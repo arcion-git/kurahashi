@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use App\Cart;
 use App\Deal;
 
@@ -13,68 +14,21 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
-class LoginPageController extends Controller
+class AdminPageController extends Controller
 {
   public function __construct(){
-		$this->middleware('user');
+		$this->middleware('admin');
 	}
 
   public function index()
   {
-      $items = \DB::table('items')->get();
-
-      $user_id = Auth::guard('user')->user()->id;
-      $carts =  Cart::where('user_id',$user_id)->get();
-
-      return view('user/home', ['items' => $items , 'carts' => $carts]);
-  }
-
-  public function addcart(Request $request){
-
-    $user_id = Auth::guard('user')->user()->id;
-    $item_id = $request->item_id;
-
-    $cart=Cart::firstOrNew(['user_id'=> $user_id , 'item_id'=> $item_id , 'deal_id'=> null]);
-    $cart->quantity = $request->quantity;
-    $cart->save();
-
-    $data = "sucsess";
-      return redirect()->route('home',$data);
-  }
-
-
-  public function removecart(Request $request){
-    $user_id = Auth::guard('user')->user()->id;
-    $item_id = $request->item_id;
-    $cart=Cart::where(['user_id'=> $user_id , 'item_id'=> $item_id , 'deal_id'=> null])->delete();
-    $data = "sucsess";
-    return redirect()->route('home',$data);
-  }
-
-
-  public function cart(){
-    $user_id = Auth::guard('user')->user()->id;
-    $carts =  Cart::where(['user_id'=>$user_id, 'deal_id'=> null])->get();
-    return view('cart', ['carts' => $carts]);
-  }
-
-  public function confirm(){
-    $user_id = Auth::guard('user')->user()->id;
-    $carts =  Cart::where(['user_id'=>$user_id, 'deal_id'=> null])->get();
-    return view('user/auth/confirm', ['carts' => $carts]);
-  }
-
-  public function deal(){
-    $user_id = Auth::guard('user')->user()->id;
-    $deals =  Deal::where('user_id',$user_id)->get();
-
-    return view('deal', ['deals' => $deals]);
+    $deals =  Deal::get();
+    return view('admin/home', ['deals' => $deals]);
   }
 
   public function dealdetail($id){
-    $user_id = Auth::guard('user')->user()->id;
     $deal = Deal::where('id',$id)->first();
-    $carts = Cart::where(['user_id'=>$user_id, 'deal_id'=> $id])->get();
+    $carts = Cart::where(['user_id'=>$deal->user_id, 'deal_id'=> $id])->get();
     $data=[
       'carts'=>$carts,
       'deal'=>$deal

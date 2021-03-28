@@ -33,6 +33,10 @@
 
 
 
+  Route::get('/admin/home', 'AdminPageController@index')->name('admin.home');
+  Route::get('/admin/deal/{id}', 'AdminPageController@dealdetail');
+
+
 
 
 Route::group(['prefix' => 'admin'], function () {

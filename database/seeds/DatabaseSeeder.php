@@ -11,9 +11,20 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+
+
+      DB::table("admins")->insert([
+        'last_name'            => '管理者',
+        'first_name'           => '太郎',
+        'email'               => 'admin@gmail.com' ,
+        'password'            => \Hash::make('secret') ,
+      ]);
+
+for ($i = 1; $i <= 10; $i++) {
+
       \DB::table("users")->insert([
         'last_name'            => '山田',
-        'first_name'           => '太郎',
+        'first_name'           => '太郎'.$i,
         'last_name_kana'       => 'ヤマダ',
         'first_name_kana'      => 'タロウ',
         'company'              => '株式会社サンプル',
@@ -24,17 +35,11 @@ class DatabaseSeeder extends Seeder
         'address04'            => '1丁目1-1',
         'address05'            => '',
         'tel'                  => '08012345678',
-        'email'                => 'sample1@gmail.com' ,
+        'email'                => 'sample'.$i.'@gmail.com' ,
         'password'             => \Hash::make('secret') ,
       ]);
 
-      DB::table("admins")->insert([
-          'name'                => '管理者 太郎' ,
-          'email'               => 'admin@gmail.com' ,
-          'password'            => \Hash::make('secret') ,
-      ]);
 
-for ($i = 1; $i <= 10; $i++) {
       \DB::table("items")->insert([
         'rank'                => 'A' ,
         'item_code'           => $i ,
@@ -65,6 +70,18 @@ for ($i = 1; $i <= 10; $i++) {
         'tokkijikou'          => '特記事項' ,
         'yokujitsuhaisou_simekirijikan' => '翌日配送締切時間' ,
       ]);
+
+      \DB::table("carts")->insert([
+        'user_id'             => $i ,
+        'deal_id'             => $i ,
+        'item_id'             => $i ,
+        'quantity'             => $i ,
+      ]);
+
+      \DB::table("deals")->insert([
+        'user_id'             => $i ,
+      ]);
+
     }
     }
 }

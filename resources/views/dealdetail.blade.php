@@ -90,7 +90,13 @@
                     @foreach($carts as $cart)
                     <tr>
                       <td>{{$cart->item->item_name}}</td>
-                      <td class="teika text-center">{{$cart->item->teika}}</td>
+                      <td class="teika text-center">
+                        @if($deal->success_flg)
+                        <input name="teika[]" class="teika text-center form-control" value="{{$cart->item->teika}}" readonly>
+                        @else
+                        <input name="teika[]" class="teika text-center form-control" value="{{$cart->item->teika}}">
+                        @endif
+                      </td>
                       <td class="text-center">
                         @if($deal->success_flg)
                         <input name="quantity[]" class="quantity text-center form-control" value="{{$cart->quantity}}" readonly>
@@ -130,12 +136,16 @@
                     </div>
                   </div>
                 </div>
+
+                @if ( Auth::guard('user')->check() )
                 @if($deal->success_flg)
                 @else
                 <div class="float-right">
                     <button type="submit" name="deal_id" value="{{ $deal->id }}" class="btn btn-warning">この内容で発注する</button>
                 </div>
                 @endif
+                @endif
+
               </div>
             </div>
           </form>
