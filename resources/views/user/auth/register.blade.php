@@ -14,7 +14,7 @@
 <div class="card card-primary">
   <div class="card-header"><h4>新規会員登録</h4></div>
   <div class="card-body">
-    <form method="POST" action="{{ route('register') }}">
+    <form class="form-horizontal" role="form" method="POST" action="{{ url('/user/register') }}">
     @csrf
       <div class="form-divider">
         お名前

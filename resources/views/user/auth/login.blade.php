@@ -14,7 +14,7 @@
 <div class="card card-primary">
   <div class="card-header"><h4>ログイン</h4></div>
   <div class="card-body">
-      <form method="POST" action="{{ route('login') }}">
+    <form class="form-horizontal" role="form" method="POST" action="{{ url('/user/login') }}">
           @csrf
 
           <div class="form-group row">
