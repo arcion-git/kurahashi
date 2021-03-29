@@ -55,8 +55,36 @@ class LoginPageController extends Controller
   public function cart(){
     $user_id = Auth::guard('user')->user()->id;
     $carts =  Cart::where(['user_id'=>$user_id, 'deal_id'=> null])->get();
+
+    $deal = Deal::where('id',$id)->first();
+
     return view('cart', ['carts' => $carts]);
   }
+
+  public function dealcart(Request $request){
+    $id = $request->deal_id;
+    $user_id = Auth::guard('user')->user()->id;
+    $deal = Deal::where('id',$id)->first();
+    $carts = Cart::where(['user_id'=>$user_id, 'deal_id'=> $id])->get();
+    $data=[
+      'carts'=>$carts,
+      'deal'=>$deal
+    ];
+    return view('showdealcart', $data);
+  }
+
+  public function showdealcart(Request $request){
+    $id = $request->deal_id;
+    $user_id = Auth::guard('user')->user()->id;
+    $deal = Deal::where('id',$id)->first();
+    $carts = Cart::where(['user_id'=>$user_id, 'deal_id'=> $id])->get();
+    $data=[
+      'carts'=>$carts,
+      'deal'=>$deal
+    ];
+    return view('dealcart', $data);
+  }
+
 
   public function confirm(){
     $user_id = Auth::guard('user')->user()->id;

@@ -31,7 +31,8 @@
   Route::post('/addsuscess', 'LoginPageController@addsuscess');
 
   Route::get('/cart', 'LoginPageController@cart');
-
+  Route::post('/dealcart', 'LoginPageController@dealcart');
+  Route::get('/showdealcart', 'LoginPageController@showdealcart');
 
 
 
