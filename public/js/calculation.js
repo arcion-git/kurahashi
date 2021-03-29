@@ -57,7 +57,7 @@ $(function() {
           },
           // 通信エラー時に呼び出されるコールバック
           error: function () {
-              alert("Ajax通信エラー");
+              // alert("Ajax通信エラー");
           }
       });
   }

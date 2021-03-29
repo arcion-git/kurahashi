@@ -54,8 +54,7 @@
               </div>
               <div class="dropdown-list-content dropdown-list-message">
                 <a href="#" class="dropdown-item dropdown-item-unread">
-                  <div id="cart">
-                  </div>
+                  <div id="cart"></div>
                 </a>
               </div>
               <div class="dropdown-footer text-center">

@@ -55,10 +55,10 @@ class LoginPageController extends Controller
   public function cart(){
     $user_id = Auth::guard('user')->user()->id;
     $carts =  Cart::where(['user_id'=>$user_id, 'deal_id'=> null])->get();
-
-    $deal = Deal::where('id',$id)->first();
-
-    return view('cart', ['carts' => $carts]);
+    $data=[
+      'carts'=>$carts,
+    ];
+    return view('cart', $data);
   }
 
   public function dealcart(Request $request){
