@@ -25,6 +25,7 @@
 
   Route::post('/addcart', 'LoginPageController@addcart');
   Route::post('/removecart', 'LoginPageController@removecart');
+  Route::post('/updatecart', 'AdminPageController@updatecart');
 
   Route::post('/adddeal', 'LoginPageController@adddeal');
   Route::post('/addsuscess', 'LoginPageController@addsuscess');
@@ -33,8 +34,10 @@
 
 
 
+
   Route::get('/admin/home', 'AdminPageController@index')->name('admin.home');
-  Route::get('/admin/deal/{id}', 'AdminPageController@dealdetail');
+  Route::get('/admin/deal/{id}', 'AdminPageController@dealdetail')->name('admin.dealdetail');
+
 
 
 

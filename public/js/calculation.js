@@ -102,12 +102,19 @@ $(function() {
 
 
 
+
+
+
+
 // 合計金額アップデート
 function update_field(){
     $('input').on('keyup change',function(){
-    $(this).parent().parent().find('.total').text(
-    $(this).parent().parent().find('.quantity').val() *
-    $(this).parent().parent().find('.teika').text());
+
+      var target = $('input').map(function (index, el) {
+      $(this).closest('tr').find('.total').text(
+      $(this).closest('tr').find('input:eq(0)').val() *
+      $(this).closest('tr').find('input:eq(1)').val());});
+      console.log(target);
 
     var sum = 0;
     $('.total').each(function () {
@@ -125,18 +132,52 @@ function update_field(){
         var tax = sum * 1.1 - sum;
         var tax = Math.round(tax);
         $(this).text("¥ "+ tax.toLocaleString());});
-
     });
+
+
+    if(document.URL.match(/deal/)){
+      var discount = $(this).closest('tr').find('input:eq(0)').val();
+      var quantity = $(this).closest('tr').find('input:eq(1)').val();
+      var cart_id = $(this).closest('tr').find('.cart_id').val();
+
+      $.ajax({
+          headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }, //Headersを書き忘れるとエラーになる
+          url: location.origin + '/updatecart',
+          type: 'POST', //リクエストタイプ
+          data: {
+            'discount': discount,
+            'quantity': quantity,
+            'cart_id': cart_id,
+          } //Laravelに渡すデータ
+        })
+        // Ajaxリクエスト成功時の処理
+        .done(function(data) {
+          console.log(data);
+        })
+        // Ajaxリクエスト失敗時の処理
+        .fail(function(jqXHR, textStatus, errorThrown) {
+          alert('Ajaxリクエスト失敗');
+          console.log("ajax通信に失敗しました");
+          console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+          console.log("textStatus     : " + textStatus);
+          console.log("errorThrown    : " + errorThrown.message);
+        });
+      }
+
 
    });
 }
+
 // 合計金額アップデート画面を開たとき
 $(document).ready( function(){
     update_field();
+
       var target = $('input').map(function (index, el) {
-      $(this).parent().parent().find('.total').text(
-      $(this).parent().parent().find('.quantity').val() *
-      $(this).parent().parent().find('.teika').text());});
+      $(this).closest('tr').find('.total').text(
+      $(this).closest('tr').find('input:eq(0)').val() *
+      $(this).closest('tr').find('input:eq(1)').val());});
       console.log(target);
 
 

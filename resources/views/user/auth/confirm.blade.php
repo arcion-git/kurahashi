@@ -35,7 +35,7 @@
                     @foreach($carts as $cart)
                     <tr>
                       <td>{{$cart->item->item_name}}</td>
-                      <td class="teika text-center">{{$cart->item->teika}}</td>
+                      <td class="teika text-center"><input name="teika[]" class="teika text-center form-control" value="{{$cart->item->teika}}" readonly></td>
                       <td class="text-center"><input name="quantity[]" class="quantity text-center form-control" value="{{$cart->quantity}}"></td>
                       <td class="total text-center"></td>
                       <td class="text-center"><button id="{{$cart->item->id}}" class="removeid_{{$cart->item->id}} removecart btn btn-info">削除</button>

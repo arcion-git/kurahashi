@@ -15,7 +15,7 @@ class CreateItemsTable extends Migration
     {
         Schema::create('items', function (Blueprint $table) {
             $table->bigIncrements('id');
-            
+
             $table->string('rank')->nullable()->comment('ランクグループ');
             $table->string('item_code')->nullable()->comment('商品コード');
             $table->string('sku_code')->nullable()->comment('SKUコード');

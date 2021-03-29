@@ -18,6 +18,7 @@ class CreateCartsTable extends Migration
 
             $table->integer('user_id')->unsigned()->nullable();
             $table->integer('deal_id')->unsigned()->nullable();
+            $table->string('discount')->nullable();
             $table->integer('item_id')->unsigned()->nullable();
             $table->integer('quantity')->unsigned()->nullable();
 

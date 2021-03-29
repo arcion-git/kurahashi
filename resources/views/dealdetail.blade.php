@@ -70,6 +70,24 @@
           </div>
 
 
+
+
+          <!-- <form action="{{ url('/updatecart') }}" method="POST" class="form-horizontal">
+            {{ csrf_field() }}
+            <tr>
+              <td>
+              <input name="discount" type="text" value="5000" />
+              <input name="cart_id" type="text" value="1"/>
+              <input name="quantity" type="text" value="5"/>
+              </td>
+            </tr>
+            <div class="float-right">
+                <button type="submit" name="deal_id" value="{{ $deal->id }}" class="btn btn-warning">この内容で発注する</button>
+            </div>
+          </form> -->
+
+
+
           <form action="{{ url('/addsuscess') }}" method="POST" class="form-horizontal">
             {{ csrf_field() }}
             <div class="row mt-4 order">
@@ -91,11 +109,23 @@
                     <tr>
                       <td>{{$cart->item->item_name}}</td>
                       <td class="teika text-center">
-                        @if($deal->success_flg)
-                        <input name="teika[]" class="teika text-center form-control" value="{{$cart->item->teika}}" readonly>
-                        @else
-                        <input name="teika[]" class="teika text-center form-control" value="{{$cart->item->teika}}">
+
+                        @if ( Auth::guard('admin')->check() )
+                          @if($deal->success_flg)
+                          <input name="teika[]" class="teika text-center form-control" value="{{$cart->item->teika}}" readonly>
+                          @else
+                            @if(isset($cart->discount))
+                            <input name="discount[]" class="teika text-center form-control" value="{{$cart->discount}}">
+                            @else
+                            <input name="teika[]" class="teika text-center form-control" value="{{$cart->item->teika}}">
+                            @endif
+                          @endif
                         @endif
+
+                        @if ( Auth::guard('user')->check() )
+                        <input name="teika[]" class="teika text-center form-control" value="{{$cart->item->teika}}" readonly>
+                        @endif
+
                       </td>
                       <td class="text-center">
                         @if($deal->success_flg)
@@ -108,14 +138,14 @@
                       @if($deal->success_flg)
                       @else
                       <td class="text-center"><button id="{{$cart->item->id}}" class="removeid_{{$cart->item->id}} removecart btn btn-info">削除</button>
-<input name="item_id[]" type="hidden" value="{{$cart->item->id}}" />
+                      <input name="item_id[]" type="hidden" value="{{$cart->item->id}}" />
+                      <input name="cart_id[]" type="hidden" value="{{$cart->id}}" class="cart_id"/>
                       </td>
                       @endif
                     </tr>
                     @endforeach
                   </table>
                 </div>
-              </form>
                 <div class="row mt-4">
                   <div class="col-lg-8">
                     <div class="section-title">お支払い</div>

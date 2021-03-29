@@ -28,6 +28,7 @@ class AdminPageController extends Controller
 
   public function dealdetail($id){
     $deal = Deal::where('id',$id)->first();
+
     $carts = Cart::where(['user_id'=>$deal->user_id, 'deal_id'=> $id])->get();
     $data=[
       'carts'=>$carts,
@@ -36,48 +37,17 @@ class AdminPageController extends Controller
     return view('dealdetail', $data);
   }
 
-  public function adddeal(Request $request){
-    $user_id = Auth::guard('user')->user()->id;
+  public function updatecart(Request $request){
 
-    $data = $request->all();
-    $item_ids = $data['item_id'];
-    $quantitys = $data['quantity'];
+    $cart_id = $request->cart_id;
 
-    $deal=Deal::create(['user_id'=> $user_id]);
-    $deal_id = $deal->id;
+    $cart=Cart::where('id',$cart_id)->first();
+    $cart->discount = $request->discount;
+    $cart->quantity = $request->quantity;
+    $cart->save();
 
-    foreach($item_ids as $key => $input) {
-      $cart = Cart::firstOrNew(['user_id'=> $user_id , 'item_id'=> $item_ids[$key], 'deal_id'=> null]);
-      $cart->user_id = $user_id;
-      $cart->deal_id = $deal_id;
-      $cart->quantity = isset($quantitys[$key]) ? $quantitys[$key] : null;
-      $cart->save();
-    }
-    return redirect('deal');
-  }
-
-  public function addsuscess(Request $request){
-    $user_id = Auth::guard('user')->user()->id;
-
-    $data = $request->all();
-    $item_ids = $data['item_id'];
-    $quantitys = $data['quantity'];
-
-    $deal_id = $request->deal_id;
-
-    $deal=Deal::firstOrNew(['id'=> $deal_id]);
-    $deal->success_flg = True;
-    $deal->success_time = Carbon::now();
-    $deal->save();
-
-    foreach($item_ids as $key => $input) {
-      $cart = Cart::firstOrNew(['user_id'=> $user_id , 'item_id'=> $item_ids[$key], 'deal_id'=> $deal_id]);
-      $cart->user_id = $user_id;
-      $cart->deal_id = $deal_id;
-      $cart->quantity = isset($quantitys[$key]) ? $quantitys[$key] : null;
-      $cart->save();
-    }
-    return redirect('deal');
+    $id = $cart->user_id;
+    return redirect()->route('admin.dealdetail',$id);
   }
 
 
