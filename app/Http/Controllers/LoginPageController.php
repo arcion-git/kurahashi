@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Cart;
 use App\Deal;
+use App\Item;
+use App\Category;
 
 // 時間に関する処理
 use Carbon\Carbon;
@@ -21,13 +23,33 @@ class LoginPageController extends Controller
 
   public function index()
   {
-      $items = \DB::table('items')->get();
+      $items = Item::get();
 
+      $categories = Category::get();
       $user_id = Auth::guard('user')->user()->id;
       $carts =  Cart::where('user_id',$user_id)->get();
 
-      return view('user/home', ['items' => $items , 'carts' => $carts]);
+      // foreach($items as $item){
+      //   dd($item->category()->id);
+      // }
+
+      return view('user/home', ['items' => $items , 'carts' => $carts , 'categories' => $categories]);
   }
+
+  public function category($id)
+  {
+
+      $items = Item::where('category_id',$id)->get();
+
+      $categories = Category::get();
+      $category_name = Category::where('id',$id)->first()->category_name;
+      $user_id = Auth::guard('user')->user()->id;
+      $carts =  Cart::where('user_id',$user_id)->get();
+
+      return view('user/home', ['items' => $items , 'carts' => $carts , 'categories' => $categories , 'category_name' => $category_name]);
+  }
+
+
 
   public function addcart(Request $request){
 
@@ -76,25 +98,29 @@ class LoginPageController extends Controller
 
 
   public function confirm(){
+    $categories = Category::get();
     $user_id = Auth::guard('user')->user()->id;
     $carts =  Cart::where(['user_id'=>$user_id, 'deal_id'=> null])->get();
-    return view('user/auth/confirm', ['carts' => $carts]);
+    return view('user/auth/confirm', ['carts' => $carts, 'categories' => $categories]);
   }
 
   public function deal(){
+      $categories = Category::get();
     $user_id = Auth::guard('user')->user()->id;
     $deals =  Deal::where('user_id',$user_id)->get();
 
-    return view('deal', ['deals' => $deals]);
+    return view('deal', ['deals' => $deals, 'categories' => $categories]);
   }
 
   public function dealdetail($id){
+      $categories = Category::get();
     $user_id = Auth::guard('user')->user()->id;
     $deal = Deal::where('id',$id)->first();
     $carts = Cart::where(['user_id'=>$user_id, 'deal_id'=> $id])->get();
     $data=[
       'carts'=>$carts,
-      'deal'=>$deal
+      'deal'=>$deal,
+      'categories' => $categories,
     ];
     return view('dealdetail', $data);
   }
@@ -155,5 +181,8 @@ class LoginPageController extends Controller
     $id = $cart->deal_id;
     return redirect()->route('dealdetail',$id);
   }
+
+
+
 
 }

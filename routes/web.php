@@ -18,6 +18,7 @@
 
 
   Route::get('/', 'LoginPageController@index')->name('home');
+  Route::get('/category/{id}', 'LoginPageController@category');
 
   Route::get('/confirm', 'LoginPageController@confirm');
   Route::get('/deal', 'LoginPageController@deal')->name('deal');
@@ -38,6 +39,9 @@
 
   Route::get('/admin/home', 'AdminPageController@index')->name('admin.home');
   Route::get('/admin/deal/{id}', 'AdminPageController@dealdetail')->name('admin.dealdetail');
+  Route::get('/admin/user', 'AdminPageController@user')->name('admin.user');
+  Route::get('/admin/user/deal/{id}', 'AdminPageController@userdeal')->name('admin.user.deal');
+
   Route::post('/admin/updatecart', 'AdminPageController@updatecart');
 
 

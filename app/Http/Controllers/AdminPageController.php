@@ -50,6 +50,18 @@ class AdminPageController extends Controller
     return redirect()->route('admin.dealdetail',$id);
   }
 
+  public function user(){
 
+    $users = User::get();
+
+    return view('admin.auth.user', ['users' => $users]);
+  }
+
+  public function userdeal($id){
+
+    $deals = Deal::where('user_id',$id)->get();
+
+    return view('admin.home', ['deals' => $deals]);
+  }
 
 }

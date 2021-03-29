@@ -22,6 +22,28 @@ class DatabaseSeeder extends Seeder
         'updated_at' => new DateTime(),
       ]);
 
+      \DB::table("categories")->insert([
+        'category_name'        =>  'おすすめ',
+      ]);
+      \DB::table("categories")->insert([
+        'category_name'        =>  'クラハシオリジナル',
+      ]);
+      \DB::table("categories")->insert([
+        'category_name'        =>  '鮮魚',
+      ]);
+      \DB::table("categories")->insert([
+        'category_name'        =>  '訳あり',
+      ]);
+      \DB::table("categories")->insert([
+        'category_name'        =>  '塩蔵・塩干し',
+      ]);
+      \DB::table("categories")->insert([
+        'category_name'        =>  '冷凍',
+      ]);
+      \DB::table("categories")->insert([
+        'category_name'        =>  '冷凍加工',
+      ]);
+
 for ($i = 1; $i <= 10; $i++) {
 
       \DB::table("users")->insert([
@@ -31,7 +53,7 @@ for ($i = 1; $i <= 10; $i++) {
         'first_name_kana'      => 'タロウ',
         'company'              => '株式会社サンプル',
         'company_kana'         => 'カブシキガイシャサンプル',
-        'address01'            => '7201234',
+        'address01'            => '720-1234',
         'address02'            => '広島県',
         'address03'            => '福山市引野町',
         'address04'            => '1丁目1-1',
@@ -72,6 +94,7 @@ for ($i = 1; $i <= 10; $i++) {
         'lot_eda'             => 'ロット枝' ,
         'souko_code'          => '倉庫コード' ,
         'tokkijikou'          => '特記事項' ,
+        'category_id'         =>  $i ,
         'yokujitsuhaisou_simekirijikan' => '翌日配送締切時間' ,
         'created_at' => new DateTime(),
         'updated_at' => new DateTime(),

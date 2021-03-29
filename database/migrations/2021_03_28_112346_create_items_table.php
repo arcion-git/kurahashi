@@ -43,6 +43,7 @@ class CreateItemsTable extends Migration
             $table->string('lot_eda')->nullable()->comment('ロット枝');
             $table->string('souko_code')->nullable()->comment('倉庫コード');
             $table->string('tokkijikou')->nullable()->comment('特記事項');
+            $table->string('category_id')->nullable()->comment('カテゴリーid');
             $table->string('yokujitsuhaisou_simekirijikan')->nullable()->comment('翌日配送締切時間');
 
             $table->timestamps();

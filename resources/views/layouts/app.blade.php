@@ -90,11 +90,21 @@
               @endif
               <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
                 <i class="fas fa-sign-out-alt"></i>
-   {{ __('Logout') }}
+                {{ __('Logout') }}
               </a>
-              <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+
+              @if ( Auth::guard('user')->check() )
+              <form id="logout-form" action="/user/logout" method="POST" style="display: none;">
                   @csrf
               </form>
+              @endif
+              @if ( Auth::guard('admin')->check() )
+              <form id="logout-form" action="/admin/logout" method="POST" style="display: none;">
+                  @csrf
+              </form>
+              @endif
+
+
             </div>
           </li>
         </ul>
@@ -130,13 +140,13 @@
                 <a href="/admin/home" class="nav-link"><span>取引一覧</span></a>
               </li>
               <li class="nav-item dropdown">
-                <a href="" class="nav-link"><span>顧客一覧</span></a>
+                <a href="/admin/user" class="nav-link"><span>顧客一覧</span></a>
               </li>
               <li class="nav-item">
-                <a href="/admin/home" class="nav-link"><span>商品登録</span></a>
+                <a href="/itemadd" class="nav-link"><span>商品登録</span></a>
               </li>
               <li class="nav-item dropdown">
-                <a href="" class="nav-link"><span>CSVデータダウンロード</span></a>
+                <a href="/download" class="nav-link"><span>CSVデータダウンロード</span></a>
               </li>
           </ul>
           @endif
@@ -144,48 +154,14 @@
 
           @if ( Auth::guard('user')->check() )
           <ul class="sidebar-menu">
-              <li class="menu-header">商品カテゴリー</li>
-              <li class="nav-item dropdown">
-                <a href="#" class="nav-link" data-toggle="dropdown"><span>全ての商品</span></a>
-              </li>
-              <li class="nav-item dropdown">
-                <a href="#" class="nav-link has-dropdown"> <span>おすすめ商品</span></a>
-              </li>
-              <li class="nav-item dropdown">
-                <a href="#" class="nav-link has-dropdown"> <span>クラハシオリジナル</span></a>
-              </li>
-              <li class="nav-item dropdown">
-                <a href="#" class="nav-link has-dropdown"> <span>塩蔵・塩干し</span></a>
-              </li>
-              <li class="nav-item dropdown">
-                <a href="#" class="nav-link has-dropdown"> <span>鮮魚</span></a>
-                <ul class="dropdown-menu">
-                  <li><a class="nav-link" href="index-0.html">冷凍</a></li>
-                  <li><a class="nav-link" href="index-0.html">冷凍加工</a></li>
-                  <li><a class="nav-link" href="index-0.html">天然</a></li>
-                  <li><a class="nav-link" href="index-0.html">養殖</a></li>
-                </ul>
-              </li>
-
-              <li class="menu-header">特集カテゴリー</li>
-              <li class="nav-item dropdown">
-                <a href="#" class="nav-link"> <span>季節のおすすめ</span></a>
-              </li>
-              <li class="nav-item dropdown">
-                <a href="#" class="nav-link"> <span>年末商品</span></a>
-              </li>
-              <li class="nav-item dropdown">
-                <a href="#" class="nav-link"> <span>塩蔵・塩干し</span></a>
-              </li>
-              <li class="nav-item dropdown">
-                <a href="#" class="nav-link has-dropdown"> <span>訳あり</span></a>
-                <ul class="dropdown-menu">
-                  <li><a class="nav-link" href="index-0.html">冷凍</a></li>
-                  <li><a class="nav-link" href="index-0.html">冷凍加工</a></li>
-                  <li><a class="nav-link" href="index-0.html">天然</a></li>
-                  <li><a class="nav-link" href="index-0.html">養殖</a></li>
-                </ul>
-              </li>
+            <li class="nav-item">
+              <a href="{{ url('/') }}" class="nav-link"><span>すべての商品</span></a>
+            </li>
+          @foreach($categories as $category)
+            <li class="nav-item">
+              <a href="/category/{{$category->id}}" class="nav-link"><span>{{$category->category_name}}</span></a>
+            </li>
+          @endforeach
           </ul>
           @endif
 

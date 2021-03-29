@@ -5,12 +5,8 @@
 
 <section class="section">
   <div class="section-header">
-    <h1>取引一覧</h1>
+    <h1>顧客一覧</h1>
     <div class="section-header-breadcrumb">
-      @if ( Auth::guard('user')->check() )
-      <div class="breadcrumb-item"><a href="{{ url('/') }}">HOME</a></div>
-      <div class="breadcrumb-item active">取引一覧</div>
-      @endif
     </div>
   </div>
   <div class="section-body">
@@ -35,29 +31,33 @@
             <div class="table-responsive">
               <table class="table table-striped">
                 <tr>
-                  <th>お問い合わせ日時</th>
-                  <th class="text-center">発注日時</th>
-                  <th class="text-center">状態</th>
+                  <th class="text-center">お名前</th>
+                  <th class="text-center">会社名</th>
+                  <th class="text-center">住所</th>
+                  <th class="text-center">電話番号</th>
+                  <th class="text-center">メールアドレス</th>
                   <th class="text-center">操作</th>
                 </tr>
 
-                @foreach($deals as $deal)
+                @foreach($users as $user)
                 <tr>
-                  <td>
-                    {{$deal->created_at}}
+                  <td class="text-center">
+                    {{$user->last_name}} {{$user->first_name}}
                   </td>
                   <td class="text-center">
-                    {{$deal->success_time}}
+                    {{$user->company}}
                   </td>
                   <td class="text-center">
-                    @empty($deal->success_flg)
-                    <div class="badge badge-warning">問合中</div>
-                    @else
-                    <div class="badge badge-success">発注済</div>
-                    @endempty
+                    {{$user->address01}} {{$user->address02}}{{$user->address03}}{{$user->address04}}
                   </td>
                   <td class="text-center">
-                    <a href="{{ url('/deal/'.$deal->id) }}"><button class="btn btn-primary">詳細を見る</button></a>
+                    {{$user->tel}}
+                  </td>
+                  <td class="text-center">
+                    {{$user->email}}
+                  </td>
+                  <td class="text-center">
+                    <a href="{{ url('/admin/user/deal/'.$user->id) }}"><button class="btn btn-primary">取引一覧</button></a>
                   </td>
                 </tr>
                 @endforeach

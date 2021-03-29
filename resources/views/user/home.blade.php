@@ -11,7 +11,11 @@
                 <div class="card">
                   <div class="card-body">
                     <div class="float-left">
-                      <h2 class="section-title">全てのカテゴリー</h2>
+                      @if(isset($category_name))
+                      <h2 class="section-title">{{$category_name}}</h2>
+                      @else
+                      <h2 class="section-title">全ての商品</h2>
+                      @endif
                     </div>
                     <div class="float-right">
                       <form>
@@ -29,12 +33,12 @@
                     <div class="table-responsive">
                       <table class="table table-striped">
                         <tr>
-                          <th>商品名</th>
-                          <th>カテゴリー</th>
-                          <th>参考価格</th>
-                          <th>商品番号</th>
-                          <th>個数</th>
-                          <th>操作</th>
+                          <th class="text-center">商品番号</th>
+                          <th class="text-center">商品名</th>
+                          <!-- <th class="text-center">カテゴリー</th> -->
+                          <th class="text-center">参考価格</th>
+                          <th class="text-center">個数</th>
+                          <th class="text-center">操作</th>
                         </tr>
 
 
@@ -43,17 +47,13 @@
 
                         @foreach($items as $item)
                         <tr>
-                          <td>{{$item->item_name}}</td>
-                          <td>
-                            <a href="#">サンプルカテゴリー1</a>,
-                            <a href="#">サンプルカテゴリー2</a>
-                          </td>
-                          <td>
+                          <td class="text-center">{{$item->item_code}}</td>
+                          <td class="text-center">{{$item->item_name}}</td>
+                          <td class="text-center">
                             ¥ {{$item->teika}}
                           </td>
-                          <td>{{$item->teika}}</td>
-                          <td><input name="quantity" class="quantity form-control" value="1"></td>
-                          <td><button id="{{$item->id}}" class="addcart btn btn-warning">カートに入れる</button></td>
+                          <td class="text-center"><input name="quantity" class="quantity form-control" value="1"></td>
+                          <td class="text-center"><button id="{{$item->id}}" class="addcart btn btn-warning">カートに入れる</button></td>
                         </tr>
                         @endforeach
                       </table>
