@@ -55,7 +55,7 @@ for ($i = 1; $i <= 10; $i++) {
         'sanchi_code'         => '産地コード' ,
         'sanchi_name'         => '産地名' ,
         'teika'               => '3000' ,
-        'tanka'               => '3000' ,
+        'tanka'               => '5000' ,
         'tani'                => '¥' ,
         'zaikosuu'            => '10' ,
         'kigyou_code'         => '発注先企業コード' ,

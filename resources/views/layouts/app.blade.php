@@ -42,16 +42,13 @@
         </form>
 
         <ul class="navbar-nav navbar-right">
+          @if ( Auth::guard('user')->check() )
           <li class="dropdown dropdown-list-toggle">
             <a id="toggle" href="#" data-toggle="dropdown" class="nav-link nav-link-lg message-toggle">
               <i class="fas fa-shopping-cart"></i>
             </a>
             <div class="dropdown-menu dropdown-list dropdown-menu-right">
-              <div class="dropdown-header">ショッピングカート
-                <!-- <div class="float-right">
-                  <a href="#">カートの中身を全て削除</a>
-                </div> -->
-              </div>
+              <div class="dropdown-header">ショッピングカート</div>
               <div class="dropdown-list-content dropdown-list-message">
                 <a href="#" class="dropdown-item dropdown-item-unread">
                   <div id="cart"></div>
@@ -59,10 +56,11 @@
               </div>
               <div class="dropdown-footer text-center">
                 <a href="{{ url('/confirm') }}" class="">営業に問い合わせる <i class="fas fa-chevron-right"></i></a>　
-                <a href="#" class="">商品を発注する <i class="fas fa-chevron-right"></i></a>
+                <!-- <a href="#" class="">商品を発注する <i class="fas fa-chevron-right"></i></a> -->
               </div>
             </div>
           </li>
+          @endif
           <li class="dropdown">
             <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
               <img alt="image" src="{{ asset('img/avatar/avatar-1.png') }}" class="rounded-circle mr-1">
@@ -73,6 +71,8 @@
 
             </a>
             <div class="dropdown-menu dropdown-menu-right">
+
+              @if ( Auth::guard('user')->check() )
               <!-- <div class="dropdown-title">Logged in 5 min ago</div> -->
               <a href="features-profile.html" class="dropdown-item has-icon">
                 <i class="far fa-user"></i> プロフィール編集
@@ -87,6 +87,7 @@
                 <i class="fas fa-cog"></i> 配送先設定
               </a>
               <div class="dropdown-divider"></div>
+              @endif
               <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
                 <i class="fas fa-sign-out-alt"></i>
    {{ __('Logout') }}
@@ -107,7 +108,12 @@
       <div class="main-sidebar">
         <aside id="sidebar-wrapper">
           <div class="sidebar-brand">
+            @if ( Auth::guard('user')->check() )
             <a href="{{ url('/') }}">
+            @endif
+            @if ( Auth::guard('admin')->check() )
+            <a href="{{ url('/admin/home') }}">
+            @endif
                 <img src="{{ asset('img/logo.png') }}" alt="logo" width="195" class="">
             </a>
           </div>
@@ -116,6 +122,27 @@
                 <img src="{{ asset('img/logo2.png') }}" alt="logo" width="25" class="">
             </a>
           </div>
+
+
+          @if ( Auth::guard('admin')->check() )
+          <ul class="sidebar-menu">
+              <li class="nav-item">
+                <a href="/admin/home" class="nav-link"><span>取引一覧</span></a>
+              </li>
+              <li class="nav-item dropdown">
+                <a href="" class="nav-link"><span>顧客一覧</span></a>
+              </li>
+              <li class="nav-item">
+                <a href="/admin/home" class="nav-link"><span>商品登録</span></a>
+              </li>
+              <li class="nav-item dropdown">
+                <a href="" class="nav-link"><span>CSVデータダウンロード</span></a>
+              </li>
+          </ul>
+          @endif
+
+
+          @if ( Auth::guard('user')->check() )
           <ul class="sidebar-menu">
               <li class="menu-header">商品カテゴリー</li>
               <li class="nav-item dropdown">
@@ -159,8 +186,9 @@
                   <li><a class="nav-link" href="index-0.html">養殖</a></li>
                 </ul>
               </li>
-
           </ul>
+          @endif
+
         </aside>
       </div>
 

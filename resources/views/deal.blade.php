@@ -7,8 +7,10 @@
   <div class="section-header">
     <h1>取引一覧</h1>
     <div class="section-header-breadcrumb">
-      <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-      <div class="breadcrumb-item">取引一覧</div>
+      @if ( Auth::guard('user')->check() )
+      <div class="breadcrumb-item"><a href="{{ url('/') }}">HOME</a></div>
+      <div class="breadcrumb-item active">取引一覧</div>
+      @endif
     </div>
   </div>
   <div class="section-body">
@@ -33,10 +35,8 @@
             <div class="table-responsive">
               <table class="table table-striped">
                 <tr>
-                  <th>お名前</th>
-                  <th>会社名</th>
                   <th>お問い合わせ日時</th>
-                  <th>受注日時</th>
+                  <th>発注日時</th>
                   <th>状態</th>
                   <th>操作</th>
                 </tr>
@@ -44,22 +44,16 @@
                 @foreach($deals as $deal)
                 <tr>
                   <td>
-                    {{$deal->user->last_name}} {{$deal->user->first_name}}
-                  </td>
-                  <td>
-                    {{$deal->user->company}}
-                  </td>
-                  <td>
                     {{$deal->created_at}}
                   </td>
                   <td>
-
+                    {{$deal->success_time}}
                   </td>
                   <td>
                     @empty($deal->success_flg)
-                    <div class="badge badge-warning">交渉中</div>
+                    <div class="badge badge-warning">問合中</div>
                     @else
-                    <div class="badge badge-success">受注済</div>
+                    <div class="badge badge-success">発注済</div>
                     @endempty
                   </td>
                   <td>

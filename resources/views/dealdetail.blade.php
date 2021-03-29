@@ -11,9 +11,14 @@
     <div class="section-header">
       <h1>取引詳細</h1>
       <div class="section-header-breadcrumb">
-        <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-        <div class="breadcrumb-item">取引一覧</div>
-        <div class="breadcrumb-item">取引詳細</div>
+        @if ( Auth::guard('user')->check() )
+        <div class="breadcrumb-item"><a href="{{ url('/') }}">HOME</a></div>
+        <div class="breadcrumb-item"><a href="{{ url('/deal') }}">取引一覧</a></div>
+        @endif
+        @if ( Auth::guard('admin')->check() )
+        <div class="breadcrumb-item"><a href="{{ url('/admin/home') }}">取引一覧</a></div>
+        @endif
+        <div class="breadcrumb-item active">取引詳細</div>
       </div>
     </div>
 
@@ -26,9 +31,19 @@
                 <h3>{{$deal->user->last_name}}{{ $deal->user->first_name }} 様<span class="small"></span>（{{ $deal->user->company }}）</h3>
                 <div class="invoice-number">
                   @if($deal->success_flg)
+                  @if ( Auth::guard('user')->check() )
+                  <div class="badge badge-success">発注済</div>
+                  @endif
+                  @if ( Auth::guard('admin')->check() )
                   <div class="badge badge-success">受注済</div>
+                  @endif
                   @else
+                  @if ( Auth::guard('user')->check() )
+                  <div class="badge badge-warning">問合中</div>
+                  @endif
+                  @if ( Auth::guard('admin')->check() )
                   <div class="badge badge-warning">交渉中</div>
+                  @endif
                   @endif
                   オーダー番号 #{{$deal->id}}
                 </div>
@@ -98,7 +113,10 @@
                   <table class="table table-striped table-hover table-md">
                   <tr>
                   	<th>商品名</th>
-                  	<th class="text-center">金額</th>
+                    @if ( Auth::guard('admin')->check() )
+                  	<th class="text-center">定価</th>
+                    @endif
+                  	<th class="text-center">単価</th>
                   	<th class="text-center">個数</th>
                   	<th class="text-center">小計</th>
                   	@if($deal->success_flg)
@@ -110,6 +128,9 @@
                   @foreach($carts as $cart)
                   <tr>
                   	<td>{{$cart->item->item_name}}</td>
+                    @if ( Auth::guard('admin')->check() )
+                  	<td class="text-center">{{$cart->item->tanka}}</td>
+                    @endif
                   	<td class="teika text-center">
 
                   		@if ( Auth::guard('admin')->check() )

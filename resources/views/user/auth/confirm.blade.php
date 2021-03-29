@@ -68,7 +68,7 @@
                 </div>
 
                 <div class="float-right">
-                    <button type="submit" class="btn btn-warning">この内容で発注する</button>
+                    <button type="submit" class="btn btn-warning">この内容で問い合わせる</button>
                 </div>
 
               </div>

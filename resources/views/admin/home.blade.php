@@ -7,8 +7,6 @@
   <div class="section-header">
     <h1>取引一覧</h1>
     <div class="section-header-breadcrumb">
-      <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-      <div class="breadcrumb-item">取引一覧</div>
     </div>
   </div>
   <div class="section-body">
@@ -53,7 +51,7 @@
                     {{$deal->created_at}}
                   </td>
                   <td>
-
+                    {{$deal->success_time}}
                   </td>
                   <td>
                     @empty($deal->success_flg)
