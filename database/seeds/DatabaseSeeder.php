@@ -18,6 +18,8 @@ class DatabaseSeeder extends Seeder
         'first_name'           => '太郎',
         'email'               => 'admin@gmail.com' ,
         'password'            => \Hash::make('secret') ,
+        'created_at' => new DateTime(),
+        'updated_at' => new DateTime(),
       ]);
 
 for ($i = 1; $i <= 10; $i++) {
@@ -37,6 +39,8 @@ for ($i = 1; $i <= 10; $i++) {
         'tel'                  => '08012345678',
         'email'                => 'sample'.$i.'@gmail.com' ,
         'password'             => \Hash::make('secret') ,
+        'created_at' => new DateTime(),
+        'updated_at' => new DateTime(),
       ]);
 
 
@@ -69,6 +73,8 @@ for ($i = 1; $i <= 10; $i++) {
         'souko_code'          => '倉庫コード' ,
         'tokkijikou'          => '特記事項' ,
         'yokujitsuhaisou_simekirijikan' => '翌日配送締切時間' ,
+        'created_at' => new DateTime(),
+        'updated_at' => new DateTime(),
       ]);
 
       \DB::table("carts")->insert([
@@ -76,10 +82,14 @@ for ($i = 1; $i <= 10; $i++) {
         'deal_id'             => $i ,
         'item_id'             => $i ,
         'quantity'             => $i ,
+        'created_at' => new DateTime(),
+        'updated_at' => new DateTime(),
       ]);
 
       \DB::table("deals")->insert([
         'user_id'             => $i ,
+        'created_at' => new DateTime(),
+        'updated_at' => new DateTime(),
       ]);
 
     }

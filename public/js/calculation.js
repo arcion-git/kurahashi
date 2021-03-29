@@ -135,6 +135,37 @@ function update_field(){
     });
 
 
+    if(document.URL.match(/admin/)){
+      var discount = $(this).closest('tr').find('input:eq(0)').val();
+      var quantity = $(this).closest('tr').find('input:eq(1)').val();
+      var cart_id = $(this).closest('tr').find('.cart_id').val();
+
+      $.ajax({
+          headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }, //Headersを書き忘れるとエラーになる
+          url: location.origin + '/admin/updatecart',
+          type: 'POST', //リクエストタイプ
+          data: {
+            'discount': discount,
+            'quantity': quantity,
+            'cart_id': cart_id,
+          } //Laravelに渡すデータ
+        })
+        // Ajaxリクエスト成功時の処理
+        .done(function(data) {
+          console.log(data);
+        })
+        // Ajaxリクエスト失敗時の処理
+        .fail(function(jqXHR, textStatus, errorThrown) {
+          alert('Ajaxリクエスト失敗');
+          console.log("ajax通信に失敗しました");
+          console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+          console.log("textStatus     : " + textStatus);
+          console.log("errorThrown    : " + errorThrown.message);
+        });
+      }
+
     if(document.URL.match(/deal/)){
       var discount = $(this).closest('tr').find('input:eq(0)').val();
       var quantity = $(this).closest('tr').find('input:eq(1)').val();

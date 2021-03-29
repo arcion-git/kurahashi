@@ -126,6 +126,17 @@ class LoginPageController extends Controller
     return redirect('deal');
   }
 
+  public function updatecart(Request $request){
 
+    $cart_id = $request->cart_id;
+
+    $cart=Cart::where('id',$cart_id)->first();
+    $cart->discount = $request->discount;
+    $cart->quantity = $request->quantity;
+    $cart->save();
+
+    $id = $cart->deal_id;
+    return redirect()->route('dealdetail',$id);
+  }
 
 }

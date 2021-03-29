@@ -112,7 +112,11 @@
 
                         @if ( Auth::guard('admin')->check() )
                           @if($deal->success_flg)
-                          <input name="teika[]" class="teika text-center form-control" value="{{$cart->item->teika}}" readonly>
+                            @if(isset($cart->discount))
+                            <input name="discount[]" class="teika text-center form-control" value="{{$cart->discount}}" readonly>
+                            @else
+                            <input name="teika[]" class="teika text-center form-control" value="{{$cart->item->teika}}" readonly>
+                            @endif
                           @else
                             @if(isset($cart->discount))
                             <input name="discount[]" class="teika text-center form-control" value="{{$cart->discount}}">
@@ -123,7 +127,11 @@
                         @endif
 
                         @if ( Auth::guard('user')->check() )
-                        <input name="teika[]" class="teika text-center form-control" value="{{$cart->item->teika}}" readonly>
+                          @if(isset($cart->discount))
+                          <input name="discount[]" class="teika text-center form-control" value="{{$cart->discount}}" readonly>
+                          @else
+                          <input name="teika[]" class="teika text-center form-control" value="{{$cart->item->teika}}" readonly>
+                          @endif
                         @endif
 
                       </td>
