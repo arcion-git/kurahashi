@@ -202,7 +202,11 @@
 
     <!-- Page Specific JS File -->
     <script src="{{ asset('js/page/auth-register.js') }}"></script>
+
+
     <script src="{{ asset('js/calculation.js') }}"></script>
+    <!-- <script src="{{ asset('js/realtime.js') }}"></script> -->
+
 
 </body>
 </html>

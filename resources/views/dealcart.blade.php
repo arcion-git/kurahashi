@@ -1,3 +1,15 @@
+<table class="table table-striped table-hover table-md">
+<tr>
+	<th>商品名</th>
+	<th class="text-center">金額</th>
+	<th class="text-center">個数</th>
+	<th class="text-center">小計</th>
+	@if($deal->success_flg)
+	@else
+	<th class="text-center">操作</th>
+	@endif
+</tr>
+
 @foreach($carts as $cart)
 <tr>
 	<td>{{$cart->item->item_name}}</td>
@@ -45,3 +57,4 @@
 	@endif
 </tr>
 @endforeach
+</table>
