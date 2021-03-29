@@ -15,7 +15,7 @@
         <div class="card">
           <div class="card-body">
 
-            <div class="float-right">
+            <!-- <div class="float-right">
               <form>
                 <div class="input-group">
                   <input type="text" class="form-control" placeholder="検索">
@@ -24,7 +24,7 @@
                   </div>
                 </div>
               </form>
-            </div>
+            </div> -->
 
             <div class="clearfix mb-3"></div>
 
@@ -80,12 +80,12 @@
                   <li class="page-item active">
                     <a class="page-link" href="#">1</a>
                   </li>
-                  <li class="page-item">
+                  <!-- <li class="page-item">
                     <a class="page-link" href="#">2</a>
                   </li>
                   <li class="page-item">
                     <a class="page-link" href="#">3</a>
-                  </li>
+                  </li> -->
                   <li class="page-item">
                     <a class="page-link" href="#" aria-label="Next">
                       <span aria-hidden="true">&raquo;</span>

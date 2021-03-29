@@ -74,18 +74,18 @@
 
               @if ( Auth::guard('user')->check() )
               <!-- <div class="dropdown-title">Logged in 5 min ago</div> -->
-              <a href="features-profile.html" class="dropdown-item has-icon">
+              <!-- <a href="features-profile.html" class="dropdown-item has-icon">
                 <i class="far fa-user"></i> プロフィール編集
-              </a>
+              </a> -->
               <a href="{{ url('/deal') }}" class="dropdown-item has-icon">
-                <i class="fas fa-bolt"></i> 取引一覧
+                <i class="fas fa-user"></i> 取引一覧
               </a>
-              <a href="features-activities.html" class="dropdown-item has-icon">
+              <!-- <a href="features-activities.html" class="dropdown-item has-icon">
                 <i class="fas fa-bolt"></i> LINEでお問い合わせ
               </a>
               <a href="features-settings.html" class="dropdown-item has-icon">
                 <i class="fas fa-cog"></i> 配送先設定
-              </a>
+              </a> -->
               <div class="dropdown-divider"></div>
               @endif
               <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
