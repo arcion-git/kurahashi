@@ -3030,3 +3030,7 @@ body.sidebar-mini .main-sidebar .sidebar-brand{
     opacity: 1;
     border: none;
 }
+
+.dropdown-list .dropdown-footer, .dropdown-list .dropdown-header {
+    padding: 10px;
+}

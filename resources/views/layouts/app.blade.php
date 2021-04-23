@@ -55,8 +55,8 @@
                 </a>
               </div>
               <div class="dropdown-footer text-center">
-                <a href="{{ url('/confirm') }}" class="">営業に問い合わせる <i class="fas fa-chevron-right"></i></a>　
-                <!-- <a href="#" class="">商品を発注する <i class="fas fa-chevron-right"></i></a> -->
+                <a href="{{ url('/confirm') }}" class="btn btn-warning">営業に問い合わせる <i class="fas fa-chevron-right"></i></a>　
+                <a href="" class="btn btn-success">このまま商品を発注する <i class="fas fa-chevron-right"></i></a>　
               </div>
             </div>
           </li>
@@ -138,12 +138,37 @@
           <ul class="sidebar-menu">
               <li class="nav-item">
                 <a href="/admin/home" class="nav-link"><span>取引一覧</span></a>
-              </li>
-              <li class="nav-item dropdown">
-                <a href="/admin/user" class="nav-link"><span>顧客一覧</span></a>
+                <ul class=" dropdown">
+                    <li class="nav-item dropdown">
+                      <a href="/admin/user" class="nav-link"><span>未発注の取引</span></a>
+                    </li>
+                    <li class="nav-item dropdown">
+                      <a href="/admin/user" class="nav-link"><span>発注済の取引</span></a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="/admin/home" class="nav-link"><span>過去の取引</span></a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="/admin/home" class="nav-link"><span>キャンセルされた取引</span></a>
+                    </li>
+                </ul>
               </li>
               <li class="nav-item">
-                <a href="/itemadd" class="nav-link"><span>商品登録</span></a>
+                <a href="/itemadd" class="nav-link"><span>データベース</span></a>
+                <ul class=" dropdown">
+                    <li class="nav-item">
+                      <a href="/admin/home" class="nav-link"><span>商品一覧</span></a>
+                    </li>
+                    <li class="nav-item dropdown">
+                      <a href="/admin/user" class="nav-link"><span>顧客担当者一覧</span></a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="/admin/itemadd" class="nav-link"><span>社内営業</span></a>
+                    </li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a href="/itemadd" class="nav-link"><span>データベース登録</span></a>
               </li>
               <li class="nav-item dropdown">
                 <a href="/download" class="nav-link"><span>CSVデータダウンロード</span></a>
