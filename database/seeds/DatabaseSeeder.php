@@ -87,7 +87,7 @@ for ($i = 1; $i <= 10; $i++) {
         'tantou_name'         => '発注先担当者名' ,
         'kokyaku_item_code'   => '顧客商品コード' ,
         'nouhin_yoteibi'      => '納品予定日' ,
-        'keisai_kigen'        => '掲載期限' ,
+        'keisai_kigen'        => '2022/04/01' ,
         'nyuukabi'            => '入荷日' ,
         'lot_bangou'          => 'ロット番号' ,
         'lot_gyou'            => 'ロット行' ,

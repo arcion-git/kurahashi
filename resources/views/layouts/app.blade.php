@@ -138,40 +138,21 @@
           <ul class="sidebar-menu">
               <li class="nav-item">
                 <a href="/admin/home" class="nav-link"><span>取引一覧</span></a>
-                <ul class=" dropdown">
-                    <li class="nav-item dropdown">
-                      <a href="/admin/user" class="nav-link"><span>未発注の取引</span></a>
-                    </li>
-                    <li class="nav-item dropdown">
-                      <a href="/admin/user" class="nav-link"><span>発注済の取引</span></a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="/admin/home" class="nav-link"><span>過去の取引</span></a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="/admin/home" class="nav-link"><span>キャンセルされた取引</span></a>
-                    </li>
-                </ul>
-              </li>
-              <li class="nav-item">
-                <a href="/itemadd" class="nav-link"><span>データベース</span></a>
-                <ul class=" dropdown">
-                    <li class="nav-item">
-                      <a href="/admin/home" class="nav-link"><span>商品一覧</span></a>
-                    </li>
-                    <li class="nav-item dropdown">
-                      <a href="/admin/user" class="nav-link"><span>顧客担当者一覧</span></a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="/admin/itemadd" class="nav-link"><span>社内営業</span></a>
-                    </li>
-                </ul>
-              </li>
-              <li class="nav-item">
-                <a href="/itemadd" class="nav-link"><span>データベース登録</span></a>
               </li>
               <li class="nav-item dropdown">
-                <a href="/download" class="nav-link"><span>CSVデータダウンロード</span></a>
+                <a href="/admin/user" class="nav-link"><span>顧客担当者一覧</span></a>
+              </li>
+              <li class="nav-item">
+                <a href="/admin/item" class="nav-link"><span>商品一覧</span></a>
+              </li>
+              <li class="nav-item">
+                <a href="/admin/" class="nav-link"><span>社内営業</span></a>
+              </li>
+              <li class="nav-item">
+                <a href="/admin/import" class="nav-link"><span>CSVインポート</span></a>
+              </li>
+              <li class="nav-item dropdown">
+                <a href="/admin/download" class="nav-link"><span>CSVダウンロード</span></a>
               </li>
           </ul>
           @endif

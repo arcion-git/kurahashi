@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use App\Cart;
 use App\Deal;
+use App\Item;
 
 // 時間に関する処理
 use Carbon\Carbon;
@@ -55,6 +56,21 @@ class AdminPageController extends Controller
     $users = User::get();
 
     return view('admin.auth.user', ['users' => $users]);
+  }
+
+  public function item(){
+
+    $items = Item::get();
+
+    return view('admin.auth.item', ['items' => $items]);
+  }
+
+  public function import(){
+    return view('admin.auth.import');
+  }
+
+  public function download(){
+    return view('admin.auth.download');
   }
 
   public function userdeal($id){

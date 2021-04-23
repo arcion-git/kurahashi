@@ -40,6 +40,12 @@
   Route::get('/admin/home', 'AdminPageController@index')->name('admin.home');
   Route::get('/admin/deal/{id}', 'AdminPageController@dealdetail')->name('admin.dealdetail');
   Route::get('/admin/user', 'AdminPageController@user')->name('admin.user');
+  Route::get('/admin/item', 'AdminPageController@item')->name('admin.item');
+  Route::get('/admin/sales', 'AdminPageController@sales')->name('admin.sales');
+
+  Route::get('/admin/import', 'AdminPageController@import')->name('admin.import');
+  Route::get('/admin/download', 'AdminPageController@download')->name('admin.download');
+
   Route::get('/admin/user/deal/{id}', 'AdminPageController@userdeal')->name('admin.user.deal');
 
   Route::post('/admin/updatecart', 'AdminPageController@updatecart');

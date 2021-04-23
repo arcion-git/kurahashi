@@ -15,7 +15,23 @@
         <div class="card">
           <div class="card-body">
 
-            <!-- <div class="float-right">
+            <ul class="navbar-nav float-left">
+
+
+              <div class="form-group">
+                <select class="custom-select">
+                  <option selected="">全ての取引</option>
+                  <option value="1">交渉中</option>
+                  <option value="2">受注済み</option>
+                  <option value="3">過去受注</option>
+                  <option value="3">キャンセル</option>
+                </select>
+              </div>
+
+            </ul>
+
+
+            <div class="float-right">
               <form>
                 <div class="input-group">
                   <input type="text" class="form-control" placeholder="検索">
@@ -24,13 +40,14 @@
                   </div>
                 </div>
               </form>
-            </div> -->
+            </div>
 
             <div class="clearfix mb-3"></div>
 
             <div class="table-responsive">
               <table class="table table-striped">
                 <tr>
+                  <th>取引ID</th>
                   <th>お名前</th>
                   <th>会社名</th>
                   <th>お問い合わせ日時</th>
@@ -41,6 +58,9 @@
 
                 @foreach($deals as $deal)
                 <tr>
+                  <td>
+                    {{$deal->id}}
+                  </td>
                   <td>
                     {{$deal->user->last_name}} {{$deal->user->first_name}}
                   </td>

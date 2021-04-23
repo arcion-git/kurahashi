@@ -57,7 +57,7 @@
                     {{$user->email}}
                   </td>
                   <td class="text-center">
-                    <a href="{{ url('/admin/user/deal/'.$user->id) }}"><button class="btn btn-primary">取引一覧</button></a>
+                    <a href="{{ url('/admin/user/deal/'.$user->id) }}"><button class="btn btn-primary">顧客詳細</button></a>
                   </td>
                 </tr>
                 @endforeach

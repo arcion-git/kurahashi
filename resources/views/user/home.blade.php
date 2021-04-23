@@ -1,12 +1,24 @@
 @extends('layouts.app')
 
 @section('content')
-<section class="section">
+
+
+        <section class="section">
           <div class="section-header">
-            <h1>商品一覧</h1>
+            <h1>
+              @if(isset($category_name))
+              {{$category_name}}
+              @else
+              商品一覧
+              @endif
+            </h1>
           </div>
 
 
+          <div class="section-body">
+
+@if(isset($category_name))
+@else
           <div class="row mt-4">
             <div class="col-12">
               <div class="card">
@@ -112,9 +124,6 @@
               </div>
             </div>
           </div>
-
-
-
           <div class="row">
             <div class="col-12">
               <div class="card">
@@ -220,11 +229,7 @@
               </div>
             </div>
           </div>
-
-
-
-
-                    <div class="row">
+          <div class="row">
                       <div class="col-12">
                         <div class="card">
                           <div class="card-body">
@@ -265,7 +270,7 @@
 
                                 <tr>
                                   <td class="text-center">01</td>
-                                  <td class="text-center">おすすめ商品サンプル</td>
+                                  <td class="text-center">前回注文商品サンプル</td>
                                   <td class="text-center">
                                     ¥ 5,000
                                   </td>
@@ -275,7 +280,7 @@
 
                                 <tr>
                                   <td class="text-center">02</td>
-                                  <td class="text-center">おすすめ商品サンプル</td>
+                                  <td class="text-center">前回注文商品サンプル</td>
                                   <td class="text-center">
                                     ¥ 4,000
                                   </td>
@@ -285,7 +290,7 @@
 
                                 <tr>
                                   <td class="text-center">03</td>
-                                  <td class="text-center">おすすめ商品サンプル</td>
+                                  <td class="text-center">前回注文商品サンプル</td>
                                   <td class="text-center">
                                     ¥ 6,000
                                   </td>
@@ -329,9 +334,9 @@
                         </div>
                       </div>
                     </div>
+@endif
 
 
-          <div class="section-body">
             <div class="row">
               <div class="col-12">
                 <div class="card">
