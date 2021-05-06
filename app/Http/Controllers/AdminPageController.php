@@ -51,6 +51,27 @@ class AdminPageController extends Controller
     return redirect()->route('admin.dealdetail',$id);
   }
 
+
+  public function intervalupdatecart(Request $request){
+
+    $cart_id = $request->cart_id;
+
+    $cart=Cart::where('id',$cart_id)->first();
+    $cart->discount = $request->discount;
+    $cart->quantity = $request->quantity;
+    $cart->save();
+
+    $data=[
+      'discount'=>$cart->discount,
+      'quantity'=>$cart->quantity,
+    ];
+
+    return view('dealdetail', $data);
+  }
+
+
+
+
   public function user(){
 
     $users = User::get();

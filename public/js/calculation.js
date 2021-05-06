@@ -7,7 +7,7 @@
 
 
 
-
+  // カートに追加
 $(function() {
 
   $(document).on("click", ".addcart", function() {
@@ -112,8 +112,8 @@ function update_field(){
 
       var target = $('input').map(function (index, el) {
       $(this).closest('tr').find('.total').text(
-      $(this).closest('tr').find('input:eq(0)').val() *
-      $(this).closest('tr').find('input:eq(1)').val());});
+      $(this).closest('tr').find('input.teika').val() *
+      $(this).closest('tr').find('input.quantity').val());});
       console.log(target);
 
     var sum = 0;
@@ -136,8 +136,8 @@ function update_field(){
 
 
     if(document.URL.match(/admin/)){
-      var discount = $(this).closest('tr').find('input:eq(0)').val();
-      var quantity = $(this).closest('tr').find('input:eq(1)').val();
+      var discount = $(this).closest('tr').find('input.discount').val();
+      var quantity = $(this).closest('tr').find('input.quantity').val();
       var cart_id = $(this).closest('tr').find('.cart_id').val();
 
       $.ajax({
@@ -166,10 +166,10 @@ function update_field(){
         });
       }
 
-    if(document.URL.match(/deal/)){
-      var discount = $(this).closest('tr').find('input:eq(0)').val();
-      var quantity = $(this).closest('tr').find('input:eq(1)').val();
-      var cart_id = $(this).closest('tr').find('.cart_id').val();
+    if(document.URL.match(/user/)){
+      var discount = $(this).closest('tr').find('input.teika').val();
+      var quantity = $(this).closest('tr').find('input.quantity').val();
+      var cart_id = $(this).closest('tr').find('input.cart_id').val();
 
       $.ajax({
           headers: {
@@ -196,8 +196,6 @@ function update_field(){
           console.log("errorThrown    : " + errorThrown.message);
         });
       }
-
-
    });
 }
 
@@ -207,8 +205,8 @@ $(document).ready( function(){
 
       var target = $('input').map(function (index, el) {
       $(this).closest('tr').find('.total').text(
-      $(this).closest('tr').find('input:eq(0)').val() *
-      $(this).closest('tr').find('input:eq(1)').val());});
+      $(this).closest('tr').find('input.teika').val() *
+      $(this).closest('tr').find('input.quantity').val());});
       console.log(target);
 
 
@@ -230,6 +228,65 @@ $(document).ready( function(){
       });
 
 
-
-
 });
+
+if(document.URL.match(/user/)){
+  window.addEventListener('load', function () {
+      setInterval(function () {
+        $(".cart_id").each( function() {
+        var discount = $(this).closest('tr').find('input.teika').val();
+        var quantity = $(this).closest('tr').find('input.change_quantity').val();
+        var cart_id = $(this).closest('tr').find('.cart_id').val();
+        $.ajax({
+            headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }, //Headersを書き忘れるとエラーになる
+            url: location.origin + '/updatecart',
+            type: 'POST', //リクエストタイプ
+            data: {
+              'discount': discount,
+              'quantity': quantity,
+              'cart_id': cart_id,
+            } //Laravelに渡すデータ
+          })
+          .done(function(data) {
+            console.log(data);
+            console.log(quantity);
+          })
+        $(this).closest('tr').find('input.quantity').val(quantity);
+        });
+      }, 1000);
+  })
+}
+
+
+
+if(document.URL.match(/admin/)){
+  window.addEventListener('load', function () {
+      setInterval(function () {
+        $(".cart_id").each( function() {
+        var discount = $(this).closest('tr').find('input.discount').val();
+        var quantity = $(this).closest('tr').find('input.change_quantity').val();
+        var cart_id = $(this).closest('tr').find('input.cart_id').val();
+        $.ajax({
+            headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }, //Headersを書き忘れるとエラーになる
+            url: location.origin + '/updatecart',
+            type: 'POST', //リクエストタイプ
+            data: {
+              'discount': discount,
+              'quantity': quantity,
+              'cart_id': cart_id,
+            } //Laravelに渡すデータ
+          })
+          .done(function(data) {
+            console.log(discount);
+            console.log(quantity);
+          })
+        $(this).closest('tr').find('input.teika').val(discount);
+        $(this).closest('tr').find('input.quantity').val(quantity);
+        });
+      }, 1000);
+  })
+}

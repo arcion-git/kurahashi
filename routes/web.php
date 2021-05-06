@@ -22,7 +22,7 @@
 
   Route::get('/confirm', 'LoginPageController@confirm');
   Route::get('/deal', 'LoginPageController@deal')->name('deal');
-  Route::get('/deal/{id}', 'LoginPageController@dealdetail')->name('dealdetail');
+  Route::get('/user/deal/{id}', 'LoginPageController@dealdetail')->name('dealdetail');
 
   Route::post('/addcart', 'LoginPageController@addcart');
   Route::post('/removecart', 'LoginPageController@removecart');
@@ -49,6 +49,7 @@
   Route::get('/admin/user/deal/{id}', 'AdminPageController@userdeal')->name('admin.user.deal');
 
   Route::post('/admin/updatecart', 'AdminPageController@updatecart');
+  Route::post('/admin/intervalupdatecart', 'AdminPageController@intervalupdatecart');
 
 
 
