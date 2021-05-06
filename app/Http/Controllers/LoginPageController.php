@@ -166,7 +166,8 @@ class LoginPageController extends Controller
       $cart->quantity = isset($quantitys[$key]) ? $quantitys[$key] : null;
       $cart->save();
     }
-    return redirect('deal');
+
+    return; redirect('deal');
   }
 
   public function updatecart(Request $request){
@@ -179,7 +180,15 @@ class LoginPageController extends Controller
     $cart->save();
 
     $id = $cart->deal_id;
-    return redirect()->route('dealdetail',$id);
+    $cart=Cart::where('id',$cart_id)->first();
+
+    $data=[
+      'discount'=> $cart->discount,
+      'quantity'=> $cart->quantity,
+      'cart_id' => $cart_id,
+    ];
+    echo json_encode($data);
+    return ;
   }
 
 

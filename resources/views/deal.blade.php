@@ -57,7 +57,7 @@
                     @endempty
                   </td>
                   <td class="text-center">
-                    <a href="{{ url('/deal/'.$deal->id) }}"><button class="btn btn-primary">詳細を見る</button></a>
+                    <a href="{{ url('/user/deal/'.$deal->id) }}"><button class="btn btn-primary">詳細を見る</button></a>
                   </td>
                 </tr>
                 @endforeach

@@ -117,7 +117,15 @@
                   	<th class="text-center">定価</th>
                     @endif
                   	<th class="text-center">単価</th>
+                    @if($deal->success_flg)
+                    @else
+                  	<th class="text-center">変更する単価</th>
+                    @endif
                   	<th class="text-center">個数</th>
+                    @if($deal->success_flg)
+                    @else
+                  	<th class="text-center">変更する個数</th>
+                    @endif
                   	<th class="text-center">小計</th>
                   	@if($deal->success_flg)
                   	@else
@@ -131,24 +139,41 @@
                     @if ( Auth::guard('admin')->check() )
                   	<td class="text-center">{{$cart->item->tanka}}</td>
                     @endif
-                  	<td class="teika text-center">
 
+
+                    <!-- 変更後の単価 -->
+                  	<td class="kakaku text-center">
+                      @if(isset($cart->discount))
+                      <input name="discount[]" class="teika text-center form-control" value="{{$cart->discount}}" readonly>
+                      @else
+                      <input name="teika[]" class="teika text-center form-control" value="{{$cart->item->teika}}" readonly>
+                      @endif
+                    </td>
+
+                    <!-- 変更単価 -->
+                  	<td class="kakaku text-center">
+                      <!-- クラハシ -->
                   		@if ( Auth::guard('admin')->check() )
+                        <!-- 発注済み -->
                   			@if($deal->success_flg)
+                          <!-- 割引適用 -->
                   				@if(isset($cart->discount))
                   				<input name="discount[]" class="teika text-center form-control" value="{{$cart->discount}}" readonly>
+                          <!-- 割引なし -->
                   				@else
                   				<input name="teika[]" class="teika text-center form-control" value="{{$cart->item->teika}}" readonly>
                   				@endif
+                        <!-- 発注前 -->
                   			@else
                   				@if(isset($cart->discount))
-                  				<input name="discount[]" class="teika text-center form-control" value="{{$cart->discount}}">
+                  				<input name="discount[]" class="discount text-center form-control" value="{{$cart->discount}}">
                   				@else
-                  				<input name="teika[]" class="teika text-center form-control" value="{{$cart->item->teika}}">
+                  				<input name="discount[]" class="discount text-center form-control" value="{{$cart->item->teika}}">
                   				@endif
                   			@endif
                   		@endif
 
+                      <!-- 顧客 -->
                   		@if ( Auth::guard('user')->check() )
                   			@if(isset($cart->discount))
                   			<input name="discount[]" class="teika text-center form-control" value="{{$cart->discount}}" readonly>
@@ -156,15 +181,16 @@
                   			<input name="teika[]" class="teika text-center form-control" value="{{$cart->item->teika}}" readonly>
                   			@endif
                   		@endif
-
                   	</td>
                   	<td class="text-center">
-                  		@if($deal->success_flg)
                   		<input name="quantity[]" class="quantity text-center form-control" value="{{$cart->quantity}}" readonly>
-                  		@else
-                  		<input name="quantity[]" class="quantity text-center form-control" value="{{$cart->quantity}}">
-                  		@endif
                   	</td>
+                  	@if($deal->success_flg)
+                  	@else
+                    <td class="text-center">
+                  		<input name="change_quantity[]" class="change_quantity text-center form-control" value="{{$cart->quantity}}">
+                  	</td>
+                  	@endif
                   	<td class="total text-center"></td>
                   	@if($deal->success_flg)
                   	@else
