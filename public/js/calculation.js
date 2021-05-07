@@ -230,63 +230,63 @@ $(document).ready( function(){
 
 });
 
-if(document.URL.match(/user/)){
-  window.addEventListener('load', function () {
-      setInterval(function () {
-        $(".cart_id").each( function() {
-        var discount = $(this).closest('tr').find('input.teika').val();
-        var quantity = $(this).closest('tr').find('input.change_quantity').val();
-        var cart_id = $(this).closest('tr').find('.cart_id').val();
-        $.ajax({
-            headers: {
-              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }, //Headersを書き忘れるとエラーになる
-            url: location.origin + '/updatecart',
-            type: 'POST', //リクエストタイプ
-            data: {
-              'discount': discount,
-              'quantity': quantity,
-              'cart_id': cart_id,
-            } //Laravelに渡すデータ
-          })
-          .done(function(data) {
-            console.log(data);
-            console.log(quantity);
-          })
-        $(this).closest('tr').find('input.quantity').val(quantity);
-        });
-      }, 1000);
-  })
-}
+// if(document.URL.match(/user/)){
+//   window.addEventListener('load', function () {
+//       setInterval(function () {
+//         $(".cart_id").each( function() {
+//         var discount = $(this).closest('tr').find('input.teika').val();
+//         var quantity = $(this).closest('tr').find('input.change_quantity').val();
+//         var cart_id = $(this).closest('tr').find('.cart_id').val();
+//         $.ajax({
+//             headers: {
+//               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+//             }, //Headersを書き忘れるとエラーになる
+//             url: location.origin + '/updatecart',
+//             type: 'POST', //リクエストタイプ
+//             data: {
+//               'discount': discount,
+//               'quantity': quantity,
+//               'cart_id': cart_id,
+//             } //Laravelに渡すデータ
+//           })
+//           .done(function(data) {
+//             console.log(data);
+//             console.log(quantity);
+//           })
+//         $(this).closest('tr').find('input.quantity').val(quantity);
+//         });
+//       }, 1000);
+//   })
+// }
 
 
 
-if(document.URL.match(/admin/)){
-  window.addEventListener('load', function () {
-      setInterval(function () {
-        $(".cart_id").each( function() {
-        var discount = $(this).closest('tr').find('input.discount').val();
-        var quantity = $(this).closest('tr').find('input.change_quantity').val();
-        var cart_id = $(this).closest('tr').find('input.cart_id').val();
-        $.ajax({
-            headers: {
-              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }, //Headersを書き忘れるとエラーになる
-            url: location.origin + '/updatecart',
-            type: 'POST', //リクエストタイプ
-            data: {
-              'discount': discount,
-              'quantity': quantity,
-              'cart_id': cart_id,
-            } //Laravelに渡すデータ
-          })
-          .done(function(data) {
-            console.log(discount);
-            console.log(quantity);
-          })
-        $(this).closest('tr').find('input.teika').val(discount);
-        $(this).closest('tr').find('input.quantity').val(quantity);
-        });
-      }, 1000);
-  })
-}
+// if(document.URL.match(/admin/)){
+//   window.addEventListener('load', function () {
+//       setInterval(function () {
+//         $(".cart_id").each( function() {
+//         var discount = $(this).closest('tr').find('input.discount').val();
+//         var quantity = $(this).closest('tr').find('input.change_quantity').val();
+//         var cart_id = $(this).closest('tr').find('input.cart_id').val();
+//         $.ajax({
+//             headers: {
+//               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+//             }, //Headersを書き忘れるとエラーになる
+//             url: location.origin + '/updatecart',
+//             type: 'POST', //リクエストタイプ
+//             data: {
+//               'discount': discount,
+//               'quantity': quantity,
+//               'cart_id': cart_id,
+//             } //Laravelに渡すデータ
+//           })
+//           .done(function(data) {
+//             console.log(discount);
+//             console.log(quantity);
+//           })
+//         $(this).closest('tr').find('input.teika').val(discount);
+//         $(this).closest('tr').find('input.quantity').val(quantity);
+//         });
+//       }, 1000);
+//   })
+// }

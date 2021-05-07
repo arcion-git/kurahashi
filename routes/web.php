@@ -17,6 +17,10 @@
 
 
 
+  Route::post('/form/import-csv', 'CsvImportController@store');
+
+
+
   Route::get('/', 'LoginPageController@index')->name('home');
   Route::get('/category/{id}', 'LoginPageController@category');
 
