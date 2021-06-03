@@ -47,17 +47,9 @@ class DatabaseSeeder extends Seeder
 for ($i = 1; $i <= 10; $i++) {
 
       \DB::table("users")->insert([
-        'last_name'            => '山田',
-        'first_name'           => '太郎'.$i,
-        'last_name_kana'       => 'ヤマダ',
-        'first_name_kana'      => 'タロウ',
-        'company'              => '株式会社サンプル',
-        'company_kana'         => 'カブシキガイシャサンプル',
-        'address01'            => '720-1234',
-        'address02'            => '広島県',
-        'address03'            => '福山市引野町',
-        'address04'            => '1丁目1-1',
-        'address05'            => '',
+        'kaiin_number'           => '0000'.$i,
+        'name'           => '太郎'.$i,
+        'name_kana'       => 'ヤマダ',
         'tel'                  => '08012345678',
         'email'                => 'sample'.$i.'@gmail.com' ,
         'password'             => \Hash::make('secret') ,
