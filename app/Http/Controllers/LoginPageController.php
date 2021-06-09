@@ -15,11 +15,29 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
+
+
 class LoginPageController extends Controller
 {
   public function __construct(){
 		$this->middleware('user');
 	}
+
+
+
+
+  public function questionnaire()
+  {
+      $items = Item::get();
+
+      $categories = Category::get();
+      $user_id = Auth::guard('user')->user()->id;
+      $carts =  Cart::where('user_id',$user_id)->get();
+
+      return view('user/auth/questionnaire', ['items' => $items , 'carts' => $carts , 'categories' => $categories]);
+  }
+
+
 
   public function index()
   {

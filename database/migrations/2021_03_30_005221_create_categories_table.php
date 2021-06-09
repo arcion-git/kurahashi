@@ -15,7 +15,12 @@ class CreateCategoriesTable extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('category_name')->nullable()->comment('カテゴリー名');
+
+            $table->string('busho_code')->nullable()->comment('部署コード');
+            $table->string('ka_code')->nullable()->comment('課コード');
+            $table->string('item_code')->nullable()->comment('商品コード');
+            $table->string('category_name')->nullable()->comment('商品カテゴリ名');
+
             $table->timestamps();
         });
     }

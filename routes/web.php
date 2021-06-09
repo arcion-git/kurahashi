@@ -39,6 +39,8 @@
   Route::post('/dealcart', 'LoginPageController@dealcart');
   Route::get('/showdealcart', 'LoginPageController@showdealcart');
 
+// アンケート画面
+  Route::get('/questionnaire', 'LoginPageController@questionnaire');
 
 
   Route::get('/admin/home', 'AdminPageController@index')->name('admin.home');
@@ -47,7 +49,8 @@
   Route::get('/admin/item', 'AdminPageController@item')->name('admin.item');
   Route::get('/admin/sales', 'AdminPageController@sales')->name('admin.sales');
 
-  Route::get('/admin/import', 'AdminPageController@import')->name('admin.import');
+  Route::get('/admin/csv', 'AdminPageController@csv')->name('admin.csv');
+  Route::post('/admin/import', 'AdminPageController@import')->name('admin.import');
   Route::get('/admin/download', 'AdminPageController@download')->name('admin.download');
 
   Route::get('/admin/user/deal/{id}', 'AdminPageController@userdeal')->name('admin.user.deal');

@@ -149,7 +149,7 @@
                 <a href="/admin/" class="nav-link"><span>社内営業</span></a>
               </li>
               <li class="nav-item">
-                <a href="/admin/import" class="nav-link"><span>CSVインポート</span></a>
+                <a href="/admin/csv" class="nav-link"><span>CSVインポート</span></a>
               </li>
               <li class="nav-item dropdown">
                 <a href="/admin/download" class="nav-link"><span>CSVダウンロード</span></a>

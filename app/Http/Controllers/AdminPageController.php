@@ -15,6 +15,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
+// CSVインポート
+use App\Imports\UserImport;
+use Maatwebsite\Excel\Facades\Excel;
+
 class AdminPageController extends Controller
 {
   public function __construct(){
@@ -86,8 +90,13 @@ class AdminPageController extends Controller
     return view('admin.auth.item', ['items' => $items]);
   }
 
+  public function csv(){
+    return view('admin.auth.csv');
+  }
+
   public function import(){
-    return view('admin.auth.import');
+  Excel::import(new UserImport, request()->file('file'));
+  return back();
   }
 
   public function download(){
