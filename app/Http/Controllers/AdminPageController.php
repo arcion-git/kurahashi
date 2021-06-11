@@ -6,6 +6,7 @@ use App\User;
 use App\Cart;
 use App\Deal;
 use App\Item;
+use App\CategoryMaster;
 
 // 時間に関する処理
 use Carbon\Carbon;
@@ -16,7 +17,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
 // CSVインポート
+use App\Imports\ItemImport;
 use App\Imports\UserImport;
+use App\Imports\CategoryMasterImport;
 use Maatwebsite\Excel\Facades\Excel;
 
 class AdminPageController extends Controller
@@ -94,10 +97,23 @@ class AdminPageController extends Controller
     return view('admin.auth.csv');
   }
 
-  public function import(){
+  public function userimport(){
   Excel::import(new UserImport, request()->file('file'));
   return back();
   }
+
+  public function itemimport(){
+  Excel::import(new ItemImport, request()->file('file'));
+  return back();
+  }
+
+  public function categorymasterimport(){
+  CategoryMaster::truncate();
+  Excel::import(new CategoryMasterImport, request()->file('file'));
+  return back();
+  }
+
+
 
   public function download(){
     return view('admin.auth.download');

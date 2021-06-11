@@ -6,6 +6,7 @@ use App\Cart;
 use App\Deal;
 use App\Item;
 use App\Category;
+use App\CategoryMaster;
 
 // 時間に関する処理
 use Carbon\Carbon;
@@ -28,13 +29,16 @@ class LoginPageController extends Controller
 
   public function questionnaire()
   {
-      $items = Item::get();
+      $category_masters = CategoryMaster::get();
+      $category_masters = $category_masters->groupBy('bu_ka_name');
+      // dd($category_masters);
 
-      $categories = Category::get();
+
+
       $user_id = Auth::guard('user')->user()->id;
       $carts =  Cart::where('user_id',$user_id)->get();
 
-      return view('user/auth/questionnaire', ['items' => $items , 'carts' => $carts , 'categories' => $categories]);
+      return view('user/auth/questionnaire', ['category_masters' => $category_masters]);
   }
 
 
@@ -43,7 +47,8 @@ class LoginPageController extends Controller
   {
       $items = Item::get();
 
-      $categories = Category::get();
+      $category_masters = CategoryMaster::get();
+      $category_masters = $category_masters->groupBy('bu_ka_name');
       $user_id = Auth::guard('user')->user()->id;
       $carts =  Cart::where('user_id',$user_id)->get();
 
@@ -51,7 +56,7 @@ class LoginPageController extends Controller
       //   dd($item->category()->id);
       // }
 
-      return view('user/home', ['items' => $items , 'carts' => $carts , 'categories' => $categories]);
+      return view('user/home', ['items' => $items , 'carts' => $carts , 'category_masters' => $category_masters]);
   }
 
   public function category($id)

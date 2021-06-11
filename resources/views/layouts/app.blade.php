@@ -161,13 +161,31 @@
           @if ( Auth::guard('user')->check() )
           <ul class="sidebar-menu">
             <li class="nav-item">
+              <a href="{{ url('/') }}" class="nav-link"><span>担当のおすすめ商品</span></a>
+            </li>
+            <li class="nav-item">
+              <a href="{{ url('/') }}" class="nav-link"><span>時価商品</span></a>
+            </li>
+            <li class="nav-item">
               <a href="{{ url('/') }}" class="nav-link"><span>すべての商品</span></a>
             </li>
-          @foreach($categories as $category)
-            <li class="nav-item">
-              <a href="/category/{{$category->id}}" class="nav-link"><span>{{$category->category_name}}</span></a>
-            </li>
-          @endforeach
+
+
+            @foreach($category_masters as $key=>$vals)
+                <li class="nav-item" style="font-weight:bold;"><span class="nav-link">{{$key}}</span></li>
+                @foreach($vals as $val)
+                    <li class="nav-item"><a class="nav-link" href="/category/{{$val->category_id}}"><span>{{ $val->category_name }}</span></a></li>
+                @endforeach
+            @endforeach
+
+
+
+
+
+
+
+
+
           </ul>
           @endif
 

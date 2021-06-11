@@ -40,7 +40,7 @@
   Route::get('/showdealcart', 'LoginPageController@showdealcart');
 
 // アンケート画面
-  Route::get('/questionnaire', 'LoginPageController@questionnaire');
+  Route::get('/user/questionnaire', 'LoginPageController@questionnaire');
 
 
   Route::get('/admin/home', 'AdminPageController@index')->name('admin.home');
@@ -50,7 +50,9 @@
   Route::get('/admin/sales', 'AdminPageController@sales')->name('admin.sales');
 
   Route::get('/admin/csv', 'AdminPageController@csv')->name('admin.csv');
-  Route::post('/admin/import', 'AdminPageController@import')->name('admin.import');
+  Route::post('/admin/userimport', 'AdminPageController@userimport')->name('admin.userimport');
+  Route::post('/admin/itemimport', 'AdminPageController@itemimport')->name('admin.itemimport');
+  Route::post('/admin/CategoryMasterImport', 'AdminPageController@CategoryMasterImport')->name('admin.categorymasterimport');
   Route::get('/admin/download', 'AdminPageController@download')->name('admin.download');
 
   Route::get('/admin/user/deal/{id}', 'AdminPageController@userdeal')->name('admin.user.deal');

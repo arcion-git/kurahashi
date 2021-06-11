@@ -367,6 +367,8 @@
                           <th class="text-center">商品番号</th>
                           <th class="text-center">商品名</th>
                           <!-- <th class="text-center">カテゴリー</th> -->
+                          <th class="text-center">単位</th>
+                          <th class="text-center">納品予定日</th>
                           <th class="text-center">参考価格</th>
                           <th class="text-center">個数</th>
                           <th class="text-center">操作</th>
@@ -380,6 +382,18 @@
                         <tr>
                           <td class="text-center">{{$item->item_code}}</td>
                           <td class="text-center">{{$item->item_name}}</td>
+                          <td class="text-center">
+                            @if ($item->tani == 1)
+                            ｹｰｽ
+                            @elseif ($item->tani == 2)
+                            ﾎﾞｰﾙ
+                            @elseif ($item->tani == 3)
+                            ﾊﾞﾗ
+                            @elseif ($item->tani == 4)
+                            Kg
+                            @endif
+                          </td>
+                          <td class="text-center">{{$item->nouhin_yoteibi_start}}</td>
                           <td class="text-center">
                             ¥ {{$item->teika}}
                           </td>

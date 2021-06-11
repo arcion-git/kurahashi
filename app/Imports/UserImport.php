@@ -17,17 +17,13 @@ class UserImport implements OnEachRow, WithHeadingRow
     *
     * @return \Illuminate\Database\Eloquent\Model|null
     */
-
-
     public function OnRow(Row $row)
     {
-
-
        $row=$row->toArray();
        $user=User::updateOrCreate(
-            // 重複除外カラムを指定
+            // キーカラム
             [   'kaiin_number'=>$row['会員No']],
-            // データベースのカラムとエクセルのカラムを紐づけ
+            // 上書き内容
             [
               'name'=>$row['担当者名'],
               'name_kana'=>$row['担当者名カナ'],
@@ -40,17 +36,18 @@ class UserImport implements OnEachRow, WithHeadingRow
 
 
 
-   //  public function rules(): array
-   //  {
-   //      return [
-   //          'kaiin_number' => 'required',
-   //      ];
-   //  }
-   //
+    // public function rules(): array
+    // {
+    //     return [
+    //         'kaiin_number' => 'required',
+    //     ];
+    // }
+
    //  public function customValidationMessages()
    // {
    //  return [
    //      'kaiin_number.required' => '会員Noがありません',
+   //      'name_kana.required' => '担当者名カナがありません',
    //  ];
    // }
 

@@ -36,33 +36,14 @@
               <div class="col-12">
                 <div class="form-group">
                   <label>商品詳細</label>
-
-
-                  @if ($errors->any())
-                  <div class="alert alert-danger">
-                  	<ul>
-                  		@foreach ($errors->all() as $error)
-                  			<li>{{ $error }}</li>
-                  		@endforeach
-                  	</ul>
-                  </div>
-                  @endif
-                  <form action="import" method="POST" enctype="multipart/form-data">
+                  <form action="itemimport" method="POST" enctype="multipart/form-data">
                   	@csrf
                   	<div class="form-group">
-                  		<input type="file" name="file">
-                  		<br><br>
-                  		<button class="btn btn-success">ボタンをクリック</button>
+                  		<input type="file" class="form-control" name="file" style="padding-bottom:37px;">
+                  		<br>
+                  		<button class="btn btn-success">インポート</button>
                   	</div>
                   </form>
-
-
-
-
-
-
-
-                  <input type="file" class="form-control" style="padding-bottom:37px;">
                 </div>
               </div>
               <div class="col-6">
@@ -75,6 +56,28 @@
                 <div class="form-group">
                   <label>商品情報 - 特価</label>
                   <input type="file" class="form-control" style="padding-bottom:37px;">
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="form-group">
+                  <label>商品カテゴリマスター</label>
+                  @if ($errors->any())
+                  <div class="alert alert-danger">
+                  	<ul>
+                  		@foreach ($errors->all() as $error)
+                  			<li>{{ $error }}</li>
+                  		@endforeach
+                  	</ul>
+                  </div>
+                  @endif
+                  <form action="CategoryMasterImport" method="POST" enctype="multipart/form-data">
+                  	@csrf
+                  	<div class="form-group">
+                  		<input type="file" class="form-control" name="file" style="padding-bottom:37px;">
+                  		<br>
+                  		<button class="btn btn-success">インポート</button>
+                  	</div>
+                  </form>
                 </div>
               </div>
               <div class="col-6">
@@ -100,7 +103,23 @@
               <div class="col-12">
                 <div class="form-group">
                   <label>顧客担当者</label>
-                  <input type="file" class="form-control" style="padding-bottom:37px;">
+                  @if ($errors->any())
+                  <div class="alert alert-danger">
+                  	<ul>
+                  		@foreach ($errors->all() as $error)
+                  			<li>{{ $error }}</li>
+                  		@endforeach
+                  	</ul>
+                  </div>
+                  @endif
+                  <form action="userimport" method="POST" enctype="multipart/form-data">
+                  	@csrf
+                  	<div class="form-group">
+                  		<input type="file" class="form-control" name="file" style="padding-bottom:37px;">
+                  		<br>
+                  		<button class="btn btn-success">インポート</button>
+                  	</div>
+                  </form>
                 </div>
               </div>
               <div class="col-6">
