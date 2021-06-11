@@ -63,14 +63,23 @@ class LoginPageController extends Controller
   public function category($id)
   {
 
-      $items = Item::where('category_id',$id)->get();
+      $category = $id;
+
+      $category_items = Category::where('category_id',$id)->get();
+
+      // $items = Item::where('category_id',$id)->get();
+      $items = Item::get();
+
+
+      $category_masters = CategoryMaster::get();
+      $category_masters = $category_masters->groupBy('bu_ka_name');
 
       $categories = Category::get();
       $category_name = Category::where('id',$id)->first()->category_name;
       $user_id = Auth::guard('user')->user()->id;
       $carts =  Cart::where('user_id',$user_id)->get();
 
-      return view('user/home', ['items' => $items , 'carts' => $carts , 'categories' => $categories , 'category_name' => $category_name]);
+      return view('user/home', ['items' => $items , 'carts' => $carts ,'category' => $category, 'category_masters' => $category_masters , 'categories' => $categories , 'category_name' => $category_name]);
   }
 
 

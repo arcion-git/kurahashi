@@ -40,9 +40,9 @@ class Item extends Model
 
   ];
 
-  public function category() {
-      //リレーション
-      return $this->belongsToMany('App\Category');
+  public function tags()
+  {
+      return $this->belongsToMany('App\Models\Category');
   }
 
 

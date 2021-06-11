@@ -366,29 +366,30 @@
                         <tr>
                           <th class="text-center">商品番号</th>
                           <th class="">商品名</th>
-                          <th class="text-center">カテゴリー</th>
-                          <th class="text-center">タグ</th>
+                          <th class="text-center">産地</th>
+                          <th class="text-center">在庫数</th>
+                          <th class="text-center">規格</th>
                           <th class="text-center">単位</th>
+                          <th class="text-center">特記事項</th>
                           <!-- <th class="text-center">納品予定日</th>
                           <th class="text-center">参考価格</th>
                           <th class="text-center">個数</th> -->
-                          <th class="text-center">操作</th>
+                          <th class="text-center" style="min-width:180px;">操作</th>
                         </tr>
 
 
 
-
+                        @foreach ($category->items as $item)
+                        <li>{{ $items->item_name }}</li>
+                        @endforeach
 
                         @foreach($items as $item)
                         <tr>
                           <td class="text-center">{{$item->item_code}}</td>
                           <td class="">{{$item->item_name}}</td>
-                          <td class="">
-
-
-                          </td>
-                          <td class="">
-                          </td>
+                          <td class="text-center">{{$item->sanchi_name}}</td>
+                          <td class="text-center">{{$item->zaikosuu}}</td>
+                          <td class="text-center">{{$item->kikaku}}</td>
                           <td class="text-center">
                             @if ($item->tani == 1)
                             ｹｰｽ
@@ -400,6 +401,8 @@
                             Kg
                             @endif
                           </td>
+                          <td class="text-center">{{$item->tokkijikou}}</td>
+
                           <!-- <td class="text-center">{{$item->nouhin_yoteibi_start}}</td>
                           <td class="text-center">
                             ¥ {{$item->teika}}
