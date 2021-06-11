@@ -22,27 +22,27 @@ class DatabaseSeeder extends Seeder
         'updated_at' => new DateTime(),
       ]);
 
-      \DB::table("categories")->insert([
-        'category_name'        =>  'おすすめ',
-      ]);
-      \DB::table("categories")->insert([
-        'category_name'        =>  'クラハシオリジナル',
-      ]);
-      \DB::table("categories")->insert([
-        'category_name'        =>  '鮮魚',
-      ]);
-      \DB::table("categories")->insert([
-        'category_name'        =>  '訳あり',
-      ]);
-      \DB::table("categories")->insert([
-        'category_name'        =>  '塩蔵・塩干し',
-      ]);
-      \DB::table("categories")->insert([
-        'category_name'        =>  '冷凍',
-      ]);
-      \DB::table("categories")->insert([
-        'category_name'        =>  '冷凍加工',
-      ]);
+      // \DB::table("categories")->insert([
+      //   'category_name'        =>  'おすすめ',
+      // ]);
+      // \DB::table("categories")->insert([
+      //   'category_name'        =>  'クラハシオリジナル',
+      // ]);
+      // \DB::table("categories")->insert([
+      //   'category_name'        =>  '鮮魚',
+      // ]);
+      // \DB::table("categories")->insert([
+      //   'category_name'        =>  '訳あり',
+      // ]);
+      // \DB::table("categories")->insert([
+      //   'category_name'        =>  '塩蔵・塩干し',
+      // ]);
+      // \DB::table("categories")->insert([
+      //   'category_name'        =>  '冷凍',
+      // ]);
+      // \DB::table("categories")->insert([
+      //   'category_name'        =>  '冷凍加工',
+      // ]);
 
 for ($i = 1; $i <= 10; $i++) {
 

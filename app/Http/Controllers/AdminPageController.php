@@ -6,6 +6,7 @@ use App\User;
 use App\Cart;
 use App\Deal;
 use App\Item;
+use App\Category;
 use App\CategoryMaster;
 
 // 時間に関する処理
@@ -19,6 +20,7 @@ use Illuminate\Support\Facades\Mail;
 // CSVインポート
 use App\Imports\ItemImport;
 use App\Imports\UserImport;
+use App\Imports\CategoryImport;
 use App\Imports\CategoryMasterImport;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -110,6 +112,12 @@ class AdminPageController extends Controller
   public function categorymasterimport(){
   CategoryMaster::truncate();
   Excel::import(new CategoryMasterImport, request()->file('file'));
+  return back();
+  }
+
+  public function categoryimport(){
+  Category::truncate();
+  Excel::import(new CategoryImport, request()->file('file'));
   return back();
   }
 

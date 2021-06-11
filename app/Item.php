@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Item extends Model
 {
   protected $fillable = [
+      'id',
       'item_code',
       'sku_code',
       'item_name',
@@ -26,7 +27,6 @@ class Item extends Model
       'jan_code',
       'nouhin_yoteibi_start',
       'nouhin_yoteibi_end',
-      // 'keisai_kigen',
       'nyuukabi',
       'lot_bangou',
       'lot_gyou',
@@ -37,36 +37,15 @@ class Item extends Model
       'haisou_nissuu',
       'shoudan_umu',
       'nebiki_umu',
+
   ];
 
   public function category() {
       //リレーション
-      return $this->hasMany('App\Category', 'category_id');
+      return $this->belongsToMany('App\Category');
   }
 
 
 
-  /**
-   * CSVヘッダ項目の定義値があれば定義配列のkeyを返す
-   *
-   * @param string $header
-   * @param string $encoding
-   * @return string|null
-   */
-  public static function retrieveTestColumnsByValue(string $header ,string $encoding)
-  {
-      // CSVヘッダとテーブルのカラムを関連付けておく
-      $list = [
-          'content' => "内容",
-          'memo'    => "備考",
-      ];
-
-      foreach ($list as $key => $value) {
-          if ($header === mb_convert_encoding($value, $encoding)) {
-              return $key;
-          }
-      }
-      return null;
-  }
 
 }

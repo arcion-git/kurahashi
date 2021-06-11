@@ -66,7 +66,7 @@
               <img alt="image" src="{{ asset('img/avatar/avatar-1.png') }}" class="rounded-circle mr-1">
 
               @if ( Auth::guard('user')->check() )
-              <div class="d-sm-none d-lg-inline-block">{{ Auth::guard('user')->user()->last_name }} {{ Auth::guard('user')->user()->first_name }} 様</div>
+              <div class="d-sm-none d-lg-inline-block">{{ Auth::guard('user')->user()->name }}  様</div>
               @endif
 
             </a>

@@ -46,6 +46,7 @@ class LoginPageController extends Controller
   public function index()
   {
       $items = Item::get();
+      $categorys = Category::get();
 
       $category_masters = CategoryMaster::get();
       $category_masters = $category_masters->groupBy('bu_ka_name');
@@ -56,7 +57,7 @@ class LoginPageController extends Controller
       //   dd($item->category()->id);
       // }
 
-      return view('user/home', ['items' => $items , 'carts' => $carts , 'category_masters' => $category_masters]);
+      return view('user/home', ['items' => $items , 'carts' => $carts , 'category_masters' => $category_masters ,'categorys' => $categorys]);
   }
 
   public function category($id)

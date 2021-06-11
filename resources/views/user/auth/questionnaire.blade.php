@@ -24,7 +24,7 @@
                 @foreach($vals as $val)
                     <li class="col-4">
                       <input type="checkbox" id="{{ $val->category_id }}" name="{{ $val->category_id }}">
-                      <label for="{{ $val->category_id }}" class="checkbox02">{{ $val->category_name }}</label>
+                      <label for="{{ $val->category_id }}" class="checkbox02">{{ $val->category_name }}（236点）</label>
                     </li>
                 @endforeach
             </ul>

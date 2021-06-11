@@ -32,8 +32,8 @@
               <table class="table table-striped">
                 <tr>
                   <th class="text-center">お名前</th>
-                  <th class="text-center">会社名</th>
-                  <th class="text-center">住所</th>
+                  <!-- <th class="text-center">会社名</th>
+                  <th class="text-center">住所</th> -->
                   <th class="text-center">電話番号</th>
                   <th class="text-center">メールアドレス</th>
                   <th class="text-center">操作</th>
@@ -42,13 +42,7 @@
                 @foreach($users as $user)
                 <tr>
                   <td class="text-center">
-                    {{$user->last_name}} {{$user->first_name}}
-                  </td>
-                  <td class="text-center">
-                    {{$user->company}}
-                  </td>
-                  <td class="text-center">
-                    {{$user->address01}} {{$user->address02}}{{$user->address03}}{{$user->address04}}
+                    {{$user->name}}
                   </td>
                   <td class="text-center">
                     {{$user->tel}}

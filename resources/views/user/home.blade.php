@@ -30,7 +30,7 @@
                     <h2 class="section-title">担当のおすすめ商品</h2>
                     @endif
                   </div>
-                  <!-- <div class="float-right">
+                  <div class="float-right">
                     <form>
                       <div class="input-group">
                         <input type="text" class="form-control" placeholder="検索">
@@ -39,7 +39,7 @@
                         </div>
                       </div>
                     </form>
-                  </div> -->
+                  </div>
 
                   <div class="clearfix mb-3"></div>
 
@@ -365,12 +365,13 @@
                       <table class="table table-striped">
                         <tr>
                           <th class="text-center">商品番号</th>
-                          <th class="text-center">商品名</th>
-                          <!-- <th class="text-center">カテゴリー</th> -->
+                          <th class="">商品名</th>
+                          <th class="text-center">カテゴリー</th>
+                          <th class="text-center">タグ</th>
                           <th class="text-center">単位</th>
-                          <th class="text-center">納品予定日</th>
+                          <!-- <th class="text-center">納品予定日</th>
                           <th class="text-center">参考価格</th>
-                          <th class="text-center">個数</th>
+                          <th class="text-center">個数</th> -->
                           <th class="text-center">操作</th>
                         </tr>
 
@@ -381,7 +382,13 @@
                         @foreach($items as $item)
                         <tr>
                           <td class="text-center">{{$item->item_code}}</td>
-                          <td class="text-center">{{$item->item_name}}</td>
+                          <td class="">{{$item->item_name}}</td>
+                          <td class="">
+
+
+                          </td>
+                          <td class="">
+                          </td>
                           <td class="text-center">
                             @if ($item->tani == 1)
                             ｹｰｽ
@@ -393,11 +400,11 @@
                             Kg
                             @endif
                           </td>
-                          <td class="text-center">{{$item->nouhin_yoteibi_start}}</td>
+                          <!-- <td class="text-center">{{$item->nouhin_yoteibi_start}}</td>
                           <td class="text-center">
                             ¥ {{$item->teika}}
                           </td>
-                          <td class="text-center"><input name="quantity" class="quantity form-control" value="1"></td>
+                          <td class="text-center"><input name="quantity" class="quantity form-control" value="1"></td> -->
                           <td class="text-center"><button id="{{$item->id}}" class="addcart btn btn-warning">カートに入れる</button></td>
                         </tr>
                         @endforeach

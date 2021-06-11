@@ -28,7 +28,7 @@ class UserImport implements OnEachRow, WithHeadingRow
               'name'=>$row['担当者名'],
               'name_kana'=>$row['担当者名カナ'],
               'tel'=>$row['担当者連絡先電話番号'],
-              'password'=>'secret',
+              'password'=>\Hash::make('secret') ,
               'email'=>$row['担当者連絡先メールアドレス'],
             ]
         );

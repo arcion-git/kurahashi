@@ -53,6 +53,10 @@
   Route::post('/admin/userimport', 'AdminPageController@userimport')->name('admin.userimport');
   Route::post('/admin/itemimport', 'AdminPageController@itemimport')->name('admin.itemimport');
   Route::post('/admin/CategoryMasterImport', 'AdminPageController@CategoryMasterImport')->name('admin.categorymasterimport');
+
+  Route::post('/admin/CategoryImport', 'AdminPageController@CategoryImport')->name('admin.categoryimport');
+
+
   Route::get('/admin/download', 'AdminPageController@download')->name('admin.download');
 
   Route::get('/admin/user/deal/{id}', 'AdminPageController@userdeal')->name('admin.user.deal');
