@@ -42,7 +42,7 @@ class Item extends Model
 
   public function tags()
   {
-      return $this->belongsToMany('App\Models\Category');
+      return $this->belongsToMany('App\Category');
   }
 
 

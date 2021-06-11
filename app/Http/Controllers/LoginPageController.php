@@ -63,7 +63,7 @@ class LoginPageController extends Controller
   public function category($id)
   {
 
-      $category = $id;
+      $category = Category::find($id);
 
       $category_items = Category::where('category_id',$id)->get();
 
