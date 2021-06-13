@@ -2,13 +2,13 @@
 
 namespace App\Imports;
 
-use App\Category;
+use App\category_item;
 
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
 
-class CategoryImport implements ToModel, WithHeadingRow
+class CategoryItemImport implements ToModel, WithHeadingRow
 {
     /**
     * @param array $row
@@ -17,13 +17,9 @@ class CategoryImport implements ToModel, WithHeadingRow
     */
     public function model(array $row)
     {
-        return new Category([
+        return new category_item([
+          'item_id'=>$row['商品コード'],
           'category_id'=>$row['カテゴリID'],
-          'busho_code'=>$row['部署コード'],
-          'busho_name'=>$row['部署名'],
-          'ka_code'=>$row['課コード'],
-          'bu_ka_name'=>$row['部課名'],
-          'category_name'=>$row['カテゴリ名'],
         ]);
     }
 }

@@ -70,7 +70,7 @@
                   	</ul>
                   </div>
                   @endif
-                  <form action="CategoryMasterImport" method="POST" enctype="multipart/form-data">
+                  <form action="CategoryImport" method="POST" enctype="multipart/form-data">
                   	@csrf
                   	<div class="form-group">
                   		<input type="file" class="form-control" name="file" style="padding-bottom:37px;">
@@ -92,7 +92,7 @@
                   	</ul>
                   </div>
                   @endif
-                  <form action="CategoryImport" method="POST" enctype="multipart/form-data">
+                  <form action="CategoryItemImport" method="POST" enctype="multipart/form-data">
                   	@csrf
                   	<div class="form-group">
                   		<input type="file" class="form-control" name="file" style="padding-bottom:37px;">
@@ -102,12 +102,28 @@
                   </form>
                 </div>
               </div>
-              <!-- <div class="col-6">
+              <div class="col-6">
                 <div class="form-group">
                   <label>商品タグ</label>
-                  <input type="file" class="form-control" style="padding-bottom:37px;">
+                  @if ($errors->any())
+                  <div class="alert alert-danger">
+                  	<ul>
+                  		@foreach ($errors->all() as $error)
+                  			<li>{{ $error }}</li>
+                  		@endforeach
+                  	</ul>
+                  </div>
+                  @endif
+                  <form action="TagImport" method="POST" enctype="multipart/form-data">
+                  	@csrf
+                  	<div class="form-group">
+                  		<input type="file" class="form-control" name="file" style="padding-bottom:37px;">
+                  		<br>
+                  		<button class="btn btn-success">インポート</button>
+                  	</div>
+                  </form>
                 </div>
-              </div> -->
+              </div>
             </div>
 
             <div class="row mt-4">

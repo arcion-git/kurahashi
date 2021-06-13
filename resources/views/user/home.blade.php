@@ -378,14 +378,9 @@
                         </tr>
 
 
-
-                        @foreach ($category->items as $item)
-                        <li>{{ $items->item_name }}</li>
-                        @endforeach
-
                         @foreach($items as $item)
                         <tr>
-                          <td class="text-center">{{$item->item_code}}</td>
+                          <td class="text-center">{{$item->item_id}}</td>
                           <td class="">{{$item->item_name}}</td>
                           <td class="text-center">{{$item->sanchi_name}}</td>
                           <td class="text-center">{{$item->zaikosuu}}</td>

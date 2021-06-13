@@ -7,12 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 class Category extends Model
 {
   protected $fillable = [
-    'id','category_id','item_code',
+    'category_id','busho_code','busho_name','ka_code','bu_ka_name','category_name',
   ];
 
+  /**
+   * カテゴリに所属する商品を取得
+   */
   public function items()
   {
-    return $this->belongsToMany('App\item');
+    return $this->belongsToMany('App\item','category_item','item_id','category_id');
   }
+
 
 }

@@ -22,7 +22,7 @@ class ItemImport implements OnEachRow, WithHeadingRow
       $row=$row->toArray();
       $item=Item::updateOrCreate(
            // キーカラム
-           [ 'item_code'=>$row['商品コード']],
+           [ 'item_id'=>$row['商品コード']],
            // 上書き内容
            [
              'sku_code'=>$row['SKUコード'],

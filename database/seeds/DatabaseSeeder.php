@@ -13,6 +13,9 @@ class DatabaseSeeder extends Seeder
     {
 
 
+
+
+
       DB::table("admins")->insert([
         'last_name'            => '管理者',
         'first_name'           => '太郎',
@@ -44,7 +47,7 @@ class DatabaseSeeder extends Seeder
       //   'category_name'        =>  '冷凍加工',
       // ]);
 
-for ($i = 1; $i <= 10; $i++) {
+for ($i = 1; $i <= 30; $i++) {
 
       \DB::table("users")->insert([
         'kaiin_number'           => '0000'.$i,
@@ -60,7 +63,7 @@ for ($i = 1; $i <= 10; $i++) {
 
       // \DB::table("items")->insert([
       //   'rank'                => 'A' ,
-      //   'item_code'           => $i ,
+      //   'item_id'           => $i ,
       //   'sku_code'            => 'SKUコード' ,
       //   'item_name'           => 'サンプル商品名'.$i ,
       //   'keiyaku'             => '契約区分' ,
@@ -77,7 +80,7 @@ for ($i = 1; $i <= 10; $i++) {
       //   'busho_name'          => '発注先部署名' ,
       //   'tantou_code'         => '発注先担当者コード' ,
       //   'tantou_name'         => '発注先担当者名' ,
-      //   'kokyaku_item_code'   => '顧客商品コード' ,
+      //   'kokyaku_item_id'   => '顧客商品コード' ,
       //   'nouhin_yoteibi'      => '納品予定日' ,
       //   'keisai_kigen'        => '2022/04/01' ,
       //   'nyuukabi'            => '入荷日' ,
@@ -97,6 +100,20 @@ for ($i = 1; $i <= 10; $i++) {
         'deal_id'             => $i ,
         'item_id'             => $i ,
         'quantity'             => $i ,
+        'created_at' => new DateTime(),
+        'updated_at' => new DateTime(),
+      ]);
+
+      \DB::table("item_tag")->insert([
+        'item_id'             => $i ,
+        'tag_id'             => $i ,
+        'created_at' => new DateTime(),
+        'updated_at' => new DateTime(),
+      ]);
+
+      \DB::table("category_item")->insert([
+        'item_id'             => $i ,
+        'category_id'             => $i ,
         'created_at' => new DateTime(),
         'updated_at' => new DateTime(),
       ]);

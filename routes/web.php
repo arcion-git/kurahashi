@@ -50,12 +50,12 @@
   Route::get('/admin/sales', 'AdminPageController@sales')->name('admin.sales');
 
   Route::get('/admin/csv', 'AdminPageController@csv')->name('admin.csv');
-  Route::post('/admin/userimport', 'AdminPageController@userimport')->name('admin.userimport');
-  Route::post('/admin/itemimport', 'AdminPageController@itemimport')->name('admin.itemimport');
-  Route::post('/admin/CategoryMasterImport', 'AdminPageController@CategoryMasterImport')->name('admin.categorymasterimport');
 
-  Route::post('/admin/CategoryImport', 'AdminPageController@CategoryImport')->name('admin.categoryimport');
-
+  Route::post('/admin/userimport', 'AdminPageController@userimport');
+  Route::post('/admin/itemimport', 'AdminPageController@itemimport');
+  Route::post('/admin/CategoryItemImport', 'AdminPageController@CategoryItemImport');
+  Route::post('/admin/CategoryImport', 'AdminPageController@CategoryImport');
+  Route::post('/admin/TagImport', 'AdminPageController@TagImport');
 
   Route::get('/admin/download', 'AdminPageController@download')->name('admin.download');
 

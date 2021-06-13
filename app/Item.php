@@ -7,8 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Item extends Model
 {
   protected $fillable = [
-      'id',
-      'item_code',
+      'item_id',
       'sku_code',
       'item_name',
       'keiyaku',
@@ -37,14 +36,20 @@ class Item extends Model
       'haisou_nissuu',
       'shoudan_umu',
       'nebiki_umu',
-
   ];
+
+  /**
+   * 商品に所属するカテゴリーを取得
+   */
+  public function categories()
+  {
+      return $this->belongsToMany('App\Category','category_item','category_id','item_id');
+  }
 
   public function tags()
   {
-      return $this->belongsToMany('App\Category');
+      return $this->belongsToMany('App\Tag','item_tag','tag_id','item_id');
   }
-
 
 
 

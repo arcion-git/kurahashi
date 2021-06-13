@@ -7,7 +7,8 @@ use App\Cart;
 use App\Deal;
 use App\Item;
 use App\Category;
-use App\CategoryMaster;
+use App\category_item;
+use App\Tag;
 
 // 時間に関する処理
 use Carbon\Carbon;
@@ -21,7 +22,8 @@ use Illuminate\Support\Facades\Mail;
 use App\Imports\ItemImport;
 use App\Imports\UserImport;
 use App\Imports\CategoryImport;
-use App\Imports\CategoryMasterImport;
+use App\Imports\TagImport;
+use App\Imports\CategoryItemImport;
 use Maatwebsite\Excel\Facades\Excel;
 
 class AdminPageController extends Controller
@@ -109,15 +111,21 @@ class AdminPageController extends Controller
   return back();
   }
 
-  public function categorymasterimport(){
-  CategoryMaster::truncate();
-  Excel::import(new CategoryMasterImport, request()->file('file'));
+  public function CategoryItemimport(){
+  category_item::truncate();
+  Excel::import(new CategoryItemImport, request()->file('file'));
   return back();
   }
 
   public function categoryimport(){
   Category::truncate();
   Excel::import(new CategoryImport, request()->file('file'));
+  return back();
+  }
+
+  public function tagimport(){
+  Tag::truncate();
+  Excel::import(new TagImport, request()->file('file'));
   return back();
   }
 

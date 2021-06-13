@@ -17,7 +17,7 @@
       </div>
       <div class="row">
         <div class="form-group col-12">
-        @foreach($category_masters as $key=>$vals)
+        @foreach($categories as $key=>$vals)
           <div class="form-group">
             <h6>{{$key}}</h6>
             <ul class="list-unstyled row">

@@ -6,7 +6,8 @@ use App\Cart;
 use App\Deal;
 use App\Item;
 use App\Category;
-use App\CategoryMaster;
+use App\category_item;
+use App\Tag;
 
 // 時間に関する処理
 use Carbon\Carbon;
@@ -29,16 +30,16 @@ class LoginPageController extends Controller
 
   public function questionnaire()
   {
-      $category_masters = CategoryMaster::get();
-      $category_masters = $category_masters->groupBy('bu_ka_name');
-      // dd($category_masters);
+      $categories = Category::get();
+      $categories = $categories->groupBy('bu_ka_name');
+      // dd($categories);
 
 
 
       $user_id = Auth::guard('user')->user()->id;
       $carts =  Cart::where('user_id',$user_id)->get();
 
-      return view('user/auth/questionnaire', ['category_masters' => $category_masters]);
+      return view('user/auth/questionnaire', ['categories' => $categories]);
   }
 
 
@@ -46,18 +47,11 @@ class LoginPageController extends Controller
   public function index()
   {
       $items = Item::get();
-      $categorys = Category::get();
-
-      $category_masters = CategoryMaster::get();
-      $category_masters = $category_masters->groupBy('bu_ka_name');
+      $categories = Category::get()->groupBy('bu_ka_name');
       $user_id = Auth::guard('user')->user()->id;
       $carts =  Cart::where('user_id',$user_id)->get();
 
-      // foreach($items as $item){
-      //   dd($item->category()->id);
-      // }
-
-      return view('user/home', ['items' => $items , 'carts' => $carts , 'category_masters' => $category_masters ,'categorys' => $categorys]);
+      return view('user/home', ['items' => $items , 'carts' => $carts , 'categories' => $categories]);
   }
 
   public function category($id)
@@ -65,21 +59,22 @@ class LoginPageController extends Controller
 
       $category = Category::find($id);
 
-      $category_items = Category::where('category_id',$id)->get();
-
-      // $items = Item::where('category_id',$id)->get();
+      // $category_items = CategoryItem::where('category_id',$id)->get();
+      // dd($category_items);
       $items = Item::get();
 
+      // $items = Tag::first()->items()->get();
 
-      $category_masters = CategoryMaster::get();
-      $category_masters = $category_masters->groupBy('bu_ka_name');
+      $items = Category::first()->items()->get();
+      dd($items);
 
-      $categories = Category::get();
-      $category_name = Category::where('id',$id)->first()->category_name;
+
+      $categories = Category::get()->groupBy('bu_ka_name');
+      $category_name = Category::where('category_id',$id)->first()->category_name;
       $user_id = Auth::guard('user')->user()->id;
       $carts =  Cart::where('user_id',$user_id)->get();
 
-      return view('user/home', ['items' => $items , 'carts' => $carts ,'category' => $category, 'category_masters' => $category_masters , 'categories' => $categories , 'category_name' => $category_name]);
+      return view('user/home', ['items' => $items , 'carts' => $carts , 'categories' => $categories ,  'category_name' => $category_name]);
   }
 
 

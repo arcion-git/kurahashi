@@ -151,7 +151,7 @@
                 @foreach($items as $item)
                 <tr>
                   <td class="text-center">
-                    {{$item->item_code}}
+                    {{$item->item_id}}
                   </td>
                   <td class="text-center">
                     {{$item->item_name}}

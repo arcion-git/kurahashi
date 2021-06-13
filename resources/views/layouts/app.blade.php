@@ -171,7 +171,7 @@
             </li>
 
 
-            @foreach($category_masters as $key=>$vals)
+            @foreach($categories as $key=>$vals)
                 <li class="nav-item" style="font-weight:bold;"><span class="nav-link">{{$key}}</span></li>
                 @foreach($vals as $val)
                     <li class="nav-item"><a class="nav-link" href="/category/{{$val->category_id}}"><span>{{ $val->category_name }}</span></a></li>
