@@ -15,7 +15,7 @@ class Category extends Model
    */
   public function items()
   {
-    return $this->belongsToMany('App\item','category_item','item_id','category_id');
+    return $this->belongsToMany('App\item','category_items','category_id','item_id');
   }
 
 

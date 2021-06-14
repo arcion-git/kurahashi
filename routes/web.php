@@ -24,6 +24,9 @@
   Route::get('/', 'LoginPageController@index')->name('home');
   Route::get('/category/{id}', 'LoginPageController@category');
 
+
+
+
   Route::get('/confirm', 'LoginPageController@confirm');
   Route::get('/deal', 'LoginPageController@deal')->name('deal');
   Route::get('/user/deal/{id}', 'LoginPageController@dealdetail')->name('dealdetail');
@@ -64,6 +67,8 @@
   Route::post('/admin/updatecart', 'AdminPageController@updatecart');
   Route::post('/admin/intervalupdatecart', 'AdminPageController@intervalupdatecart');
 
+
+  Route::post('/user/post/favoritecategory','LoginPageController@PostFavoriteCategory');
 
 
 

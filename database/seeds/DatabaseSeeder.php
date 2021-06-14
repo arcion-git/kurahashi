@@ -118,6 +118,13 @@ for ($i = 1; $i <= 30; $i++) {
         'updated_at' => new DateTime(),
       ]);
 
+      \DB::table("category_items")->insert([
+        'item_id'             => $i ,
+        'category_id'             => $i ,
+        'created_at' => new DateTime(),
+        'updated_at' => new DateTime(),
+      ]);
+
       \DB::table("deals")->insert([
         'user_id'             => $i ,
         'created_at' => new DateTime(),

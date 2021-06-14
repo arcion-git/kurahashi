@@ -7,7 +7,7 @@ use App\Cart;
 use App\Deal;
 use App\Item;
 use App\Category;
-use App\category_item;
+use App\CategoryItem;
 use App\Tag;
 
 // 時間に関する処理
@@ -112,7 +112,7 @@ class AdminPageController extends Controller
   }
 
   public function CategoryItemimport(){
-  category_item::truncate();
+  CategoryItem::truncate();
   Excel::import(new CategoryItemImport, request()->file('file'));
   return back();
   }

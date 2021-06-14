@@ -43,7 +43,7 @@ class Item extends Model
    */
   public function categories()
   {
-      return $this->belongsToMany('App\Category','category_item','category_id','item_id');
+      return $this->belongsToMany('App\Category','category_items','category_id','item_id');
   }
 
   public function tags()
