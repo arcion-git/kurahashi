@@ -7,6 +7,7 @@ use App\Deal;
 use App\Item;
 use App\Category;
 use App\Tag;
+use App\User;
 
 use App\FavoriteCategory;
 
@@ -49,7 +50,7 @@ class LoginPageController extends Controller
   {
 
       $first_login = Auth::guard('user')->user()->first_login;
-        if ($first_login == null) {
+        if ($first_login === null) {
           $categories = Category::get();
           $categories = $categories->groupBy('bu_ka_name');
           return view('user/auth/questionnaire', ['categories' => $categories]);
@@ -69,12 +70,15 @@ class LoginPageController extends Controller
     $favorite_categories = $request->input('favorite_category');
     // dd($favorite_categories);
 
+
     foreach ($favorite_categories as $favorite_category) {
       $favorite_category=FavoriteCategory::firstOrNew(['user_id'=> $user_id , 'category_id'=> $favorite_category]);
-      $favorite_category->user_id = $request->user_id;
-      $favorite_category->category_id = $value;
       $favorite_category->save();
     }
+
+    $user = User::where('id', $user_id)->first();
+    $user->first_login = 1;
+    $user->save();
 
     // $cart=Cart::firstOrNew(['user_id'=> $user_id , 'item_id'=> $item_id);
     // $cart->quantity = $request->quantity;
