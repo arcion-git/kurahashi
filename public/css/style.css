@@ -2983,11 +2983,12 @@ body:not(.sidebar-mini) .sidebar-style-2 .sidebar-menu li.active ul.dropdown-men
 
 
 .order input{
-  width:50px !important;
-  margin:auto !important;
+  /* width:50px !important; */
+  /* margin:auto !important; */
   text-align: center;
   padding: 3px !important;
   display: inline-block;
+  /* max-width: 100px; */
 }
 
 .quantity{
@@ -3038,10 +3039,10 @@ body.sidebar-mini .main-sidebar .sidebar-brand{
 
 
 /* チェックボックス02 */
-input[type=checkbox] {
+/* .checkbox-input {
     display: none;
 }
-.checkbox02 {
+.checkbox02-label {
     box-sizing: border-box;
     cursor: pointer;
     display: inline-block;
@@ -3049,7 +3050,7 @@ input[type=checkbox] {
     position: relative;
     width: auto;
 }
-.checkbox02::before {
+.checkbox02-label::before {
     background: #fff;
     border: 1px solid #ccc;
     border-radius: 3px;
@@ -3062,7 +3063,7 @@ input[type=checkbox] {
     top: 50%;
     width: 16px;
 }
-.checkbox02::after {
+.checkbox02-label::after {
     border-right: 3px solid #00cccc;
     border-bottom: 5px solid #00cccc;
     content: '';
@@ -3076,54 +3077,9 @@ input[type=checkbox] {
     transform: rotate(45deg);
     width: 9px;
 }
-input[type=checkbox]:checked + .checkbox02::before {
+.checkbox-input:checked + .checkbox02::before {
     border-color: #666;
 }
-input[type=checkbox]:checked + .checkbox02::after {
+.checkbox-input:checked + .checkbox02::after {
     opacity: 1;
-}
-
-/* ラジオボタン02 */
-input[type=radio] {
-    display: none;
-}
-.radio02 {
-    box-sizing: border-box;
-    cursor: pointer;
-    display: inline-block;
-    padding: 5px 30px;
-    position: relative;
-    width: auto;
-}
-.radio02::before {
-    background: #fff;
-    border: 1px solid #ccc;
-    border-radius: 50%;
-    content: '';
-    display: block;
-    height: 16px;
-    left: 5px;
-    margin-top: -8px;
-    position: absolute;
-    top: 50%;
-    width: 16px;
-}
-.radio02::after {
-    background: #00cccc;
-    border-radius: 50%;
-    content: '';
-    display: block;
-    height: 8px;
-    left: 10px;
-    margin-top: -3px;
-    opacity: 0;
-    position: absolute;
-    top: 50%;
-    width: 8px;
-}
-input[type=radio]:checked + .radio02::before {
-    border-color: #666;
-}
-input[type=radio]:checked + .radio02::after {
-    opacity: 1;
-}
+} */

@@ -47,7 +47,7 @@
             <a id="toggle" href="#" data-toggle="dropdown" class="nav-link nav-link-lg message-toggle">
               <i class="fas fa-shopping-cart"></i>
             </a>
-            <div class="dropdown-menu dropdown-list dropdown-menu-right">
+            <div id="cart-container" class="dropdown-menu dropdown-list dropdown-menu-right">
               <div class="dropdown-header">ショッピングカート</div>
               <div class="dropdown-list-content dropdown-list-message">
                 <a href="#" class="dropdown-item dropdown-item-unread">
@@ -160,22 +160,50 @@
 
           @if ( Auth::guard('user')->check() )
           <ul class="sidebar-menu">
+
+            <li class="menu-header">メニュー</li>
+
             <li class="nav-item">
-              <a href="{{ url('/') }}" class="nav-link"><span>担当のおすすめ商品</span></a>
+              <a href="{{ url('/') }}" class="nav-link"><i class="fas fa-list"></i><span>すべての商品</span></a>
             </li>
             <li class="nav-item">
-              <a href="{{ url('/') }}" class="nav-link"><span>時価商品</span></a>
+              <a href="{{ url('/') }}" class="nav-link"><i class="far fa-user"></i><span>担当のおすすめ商品</span></a>
             </li>
             <li class="nav-item">
-              <a href="{{ url('/') }}" class="nav-link"><span>すべての商品</span></a>
+              <a href="{{ url('/') }}" class="nav-link"><i class="fas fa-fire"></i><span>時価商品</span></a>
             </li>
+
+
+
+
+
+
+            <li class="nav-item dropdown active">
+              <a href="#" class="nav-link has-dropdown">
+                <i class="fas fa-heart"></i></i><span>お気に入りカテゴリ</span>
+              </a>
+              <ul class="dropdown-menu">
+              @foreach($favorite_categories as $favorite_category)
+                      <li class="nav-item"><a class="nav-link" href="/category/{{$favorite_category->category->category_id}}"><span>{{ $favorite_category->category->category_name }}</span></a></li>
+              @endforeach
+              </ul>
+            </li>
+
+
+            <li class="menu-header">カテゴリ一覧</li>
 
 
             @foreach($categories as $key=>$vals)
-                <li class="nav-item" style="font-weight:bold;"><span class="nav-link">{{$key}}</span></li>
+            <li class="nav-item dropdown active">
+              <a href="#" class="nav-link has-dropdown">
+                <i class="fas fal-circle"></i><span>{{$key}}</span>
+              </a>
+              <ul class="dropdown-menu">
                 @foreach($vals as $val)
-                    <li class="nav-item"><a class="nav-link" href="/category/{{$val->category_id}}"><span>{{ $val->category_name }}</span></a></li>
+                      <li class="nav-item"><a class="nav-link" href="/category/{{$val->category_id}}"><span>{{ $val->category_name }}</span></a></li>
                 @endforeach
+              </ul>
+            </li>
             @endforeach
 
 
@@ -184,9 +212,7 @@
 
 
 
-
-
-          </ul>
+          </ul><br /><br /><br /><br /><br />
           @endif
 
         </aside>

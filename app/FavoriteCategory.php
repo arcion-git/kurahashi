@@ -9,4 +9,15 @@ class FavoriteCategory extends Model
   protected $fillable = [
     'category_id','user_id',
   ];
+
+  // public function categories()
+  // {
+  //   return $this->hasOne('App\category');
+  // }
+
+  public function category()
+  {
+    return $this->belongsTo(Category::class, 'category_id');
+  }
+
 }

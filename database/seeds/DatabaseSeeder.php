@@ -1,6 +1,16 @@
 <?php
 
+
+use App\Cart;
+use App\Deal;
+use App\Item;
+use App\Category;
+use App\Tag;
+use App\User;
+
+
 use Illuminate\Database\Seeder;
+use Carbon\Carbon;
 
 class DatabaseSeeder extends Seeder
 {
@@ -11,6 +21,138 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+
+
+
+      $file = new SplFileObject('database/csv/CategoryMaster.csv');
+      $file->setFlags(
+          \SplFileObject::READ_CSV |
+          \SplFileObject::READ_AHEAD |
+          \SplFileObject::SKIP_EMPTY |
+          \SplFileObject::DROP_NEW_LINE
+      );
+      $list = [];
+      $now = Carbon::now();
+
+      foreach ($file as $line) {
+          if ($file->key() > 0 && ! $file->eof()) {
+            $list[] = [
+              'category_id'=>$line[0],
+              'busho_code'=>$line[1],
+              'busho_name'=>$line[2],
+              'ka_code'=>$line[3],
+              'bu_ka_name'=>$line[4],
+              'category_name'=>$line[5],
+              "created_at" => $now,
+              "updated_at" => $now,
+            ];
+          }
+      }
+      DB::table("categories")->insert($list);
+
+
+
+      $file = new SplFileObject('database/csv/ProductCategory.csv');
+      $file->setFlags(
+          \SplFileObject::READ_CSV |
+          \SplFileObject::READ_AHEAD |
+          \SplFileObject::SKIP_EMPTY |
+          \SplFileObject::DROP_NEW_LINE
+      );
+      $list = [];
+      $now = Carbon::now();
+
+      foreach ($file as $line) {
+          if ($file->key() > 0 && ! $file->eof()) {
+            $list[] = [
+              'category_id'=>$line[0],
+              'item_id'=>$line[1],
+              "created_at" => $now,
+              "updated_at" => $now,
+            ];
+          }
+      }
+      DB::table("category_items")->insert($list);
+
+
+
+      $file = new SplFileObject('database/csv/CustomerRep.csv');
+      $file->setFlags(
+          \SplFileObject::READ_CSV |
+          \SplFileObject::READ_AHEAD |
+          \SplFileObject::SKIP_EMPTY |
+          \SplFileObject::DROP_NEW_LINE
+      );
+      $list = [];
+      $now = Carbon::now();
+
+      foreach ($file as $line) {
+          if ($file->key() > 0 && ! $file->eof()) {
+            $list[] = [
+              'kaiin_number'=> $line[0],
+              'name'=> $line[1],
+              'name_kana'=> $line[2],
+              'tel'=> $line[3],
+              'email'=> $line[4],
+              'password'=> \Hash::make('secret') ,
+              // 'first_login'=> $line[6],
+              "created_at" => $now,
+              "updated_at" => $now,
+            ];
+          }
+      }
+      DB::table("users")->insert($list);
+
+
+
+      $file = new SplFileObject('database/csv/ProductItemDetail.csv');
+      $file->setFlags(
+          \SplFileObject::READ_CSV |
+          \SplFileObject::READ_AHEAD |
+          \SplFileObject::SKIP_EMPTY |
+          \SplFileObject::DROP_NEW_LINE
+      );
+      $list = [];
+      $now = Carbon::now();
+
+      foreach ($file as $line) {
+          if ($file->key() > 0 && ! $file->eof()) {
+            $list[] = [
+              'item_id'=> $line[0],
+              'sku_code'=> $line[1],
+              'item_name'=> $line[2],
+              'keiyaku'=> $line[3],
+              'kikaku'=> $line[4],
+              'ninushi_code'=> $line[5],
+              'ninushi_name'=> $line[6],
+              'sanchi_code'=> $line[7],
+              'sanchi_name'=> $line[8],
+              'tani'=> $line[9],
+              'zaikosuu'=> $line[10],
+              'kigyou_code'=> $line[11],
+              'busho_code'=> $line[12],
+              'busho_name'=> $line[13],
+              'tantou_code'=> $line[14],
+              'tantou_name'=> $line[15],
+              'jan_code'=> $line[16],
+              'nouhin_yoteibi_start'=> $line[17],
+              'nouhin_yoteibi_end'=> $line[18],
+              'nyuukabi'=> $line[19],
+              'lot_bangou'=> $line[20],
+              'lot_gyou'=> $line[21],
+              'lot_eda'=> $line[22],
+              'souko_code'=> $line[23],
+              'tokkijikou'=> $line[24],
+              'haisou_simekiri_jikan'=> $line[25],
+              'haisou_nissuu'=> $line[26],
+              'shoudan_umu'=> $line[27],
+              'nebiki_umu'=> $line[28],
+              "created_at" => $now,
+              "updated_at" => $now,
+            ];
+          }
+      }
+      DB::table("items")->insert($list);
 
 
 
@@ -51,8 +193,8 @@ for ($i = 1; $i <= 30; $i++) {
 
       \DB::table("users")->insert([
         'kaiin_number'           => '0000'.$i,
-        'name'           => '太郎'.$i,
-        'name_kana'       => 'ヤマダ',
+        'name'           => '山田太郎'.$i,
+        'name_kana'       => 'ヤマダタロウ',
         'tel'                  => '08012345678',
         'email'                => 'sample'.$i.'@gmail.com' ,
         'password'             => \Hash::make('secret') ,
@@ -104,26 +246,26 @@ for ($i = 1; $i <= 30; $i++) {
         'updated_at' => new DateTime(),
       ]);
 
-      \DB::table("item_tag")->insert([
-        'item_id'             => $i ,
-        'tag_id'             => $i ,
-        'created_at' => new DateTime(),
-        'updated_at' => new DateTime(),
-      ]);
-
-      \DB::table("category_item")->insert([
-        'item_id'             => $i ,
-        'category_id'             => $i ,
-        'created_at' => new DateTime(),
-        'updated_at' => new DateTime(),
-      ]);
-
-      \DB::table("category_items")->insert([
-        'item_id'             => $i ,
-        'category_id'             => $i ,
-        'created_at' => new DateTime(),
-        'updated_at' => new DateTime(),
-      ]);
+      // \DB::table("item_tag")->insert([
+      //   'item_id'             => $i ,
+      //   'tag_id'             => $i ,
+      //   'created_at' => new DateTime(),
+      //   'updated_at' => new DateTime(),
+      // ]);
+      //
+      // \DB::table("category_item")->insert([
+      //   'item_id'             => $i ,
+      //   'category_id'             => $i ,
+      //   'created_at' => new DateTime(),
+      //   'updated_at' => new DateTime(),
+      // ]);
+      //
+      // \DB::table("category_items")->insert([
+      //   'item_id'             => $i ,
+      //   'category_id'             => $i ,
+      //   'created_at' => new DateTime(),
+      //   'updated_at' => new DateTime(),
+      // ]);
 
       \DB::table("deals")->insert([
         'user_id'             => $i ,

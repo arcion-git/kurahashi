@@ -22,9 +22,9 @@
             <h6>{{$key}}</h6>
             <ul class="list-unstyled row">
                 @foreach($vals as $val)
-                    <li class="col-4">
-                      <input type="checkbox" id="{{ $val->category_id }}" name="favorite_category[]" value="{{ $val->category_id }}">
-                      <label for="{{ $val->category_id }}" class="checkbox02">{{ $val->category_name }}（{{ $val->items->count() }}点）</label>
+                    <li class="col-4 ">
+                      <input class="checkbox-input" type="checkbox" id="{{ $val->category_id }}" name="favorite_category[]" value="{{ $val->category_id }}">
+                      <label for="{{ $val->category_id }}" class="checkbox-label">{{ $val->category_name }}（{{ $val->items->count() }}点）</label>
                     </li>
                 @endforeach
             </ul>

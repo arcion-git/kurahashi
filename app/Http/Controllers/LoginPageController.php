@@ -55,12 +55,21 @@ class LoginPageController extends Controller
           $categories = $categories->groupBy('bu_ka_name');
           return view('user/auth/questionnaire', ['categories' => $categories]);
         }
+
+
       $items = Item::get();
       $categories = Category::get()->groupBy('bu_ka_name');
       $user_id = Auth::guard('user')->user()->id;
+
+      $favorite_categories = FavoriteCategory::where('user_id', $user_id)->get();
+
       $carts =  Cart::where('user_id',$user_id)->get();
 
-      return view('user/home', ['items' => $items , 'carts' => $carts , 'categories' => $categories]);
+      return view('user/home',
+      ['items' => $items ,
+       'carts' => $carts ,
+       'categories' => $categories ,
+       'favorite_categories' => $favorite_categories]);
   }
 
 
@@ -79,10 +88,6 @@ class LoginPageController extends Controller
     $user = User::where('id', $user_id)->first();
     $user->first_login = 1;
     $user->save();
-
-    // $cart=Cart::firstOrNew(['user_id'=> $user_id , 'item_id'=> $item_id);
-    // $cart->quantity = $request->quantity;
-    // $cart->save();
 
     $data = "sucsess";
     return redirect()->route('home',$data);
@@ -108,9 +113,10 @@ class LoginPageController extends Controller
       $categories = Category::get()->groupBy('bu_ka_name');
       $category_name = Category::where('category_id',$id)->first()->category_name;
       $user_id = Auth::guard('user')->user()->id;
+      $favorite_categories = FavoriteCategory::where('user_id', $user_id)->get();
       $carts =  Cart::where('user_id',$user_id)->get();
 
-      return view('user/home', ['items' => $items , 'carts' => $carts , 'categories' => $categories ,  'category_name' => $category_name]);
+      return view('user/home', ['items' => $items , 'carts' => $carts , 'categories' => $categories ,  'category_name' => $category_name ,'favorite_categories' => $favorite_categories]);
   }
 
 
@@ -162,10 +168,14 @@ class LoginPageController extends Controller
 
 
   public function confirm(){
-    $categories = Category::get();
+
+
+    $categories = Category::get()->groupBy('bu_ka_name');
     $user_id = Auth::guard('user')->user()->id;
+    $favorite_categories = FavoriteCategory::where('user_id', $user_id)->get();
     $carts =  Cart::where(['user_id'=>$user_id, 'deal_id'=> null])->get();
-    return view('user/auth/confirm', ['carts' => $carts, 'categories' => $categories]);
+
+    return view('user/auth/confirm', ['carts' => $carts, 'categories' => $categories, 'favorite_categories' => $favorite_categories]);
   }
 
   public function deal(){

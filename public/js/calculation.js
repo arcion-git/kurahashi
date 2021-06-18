@@ -12,6 +12,9 @@ $(function() {
 
   $(document).on("click", ".addcart", function() {
 
+
+
+
     var item_id = $(this).get(0).id;
     var quantity = $(this).parent().parent().find('.quantity').val();
 
@@ -42,9 +45,13 @@ $(function() {
         console.log("errorThrown    : " + errorThrown.message);
       });
       $('#toggle').addClass('beep');
+      $('#toggle').trigger('click');
   });
 
-  // jQueryを使う方法
+
+
+
+  // カートの中身を更新
   function dojQueryAjax() {
       // jQueryのajaxメソッドを使用しajax通信
       $.ajax({
@@ -60,11 +67,26 @@ $(function() {
               // alert("Ajax通信エラー");
           }
       });
+      $('#cart-container').addClass('show');
   }
   $('#toggle').click(function(){
     $(this).removeClass("beep");
       setTimeout(dojQueryAjax);
   });
+
+
+
+  document.addEventListener('click', (e) => {
+    if(!e.target.closest('.dropdown-list-content')) {
+      $('#cart-container').removeClass("show");
+      $('#dropdown').removeClass("show");
+    } else {
+      //ここに内側をクリックしたときの処理
+    }
+  })
+
+
+
 
 
 
@@ -97,6 +119,8 @@ $(function() {
         console.log("textStatus     : " + textStatus);
         console.log("errorThrown    : " + errorThrown.message);
       });
+      $('#toggle').addClass('beep');
+      $('#toggle').trigger('click');
   });
 });
 
