@@ -102,7 +102,7 @@
                   </form>
                 </div>
               </div>
-              <div class="col-6">
+              <!-- <div class="col-6">
                 <div class="form-group">
                   <label>商品タグ</label>
                   @if ($errors->any())
@@ -123,7 +123,7 @@
                   	</div>
                   </form>
                 </div>
-              </div>
+              </div> -->
             </div>
 
             <div class="row mt-4">

@@ -1,7 +1,7 @@
 @extends('layouts.auth')
 
 @section('content')
-<ul class="nav nav-tabs">
+<!-- <ul class="nav nav-tabs">
   <li class="nav-item col-6 text-center font-weight-bold">
     <a class="nav-link font-weight-bold active" href="{{ route('login') }}">{{ __('Login') }}</a>
   </li>
@@ -10,7 +10,7 @@
           <a class="nav-link font-weight-bold" href="{{ route('register') }}">{{ __('Register') }}</a>
       </li>
   @endif
-</ul>
+</ul> -->
 <div class="card card-primary">
   <div class="card-header"><h4>ログイン</h4></div>
   <div class="card-body">

@@ -16,7 +16,15 @@ class Admin extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'first_name', 'last_name', 'email', 'password',
+        'tantou_id',
+        'name',
+        'name_kana',
+        'tel',
+        'shozoku_busho_id' ,
+        'shozoku_busho_name' ,
+        'kengen' ,
+        'email' ,
+        'password',
     ];
 
     /**
@@ -27,6 +35,8 @@ class Admin extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+
 
     /**
      * Send the password reset notification.

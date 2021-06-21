@@ -136,24 +136,24 @@
 
           @if ( Auth::guard('admin')->check() )
           <ul class="sidebar-menu">
-              <li class="nav-item">
+              <!-- <li class="nav-item">
                 <a href="/admin/home" class="nav-link"><span>取引一覧</span></a>
-              </li>
+              </li> -->
               <li class="nav-item dropdown">
                 <a href="/admin/user" class="nav-link"><span>顧客担当者一覧</span></a>
               </li>
-              <li class="nav-item">
+              <!-- <li class="nav-item">
                 <a href="/admin/item" class="nav-link"><span>商品一覧</span></a>
-              </li>
-              <li class="nav-item">
+              </li> -->
+              <!-- <li class="nav-item">
                 <a href="/admin/" class="nav-link"><span>社内営業</span></a>
-              </li>
+              </li> -->
               <li class="nav-item">
                 <a href="/admin/csv" class="nav-link"><span>CSVインポート</span></a>
               </li>
-              <li class="nav-item dropdown">
+              <!-- <li class="nav-item dropdown">
                 <a href="/admin/download" class="nav-link"><span>CSVダウンロード</span></a>
-              </li>
+              </li> -->
           </ul>
           @endif
 

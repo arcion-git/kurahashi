@@ -14,8 +14,14 @@ class CreateAdminsTable extends Migration
     {
         Schema::create('admins', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('first_name')->nullable();
-            $table->string('last_name')->nullable();
+
+            $table->string('tantou_id')->nullable()->comment('担当者コード');
+            $table->string('name')->nullable()->comment('氏名');
+            $table->string('name_kana')->nullable()->comment('フリガナ');
+            $table->string('tel')->nullable()->comment('電話番号');
+            $table->string('shozoku_busho_id')->nullable()->comment('所属部署コード');
+            $table->string('shozoku_busho_name')->nullable()->comment('所属部署名');
+            $table->string('kengen')->nullable()->comment('権限');
             $table->string('email')->unique();
             $table->string('password');
             $table->rememberToken();
