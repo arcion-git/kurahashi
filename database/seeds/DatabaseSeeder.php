@@ -73,38 +73,38 @@ class DatabaseSeeder extends Seeder
       //     }
       // }
       // DB::table("category_items")->insert($list);
-      //
-      //
-      //
-      // $file = new SplFileObject('database/csv/CustomerRep.csv');
-      // $file->setFlags(
-      //     \SplFileObject::READ_CSV |
-      //     \SplFileObject::READ_AHEAD |
-      //     \SplFileObject::SKIP_EMPTY |
-      //     \SplFileObject::DROP_NEW_LINE
-      // );
-      // $list = [];
-      // $now = Carbon::now();
-      //
-      // foreach ($file as $line) {
-      //     if ($file->key() > 0 && ! $file->eof()) {
-      //       $list[] = [
-      //         'kaiin_number'=> $line[0],
-      //         'name'=> $line[1],
-      //         'name_kana'=> $line[2],
-      //         'tel'=> $line[3],
-      //         'email'=> $line[4],
-      //         'password'=> \Hash::make('secret') ,
-      //         // 'first_login'=> $line[6],
-      //         "created_at" => $now,
-      //         "updated_at" => $now,
-      //       ];
-      //     }
-      // }
-      // DB::table("users")->insert($list);
-      //
-      //
-      //
+
+
+
+      $file = new SplFileObject('database/csv/CustomerRep.csv');
+      $file->setFlags(
+          \SplFileObject::READ_CSV |
+          \SplFileObject::READ_AHEAD |
+          \SplFileObject::SKIP_EMPTY |
+          \SplFileObject::DROP_NEW_LINE
+      );
+      $list = [];
+      $now = Carbon::now();
+
+      foreach ($file as $line) {
+          if ($file->key() > 0 && ! $file->eof()) {
+            $list[] = [
+              'kaiin_number'=> $line[0],
+              'name'=> $line[1],
+              'name_kana'=> $line[2],
+              'tel'=> $line[3],
+              'email'=> $line[4],
+              'password'=> \Hash::make('secret') ,
+              // 'first_login'=> $line[6],
+              "created_at" => $now,
+              "updated_at" => $now,
+            ];
+          }
+      }
+      DB::table("users")->insert($list);
+
+
+
       // $file = new SplFileObject('database/csv/ProductItemDetail.csv');
       // $file->setFlags(
       //     \SplFileObject::READ_CSV |
@@ -153,34 +153,34 @@ class DatabaseSeeder extends Seeder
       //     }
       // }
       // DB::table("items")->insert($list);
-      //
-      //
-      //
-      //
-      // $file = new SplFileObject('database/csv/Calendar.csv');
-      // $file->setFlags(
-      //     \SplFileObject::READ_CSV |
-      //     \SplFileObject::READ_AHEAD |
-      //     \SplFileObject::SKIP_EMPTY |
-      //     \SplFileObject::DROP_NEW_LINE
-      // );
-      // $list = [];
-      // $now = Carbon::now();
-      //
-      // foreach ($file as $line) {
-      //     if ($file->key() > 0 && ! $file->eof()) {
-      //       $list[] = [
-      //         'date'=> $line[0],
-      //         "created_at" => $now,
-      //         "updated_at" => $now,
-      //       ];
-      //     }
-      // }
-      // DB::table("holidays")->insert($list);
-      //
-      //
-      //
-      //
+
+
+
+
+      $file = new SplFileObject('database/csv/Calendar.csv');
+      $file->setFlags(
+          \SplFileObject::READ_CSV |
+          \SplFileObject::READ_AHEAD |
+          \SplFileObject::SKIP_EMPTY |
+          \SplFileObject::DROP_NEW_LINE
+      );
+      $list = [];
+      $now = Carbon::now();
+
+      foreach ($file as $line) {
+          if ($file->key() > 0 && ! $file->eof()) {
+            $list[] = [
+              'date'=> $line[0],
+              "created_at" => $now,
+              "updated_at" => $now,
+            ];
+          }
+      }
+      DB::table("holidays")->insert($list);
+
+
+
+
       // $file = new SplFileObject('database/csv/CustomerStore.csv');
       // $file->setFlags(
       //     \SplFileObject::READ_CSV |
@@ -218,11 +218,11 @@ class DatabaseSeeder extends Seeder
       //     }
       // }
       // DB::table("stores")->insert($list);
-      //
-      //
-      //
-      //
-      //
+
+
+
+
+
       // $file = new SplFileObject('database/csv/CustomerResponsibleStore.csv');
       // $file->setFlags(
       //     \SplFileObject::READ_CSV |
@@ -245,38 +245,38 @@ class DatabaseSeeder extends Seeder
       //     }
       // }
       // DB::table("store_users")->insert($list);
-
-
-
-
-      $file = new SplFileObject('database/csv/InCompanySales.csv');
-      $file->setFlags(
-          \SplFileObject::READ_CSV |
-          \SplFileObject::READ_AHEAD |
-          \SplFileObject::SKIP_EMPTY |
-          \SplFileObject::DROP_NEW_LINE
-      );
-      $list = [];
-      $now = Carbon::now();
-
-      foreach ($file as $line) {
-          if ($file->key() > 0 && ! $file->eof()) {
-            $list[] = [
-              'tantou_id' => $line[0],
-              'name' => $line[1],
-              'name_kana' => $line[2],
-              'tel' => $line[3],
-              'shozoku_busho_id' => $line[4],
-              'shozoku_busho_name' => $line[5],
-              'kengen' => $line[6],
-              'email'=> $line[7],
-              'password' => \Hash::make($line[8]) ,
-              "created_at" => $now,
-              "updated_at" => $now,
-            ];
-          }
-      }
-      DB::table("admins")->insert($list);
+      //
+      //
+      //
+      //
+      // $file = new SplFileObject('database/csv/InCompanySales.csv');
+      // $file->setFlags(
+      //     \SplFileObject::READ_CSV |
+      //     \SplFileObject::READ_AHEAD |
+      //     \SplFileObject::SKIP_EMPTY |
+      //     \SplFileObject::DROP_NEW_LINE
+      // );
+      // $list = [];
+      // $now = Carbon::now();
+      //
+      // foreach ($file as $line) {
+      //     if ($file->key() > 0 && ! $file->eof()) {
+      //       $list[] = [
+      //         'tantou_id' => $line[0],
+      //         'name' => $line[1],
+      //         'name_kana' => $line[2],
+      //         'tel' => $line[3],
+      //         'shozoku_busho_id' => $line[4],
+      //         'shozoku_busho_name' => $line[5],
+      //         'kengen' => $line[6],
+      //         'email'=> $line[7],
+      //         'password' => \Hash::make($line[8]) ,
+      //         "created_at" => $now,
+      //         "updated_at" => $now,
+      //       ];
+      //     }
+      // }
+      // DB::table("admins")->insert($list);
 
 
 
