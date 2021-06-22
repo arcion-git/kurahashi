@@ -9,6 +9,10 @@ use App\Category;
 use App\Tag;
 use App\User;
 
+
+use App\Store;
+use App\StoreUser;
+
 use App\FavoriteCategory;
 
 // 時間に関する処理
@@ -169,17 +173,32 @@ class LoginPageController extends Controller
 
   public function confirm(){
 
-
     $categories = Category::get()->groupBy('bu_ka_name');
     $user_id = Auth::guard('user')->user()->id;
     $favorite_categories = FavoriteCategory::where('user_id', $user_id)->get();
     $carts =  Cart::where(['user_id'=>$user_id, 'deal_id'=> null])->get();
 
+    $kaiin_number = Auth::guard('user')->user()->kaiin_number;
+    // dd($kaiin_number);
+    $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get("tokuisaki_id","store_id");
+    $store_ids = StoreUser::where('user_id',$kaiin_number)->get("store_id");
+
+
+
+    $stores = Store::get();
+
+
+    foreach($stores as $store) {
+    $store = Store::where(['user_id'=>$user_id, 'deal_id'=> $id])->get();
+    }
+    dd($stores);
+
     return view('user/auth/confirm', ['carts' => $carts, 'categories' => $categories, 'favorite_categories' => $favorite_categories]);
+
   }
 
   public function deal(){
-      $categories = Category::get();
+    $categories = Category::get();
     $user_id = Auth::guard('user')->user()->id;
     $deals =  Deal::where('user_id',$user_id)->get();
 
@@ -187,7 +206,7 @@ class LoginPageController extends Controller
   }
 
   public function dealdetail($id){
-      $categories = Category::get();
+    $categories = Category::get();
     $user_id = Auth::guard('user')->user()->id;
     $deal = Deal::where('id',$id)->first();
     $carts = Cart::where(['user_id'=>$user_id, 'deal_id'=> $id])->get();
