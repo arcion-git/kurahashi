@@ -76,6 +76,7 @@ $(function() {
 
 
 
+  //HOME画面でカートの外側をクリックしたときの処理
   document.addEventListener('click', (e) => {
     if(!e.target.closest('.dropdown-list-content')) {
       $('#cart-container').removeClass("show");
@@ -91,6 +92,7 @@ $(function() {
 
 
   // カートから削除
+
   $(document).on("click", ".removecart", function() {
 
     var item_id = $(this).get(0).id;
@@ -119,14 +121,25 @@ $(function() {
         console.log("textStatus     : " + textStatus);
         console.log("errorThrown    : " + errorThrown.message);
       });
+
+      // 送信画面のときは、カートのポップアップを出さない
+      if(!document.URL.match(/confirm/)){
       $('#toggle').addClass('beep');
       $('#toggle').trigger('click');
+      }
   });
+
+
+
 });
 
 
 
+if(!document.URL.match(/confirm/)){
 
+
+
+}
 
 
 
@@ -227,12 +240,11 @@ function update_field(){
 $(document).ready( function(){
     update_field();
 
-      var target = $('input').map(function (index, el) {
+      var target = $('.total').map(function (index, el) {
       $(this).closest('tr').find('.total').text(
       $(this).closest('tr').find('input.teika').val() *
       $(this).closest('tr').find('input.quantity').val());});
-      console.log(target);
-
+      // console.log(target);
 
       var sum = 0;
       $('.total').each(function () {
@@ -253,6 +265,14 @@ $(document).ready( function(){
 
 
 });
+
+
+// value値を取得
+// const str1 = $(".store").val();
+// alert(str1);
+// alert('JavaScriptのアラート');
+
+
 
 // if(document.URL.match(/user/)){
 //   window.addEventListener('load', function () {

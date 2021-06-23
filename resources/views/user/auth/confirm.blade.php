@@ -57,10 +57,17 @@
 
                       <td class="teika text-center"><input name="teika[]" class="teika text-center form-control" value="5000" readonly></td>
                       <td class="text-center">
-                        <select name="quantity[]" class="text-center form-control" value="1">
-                          <option value="サンプル1">春日店</option>
-                          <option value="サンプル2">緑町店</option>
-                          <option value="サンプル3">蔵王店</option>
+                        <select name="store[]" class="store text-center form-control" value="{{$cart->store_id}}">
+
+                          @foreach($cart->orders as $val)
+                          <option value="{{$val}}">{{$val->quantity}}</option>
+                          @endforeach
+
+
+                          @foreach($stores as $store)
+                          <option value="{{$store->store_id}}">{{$store->tokuisaki_name}} {{$store->store_name}}</option>
+                          @endforeach
+                          <option value="{{$store->store_id}}">全店舗に追加</option>
                         </select>
                       </td>
                       <td class="text-center">{{$cart->item->kikaku}}</td>
@@ -84,7 +91,7 @@
                               <i class="fas fa-calendar"></i>
                             </div>
                           </div>
-                          <input  type="text" name="nouhinbi[]" class="nouhinbi text-center form-control daterange-cus" value="2021-06-19">
+                          <input type="text" name="nouhinbi[]" class="nouhinbi text-center form-control daterange-cus" value="2021-06-19">
                           <inputclass="form-control daterange-cus">
                         </div>
                       </td>
@@ -103,7 +110,7 @@
 
 
 
-            <div class="row mt-4 order">
+            <!-- <div class="row mt-4 order">
               <div class="col-md-4">
                 <div class="section-title">通信欄</div>
                 <div class="col-md-12">
@@ -115,28 +122,18 @@
                 <div class="table-responsive">
                   <table class="table table-striped table-hover table-md">
                     <tr>
-                      <!-- <th class="text-center">商品番号</th> -->
                       <th class="text-center">商品名</th>
-                      <!-- <th class="text-center">産地</th>
-                      <th class="text-center">在庫数</th>
-                      <th class="text-center">規格</th>
-                      <th class="text-center">単位</th>
-                      <th class="text-center">特記事項</th> -->
-
-                      <!-- <th class="text-center">金額</th> -->
                       <th class="text-center">担当</th>
                       <th class="text-center">納品先店舗</th>
                       <th class="text-center">数量</th>
                       <th class="text-center">納品予定日</th>
                       <th class="text-center">操作</th>
-                      <!-- <th class="text-center">小計</th>
-                      <th class="text-center">操作</th> -->
                     </tr>
                     <tr>
                         <td class="teika">
-                          <input name="teika[]" class="text-center form-control" value=" ハマグリ 4kg 天然"></td>
+                          <input name="nini_item_name[]" class="text-center form-control" value=" ハマグリ 4kg 天然"></td>
                         <td class="text-center">
-                          <select name="quantity[]" class="text-center form-control" value="1">
+                          <select name="nini_tantou[]" class="text-center form-control" value="1">
                             <option value="サンプル1">鮮魚</option>
                             <option value="サンプル2">青物</option>
                             <option value="サンプル3">太物</option>
@@ -148,13 +145,13 @@
                         </td>
 
                         <td class="text-center">
-                          <select name="quantity[]" class="text-center form-control" value="1">
+                          <select name="nini_store[]" class="text-center form-control" value="1">
                             <option value="サンプル1">春日店</option>
                             <option value="サンプル2">緑町店</option>
                             <option value="サンプル3">蔵王店</option>
                           </select>
                         </td>
-                        <td class="text-center"><input name="quantity[]" class="quantity text-center form-control" value="1"></td>
+                        <td class="text-center"><input name="nini_quantity[]" class="quantity text-center form-control" value="1"></td>
                         <td class="text-center">
                           <div class="input-group">
                             <div class="input-group-prepend">
@@ -162,7 +159,7 @@
                                 <i class="fas fa-calendar"></i>
                               </div>
                             </div>
-                            <input  type="text" name="nouhinbi[]" class="nouhinbi text-center form-control daterange-cus" value="2021-06-19">
+                            <input  type="text" name="nini_nouhinbi[]" class="nouhinbi text-center form-control daterange-cus" value="2021-06-19">
                             <inputclass="form-control daterange-cus">
                           </div>
                         </td>
@@ -178,7 +175,7 @@
                 </div>
               </div>
 
-            </div>
+            </div> -->
 
 
             <div class="row mt-4 order">

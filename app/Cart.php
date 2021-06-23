@@ -17,4 +17,10 @@ class Cart extends Model
       //リレーション
       return $this->belongsTo('App\Item', 'item_id');
   }
+
+  public function orders() {
+      //リレーション
+      return $this->hasMany('App\Order');
+  }
+
 }

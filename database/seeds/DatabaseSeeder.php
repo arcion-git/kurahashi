@@ -360,14 +360,14 @@ for ($i = 1; $i <= 30; $i++) {
       //   'updated_at' => new DateTime(),
       // ]);
 
-      \DB::table("carts")->insert([
-        'user_id'             => $i ,
-        'deal_id'             => $i ,
-        'item_id'             => $i ,
-        'quantity'             => $i ,
-        'created_at' => new DateTime(),
-        'updated_at' => new DateTime(),
-      ]);
+      // \DB::table("carts")->insert([
+      //   'user_id'             => $i ,
+      //   'deal_id'             => $i ,
+      //   'item_id'             => $i ,
+      //   'quantity'             => $i ,
+      //   'created_at' => new DateTime(),
+      //   'updated_at' => new DateTime(),
+      // ]);
 
       // \DB::table("item_tag")->insert([
       //   'item_id'             => $i ,
@@ -390,11 +390,11 @@ for ($i = 1; $i <= 30; $i++) {
       //   'updated_at' => new DateTime(),
       // ]);
 
-      \DB::table("deals")->insert([
-        'user_id'             => $i ,
-        'created_at' => new DateTime(),
-        'updated_at' => new DateTime(),
-      ]);
+      // \DB::table("deals")->insert([
+      //   'user_id'             => $i ,
+      //   'created_at' => new DateTime(),
+      //   'updated_at' => new DateTime(),
+      // ]);
 
     }
     }

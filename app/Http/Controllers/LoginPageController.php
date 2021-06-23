@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Cart;
+use App\Order;
 use App\Deal;
 use App\Item;
 use App\Category;
@@ -130,9 +131,16 @@ class LoginPageController extends Controller
     $user_id = Auth::guard('user')->user()->id;
     $item_id = $request->item_id;
 
+    $kaiin_number = Auth::guard('user')->user()->kaiin_number;
+    $store_user = StoreUser::where('user_id',$kaiin_number)->first(['store_id','tokuisaki_id']);
+
+    $store = Store::where([ 'tokuisaki_id'=> $store_user->tokuisaki_id,'store_id'=> $store_user->store_id ])->first();
+
     $cart=Cart::firstOrNew(['user_id'=> $user_id , 'item_id'=> $item_id , 'deal_id'=> null]);
-    $cart->quantity = $request->quantity;
     $cart->save();
+
+    $order=Order::firstOrNew(['cart_id'=> $cart->id , 'store_id'=> $store->store_id , 'quantity'=> 1]);
+    $order->save();
 
     $data = "sucsess";
       return redirect()->route('home',$data);
@@ -179,42 +187,25 @@ class LoginPageController extends Controller
     $carts =  Cart::where(['user_id'=>$user_id, 'deal_id'=> null])->get();
 
     $kaiin_number = Auth::guard('user')->user()->kaiin_number;
-    // dd($kaiin_number);
-    $store_users = StoreUser::where('user_id',$kaiin_number)->get(['tokuisaki_id','store_id']);
-    // $store_ids = StoreUser::where('user_id',$kaiin_number)->get("store_id");
-
-    // $storeusers = StoreUser::pluck('tokuisaki_id', 'store_id');
-    // dd($tokuisaki_ids);
-    // $store_users = $store_users->toArray();
-    //
-    // dd($store_users);
-    //
-
-
+    $store_users = StoreUser::where('user_id',$kaiin_number)->get(['store_id','tokuisaki_id']);
     $stores = [];
     $n=1;
-    foreach ($store_users as $store_user['tokuisaki_id'] => $store_user['store_id']) {
-    $store = Store::where([ 'tokuisaki_id'=> $store_user['tokuisaki_id'],'store_id'=> $store_user['store_id'] ])->first();
-      if (!is_null($store)){
+    foreach ($store_users as $store_user) {
+    $store = Store::where([ 'tokuisaki_id'=> $store_user->tokuisaki_id,'store_id'=> $store_user->store_id ])->first();
         array_push($stores, $store);
-      }
     $n++;
     }
-    dd($stores);
-
-    $stores = implode("\n", $stores);
+    // $stores = Store::get();
 
 
-    $stores = Store::get();
+    // dd($stores);
 
-
-
-
-
-
-
-
-    return view('user/auth/confirm', ['carts' => $carts, 'categories' => $categories, 'favorite_categories' => $favorite_categories]);
+    return view('user/auth/confirm',
+    ['carts' => $carts,
+     'categories' => $categories,
+     'favorite_categories' => $favorite_categories,
+     'stores' => $stores
+    ]);
 
   }
 
