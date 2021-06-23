@@ -180,18 +180,39 @@ class LoginPageController extends Controller
 
     $kaiin_number = Auth::guard('user')->user()->kaiin_number;
     // dd($kaiin_number);
-    $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get("tokuisaki_id","store_id");
-    $store_ids = StoreUser::where('user_id',$kaiin_number)->get("store_id");
+    $store_users = StoreUser::where('user_id',$kaiin_number)->get(['tokuisaki_id','store_id']);
+    // $store_ids = StoreUser::where('user_id',$kaiin_number)->get("store_id");
 
+    // $storeusers = StoreUser::pluck('tokuisaki_id', 'store_id');
+    // dd($tokuisaki_ids);
+    // $store_users = $store_users->toArray();
+    //
+    // dd($store_users);
+    //
+
+
+    $stores = [];
+    $n=1;
+    foreach ($store_users as $store_user['tokuisaki_id'] => $store_user['store_id']) {
+    $store = Store::where([ 'tokuisaki_id'=> $store_user['tokuisaki_id'],'store_id'=> $store_user['store_id'] ])->first();
+      if (!is_null($store)){
+        array_push($stores, $store);
+      }
+    $n++;
+    }
+    dd($stores);
+
+    $stores = implode("\n", $stores);
 
 
     $stores = Store::get();
 
 
-    foreach($stores as $store) {
-    $store = Store::where(['user_id'=>$user_id, 'deal_id'=> $id])->get();
-    }
-    dd($stores);
+
+
+
+
+
 
     return view('user/auth/confirm', ['carts' => $carts, 'categories' => $categories, 'favorite_categories' => $favorite_categories]);
 
