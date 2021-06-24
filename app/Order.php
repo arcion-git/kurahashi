@@ -12,4 +12,7 @@ class Order extends Model
     'nouhin_yoteibi',
     'quantity',
   ];
+  public function cart() {
+    return $this->belongsTo('App\Cart');
+  }
 }
