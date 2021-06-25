@@ -33,6 +33,7 @@
 
   Route::post('/addcart', 'LoginPageController@addcart');
   Route::post('/removecart', 'LoginPageController@removecart');
+  Route::post('/clonecart', 'LoginPageController@clonecart');
   Route::post('/updatecart', 'LoginPageController@updatecart');
 
   Route::post('/adddeal', 'LoginPageController@adddeal');

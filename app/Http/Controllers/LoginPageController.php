@@ -70,6 +70,7 @@ class LoginPageController extends Controller
 
       $carts =  Cart::where('user_id',$user_id)->get();
 
+
       return view('user/home',
       ['items' => $items ,
        'carts' => $carts ,
@@ -150,7 +151,21 @@ class LoginPageController extends Controller
   public function removecart(Request $request){
     $user_id = Auth::guard('user')->user()->id;
     $item_id = $request->item_id;
+
+    $orders=Cart::where(['user_id'=> $user_id , 'item_id'=> $item_id , 'deal_id'=> null])->first()->orders()->delete();
     $cart=Cart::where(['user_id'=> $user_id , 'item_id'=> $item_id , 'deal_id'=> null])->delete();
+
+
+    $data = "sucsess";
+    return redirect()->route('home',$data);
+  }
+
+  public function clonecart(Request $request){
+    $user_id = Auth::guard('user')->user()->id;
+    $item_id = $request->item_id;
+
+    $orders=Cart::where(['user_id'=> $user_id , 'item_id'=> $item_id , 'deal_id'=> null])->first()->orders()->clone();
+
     $data = "sucsess";
     return redirect()->route('home',$data);
   }

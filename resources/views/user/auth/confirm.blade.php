@@ -97,8 +97,8 @@
                       </td>
                       <td class="total text-center"></td>
                       <td class="text-center">
-                        <button id="{{$cart->item->id}}" class="removeid_{{$cart->item->id}} removecart btn btn-info">削除</button>
-                        <button id="{{$cart->item->id}}" class="btn btn-success">配送先を追加</button>
+                        <button type="button" id="{{$cart->item->id}}" class="removeid_{{$cart->item->id}} removecart btn btn-info">削除</button>
+                        <button type="button" id="{{$cart->item->id}}" class="cloneid_{{$cart->item->id}} clonecart btn btn-success">配送先を追加</button>
                       <input name="item_id[]" type="hidden" value="{{$cart->item->id}}" />
                       </td>
                     </tr>
@@ -214,4 +214,7 @@
       </div>
     </div>
   </section>
+
+
+
 @endsection
