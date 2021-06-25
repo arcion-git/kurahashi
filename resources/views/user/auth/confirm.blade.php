@@ -42,16 +42,15 @@
                     </tr>
                     @foreach($carts as $cart)
                     <tr id="{{$cart->id}}">
-                      <td rowspan="4" class="text-center">{{$cart->item->item_id}}</td>
-                      <td rowspan="4" class="">{{$cart->item->item_name}}</td>
-                      <td rowspan="4" class="text-center">{{$cart->item->sanchi_name}}</td>
-                      <td rowspan="4" class="text-center">{{$cart->item->zaikosuu}}</td>
-                      <td rowspan="4" class="text-center">{{$cart->item->tokkijikou}}</td>
-                      <td rowspan="4" class="teika text-center">
-                        <input name="teika[]" class="teika text-center form-control" value="5000" readonly></td>
-                      <td>
+                      <td class="cartid_{$cart->id}} text-center">{{$cart->item->item_id}}</td>
+                      <td class="cartid_{$cart->id}}">{{$cart->item->item_name}}</td>
+                      <td class="cartid_{$cart->id}} text-center">{{$cart->item->sanchi_name}}</td>
+                      <td class="cartid_{$cart->id}} text-center">{{$cart->item->zaikosuu}}</td>
+                      <td class="cartid_{$cart->id}} text-center">{{$cart->item->tokkijikou}}</td>
+                      <td class="cartid_{$cart->id}} teika text-center">
+                        <input name="teika[]" class="teika text-center form-control" value="5000" readonly>
+                      </td>
                           @foreach($cart->orders as $val)
-                          <tr>
                             <td class="text-center">
                               <select name="store[]" class="store text-center form-control" value="{{$cart->store_id}}">
                                 @foreach($stores as $store)
@@ -80,7 +79,7 @@
                                     <i class="fas fa-calendar"></i>
                                   </div>
                                 </div>
-                                <input type="text" name="nouhinbi[]" class="nouhinbi text-center form-control daterange-cus" value="2021-06-19">
+                                <input type="text" name="nouhinbi[]" class="nouhinbi text-center form-control daterange-cus" value="2021-06-26">
                                 <inputclass="form-control daterange-cus">
                               </div>
                             </td>
@@ -90,10 +89,7 @@
                               <button style="margin-top:10px;" type="button" id="{{$cart->item->id}}" class="cloneid_{{$cart->item->id}} clonecart btn btn-success">配送先を追加</button>
                             <input name="item_id[]" type="hidden" value="{{$cart->item->id}}" />
                             </td>
-                          </tr>
                           @endforeach
-                      </td>
-                    </tr>
                     @endforeach
                   </table>
                 </div>
