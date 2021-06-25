@@ -134,7 +134,6 @@ class LoginPageController extends Controller
 
     $kaiin_number = Auth::guard('user')->user()->kaiin_number;
     $store_user = StoreUser::where('user_id',$kaiin_number)->first(['store_id','tokuisaki_id']);
-
     $store = Store::where([ 'tokuisaki_id'=> $store_user->tokuisaki_id,'store_id'=> $store_user->store_id ])->first();
 
     $cart=Cart::firstOrNew(['user_id'=> $user_id , 'item_id'=> $item_id , 'deal_id'=> null]);
@@ -162,10 +161,8 @@ class LoginPageController extends Controller
 
   public function clonecart(Request $request){
     $user_id = Auth::guard('user')->user()->id;
-    $item_id = $request->item_id;
-
-    $orders=Cart::where(['user_id'=> $user_id , 'item_id'=> $item_id , 'deal_id'=> null])->first()->orders()->clone();
-
+    $cart_id = $request->cart_id;
+    $order=Order::Create(['cart_id'=> $cart_id , 'store_id'=> 1 , 'nouhin_yoteibi'=> 20, 'quantity'=> 1]);
     $data = "sucsess";
     return redirect()->route('home',$data);
   }
@@ -225,22 +222,31 @@ class LoginPageController extends Controller
   }
 
   public function deal(){
-    $categories = Category::get();
     $user_id = Auth::guard('user')->user()->id;
+    $categories = Category::get()->groupBy('bu_ka_name');
+
+
+
+    $favorite_categories = FavoriteCategory::where('user_id', $user_id)->get();
     $deals =  Deal::where('user_id',$user_id)->get();
 
-    return view('deal', ['deals' => $deals, 'categories' => $categories]);
+
+
+
+    return view('deal', ['deals' => $deals, 'categories' => $categories, 'favorite_categories' => $favorite_categories]);
   }
 
   public function dealdetail($id){
-    $categories = Category::get();
+    $categories = Category::get()->groupBy('bu_ka_name');
     $user_id = Auth::guard('user')->user()->id;
+    $favorite_categories = FavoriteCategory::where('user_id', $user_id)->get();
     $deal = Deal::where('id',$id)->first();
     $carts = Cart::where(['user_id'=>$user_id, 'deal_id'=> $id])->get();
     $data=[
       'carts'=>$carts,
       'deal'=>$deal,
       'categories' => $categories,
+      'favorite_categories' => $favorite_categories,
     ];
     return view('dealdetail', $data);
   }
@@ -259,7 +265,7 @@ class LoginPageController extends Controller
       $cart = Cart::firstOrNew(['user_id'=> $user_id , 'item_id'=> $item_ids[$key], 'deal_id'=> null]);
       $cart->user_id = $user_id;
       $cart->deal_id = $deal_id;
-      $cart->quantity = isset($quantitys[$key]) ? $quantitys[$key] : null;
+      // $cart->quantity = isset($quantitys[$key]) ? $quantitys[$key] : null;
       $cart->save();
     }
     return redirect('deal');

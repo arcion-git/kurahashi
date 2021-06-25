@@ -95,32 +95,35 @@ $(function() {
   $(document).on("click", ".clonecart", function() {
 
     var item_id = $(this).get(0).id;
+    var cart_id = $(this).parent().parent().get(0).id;
+    console.log(cart_id);
     // $('.cloneid_'+item_id).parent().parent().clone(true).insertAfter($(this).parent().parent().prev());
     $(this).parent().parent().clone(true).insertAfter($(this).parent().parent().prev());
-    console.log(item_id);
 
-      // $.ajax({
-      //   headers: {
-      //     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-      //   }, //Headersを書き忘れるとエラーになる
-      //   url: location.origin + '/clonecart',
-      //   type: 'POST', //リクエストタイプ
-      //   data: {
-      //     'item_id': item_id,
-      //   } //Laravelに渡すデータ
-      // })
-      // // Ajaxリクエスト成功時の処理
-      // .done(function(data) {
-      //   console.log(data);
-      // })
-      // // Ajaxリクエスト失敗時の処理
-      // .fail(function(jqXHR, textStatus, errorThrown) {
-      //   alert('Ajaxリクエスト失敗');
-      //   console.log("ajax通信に失敗しました");
-      //   console.log("XMLHttpRequest : " + XMLHttpRequest.status);
-      //   console.log("textStatus     : " + textStatus);
-      //   console.log("errorThrown    : " + errorThrown.message);
-      // });
+
+      $.ajax({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }, //Headersを書き忘れるとエラーになる
+        url: location.origin + '/clonecart',
+        type: 'POST', //リクエストタイプ
+        data: {
+          'item_id': item_id,
+          'cart_id': cart_id,
+        } //Laravelに渡すデータ
+      })
+      // Ajaxリクエスト成功時の処理
+      .done(function(data) {
+        console.log(data);
+      })
+      // Ajaxリクエスト失敗時の処理
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        alert('Ajaxリクエスト失敗');
+        console.log("ajax通信に失敗しました");
+        console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+        console.log("textStatus     : " + textStatus);
+        console.log("errorThrown    : " + errorThrown.message);
+      });
   });
 
 

@@ -30,10 +30,7 @@
                       <th class="">商品名</th>
                       <th class="text-center">産地</th>
                       <th class="text-center">在庫数</th>
-
-
                       <th class="text-center">特記事項</th>
-
                       <th class="text-center">金額</th>
                       <th class="text-center">納品先店舗</th>
                       <th class="text-center">規格</th>
@@ -44,62 +41,57 @@
                       <th class="text-center">操作</th>
                     </tr>
                     @foreach($carts as $cart)
-                    <tr>
-                      <td class="text-center">{{$cart->item->item_id}}</td>
-                      <td class="">{{$cart->item->item_name}}</td>
-                      <td class="text-center">{{$cart->item->sanchi_name}}</td>
-                      <td class="text-center">{{$cart->item->zaikosuu}}</td>
-
-
-                      <td class="text-center">{{$cart->item->tokkijikou}}</td>
-
-
-
-                      <td class="teika text-center"><input name="teika[]" class="teika text-center form-control" value="5000" readonly></td>
-                      <td class="text-center">
-                        <select name="store[]" class="store text-center form-control" value="{{$cart->store_id}}">
-
+                    <tr id="{{$cart->id}}">
+                      <td rowspan="4" class="text-center">{{$cart->item->item_id}}</td>
+                      <td rowspan="4" class="">{{$cart->item->item_name}}</td>
+                      <td rowspan="4" class="text-center">{{$cart->item->sanchi_name}}</td>
+                      <td rowspan="4" class="text-center">{{$cart->item->zaikosuu}}</td>
+                      <td rowspan="4" class="text-center">{{$cart->item->tokkijikou}}</td>
+                      <td rowspan="4" class="teika text-center">
+                        <input name="teika[]" class="teika text-center form-control" value="5000" readonly></td>
+                      <td>
                           @foreach($cart->orders as $val)
-                          <option value="{{$val}}">{{$val->quantity}}</option>
+                          <tr>
+                            <td class="text-center">
+                              <select name="store[]" class="store text-center form-control" value="{{$cart->store_id}}">
+                                @foreach($stores as $store)
+                                <option value="{{$store->store_id}}">{{$store->tokuisaki_name}} {{$store->store_name}}</option>
+                                @endforeach
+                                <option value="{{$store->store_id}}">全店舗に追加</option>
+                              </select>
+                            </td>
+                            <td class="text-center">{{$cart->item->kikaku}}</td>
+                            <td class="text-center"><input name="quantity[]" class="quantity text-center form-control" value="1"></td>
+                            <td class="text-center">
+                              @if ($cart->item->tani == 1)
+                              ｹｰｽ
+                              @elseif ($cart->item->tani == 2)
+                              ﾎﾞｰﾙ
+                              @elseif ($cart->item->tani == 3)
+                              ﾊﾞﾗ
+                              @elseif ($cart->item->tani == 4)
+                              Kg
+                              @endif
+                            </td>
+                            <td class="text-center">
+                              <div class="input-group">
+                                <div class="input-group-prepend">
+                                  <div class="input-group-text">
+                                    <i class="fas fa-calendar"></i>
+                                  </div>
+                                </div>
+                                <input type="text" name="nouhinbi[]" class="nouhinbi text-center form-control daterange-cus" value="2021-06-19">
+                                <inputclass="form-control daterange-cus">
+                              </div>
+                            </td>
+                            <td class="total text-center"></td>
+                            <td class="text-center">
+                              <button type="button" id="{{$cart->item->id}}" class="removeid_{{$cart->item->id}} removecart btn btn-info">削除</button>
+                              <button style="margin-top:10px;" type="button" id="{{$cart->item->id}}" class="cloneid_{{$cart->item->id}} clonecart btn btn-success">配送先を追加</button>
+                            <input name="item_id[]" type="hidden" value="{{$cart->item->id}}" />
+                            </td>
+                          </tr>
                           @endforeach
-
-
-                          @foreach($stores as $store)
-                          <option value="{{$store->store_id}}">{{$store->tokuisaki_name}} {{$store->store_name}}</option>
-                          @endforeach
-                          <option value="{{$store->store_id}}">全店舗に追加</option>
-                        </select>
-                      </td>
-                      <td class="text-center">{{$cart->item->kikaku}}</td>
-                      <td class="text-center"><input name="quantity[]" class="quantity text-center form-control" value="1"></td>
-                      <td class="text-center">
-                        @if ($cart->item->tani == 1)
-                        ｹｰｽ
-                        @elseif ($cart->item->tani == 2)
-                        ﾎﾞｰﾙ
-                        @elseif ($cart->item->tani == 3)
-                        ﾊﾞﾗ
-                        @elseif ($cart->item->tani == 4)
-                        Kg
-                        @endif
-                      </td>
-
-                      <td class="text-center">
-                        <div class="input-group">
-                          <div class="input-group-prepend">
-                            <div class="input-group-text">
-                              <i class="fas fa-calendar"></i>
-                            </div>
-                          </div>
-                          <input type="text" name="nouhinbi[]" class="nouhinbi text-center form-control daterange-cus" value="2021-06-19">
-                          <inputclass="form-control daterange-cus">
-                        </div>
-                      </td>
-                      <td class="total text-center"></td>
-                      <td class="text-center">
-                        <button type="button" id="{{$cart->item->id}}" class="removeid_{{$cart->item->id}} removecart btn btn-info">削除</button>
-                        <button type="button" id="{{$cart->item->id}}" class="cloneid_{{$cart->item->id}} clonecart btn btn-success">配送先を追加</button>
-                      <input name="item_id[]" type="hidden" value="{{$cart->item->id}}" />
                       </td>
                     </tr>
                     @endforeach

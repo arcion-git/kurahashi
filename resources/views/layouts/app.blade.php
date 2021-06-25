@@ -55,8 +55,8 @@
                 </a>
               </div>
               <div class="dropdown-footer text-center">
-                <a href="{{ url('/confirm') }}" class="btn btn-warning">営業に問い合わせる <i class="fas fa-chevron-right"></i></a>　
-                <a href="" class="btn btn-success">このまま商品を発注する <i class="fas fa-chevron-right"></i></a>　
+                <a href="{{ url('/confirm') }}" class="btn btn-warning">注文個数入力に進む <i class="fas fa-chevron-right"></i></a>　
+                <!-- <a href="" class="btn btn-success">このまま商品を発注する <i class="fas fa-chevron-right"></i></a>　 -->
               </div>
             </div>
           </li>

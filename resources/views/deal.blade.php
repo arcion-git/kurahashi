@@ -35,7 +35,9 @@
             <div class="table-responsive">
               <table class="table table-striped">
                 <tr>
-                  <th>お問い合わせ日時</th>
+                  <th class="text-center">オーダーID</th>
+                  <th class="text-center">お名前</th>
+                  <th class="text-center">お問い合わせ日時</th>
                   <th class="text-center">発注日時</th>
                   <th class="text-center">状態</th>
                   <th class="text-center">操作</th>
@@ -43,7 +45,13 @@
 
                 @foreach($deals as $deal)
                 <tr>
-                  <td>
+                  <td class="text-center" class="text-center">
+                    {{$deal->id}}
+                  </td>
+                  <td class="text-center">
+                    {{$deal->user->name}}
+                  </td>
+                  <td class="text-center">
                     {{$deal->created_at}}
                   </td>
                   <td class="text-center">
