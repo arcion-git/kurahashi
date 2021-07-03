@@ -12,9 +12,6 @@ $(function() {
 
   $(document).on("click", ".addcart", function() {
 
-
-
-
     var item_id = $(this).get(0).id;
     var quantity = $(this).parent().parent().find('.quantity').val();
 
@@ -76,6 +73,8 @@ $(function() {
 
 
 
+
+
   //HOME画面でカートの外側をクリックしたときの処理
   document.addEventListener('click', (e) => {
     if(!e.target.closest('.dropdown-list-content')) {
@@ -87,47 +86,7 @@ $(function() {
   })
 
 
-
-
-
-
-  // 配送先を追加
-  $(document).on("click", ".clonecart", function() {
-
-    var item_id = $(this).get(0).id;
-    var cart_id = $(this).parent().parent().get(0).id;
-    console.log(cart_id);
-    // $('.cloneid_'+item_id).parent().parent().clone(true).insertAfter($(this).parent().parent().prev());
-    $(this).parent().parent().clone(true).insertAfter($(this).parent().parent().prev());
-
-
-      $.ajax({
-        headers: {
-          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }, //Headersを書き忘れるとエラーになる
-        url: location.origin + '/clonecart',
-        type: 'POST', //リクエストタイプ
-        data: {
-          'item_id': item_id,
-          'cart_id': cart_id,
-        } //Laravelに渡すデータ
-      })
-      // Ajaxリクエスト成功時の処理
-      .done(function(data) {
-        console.log(data);
-      })
-      // Ajaxリクエスト失敗時の処理
-      .fail(function(jqXHR, textStatus, errorThrown) {
-        alert('Ajaxリクエスト失敗');
-        console.log("ajax通信に失敗しました");
-        console.log("XMLHttpRequest : " + XMLHttpRequest.status);
-        console.log("textStatus     : " + textStatus);
-        console.log("errorThrown    : " + errorThrown.message);
-      });
-  });
-
-
-  // カートから削除
+  // カートから削除HOME画面用
 
   $(document).on("click", ".removecart", function() {
 
@@ -164,6 +123,116 @@ $(function() {
       $('#toggle').trigger('click');
       }
   });
+
+
+
+
+
+
+
+
+
+
+
+
+  // オーダー内容を取得
+    function order_update() {
+            $.ajax({
+                type: "GET", // GETメソッドで通信
+                url: location.origin + '/order',
+                cache: false, // キャッシュしないで読み込み
+                // 通信成功時に呼び出されるコールバック
+                success: function (data) {
+                      $('#order').html(data);
+                },
+                // 通信エラー時に呼び出されるコールバック
+                error: function () {
+                    // alert("Ajax通信エラー");
+                }
+            });
+    }
+
+// 個数入力画面を開いたらオーダー内容を取得
+  $(document).ready( function(){
+  setTimeout(order_update);
+  });
+
+
+
+
+  // 配送先を追加
+  $(document).on("click", ".clonecart", function() {
+
+    var item_id = $(this).get(0).id;
+    var cart_id = $(this).parent().parent().parent().parent().parent().parent().get(0).id;
+    console.log(cart_id);
+    // $(this).parent().parent().clone(true).insertAfter($(this).parent().parent());
+
+      $.ajax({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }, //Headersを書き忘れるとエラーになる
+        url: location.origin + '/clonecart',
+        type: 'POST', //リクエストタイプ
+        data: {
+          'item_id': item_id,
+          'cart_id': cart_id,
+        } //Laravelに渡すデータ
+      })
+      // Ajaxリクエスト成功時の処理
+      .done(function(data) {
+        console.log(data);
+      })
+      // Ajaxリクエスト失敗時の処理
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        alert('Ajaxリクエスト失敗');
+        console.log("ajax通信に失敗しました");
+        console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+        console.log("textStatus     : " + textStatus);
+        console.log("errorThrown    : " + errorThrown.message);
+      });
+      setTimeout(order_update);
+  });
+
+
+
+
+
+
+  // 確認画面カートから削除
+  $(document).on("click", ".removeorder", function() {
+    var order_id = $(this).get(0).id;
+    var cart_id = $(this).parent().parent().parent().parent().parent().parent().get(0).id;
+
+    // $(this).parent().parent().remove();
+    console.log(cart_id);
+    console.log(order_id);
+    $.ajax({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }, //Headersを書き忘れるとエラーになる
+        url: location.origin + '/removeorder',
+        type: 'POST', //リクエストタイプ
+        data: {
+          'order_id': order_id,
+          'cart_id': cart_id,
+        } //Laravelに渡すデータ
+      })
+      // Ajaxリクエスト成功時の処理
+      .done(function(data) {
+        // console.log(data);
+      })
+      // Ajaxリクエスト失敗時の処理
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        alert('Ajaxリクエスト失敗');
+        console.log("ajax通信に失敗しました");
+        console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+        console.log("textStatus     : " + textStatus);
+        console.log("errorThrown    : " + errorThrown.message);
+      });
+      setTimeout(order_update);
+  });
+
 });
 
 

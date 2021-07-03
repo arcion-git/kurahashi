@@ -9,7 +9,7 @@ use App\Item;
 use App\Category;
 use App\Tag;
 use App\User;
-
+use App\Holiday;
 
 use App\Store;
 use App\StoreUser;
@@ -151,13 +151,38 @@ class LoginPageController extends Controller
     $user_id = Auth::guard('user')->user()->id;
     $item_id = $request->item_id;
 
-    $orders=Cart::where(['user_id'=> $user_id , 'item_id'=> $item_id , 'deal_id'=> null])->first()->orders()->delete();
-    $cart=Cart::where(['user_id'=> $user_id , 'item_id'=> $item_id , 'deal_id'=> null])->delete();
+    // $orders=Cart::where(['user_id'=> $user_id , 'item_id'=> $item_id , 'deal_id'=> null])->first()->orders()->delete();
+    // $cart=Cart::where(['user_id'=> $user_id , 'item_id'=> $item_id , 'deal_id'=> null])->delete();
 
+    $orders=Cart::where(['id'=> $cart_id])->first()->orders()->get();
+    if(empty($orders)){
+    $delete_cart=Cart::find(['id'=> $cart_id])->delete();
+    // dd($cart_id);
+    }
 
     $data = "sucsess";
     return redirect()->route('home',$data);
   }
+
+
+  public function removeorder(Request $request){
+    $order_id = $request->order_id;
+    $cart_id = $request->cart_id;
+
+    $delete_order=Order::where(['id'=> $order_id])->first()->delete();
+
+    $orders=Order::where(['cart_id'=> $cart_id])->first();
+    if(empty($orders)){
+    $delete_cart=Cart::where(['id'=> $cart_id])->first()->delete();
+    }
+
+    $data = "sucsess";
+    return redirect()->route('home',$data);
+  }
+
+
+
+
 
   public function clonecart(Request $request){
     $user_id = Auth::guard('user')->user()->id;
@@ -177,6 +202,10 @@ class LoginPageController extends Controller
     return view('cart', $data);
   }
 
+
+
+
+
   public function dealcart(Request $request){
     $id = $request->deal_id;
     $user_id = Auth::guard('user')->user()->id;
@@ -193,10 +222,43 @@ class LoginPageController extends Controller
 
   public function confirm(){
 
+
+
     $categories = Category::get()->groupBy('bu_ka_name');
     $user_id = Auth::guard('user')->user()->id;
     $favorite_categories = FavoriteCategory::where('user_id', $user_id)->get();
     $carts =  Cart::where(['user_id'=>$user_id, 'deal_id'=> null])->get();
+
+    // $today = date("Y/m/d");
+    // $holidays = Holiday::pluck('date');
+    // $kaiin_number = Auth::guard('user')->user()->kaiin_number;
+    // $store_users = StoreUser::where('user_id',$kaiin_number)->get(['store_id','tokuisaki_id']);
+    // $stores = [];
+    // $n=1;
+    // foreach ($store_users as $store_user) {
+    // $store = Store::where([ 'tokuisaki_id'=> $store_user->tokuisaki_id,'store_id'=> $store_user->store_id ])->first();
+    //   array_push($stores, $store);
+    // $n++;
+    // }
+
+    return view('user/auth/confirm',
+    ['carts' => $carts,
+     'categories' => $categories,
+     'favorite_categories' => $favorite_categories,
+     // 'stores' => $stores,
+     // 'holidays' => $holidays,
+    ]);
+
+  }
+
+
+  public function order(){
+
+    $user_id = Auth::guard('user')->user()->id;
+    $carts =  Cart::where(['user_id'=>$user_id, 'deal_id'=> null])->get();
+
+    $today = date("Y/m/d");
+    $holidays = Holiday::pluck('date');
 
     $kaiin_number = Auth::guard('user')->user()->kaiin_number;
     $store_users = StoreUser::where('user_id',$kaiin_number)->get(['store_id','tokuisaki_id']);
@@ -204,52 +266,93 @@ class LoginPageController extends Controller
     $n=1;
     foreach ($store_users as $store_user) {
     $store = Store::where([ 'tokuisaki_id'=> $store_user->tokuisaki_id,'store_id'=> $store_user->store_id ])->first();
-        array_push($stores, $store);
+      array_push($stores, $store);
     $n++;
     }
-    // $stores = Store::get();
 
-
-    // dd($stores);
-
-    return view('user/auth/confirm',
+    $data=
     ['carts' => $carts,
-     'categories' => $categories,
-     'favorite_categories' => $favorite_categories,
-     'stores' => $stores
-    ]);
-
+     'stores' => $stores,
+     'holidays' => $holidays,
+    ];
+    return view('order', $data);
   }
+
+
+
+
+
+
+
+
+
+
+
 
   public function deal(){
     $user_id = Auth::guard('user')->user()->id;
     $categories = Category::get()->groupBy('bu_ka_name');
 
-
-
     $favorite_categories = FavoriteCategory::where('user_id', $user_id)->get();
     $deals =  Deal::where('user_id',$user_id)->get();
-
-
-
 
     return view('deal', ['deals' => $deals, 'categories' => $categories, 'favorite_categories' => $favorite_categories]);
   }
 
+
+
   public function dealdetail($id){
+
+
+
     $categories = Category::get()->groupBy('bu_ka_name');
     $user_id = Auth::guard('user')->user()->id;
+
     $favorite_categories = FavoriteCategory::where('user_id', $user_id)->get();
+
     $deal = Deal::where('id',$id)->first();
     $carts = Cart::where(['user_id'=>$user_id, 'deal_id'=> $id])->get();
+
     $data=[
-      'carts'=>$carts,
+      // 'carts'=>$carts,
       'deal'=>$deal,
       'categories' => $categories,
       'favorite_categories' => $favorite_categories,
     ];
     return view('dealdetail', $data);
   }
+
+
+  public function dealorder(){
+
+
+    $id=1;
+    $carts =  Cart::where(['deal_id'=>$id])->get();
+
+    $today = date("Y/m/d");
+    $holidays = Holiday::pluck('date');
+
+    $kaiin_number = Auth::guard('user')->user()->kaiin_number;
+    $store_users = StoreUser::where('user_id',$kaiin_number)->get(['store_id','tokuisaki_id']);
+    $stores = [];
+    $n=1;
+    foreach ($store_users as $store_user) {
+    $store = Store::where([ 'tokuisaki_id'=> $store_user->tokuisaki_id,'store_id'=> $store_user->store_id ])->first();
+      array_push($stores, $store);
+    $n++;
+    }
+
+    $data=
+    ['carts' => $carts,
+     'stores' => $stores,
+     'holidays' => $holidays,
+    ];
+    return view('dealorder', $data);
+  }
+
+
+
+
 
   public function adddeal(Request $request){
     $user_id = Auth::guard('user')->user()->id;

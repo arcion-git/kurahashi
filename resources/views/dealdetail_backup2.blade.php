@@ -28,7 +28,7 @@
           <div class="row">
             <div class="col-lg-12">
               <div class="invoice-title">
-                <h3>{{$deal->user->name}} <span class="small">様</span></h3>
+                <h3>{{$deal->user->last_name}}{{ $deal->user->first_name }} 様<span class="small"></span>（{{ $deal->user->company }}）</h3>
                 <div class="invoice-number">
                   @if($deal->success_flg)
                   @if ( Auth::guard('user')->check() )
@@ -50,7 +50,7 @@
               </div>
               <hr>
               <div class="row">
-                <!-- <div class="col-md-6">
+                <div class="col-md-6">
                   <address>
                     <strong>ご住所:</strong><br>
                     〒{{ $deal->user->address01 }}<br>{{ $deal->user->address02 }}{{ $deal->user->address03 }}{{ $deal->user->address04 }}
@@ -68,7 +68,7 @@
                     {{ $deal->user->tel }}<br>
                     {{ $deal->user->email }}
                   </address>
-                </div> -->
+                </div>
                 <div class="col-md-6">
                   <address>
                     <strong>お問い合わせ日時:</strong><br>
@@ -108,7 +108,103 @@
             <div class="row mt-4 order">
               <div class="col-md-12">
                 <div class="section-title">オーダー内容</div>
-                  <div id="dealorder"></div>
+                <div class="table-responsive">
+
+                  <table class="table table-striped table-hover table-md">
+                  <tr>
+                  	<th>商品名</th>
+                    @if ( Auth::guard('admin')->check() )
+                  	<th class="text-center">定価</th>
+                    @endif
+                  	<th class="text-center">単価</th>
+                    @if($deal->success_flg)
+                    @else
+                  	<th class="text-center">変更する単価</th>
+                    @endif
+                  	<th class="text-center">個数</th>
+                    @if($deal->success_flg)
+                    @else
+                  	<th class="text-center">変更する個数</th>
+                    @endif
+                  	<th class="text-center">小計</th>
+                  	@if($deal->success_flg)
+                  	@else
+                  	<th class="text-center">操作</th>
+                  	@endif
+                  </tr>
+
+                  @foreach($carts as $cart)
+                  <tr>
+                  	<td>{{$cart->item->item_name}}</td>
+                    @if ( Auth::guard('admin')->check() )
+                  	<td class="text-center">{{$cart->item->tanka}}</td>
+                    @endif
+
+
+                    <!-- 変更後の単価 -->
+                  	<td class="kakaku text-center">
+                      @if(isset($cart->discount))
+                      <input name="discount[]" class="teika text-center form-control" value="{{$cart->discount}}" readonly>
+                      @else
+                      <input name="teika[]" class="teika text-center form-control" value="{{$cart->item->teika}}" readonly>
+                      @endif
+                    </td>
+
+                    <!-- 変更単価 -->
+                  	<td class="kakaku text-center">
+                      <!-- クラハシ -->
+                  		@if ( Auth::guard('admin')->check() )
+                        <!-- 発注済み -->
+                  			@if($deal->success_flg)
+                          <!-- 割引適用 -->
+                  				@if(isset($cart->discount))
+                  				<input name="discount[]" class="teika text-center form-control" value="{{$cart->discount}}" readonly>
+                          <!-- 割引なし -->
+                  				@else
+                  				<input name="teika[]" class="teika text-center form-control" value="{{$cart->item->teika}}" readonly>
+                  				@endif
+                        <!-- 発注前 -->
+                  			@else
+                  				@if(isset($cart->discount))
+                  				<input name="discount[]" class="discount text-center form-control" value="{{$cart->discount}}">
+                  				@else
+                  				<input name="discount[]" class="discount text-center form-control" value="{{$cart->item->teika}}">
+                  				@endif
+                  			@endif
+                  		@endif
+
+                      <!-- 顧客 -->
+                  		@if ( Auth::guard('user')->check() )
+                  			@if(isset($cart->discount))
+                  			<input name="discount[]" class="teika text-center form-control" value="{{$cart->discount}}" readonly>
+                  			@else
+                  			<input name="teika[]" class="teika text-center form-control" value="{{$cart->item->teika}}" readonly>
+                  			@endif
+                  		@endif
+                  	</td>
+                  	<td class="text-center">
+                  		<input name="quantity[]" class="quantity text-center form-control" value="{{$cart->quantity}}" readonly>
+                  	</td>
+                  	@if($deal->success_flg)
+                  	@else
+                    <td class="text-center">
+                  		<input name="change_quantity[]" class="change_quantity text-center form-control" value="{{$cart->quantity}}">
+                  	</td>
+                  	@endif
+                  	<td class="total text-center"></td>
+                  	@if($deal->success_flg)
+                  	@else
+                  	<td class="text-center"><button id="{{$cart->item->id}}" class="removeid_{{$cart->item->id}} removecart btn btn-info">削除</button>
+                  	<input name="item_id[]" type="hidden" value="{{$cart->item->id}}" />
+                  	<input name="cart_id[]" type="hidden" value="{{$cart->id}}" class="cart_id"/>
+                  	</td>
+                  	@endif
+                  </tr>
+                  @endforeach
+                  </table>
+
+
+                </div>
                 <div class="row mt-4">
                   <div class="col-lg-8">
                     <div class="section-title">お支払い</div>

@@ -33,6 +33,8 @@
 
   Route::post('/addcart', 'LoginPageController@addcart');
   Route::post('/removecart', 'LoginPageController@removecart');
+  Route::post('/removeorder', 'LoginPageController@removeorder');
+
   Route::post('/clonecart', 'LoginPageController@clonecart');
   Route::post('/updatecart', 'LoginPageController@updatecart');
 
@@ -40,6 +42,8 @@
   Route::post('/addsuscess', 'LoginPageController@addsuscess');
 
   Route::get('/cart', 'LoginPageController@cart');
+  Route::get('/order', 'LoginPageController@order');
+  Route::get('/dealorder', 'LoginPageController@dealorder');
   Route::post('/dealcart', 'LoginPageController@dealcart');
   Route::get('/showdealcart', 'LoginPageController@showdealcart');
 

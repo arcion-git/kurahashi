@@ -15,6 +15,14 @@
     <!-- General CSS Files -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css">
+
+
+
+
+
 
     <!-- Styles -->
     <!-- <link href="{{ asset('css/app.css') }}" rel="stylesheet"> -->
@@ -24,6 +32,7 @@
     <!-- Template CSS -->
     <link href="{{ asset('css/style.css') }}" rel="stylesheet" >
     <link href="{{ asset('css/components.css') }}" rel="stylesheet" >
+    <!-- <link href="{{ asset('css/daterangepicker.css') }}" rel="stylesheet" > -->
 
 
 </head>
@@ -245,6 +254,31 @@
     <script src="https://ajaxzip3.github.io/ajaxzip3.js" charset="UTF-8"></script>
     <script src="{{ asset('js/stisla.js') }}"></script>
 
+    <!-- datepicker -->
+    <!-- <script src="{{ asset('js/daterangepicker.js') }}"></script> -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.ja.min.js"></script>
+
+    @if(isset( $holidays ))
+    <script>
+    $('.datepicker').datepicker({
+      format: 'yyyy-mm-dd',
+      autoclose: true,
+      assumeNearbyYear: true,
+      language: 'ja',
+      startDate: '+2d',
+      endDate: '+31d',
+      defaultViewDate: Date(),
+      datesDisabled: [
+      @foreach($holidays as $holiday)
+      '{{$holiday}}',
+      @endforeach
+      ]
+    });
+    </script>
+    @endif
+
+
     <!-- JS Libraies -->
     <!-- <script src="../node_modules/jquery-pwstrength/jquery.pwstrength.min.js"></script>
     <script src="../node_modules/selectric/public/jquery.selectric.min.js"></script> -->
@@ -259,6 +293,8 @@
 
     <script src="{{ asset('js/calculation.js') }}"></script>
     <!-- <script src="{{ asset('js/realtime.js') }}"></script> -->
+
+
 
 
 </body>

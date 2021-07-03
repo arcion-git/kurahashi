@@ -3083,3 +3083,9 @@ body.sidebar-mini .main-sidebar .sidebar-brand{
 .checkbox-input:checked + .checkbox02::after {
     opacity: 1;
 } */
+
+td.order-table table,
+td.order-table{
+  padding: 0px !important;
+  margin: 0px !important;
+}
