@@ -20,34 +20,38 @@
   Route::post('/form/import-csv', 'CsvImportController@store');
 
 
-
+  // ページ
   Route::get('/', 'LoginPageController@index')->name('home');
   Route::get('/category/{id}', 'LoginPageController@category');
-
-
-
-
   Route::get('/confirm', 'LoginPageController@confirm');
   Route::get('/deal', 'LoginPageController@deal')->name('deal');
   Route::get('/user/deal/{id}', 'LoginPageController@dealdetail')->name('dealdetail');
 
+  // Ajax GET
+  Route::get('/cart', 'LoginPageController@cart');
+  Route::get('/order', 'LoginPageController@order');
+
+  // Ajax POST&GET
+  Route::post('/dealorder', 'LoginPageController@dealorder');
+
+  // Ajax POST
   Route::post('/addcart', 'LoginPageController@addcart');
   Route::post('/removecart', 'LoginPageController@removecart');
   Route::post('/removeorder', 'LoginPageController@removeorder');
-
+  Route::post('/change_quantity', 'LoginPageController@change_quantity');
+  Route::post('/change_nouhin_yoteibi', 'LoginPageController@change_nouhin_yoteibi');
+  Route::post('/change_store', 'LoginPageController@change_store');
   Route::post('/clonecart', 'LoginPageController@clonecart');
   Route::post('/updatecart', 'LoginPageController@updatecart');
 
+  // POST
   Route::post('/adddeal', 'LoginPageController@adddeal');
   Route::post('/addsuscess', 'LoginPageController@addsuscess');
 
-  Route::get('/cart', 'LoginPageController@cart');
-  Route::get('/order', 'LoginPageController@order');
-  Route::get('/dealorder', 'LoginPageController@dealorder');
   Route::post('/dealcart', 'LoginPageController@dealcart');
   Route::get('/showdealcart', 'LoginPageController@showdealcart');
 
-// アンケート画面
+  // アンケート画面
   Route::get('/user/questionnaire', 'LoginPageController@questionnaire');
 
 

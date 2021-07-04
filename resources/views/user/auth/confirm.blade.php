@@ -14,6 +14,13 @@
       </div>
     </div>
 
+
+    <!-- <div class="input-group">
+      <input type="text" name="nouhinbi[]" class="nouhinbi text-center form-control datepicker" value="2021-06-26">
+    </div> -->
+
+
+
     <div class="section-body">
       <div class="invoice">
         <div class="invoice-print">

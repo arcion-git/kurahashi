@@ -1,3 +1,5 @@
+
+
 <div class="table-responsive">
 	<table class="table table-striped table-hover table-md">
 		<tr>
@@ -81,33 +83,3 @@
 		@endforeach
 	</table>
 </div>
-
-<script>
-// 取引詳細画面でオーダー内容を取得
-function dealorder_update() {
-					$.ajax({
-							headers: {
-								'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-							}, //Headersを書き忘れるとエラーになる
-							type: 'POST', //リクエストタイプ
-							data: {
-								'item_id': item_id,
-							}, //Laravelに渡すデータ
-							url: location.origin + '/dealorder',
-							cache: false, // キャッシュしないで読み込み
-							// 通信成功時に呼び出されるコールバック
-							success: function (data) {
-										$('#dealorder').html(data);
-							},
-							// 通信エラー時に呼び出されるコールバック
-							error: function () {
-									// alert("Ajax通信エラー");
-							}
-					});
-	}
-
-// 個数入力画面を開いたらオーダー内容を取得
-$(document).ready( function(){
-setTimeout(dealorder_update);
-});
-</script>

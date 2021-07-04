@@ -17,8 +17,16 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css">
+    <!-- jQUERY -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
+    <!-- datepicker -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css">
+    <!-- <script src="{{ asset('js/daterangepicker.js') }}"></script> -->
+
+    <!-- <link rel="stylesheet" href="{{ asset('css/daterangepicker.css') }}"> -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.ja.min.js"></script>
 
 
 
@@ -37,6 +45,7 @@
 
 </head>
 <body>
+
 
 
   <div id="app">
@@ -246,7 +255,7 @@
 
 
     <!-- General JS Scripts -->
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.nicescroll/3.7.6/jquery.nicescroll.min.js"></script>
@@ -254,29 +263,7 @@
     <script src="https://ajaxzip3.github.io/ajaxzip3.js" charset="UTF-8"></script>
     <script src="{{ asset('js/stisla.js') }}"></script>
 
-    <!-- datepicker -->
-    <!-- <script src="{{ asset('js/daterangepicker.js') }}"></script> -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.ja.min.js"></script>
 
-    @if(isset( $holidays ))
-    <script>
-    $('.datepicker').datepicker({
-      format: 'yyyy-mm-dd',
-      autoclose: true,
-      assumeNearbyYear: true,
-      language: 'ja',
-      startDate: '+2d',
-      endDate: '+31d',
-      defaultViewDate: Date(),
-      datesDisabled: [
-      @foreach($holidays as $holiday)
-      '{{$holiday}}',
-      @endforeach
-      ]
-    });
-    </script>
-    @endif
 
 
     <!-- JS Libraies -->
@@ -293,6 +280,7 @@
 
     <script src="{{ asset('js/calculation.js') }}"></script>
     <!-- <script src="{{ asset('js/realtime.js') }}"></script> -->
+
 
 
 

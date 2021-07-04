@@ -1,19 +1,19 @@
 <div class="table-responsive">
 	<table class="table table-striped table-hover table-md">
 		<tr>
-			<th class="text-center">商品番号</th>
-			<th class="">商品名</th>
-			<th class="text-center">産地</th>
-			<th class="text-center">在庫数</th>
-			<th class="text-center">特記事項</th>
-			<th class="text-center">金額</th>
-			<th width="180px" class="text-center">納品先店舗</th>
-			<th width="80px" class="text-center">規格</th>
-			<th width="100px" class="text-center">数量</th>
-			<th width="80px" class="text-center">単位</th>
-			<th width="120px" class="text-center">納品予定日</th>
-			<th width="80px" class="text-center">小計</th>
-			<th width="140px" class="text-center">操作</th>
+			<th class="head text-center">商品番号</th>
+			<th class="head">商品名</th>
+			<th class="head text-center">産地</th>
+			<th class="head text-center">在庫数</th>
+			<th class="head text-center">特記事項</th>
+			<th class="head text-center">金額</th>
+			<th width="180px" class="head text-center">納品先店舗</th>
+			<th width="80px" class="head text-center">規格</th>
+			<th width="100px" class="head text-center">数量</th>
+			<th width="80px" class="head text-center">単位</th>
+			<th width="120px" class="head text-center">納品予定日</th>
+			<th width="80px" class="head text-center">小計</th>
+			<th width="140px" class="head text-center">操作</th>
 		</tr>
 		@foreach($carts as $cart)
 		<tr id="{{$cart->id}}">
@@ -30,16 +30,20 @@
 				@foreach($cart->orders as $val)
 					<tr id="{{$val->id}}">
 						<td width="180px" class="text-center">
-							<select name="store[]" class="store text-center form-control" value="{{$cart->store_id}}">
+							<select name="store[]" class="store text-center form-control" value="{{$val->tokuisaki_name}} {{$val->store_name}}">
 								@foreach($stores as $store)
-								<option value="{{$store->store_id}}">{{$store->tokuisaki_name}} {{$store->store_name}}</option>
+								<option id="{{$store->tokuisaki_name}}" value="{{$store->store_name}}">{{$store->tokuisaki_name}} {{$store->store_name}}</option>
 								@endforeach
-								<option value="{{$store->store_id}}">全店舗に追加</option>
+								<option value="">全店舗に追加</option>
 							</select>
 						</td>
 						<td width="80px" class="text-center">{{$cart->item->kikaku}}</td>
 						<td width="100px" class="text-center">
-							<select name="quantity[]" class="store text-center form-control" value="{{$cart->store_id}}">
+							<select name="quantity[]" class="quantity text-center form-control" value="{{$val->quantity}}">
+								@if($val->quantity == 1)
+								@elseif($val->quantity)
+								<option value="{{$val->quantity}}">{{$val->quantity}}</option>
+								@endif
 								@for ($i = 1; $i <= $cart->item->zaikosuu; $i++)
 								<option value="{{$i}}">{{$i}}</option>
 								@endfor
@@ -57,15 +61,7 @@
 							@endif
 						</td>
 						<td width="120px" class="text-center">
-							<div class="input-group">
-
-								<input type="text" name="nouhinbi[]" class="nouhinbi text-center form-control daterange-cus datepicker" value="2021-06-26">
-								<!-- <div class="input-group-prepend">
-									<div class="input-group-text">
-										<i class="fas fa-calendar"></i>
-									</div>
-								</div> -->
-							</div>
+								<input type="text" name="nouhin_yoteibi[]" class="nouhin_yoteibi text-center form-control daterange-cus datepicker" value="{{$val->nouhin_yoteibi}}">
 						</td>
 						<td width="80px" class="total text-center"></td>
 						<td width="140px" class="text-center">
@@ -81,3 +77,23 @@
 		@endforeach
 	</table>
 </div>
+
+
+@if(isset( $holidays ))
+<script>
+$('.datepicker').datepicker({
+	format: 'yyyy-mm-dd',
+	autoclose: true,
+	assumeNearbyYear: true,
+	language: 'ja',
+	startDate: '+2d',
+	endDate: '+31d',
+	defaultViewDate: Date(),
+	datesDisabled: [
+	@foreach($holidays as $holiday)
+	'{{$holiday}}',
+	@endforeach
+	]
+});
+</script>
+@endif

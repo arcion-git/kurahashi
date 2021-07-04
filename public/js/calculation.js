@@ -6,10 +6,9 @@
  */
 
 
-
-  // カートに追加
 $(function() {
 
+  // カートに追加
   $(document).on("click", ".addcart", function() {
 
     var item_id = $(this).get(0).id;
@@ -45,9 +44,6 @@ $(function() {
       $('#toggle').trigger('click');
   });
 
-
-
-
   // カートの中身を更新
   function dojQueryAjax() {
       // jQueryのajaxメソッドを使用しajax通信
@@ -71,11 +67,7 @@ $(function() {
       setTimeout(dojQueryAjax);
   });
 
-
-
-
-
-  //HOME画面でカートの外側をクリックしたときの処理
+  //HOME画面でカートの外側をクリックしたらカートの内容を非表示
   document.addEventListener('click', (e) => {
     if(!e.target.closest('.dropdown-list-content')) {
       $('#cart-container').removeClass("show");
@@ -86,10 +78,8 @@ $(function() {
   })
 
 
-  // カートから削除HOME画面用
-
+  // HOME画面でカートから削除
   $(document).on("click", ".removecart", function() {
-
     var item_id = $(this).get(0).id;
     $('.removeid_'+item_id).parent().parent().remove();
     console.log(item_id);
@@ -116,7 +106,6 @@ $(function() {
         console.log("textStatus     : " + textStatus);
         console.log("errorThrown    : " + errorThrown.message);
       });
-
       // 送信画面のときは、カートのポップアップを出さない
       if(!document.URL.match(/confirm/)){
       $('#toggle').addClass('beep');
@@ -132,37 +121,74 @@ $(function() {
 
 
 
-
-
-
-  // オーダー内容を取得
-    function order_update() {
-            $.ajax({
-                type: "GET", // GETメソッドで通信
-                url: location.origin + '/order',
-                cache: false, // キャッシュしないで読み込み
-                // 通信成功時に呼び出されるコールバック
-                success: function (data) {
-                      $('#order').html(data);
-                },
-                // 通信エラー時に呼び出されるコールバック
-                error: function () {
-                    // alert("Ajax通信エラー");
-                }
-            });
-    }
-
-// 個数入力画面を開いたらオーダー内容を取得
+  // 取引詳細画面でオーダー内容を取得する関数
+  function dealorder_update() {
+    var deal_id = $('#deal_id').val();
+    console.log(deal_id);
+    $.ajax({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }, //Headersを書き忘れるとエラーになる
+        url: location.origin + '/dealorder',
+        type: 'POST', //リクエストタイプ
+        data: {
+          'deal_id': deal_id,
+        },
+				cache: false,
+        success: function (data) {
+              $('#dealorder').html(data);
+        },
+        error: function () {
+            // alert("Ajax通信エラー");
+        }
+      })
+      // Ajaxリクエスト成功時の処理
+      .done(function(data) {
+        // console.log(data);
+      })
+      // Ajaxリクエスト失敗時の処理
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        alert('Ajaxリクエスト失敗');
+        console.log("ajax通信に失敗しました");
+        console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+        console.log("textStatus     : " + textStatus);
+        console.log("errorThrown    : " + errorThrown.message);
+      });
+  	}
+  // 個数入力画面を開いたらオーダー内容を取得
   $(document).ready( function(){
-  setTimeout(order_update);
+  setTimeout(dealorder_update);
   });
 
 
 
 
+
+  // オーダー内容を取得する関数
+  function order_update() {
+      $.ajax({
+          type: "GET", // GETメソッドで通信
+          url: location.origin + '/order',
+          cache: false, // キャッシュしないで読み込み
+          // 通信成功時に呼び出されるコールバック
+          success: function (data) {
+                $('#order').html(data);
+          },
+          // 通信エラー時に呼び出されるコールバック
+          error: function () {
+              // alert("Ajax通信エラー");
+          }
+      });
+    }
+
+  // 個数入力画面を開いたらオーダー内容を取得
+  $(document).ready( function(){
+  setTimeout(order_update);
+  });
+
+
   // 配送先を追加
   $(document).on("click", ".clonecart", function() {
-
     var item_id = $(this).get(0).id;
     var cart_id = $(this).parent().parent().parent().parent().parent().parent().get(0).id;
     console.log(cart_id);
@@ -192,11 +218,8 @@ $(function() {
         console.log("errorThrown    : " + errorThrown.message);
       });
       setTimeout(order_update);
+      setTimeout(dealorder_update);
   });
-
-
-
-
 
 
   // 確認画面カートから削除
@@ -231,23 +254,126 @@ $(function() {
         console.log("errorThrown    : " + errorThrown.message);
       });
       setTimeout(order_update);
+      setTimeout(dealorder_update);
   });
 
+
+
+
+  // 個数変更を保存
+  $(document).on("change", ".quantity", function() {
+    var order_id = $(this).parent().parent().get(0).id;
+    var quantity = $(this).val();
+    console.log(quantity);
+    console.log(order_id);
+    $.ajax({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }, //Headersを書き忘れるとエラーになる
+        url: location.origin + '/change_quantity',
+        type: 'POST', //リクエストタイプ
+        data: {
+          'order_id': order_id,
+          'quantity': quantity,
+        } //Laravelに渡すデータ
+      })
+      // Ajaxリクエスト成功時の処理
+      .done(function(data) {
+        // console.log(data);
+      })
+      // Ajaxリクエスト失敗時の処理
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        alert('Ajaxリクエスト失敗');
+        console.log("ajax通信に失敗しました");
+        console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+        console.log("textStatus     : " + textStatus);
+        console.log("errorThrown    : " + errorThrown.message);
+      });
+      setTimeout(order_update);
+  });
+
+
+  // 納品予定日を保存
+  $(document).on("change", ".nouhin_yoteibi", function() {
+    var order_id = $(this).parent().parent().get(0).id;
+    var nouhin_yoteibi = $(this).val();
+    console.log(order_id);
+    console.log(nouhin_yoteibi);
+    $.ajax({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }, //Headersを書き忘れるとエラーになる
+        url: location.origin + '/change_nouhin_yoteibi',
+        type: 'POST', //リクエストタイプ
+        data: {
+          'order_id': order_id,
+          'nouhin_yoteibi': nouhin_yoteibi,
+        } //Laravelに渡すデータ
+      })
+      // Ajaxリクエスト成功時の処理
+      .done(function(data) {
+        // console.log(data);
+      })
+      // Ajaxリクエスト失敗時の処理
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        alert('Ajaxリクエスト失敗');
+        console.log("ajax通信に失敗しました");
+        console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+        console.log("textStatus     : " + textStatus);
+        console.log("errorThrown    : " + errorThrown.message);
+      });
+      setTimeout(order_update);
+  });
+
+  // 配送先店舗を保存
+  $(document).on("change", ".store", function() {
+    var order_id = $(this).parent().parent().get(0).id;
+    var store_name = $(this).val();
+    var tokuisaki_name = $(this).find('option:selected').get(0).id;
+    console.log(order_id);
+    console.log(store_name);
+    console.log(tokuisaki_name);
+    $.ajax({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }, //Headersを書き忘れるとエラーになる
+        url: location.origin + '/change_store',
+        type: 'POST', //リクエストタイプ
+        data: {
+          'order_id': order_id,
+          'store_name': store_name,
+          'tokuisaki_name': tokuisaki_name,
+        } //Laravelに渡すデータ
+      })
+      // Ajaxリクエスト成功時の処理
+      .done(function(data) {
+        // console.log(data);
+      })
+      // Ajaxリクエスト失敗時の処理
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        alert('Ajaxリクエスト失敗');
+        console.log("ajax通信に失敗しました");
+        console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+        console.log("textStatus     : " + textStatus);
+        console.log("errorThrown    : " + errorThrown.message);
+      });
+      setTimeout(order_update);
+  });
+
+
+
+
+
 });
 
 
 
 
-// 単品料理追加
-$(document).on("click", ".add", function() {
-    $(this).prev().find(".box:last").clone(true).insertAfter($(this).prev());
-});
-$(document).on("click", ".del", function() {
-    var target = $(this).parent().parent();
-    if (target.parent().children().length > 1) {
-        target.remove();
-    }
-});
+
+
+
+
+
 
 
 

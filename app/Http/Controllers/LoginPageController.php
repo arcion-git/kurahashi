@@ -139,7 +139,7 @@ class LoginPageController extends Controller
     $cart=Cart::firstOrNew(['user_id'=> $user_id , 'item_id'=> $item_id , 'deal_id'=> null]);
     $cart->save();
 
-    $order=Order::firstOrNew(['cart_id'=> $cart->id , 'store_id'=> $store->store_id , 'quantity'=> 1]);
+    $order=Order::firstOrNew(['cart_id'=> $cart->id , 'tokuisaki_name'=> $store->tokuisaki_name , 'store_name'=> $store->store_name , 'quantity'=> 1]);
     $order->save();
 
     $data = "sucsess";
@@ -180,14 +180,44 @@ class LoginPageController extends Controller
     return redirect()->route('home',$data);
   }
 
+  public function change_quantity(Request $request){
+    $order_id = $request->order_id;
+    $quantity = $request->quantity;
+
+    $order=Order::where(['id'=> $order_id])->update(['quantity'=> $quantity]);
+
+    $data = "sucsess";
+    return redirect()->route('home',$data);
+  }
 
 
+  public function change_nouhin_yoteibi(Request $request){
+    $order_id = $request->order_id;
+    $nouhin_yoteibi = $request->nouhin_yoteibi;
+
+    $order=Order::where(['id'=> $order_id])->update(['nouhin_yoteibi'=> $nouhin_yoteibi]);
+
+    $data = "sucsess";
+    return redirect()->route('home',$data);
+  }
+
+
+  public function change_store(Request $request){
+    $order_id = $request->order_id;
+    $store_name = $request->store_name;
+    $tokuisaki_name = $request->tokuisaki_name;
+
+    $order=Order::where(['id'=> $order_id])->update(['store_name'=> $store_name,'tokuisaki_name'=> $tokuisaki_name]);
+
+    $data = "sucsess";
+    return redirect()->route('home',$data);
+  }
 
 
   public function clonecart(Request $request){
     $user_id = Auth::guard('user')->user()->id;
     $cart_id = $request->cart_id;
-    $order=Order::Create(['cart_id'=> $cart_id , 'store_id'=> 1 , 'nouhin_yoteibi'=> 20, 'quantity'=> 1]);
+    $order=Order::Create(['cart_id'=> $cart_id , 'tokuisaki_name'=>'------' , 'nouhin_yoteibi'=> '', 'quantity'=> 1]);
     $data = "sucsess";
     return redirect()->route('home',$data);
   }
@@ -222,15 +252,13 @@ class LoginPageController extends Controller
 
   public function confirm(){
 
-
-
     $categories = Category::get()->groupBy('bu_ka_name');
     $user_id = Auth::guard('user')->user()->id;
     $favorite_categories = FavoriteCategory::where('user_id', $user_id)->get();
     $carts =  Cart::where(['user_id'=>$user_id, 'deal_id'=> null])->get();
 
-    // $today = date("Y/m/d");
-    // $holidays = Holiday::pluck('date');
+    $today = date("Y/m/d");
+    $holidays = Holiday::pluck('date');
     // $kaiin_number = Auth::guard('user')->user()->kaiin_number;
     // $store_users = StoreUser::where('user_id',$kaiin_number)->get(['store_id','tokuisaki_id']);
     // $stores = [];
@@ -246,7 +274,7 @@ class LoginPageController extends Controller
      'categories' => $categories,
      'favorite_categories' => $favorite_categories,
      // 'stores' => $stores,
-     // 'holidays' => $holidays,
+     'holidays' => $holidays,
     ]);
 
   }
@@ -303,8 +331,6 @@ class LoginPageController extends Controller
 
   public function dealdetail($id){
 
-
-
     $categories = Category::get()->groupBy('bu_ka_name');
     $user_id = Auth::guard('user')->user()->id;
 
@@ -323,15 +349,19 @@ class LoginPageController extends Controller
   }
 
 
-  public function dealorder(){
+  public function dealorder(Request $request){
 
+    $deal_id = $request->deal_id;
+    $user_id = Auth::guard('user')->user()->id;
 
-    $id=1;
-    $carts =  Cart::where(['deal_id'=>$id])->get();
+    // 取引IDが一致しているものを取得
+    $carts =  Cart::where(['user_id'=>$user_id, 'deal_id'=> $deal_id])->get();
 
+    // 休日についての処理
     $today = date("Y/m/d");
     $holidays = Holiday::pluck('date');
 
+    // 店舗一覧取得
     $kaiin_number = Auth::guard('user')->user()->kaiin_number;
     $store_users = StoreUser::where('user_id',$kaiin_number)->get(['store_id','tokuisaki_id']);
     $stores = [];
@@ -347,8 +377,11 @@ class LoginPageController extends Controller
      'stores' => $stores,
      'holidays' => $holidays,
     ];
-    return view('dealorder', $data);
+    return view('order', $data);
   }
+
+
+
 
 
 
@@ -359,7 +392,7 @@ class LoginPageController extends Controller
 
     $data = $request->all();
     $item_ids = $data['item_id'];
-    $quantitys = $data['quantity'];
+    // $quantitys = $data['quantity'];
 
     $deal=Deal::create(['user_id'=> $user_id]);
     $deal_id = $deal->id;
@@ -377,9 +410,9 @@ class LoginPageController extends Controller
   public function addsuscess(Request $request){
     $user_id = Auth::guard('user')->user()->id;
 
-    $data = $request->all();
-    $item_ids = $data['item_id'];
-    $quantitys = $data['quantity'];
+    // $data = $request->all();
+    // $item_ids = $data['item_id'];
+    // $quantitys = $data['quantity'];
 
     $deal_id = $request->deal_id;
 
@@ -388,15 +421,15 @@ class LoginPageController extends Controller
     $deal->success_time = Carbon::now();
     $deal->save();
 
-    foreach($item_ids as $key => $input) {
-      $cart = Cart::firstOrNew(['user_id'=> $user_id , 'item_id'=> $item_ids[$key], 'deal_id'=> $deal_id]);
-      $cart->user_id = $user_id;
-      $cart->deal_id = $deal_id;
-      $cart->quantity = isset($quantitys[$key]) ? $quantitys[$key] : null;
-      $cart->save();
-    }
+    // foreach($item_ids as $key => $input) {
+    //   $cart = Cart::firstOrNew(['user_id'=> $user_id , 'item_id'=> $item_ids[$key], 'deal_id'=> $deal_id]);
+    //   $cart->user_id = $user_id;
+    //   $cart->deal_id = $deal_id;
+    //   $cart->quantity = isset($quantitys[$key]) ? $quantitys[$key] : null;
+    //   $cart->save();
+    // }
 
-    return; redirect('deal');
+    return redirect('deal');
   }
 
   public function updatecart(Request $request){
@@ -410,6 +443,8 @@ class LoginPageController extends Controller
 
     $id = $cart->deal_id;
     $cart=Cart::where('id',$cart_id)->first();
+
+
 
     $data=[
       'discount'=> $cart->discount,

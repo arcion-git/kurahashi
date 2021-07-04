@@ -3089,3 +3089,24 @@ td.order-table{
   padding: 0px !important;
   margin: 0px !important;
 }
+
+
+.datepicker th,
+.datepicker td {
+    padding: 5px !important;
+    font-size: 14px !important;
+}
+
+
+
+/* ここからスマホ */
+
+@media (max-width: 767px) {
+.invoice{
+  padding: 5px !important;
+}
+.main-content {
+    padding-left: 7px !important;
+    padding-right: 7px !important;
+    width: 100% !important;
+}

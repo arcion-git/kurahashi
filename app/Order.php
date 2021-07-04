@@ -8,11 +8,13 @@ class Order extends Model
 {
     protected $fillable = [
     'cart_id',
-    'store_id',
+    'tokuisaki_name',
+    'store_name',
     'nouhin_yoteibi',
     'quantity',
   ];
   public function cart() {
     return $this->belongsTo('App\Cart');
   }
+
 }
