@@ -388,127 +388,126 @@ if(!document.URL.match(/confirm/)){
 
 
 // 合計金額アップデート
-function update_field(){
-    $('input').on('keyup change',function(){
-
-      var target = $('input').map(function (index, el) {
-      $(this).closest('tr').find('.total').text(
-      $(this).closest('tr').find('input.teika').val() *
-      $(this).closest('tr').find('input.quantity').val());});
-      console.log(target);
-
-    var sum = 0;
-    $('.total').each(function () {
-        sum += parseInt(this.innerText);
-        var item_total = $('#item_total').map(function (index, el) {
-        var item_total = Number(item_total).toLocaleString()
-        $(this).text("¥ "+ sum.toLocaleString() );});
-
-        var all_total = $('#all_total').map(function (index, el) {
-        var all_total = sum * 1.1;
-        var all_total = Math.round(all_total);
-        $(this).text("¥ "+ all_total.toLocaleString());});
-
-        var tax = $('#tax').map(function (index, el) {
-        var tax = sum * 1.1 - sum;
-        var tax = Math.round(tax);
-        $(this).text("¥ "+ tax.toLocaleString());});
-    });
-
-
-    if(document.URL.match(/admin/)){
-      var discount = $(this).closest('tr').find('input.discount').val();
-      var quantity = $(this).closest('tr').find('input.quantity').val();
-      var cart_id = $(this).closest('tr').find('.cart_id').val();
-
-      $.ajax({
-          headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-          }, //Headersを書き忘れるとエラーになる
-          url: location.origin + '/admin/updatecart',
-          type: 'POST', //リクエストタイプ
-          data: {
-            'discount': discount,
-            'quantity': quantity,
-            'cart_id': cart_id,
-          } //Laravelに渡すデータ
-        })
-        // Ajaxリクエスト成功時の処理
-        .done(function(data) {
-          console.log(data);
-        })
-        // Ajaxリクエスト失敗時の処理
-        .fail(function(jqXHR, textStatus, errorThrown) {
-          alert('Ajaxリクエスト失敗');
-          console.log("ajax通信に失敗しました");
-          console.log("XMLHttpRequest : " + XMLHttpRequest.status);
-          console.log("textStatus     : " + textStatus);
-          console.log("errorThrown    : " + errorThrown.message);
-        });
-      }
-
-    if(document.URL.match(/user/)){
-      var discount = $(this).closest('tr').find('input.teika').val();
-      var quantity = $(this).closest('tr').find('input.quantity').val();
-      var cart_id = $(this).closest('tr').find('input.cart_id').val();
-
-      $.ajax({
-          headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-          }, //Headersを書き忘れるとエラーになる
-          url: location.origin + '/updatecart',
-          type: 'POST', //リクエストタイプ
-          data: {
-            'discount': discount,
-            'quantity': quantity,
-            'cart_id': cart_id,
-          } //Laravelに渡すデータ
-        })
-        // Ajaxリクエスト成功時の処理
-        .done(function(data) {
-          console.log(data);
-        })
-        // Ajaxリクエスト失敗時の処理
-        .fail(function(jqXHR, textStatus, errorThrown) {
-          alert('Ajaxリクエスト失敗');
-          console.log("ajax通信に失敗しました");
-          console.log("XMLHttpRequest : " + XMLHttpRequest.status);
-          console.log("textStatus     : " + textStatus);
-          console.log("errorThrown    : " + errorThrown.message);
-        });
-      }
-   });
-}
+// function update_field(){
+//     $('input').on('keyup change',function(){
+//
+//       var target = $('input').map(function (index, el) {
+//       $(this).closest('tr').find('.total').text(
+//       $(this).closest('tr').find('input.teika').val() *
+//       $(this).closest('tr').find('input.quantity').val());});
+//       console.log(target);
+//
+//     var sum = 0;
+//     $('.total').each(function () {
+//         sum += parseInt(this.innerText);
+//         var item_total = $('#item_total').map(function (index, el) {
+//         var item_total = Number(item_total).toLocaleString()
+//         $(this).text("¥ "+ sum.toLocaleString() );});
+//
+//         var all_total = $('#all_total').map(function (index, el) {
+//         var all_total = sum * 1.1;
+//         var all_total = Math.round(all_total);
+//         $(this).text("¥ "+ all_total.toLocaleString());});
+//
+//         var tax = $('#tax').map(function (index, el) {
+//         var tax = sum * 1.1 - sum;
+//         var tax = Math.round(tax);
+//         $(this).text("¥ "+ tax.toLocaleString());});
+//     });
+//
+//
+//     if(document.URL.match(/admin/)){
+//       var discount = $(this).closest('tr').find('input.discount').val();
+//       var quantity = $(this).closest('tr').find('input.quantity').val();
+//       var cart_id = $(this).closest('tr').find('.cart_id').val();
+//
+//       $.ajax({
+//           headers: {
+//             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+//           },
+//           url: location.origin + '/admin/updatecart',
+//           type: 'POST',
+//           data: {
+//             'discount': discount,
+//             'quantity': quantity,
+//             'cart_id': cart_id,
+//           }
+//         })
+//
+//         .done(function(data) {
+//           console.log(data);
+//         })
+//
+//         .fail(function(jqXHR, textStatus, errorThrown) {
+//           alert('Ajaxリクエスト失敗');
+//           console.log("ajax通信に失敗しました");
+//           console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+//           console.log("textStatus     : " + textStatus);
+//           console.log("errorThrown    : " + errorThrown.message);
+//         });
+//       }
+//
+//     if(document.URL.match(/user/)){
+//       var discount = $(this).closest('tr').find('input.teika').val();
+//       var quantity = $(this).closest('tr').find('input.quantity').val();
+//       var cart_id = $(this).closest('tr').find('input.cart_id').val();
+//
+//       $.ajax({
+//           headers: {
+//             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+//           },
+//           url: location.origin + '/updatecart',
+//           type: 'POST',
+//           data: {
+//             'discount': discount,
+//             'quantity': quantity,
+//             'cart_id': cart_id,
+//           }
+//         })
+//
+//         .done(function(data) {
+//           console.log(data);
+//         })
+//
+//         .fail(function(jqXHR, textStatus, errorThrown) {
+//           alert('Ajaxリクエスト失敗');
+//           console.log("ajax通信に失敗しました");
+//           console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+//           console.log("textStatus     : " + textStatus);
+//           console.log("errorThrown    : " + errorThrown.message);
+//         });
+//       }
+//    });
+// }
 
 // 合計金額アップデート画面を開たとき
-$(document).ready( function(){
-    update_field();
-
-      var target = $('.total').map(function (index, el) {
-      $(this).closest('tr').find('.total').text(
-      $(this).closest('tr').find('input.teika').val() *
-      $(this).closest('tr').find('input.quantity').val());});
-      // console.log(target);
-
-      var sum = 0;
-      $('.total').each(function () {
-          sum += parseInt(this.innerText);
-          var item_total = $('#item_total').map(function (index, el) {
-          $(this).text("¥ "+ sum.toLocaleString() );});
-
-          var all_total = $('#all_total').map(function (index, el) {
-          var all_total = sum * 1.1;
-          var all_total = Math.round(all_total);
-          $(this).text("¥ "+ all_total.toLocaleString());});
-
-          var tax = $('#tax').map(function (index, el) {
-          var tax = sum * 1.1 - sum;
-          var tax = Math.round(tax);
-          $(this).text("¥ "+ tax.toLocaleString());});
-      });
-
-
-});
+// $(document).ready( function(){
+//     update_field();
+//
+//       var target = $('.total').map(function (index, el) {
+//       $(this).closest('tr').find('.total').text(
+//       $(this).closest('tr').find('input.teika').val() *
+//       $(this).closest('tr').find('input.quantity').val());});
+//
+//       var sum = 0;
+//       $('.total').each(function () {
+//           sum += parseInt(this.innerText);
+//           var item_total = $('#item_total').map(function (index, el) {
+//           $(this).text("¥ "+ sum.toLocaleString() );});
+//
+//           var all_total = $('#all_total').map(function (index, el) {
+//           var all_total = sum * 1.1;
+//           var all_total = Math.round(all_total);
+//           $(this).text("¥ "+ all_total.toLocaleString());});
+//
+//           var tax = $('#tax').map(function (index, el) {
+//           var tax = sum * 1.1 - sum;
+//           var tax = Math.round(tax);
+//           $(this).text("¥ "+ tax.toLocaleString());});
+//       });
+//
+//
+// });
 
 
 
