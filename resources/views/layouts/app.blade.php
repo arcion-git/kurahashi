@@ -201,9 +201,11 @@
                 <i class="fas fa-heart"></i></i><span>お気に入りカテゴリ</span>
               </a>
               <ul class="dropdown-menu">
+              @if($favorite_categories)
               @foreach($favorite_categories as $favorite_category)
                       <li class="nav-item"><a class="nav-link" href="/category/{{$favorite_category->category->category_id}}"><span>{{ $favorite_category->category->category_name }}</span></a></li>
               @endforeach
+              @endif
               </ul>
             </li>
 
