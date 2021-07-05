@@ -249,34 +249,34 @@ class DatabaseSeeder extends Seeder
 
 
 
-      $file = new SplFileObject('database/csv/InCompanySales.csv');
-      $file->setFlags(
-          \SplFileObject::READ_CSV |
-          \SplFileObject::READ_AHEAD |
-          \SplFileObject::SKIP_EMPTY |
-          \SplFileObject::DROP_NEW_LINE
-      );
-      $list = [];
-      $now = Carbon::now();
-
-      foreach ($file as $line) {
-          if ($file->key() > 0 && ! $file->eof()) {
-            $list[] = [
-              'tantou_id' => $line[0],
-              'name' => $line[1],
-              'name_kana' => $line[2],
-              'tel' => $line[3],
-              'shozoku_busho_id' => $line[4],
-              'shozoku_busho_name' => $line[5],
-              'kengen' => $line[6],
-              'email'=> $line[7],
-              'password' => \Hash::make($line[8]) ,
-              "created_at" => $now,
-              "updated_at" => $now,
-            ];
-          }
-      }
-      DB::table("admins")->insert($list);
+      // $file = new SplFileObject('database/csv/InCompanySales.csv');
+      // $file->setFlags(
+      //     \SplFileObject::READ_CSV |
+      //     \SplFileObject::READ_AHEAD |
+      //     \SplFileObject::SKIP_EMPTY |
+      //     \SplFileObject::DROP_NEW_LINE
+      // );
+      // $list = [];
+      // $now = Carbon::now();
+      //
+      // foreach ($file as $line) {
+      //     if ($file->key() > 0 && ! $file->eof()) {
+      //       $list[] = [
+      //         'tantou_id' => $line[0],
+      //         'name' => $line[1],
+      //         'name_kana' => $line[2],
+      //         'tel' => $line[3],
+      //         'shozoku_busho_id' => $line[4],
+      //         'shozoku_busho_name' => $line[5],
+      //         'kengen' => $line[6],
+      //         'email'=> $line[7],
+      //         'password' => \Hash::make($line[8]) ,
+      //         "created_at" => $now,
+      //         "updated_at" => $now,
+      //       ];
+      //     }
+      // }
+      // DB::table("admins")->insert($list);
 
 
 
