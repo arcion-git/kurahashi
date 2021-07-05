@@ -24,6 +24,11 @@ use App\Imports\UserImport;
 use App\Imports\CategoryImport;
 use App\Imports\TagImport;
 use App\Imports\CategoryItemImport;
+use App\Imports\HolidayImport;
+use App\Imports\StoreImport;
+use App\Imports\StoreUserImport;
+
+
 use Maatwebsite\Excel\Facades\Excel;
 
 class AdminPageController extends Controller
@@ -128,6 +133,25 @@ class AdminPageController extends Controller
   Excel::import(new TagImport, request()->file('file'));
   return back();
   }
+
+  public function HolidayImport(){
+  Tag::truncate();
+  Excel::import(new HolidayImport, request()->file('file'));
+  return back();
+  }
+
+  public function StoreImport(){
+  Tag::truncate();
+  Excel::import(new StoreImport, request()->file('file'));
+  return back();
+  }
+
+  public function StoreUserImport(){
+  Tag::truncate();
+  Excel::import(new StoreUserImport, request()->file('file'));
+  return back();
+  }
+
 
 
 

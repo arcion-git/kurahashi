@@ -154,20 +154,84 @@
                   </form>
                 </div>
               </div>
-              <!-- <div class="col-6">
+            </div>
+            <div class="row">
+              <div class="col-6">
                 <div class="form-group">
                   <label>顧客担当店舗</label>
-                  <input type="file" class="form-control" style="padding-bottom:37px;">
+                  @if ($errors->any())
+                  <div class="alert alert-danger">
+                  	<ul>
+                  		@foreach ($errors->all() as $error)
+                  			<li>{{ $error }}</li>
+                  		@endforeach
+                  	</ul>
+                  </div>
+                  @endif
+                  <form action="StoreUserImport" method="POST" enctype="multipart/form-data">
+                  	@csrf
+                  	<div class="form-group">
+                  		<input type="file" class="form-control" name="file" style="padding-bottom:37px;">
+                  		<br>
+                  		<button class="btn btn-success">インポート</button>
+                  	</div>
+                  </form>
                 </div>
               </div>
               <div class="col-6">
                 <div class="form-group">
-                  <label>得意先</label>
-                  <input type="file" class="form-control" style="padding-bottom:37px;">
+                  <label>得意先店舗</label>
+                  @if ($errors->any())
+                  <div class="alert alert-danger">
+                    <ul>
+                      @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                      @endforeach
+                    </ul>
+                  </div>
+                  @endif
+                  <form action="StoreImport" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="form-group">
+                      <input type="file" class="form-control" name="file" style="padding-bottom:37px;">
+                      <br>
+                      <button class="btn btn-success">インポート</button>
+                    </div>
+                  </form>
                 </div>
-              </div> -->
+              </div>
             </div>
 
+
+            <div class="row mt-4">
+              <div class="col-12">
+                <h4>休日カレンダーインポート</h4>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-6">
+                <div class="form-group">
+                  <label>休日カレンダー</label>
+                  @if ($errors->any())
+                  <div class="alert alert-danger">
+                  	<ul>
+                  		@foreach ($errors->all() as $error)
+                  			<li>{{ $error }}</li>
+                  		@endforeach
+                  	</ul>
+                  </div>
+                  @endif
+                  <form action="HolidayImport" method="POST" enctype="multipart/form-data">
+                  	@csrf
+                  	<div class="form-group">
+                  		<input type="file" class="form-control" name="file" style="padding-bottom:37px;">
+                  		<br>
+                  		<button class="btn btn-success">インポート</button>
+                  	</div>
+                  </form>
+                </div>
+              </div>
+            </div>
 
 
             <!-- <div class="row mt-4">

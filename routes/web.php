@@ -20,7 +20,7 @@
   Route::post('/form/import-csv', 'CsvImportController@store');
 
 
-  // ページ
+  // 顧客側ページ
   Route::get('/', 'LoginPageController@index')->name('home');
   Route::get('/category/{id}', 'LoginPageController@category');
   Route::get('/confirm', 'LoginPageController@confirm');
@@ -55,22 +55,26 @@
   Route::get('/user/questionnaire', 'LoginPageController@questionnaire');
 
 
+  // 管理側ページ
   Route::get('/admin/home', 'AdminPageController@index')->name('admin.home');
   Route::get('/admin/deal/{id}', 'AdminPageController@dealdetail')->name('admin.dealdetail');
   Route::get('/admin/user', 'AdminPageController@user')->name('admin.user');
   Route::get('/admin/item', 'AdminPageController@item')->name('admin.item');
   Route::get('/admin/sales', 'AdminPageController@sales')->name('admin.sales');
-
   Route::get('/admin/csv', 'AdminPageController@csv')->name('admin.csv');
 
+  // CSVインポート
   Route::post('/admin/userimport', 'AdminPageController@userimport');
   Route::post('/admin/itemimport', 'AdminPageController@itemimport');
   Route::post('/admin/CategoryItemImport', 'AdminPageController@CategoryItemImport');
   Route::post('/admin/CategoryImport', 'AdminPageController@CategoryImport');
   Route::post('/admin/TagImport', 'AdminPageController@TagImport');
+  Route::post('/admin/HolidayImport', 'AdminPageController@HolidayImport');
+  Route::post('/admin/StoreImport', 'AdminPageController@StoreImport');
+  Route::post('/admin/StoreUserImport', 'AdminPageController@StoreUserImport');
+
 
   Route::get('/admin/download', 'AdminPageController@download')->name('admin.download');
-
   Route::get('/admin/user/deal/{id}', 'AdminPageController@userdeal')->name('admin.user.deal');
 
   Route::post('/admin/updatecart', 'AdminPageController@updatecart');

@@ -282,7 +282,7 @@ class DatabaseSeeder extends Seeder
 
 
       DB::table("admins")->insert([
-        'name'            => '管理者　太郎',
+        'name'                => '管理者　次郎',
         'name_kana'           => 'カンリシャ　タロウ',
         'email'               => 'admin@gmail.com' ,
         'password'            => \Hash::make('secret') ,
