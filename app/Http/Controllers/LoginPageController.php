@@ -54,8 +54,10 @@ class LoginPageController extends Controller
   public function index()
   {
 
-      $first_login = Auth::guard('user')->user()->first_login;
-        if ($first_login === null) {
+      $user_id = Auth::guard('user')->user()->id;
+      $favorite_categories = FavoriteCategory::where('user_id', $user_id)->first();
+
+        if ($favorite_categories === null) {
           $categories = Category::get();
           $categories = $categories->groupBy('bu_ka_name');
           return view('user/auth/questionnaire', ['categories' => $categories]);
