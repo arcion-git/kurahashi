@@ -84,6 +84,8 @@ class LoginPageController extends Controller
   public function PostFavoriteCategory(Request $request){
 
     $user_id = Auth::guard('user')->user()->id;
+
+
     $favorite_categories = $request->input('favorite_category');
     // dd($favorite_categories);
 
