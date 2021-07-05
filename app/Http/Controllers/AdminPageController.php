@@ -10,6 +10,10 @@ use App\Category;
 use App\CategoryItem;
 use App\Tag;
 
+use App\Calendar;
+use App\Store;
+use App\StoreUser;
+
 // 時間に関する処理
 use Carbon\Carbon;
 
