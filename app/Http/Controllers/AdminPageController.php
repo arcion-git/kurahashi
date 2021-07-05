@@ -135,19 +135,19 @@ class AdminPageController extends Controller
   }
 
   public function HolidayImport(){
-  Tag::truncate();
+  Holiday::truncate();
   Excel::import(new HolidayImport, request()->file('file'));
   return back();
   }
 
   public function StoreImport(){
-  Tag::truncate();
+  Store::truncate();
   Excel::import(new StoreImport, request()->file('file'));
   return back();
   }
 
   public function StoreUserImport(){
-  Tag::truncate();
+  StoreUser::truncate();
   Excel::import(new StoreUserImport, request()->file('file'));
   return back();
   }
