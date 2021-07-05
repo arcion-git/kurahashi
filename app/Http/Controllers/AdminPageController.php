@@ -10,7 +10,7 @@ use App\Category;
 use App\CategoryItem;
 use App\Tag;
 
-use App\Calendar;
+use App\Holiday;
 use App\Store;
 use App\StoreUser;
 
