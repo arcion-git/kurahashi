@@ -272,7 +272,6 @@ class LoginPageController extends Controller
     }
 
 
-
     $categories = Category::get()->groupBy('bu_ka_name');
     $user_id = Auth::guard('user')->user()->id;
     $favorite_categories = FavoriteCategory::where('user_id', $user_id)->get();

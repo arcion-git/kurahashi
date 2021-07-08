@@ -10,6 +10,7 @@ class Order extends Model
     'cart_id',
     'tokuisaki_name',
     'store_name',
+    'price',
     'nouhin_yoteibi',
     'quantity',
   ];

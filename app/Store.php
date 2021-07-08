@@ -30,7 +30,9 @@ class Store extends Model
   ];
 
   public function price() {
-      return PriceGroupe::where(['tokuisaki_id'=>$tokuisaki_id, 'store_id'=> $store_id])->first();
+      return $this->belongsTo('App\PriceGroupe', 'tokuisaki_id')
+      ->where('store_id', $this->store_id)
+      ->first();
   }
 
 
