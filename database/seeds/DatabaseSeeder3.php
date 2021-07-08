@@ -281,6 +281,88 @@ class DatabaseSeeder extends Seeder
 
 
 
+
+      $file = new SplFileObject('database/csv/PriceGroupInfo.csv');
+      $file->setFlags(
+          \SplFileObject::READ_CSV |
+          \SplFileObject::READ_AHEAD |
+          \SplFileObject::SKIP_EMPTY |
+          \SplFileObject::DROP_NEW_LINE
+      );
+      $list = [];
+      $now = Carbon::now();
+
+      foreach ($file as $line) {
+          if ($file->key() > 0 && ! $file->eof()) {
+            $list[] = [
+              'tokuisaki_id'=>$line[0],
+              'store_id'=>$line[1],
+              'kigyou_id'=>$line[2],
+              'price_groupe'=>$line[3],
+              'price_groupe_name'=>$line[4],
+              'nebiki_ritsu'=>$line[5],
+            ];
+          }
+      }
+      DB::table("price_groupes")->insert($list);
+
+
+
+      $file = new SplFileObject('database/csv/ListPriceInfo.csv');
+      $file->setFlags(
+          \SplFileObject::READ_CSV |
+          \SplFileObject::READ_AHEAD |
+          \SplFileObject::SKIP_EMPTY |
+          \SplFileObject::DROP_NEW_LINE
+      );
+      $list = [];
+      $now = Carbon::now();
+
+      foreach ($file as $line) {
+          if ($file->key() > 0 && ! $file->eof()) {
+            $list[] = [
+              'price_groupe'=>$line[0],
+              'item_id'=>$line[1],
+              'sku_code'=>$line[2],
+              'start'=>$line[3],
+              'end'=>$line[4],
+              'teika'=>$line[5],
+              'price'=>$line[6],
+            ];
+          }
+      }
+      DB::table("prices")->insert($list);
+
+
+      $file = new SplFileObject('database/csv/SpecialPriceInfo.csv');
+      $file->setFlags(
+          \SplFileObject::READ_CSV |
+          \SplFileObject::READ_AHEAD |
+          \SplFileObject::SKIP_EMPTY |
+          \SplFileObject::DROP_NEW_LINE
+      );
+      $list = [];
+      $now = Carbon::now();
+
+      foreach ($file as $line) {
+          if ($file->key() > 0 && ! $file->eof()) {
+            $list[] = [
+              'price_groupe'=>$line[0],
+              'item_id'=>$line[1],
+              'sku_code'=>$line[2],
+              'start'=>$line[3],
+              'end'=>$line[4],
+              'teika'=>$line[5],
+              'price'=>$line[6],
+            ];
+          }
+      }
+      DB::table("special_prices")->insert($list);
+
+
+
+
+
       DB::table("admins")->insert([
         'name'            => '管理者　次郎',
         'name_kana'           => 'カンリシャ　タロウ',

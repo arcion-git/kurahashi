@@ -31,8 +31,11 @@
   Route::get('/cart', 'LoginPageController@cart');
   Route::get('/order', 'LoginPageController@order');
 
-  // Ajax POST&GET
+  // Ajax POST&GET（ユーザー側）
   Route::post('/dealorder', 'LoginPageController@dealorder');
+
+  // Ajax POST&GET（管理者側）
+  Route::post('/admin/dealorder', 'AdminPageController@dealorder');
 
   // Ajax POST
   Route::post('/addcart', 'LoginPageController@addcart');
@@ -77,7 +80,7 @@
   Route::get('/admin/download', 'AdminPageController@download')->name('admin.download');
   Route::get('/admin/user/deal/{id}', 'AdminPageController@userdeal')->name('admin.user.deal');
 
-  Route::post('/admin/updatecart', 'AdminPageController@updatecart');
+  Route::post('/admin/discount', 'AdminPageController@discount');
   Route::post('/admin/intervalupdatecart', 'AdminPageController@intervalupdatecart');
 
 

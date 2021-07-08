@@ -10,11 +10,12 @@ use App\Category;
 use App\Tag;
 use App\User;
 use App\Holiday;
-
 use App\Store;
 use App\StoreUser;
-
 use App\FavoriteCategory;
+use App\Price;
+use App\PriceGroupe;
+use App\SpecialPrice;
 
 // 時間に関する処理
 use Carbon\Carbon;
@@ -256,6 +257,22 @@ class LoginPageController extends Controller
 
   public function confirm(){
 
+
+
+
+    $kaiin_number = Auth::guard('user')->user()->kaiin_number;
+    $store_users = StoreUser::where('user_id',$kaiin_number)->get(['store_id','tokuisaki_id']);
+    $stores = [];
+    $n=1;
+    foreach ($store_users as $store_user) {
+    $store = Store::where([ 'tokuisaki_id'=> $store_user->tokuisaki_id,'store_id'=> $store_user->store_id ])->first();
+    dd($store->price());
+      array_push($stores, $store);
+    $n++;
+    }
+
+
+
     $categories = Category::get()->groupBy('bu_ka_name');
     $user_id = Auth::guard('user')->user()->id;
     $favorite_categories = FavoriteCategory::where('user_id', $user_id)->get();
@@ -263,15 +280,6 @@ class LoginPageController extends Controller
 
     $today = date("Y/m/d");
     $holidays = Holiday::pluck('date');
-    // $kaiin_number = Auth::guard('user')->user()->kaiin_number;
-    // $store_users = StoreUser::where('user_id',$kaiin_number)->get(['store_id','tokuisaki_id']);
-    // $stores = [];
-    // $n=1;
-    // foreach ($store_users as $store_user) {
-    // $store = Store::where([ 'tokuisaki_id'=> $store_user->tokuisaki_id,'store_id'=> $store_user->store_id ])->first();
-    //   array_push($stores, $store);
-    // $n++;
-    // }
 
     return view('user/auth/confirm',
     ['carts' => $carts,
@@ -403,7 +411,7 @@ class LoginPageController extends Controller
 
     foreach($item_ids as $key => $input) {
       $cart = Cart::firstOrNew(['user_id'=> $user_id , 'item_id'=> $item_ids[$key], 'deal_id'=> null]);
-      $cart->user_id = $user_id;
+      // $cart->user_id = $user_id;
       $cart->deal_id = $deal_id;
       // $cart->quantity = isset($quantitys[$key]) ? $quantitys[$key] : null;
       $cart->save();

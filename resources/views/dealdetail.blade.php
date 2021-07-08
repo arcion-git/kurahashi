@@ -61,14 +61,14 @@
                     <strong>商品の送付先:</strong><br>
                     〒{{ $deal->user->address01 }}<br>{{ $deal->user->address02 }}{{ $deal->user->address03 }}{{ $deal->user->address04 }}
                     </address>
-                </div>
+                </div> -->
                 <div class="col-md-6">
                   <address>
                     <strong>ご連絡先:</strong><br>
                     {{ $deal->user->tel }}<br>
                     {{ $deal->user->email }}
                   </address>
-                </div> -->
+                </div>
                 <div class="col-md-6">
                   <address>
                     <strong>お問い合わせ日時:</strong><br>
@@ -102,8 +102,12 @@
           </form> -->
 
 
-
+          @if ( Auth::guard('admin')->check() )
+          <form action="{{ url('/admin/discount') }}" method="POST" class="form-horizontal">
+          @endif
+          @if ( Auth::guard('user')->check() )
           <form action="{{ url('/addsuscess') }}" method="POST" class="form-horizontal">
+          @endif
             {{ csrf_field() }}
             <div class="row mt-4 order">
               <div class="col-md-12">
@@ -139,6 +143,14 @@
                 </div>
                 @endif
                 @endif
+
+
+                @if ( Auth::guard('admin')->check() )
+                <div class="float-right">
+                    <button type="submit" name="deal_id" value="{{ $deal->id }}" class="btn btn-warning">更新を通知する</button>
+                </div>
+                @endif
+
 
               </div>
             </div>

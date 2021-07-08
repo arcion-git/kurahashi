@@ -17,13 +17,15 @@
 		</tr>
 		@foreach($carts as $cart)
 		<tr id="{{$cart->id}}">
+			<input name="item_id[]" type="hidden" value="{{$cart->item_id}}" />
 			<td class="cartid_{$cart->id}} text-center">{{$cart->item->item_id}}</td>
 			<td class="cartid_{$cart->id}}">{{$cart->item->item_name}}</td>
 			<td class="cartid_{$cart->id}} text-center">{{$cart->item->sanchi_name}}</td>
 			<td class="cartid_{$cart->id}} text-center">{{$cart->item->zaikosuu}}</td>
 			<td class="cartid_{$cart->id}} text-center">{{$cart->item->tokkijikou}}</td>
 			<td class="cartid_{$cart->id}} teika text-center">
-				<input name="teika[]" class="teika text-center form-control" value="5000" readonly>
+				<input name="price[]" class="teika text-center form-control" value="5000"
+				@if ( Auth::guard('user')->check() ) readonly @endif>
 			</td>
 			<td width="120px" colspan="7" class="order-table">
 				<table class="table table-striped table-hover table-md">
@@ -31,6 +33,7 @@
 					<tr id="{{$val->id}}">
 						<td width="180px" class="text-center">
 							<select name="store[]" class="store text-center form-control" value="{{$val->tokuisaki_name}} {{$val->store_name}}">
+								<option id="{{$val->tokuisaki_name}}" value="{{$val->store_name}}">{{$val->tokuisaki_name}} {{$val->store_name}}</option>
 								@foreach($stores as $store)
 								<option id="{{$store->tokuisaki_name}}" value="{{$store->store_name}}">{{$store->tokuisaki_name}} {{$store->store_name}}</option>
 								@endforeach
@@ -67,7 +70,7 @@
 						<td width="140px" class="text-center">
 							<button type="button" id="{{$val->id}}" class="removeid_{{$val->id}} removeorder btn btn-info">削除</button>
 							<button style="margin-top:10px;" type="button" id="{{$cart->item->id}}" class="cloneid_{{$cart->item->id}} clonecart btn btn-success">配送先を追加</button>
-						<input name="item_id[]" type="hidden" value="{{$cart->item->id}}" />
+						<input name="order_id[]" type="hidden" value="{{$cart->item->id}}" />
 						</td>
 					</tr>
 				@endforeach

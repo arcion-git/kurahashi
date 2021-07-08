@@ -2,21 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
 use App\Cart;
+use App\Order;
 use App\Deal;
 use App\Item;
 use App\Category;
-use App\CategoryItem;
 use App\Tag;
-
+use App\User;
 use App\Holiday;
 use App\Store;
 use App\StoreUser;
+use App\FavoriteCategory;
 
 // 時間に関する処理
 use Carbon\Carbon;
 
+// 認証関連
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -58,16 +59,63 @@ class AdminPageController extends Controller
     return view('dealdetail', $data);
   }
 
-  public function updatecart(Request $request){
 
-    $cart_id = $request->cart_id;
+  public function dealorder(Request $request){
 
-    $cart=Cart::where('id',$cart_id)->first();
-    $cart->discount = $request->discount;
-    $cart->quantity = $request->quantity;
-    $cart->save();
+    $deal_id = $request->deal_id;
 
-    $id = $cart->user_id;
+    $deal = Deal::where(['id'=> $deal_id])->first();
+
+
+    $user_id = $deal->user_id;
+    // dd($user_id);
+
+    // 取引IDが一致しているものを取得
+    $carts =  Cart::where(['user_id'=>$user_id, 'deal_id'=> $deal_id])->get();
+
+    // 休日についての処理
+    $today = date("Y/m/d");
+    $holidays = Holiday::pluck('date');
+
+    // 店舗一覧取得
+    $store_users = StoreUser::where('user_id',$user_id)->get(['store_id','tokuisaki_id']);
+    $stores = [];
+    $n=1;
+    foreach ($store_users as $store_user) {
+    $store = Store::where([ 'tokuisaki_id'=> $store_user->tokuisaki_id,'store_id'=> $store_user->store_id ])->first();
+      array_push($stores, $store);
+    $n++;
+    }
+
+    $data=
+    ['carts' => $carts,
+     'stores' => $stores,
+     'holidays' => $holidays,
+    ];
+    return view('order', $data);
+  }
+
+
+
+
+
+
+  public function discount(Request $request){
+
+    $deal_id = $request->deal_id;
+
+    $data = $request->all();
+    $item_ids = $data['item_id'];
+    $prices = $data['price'];
+
+
+    foreach (array_map(null, $item_ids, $prices) as [$val1, $val2]) {
+      $cart = Cart::firstOrNew(['deal_id'=> $deal_id , 'item_id'=> $val1]);
+      $cart->discount = $val2;
+      $cart->save();
+    }
+
+    $id = $deal_id;
     return redirect()->route('admin.dealdetail',$id);
   }
 

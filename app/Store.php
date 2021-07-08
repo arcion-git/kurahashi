@@ -2,6 +2,8 @@
 
 namespace App;
 
+
+use App\PriceGroupe;
 use Illuminate\Database\Eloquent\Model;
 
 class Store extends Model
@@ -26,4 +28,10 @@ class Store extends Model
   'haisou_fax',
   'haisou_route',
   ];
+
+  public function price() {
+      return PriceGroupe::where(['tokuisaki_id'=>$tokuisaki_id, 'store_id'=> $store_id])->first();
+  }
+
+
 }

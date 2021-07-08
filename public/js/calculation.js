@@ -121,11 +121,12 @@ $(function() {
 
 
 
-  // 取引詳細画面でオーダー内容を取得する関数
+// 取引詳細画面でオーダー内容を取得する関数（ユーザー側）
+if(document.URL.match("/user")) {
   function dealorder_update() {
     var deal_id = $('#deal_id').val();
     console.log(deal_id);
-    $.ajax({
+      $.ajax({
         headers: {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }, //Headersを書き忘れるとエラーになる
@@ -159,6 +160,52 @@ $(function() {
   $(document).ready( function(){
   setTimeout(dealorder_update);
   });
+}
+
+
+// 取引詳細画面でオーダー内容を取得する関数（管理者側）
+if(document.URL.match("/admin/deal")) {
+  function dealorder_update() {
+    var deal_id = $('#deal_id').val();
+    console.log(deal_id);
+      $.ajax({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }, //Headersを書き忘れるとエラーになる
+        url: location.origin + '/admin/dealorder',
+        type: 'POST', //リクエストタイプ
+        data: {
+          'deal_id': deal_id,
+        },
+				cache: false,
+        success: function (data) {
+              $('#dealorder').html(data);
+        },
+        error: function () {
+            // alert("Ajax通信エラー");
+        }
+      })
+      // Ajaxリクエスト成功時の処理
+      .done(function(data) {
+        // console.log(data);
+      })
+      // Ajaxリクエスト失敗時の処理
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        alert('Ajaxリクエスト失敗');
+        console.log("ajax通信に失敗しました");
+        console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+        console.log("textStatus     : " + textStatus);
+        console.log("errorThrown    : " + errorThrown.message);
+      });
+  	}
+  // 個数入力画面を開いたらオーダー内容を取得
+  $(document).ready( function(){
+  setTimeout(dealorder_update);
+  });
+}
+
+
+
 
 
 
@@ -379,11 +426,7 @@ $(function() {
 
 
 
-if(!document.URL.match(/confirm/)){
 
-
-
-}
 
 
 

@@ -47,40 +47,36 @@
             <div class="table-responsive">
               <table class="table table-striped">
                 <tr>
-                  <th>取引ID</th>
-                  <th>お名前</th>
-                  <th>会社名</th>
-                  <th>お問い合わせ日時</th>
-                  <th>受注日時</th>
-                  <th>状態</th>
-                  <th>操作</th>
+                  <th class="text-center">取引ID</th>
+                  <th class="text-center">お名前</th>
+                  <th class="text-center">お問い合わせ日時</th>
+                  <th class="text-center">受注日時</th>
+                  <th class="text-center">状態</th>
+                  <th class="text-center">操作</th>
                 </tr>
 
                 @foreach($deals as $deal)
                 <tr>
-                  <td>
+                  <td class="text-center">
                     {{$deal->id}}
                   </td>
-                  <td>
-                    {{$deal->user->last_name}} {{$deal->user->first_name}}
+                  <td class="text-center">
+                    {{$deal->user->name}}
                   </td>
-                  <td>
-                    {{$deal->user->company}}
-                  </td>
-                  <td>
+                  <td class="text-center">
                     {{$deal->created_at}}
                   </td>
-                  <td>
+                  <td class="text-center">
                     {{$deal->success_time}}
                   </td>
-                  <td>
+                  <td class="text-center">
                     @empty($deal->success_flg)
                     <div class="badge badge-warning">交渉中</div>
                     @else
                     <div class="badge badge-success">受注済</div>
                     @endempty
                   </td>
-                  <td>
+                  <td class="text-center">
                     <a href="{{ url('/admin/deal/'.$deal->id) }}"><button class="btn btn-primary">詳細を見る</button></a>
                   </td>
                 </tr>
