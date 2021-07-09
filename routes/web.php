@@ -46,6 +46,7 @@
   Route::post('/change_store', 'LoginPageController@change_store');
   Route::post('/clonecart', 'LoginPageController@clonecart');
   Route::post('/updatecart', 'LoginPageController@updatecart');
+  Route::post('/prices', 'LoginPageController@prices');
 
   // POST
   Route::post('/adddeal', 'LoginPageController@adddeal');

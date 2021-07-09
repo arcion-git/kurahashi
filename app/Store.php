@@ -29,7 +29,7 @@ class Store extends Model
   'haisou_route',
   ];
 
-  public function price() {
+  public function price_groupe() {
       return $this->belongsTo('App\PriceGroupe', 'tokuisaki_id')
       ->where('store_id', $this->store_id)
       ->first();

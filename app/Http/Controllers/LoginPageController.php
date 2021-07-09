@@ -55,6 +55,9 @@ class LoginPageController extends Controller
   public function index()
   {
 
+
+
+
       $user_id = Auth::guard('user')->user()->id;
       $favorite_categories = FavoriteCategory::where('user_id', $user_id)->first();
 
@@ -137,19 +140,47 @@ class LoginPageController extends Controller
     $user_id = Auth::guard('user')->user()->id;
     $item_id = $request->item_id;
 
+    $item = Item::where('id',$item_id)->first();
+
     $kaiin_number = Auth::guard('user')->user()->kaiin_number;
+    // dd($kaiin_number);
     $store_user = StoreUser::where('user_id',$kaiin_number)->first(['store_id','tokuisaki_id']);
+    // dd($store_user);
     $store = Store::where([ 'tokuisaki_id'=> $store_user->tokuisaki_id,'store_id'=> $store_user->store_id ])->first();
+    // dd($store);
+    $price_groupe = $store->price_groupe();
+    // dd($price_groupe->price_groupe);
+    // dd($item->sku_code);
+    $price = Price::where(['price_groupe'=>$price_groupe->price_groupe, 'item_id'=> $item->item_id , 'sku_code'=> $item->sku_code])->first();
+ // dd($price);
 
     $cart=Cart::firstOrNew(['user_id'=> $user_id , 'item_id'=> $item_id , 'deal_id'=> null]);
     $cart->save();
 
-    $order=Order::firstOrNew(['cart_id'=> $cart->id , 'tokuisaki_name'=> $store->tokuisaki_name , 'store_name'=> $store->store_name , 'quantity'=> 1]);
+    $order=Order::firstOrNew(['cart_id'=> $cart->id , 'tokuisaki_name'=> $store->tokuisaki_name , 'store_name'=> $store->store_name , 'quantity'=> 1 ]);
+    if(isset($price->price)){
+    $order->price = $price->price;
+    }
     $order->save();
 
     $data = "sucsess";
       return redirect()->route('home',$data);
   }
+
+
+  public function prices(Request $request){
+    $prices = $request->prices;
+    $data = $prices;
+
+    // $data=[
+    //   'prices'=> $prices,
+    // ];
+    $data = "sucsess";
+    return redirect()->route('dealdetail',$data);
+  }
+
+
+
 
 
   public function removecart(Request $request){
@@ -256,21 +287,6 @@ class LoginPageController extends Controller
 
 
   public function confirm(){
-
-
-
-
-    $kaiin_number = Auth::guard('user')->user()->kaiin_number;
-    $store_users = StoreUser::where('user_id',$kaiin_number)->get(['store_id','tokuisaki_id']);
-    $stores = [];
-    $n=1;
-    foreach ($store_users as $store_user) {
-    $store = Store::where([ 'tokuisaki_id'=> $store_user->tokuisaki_id,'store_id'=> $store_user->store_id ])->first();
-    dd($store->price());
-      array_push($stores, $store);
-    $n++;
-    }
-
 
     $categories = Category::get()->groupBy('bu_ka_name');
     $user_id = Auth::guard('user')->user()->id;
@@ -465,6 +481,9 @@ class LoginPageController extends Controller
     echo json_encode($data);
     return ;
   }
+
+
+
 
 
 

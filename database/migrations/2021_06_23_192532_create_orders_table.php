@@ -19,7 +19,7 @@ class CreateOrdersTable extends Migration
             $table->integer('cart_id')->unsigned()->nullable();
             $table->integer('tokuisaki_name')->unsigned()->nullable();
             $table->integer('store_name')->unsigned()->nullable();
-            $table->integer('price')->unsigned()->nullable();
+            $table->string('price')->nullable();
             $table->integer('nouhin_yoteibi')->unsigned()->nullable();
             $table->integer('quantity')->unsigned()->nullable();
 

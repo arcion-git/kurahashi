@@ -6,7 +6,7 @@
 			<th class="head text-center">産地</th>
 			<th class="head text-center">在庫数</th>
 			<th class="head text-center">特記事項</th>
-			<th class="head text-center">金額</th>
+			<th width="120px" class="head text-center">金額</th>
 			<th width="180px" class="head text-center">納品先店舗</th>
 			<th width="80px" class="head text-center">規格</th>
 			<th width="100px" class="head text-center">数量</th>
@@ -23,14 +23,14 @@
 			<td class="cartid_{$cart->id}} text-center">{{$cart->item->sanchi_name}}</td>
 			<td class="cartid_{$cart->id}} text-center">{{$cart->item->zaikosuu}}</td>
 			<td class="cartid_{$cart->id}} text-center">{{$cart->item->tokkijikou}}</td>
-			<td class="cartid_{$cart->id}} teika text-center">
-				<input name="price[]" class="teika text-center form-control" value="5000"
-				@if ( Auth::guard('user')->check() ) readonly @endif>
-			</td>
-			<td width="120px" colspan="7" class="order-table">
+			<td width="120px" colspan="8" class="order-table">
 				<table class="table table-striped table-hover table-md">
 				@foreach($cart->orders as $val)
 					<tr id="{{$val->id}}">
+						<td width="120px" class="text-center">
+							<input name="price[]" class="price text-center form-control" value="{{$val->price}}"
+							@if ( Auth::guard('user')->check() ) readonly @endif>
+						</td>
 						<td width="180px" class="text-center">
 							<select name="store[]" class="store text-center form-control" value="{{$val->tokuisaki_name}} {{$val->store_name}}">
 								<option id="{{$val->tokuisaki_name}}" value="{{$val->store_name}}">{{$val->tokuisaki_name}} {{$val->store_name}}</option>
@@ -80,6 +80,8 @@
 		@endforeach
 	</table>
 </div>
+
+<button style="margin-top:10px;" type="button" class="updateorder btn btn-success">更新確認</button>
 
 
 @if(isset( $holidays ))
