@@ -411,24 +411,25 @@ if(document.URL.match("/admin/deal")) {
 
 
 
-  if(document.URL.match("/user/deal")) {
   $(document).on("click", ".updateorder", function() {
 
-    // var prices = $(".price").map(function (index, el) {
-    //   return $(this).val();
-    // });
 
-    var prices = 'text';
-    console.log(prices);
-
+    var order_id = 'a';
+    var store_name = 'a';
+    var tokuisaki_name = 'a';
+    console.log(order_id);
+    console.log(store_name);
+    console.log(tokuisaki_name);
     $.ajax({
         headers: {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }, //Headersを書き忘れるとエラーになる
-        url: location.origin + '/prices',
+        url: location.origin + '/updateorder',
         type: 'POST', //リクエストタイプ
         data: {
-          'prices': prices,
+          'order_id': order_id,
+          'store_name': store_name,
+          'tokuisaki_name': tokuisaki_name,
         } //Laravelに渡すデータ
       })
       // Ajaxリクエスト成功時の処理
@@ -444,7 +445,7 @@ if(document.URL.match("/admin/deal")) {
         console.log("errorThrown    : " + errorThrown.message);
       });
   });
-  }
+
 
 
 });

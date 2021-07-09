@@ -81,7 +81,7 @@
 	</table>
 </div>
 
-<button style="margin-top:10px;" type="button" class="updateorder btn btn-success">更新確認</button>
+
 
 
 @if(isset( $holidays ))

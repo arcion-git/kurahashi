@@ -168,9 +168,8 @@ class LoginPageController extends Controller
   }
 
 
-  public function prices(Request $request){
-    $prices = $request->prices;
-    $data = $prices;
+  public function updateorder(Request $request){
+
 
     // $data=[
     //   'prices'=> $prices,
