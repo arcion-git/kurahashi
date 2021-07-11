@@ -410,16 +410,34 @@ if(document.URL.match("/admin/deal")) {
 
 
 
+  // 顧客側オーダー内容を随時取得
 
-  $(document).on("click", ".updateorder", function() {
+if(document.URL.match("/user/deal")) {
+  $(function(){
+      setInterval(function(){
 
+    var prices = $(".price").map(function (index, el) {
+      var prices = $(this).val();
+      return (prices);
+    }).get();
 
-    var order_id = 'a';
-    var store_name = 'a';
-    var tokuisaki_name = 'a';
-    console.log(order_id);
-    console.log(store_name);
-    console.log(tokuisaki_name);
+    var ids = $(".order_id").map(function (index, el) {
+      var ids = $(this).val();
+      return (ids);
+    }).get();
+
+    console.log(prices);
+    console.log(ids);
+
+    var array = [];
+    for (var i = 0, l = ids.length, obj = Object.create(null); i < l; ++i) {
+      if (prices.hasOwnProperty(i)) {
+        obj[ids[i]] = prices[i];
+      }
+    }
+    array = obj;
+    console.log(array);
+
     $.ajax({
         headers: {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -427,25 +445,27 @@ if(document.URL.match("/admin/deal")) {
         url: location.origin + '/updateorder',
         type: 'POST', //リクエストタイプ
         data: {
-          'order_id': order_id,
-          'store_name': store_name,
-          'tokuisaki_name': tokuisaki_name,
+          'array': array,
         } //Laravelに渡すデータ
       })
       // Ajaxリクエスト成功時の処理
       .done(function(data) {
         console.log(data);
+        if (data == 1) {
+          location.reload();
+      	}
       })
       // Ajaxリクエスト失敗時の処理
       .fail(function(jqXHR, textStatus, errorThrown) {
-        alert('Ajaxリクエスト失敗');
+        // alert('Ajaxリクエスト失敗');
         console.log("ajax通信に失敗しました");
         console.log("XMLHttpRequest : " + XMLHttpRequest.status);
         console.log("textStatus     : " + textStatus);
         console.log("errorThrown    : " + errorThrown.message);
       });
-  });
-
+    },1000);
+});
+}
 
 
 });

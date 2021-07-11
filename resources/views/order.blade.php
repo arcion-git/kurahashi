@@ -17,7 +17,7 @@
 		</tr>
 		@foreach($carts as $cart)
 		<tr id="{{$cart->id}}">
-			<input name="item_id[]" type="hidden" value="{{$cart->item_id}}" />
+			<input name="item_id[]" type="hidden" value="{{$cart->item->item_id}}" />
 			<td class="cartid_{$cart->id}} text-center">{{$cart->item->item_id}}</td>
 			<td class="cartid_{$cart->id}}">{{$cart->item->item_name}}</td>
 			<td class="cartid_{$cart->id}} text-center">{{$cart->item->sanchi_name}}</td>
@@ -70,7 +70,7 @@
 						<td width="140px" class="text-center">
 							<button type="button" id="{{$val->id}}" class="removeid_{{$val->id}} removeorder btn btn-info">削除</button>
 							<button style="margin-top:10px;" type="button" id="{{$cart->item->id}}" class="cloneid_{{$cart->item->id}} clonecart btn btn-success">配送先を追加</button>
-						<input name="order_id[]" type="hidden" value="{{$cart->item->id}}" />
+						<input name="order_id[]" class="order_id" type="hidden" value="{{$val->id}}" />
 						</td>
 					</tr>
 				@endforeach

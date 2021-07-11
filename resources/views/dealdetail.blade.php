@@ -152,7 +152,7 @@
                 @endif
 
 
-                <button style="margin-top:10px;" type="button" class="updateorder btn btn-success">更新確認</button>
+                <button type="button" class="updateorder btn">更新確認</button>
 
 
               </div>

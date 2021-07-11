@@ -112,6 +112,9 @@ class LoginPageController extends Controller
   public function category($id)
   {
 
+
+
+
       $category = Category::find($id);
 
 
@@ -164,18 +167,21 @@ class LoginPageController extends Controller
     $order->save();
 
     $data = "sucsess";
-      return redirect()->route('home',$data);
+    return redirect()->route('home',$data);
   }
 
 
   public function updateorder(Request $request){
 
-
-    // $data=[
-    //   'prices'=> $prices,
-    // ];
-    $data = "sucsess";
-    return redirect()->route('dealdetail',$data);
+    $prices = $request->array;
+    $kekka=1;
+    foreach($prices as $key => $value) {
+    $order = Order::where(['id'=> $key , 'price'=> $value])->first();
+    if(isset($order)){
+    $kekka=0;
+    }
+    }
+    return ($kekka);
   }
 
 

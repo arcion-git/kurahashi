@@ -102,20 +102,26 @@ class AdminPageController extends Controller
 
   public function discount(Request $request){
 
-    $deal_id = $request->deal_id;
+    $id = $request->deal_id;
 
-    $data = $request->all();
-    $item_ids = $data['item_id'];
-    $prices = $data['price'];
+    $order_ids = $request->order_id;
+    $prices = $request['price'];
 
-
-    foreach (array_map(null, $item_ids, $prices) as [$val1, $val2]) {
-      $cart = Cart::firstOrNew(['deal_id'=> $deal_id , 'item_id'=> $val1]);
-      $cart->discount = $val2;
-      $cart->save();
+    $prices = array_combine($order_ids, $prices);
+    // dd($prices);
+    foreach($prices as $key => $value) {
+      $order = Order::firstOrNew(['id'=> $key]);
+      $order->price = $value;
+      $order->save();
     }
 
-    $id = $deal_id;
+
+    // foreach (array_map(null, $order_ids, $prices) as [$val1, $val2]) {
+    //   $order = Order::where(['id'=> $val1 , 'price'=> $val2])->first();
+    //   $order->price = $val2;
+    //   $order->save();
+    // }
+
     return redirect()->route('admin.dealdetail',$id);
   }
 
