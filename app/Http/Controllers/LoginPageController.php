@@ -174,12 +174,13 @@ class LoginPageController extends Controller
   public function updateorder(Request $request){
 
     $prices = $request->array;
+    
     $kekka=1;
     foreach($prices as $key => $value) {
     $order = Order::where(['id'=> $key , 'price'=> $value])->first();
     if(isset($order)){
-    $kekka=0;
     }
+    $kekka=0;
     }
     return ($kekka);
   }

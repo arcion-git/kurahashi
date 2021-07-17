@@ -463,7 +463,7 @@ if(document.URL.match("/user/deal")) {
         console.log("textStatus     : " + textStatus);
         console.log("errorThrown    : " + errorThrown.message);
       });
-    },1000);
+    },5000);
 });
 }
 
