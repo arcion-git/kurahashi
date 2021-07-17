@@ -152,7 +152,7 @@
                 @endif
 
 
-                <button type="button" class="updateorder btn">更新確認</button>
+                <!-- <button type="button" class="updateorder btn">更新確認</button> -->
 
 
               </div>

@@ -174,16 +174,41 @@ class LoginPageController extends Controller
   public function updateorder(Request $request){
 
     $prices = $request->array;
-    
+
     $kekka=1;
     foreach($prices as $key => $value) {
     $order = Order::where(['id'=> $key , 'price'=> $value])->first();
-    if(isset($order)){
-    }
+    if ($order){
+    }else{
     $kekka=0;
     }
+    }
+
     return ($kekka);
   }
+
+
+
+  public function updateordergtest(Request $request){
+
+    // dd($request->order_id);
+
+    $prices = array_combine($request->order_id, $request->price);
+    // dd($prices);
+
+    $kekka=1;
+    foreach($prices as $key => $value) {
+    $order = Order::where(['id'=> $key , 'price'=> $value])->first();
+    if ($order){
+    }else{
+    $kekka=0;
+    }
+    }
+    dd($kekka);
+
+    return ($kekka);
+  }
+
 
 
 

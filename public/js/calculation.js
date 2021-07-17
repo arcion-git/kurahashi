@@ -416,6 +416,7 @@ if(document.URL.match("/user/deal")) {
   $(function(){
       setInterval(function(){
 
+
     var prices = $(".price").map(function (index, el) {
       var prices = $(this).val();
       return (prices);
@@ -451,8 +452,8 @@ if(document.URL.match("/user/deal")) {
       // Ajaxリクエスト成功時の処理
       .done(function(data) {
         console.log(data);
-        if (data == 1) {
-          location.reload();
+        if (data == 0) {
+          location.reload(true);
       	}
       })
       // Ajaxリクエスト失敗時の処理
@@ -463,7 +464,7 @@ if(document.URL.match("/user/deal")) {
         console.log("textStatus     : " + textStatus);
         console.log("errorThrown    : " + errorThrown.message);
       });
-    },5000);
+    },1000);
 });
 }
 

@@ -48,6 +48,9 @@
   Route::post('/updatecart', 'LoginPageController@updatecart');
   Route::post('/updateorder', 'LoginPageController@updateorder');
 
+  // Ajax POST テスト
+  Route::post('/updateordergtest', 'LoginPageController@updateordergtest');
+
   // POST
   Route::post('/adddeal', 'LoginPageController@adddeal');
   Route::post('/addsuscess', 'LoginPageController@addsuscess');
