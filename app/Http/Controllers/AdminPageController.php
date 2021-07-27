@@ -15,6 +15,10 @@ use App\Store;
 use App\StoreUser;
 use App\FavoriteCategory;
 
+use App\PriceGroupe;
+use App\Price;
+use App\SpecialPrice;
+
 // 時間に関する処理
 use Carbon\Carbon;
 
@@ -33,6 +37,11 @@ use App\Imports\CategoryItemImport;
 use App\Imports\HolidayImport;
 use App\Imports\StoreImport;
 use App\Imports\StoreUserImport;
+
+use App\Imports\PriceGroupeImport;
+use App\Imports\PriceImport;
+use App\Imports\SpecialPriceImport;
+
 
 
 use Maatwebsite\Excel\Facades\Excel;
@@ -208,6 +217,24 @@ class AdminPageController extends Controller
   public function StoreUserImport(){
   StoreUser::truncate();
   Excel::import(new StoreUserImport, request()->file('file'));
+  return back();
+  }
+
+  public function PriceGroupeImport(){
+  PriceGroupe::truncate();
+  Excel::import(new PriceGroupeImport, request()->file('file'));
+  return back();
+  }
+
+  public function PriceImport(){
+  Price::truncate();
+  Excel::import(new PriceImport, request()->file('file'));
+  return back();
+  }
+
+  public function SpecialPriceImport(){
+  SpecialPrice::truncate();
+  Excel::import(new SpecialPriceImport, request()->file('file'));
   return back();
   }
 

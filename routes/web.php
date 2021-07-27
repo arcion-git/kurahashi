@@ -81,7 +81,9 @@
   Route::post('/admin/HolidayImport', 'AdminPageController@HolidayImport');
   Route::post('/admin/StoreImport', 'AdminPageController@StoreImport');
   Route::post('/admin/StoreUserImport', 'AdminPageController@StoreUserImport');
-
+  Route::post('/admin/PriceGroupeImport', 'AdminPageController@PriceGroupeImport');
+  Route::post('/admin/PriceImport', 'AdminPageController@PriceImport');
+  Route::post('/admin/SpecialPriceImport', 'AdminPageController@SpecialPriceImport');
 
   Route::get('/admin/download', 'AdminPageController@download')->name('admin.download');
   Route::get('/admin/user/deal/{id}', 'AdminPageController@userdeal')->name('admin.user.deal');
