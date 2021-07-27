@@ -157,26 +157,26 @@ class DatabaseSeeder extends Seeder
 
 
 
-      $file = new SplFileObject('database/csv/Calendar.csv');
-      $file->setFlags(
-          \SplFileObject::READ_CSV |
-          \SplFileObject::READ_AHEAD |
-          \SplFileObject::SKIP_EMPTY |
-          \SplFileObject::DROP_NEW_LINE
-      );
-      $list = [];
-      $now = Carbon::now();
-
-      foreach ($file as $line) {
-          if ($file->key() > 0 && ! $file->eof()) {
-            $list[] = [
-              'date'=> $line[0],
-              "created_at" => $now,
-              "updated_at" => $now,
-            ];
-          }
-      }
-      DB::table("holidays")->insert($list);
+      // $file = new SplFileObject('database/csv/Calendar.csv');
+      // $file->setFlags(
+      //     \SplFileObject::READ_CSV |
+      //     \SplFileObject::READ_AHEAD |
+      //     \SplFileObject::SKIP_EMPTY |
+      //     \SplFileObject::DROP_NEW_LINE
+      // );
+      // $list = [];
+      // $now = Carbon::now();
+      //
+      // foreach ($file as $line) {
+      //     if ($file->key() > 0 && ! $file->eof()) {
+      //       $list[] = [
+      //         'date'=> $line[0],
+      //         "created_at" => $now,
+      //         "updated_at" => $now,
+      //       ];
+      //     }
+      // }
+      // DB::table("holidays")->insert($list);
 
 
 
