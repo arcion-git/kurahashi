@@ -3097,6 +3097,9 @@ td.order-table{
     font-size: 14px !important;
 }
 
+a:not(.btn-social-icon):not(.btn-social):not(.page-link) .ion, a:not(.btn-social-icon):not(.btn-social):not(.page-link) .fas, a:not(.btn-social-icon):not(.btn-social):not(.page-link) .far, a:not(.btn-social-icon):not(.btn-social):not(.page-link) .fal, a:not(.btn-social-icon):not(.btn-social):not(.page-link) .fab {
+    margin-left: 0px;
+}
 
 
 /* ここからスマホ */

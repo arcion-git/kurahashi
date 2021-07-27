@@ -94,14 +94,20 @@
                 <i class="far fa-user"></i> プロフィール編集
               </a> -->
               <a href="{{ url('/deal') }}" class="dropdown-item has-icon">
-                <i class="fas fa-user"></i> 取引一覧
+                <i class="fa fa-clipboard-list"></i> 取引一覧
               </a>
-              <!-- <a href="features-activities.html" class="dropdown-item has-icon">
-                <i class="fas fa-bolt"></i> LINEでお問い合わせ
+              <a href="{{ url('/deal') }}" class="dropdown-item has-icon">
+                <i class="fa fa-redo-alt"></i> リピートオーダー
               </a>
-              <a href="features-settings.html" class="dropdown-item has-icon">
-                <i class="fas fa-cog"></i> 配送先設定
-              </a> -->
+              <a href="{{ url('/deal') }}" class="dropdown-item has-icon">
+                <i class="far fa-user"></i> ご提案商品
+              </a>
+              <a href="{{ url('/deal') }}" class="dropdown-item has-icon">
+                <i class="far fa-heart"></i> お気に入りカテゴリ編集
+              </a>
+              <a href="features-activities.html" class="dropdown-item has-icon">
+                <i class="far fa-comments"></i> LINEでお問い合わせ
+              </a>
               <div class="dropdown-divider"></div>
               @endif
               <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
@@ -152,20 +158,34 @@
 
           @if ( Auth::guard('admin')->check() )
           <ul class="sidebar-menu">
-              <!-- <li class="nav-item">
+              <li class="nav-item">
                 <a href="/admin/home" class="nav-link"><span>取引一覧</span></a>
-              </li> -->
-              <li class="nav-item dropdown">
+              </li>
+              <li class="nav-item">
+                <a href="/admin/home" class="nav-link"><span>×リピートオーダー</span></a>
+              </li>
+              <li class="nav-item">
+                <a href="/admin/home" class="nav-link"><span>×ご提案商品</span></a>
+              </li>
+              <li class="nav-item">
                 <a href="/admin/user" class="nav-link"><span>顧客担当者一覧</span></a>
               </li>
-              <!-- <li class="nav-item">
-                <a href="/admin/item" class="nav-link"><span>商品一覧</span></a>
-              </li> -->
-              <!-- <li class="nav-item">
-                <a href="/admin/" class="nav-link"><span>社内営業</span></a>
-              </li> -->
               <li class="nav-item">
-                <a href="/admin/csv" class="nav-link"><span>CSVインポート</span></a>
+                <a href="/admin/home" class="nav-link"><span>×カテゴリーのおすすめ</span></a>
+              </li>
+              <li class="nav-item">
+                <a href="/admin/item" class="nav-link"><span>商品一覧</span></a>
+              </li>
+              <li class="nav-item">
+                <a href="/admin/home" class="nav-link"><span>×社内営業</span></a>
+              </li>
+              <li class="nav-item">
+                <a href="/admin/csv" class="nav-link"><span>CSVデータ</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
+                  {{ __('Logout') }}
+                </a>
               </li>
               <!-- <li class="nav-item dropdown">
                 <a href="/admin/download" class="nav-link"><span>CSVダウンロード</span></a>

@@ -33,16 +33,16 @@
                 <tr>
                   <th class="text-center">商品コード</th>
                   <th class="text-center">商品名</th>
-                  <th class="text-center">カテゴリー</th>
-                  <th class="text-center">タグ</th>
+                  <th class="text-center">発注先担当者名</th>
+                  <!-- <th class="text-center">タグ</th>
                   <th class="text-center">定価</th>
-                  <th class="text-center">単価</th>
-                  <th class="text-center">在庫数</th>
-                  <th class="text-center">掲載期限</th>
-                  <th class="text-center">操作</th>
+                  <th class="text-center">単価</th> -->
+                  <th class="text-center">残り在庫数</th>
+                  <!-- <th class="text-center">掲載期限</th> -->
+                  <!-- <th class="text-center">操作</th> -->
                 </tr>
 
-                <tr>
+                <!-- <tr>
                   <td class="text-center">
                     0
                   </td>
@@ -146,7 +146,7 @@
                   </td>
                   <td class="text-center">
                   </td>
-                </tr>
+                </tr> -->
 
                 @foreach($items as $item)
                 <tr>
@@ -157,26 +157,25 @@
                     {{$item->item_name}}
                   </td>
                   <td class="text-center">
-
+                    {{$item->tantou_name}}
                   </td>
-                  <td class="text-center">
+                  <!-- <td class="text-center">
 
-                  </td>
-                  <td class="text-center">
+                  </td> -->
+                  <!-- <td class="text-center">
 
-                  </td>
-                  <td class="text-center">
+                  </td> -->
+                  <!-- <td class="text-center">
 
-                  </td>
+                  </td> -->
                   <td class="text-center">
                     {{$item->zaikosuu}}
                   </td>
-                  <td class="text-center">
-                    {{$item->keisai_kigen}}
-                  </td>
-                  <td class="text-center">
+                  <!-- <td class="text-center">
+                  </td> -->
+                  <!-- <td class="text-center">
                     <a href=""><button class="btn btn-primary">価格を見る</button></a>
-                  </td>
+                  </td> -->
                 </tr>
                 @endforeach
 
