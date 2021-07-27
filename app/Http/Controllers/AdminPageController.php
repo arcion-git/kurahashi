@@ -7,6 +7,7 @@ use App\Order;
 use App\Deal;
 use App\Item;
 use App\Category;
+use App\CategoryItem;
 use App\Tag;
 use App\User;
 use App\Holiday;
