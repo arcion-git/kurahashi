@@ -103,6 +103,10 @@ class LoginPageController extends Controller
 
 
 
+
+
+
+
   public function category($id)
   {
 
@@ -375,6 +379,7 @@ class LoginPageController extends Controller
   }
 
 
+
   public function favorite(){
     $user_id = Auth::guard('user')->user()->id;
     $categories = Category::get()->groupBy('bu_ka_name');
@@ -384,6 +389,25 @@ class LoginPageController extends Controller
   }
 
 
+  public function EditFavoriteCategory(Request $request){
+    $user_id = Auth::guard('user')->user()->id;
+    $favorite_categories = $request->input('favorite_category');
+    // dd($favorite_categories);
+
+    $delete_favorite_categories = FavoriteCategory::where('user_id', $user_id)->delete();
+
+    foreach ($favorite_categories as $favorite_category) {
+      $favorite_category=FavoriteCategory::firstOrNew(['user_id'=> $user_id , 'category_id'=> $favorite_category]);
+      $favorite_category->save();
+    }
+
+    $user = User::where('id', $user_id)->first();
+    $user->first_login = 1;
+    $user->save();
+
+    $data = "sucsess";
+    return redirect()->route('favorite',$data);
+  }
 
 
   public function deal(){

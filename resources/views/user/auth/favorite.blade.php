@@ -18,7 +18,7 @@
       <div class="col-12">
         <div class="card">
           <div class="card-body">
-            <form class="form-horizontal" role="form" method="POST" action="{{ url('/user/post/favoritecategory') }}">
+            <form class="form-horizontal" role="form" method="POST" action="{{ url('/user/edit/favoritecategory') }}">
             @csrf
               <div class="form-divider" style="margin-bottom:30px;">
                 興味のあるカテゴリーにチェックをつけてください。
@@ -30,8 +30,15 @@
                     <h6>{{$key}}</h6>
                     <ul class="list-unstyled row">
                         @foreach($vals as $val)
-                            <li class="col-4 ">
-                              <input class="checkbox-input" type="checkbox" id="{{ $val->category_id }}" name="favorite_category[]" value="{{ $val->category_id }}">
+                            <li class="col-3">
+                              <input class="checkbox-input" type="checkbox" id="{{ $val->category_id }}" name="favorite_category[]" value="{{ $val->category_id }}"
+                              @foreach($favorite_categories as $favorite_category)
+                              @if($favorite_category->category_id == $val->category_id)
+                              checked
+                              @else
+                              @endif
+                              @endforeach
+                              >
                               <label for="{{ $val->category_id }}" class="checkbox-label">{{ $val->category_name }}（{{ $val->items->count() }}点）</label>
                             </li>
                         @endforeach
@@ -42,7 +49,7 @@
               </div>
               <div class="form-group">
                 <button type="submit" class="btn btn-primary btn-lg btn-block">
-                  登録
+                  保存
                 </button>
               </div>
             </form>

@@ -91,6 +91,7 @@
 
 
   Route::post('/user/post/favoritecategory','LoginPageController@PostFavoriteCategory');
+  Route::post('/user/edit/favoritecategory','LoginPageController@EditFavoriteCategory');
 
 
 
