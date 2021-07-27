@@ -42,8 +42,6 @@ class LoginPageController extends Controller
       $categories = $categories->groupBy('bu_ka_name');
       // dd($categories);
 
-
-
       $user_id = Auth::guard('user')->user()->id;
       $carts =  Cart::where('user_id',$user_id)->get();
 
@@ -54,10 +52,6 @@ class LoginPageController extends Controller
 
   public function index()
   {
-
-
-
-
       $user_id = Auth::guard('user')->user()->id;
       $favorite_categories = FavoriteCategory::where('user_id', $user_id)->first();
 
@@ -371,6 +365,23 @@ class LoginPageController extends Controller
 
 
 
+
+  public function line(){
+    $user_id = Auth::guard('user')->user()->id;
+    $categories = Category::get()->groupBy('bu_ka_name');
+    $favorite_categories = FavoriteCategory::where('user_id', $user_id)->get();
+
+    return view('user.auth.line', ['categories' => $categories, 'favorite_categories' => $favorite_categories]);
+  }
+
+
+  public function favorite(){
+    $user_id = Auth::guard('user')->user()->id;
+    $categories = Category::get()->groupBy('bu_ka_name');
+    $favorite_categories = FavoriteCategory::where('user_id', $user_id)->get();
+
+    return view('user.auth.favorite', ['categories' => $categories, 'favorite_categories' => $favorite_categories]);
+  }
 
 
 

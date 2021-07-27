@@ -102,10 +102,10 @@
               <a href="{{ url('/deal') }}" class="dropdown-item has-icon">
                 <i class="far fa-user"></i> ご提案商品
               </a>
-              <a href="{{ url('/deal') }}" class="dropdown-item has-icon">
-                <i class="far fa-heart"></i> お気に入りカテゴリ編集
+              <a href="{{ url('/favorite') }}" class="dropdown-item has-icon">
+                <i class="far fa-heart"></i> お気に入り編集
               </a>
-              <a href="features-activities.html" class="dropdown-item has-icon">
+              <a href="{{ url('/line') }}" class="dropdown-item has-icon">
                 <i class="far fa-comments"></i> LINEでお問い合わせ
               </a>
               <div class="dropdown-divider"></div>
@@ -159,32 +159,32 @@
           @if ( Auth::guard('admin')->check() )
           <ul class="sidebar-menu">
               <li class="nav-item">
-                <a href="/admin/home" class="nav-link"><span>取引一覧</span></a>
+                <a href="/admin/home" class="nav-link"><i class="fa fa-clipboard-list"></i><span>取引一覧</span></a>
               </li>
               <li class="nav-item">
-                <a href="/admin/home" class="nav-link"><span>×リピートオーダー</span></a>
+                <a href="/admin/home" class="nav-link"><i class="fa fa-redo-alt"></i><span>×リピートオーダー</span></a>
               </li>
               <li class="nav-item">
-                <a href="/admin/home" class="nav-link"><span>×ご提案商品</span></a>
+                <a href="/admin/home" class="nav-link"><i class="far fa-user"></i><span>×ご提案商品</span></a>
               </li>
               <li class="nav-item">
-                <a href="/admin/user" class="nav-link"><span>顧客担当者一覧</span></a>
+                <a href="/admin/user" class="nav-link"><i class="fa fa-users"></i><span>顧客担当者一覧</span></a>
               </li>
               <li class="nav-item">
-                <a href="/admin/home" class="nav-link"><span>×カテゴリーのおすすめ</span></a>
+                <a href="/admin/home" class="nav-link"><i class="fa fa-bullhorn"></i><span>×カテゴリーのおすすめ</span></a>
               </li>
               <li class="nav-item">
-                <a href="/admin/item" class="nav-link"><span>商品一覧</span></a>
+                <a href="/admin/item" class="nav-link"><i class="fas fa-list"></i><span>商品一覧</span></a>
               </li>
-              <li class="nav-item">
+              <!-- <li class="nav-item">
                 <a href="/admin/home" class="nav-link"><span>×社内営業</span></a>
-              </li>
+              </li> -->
               <li class="nav-item">
-                <a href="/admin/csv" class="nav-link"><span>CSVデータ</span></a>
+                <a href="/admin/csv" class="nav-link"><i class="fas fa-file-csv"></i><span>CSVデータ</span></a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
-                  {{ __('Logout') }}
+                  <i class="fas fa-sign-out-alt"></i><span>{{ __('Logout') }}</span>
                 </a>
               </li>
               <!-- <li class="nav-item dropdown">

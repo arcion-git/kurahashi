@@ -25,6 +25,8 @@
   Route::get('/category/{id}', 'LoginPageController@category');
   Route::get('/confirm', 'LoginPageController@confirm');
   Route::get('/deal', 'LoginPageController@deal')->name('deal');
+  Route::get('/line', 'LoginPageController@line')->name('line');
+  Route::get('/favorite', 'LoginPageController@favorite')->name('favorite');
   Route::get('/user/deal/{id}', 'LoginPageController@dealdetail')->name('dealdetail');
 
   // Ajax GET
