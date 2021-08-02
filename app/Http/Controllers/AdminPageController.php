@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Cart;
 use App\Order;
 use App\Deal;
+use App\User;
 use App\Item;
 use App\Category;
 use App\CategoryItem;
@@ -175,11 +176,13 @@ class AdminPageController extends Controller
   }
 
   public function userimport(){
+  User::truncate();
   Excel::import(new UserImport, request()->file('file'));
   return back();
   }
 
   public function itemimport(){
+  Item::truncate();
   Excel::import(new ItemImport, request()->file('file'));
   return back();
   }
