@@ -3113,3 +3113,11 @@ a:not(.btn-social-icon):not(.btn-social):not(.page-link) .ion, a:not(.btn-social
     padding-right: 7px !important;
     width: 100% !important;
 }
+}
+
+@media (min-width: 768px) {
+.modal-dialog {
+    max-width: 1000px;
+    margin: 1.75rem auto;
+}
+}

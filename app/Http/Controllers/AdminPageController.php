@@ -13,6 +13,7 @@ use App\Tag;
 use App\Holiday;
 use App\Store;
 use App\StoreUser;
+use App\recommend;
 use App\FavoriteCategory;
 
 use App\PriceGroupe;
@@ -68,6 +69,7 @@ class AdminPageController extends Controller
     ];
     return view('dealdetail', $data);
   }
+
 
 
   public function dealorder(Request $request){
@@ -170,6 +172,8 @@ class AdminPageController extends Controller
     return view('admin.auth.item', ['items' => $items]);
   }
 
+
+
   public function csv(){
     return view('admin.auth.csv');
   }
@@ -253,5 +257,34 @@ class AdminPageController extends Controller
 
     return view('admin.home', ['deals' => $deals]);
   }
+
+  public function userrecommend($id){
+    $deals = Deal::where('user_id',$id)->get();
+    $items = Item::get();
+
+    $data=[
+      'id'=>$id,
+      'items'=>$items,
+    ];
+    return view('recommend', $data);
+  }
+
+
+  public function addrecommend(Request $request){
+
+    $item_id = $request->item_id;
+    $user_id = $request->user_id;
+
+    $recommend = Recommend::firstOrNew(['user_id'=> $user_id , 'item_id'=> $item_id ]);
+    $recommend -> save();
+
+
+    $id = $user_id;
+
+
+
+    return redirect()->route('recommend', $id);
+  }
+
 
 }

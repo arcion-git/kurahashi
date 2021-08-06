@@ -71,6 +71,13 @@
   Route::get('/admin/item', 'AdminPageController@item')->name('admin.item');
   Route::get('/admin/sales', 'AdminPageController@sales')->name('admin.sales');
   Route::get('/admin/csv', 'AdminPageController@csv')->name('admin.csv');
+  Route::get('/admin/download', 'AdminPageController@download')->name('admin.download');
+  Route::get('/admin/user/deal/{id}', 'AdminPageController@userdeal')->name('admin.user.deal');
+  Route::get('/admin/user/recommend/{id}', 'AdminPageController@userrecommend')->name('recommend');
+
+  // Ajax POST
+  Route::post('/admin/user/addrecommend', 'AdminPageController@addrecommend');
+
 
   // CSVインポート
   Route::post('/admin/userimport', 'AdminPageController@userimport');
@@ -85,8 +92,8 @@
   Route::post('/admin/PriceImport', 'AdminPageController@PriceImport');
   Route::post('/admin/SpecialPriceImport', 'AdminPageController@SpecialPriceImport');
 
-  Route::get('/admin/download', 'AdminPageController@download')->name('admin.download');
-  Route::get('/admin/user/deal/{id}', 'AdminPageController@userdeal')->name('admin.user.deal');
+
+
 
   Route::post('/admin/discount', 'AdminPageController@discount');
   Route::post('/admin/intervalupdatecart', 'AdminPageController@intervalupdatecart');

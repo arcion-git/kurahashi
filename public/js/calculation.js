@@ -62,6 +62,8 @@ $(function() {
       });
       $('#cart-container').addClass('show');
   }
+
+
   $('#toggle').click(function(){
     $(this).removeClass("beep");
       setTimeout(dojQueryAjax);
@@ -467,6 +469,10 @@ if(document.URL.match("/user/deal")) {
     },1000);
 });
 }
+
+
+
+
 
 
 });
