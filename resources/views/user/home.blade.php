@@ -15,6 +15,71 @@
           </div>
 
 
+          @if(!isset($recommends[0]))
+          @else
+          <div class="section-body">
+            <div class="row">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="float-left">
+                      <h2 class="section-title">担当のおすすめ商品</h2>
+                    </div>
+
+                    <div class="clearfix mb-3"></div>
+
+                    <div class="table-responsive">
+                      <table class="table table-striped">
+                        <tr>
+                          <th class="text-center">商品番号</th>
+                          <th class="">商品名</th>
+                          <th class="text-center">産地</th>
+                          <th class="text-center">規格</th>
+                          <th class="text-center">単位</th>
+                          <th class="text-center">在庫数</th>
+                          <th class="text-center">特記事項</th>
+                          <th class="text-center" style="min-width:180px;">操作</th>
+                        </tr>
+
+
+                        @foreach($recommends as $recommend)
+                        @if($recommend->item()->zaikosuu == 0)
+                        @else
+                        <tr>
+                          <td class="text-center">{{$recommend->item()->item_id}}</td>
+                          <td class="">{{$recommend->item()->item_name}}</td>
+                          <td class="text-center">{{$recommend->item()->sanchi_name}}</td>
+                          <td class="text-center">{{$recommend->item()->kikaku}}</td>
+                          <td class="text-center">
+                            @if ($recommend->item()->tani == 1)
+                            ｹｰｽ
+                            @elseif ($recommend->item()->tani == 2)
+                            ﾎﾞｰﾙ
+                            @elseif ($recommend->item()->tani == 3)
+                            ﾊﾞﾗ
+                            @elseif ($recommend->item()->tani == 4)
+                            Kg
+                            @endif
+                          </td>
+                          <td class="text-center">{{$recommend->item()->zaikosuu}}</td>
+                          <td class="text-center">{{$recommend->item()->tokkijikou}}</td>
+
+                          <td class="text-center"><button id="{{$recommend->item()->id}}" class="addcart btn btn-warning">カートに入れる</button></td>
+                        </tr>
+                        @endif
+                        @endforeach
+                      </table>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          @endif
+
+
+
           <div class="section-body">
 
 @if(isset($category_name))

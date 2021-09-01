@@ -16,6 +16,7 @@ use App\FavoriteCategory;
 use App\Price;
 use App\PriceGroupe;
 use App\SpecialPrice;
+use App\Recommend;
 
 // 時間に関する処理
 use Carbon\Carbon;
@@ -72,12 +73,17 @@ class LoginPageController extends Controller
 
       $carts =  Cart::where('user_id',$user_id)->get();
 
+      $kaiin_number = Auth::guard('user')->user()->kaiin_number;
+
+      $recommends = Recommend::where('user_id', $kaiin_number)->get();
 
       return view('user/home',
       ['items' => $items ,
        'carts' => $carts ,
        'categories' => $categories ,
-       'favorite_categories' => $favorite_categories]);
+       'favorite_categories' => $favorite_categories,
+       'recommends' => $recommends,
+      ]);
   }
 
 
@@ -164,6 +170,15 @@ class LoginPageController extends Controller
     if(isset($price->price)){
     $order->price = $price->price;
     }
+
+    $kaiin_number = Auth::guard('user')->user()->kaiin_number;
+    $item = Item::where('id',$item_id)->first();
+
+    $recommend_item = Recommend::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'user_id'=>$kaiin_number])->first();
+    if(isset($recommend_item->price)){
+    $order->price = $recommend_item->price;
+    }
+
     $order->save();
 
     $data = "sucsess";
@@ -217,6 +232,7 @@ class LoginPageController extends Controller
   public function removecart(Request $request){
     $cart_id = $request->cart_id;
     $delete_cart = Cart::where(['id'=> $cart_id])->first()->delete();
+    $delete_order = Order::where(['cart_id'=> $cart_id])->first()->delete();
     $data = "sucsess";
     return redirect()->route('home',$data);
   }

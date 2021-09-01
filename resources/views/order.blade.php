@@ -64,7 +64,7 @@
 							@endif
 						</td>
 						<td width="120px" class="text-center">
-								<input type="text" name="nouhin_yoteibi[]" class="nouhin_yoteibi text-center form-control daterange-cus datepicker" value="{{$val->nouhin_yoteibi}}">
+								<input type="text" name="nouhin_yoteibi[]" class="nouhin_yoteibi text-center form-control daterange-cus datepicker" value="{{$val->nouhin_yoteibi}}" autocomplete="off">
 						</td>
 						<td width="80px" class="total text-center"></td>
 						<td width="140px" class="text-center">
