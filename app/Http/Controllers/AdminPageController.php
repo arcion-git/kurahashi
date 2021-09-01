@@ -296,14 +296,23 @@ class AdminPageController extends Controller
 
   public function saverecommend(Request $request){
 
+    $user_id = $request->user_id;
     $recommends = $request->recommend;
-    // dd($recommends);
 
-    foreach($recommends as $recommend) {
-      $recommend = Recommend::firstOrNew(['id'=> $recommend->end]);
-      dd($recommend);
+    foreach($recommends as  $key => $value) {
+      $recommend = Recommend::firstOrNew(['id'=> $key]);
+      $recommend->price = $value['price'];
+      $recommend->end = $value['end'];
+      $recommend->save();
     }
 
+    $id = $request->user_id;
+    return redirect()->route('recommend', $id);
+  }
+
+  public function removercommend(Request $request){
+    $delete_id = $request->delete;
+    $delete = Recommend::where('id',$delete_id)->first()->delete();
     $id = $request->user_id;
     return redirect()->route('recommend', $id);
   }

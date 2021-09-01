@@ -46,8 +46,8 @@
 
             <div class="clearfix mb-3"></div>
 
-            <form action="{{ url('/admin/user/saverecommend') }}" method="POST" class="form-horizontal">
-              {{ csrf_field() }}
+            <form id="saveform" action="{{ url('/admin/user/saverecommend') }}" enctype="multipart/form-data" method="POST" class="form-horizontal">
+              @csrf
               <div class="table-responsive">
                 <table class="table table-striped">
                   <tr>
@@ -63,7 +63,6 @@
 
   		            @foreach($recommends as $recommend)
                   <tr>
-                    <input name="recommend[id][]" type="hidden" value="{{$recommend->id}}">
                     <td class="text-center">
                       {{$recommend->item()->item_id}}
                     </td>
@@ -88,13 +87,13 @@
         							@endif
                     </td>
                     <td class="text-center" width="150">
-                      <input name="recommend[price][]" class="price text-center form-control" value="">
+                      <input name="recommend[{{$recommend->id}}][price]" class="price text-center form-control" value="{{$recommend->price}}">
                     </td>
                     <td class="text-center" width="150">
-                      <input type="text" name="recommend[end][]" class="nouhin_yoteibi text-center form-control daterange-cus datepicker" value="">
+                      <input type="text" name="recommend[{{$recommend->id}}][end]" class="nouhin_yoteibi text-center form-control daterange-cus datepicker" value="{{$recommend->end}}">
                     </td>
                     <td class="text-center">
-                      <a href=""><button class="btn btn-primary">削除</button></a>
+                      <div class="btn btn-primary delete_button" data-id="{{$recommend->id}}"/>削除</div>
                     </td>
                   </tr>
                   @endforeach
@@ -102,15 +101,23 @@
                 </table>
               </div>
               <input name="user_id" type="hidden" value="{{$id}}">
-              <button type="submit" class="btn btn-warning float-right">内容を保存</button>
+              <button form="saveform" type="submit" class="btn btn-warning float-right">内容を保存</button>
             </form>
-              <button class="addrecommend btn btn-success" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus"></i> 商品を追加</button>
+            <button class="addrecommend btn btn-success" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus"></i> 商品を追加</button>
           </div>
         </div>
       </div>
     </div>
   </div>
 </section>
+
+
+
+<form id="remove_form" action="{{ url('/admin/user/removercommend') }}" method="POST">
+  @csrf
+  <input name="user_id" type="hidden" value="{{$id}}">
+  <input id="remove_id" name="delete" type="hidden" value="">
+</form>
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

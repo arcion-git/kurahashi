@@ -78,6 +78,7 @@
   // 担当のおすすめ保存
   Route::post('/admin/user/addrecommend', 'AdminPageController@addrecommend');
   Route::post('/admin/user/saverecommend', 'AdminPageController@saverecommend');
+  Route::post('/admin/user/removercommend', 'AdminPageController@removercommend');
 
 
   // CSVインポート

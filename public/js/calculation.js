@@ -474,6 +474,19 @@ if(document.URL.match("/user/deal")) {
 
 
 
+// 担当のおすすめ商品削除（formタグ回避）
+if(document.URL.match("/admin/user/recommend")) {
+  $(function(){
+    $(".delete_button").on("click",function(){
+      var remove_id = $(this).data('id');
+      console.log(remove_id);
+      $("#remove_id").val(remove_id);
+      $('#remove_form').submit();
+    });
+  });
+}
+
+
 
 });
 

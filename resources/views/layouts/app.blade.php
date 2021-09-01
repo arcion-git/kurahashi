@@ -165,7 +165,7 @@
                 <a href="/admin/home" class="nav-link"><i class="fa fa-redo-alt"></i><span>×リピートオーダー</span></a>
               </li>
               <li class="nav-item">
-                <a href="/admin/home" class="nav-link"><i class="far fa-user"></i><span>×ご提案商品</span></a>
+                <a href="/admin/user" class="nav-link"><i class="far fa-user"></i><span>ご提案商品</span></a>
               </li>
               <li class="nav-item">
                 <a href="/admin/user" class="nav-link"><i class="fa fa-users"></i><span>顧客担当者一覧</span></a>
