@@ -258,13 +258,20 @@ class AdminPageController extends Controller
     return view('admin.home', ['deals' => $deals]);
   }
 
+
+
   public function userrecommend($id){
+
+    $user = User::where('id',$id)->first();
     $deals = Deal::where('user_id',$id)->get();
     $items = Item::get();
 
+    $recommends = Recommend::where('user_id',$user->kaiin_number)->get();
+    // dd($recommends);
     $data=[
       'id'=>$id,
       'items'=>$items,
+      'recommends'=>$recommends,
     ];
     return view('recommend', $data);
   }
@@ -275,14 +282,27 @@ class AdminPageController extends Controller
     $item_id = $request->item_id;
     $user_id = $request->user_id;
 
-    $recommend = Recommend::firstOrNew(['user_id'=> $user_id , 'item_id'=> $item_id ]);
-    $recommend -> save();
+    $user = User::where('id',$user_id)->first();
+    $item = Item::where('id',$item_id)->first();
+    // dd($user);
 
+    $recommend = Recommend::firstOrNew(['user_id'=> $user->kaiin_number , 'item_id'=> $item->item_id , 'sku_code'=> $item->sku_code ]);
+    $recommend -> save();
 
     $id = $user_id;
 
+    return redirect()->route('recommend', $id);
+  }
 
+  public function saverecommend(Request $request){
 
+    $recommend_id = $request->recommend_id;
+    $price = $request->price;
+    $end = $request->end;
+
+    dd($end);
+
+    $id = $request->user_id;
     return redirect()->route('recommend', $id);
   }
 

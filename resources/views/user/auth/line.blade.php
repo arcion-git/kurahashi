@@ -19,9 +19,6 @@
         <div class="card">
           <div class="card-body">
 
-
-
-
             <img src="{{ asset('img/line.png') }}" width="300px"/>
 
           </div>

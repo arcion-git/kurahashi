@@ -5,7 +5,7 @@
 
 <section class="section">
   <div class="section-header">
-    <h1>おすすめ商品登録</h1>
+    <h1>担当のおすすめ商品登録</h1>
     <div class="section-header-breadcrumb">
     </div>
   </div>
@@ -46,78 +46,65 @@
 
             <div class="clearfix mb-3"></div>
 
-            <div class="table-responsive">
-              <table class="table table-striped">
-                <tr>
-                  <th class="text-center">商品番号</th>
-                  <th class="text-center">商品名</th>
-                  <th class="text-center">産地</th>
-                  <th class="text-center">規格</th>
-                  <th class="text-center">単位</th>
-                  <th class="text-center">単価</th>
-                  <th class="text-center">掲載期限</th>
-                  <th class="text-center">操作</th>
-                </tr>
+            <form action="{{ url('/admin/user/saverecommend') }}" method="POST" class="form-horizontal">
+              {{ csrf_field() }}
+              <div class="table-responsive">
+                <table class="table table-striped">
+                  <tr>
+                    <th class="text-center">商品番号</th>
+                    <th class="text-center">商品名</th>
+                    <th class="text-center">産地</th>
+                    <th class="text-center">規格</th>
+                    <th class="text-center">単位</th>
+                    <th class="text-center">単価</th>
+                    <th class="text-center">掲載期限</th>
+                    <th class="text-center">操作</th>
+                  </tr>
 
-                @for($i = 0; $i < 5; $i++)
-                <tr>
-                  <td class="text-center">
-                    111111
-                  </td>
-                  <td class="text-center">
-                    サンプル商品
-                  </td>
-                  <td class="text-center">
-                    国産
-                  </td>
-                  <td class="text-center">
-                    不定貫
-                  </td>
-                  <td class="text-center">
-                    kg
-                  </td>
-                  <td class="text-center" width="150">
-                    <input name="price[]" class="price text-center form-control" value="8000">
-                  </td>
-                  <td class="text-center" width="150">
-                    <input type="text" name="nouhin_yoteibi[]" class="nouhin_yoteibi text-center form-control daterange-cus datepicker" value="">
-                  </td>
-                  <td class="text-center">
-                    <a href=""><button class="btn btn-primary">削除</button></a>
-                  </td>
-                </tr>
-                @endfor
+  		            @foreach($recommends as $recommend)
+                  <tr>
+                    <input name="recommend_id[]" type="hidden" value="{{$recommend->id}}">
+                    <td class="text-center">
+                      {{$recommend->item()->item_id}}
+                    </td>
+                    <td class="text-center">
+                      {{$recommend->item()->item_name}}
+                    </td>
+                    <td class="text-center">
+                      {{$recommend->item()->sanchi_name}}
+                    </td>
+                    <td class="text-center">
+                      {{$recommend->item()->kikaku}}
+                    </td>
+                    <td class="text-center">
+                      @if ($recommend->item()->tani == 1)
+        							ｹｰｽ
+        							@elseif ($recommend->item()->tani == 2)
+        							ﾎﾞｰﾙ
+        							@elseif ($recommend->item()->tani == 3)
+        							ﾊﾞﾗ
+        							@elseif ($recommend->item()->tani == 4)
+        							Kg
+        							@endif
+                    </td>
+                    <td class="text-center" width="150">
+                      <input name="price[]" class="price text-center form-control" value="">
+                    </td>
+                    <td class="text-center" width="150">
+                      <input type="text" name="end[]" class="nouhin_yoteibi text-center form-control daterange-cus datepicker" value="">
+                    </td>
+                    <td class="text-center">
+                      <a href=""><button class="btn btn-primary">削除</button></a>
+                    </td>
+                  </tr>
+                  @endforeach
 
-              </table>
-            </div>
-            <button class="addrecommend btn btn-success" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus"></i> 商品を追加</button>
-            <div class="float-right">
-              <nav>
-                <ul class="pagination">
-                  <li class="page-item disabled">
-                    <a class="page-link" href="#" aria-label="Previous">
-                      <span aria-hidden="true">&laquo;</span>
-                      <span class="sr-only">Previous</span>
-                    </a>
-                  </li>
-                  <li class="page-item active">
-                    <a class="page-link" href="#">1</a>
-                  </li>
-                  <!-- <li class="page-item">
-                    <a class="page-link" href="#">2</a>
-                  </li>
-                  <li class="page-item">
-                    <a class="page-link" href="#">3</a>
-                  </li> -->
-                  <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Next">
-                      <span aria-hidden="true">&raquo;</span>
-                      <span class="sr-only">Next</span>
-                    </a>
-                  </li>
-                </ul>
-              </nav>
-            </div>
+                </table>
+              </div>
+              <input name="user_id" type="hidden" value="{{$id}}">
+              <button type="submit" class="btn btn-warning float-right">内容を保存</button>
+            </form>
+              <button class="addrecommend btn btn-success" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus"></i> 商品を追加</button>
           </div>
         </div>
       </div>

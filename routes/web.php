@@ -75,8 +75,9 @@
   Route::get('/admin/user/deal/{id}', 'AdminPageController@userdeal')->name('admin.user.deal');
   Route::get('/admin/user/recommend/{id}', 'AdminPageController@userrecommend')->name('recommend');
 
-  // Ajax POST
+  // 担当のおすすめ保存
   Route::post('/admin/user/addrecommend', 'AdminPageController@addrecommend');
+  Route::post('/admin/user/saverecommend', 'AdminPageController@saverecommend');
 
 
   // CSVインポート

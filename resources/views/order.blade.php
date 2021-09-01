@@ -17,7 +17,7 @@
 		</tr>
 		@foreach($carts as $cart)
 		<tr id="{{$cart->id}}">
-			<input name="item_id[]" type="hidden" value="{{$cart->item->item_id}}" />
+			<input name="item_id[]" type="hidden" value="{{$cart->item->id}}" />
 			<td class="cartid_{$cart->id}} text-center">{{$cart->item->item_id}}</td>
 			<td class="cartid_{$cart->id}}">{{$cart->item->item_name}}</td>
 			<td class="cartid_{$cart->id}} text-center">{{$cart->item->sanchi_name}}</td>

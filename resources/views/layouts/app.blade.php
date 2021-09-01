@@ -219,9 +219,14 @@
                 <i class="fas fa-heart"></i></i><span>お気に入りカテゴリ</span>
               </a>
               <ul class="dropdown-menu">
+              @if($favorite_categories)
               @foreach($favorite_categories as $favorite_category)
-                      <li class="nav-item"><a class="nav-link" href="/category/{{$favorite_category->category->category_id}}"><span>{{ $favorite_category->category->category_name }}</span></a></li>
+                      @if($favorite_category->category->items->count() == 0)
+                      @else
+                      <li class="nav-item"><a class="nav-link" href="/category/{{$favorite_category->category->category_id}}"><span>{{ $favorite_category->category->category_name }}</span>（{{ $favorite_category->category->items->count() }}）</a></li>
+                      @endif
               @endforeach
+              @endif
               </ul>
             </li>
 
@@ -236,7 +241,10 @@
               </a>
               <ul class="dropdown-menu">
                 @foreach($vals as $val)
-                      <li class="nav-item"><a class="nav-link" href="/category/{{$val->category_id}}"><span>{{ $val->category_name }}</span></a></li>
+                      @if($val->items->count() == 0)
+                      @else
+                      <li class="nav-item"><a class="nav-link" href="/category/{{$val->category_id}}"><span>{{ $val->category_name }}</span>（{{ $val->items->count() }}）</a></li>
+                      @endif
                 @endforeach
               </ul>
             </li>

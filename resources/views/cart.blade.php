@@ -22,7 +22,7 @@
 					Kg
 					@endif
 				</td>
-				<td><button id="{{$cart->item->id}}" class="removecart removeid_{{$cart->item->id}} btn btn-info">削除</button></td>
+				<td><button id="{{$cart->id}}" class="removecart removeid_{{$cart->item->id}} btn btn-info">削除</button></td>
 			</tr>
       @endforeach
 		</tbody>

@@ -34,7 +34,7 @@ $(function() {
       })
       // Ajaxリクエスト失敗時の処理
       .fail(function(jqXHR, textStatus, errorThrown) {
-        alert('Ajaxリクエスト失敗');
+        alert('ユーザーに紐づく得意先店舗がありません');
         console.log("ajax通信に失敗しました");
         console.log("XMLHttpRequest : " + XMLHttpRequest.status);
         console.log("textStatus     : " + textStatus);
@@ -57,7 +57,7 @@ $(function() {
           },
           // 通信エラー時に呼び出されるコールバック
           error: function () {
-              // alert("Ajax通信エラー");
+              alert("カートの中身を更新できませんでした。");
           }
       });
       $('#cart-container').addClass('show');
@@ -82,9 +82,9 @@ $(function() {
 
   // HOME画面でカートから削除
   $(document).on("click", ".removecart", function() {
-    var item_id = $(this).get(0).id;
-    $('.removeid_'+item_id).parent().parent().remove();
-    console.log(item_id);
+    var cart_id = $(this).get(0).id;
+    $(this).parent().parent().remove();
+    console.log(cart_id);
 
     $.ajax({
         headers: {
@@ -93,7 +93,7 @@ $(function() {
         url: location.origin + '/removecart',
         type: 'POST', //リクエストタイプ
         data: {
-          'item_id': item_id,
+          'cart_id': cart_id,
         } //Laravelに渡すデータ
       })
       // Ajaxリクエスト成功時の処理
@@ -102,7 +102,7 @@ $(function() {
       })
       // Ajaxリクエスト失敗時の処理
       .fail(function(jqXHR, textStatus, errorThrown) {
-        alert('Ajaxリクエスト失敗');
+        alert('カートの中身を削除できませんでした。');
         console.log("ajax通信に失敗しました");
         console.log("XMLHttpRequest : " + XMLHttpRequest.status);
         console.log("textStatus     : " + textStatus);
@@ -151,7 +151,7 @@ if(document.URL.match("/user")) {
       })
       // Ajaxリクエスト失敗時の処理
       .fail(function(jqXHR, textStatus, errorThrown) {
-        alert('Ajaxリクエスト失敗');
+        alert('ユーザー情報が取得できません。');
         console.log("ajax通信に失敗しました");
         console.log("XMLHttpRequest : " + XMLHttpRequest.status);
         console.log("textStatus     : " + textStatus);
@@ -193,7 +193,7 @@ if(document.URL.match("/admin/deal")) {
       })
       // Ajaxリクエスト失敗時の処理
       .fail(function(jqXHR, textStatus, errorThrown) {
-        alert('Ajaxリクエスト失敗');
+        alert('オーダー内容を取得できません。');
         console.log("ajax通信に失敗しました");
         console.log("XMLHttpRequest : " + XMLHttpRequest.status);
         console.log("textStatus     : " + textStatus);
@@ -225,7 +225,7 @@ if(document.URL.match("/admin/deal")) {
           },
           // 通信エラー時に呼び出されるコールバック
           error: function () {
-              // alert("Ajax通信エラー");
+              alert("オーダー内容をアップデートできません。");
           }
       });
     }
@@ -260,7 +260,7 @@ if(document.URL.match("/admin/deal")) {
       })
       // Ajaxリクエスト失敗時の処理
       .fail(function(jqXHR, textStatus, errorThrown) {
-        alert('Ajaxリクエスト失敗');
+        alert('配送先を追加できません。');
         console.log("ajax通信に失敗しました");
         console.log("XMLHttpRequest : " + XMLHttpRequest.status);
         console.log("textStatus     : " + textStatus);
@@ -296,7 +296,7 @@ if(document.URL.match("/admin/deal")) {
       })
       // Ajaxリクエスト失敗時の処理
       .fail(function(jqXHR, textStatus, errorThrown) {
-        alert('Ajaxリクエスト失敗');
+        alert('カートから削除できませんでした。');
         console.log("ajax通信に失敗しました");
         console.log("XMLHttpRequest : " + XMLHttpRequest.status);
         console.log("textStatus     : " + textStatus);
@@ -332,7 +332,7 @@ if(document.URL.match("/admin/deal")) {
       })
       // Ajaxリクエスト失敗時の処理
       .fail(function(jqXHR, textStatus, errorThrown) {
-        alert('Ajaxリクエスト失敗');
+        alert('個数を変更できませんでした。');
         console.log("ajax通信に失敗しました");
         console.log("XMLHttpRequest : " + XMLHttpRequest.status);
         console.log("textStatus     : " + textStatus);
@@ -365,7 +365,7 @@ if(document.URL.match("/admin/deal")) {
       })
       // Ajaxリクエスト失敗時の処理
       .fail(function(jqXHR, textStatus, errorThrown) {
-        alert('Ajaxリクエスト失敗');
+        alert('予定日を保存できません。');
         console.log("ajax通信に失敗しました");
         console.log("XMLHttpRequest : " + XMLHttpRequest.status);
         console.log("textStatus     : " + textStatus);
@@ -400,7 +400,7 @@ if(document.URL.match("/admin/deal")) {
       })
       // Ajaxリクエスト失敗時の処理
       .fail(function(jqXHR, textStatus, errorThrown) {
-        alert('Ajaxリクエスト失敗');
+        alert('配送先店舗を保存できません。');
         console.log("ajax通信に失敗しました");
         console.log("XMLHttpRequest : " + XMLHttpRequest.status);
         console.log("textStatus     : " + textStatus);
@@ -461,7 +461,7 @@ if(document.URL.match("/user/deal")) {
       // Ajaxリクエスト失敗時の処理
       .fail(function(jqXHR, textStatus, errorThrown) {
         // alert('Ajaxリクエスト失敗');
-        console.log("ajax通信に失敗しました");
+        console.log("オーダー内容を取得できません。");
         console.log("XMLHttpRequest : " + XMLHttpRequest.status);
         console.log("textStatus     : " + textStatus);
         console.log("errorThrown    : " + errorThrown.message);
