@@ -296,11 +296,13 @@ class AdminPageController extends Controller
 
   public function saverecommend(Request $request){
 
-    $recommend_id = $request->recommend_id;
-    $price = $request->price;
-    $end = $request->end;
+    $recommends = $request->recommend;
+    // dd($recommends);
 
-    dd($end);
+    foreach($recommends as $recommend) {
+      $recommend = Recommend::firstOrNew(['id'=> $recommend->end]);
+      dd($recommend);
+    }
 
     $id = $request->user_id;
     return redirect()->route('recommend', $id);

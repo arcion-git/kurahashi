@@ -63,7 +63,7 @@
 
   		            @foreach($recommends as $recommend)
                   <tr>
-                    <input name="recommend_id[]" type="hidden" value="{{$recommend->id}}">
+                    <input name="recommend[id][]" type="hidden" value="{{$recommend->id}}">
                     <td class="text-center">
                       {{$recommend->item()->item_id}}
                     </td>
@@ -88,10 +88,10 @@
         							@endif
                     </td>
                     <td class="text-center" width="150">
-                      <input name="price[]" class="price text-center form-control" value="">
+                      <input name="recommend[price][]" class="price text-center form-control" value="">
                     </td>
                     <td class="text-center" width="150">
-                      <input type="text" name="end[]" class="nouhin_yoteibi text-center form-control daterange-cus datepicker" value="">
+                      <input type="text" name="recommend[end][]" class="nouhin_yoteibi text-center form-control daterange-cus datepicker" value="">
                     </td>
                     <td class="text-center">
                       <a href=""><button class="btn btn-primary">削除</button></a>
