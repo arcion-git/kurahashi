@@ -260,6 +260,7 @@ class AdminPageController extends Controller
 
 
 
+// 担当のおすすめ商品処理
   public function userrecommend($id){
 
     $user = User::where('id',$id)->first();
@@ -316,6 +317,71 @@ class AdminPageController extends Controller
     $id = $request->user_id;
     return redirect()->route('recommend', $id);
   }
+
+
+
+
+
+
+// リピートオーダー処理
+  public function userrepeat_order($id){
+
+    $user = User::where('id',$id)->first();
+    $deals = Deal::where('user_id',$id)->get();
+    $items = Item::get();
+
+    $recommends = Recommend::where('user_id',$user->kaiin_number)->get();
+    // dd($recommends);
+    $data=[
+      'id'=>$id,
+      'items'=>$items,
+      'recommends'=>$recommends,
+    ];
+    return view('recommend', $data);
+  }
+
+
+  public function addrepeat_order(Request $request){
+
+    $item_id = $request->item_id;
+    $user_id = $request->user_id;
+
+    $user = User::where('id',$user_id)->first();
+    $item = Item::where('id',$item_id)->first();
+    // dd($user);
+
+    $recommend = Recommend::firstOrNew(['user_id'=> $user->kaiin_number , 'item_id'=> $item->item_id , 'sku_code'=> $item->sku_code ]);
+    $recommend -> save();
+
+    $id = $user_id;
+
+    return redirect()->route('recommend', $id);
+  }
+
+  public function saverepeat_order(Request $request){
+
+    $user_id = $request->user_id;
+    $recommends = $request->recommend;
+
+    foreach($recommends as  $key => $value) {
+      $recommend = Recommend::firstOrNew(['id'=> $key]);
+      $recommend->price = $value['price'];
+      $recommend->end = $value['end'];
+      $recommend->save();
+    }
+
+    $id = $request->user_id;
+    return redirect()->route('recommend', $id);
+  }
+
+  public function removerepeat_order(Request $request){
+    $delete_id = $request->delete;
+    $delete = Recommend::where('id',$delete_id)->first()->delete();
+    $id = $request->user_id;
+    return redirect()->route('recommend', $id);
+  }
+
+
 
 
 }
