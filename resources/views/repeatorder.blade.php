@@ -100,8 +100,28 @@
                     <td class="text-center" width="150">
                       <div class="form-group">
                         <label class="mt-4">
-                          <input type="checkbox" name="repeatorder[{{$repeatorder->id}}][status]" value="{{$repeatorder->status}}" class="custom-switch-input">
-                          <span class="custom-switch-indicator"></span>
+                          <div class="selectgroup w-100">
+                            <label class="selectgroup-item">
+                              <input type="radio" name="repeatorder[{{$repeatorder->id}}][status]" value="有効" class="selectgroup-input"
+                              @if($repeatorder->status == "有効")
+                              checked
+                              @else
+                              @endif
+                              >
+                              <span class="selectgroup-button">on</span>
+                            </label>
+                            <label class="selectgroup-item">
+                              <input type="radio" name="repeatorder[{{$repeatorder->id}}][status]" value="無効" class="selectgroup-input"
+                              @if($repeatorder->status == "無効")
+                              checked
+                              @else
+                              @endif
+                              >
+                              <span class="selectgroup-button">off</span>
+                            </label>
+                          </div>
+                          <!-- <input type="checkbox" name="repeatorder[{{$repeatorder->id}}][status]" value="{{$repeatorder->status}}" class="custom-switch-input">
+                          <span class="custom-switch-indicator"></span> -->
                         </label>
                       </div>
                     </td>
