@@ -17,6 +17,7 @@ use App\Price;
 use App\PriceGroupe;
 use App\SpecialPrice;
 use App\Recommend;
+use App\Repeatorder;
 
 // 時間に関する処理
 use Carbon\Carbon;

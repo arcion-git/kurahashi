@@ -15,6 +15,7 @@ use App\Store;
 use App\StoreUser;
 use App\recommend;
 use App\FavoriteCategory;
+use App\Repeatorder;
 
 use App\PriceGroupe;
 use App\Price;
@@ -264,7 +265,6 @@ class AdminPageController extends Controller
   public function userrecommend($id){
 
     $user = User::where('id',$id)->first();
-    $deals = Deal::where('user_id',$id)->get();
     $items = Item::get();
 
     $recommends = Recommend::where('user_id',$user->kaiin_number)->get();
@@ -324,61 +324,66 @@ class AdminPageController extends Controller
 
 
 // リピートオーダー処理
-  public function userrepeat_order($id){
+  public function userrepeatorder($id){
 
     $user = User::where('id',$id)->first();
-    $deals = Deal::where('user_id',$id)->get();
     $items = Item::get();
 
-    $recommends = Recommend::where('user_id',$user->kaiin_number)->get();
-    // dd($recommends);
+    $repeatorders = Repeatorder::where('kaiin_number',$user->kaiin_number)->get();
+    // dd($repeatorders);
     $data=[
       'id'=>$id,
       'items'=>$items,
-      'recommends'=>$recommends,
+      'repeatorders'=>$repeatorders,
     ];
-    return view('recommend', $data);
+    return view('repeatorder', $data);
   }
 
 
-  public function addrepeat_order(Request $request){
+  public function addrepeatorder(Request $request){
 
     $item_id = $request->item_id;
-    $user_id = $request->user_id;
+    $kaiin_number = $request->kaiin_number;
 
-    $user = User::where('id',$user_id)->first();
+    $user = User::where('id',$kaiin_number)->first();
     $item = Item::where('id',$item_id)->first();
     // dd($user);
 
-    $recommend = Recommend::firstOrNew(['user_id'=> $user->kaiin_number , 'item_id'=> $item->item_id , 'sku_code'=> $item->sku_code ]);
-    $recommend -> save();
+    $repeatorder = Repeatorder::firstOrNew(['kaiin_number'=> $user->kaiin_number , 'item_id'=> $item->item_id , 'sku_code'=> $item->sku_code ]);
+    $repeatorder -> save();
 
-    $id = $user_id;
+    $id = $kaiin_number;
 
-    return redirect()->route('recommend', $id);
+    return redirect()->route('repeatorder', $id);
   }
 
-  public function saverepeat_order(Request $request){
 
-    $user_id = $request->user_id;
-    $recommends = $request->recommend;
 
-    foreach($recommends as  $key => $value) {
-      $recommend = Recommend::firstOrNew(['id'=> $key]);
-      $recommend->price = $value['price'];
-      $recommend->end = $value['end'];
-      $recommend->save();
+  public function saverepeatorder(Request $request){
+
+    $kaiin_number = $request->kaiin_number;
+    $repeatorders = $request->repeatorder;
+
+    // dd($repeatorders);
+
+    foreach($repeatorders as  $key => $value) {
+      $repeatorder = Repeatorder::firstOrNew(['id'=> $key]);
+      $repeatorder->price = $value['price'];
+      $repeatorder->nouhin_youbi = $value['nouhin_youbi'];
+      $repeatorder->status = $value['status'];
+      // $repeatorder->end = $value['end'];
+      $repeatorder->save();
     }
 
-    $id = $request->user_id;
-    return redirect()->route('recommend', $id);
+    $id = $request->kaiin_number;
+    return redirect()->route('repeatorder', $id);
   }
 
-  public function removerepeat_order(Request $request){
+  public function removerepeatorder(Request $request){
     $delete_id = $request->delete;
-    $delete = Recommend::where('id',$delete_id)->first()->delete();
-    $id = $request->user_id;
-    return redirect()->route('recommend', $id);
+    $delete = Repeatorder::where('id',$delete_id)->first()->delete();
+    $id = $request->kaiin_number;
+    return redirect()->route('repeatorder', $id);
   }
 
 

@@ -74,7 +74,7 @@
   Route::get('/admin/download', 'AdminPageController@download')->name('admin.download');
   Route::get('/admin/user/deal/{id}', 'AdminPageController@userdeal')->name('admin.user.deal');
   Route::get('/admin/user/recommend/{id}', 'AdminPageController@userrecommend')->name('recommend');
-  Route::get('/admin/user/repeat_order/{id}', 'AdminPageController@userrepeat_order')->name('repeat_order');
+  Route::get('/admin/user/repeatorder/{id}', 'AdminPageController@userrepeatorder')->name('repeatorder');
 
   // 担当のおすすめポスト
   Route::post('/admin/user/addrecommend', 'AdminPageController@addrecommend');
@@ -82,9 +82,9 @@
   Route::post('/admin/user/removercommend', 'AdminPageController@removercommend');
 
   // リピートオーダーポスト
-  Route::post('/admin/user/add_repeat_order', 'AdminPageController@add_repeat_order');
-  Route::post('/admin/user/save_repeat_order', 'AdminPageController@save_repeat_order');
-  Route::post('/admin/user/remove_repeat_order', 'AdminPageController@remove_repeat_order');
+  Route::post('/admin/user/addrepeatorder', 'AdminPageController@addrepeatorder');
+  Route::post('/admin/user/saverepeatorder', 'AdminPageController@saverepeatorder');
+  Route::post('/admin/user/removerepeatorder', 'AdminPageController@removerepeatorder');
 
   // CSVインポート
   Route::post('/admin/userimport', 'AdminPageController@userimport');

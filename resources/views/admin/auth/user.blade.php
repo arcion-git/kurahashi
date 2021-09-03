@@ -53,7 +53,7 @@
                   <td class="text-center">
                     <a href="{{ url('/admin/user/deal/'.$user->id) }}"><button class="btn btn-primary">取引一覧</button></a>
                     <a href="{{ url('/admin/user/recommend/'.$user->id) }}"><button class="btn btn-success">おすすめ商品登録</button></a>
-                    <a href="{{ url('/admin/user/repeat_order/'.$user->id) }}"><button class="btn btn-warning">リピートオーダー登録</button></a>
+                    <a href="{{ url('/admin/user/repeatorder/'.$user->id) }}"><button class="btn btn-warning">リピートオーダー登録</button></a>
                   </td>
                 </tr>
                 @endforeach

@@ -162,7 +162,7 @@
                 <a href="/admin/home" class="nav-link"><i class="fa fa-clipboard-list"></i><span>取引一覧</span></a>
               </li>
               <li class="nav-item">
-                <a href="/admin/home" class="nav-link"><i class="fa fa-redo-alt"></i><span>×リピートオーダー</span></a>
+                <a href="/admin/user" class="nav-link"><i class="fa fa-redo-alt"></i><span>リピートオーダー</span></a>
               </li>
               <li class="nav-item">
                 <a href="/admin/user" class="nav-link"><i class="far fa-user"></i><span>ご提案商品</span></a>
