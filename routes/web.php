@@ -60,6 +60,9 @@
   Route::post('/dealcart', 'LoginPageController@dealcart');
   Route::get('/showdealcart', 'LoginPageController@showdealcart');
 
+  Route::post('/user/post/favoritecategory','LoginPageController@PostFavoriteCategory');
+  Route::post('/user/edit/favoritecategory','LoginPageController@EditFavoriteCategory');
+
   // アンケート画面
   Route::get('/user/questionnaire', 'LoginPageController@questionnaire');
 
@@ -72,16 +75,25 @@
   Route::get('/admin/sales', 'AdminPageController@sales')->name('admin.sales');
   Route::get('/admin/csv', 'AdminPageController@csv')->name('admin.csv');
   Route::get('/admin/download', 'AdminPageController@download')->name('admin.download');
+
+  // 取引詳細画面
   Route::get('/admin/user/deal/{id}', 'AdminPageController@userdeal')->name('admin.user.deal');
-  Route::get('/admin/user/recommend/{id}', 'AdminPageController@userrecommend')->name('recommend');
-  Route::get('/admin/user/repeatorder/{id}', 'AdminPageController@userrepeatorder')->name('repeatorder');
+
+  // カテゴリのおすすめ編集
+  Route::get('/admin/recommendcategory', 'AdminPageController@recommendcategory')->name('admin.recommendcategory');
+  Route::get('/admin/recommendcategory/{id}', 'AdminPageController@recommendcategorydetail')->name('admin.recommendcategorydetail');
+  Route::post('/admin/user/addrecommendcategory', 'AdminPageController@addrecommendcategory');
+  Route::post('/admin/user/saverecommendcategory', 'AdminPageController@saverecommendcategory');
+  Route::post('/admin/user/removerecommendcategory', 'AdminPageController@removerecommendcategory');
 
   // 担当のおすすめポスト
+  Route::get('/admin/user/recommend/{id}', 'AdminPageController@userrecommend')->name('recommend');
   Route::post('/admin/user/addrecommend', 'AdminPageController@addrecommend');
   Route::post('/admin/user/saverecommend', 'AdminPageController@saverecommend');
   Route::post('/admin/user/removercommend', 'AdminPageController@removercommend');
 
   // リピートオーダーポスト
+  Route::get('/admin/user/repeatorder/{id}', 'AdminPageController@userrepeatorder')->name('repeatorder');
   Route::post('/admin/user/addrepeatorder', 'AdminPageController@addrepeatorder');
   Route::post('/admin/user/saverepeatorder', 'AdminPageController@saverepeatorder');
   Route::post('/admin/user/removerepeatorder', 'AdminPageController@removerepeatorder');
@@ -106,8 +118,7 @@
   Route::post('/admin/intervalupdatecart', 'AdminPageController@intervalupdatecart');
 
 
-  Route::post('/user/post/favoritecategory','LoginPageController@PostFavoriteCategory');
-  Route::post('/user/edit/favoritecategory','LoginPageController@EditFavoriteCategory');
+
 
 
 

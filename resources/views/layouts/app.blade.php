@@ -99,9 +99,9 @@
               <a href="{{ url('/deal') }}" class="dropdown-item has-icon">
                 <i class="fa fa-redo-alt"></i> ×リピートオーダー
               </a>
-              <a href="{{ url('/deal') }}" class="dropdown-item has-icon">
+              <!-- <a href="{{ url('/deal') }}" class="dropdown-item has-icon">
                 <i class="far fa-user"></i> ×ご提案商品
-              </a>
+              </a> -->
               <a href="{{ url('/favorite') }}" class="dropdown-item has-icon">
                 <i class="far fa-heart"></i> お気に入り編集
               </a>
@@ -171,7 +171,7 @@
                 <a href="/admin/user" class="nav-link"><i class="fa fa-users"></i><span>顧客担当者一覧</span></a>
               </li>
               <li class="nav-item">
-                <a href="/admin/home" class="nav-link"><i class="fa fa-bullhorn"></i><span>×カテゴリーのおすすめ</span></a>
+                <a href="/admin/recommendcategory" class="nav-link"><i class="fa fa-bullhorn"></i><span>カテゴリーのおすすめ</span></a>
               </li>
               <li class="nav-item">
                 <a href="/admin/item" class="nav-link"><i class="fas fa-list"></i><span>商品一覧</span></a>

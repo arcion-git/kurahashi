@@ -18,6 +18,7 @@ use App\PriceGroupe;
 use App\SpecialPrice;
 use App\Recommend;
 use App\Repeatorder;
+use App\RecommendCategory;
 
 // 時間に関する処理
 use Carbon\Carbon;
@@ -76,7 +77,10 @@ class LoginPageController extends Controller
 
       $kaiin_number = Auth::guard('user')->user()->kaiin_number;
 
-      $recommends = Recommend::where('user_id', $kaiin_number)->get();
+      $now = Carbon::now()->addDay(3)->format('Y-m-d');
+      $recommends = Recommend::where('user_id', $kaiin_number)->whereDay('end', '>=', $now)->get();
+      // dd($recommends);
+
 
       return view('user/home',
       ['items' => $items ,

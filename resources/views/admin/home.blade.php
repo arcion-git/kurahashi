@@ -7,17 +7,47 @@
   <div class="section-header">
     <h1>取引一覧</h1>
     <div class="section-header-breadcrumb">
+      @if(isset($user))
+      <div class="breadcrumb-item active"><a href="{{ url('/admin/home') }}">HOME</a></div>
+      <div class="breadcrumb-item"><a href="{{ url('/admin/user') }}">顧客一覧</a></div>
+      <div class="breadcrumb-item">取引一覧（{{$user->name}} 様）</a></div>
+      @endif
     </div>
   </div>
+
   <div class="section-body">
-    <div class="row mt-4">
-      <div class="col-12">
-        <div class="card">
-          <div class="card-body">
 
+    @if(isset($user))
+    <div class="invoice">
+      <div class="invoice-print">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="invoice-title">
+              <h3>{{ $user->name}} <span class="small">様</span></h3>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-md-6">
+                <address>
+                  <strong>ご連絡先:</strong><br>
+                  {{ $user->tel }}<br>
+                  {{ $user->email }}
+                </address>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-4">
+          <div class="col-12">
+            <div class="section-title">取引一覧</div>
+            <div class="clearfix mb-3"></div>
+    @else
+    <div class="card">
+      <div class="card-body">
+    @endif
+        <div class="row mt-4">
+          <div class="col-12">
             <ul class="navbar-nav float-left">
-
-
               <div class="form-group">
                 <select class="custom-select">
                   <option selected="">全ての取引</option>
@@ -27,10 +57,7 @@
                   <option value="3">キャンセル</option>
                 </select>
               </div>
-
             </ul>
-
-
             <div class="float-right">
               <form>
                 <div class="input-group">
@@ -41,9 +68,7 @@
                 </div>
               </form>
             </div>
-
             <div class="clearfix mb-3"></div>
-
             <div class="table-responsive">
               <table class="table table-striped">
                 <tr>
@@ -54,7 +79,6 @@
                   <th class="text-center">状態</th>
                   <th class="text-center">操作</th>
                 </tr>
-
                 @foreach($deals as $deal)
                 <tr>
                   <td class="text-center">
@@ -81,7 +105,6 @@
                   </td>
                 </tr>
                 @endforeach
-
               </table>
             </div>
             <div class="float-right">

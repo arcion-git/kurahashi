@@ -13,9 +13,10 @@ use App\Tag;
 use App\Holiday;
 use App\Store;
 use App\StoreUser;
-use App\recommend;
+use App\Recommend;
 use App\FavoriteCategory;
 use App\Repeatorder;
+use App\RecommendCategory;
 
 use App\PriceGroupe;
 use App\Price;
@@ -255,9 +256,87 @@ class AdminPageController extends Controller
   public function userdeal($id){
 
     $deals = Deal::where('user_id',$id)->get();
-
-    return view('admin.home', ['deals' => $deals]);
+    $user = User::where('id',$id)->first();
+    $data=[
+      'id'=>$id,
+      'deals' => $deals,
+      'user'=>$user,
+    ];
+    return view('admin.home', $data);
   }
+
+
+
+
+  // カテゴリごとのおすすめ商品処理
+
+
+    public function recommendcategory(){
+      $items = Item::get();
+      $categories = Category::get();
+      $data=[
+        'items'=>$items,
+        'categories'=>$categories,
+      ];
+      return view('recommendcategory', $data);
+    }
+
+    public function recommendcategorydetail($id){
+
+      $user = User::where('id',$id)->first();
+      $items = Item::get();
+
+      $recommendcategorys = RecommendCategory::where('user_id',$user->kaiin_number)->get();
+      // dd($recommendcategorys);
+      $data=[
+        'id'=>$id,
+        'items'=>$items,
+        'user'=>$user,
+        'recommendcategorys'=>$recommendcategorys,
+      ];
+      return view('recommendcategory', $data);
+    }
+
+
+    public function addrecommendcategory(Request $request){
+
+      $item_id = $request->item_id;
+      $user_id = $request->user_id;
+
+      $user = User::where('id',$user_id)->first();
+      $item = Item::where('id',$item_id)->first();
+      // dd($user);
+
+      $recommendcategory = RecommendCategory::firstOrNew(['user_id'=> $user->kaiin_number , 'item_id'=> $item->item_id , 'sku_code'=> $item->sku_code ]);
+      $recommendcategory -> save();
+
+      $id = $user_id;
+
+      return redirect()->route('recommendcategory', $id);
+    }
+
+    public function saverecommendcategory(Request $request){
+
+      $user_id = $request->user_id;
+      $recommendcategorys = $request->recommendcategory;
+
+      foreach($recommendcategorys as  $key => $value) {
+        $recommendcategory = RecommendCategory::firstOrNew(['id'=> $key]);
+        $recommendcategory->price = $value['price'];
+        $recommendcategory->end = $value['end'];
+        $recommendcategory->save();
+      }
+
+      $id = $request->user_id;
+      return redirect()->route('recommendcategory', $id);
+    }
+
+    public function removercommendcategory(Request $request){
+      $delete_id = $request->delete;
+      $delete = RecommendCategory::where('id',$delete_id)->first()->delete();
+      $id = $request->user_id;
+      return redirect()->route('recommendcategory', $id);
+    }
 
 
 
@@ -272,6 +351,7 @@ class AdminPageController extends Controller
     $data=[
       'id'=>$id,
       'items'=>$items,
+      'user'=>$user,
       'recommends'=>$recommends,
     ];
     return view('recommend', $data);
@@ -334,6 +414,7 @@ class AdminPageController extends Controller
     $data=[
       'id'=>$id,
       'items'=>$items,
+      'user'=>$user,
       'repeatorders'=>$repeatorders,
     ];
     return view('repeatorder', $data);

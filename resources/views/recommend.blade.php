@@ -7,45 +7,41 @@
   <div class="section-header">
     <h1>担当のおすすめ商品登録</h1>
     <div class="section-header-breadcrumb">
+      @if ( Auth::guard('user')->check() )
+      <div class="breadcrumb-item"><a href="{{ url('/') }}">HOME</a></div>
+      <div class="breadcrumb-item">担当のおすすめ商品</div>
+      @endif
+      @if ( Auth::guard('admin')->check() )
+      <div class="breadcrumb-item active"><a href="{{ url('/admin/home') }}">HOME</a></div>
+      <div class="breadcrumb-item"><a href="{{ url('/admin/user') }}">顧客一覧</a></div>
+      <div class="breadcrumb-item">担当のおすすめ商品登録（{{$user->name}} 様）</a></div>
+      @endif
     </div>
   </div>
   <div class="section-body">
-    <div class="row mt-4">
-      <div class="col-12">
-        <div class="card">
-          <div class="card-body">
-
-            <!-- <ul class="navbar-nav float-left">
-
-
-              <div class="form-group">
-                <select class="custom-select">
-                  <option selected="">全ての取引</option>
-                  <option value="1">交渉中</option>
-                  <option value="2">受注済み</option>
-                  <option value="3">過去受注</option>
-                  <option value="3">キャンセル</option>
-                </select>
+    <div class="invoice">
+      <div class="invoice-print">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="invoice-title">
+              <h3>{{$user->name}} <span class="small">様</span></h3>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-md-6">
+                <address>
+                  <strong>ご連絡先:</strong><br>
+                  {{ $user->tel }}<br>
+                  {{ $user->email }}
+                </address>
               </div>
-
-            </ul> -->
-
-
-            <!-- <div class="float-right">
-              <form>
-                <div class="input-group">
-                  <input type="text" class="form-control" placeholder="検索">
-                  <div class="input-group-append">
-                    <button class="btn btn-primary"><i class="fas fa-search"></i></button>
-                  </div>
-                </div>
-              </form>
-            </div> -->
-
-
-
+            </div>
+          </div>
+        </div>
+        <div class="row mt-4">
+          <div class="col-12">
+            <div class="section-title">担当のおすすめ商品</div>
             <div class="clearfix mb-3"></div>
-
             <form id="saveform" action="{{ url('/admin/user/saverecommend') }}" enctype="multipart/form-data" method="POST" class="form-horizontal">
               @csrf
               <div class="table-responsive">
@@ -61,7 +57,7 @@
                     <th class="text-center">操作</th>
                   </tr>
 
-  		            @foreach($recommends as $recommend)
+    	            @foreach($recommends as $recommend)
                   <tr>
                     <td class="text-center">
                       {{$recommend->item()->item_id}}
@@ -107,6 +103,7 @@
           </div>
         </div>
       </div>
+      <hr>
     </div>
   </div>
 </section>
@@ -124,7 +121,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <h5 class="modal-title" id="exampleModalLabel">商品一覧</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -190,4 +187,15 @@
     </div>
   </div>
 </div>
+<script>
+$('.datepicker').datepicker({
+	format: 'yyyy-mm-dd',
+	autoclose: true,
+	assumeNearbyYear: true,
+	language: 'ja',
+	// startDate: '+2d',
+	endDate: '+31d',
+	defaultViewDate: Date()
+});
+</script>
 @endsection

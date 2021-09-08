@@ -5,7 +5,7 @@
 
 <section class="section">
   <div class="section-header">
-    <h1>リピートオーダー登録</h1>
+    <h1>カテゴリーごとのおすすめ商品登録</h1>
     <div class="section-header-breadcrumb">
       @if ( Auth::guard('user')->check() )
       <div class="breadcrumb-item"><a href="{{ url('/') }}">HOME</a></div>
@@ -13,8 +13,8 @@
       @endif
       @if ( Auth::guard('admin')->check() )
       <div class="breadcrumb-item active"><a href="{{ url('/admin/home') }}">HOME</a></div>
-      <div class="breadcrumb-item"><a href="{{ url('/admin/user') }}">顧客一覧</a></div>
-      <div class="breadcrumb-item">リピートオーダー登録（{{$user->name}} 様）</a></div>
+      <div class="breadcrumb-item"><a href="{{ url('/admin/user') }}">カテゴリーごとのおすすめ商品登録</a></div>
+      <div class="breadcrumb-item">担当のおすすめ商品登録（{{$user->name}} 様）</a></div>
       @endif
     </div>
   </div>
@@ -40,9 +40,9 @@
         </div>
         <div class="row mt-4">
           <div class="col-12">
-            <div class="section-title">リピートオーダー</div>
+            <div class="section-title">担当のおすすめ商品</div>
             <div class="clearfix mb-3"></div>
-            <form id="saveform" action="{{ url('/admin/user/saverepeatorder') }}" enctype="multipart/form-data" method="POST" class="form-horizontal">
+            <form id="saveform" action="{{ url('/admin/user/saverecommend') }}" enctype="multipart/form-data" method="POST" class="form-horizontal">
               @csrf
               <div class="table-responsive">
                 <table class="table table-striped">
@@ -53,88 +53,53 @@
                     <th class="text-center">規格</th>
                     <th class="text-center">単位</th>
                     <th class="text-center">単価</th>
-                    <th class="text-center">次回納品予定日</th>
-                    <th class="text-center">納品曜日</th>
-                    <th class="text-center">有効/無効</th>
+                    <th class="text-center">掲載期限</th>
                     <th class="text-center">操作</th>
                   </tr>
 
-  		            @foreach($repeatorders as $repeatorder)
+    	            @foreach($recommends as $recommend)
                   <tr>
                     <td class="text-center">
-                      {{$repeatorder->item()->item_id}}
+                      {{$recommend->item()->item_id}}
                     </td>
                     <td class="text-center">
-                      {{$repeatorder->item()->item_name}}
+                      {{$recommend->item()->item_name}}
                     </td>
                     <td class="text-center">
-                      {{$repeatorder->item()->sanchi_name}}
+                      {{$recommend->item()->sanchi_name}}
                     </td>
                     <td class="text-center">
-                      {{$repeatorder->item()->kikaku}}
+                      {{$recommend->item()->kikaku}}
                     </td>
                     <td class="text-center">
-                      @if ($repeatorder->item()->tani == 1)
+                      @if ($recommend->item()->tani == 1)
         							ｹｰｽ
-        							@elseif ($repeatorder->item()->tani == 2)
+        							@elseif ($recommend->item()->tani == 2)
         							ﾎﾞｰﾙ
-        							@elseif ($repeatorder->item()->tani == 3)
+        							@elseif ($recommend->item()->tani == 3)
         							ﾊﾞﾗ
-        							@elseif ($repeatorder->item()->tani == 4)
+        							@elseif ($recommend->item()->tani == 4)
         							Kg
         							@endif
                     </td>
                     <td class="text-center" width="150">
-                      <input name="repeatorder[{{$repeatorder->id}}][price]" class="price text-center form-control" value="{{$repeatorder->price}}">
-                    </td>
-                    <td class="text-center" width="160">
-      								<input type="text" name="repeatorder[{{$repeatorder->id}}][nouhin_youbi]" class="nouhin_youbi text-center form-control daterange-cus datepicker" value="{{$repeatorder->nouhin_youbi}}" autocomplete="off">
+                      <input name="recommend[{{$recommend->id}}][price]" class="price text-center form-control" value="{{$recommend->price}}">
                     </td>
                     <td class="text-center" width="150">
-                      <input type="text" name="" class="text-center form-control" value="">
-                    </td>
-                    <td class="text-center" width="150">
-                      <div class="form-group">
-                        <label class="mt-4">
-                          <div class="selectgroup w-100">
-                            <label class="selectgroup-item">
-                              <input type="radio" name="repeatorder[{{$repeatorder->id}}][status]" value="有効" class="selectgroup-input"
-                              @if($repeatorder->status == "有効")
-                              checked
-                              @elseif($repeatorder->status == "")
-                              checked
-                              @else
-                              @endif
-                              >
-                              <span class="selectgroup-button">on</span>
-                            </label>
-                            <label class="selectgroup-item">
-                              <input type="radio" name="repeatorder[{{$repeatorder->id}}][status]" value="無効" class="selectgroup-input"
-                              @if($repeatorder->status == "無効")
-                              checked
-                              @else
-                              @endif
-                              >
-                              <span class="selectgroup-button">off</span>
-                            </label>
-                          </div>
-                          <!-- <input type="checkbox" name="repeatorder[{{$repeatorder->id}}][status]" value="{{$repeatorder->status}}" class="custom-switch-input">
-                          <span class="custom-switch-indicator"></span> -->
-                        </label>
-                      </div>
+                      <input type="text" name="recommend[{{$recommend->id}}][end]" class="nouhin_yoteibi text-center form-control daterange-cus datepicker" value="{{$recommend->end}}">
                     </td>
                     <td class="text-center">
-                      <div class="btn btn-primary delete_button" data-id="{{$repeatorder->id}}"/>削除</div>
+                      <div class="btn btn-primary delete_button" data-id="{{$recommend->id}}"/>削除</div>
                     </td>
                   </tr>
                   @endforeach
 
                 </table>
               </div>
-              <input name="kaiin_number" type="hidden" value="{{$id}}">
+              <input name="user_id" type="hidden" value="{{$id}}">
               <button form="saveform" type="submit" class="btn btn-warning float-right">内容を保存</button>
             </form>
-            <button class="addrepeatorder btn btn-success" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus"></i> 商品を追加</button>
+            <button class="addrecommend btn btn-success" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus"></i> 商品を追加</button>
           </div>
         </div>
       </div>
@@ -144,9 +109,10 @@
 </section>
 
 
-<form id="remove_form" action="{{ url('/admin/user/removerepeatorder') }}" method="POST">
+
+<form id="remove_form" action="{{ url('/admin/user/removercommend') }}" method="POST">
   @csrf
-  <input name="kaiin_number" type="hidden" value="{{$id}}">
+  <input name="user_id" type="hidden" value="{{$id}}">
   <input id="remove_id" name="delete" type="hidden" value="">
 </form>
 
@@ -161,7 +127,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form action="{{ url('/admin/user/addrepeatorder') }}" method="POST" class="form-horizontal">
+        <form action="{{ url('/admin/user/addrecommend') }}" method="POST" class="form-horizontal">
           {{ csrf_field() }}
           <div class="table-responsive">
             <table class="table table-striped">
@@ -205,13 +171,13 @@
                   ¥ {{$item->teika}}
                 </td>
                 <td class="text-center"><input name="quantity" class="quantity form-control" value="1"></td> -->
-                <td class="text-center"><button id="{{$item->id}}" name="item_id" type="submit" value="{{$item->id}}" class="addrepeatorder btn btn-warning">追加</button></td>
+                <td class="text-center"><button id="{{$item->id}}" name="item_id" type="submit" value="{{$item->id}}" class="addrecommend btn btn-warning">追加</button></td>
               </tr>
               @endif
               @endforeach
             </table>
           </div>
-          <input type="hidden" name="kaiin_number" value="{{$id}}" />
+          <input type="hidden" name="user_id" value="{{$id}}" />
         </form>
       </div>
       <!-- <div class="modal-footer">
@@ -221,14 +187,13 @@
     </div>
   </div>
 </div>
-
 <script>
 $('.datepicker').datepicker({
 	format: 'yyyy-mm-dd',
 	autoclose: true,
 	assumeNearbyYear: true,
 	language: 'ja',
-	startDate: '+2d',
+	// startDate: '+2d',
 	endDate: '+31d',
 	defaultViewDate: Date()
 });
