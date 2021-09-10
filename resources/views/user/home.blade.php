@@ -78,16 +78,72 @@
           </div>
           @endif
 
+          @if(!isset($recommendcategories[0]))
+          @else
+          <div class="section-body">
+            <div class="row">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="float-left">
+                      <h2 class="section-title">{{$category_name}}のおすすめ商品</h2>
+                    </div>
+
+                    <div class="clearfix mb-3"></div>
+
+                    <div class="table-responsive">
+                      <table class="table table-striped">
+                        <tr>
+                          <th class="text-center">商品番号</th>
+                          <th class="">商品名</th>
+                          <th class="text-center">産地</th>
+                          <th class="text-center">規格</th>
+                          <th class="text-center">単位</th>
+                          <th class="text-center">在庫数</th>
+                          <th class="text-center">特記事項</th>
+                          <th class="text-center" style="min-width:180px;">操作</th>
+                        </tr>
+
+
+                        @foreach($recommendcategories as $recommendcategory)
+                        @if($recommendcategory->item()->zaikosuu == 0)
+                        @else
+                        <tr>
+                          <td class="text-center">{{$recommendcategory->item()->item_id}}</td>
+                          <td class="">{{$recommendcategory->item()->item_name}}</td>
+                          <td class="text-center">{{$recommendcategory->item()->sanchi_name}}</td>
+                          <td class="text-center">{{$recommendcategory->item()->kikaku}}</td>
+                          <td class="text-center">
+                            @if ($recommendcategory->item()->tani == 1)
+                            ｹｰｽ
+                            @elseif ($recommendcategory->item()->tani == 2)
+                            ﾎﾞｰﾙ
+                            @elseif ($recommendcategory->item()->tani == 3)
+                            ﾊﾞﾗ
+                            @elseif ($recommendcategory->item()->tani == 4)
+                            Kg
+                            @endif
+                          </td>
+                          <td class="text-center">{{$recommendcategory->item()->zaikosuu}}</td>
+                          <td class="text-center">{{$recommendcategory->item()->tokkijikou}}</td>
+
+                          <td class="text-center"><button id="{{$recommendcategory->item()->id}}" class="addcart btn btn-warning">カートに入れる</button></td>
+                        </tr>
+                        @endif
+                        @endforeach
+                      </table>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          @endif
+
 
 
           <div class="section-body">
-
-@if(isset($category_name))
-@else
-
-@endif
-
-
             <div class="row">
               <div class="col-12">
                 <div class="card">
@@ -99,16 +155,17 @@
                       <h2 class="section-title">全ての商品</h2>
                       @endif
                     </div>
-                    <!-- <div class="float-right">
-                      <form>
+                    <div class="float-right">
+                      <form id="saveform" action="{{ url('/') }}" enctype="multipart/form-data" method="POST" class="form-horizontal">
+                        @csrf
                         <div class="input-group">
-                          <input type="text" class="form-control" placeholder="検索">
+                          <input type="text" name="search" class="form-control" placeholder="検索">
                           <div class="input-group-append">
-                            <button class="btn btn-primary"><i class="fas fa-search"></i></button>
+                            <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
                           </div>
                         </div>
                       </form>
-                    </div> -->
+                    </div>
 
                     <div class="clearfix mb-3"></div>
 
@@ -177,27 +234,7 @@
                     <div class="float-right">
                       <nav>
                         <ul class="pagination">
-                          <li class="page-item disabled">
-                            <a class="page-link" href="#" aria-label="Previous">
-                              <span aria-hidden="true">&laquo;</span>
-                              <span class="sr-only">Previous</span>
-                            </a>
-                          </li>
-                          <li class="page-item active">
-                            <a class="page-link" href="#">1</a>
-                          </li>
-                          <!-- <li class="page-item">
-                            <a class="page-link" href="#">2</a>
-                          </li>
-                          <li class="page-item">
-                            <a class="page-link" href="#">3</a>
-                          </li> -->
-                          <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Next">
-                              <span aria-hidden="true">&raquo;</span>
-                              <span class="sr-only">Next</span>
-                            </a>
-                          </li>
+                          {{ $items->links() }}
                         </ul>
                       </nav>
                     </div>

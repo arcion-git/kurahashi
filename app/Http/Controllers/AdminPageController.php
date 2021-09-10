@@ -282,42 +282,38 @@ class AdminPageController extends Controller
     }
 
     public function recommendcategorydetail($id){
-
-      $user = User::where('id',$id)->first();
-      $items = Item::get();
-
-      $recommendcategorys = RecommendCategory::where('user_id',$user->kaiin_number)->get();
+      $category = Category::where('category_id',$id)->first();
+      $items = $category->items()->get();
+      $recommendcategories = RecommendCategory::where('category_id',$id)->get();
       // dd($recommendcategorys);
       $data=[
         'id'=>$id,
         'items'=>$items,
-        'user'=>$user,
-        'recommendcategorys'=>$recommendcategorys,
+        'category'=>$category,
+        'recommendcategories'=>$recommendcategories,
       ];
-      return view('recommendcategory', $data);
+      return view('recommendcategorydetail', $data);
     }
 
 
     public function addrecommendcategory(Request $request){
 
       $item_id = $request->item_id;
-      $user_id = $request->user_id;
-
-      $user = User::where('id',$user_id)->first();
+      $category_id = $request->category_id;
+      $category = Category::where('id',$category_id)->first();
       $item = Item::where('id',$item_id)->first();
-      // dd($user);
 
-      $recommendcategory = RecommendCategory::firstOrNew(['user_id'=> $user->kaiin_number , 'item_id'=> $item->item_id , 'sku_code'=> $item->sku_code ]);
+      $recommendcategory = RecommendCategory::firstOrNew(['category_id'=> $category_id , 'item_id'=> $item->item_id , 'sku_code'=> $item->sku_code ]);
       $recommendcategory -> save();
 
-      $id = $user_id;
+      $id = $category_id;
 
-      return redirect()->route('recommendcategory', $id);
+      return redirect()->route('recommendcategorydetail', $id);
     }
 
     public function saverecommendcategory(Request $request){
 
-      $user_id = $request->user_id;
+      $category_id = $request->category_id;
       $recommendcategorys = $request->recommendcategory;
 
       foreach($recommendcategorys as  $key => $value) {
@@ -327,15 +323,15 @@ class AdminPageController extends Controller
         $recommendcategory->save();
       }
 
-      $id = $request->user_id;
-      return redirect()->route('recommendcategory', $id);
+      $id = $request->category_id;
+      return redirect()->route('recommendcategorydetail', $id);
     }
 
-    public function removercommendcategory(Request $request){
+    public function removerecommendcategory(Request $request){
       $delete_id = $request->delete;
       $delete = RecommendCategory::where('id',$delete_id)->first()->delete();
-      $id = $request->user_id;
-      return redirect()->route('recommendcategory', $id);
+      $id = $request->category_id;
+      return redirect()->route('recommendcategorydetail', $id);
     }
 
 

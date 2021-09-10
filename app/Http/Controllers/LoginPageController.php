@@ -55,6 +55,10 @@ class LoginPageController extends Controller
 
   public function index()
   {
+
+      // $search = $request->search;
+      // dd($search);
+
       $user_id = Auth::guard('user')->user()->id;
       $favorite_categories = FavoriteCategory::where('user_id', $user_id)->first();
 
@@ -65,7 +69,8 @@ class LoginPageController extends Controller
         }
 
 
-      $items = Item::get();
+      $items = Item::where('zaikosuu', '!=', '0')->paginate(20);
+
       $categories = Category::get()->groupBy('bu_ka_name');
 
 
@@ -78,9 +83,8 @@ class LoginPageController extends Controller
       $kaiin_number = Auth::guard('user')->user()->kaiin_number;
 
       $now = Carbon::now()->addDay(3)->format('Y-m-d');
-      $recommends = Recommend::where('user_id', $kaiin_number)->whereDay('end', '>=', $now)->get();
+      $recommends = Recommend::where('user_id', $kaiin_number)->whereDate('end', '>=', $now)->orWhere('end',null)->get();
       // dd($recommends);
-
 
       return view('user/home',
       ['items' => $items ,
@@ -123,11 +127,7 @@ class LoginPageController extends Controller
   public function category($id)
   {
 
-
-
-
       $category = Category::find($id);
-
 
       // $category_items = CategoryItem::where('category_id',$id)->get();
       // dd($category_items);
@@ -144,7 +144,12 @@ class LoginPageController extends Controller
       $favorite_categories = FavoriteCategory::where('user_id', $user_id)->get();
       $carts =  Cart::where('user_id',$user_id)->get();
 
-      return view('user/home', ['items' => $items , 'carts' => $carts , 'categories' => $categories ,  'category_name' => $category_name ,'favorite_categories' => $favorite_categories]);
+      $now = Carbon::now()->addDay(3)->format('Y-m-d');
+      $recommendcategories = RecommendCategory::where('category_id', $category->category_id)->whereDate('end', '>=', $now)->orWhere('end',null)->get();
+      // dd($recommendcategories);
+
+
+      return view('user/home', ['items' => $items , 'carts' => $carts , 'categories' => $categories ,  'category_name' => $category_name ,'favorite_categories' => $favorite_categories ,'recommendcategories' => $recommendcategories]);
   }
 
 

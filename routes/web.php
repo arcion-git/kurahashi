@@ -80,11 +80,11 @@
   Route::get('/admin/user/deal/{id}', 'AdminPageController@userdeal')->name('admin.user.deal');
 
   // カテゴリのおすすめ編集
-  Route::get('/admin/recommendcategory', 'AdminPageController@recommendcategory')->name('admin.recommendcategory');
-  Route::get('/admin/recommendcategory/{id}', 'AdminPageController@recommendcategorydetail')->name('admin.recommendcategorydetail');
-  Route::post('/admin/user/addrecommendcategory', 'AdminPageController@addrecommendcategory');
-  Route::post('/admin/user/saverecommendcategory', 'AdminPageController@saverecommendcategory');
-  Route::post('/admin/user/removerecommendcategory', 'AdminPageController@removerecommendcategory');
+  Route::get('/admin/recommendcategory', 'AdminPageController@recommendcategory')->name('recommendcategory');
+  Route::get('/admin/recommendcategory/{id}', 'AdminPageController@recommendcategorydetail')->name('recommendcategorydetail');
+  Route::post('/admin/addrecommendcategory', 'AdminPageController@addrecommendcategory');
+  Route::post('/admin/saverecommendcategory', 'AdminPageController@saverecommendcategory');
+  Route::post('/admin/removerecommendcategory', 'AdminPageController@removerecommendcategory');
 
   // 担当のおすすめポスト
   Route::get('/admin/user/recommend/{id}', 'AdminPageController@userrecommend')->name('recommend');
