@@ -3121,3 +3121,20 @@ a:not(.btn-social-icon):not(.btn-social):not(.page-link) .ion, a:not(.btn-social
     margin: 1.75rem auto;
 }
 }
+
+
+.search-element{
+    display: flex;
+}
+.search-element select {
+    width: 100px;
+    background-color: #e5e5e5;
+    border: none;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+    padding-left: 10px;
+}
+.navbar .form-inline input.form-control {
+    border-radius: 0px;
+    border: none;
+}

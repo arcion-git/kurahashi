@@ -155,7 +155,7 @@
                       <h2 class="section-title">全ての商品</h2>
                       @endif
                     </div>
-                    <div class="float-right">
+                    <!-- <div class="float-right">
                       <form id="saveform" action="{{ url('/') }}" enctype="multipart/form-data" method="POST" class="form-horizontal">
                         @csrf
                         <div class="input-group">
@@ -165,7 +165,7 @@
                           </div>
                         </div>
                       </form>
-                    </div>
+                    </div> -->
 
                     <div class="clearfix mb-3"></div>
 

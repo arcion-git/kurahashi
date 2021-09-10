@@ -69,7 +69,7 @@ class LoginPageController extends Controller
         }
 
 
-      $items = Item::where('zaikosuu', '!=', '0')->paginate(20);
+      $items = Item::where('zaikosuu', '!=', '0')->paginate(30);
 
       $categories = Category::get()->groupBy('bu_ka_name');
 
@@ -94,6 +94,52 @@ class LoginPageController extends Controller
        'recommends' => $recommends,
       ]);
   }
+
+
+
+
+    public function search(Request $request)
+    {
+
+        $search = $request->search;
+
+        $user_id = Auth::guard('user')->user()->id;
+        $favorite_categories = FavoriteCategory::where('user_id', $user_id)->first();
+
+          if ($favorite_categories === null) {
+            $categories = Category::get();
+            $categories = $categories->groupBy('bu_ka_name');
+            return view('user/auth/questionnaire', ['categories' => $categories]);
+          }
+
+
+        $items = Item::where('zaikosuu', '!=', '0')->Where('item_id',$search)->orWhere('item_name','like', "%$search%")->paginate(30);
+
+        $categories = Category::get()->groupBy('bu_ka_name');
+
+
+        $user_id = Auth::guard('user')->user()->id;
+
+        $favorite_categories = FavoriteCategory::where('user_id', $user_id)->get();
+
+        $carts =  Cart::where('user_id',$user_id)->get();
+
+        $kaiin_number = Auth::guard('user')->user()->kaiin_number;
+
+        $now = Carbon::now()->addDay(3)->format('Y-m-d');
+        $recommends = Recommend::where('user_id', $kaiin_number)->whereDate('end', '>=', $now)->orWhere('end',null)->get();
+        // dd($recommends);
+
+        return view('user/auth/search',
+        ['items' => $items ,
+         'carts' => $carts ,
+         'categories' => $categories ,
+         'favorite_categories' => $favorite_categories,
+         'recommends' => $recommends,
+         'search' => $search,
+        ]);
+    }
+
 
 
   public function PostFavoriteCategory(Request $request){
@@ -135,7 +181,7 @@ class LoginPageController extends Controller
 
       // $items = Tag::first()->items()->get();
 
-      $items = Category::find($id)->items()->get();
+      $items = Category::find($id)->items()->paginate(30);
 
 
       $categories = Category::get()->groupBy('bu_ka_name');
