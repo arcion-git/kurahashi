@@ -35,6 +35,7 @@
 
   // Ajax POST&GET（ユーザー側）
   Route::post('/dealorder', 'LoginPageController@dealorder');
+  Route::get('/search', 'LoginPageController@search');
   Route::post('/search', 'LoginPageController@search');
 
   // Ajax POST&GET（管理者側）

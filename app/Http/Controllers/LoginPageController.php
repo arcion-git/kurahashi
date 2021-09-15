@@ -103,32 +103,42 @@ class LoginPageController extends Controller
 
         $search = $request->search;
 
+
         $user_id = Auth::guard('user')->user()->id;
         $favorite_categories = FavoriteCategory::where('user_id', $user_id)->first();
 
-          if ($favorite_categories === null) {
-            $categories = Category::get();
-            $categories = $categories->groupBy('bu_ka_name');
-            return view('user/auth/questionnaire', ['categories' => $categories]);
-          }
+        if ($favorite_categories === null) {
+          $categories = Category::get();
+          $categories = $categories->groupBy('bu_ka_name');
+          return view('user/auth/questionnaire', ['categories' => $categories]);
+        }
 
+        $cat = $request->cat;
+        if($cat == -1){
+          $items = Item::where('zaikosuu', '!=', '0')->Where('item_id',$search)->orWhere('item_name','like', "%$search%")->paginate(30);
+          $search_category = null;
+        }elseif(is_numeric($cat)){
+          $cat_id = $request->cat;
+          $search_category = Category::where('category_id',$cat_id)->first();
+          $items = $search_category->items()->Where('item_name','like', "%$search%")->where('zaikosuu', '!=', '0')->paginate(30);
+        }else{
+          // dd($cat);
+          $search_category = Category::where('bu_ka_name',$cat)->get();
+          // dd($search_category);
+          $items = $search_category->items()->Where('item_name','like', "%$search%")->where('zaikosuu', '!=', '0')->paginate(30);
+          dd($items);
+        }
 
-        $items = Item::where('zaikosuu', '!=', '0')->Where('item_id',$search)->orWhere('item_name','like', "%$search%")->paginate(30);
 
         $categories = Category::get()->groupBy('bu_ka_name');
 
-
         $user_id = Auth::guard('user')->user()->id;
-
         $favorite_categories = FavoriteCategory::where('user_id', $user_id)->get();
-
         $carts =  Cart::where('user_id',$user_id)->get();
-
         $kaiin_number = Auth::guard('user')->user()->kaiin_number;
-
         $now = Carbon::now()->addDay(3)->format('Y-m-d');
         $recommends = Recommend::where('user_id', $kaiin_number)->whereDate('end', '>=', $now)->orWhere('end',null)->get();
-        // dd($recommends);
+        // dd($categories);
 
         return view('user/auth/search',
         ['items' => $items ,
@@ -137,6 +147,7 @@ class LoginPageController extends Controller
          'favorite_categories' => $favorite_categories,
          'recommends' => $recommends,
          'search' => $search,
+         'search_category' => $search_category,
         ]);
     }
 

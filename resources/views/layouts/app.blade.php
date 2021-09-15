@@ -61,14 +61,15 @@
           <div class="search-element">
 
 			      <select name="cat" id="cat" class="postform">
+              @if(isset($search_category))<option value="{{$search_category->category_id}}">{{$search_category->category_name}}</option>@endif
             	<option value="-1">すべて</option>
                 @foreach($categories as $key=>$vals)
                 <option class="level-0" value="{{$key}}">{{$key}}</option>
                     @foreach($vals as $val)
-                          @if($val->items->count() == 0)
-                          @else
-                          <option class="level-1" value="{{$val->category_id}}">&nbsp;&nbsp;&nbsp;{{ $val->category_name }} （{{ $val->items->count() }}）</option>
-                          @endif
+                      @if($val->items->count() == 0)
+                      @else
+                      <option class="level-1" value="{{$val->category_id}}">&nbsp;&nbsp;&nbsp;{{ $val->category_name }} （{{ $val->items->count() }}）</option>
+                      @endif
                     @endforeach
                   </ul>
                 </li>

@@ -70,7 +70,7 @@
                     <div class="float-right">
                       <nav>
                         <ul class="pagination">
-                          {{ $items->links() }}
+                          {{ $items->appends(request()->input())->links() }}
                         </ul>
                       </nav>
                     </div>
