@@ -396,16 +396,16 @@ class DatabaseSeeder extends Seeder
 
 for ($i = 1; $i <= 30; $i++) {
 
-      \DB::table("users")->insert([
-        'kaiin_number'           => $i,
-        'name'           => '山田太郎'.$i,
-        'name_kana'       => 'ヤマダタロウ',
-        'tel'                  => '08012345678',
-        'email'                => 'sample'.$i.'@gmail.com' ,
-        'password'             => \Hash::make('secret') ,
-        'created_at' => new DateTime(),
-        'updated_at' => new DateTime(),
-      ]);
+      // \DB::table("users")->insert([
+      //   'kaiin_number'           => $i,
+      //   'name'           => '山田太郎'.$i,
+      //   'name_kana'       => 'ヤマダタロウ',
+      //   'tel'                  => '08012345678',
+      //   'email'                => 'sample'.$i.'@gmail.com' ,
+      //   'password'             => \Hash::make('secret') ,
+      //   'created_at' => new DateTime(),
+      //   'updated_at' => new DateTime(),
+      // ]);
 
 
       // \DB::table("items")->insert([

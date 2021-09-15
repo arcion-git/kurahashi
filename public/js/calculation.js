@@ -10,13 +10,10 @@ $(function() {
 
   // カートに追加
   $(document).on("click", ".addcart", function() {
-
     var item_id = $(this).get(0).id;
     var quantity = $(this).parent().parent().find('.quantity').val();
-
     console.log(item_id);
     console.log(quantity);
-
     $.ajax({
         headers: {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -26,13 +23,11 @@ $(function() {
         data: {
           'item_id': item_id,
           'quantity': quantity,
-        } //Laravelに渡すデータ
+        }
       })
-      // Ajaxリクエスト成功時の処理
       .done(function(data) {
         console.log(data);
       })
-      // Ajaxリクエスト失敗時の処理
       .fail(function(jqXHR, textStatus, errorThrown) {
         alert('ユーザーに紐づく得意先店舗がありません');
         console.log("ajax通信に失敗しました");
@@ -214,26 +209,26 @@ if(document.URL.match("/admin/deal")) {
 
 
   // オーダー内容を取得する関数
-  function order_update() {
-      $.ajax({
-          type: "GET", // GETメソッドで通信
-          url: location.origin + '/order',
-          cache: false, // キャッシュしないで読み込み
-          // 通信成功時に呼び出されるコールバック
-          success: function (data) {
-                $('#order').html(data);
-          },
-          // 通信エラー時に呼び出されるコールバック
-          error: function () {
-              alert("オーダー内容をアップデートできません。");
-          }
-      });
-    }
+    function order_update() {
+        $.ajax({
+            type: "GET", // GETメソッドで通信
+            url: location.origin + '/order',
+            cache: false, // キャッシュしないで読み込み
+            // 通信成功時に呼び出されるコールバック
+            success: function (data) {
+                  $('#order').html(data);
+            },
+            // 通信エラー時に呼び出されるコールバック
+            error: function () {
+                alert("オーダー内容をアップデートできません。");
+            }
+        });
+      }
 
-  // 個数入力画面を開いたらオーダー内容を取得
-  $(document).ready( function(){
-  setTimeout(order_update);
-  });
+    // 個数入力画面を開いたらオーダー内容を取得
+    $(document).ready( function(){
+    setTimeout(order_update);
+    });
 
 
   // 配送先を追加

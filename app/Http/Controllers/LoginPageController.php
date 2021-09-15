@@ -117,18 +117,17 @@ class LoginPageController extends Controller
         if($cat == -1){
           $items = Item::where('zaikosuu', '!=', '0')->Where('item_id',$search)->orWhere('item_name','like', "%$search%")->paginate(30);
           $search_category = null;
+          $search_category_parent = null;
         }elseif(is_numeric($cat)){
           $cat_id = $request->cat;
           $search_category = Category::where('category_id',$cat_id)->first();
           $items = $search_category->items()->Where('item_name','like', "%$search%")->where('zaikosuu', '!=', '0')->paginate(30);
+          $search_category_parent = null;
         }else{
-          // dd($cat);
-          $search_category = Category::where('bu_ka_name',$cat)->get();
-          // dd($search_category);
-          $items = $search_category->items()->Where('item_name','like', "%$search%")->where('zaikosuu', '!=', '0')->paginate(30);
-          dd($items);
+          $items = Item::Where('busho_name',$cat)->Where('item_name','like', "%$search%")->paginate(30);
+          $search_category = null;
+          $search_category_parent = $cat;
         }
-
 
         $categories = Category::get()->groupBy('bu_ka_name');
 
@@ -148,6 +147,7 @@ class LoginPageController extends Controller
          'recommends' => $recommends,
          'search' => $search,
          'search_category' => $search_category,
+         'search_category_parent' => $search_category_parent,
         ]);
     }
 
@@ -224,8 +224,12 @@ class LoginPageController extends Controller
     // dd($store_user);
     $store = Store::where([ 'tokuisaki_id'=> $store_user->tokuisaki_id,'store_id'=> $store_user->store_id ])->first();
     // dd($store);
-    $price_groupe = $store->price_groupe();
+
+    $price_groupe = PriceGroupe::where([ 'tokuisaki_id'=> $store_user->tokuisaki_id,'store_id'=> $store_user->store_id ])->first();
     // dd($price_groupe->price_groupe);
+    // $price_groupe = $store->price_groupe();
+
+    // dd($item);
     // dd($item->sku_code);
     $price = Price::where(['price_groupe'=>$price_groupe->price_groupe, 'item_id'=> $item->item_id , 'sku_code'=> $item->sku_code])->first();
  // dd($price);
@@ -347,7 +351,19 @@ class LoginPageController extends Controller
     $store_name = $request->store_name;
     $tokuisaki_name = $request->tokuisaki_name;
 
-    $order=Order::where(['id'=> $order_id])->update(['store_name'=> $store_name,'tokuisaki_name'=> $tokuisaki_name]);
+
+    $store = Store::where([ 'tokuisaki_name'=> $tokuisaki_name,'store_name'=> $store_name ])->first();
+    $price_groupe = PriceGroupe::where([ 'tokuisaki_id'=> $store->tokuisaki_id,'store_id'=> $store->store_id ])->first();
+
+
+    $order = Order::where(['id'=> $order_id])->first();
+    $cart_id = $order->cart_id;
+    $cart = Cart::where(['id'=> $cart_id])->first();
+    $item = Item::where('id',$cart->item_id)->first();
+
+    $price = Price::where(['price_groupe'=>$price_groupe->price_groupe, 'item_id'=> $item->item_id , 'sku_code'=> $item->sku_code])->first();
+
+    $order=Order::where(['id'=> $order_id])->update(['store_name'=> $store_name,'tokuisaki_name'=> $tokuisaki_name,'price'=> $price->price]);
 
     $data = "sucsess";
     return redirect()->route('home',$data);

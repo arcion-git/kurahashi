@@ -46,25 +46,27 @@
                         @if($recommend->item()->zaikosuu == 0)
                         @else
                         <tr>
-                          <td class="text-center">{{$recommend->item()->item_id}}</td>
-                          <td class="">{{$recommend->item()->item_name}}</td>
-                          <td class="text-center">{{$recommend->item()->sanchi_name}}</td>
-                          <td class="text-center">{{$recommend->item()->kikaku}}</td>
-                          <td class="text-center">
-                            @if ($recommend->item()->tani == 1)
-                            ｹｰｽ
-                            @elseif ($recommend->item()->tani == 2)
-                            ﾎﾞｰﾙ
-                            @elseif ($recommend->item()->tani == 3)
-                            ﾊﾞﾗ
-                            @elseif ($recommend->item()->tani == 4)
-                            Kg
-                            @endif
-                          </td>
-                          <td class="text-center">{{$recommend->item()->zaikosuu}}</td>
-                          <td class="text-center">{{$recommend->item()->tokkijikou}}</td>
-
-                          <td class="text-center"><button id="{{$recommend->item()->id}}" class="addcart btn btn-warning">カートに入れる</button></td>
+                          <form class="form-horizontal" role="form" method="POST" action="{{ url('/addcart') }}">
+                            @csrf
+                            <td class="text-center">{{$recommend->item()->item_id}}</td>
+                            <td class="">{{$recommend->item()->item_name}}</td>
+                            <td class="text-center">{{$recommend->item()->sanchi_name}}</td>
+                            <td class="text-center">{{$recommend->item()->kikaku}}</td>
+                            <td class="text-center">
+                              @if ($recommend->item()->tani == 1)
+                              ｹｰｽ
+                              @elseif ($recommend->item()->tani == 2)
+                              ﾎﾞｰﾙ
+                              @elseif ($recommend->item()->tani == 3)
+                              ﾊﾞﾗ
+                              @elseif ($recommend->item()->tani == 4)
+                              Kg
+                              @endif
+                            </td>
+                            <td class="text-center">{{$recommend->item()->zaikosuu}}</td>
+                            <td class="text-center">{{$recommend->item()->tokkijikou}}</td>
+                            <td class="text-center"><button name="item_id" value="" id="{{$recommend->item()->id}}" class="addcart btn btn-warning">カートに入れる</button></td>
+                          </form>
                         </tr>
                         @endif
                         @endforeach
@@ -187,35 +189,29 @@
 
 
                         @foreach($items as $item)
-                        @if($item->zaikosuu == 0)
-                        @else
                         <tr>
-                          <td class="text-center">{{$item->item_id}}</td>
-                          <td class="">{{$item->item_name}}</td>
-                          <td class="text-center">{{$item->sanchi_name}}</td>
-                          <td class="text-center">{{$item->kikaku}}</td>
-                          <td class="text-center">
-                            @if ($item->tani == 1)
-                            ｹｰｽ
-                            @elseif ($item->tani == 2)
-                            ﾎﾞｰﾙ
-                            @elseif ($item->tani == 3)
-                            ﾊﾞﾗ
-                            @elseif ($item->tani == 4)
-                            Kg
-                            @endif
-                          </td>
-                          <td class="text-center">{{$item->zaikosuu}}</td>
-                          <td class="text-center">{{$item->tokkijikou}}</td>
-
-                          <!-- <td class="text-center">{{$item->nouhin_yoteibi_start}}</td>
-                          <td class="text-center">
-                            ¥ {{$item->teika}}
-                          </td>
-                          <td class="text-center"><input name="quantity" class="quantity form-control" value="1"></td> -->
-                          <td class="text-center"><button id="{{$item->id}}" class="addcart btn btn-warning">カートに入れる</button></td>
+                          <!-- <form class="form-horizontal" role="form" method="POST" action="{{ url('/addcart') }}">
+                            @csrf -->
+                            <td class="text-center">{{$item->item_id}}</td>
+                            <td class="">{{$item->item_name}}</td>
+                            <td class="text-center">{{$item->sanchi_name}}</td>
+                            <td class="text-center">{{$item->kikaku}}</td>
+                            <td class="text-center">
+                              @if ($item->tani == 1)
+                              ｹｰｽ
+                              @elseif ($item->tani == 2)
+                              ﾎﾞｰﾙ
+                              @elseif ($item->tani == 3)
+                              ﾊﾞﾗ
+                              @elseif ($item->tani == 4)
+                              Kg
+                              @endif
+                            </td>
+                            <td class="text-center">{{$item->zaikosuu}}</td>
+                            <td class="text-center">{{$item->tokkijikou}}</td>
+                            <td class="text-center"><button name="item_id" value="{{$item->id}}" id="{{$item->id}}" class="addcart btn btn-warning">カートに入れる</button></td>
+                          <!-- </form> -->
                         </tr>
-                        @endif
                         @endforeach
                       </table>
                     </div>
