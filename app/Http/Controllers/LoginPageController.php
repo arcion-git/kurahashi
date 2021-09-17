@@ -69,7 +69,7 @@ class LoginPageController extends Controller
         }
 
 
-      $items = Item::where('zaikosuu', '!=', '0')->paginate(30);
+      $items = Item::where('zaikosuu', '!=', '0.00')->paginate(30);
 
       $categories = Category::get()->groupBy('bu_ka_name');
 
@@ -578,8 +578,9 @@ class LoginPageController extends Controller
     $item_ids = $data['item_id'];
     // $quantitys = $data['quantity'];
 
-    $deal = Deal::create(['user_id'=> $user_id]);
+    $deal = Deal::create(['user_id'=> $user_id, 'memo'=> $request->memo]);
     $deal_id = $deal->id;
+
 
     foreach($item_ids as $key => $input) {
       $cart = Cart::firstOrNew(['user_id'=> $user_id , 'item_id'=> $item_ids[$key], 'deal_id'=> null]);
@@ -601,6 +602,7 @@ class LoginPageController extends Controller
     $deal=Deal::firstOrNew(['id'=> $deal_id]);
     $deal->success_flg = True;
     $deal->success_time = Carbon::now();
+    $deal->memo = $request->memo;
     $deal->save();
 
     // foreach($item_ids as $key => $input) {

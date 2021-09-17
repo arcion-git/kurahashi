@@ -8,6 +8,7 @@ class Deal extends Model
 {
   protected $fillable = [
     'user_id',
+    'memo',
     'success_flg',
   ];
   public function user() {

@@ -25,7 +25,7 @@
       <div class="invoice">
         <div class="invoice-print">
 
-          <form action="{{ url('/adddeal') }}" method="POST" class="form-horizontal">
+          <form action="{{ url('/addniniorder') }}" method="POST" class="form-horizontal">
             {{ csrf_field() }}
             <div class="row mt-4 order">
               <div class="col-md-12">
@@ -39,7 +39,7 @@
               <div class="col-md-4">
                 <div class="section-title">通信欄</div>
                 <div class="col-md-12">
-                    <textarea style="height:200px;" rows="10" class="form-control selectric"></textarea>
+                    <textarea style="height:200px;" name="memo" rows="10" class="form-control selectric"></textarea>
                 </div>
               </div>
               <div class="col-md-8">
@@ -54,18 +54,18 @@
                       <th class="text-center">納品予定日</th>
                       <th class="text-center">操作</th>
                     </tr>
-                    <tr>
+                    <!-- <tr>
                         <td class="teika">
                           <input name="nini_item_name[]" class="text-center form-control" value=" ハマグリ 4kg 天然"></td>
                         <td class="text-center">
                           <select name="nini_tantou[]" class="text-center form-control" value="1">
-                            <option value="サンプル1">鮮魚</option>
-                            <option value="サンプル2">青物</option>
-                            <option value="サンプル3">太物</option>
-                            <option value="サンプル1">近海</option>
-                            <option value="サンプル2">特殊</option>
-                            <option value="サンプル3">養魚</option>
-                            <option value="サンプル3">水産</option>
+                            <option value="鮮魚">鮮魚</option>
+                            <option value="青物">青物</option>
+                            <option value="太物">太物</option>
+                            <option value="近海">近海</option>
+                            <option value="特殊">特殊</option>
+                            <option value="養魚">養魚</option>
+                            <option value="水産">水産</option>
                           </select>
                         </td>
 
@@ -93,13 +93,16 @@
                           <button id="" class="btn btn-success" style="margin-top:20px;">配送先を追加</button>
                         <input type="hidden" value="" />
                         </td>
-                    </tr>
+                    </tr> -->
                   </table>
-
-                  <button style="min-width:200px;" id="" class="removecart btn btn-success"><i class="fas fa-plus"></i> 任意の商品を追加</button>
+                  <form action="{{ url('/addniniorder') }}" method="POST" class="form-horizontal">
+                    {{ csrf_field() }}
+                    <button style="min-width:200px;" id="" class="addniniorder btn btn-success"><i class="fas fa-plus"></i> 任意の商品を追加</button>
+                  </form>
                 </div>
               </div>
             </div>
+
 
 
             <div class="row mt-4">
@@ -131,7 +134,7 @@
                 <button type="submit" class="btn btn-warning">この内容で問い合わせる</button>
             </div>
 
-          </form>
+
           <br style="clear:both;" />
 
         </div>
