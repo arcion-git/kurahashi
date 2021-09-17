@@ -87,24 +87,24 @@
     <div class="table-responsive">
       <table class="table table-striped table-hover table-md">
         <tbody><tr>
-          <th width="" class="text-center">商品名</th>
-          <th width="200px" class="text-center">担当</th>
-          <th width="180px" class="text-center">納品先店舗</th>
+          <th width="200px" class="text-center">商品名</th>
+          <th width="140px" class="text-center">担当</th>
+          <th width="100px" class="text-center">納品先店舗</th>
           <th width="100px" class="text-center">数量（単位）</th>
-          <th width="120px" class="text-center">納品予定日</th>
+          <th width="60px" class="text-center">納品予定日</th>
           <th width="80px" class="text-center">操作</th>
         </tr>
 				@foreach($cart_ninis as $cart_nini)
-				<tr id="{{$cart->id}}">
-					<input name="item_id[]" type="hidden" value="{{$cart_nini->id}}" />
-					<td class="cartid_{$cart_nini->id}}">
+				<tr width="680px" id="{{$cart_nini->id}}">
+					<input name="cart_nini_id[]" type="hidden" value="{{$cart_nini->id}}" />
+					<td width="200px" class="cart_nini_id_{$cart_nini->id}}">
 						<input name="nini_item_name[]" class="nini_item_name text-center form-control" value="{{$cart_nini->item_name}}">
 					</td>
 					<td width="200px" colspan="5" class="order-table">
 						<table class="table table-striped table-hover table-md">
 						@foreach($cart_nini->order_ninis as $val)
 							<tr id="{{$val->id}}">
-								<td width="120px" class="text-center">
+								<td width="200px" class="text-center">
 									<select name="nini_tantou[]" class="nini_tantou text-center form-control" value="1">
 										<option value="鮮魚">鮮魚</option>
 										<option value="青物">青物</option>
@@ -132,9 +132,8 @@
 								</td>
 								<td width="80px" class="total text-center"></td>
 								<td width="140px" class="text-center">
-									<button type="button" id="{{$val->id}}" class="removeid_{{$val->id}} removeorder btn btn-info">削除</button>
-									<button style="margin-top:10px;" type="button" id="{{$cart->item->id}}" class="cloneid_{{$cart->item->id}} clonecart btn btn-success">配送先を追加</button>
-								<input name="order_id[]" class="order_id" type="hidden" value="{{$val->id}}" />
+									<button type="button" id="{{$val->id}}" class="removeid_{{$val->id}} removeordernini btn btn-info">削除</button>
+									<button style="margin-top:10px;" type="button" id="{{$cart_nini->id}}" class="cloneid_{{$cart_nini->id}} addordernini btn btn-success">配送先を追加</button>
 								</td>
 							</tr>
 						@endforeach

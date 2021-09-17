@@ -45,10 +45,12 @@
   Route::post('/addcart', 'LoginPageController@addcart');
   Route::post('/removecart', 'LoginPageController@removecart');
   Route::post('/removeorder', 'LoginPageController@removeorder');
+  Route::post('/removeordernini', 'LoginPageController@removeordernini');
   Route::post('/change_quantity', 'LoginPageController@change_quantity');
   Route::post('/change_nouhin_yoteibi', 'LoginPageController@change_nouhin_yoteibi');
   Route::post('/change_store', 'LoginPageController@change_store');
   Route::post('/clonecart', 'LoginPageController@clonecart');
+  Route::post('/addordernini', 'LoginPageController@addordernini');
   Route::post('/updatecart', 'LoginPageController@updatecart');
   Route::post('/updateorder', 'LoginPageController@updateorder');
 

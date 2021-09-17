@@ -266,6 +266,39 @@ if(document.URL.match("/admin/deal")) {
   });
 
 
+  // 任意の配送先を追加
+  $(document).on("click", ".addordernini", function() {
+    var cart_nini_id = $(this).get(0).id;
+    console.log(cart_nini_id);
+    // $(this).parent().parent().clone(true).insertAfter($(this).parent().parent());
+
+      $.ajax({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }, //Headersを書き忘れるとエラーになる
+        url: location.origin + '/addordernini',
+        type: 'POST', //リクエストタイプ
+        data: {
+          'cart_nini_id': cart_nini_id,
+        } //Laravelに渡すデータ
+      })
+      // Ajaxリクエスト成功時の処理
+      .done(function(data) {
+        console.log(data);
+      })
+      // Ajaxリクエスト失敗時の処理
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        alert('配送先を追加できません。');
+        console.log("ajax通信に失敗しました");
+        console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+        console.log("textStatus     : " + textStatus);
+        console.log("errorThrown    : " + errorThrown.message);
+      });
+      setTimeout(order_update);
+      setTimeout(dealorder_update);
+  });
+
+
   // 任意の商品を追加
   $(document).on("click", ".addniniorder", function() {
     // var deal_id = $(this).parent().parent().parent().parent().parent().parent().get(0).id;
@@ -334,6 +367,43 @@ if(document.URL.match("/admin/deal")) {
       setTimeout(dealorder_update);
   });
 
+
+
+
+    // 任意の商品をカートから削除
+    $(document).on("click", ".removeordernini", function() {
+      var order_nini_id = $(this).get(0).id;
+      var cart_nini_id = $(this).parent().parent().parent().parent().parent().parent().get(0).id;
+
+      // $(this).parent().parent().remove();
+      console.log(order_nini_id);
+      console.log(cart_nini_id);
+      $.ajax({
+          headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }, //Headersを書き忘れるとエラーになる
+          url: location.origin + '/removeordernini',
+          type: 'POST', //リクエストタイプ
+          data: {
+            'order_nini_id': order_nini_id,
+            'cart_nini_id': cart_nini_id,
+          } //Laravelに渡すデータ
+        })
+        // Ajaxリクエスト成功時の処理
+        .done(function(data) {
+          // console.log(data);
+        })
+        // Ajaxリクエスト失敗時の処理
+        .fail(function(jqXHR, textStatus, errorThrown) {
+          alert('カートから削除できませんでした。');
+          console.log("ajax通信に失敗しました");
+          console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+          console.log("textStatus     : " + textStatus);
+          console.log("errorThrown    : " + errorThrown.message);
+        });
+        setTimeout(order_update);
+        setTimeout(dealorder_update);
+    });
 
 
 

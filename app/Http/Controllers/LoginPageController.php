@@ -301,25 +301,26 @@ class LoginPageController extends Controller
 
 
 
-
+// 商品の配送先を追加
   public function removecart(Request $request){
     $cart_id = $request->cart_id;
     $delete_cart = Cart::where(['id'=> $cart_id])->first()->delete();
-    $delete_order = Order::where(['cart_id'=> $cart_id])->first()->delete();
+    $delete_order = Order::where(['cart_id'=> $cart_id])->delete();
     $data = "sucsess";
     return redirect()->route('home',$data);
   }
 
 
-  public function removeorder(Request $request){
-    $order_id = $request->order_id;
-    $cart_id = $request->cart_id;
+// 任意の商品の配送先を追加
+  public function removeordernini(Request $request){
+    $order_nini_id = $request->order_nini_id;
+    $cart_nini_id = $request->cart_nini_id;
 
-    $delete_order=Order::where(['id'=> $order_id])->first()->delete();
+    $delete_order=OrderNini::where(['id'=> $order_nini_id])->first()->delete();
 
-    $orders=Order::where(['cart_id'=> $cart_id])->first();
+    $orders=OrderNini::where(['cart_nini_id'=> $cart_nini_id])->first();
     if(empty($orders)){
-    $delete_cart=Cart::where(['id'=> $cart_id])->first()->delete();
+    $delete_cart=CartNini::where(['id'=> $cart_nini_id])->first()->delete();
     }
 
     $data = "sucsess";
@@ -388,6 +389,13 @@ class LoginPageController extends Controller
     return redirect()->route('home',$data);
   }
 
+  public function addordernini(Request $request){
+    $user_id = Auth::guard('user')->user()->id;
+    $cart_nini_id = $request->cart_nini_id;
+    $order=OrderNini::Create(['cart_nini_id'=> $cart_nini_id , 'tokuisaki_name'=>'------' , 'nouhin_yoteibi'=> '', 'quantity'=> 1]);
+    $data = "sucsess";
+    return redirect()->route('home',$data);
+  }
 
 
   public function cart(){
