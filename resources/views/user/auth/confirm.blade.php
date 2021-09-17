@@ -97,7 +97,7 @@
                   </table>
                   <form action="{{ url('/addniniorder') }}" method="POST" class="form-horizontal">
                     {{ csrf_field() }}
-                    <button style="min-width:200px;" id="" class="addniniorder btn btn-success"><i class="fas fa-plus"></i> 任意の商品を追加</button>
+                    <button style="min-width:200px;" type="submit" name="" id="" class="addniniorder btn btn-success"><i class="fas fa-plus"></i> 任意の商品を追加</button>
                   </form>
                 </div>
               </div>
