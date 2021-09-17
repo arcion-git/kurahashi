@@ -266,6 +266,39 @@ if(document.URL.match("/admin/deal")) {
   });
 
 
+  // 任意の商品を追加
+  $(document).on("click", ".addniniorder", function() {
+    // var deal_id = $(this).parent().parent().parent().parent().parent().parent().get(0).id;
+    // console.log(deal_id);
+    // $(this).parent().parent().clone(true).insertAfter($(this).parent().parent());
+
+      $.ajax({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }, //Headersを書き忘れるとエラーになる
+        url: location.origin + '/addniniorder',
+        type: 'POST', //リクエストタイプ
+        data: {
+        } //Laravelに渡すデータ
+      })
+      // Ajaxリクエスト成功時の処理
+      .done(function(data) {
+        console.log(data);
+      })
+      // Ajaxリクエスト失敗時の処理
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        alert('配送先を追加できません。');
+        console.log("ajax通信に失敗しました");
+        console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+        console.log("textStatus     : " + textStatus);
+        console.log("errorThrown    : " + errorThrown.message);
+      });
+      setTimeout(order_update);
+      setTimeout(dealorder_update);
+  });
+
+
+
   // 確認画面カートから削除
   $(document).on("click", ".removeorder", function() {
     var order_id = $(this).get(0).id;

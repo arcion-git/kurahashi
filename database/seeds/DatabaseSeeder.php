@@ -394,7 +394,7 @@ class DatabaseSeeder extends Seeder
       //   'category_name'        =>  '冷凍加工',
       // ]);
 
-for ($i = 11; $i <= 30; $i++) {
+for ($i = 1; $i <= 30; $i++) {
 
       \DB::table("users")->insert([
         'kaiin_number'           => $i,

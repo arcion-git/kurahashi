@@ -16,14 +16,9 @@ class CreateOrderNinisTable extends Migration
         Schema::create('order_ninis', function (Blueprint $table) {
             $table->bigIncrements('id');
 
-            $table->integer('cart_id')->unsigned()->nullable();
-
-            $table->string('item_name')->nullable();
-            $table->string('tantou_name')->nullable();
-
+            $table->integer('cart_nini_id')->unsigned()->nullable();
             $table->integer('tokuisaki_name')->unsigned()->nullable();
             $table->integer('store_name')->unsigned()->nullable();
-
             $table->string('price')->nullable();
             $table->integer('nouhin_yoteibi')->unsigned()->nullable();
             $table->integer('quantity')->unsigned()->nullable();

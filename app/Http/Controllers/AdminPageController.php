@@ -17,6 +17,8 @@ use App\Recommend;
 use App\FavoriteCategory;
 use App\Repeatorder;
 use App\RecommendCategory;
+use App\CartNini;
+use App\OrderNini;
 
 use App\PriceGroupe;
 use App\Price;

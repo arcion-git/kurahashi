@@ -19,6 +19,8 @@ use App\SpecialPrice;
 use App\Recommend;
 use App\Repeatorder;
 use App\RecommendCategory;
+use App\CartNini;
+use App\OrderNini;
 
 // 時間に関する処理
 use Carbon\Carbon;
@@ -378,6 +380,15 @@ class LoginPageController extends Controller
     return redirect()->route('home',$data);
   }
 
+  public function addniniorder(Request $request){
+    $user_id = Auth::guard('user')->user()->id;
+    $cart_nini=CartNini::Create(['user_id'=> $user_id]);
+    $order_nini=OrderNini::Create(['cart_nini_id'=> $cart_nini->id , 'tokuisaki_name'=>'------' , 'nouhin_yoteibi'=> '', 'quantity'=> 1]);
+    $data = "sucsess";
+    return redirect()->route('home',$data);
+  }
+
+
 
   public function cart(){
     $user_id = Auth::guard('user')->user()->id;
@@ -422,6 +433,7 @@ class LoginPageController extends Controller
      'favorite_categories' => $favorite_categories,
      // 'stores' => $stores,
      'holidays' => $holidays,
+     'user_id' => $user_id,
     ]);
 
   }
@@ -431,6 +443,7 @@ class LoginPageController extends Controller
 
     $user_id = Auth::guard('user')->user()->id;
     $carts =  Cart::where(['user_id'=>$user_id, 'deal_id'=> null])->get();
+    $cart_ninis =  CartNini::where(['user_id'=>$user_id, 'deal_id'=> null])->get();
 
     $today = date("Y/m/d");
     $holidays = Holiday::pluck('date');
@@ -447,6 +460,7 @@ class LoginPageController extends Controller
 
     $data=
     ['carts' => $carts,
+     'cart_ninis' => $cart_ninis,
      'stores' => $stores,
      'holidays' => $holidays,
     ];
@@ -538,6 +552,8 @@ class LoginPageController extends Controller
     $deal_id = $request->deal_id;
     $user_id = Auth::guard('user')->user()->id;
 
+    $deal =  Deal::where(['id'=>$deal_id])->first();
+
     // 取引IDが一致しているものを取得
     $carts =  Cart::where(['user_id'=>$user_id, 'deal_id'=> $deal_id])->get();
 
@@ -560,6 +576,7 @@ class LoginPageController extends Controller
     ['carts' => $carts,
      'stores' => $stores,
      'holidays' => $holidays,
+     'deal' => $deal,
     ];
     return view('order', $data);
   }
@@ -578,7 +595,11 @@ class LoginPageController extends Controller
     $item_ids = $data['item_id'];
     // $quantitys = $data['quantity'];
 
+    if(isset($request->memo)){
     $deal = Deal::create(['user_id'=> $user_id, 'memo'=> $request->memo]);
+    }else{
+    $deal = Deal::create(['user_id'=> $user_id]);
+    }
     $deal_id = $deal->id;
 
 
