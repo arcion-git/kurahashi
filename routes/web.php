@@ -47,8 +47,13 @@
   Route::post('/removeorder', 'LoginPageController@removeorder');
   Route::post('/removeordernini', 'LoginPageController@removeordernini');
   Route::post('/change_quantity', 'LoginPageController@change_quantity');
+  Route::post('/nini_change_item_name', 'LoginPageController@nini_change_item_name');
+  Route::post('/nini_change_tantou', 'LoginPageController@nini_change_tantou');
+  Route::post('/nini_change_quantity', 'LoginPageController@nini_change_quantity');
   Route::post('/change_nouhin_yoteibi', 'LoginPageController@change_nouhin_yoteibi');
+  Route::post('/nini_change_nouhin_yoteibi', 'LoginPageController@nini_change_nouhin_yoteibi');
   Route::post('/change_store', 'LoginPageController@change_store');
+  Route::post('/nini_change_store', 'LoginPageController@nini_change_store');
   Route::post('/clonecart', 'LoginPageController@clonecart');
   Route::post('/addordernini', 'LoginPageController@addordernini');
   Route::post('/updatecart', 'LoginPageController@updatecart');

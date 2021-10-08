@@ -146,7 +146,7 @@ if(document.URL.match("/user")) {
       })
       // Ajaxリクエスト失敗時の処理
       .fail(function(jqXHR, textStatus, errorThrown) {
-        alert('ユーザー情報が取得できません。');
+        alert('オーダー内容が取得できません。');
         console.log("ajax通信に失敗しました");
         console.log("XMLHttpRequest : " + XMLHttpRequest.status);
         console.log("textStatus     : " + textStatus);
@@ -490,6 +490,170 @@ if(document.URL.match("/admin/deal")) {
           'order_id': order_id,
           'store_name': store_name,
           'tokuisaki_name': tokuisaki_name,
+        } //Laravelに渡すデータ
+      })
+      // Ajaxリクエスト成功時の処理
+      .done(function(data) {
+        // console.log(data);
+      })
+      // Ajaxリクエスト失敗時の処理
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        alert('配送先店舗を保存できません。');
+        console.log("ajax通信に失敗しました");
+        console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+        console.log("textStatus     : " + textStatus);
+        console.log("errorThrown    : " + errorThrown.message);
+      });
+      setTimeout(order_update);
+  });
+
+
+  // 任意の商品名を保存
+  $(document).on("change", ".nini_item_name", function() {
+    var cart_nini_id = $(this).parent().parent().get(0).id;
+    var nini_item_name = $(this).val();
+    console.log(nini_item_name);
+    console.log(cart_nini_id);
+    $.ajax({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }, //Headersを書き忘れるとエラーになる
+        url: location.origin + '/nini_change_item_name',
+        type: 'POST', //リクエストタイプ
+        data: {
+          'cart_nini_id': cart_nini_id,
+          'nini_item_name': nini_item_name,
+        } //Laravelに渡すデータ
+      })
+      // Ajaxリクエスト成功時の処理
+      .done(function(data) {
+        // console.log(data);
+      })
+      // Ajaxリクエスト失敗時の処理
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        alert('商品名を変更できませんでした。');
+        console.log("ajax通信に失敗しました");
+        console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+        console.log("textStatus     : " + textStatus);
+        console.log("errorThrown    : " + errorThrown.message);
+      });
+      setTimeout(order_update);
+  });
+
+  // 任意の担当を保存
+  $(document).on("change", ".nini_tantou", function() {
+    var cart_nini_id = $(this).parent().parent().get(0).id;
+    var nini_tantou = $(this).val();
+    console.log(nini_tantou);
+    console.log(cart_nini_id);
+    $.ajax({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }, //Headersを書き忘れるとエラーになる
+        url: location.origin + '/nini_change_tantou',
+        type: 'POST', //リクエストタイプ
+        data: {
+          'cart_nini_id': cart_nini_id,
+          'nini_tantou': nini_tantou,
+        } //Laravelに渡すデータ
+      })
+      // Ajaxリクエスト成功時の処理
+      .done(function(data) {
+        // console.log(data);
+      })
+      // Ajaxリクエスト失敗時の処理
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        alert('担当を変更できませんでした。');
+        console.log("ajax通信に失敗しました");
+        console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+        console.log("textStatus     : " + textStatus);
+        console.log("errorThrown    : " + errorThrown.message);
+      });
+      setTimeout(order_update);
+  });
+
+  // 任意の個数変更を保存
+  $(document).on("change", ".nini_quantity", function() {
+    var order_nini_id = $(this).parent().parent().get(0).id;
+    var nini_quantity = $(this).val();
+    console.log(nini_quantity);
+    console.log(order_nini_id);
+    $.ajax({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }, //Headersを書き忘れるとエラーになる
+        url: location.origin + '/nini_change_quantity',
+        type: 'POST', //リクエストタイプ
+        data: {
+          'order_nini_id': order_nini_id,
+          'nini_quantity': nini_quantity,
+        } //Laravelに渡すデータ
+      })
+      // Ajaxリクエスト成功時の処理
+      .done(function(data) {
+        // console.log(data);
+      })
+      // Ajaxリクエスト失敗時の処理
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        alert('個数を変更できませんでした。');
+        console.log("ajax通信に失敗しました");
+        console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+        console.log("textStatus     : " + textStatus);
+        console.log("errorThrown    : " + errorThrown.message);
+      });
+      setTimeout(order_update);
+  });
+
+  // 任意の納品予定日を保存
+  $(document).on("change", ".nini_nouhin_yoteibi", function() {
+    var order_nini_id = $(this).parent().parent().get(0).id;
+    var nini_nouhin_yoteibi = $(this).val();
+    console.log(order_nini_id);
+    console.log(nini_nouhin_yoteibi);
+    $.ajax({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }, //Headersを書き忘れるとエラーになる
+        url: location.origin + '/nini_change_nouhin_yoteibi',
+        type: 'POST', //リクエストタイプ
+        data: {
+          'order_nini_id': order_nini_id,
+          'nini_nouhin_yoteibi': nini_nouhin_yoteibi,
+        } //Laravelに渡すデータ
+      })
+      // Ajaxリクエスト成功時の処理
+      .done(function(data) {
+        // console.log(data);
+      })
+      // Ajaxリクエスト失敗時の処理
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        alert('予定日を保存できません。');
+        console.log("ajax通信に失敗しました");
+        console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+        console.log("textStatus     : " + textStatus);
+        console.log("errorThrown    : " + errorThrown.message);
+      });
+      setTimeout(order_update);
+  });
+
+  // 任意の配送先店舗を保存
+  $(document).on("change", ".nini_store", function() {
+    var order_nini_id = $(this).parent().parent().get(0).id;
+    var nini_store_name = $(this).val();
+    var nini_tokuisaki_name = $(this).find('option:selected').get(0).id;
+    console.log(order_nini_id);
+    console.log(nini_store_name);
+    console.log(nini_tokuisaki_name);
+    $.ajax({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }, //Headersを書き忘れるとエラーになる
+        url: location.origin + '/nini_change_store',
+        type: 'POST', //リクエストタイプ
+        data: {
+          'order_nini_id': order_nini_id,
+          'nini_store_name': nini_store_name,
+          'nini_tokuisaki_name': nini_tokuisaki_name,
         } //Laravelに渡すデータ
       })
       // Ajaxリクエスト成功時の処理

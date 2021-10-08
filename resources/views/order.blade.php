@@ -100,21 +100,22 @@
 					<td width="200px" class="cart_nini_id_{$cart_nini->id}}">
 						<input name="nini_item_name[]" class="nini_item_name text-center form-control" value="{{$cart_nini->item_name}}">
 					</td>
+					<td width="200px" class="text-center">
+						<select name="nini_tantou[]" class="nini_tantou text-center form-control" value="{{$cart_nini->tantou_name}}">
+							<option value="{{$cart_nini->tantou_name}}">{{$cart_nini->tantou_name}}</option>
+							<option value="鮮魚">鮮魚</option>
+							<option value="青物">青物</option>
+							<option value="太物">太物</option>
+							<option value="近海">近海</option>
+							<option value="特殊">特殊</option>
+							<option value="養魚">養魚</option>
+							<option value="水産">水産</option>
+						</select>
+					</td>
 					<td width="200px" colspan="5" class="order-table">
 						<table class="table table-striped table-hover table-md">
 						@foreach($cart_nini->order_ninis as $val)
 							<tr id="{{$val->id}}">
-								<td width="200px" class="text-center">
-									<select name="nini_tantou[]" class="nini_tantou text-center form-control" value="1">
-										<option value="鮮魚">鮮魚</option>
-										<option value="青物">青物</option>
-										<option value="太物">太物</option>
-										<option value="近海">近海</option>
-										<option value="特殊">特殊</option>
-										<option value="養魚">養魚</option>
-										<option value="水産">水産</option>
-									</select>
-								</td>
 								<td width="180px" class="text-center">
 									<select name="nini_store[]" class="nini_store text-center form-control" value="{{$val->tokuisaki_name}} {{$val->store_name}}">
 										<option id="{{$val->tokuisaki_name}}" value="{{$val->store_name}}">{{$val->tokuisaki_name}} {{$val->store_name}}</option>
@@ -125,7 +126,7 @@
 									</select>
 								</td>
 								<td width="100px" class="text-center">
-									<input name="nini_price[]" class="nini_price text-center form-control" value="{{$val->quantity}}">
+									<input name="nini_quantity[]" class="nini_quantity text-center form-control" value="{{$val->quantity}}">
 								</td>
 								<td width="120px" class="text-center">
 										<input type="text" name="nini_nouhin_yoteibi[]" class="nini_nouhin_yoteibi text-center form-control daterange-cus datepicker" value="{{$val->nouhin_yoteibi}}" autocomplete="off">

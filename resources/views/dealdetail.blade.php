@@ -84,9 +84,6 @@
             </div>
           </div>
 
-
-
-
           <!-- <form action="{{ url('/updatecart') }}" method="POST" class="form-horizontal">
             {{ csrf_field() }}
             <tr>
@@ -100,7 +97,6 @@
                 <button type="submit" name="deal_id" value="{{ $deal->id }}" class="btn btn-warning">この内容で発注する</button>
             </div>
           </form> -->
-
 
           @if ( Auth::guard('admin')->check() )
           <form action="{{ url('/admin/discount') }}" method="POST" class="form-horizontal">
