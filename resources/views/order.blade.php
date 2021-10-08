@@ -95,12 +95,12 @@
           <th width="80px" class="text-center">操作</th>
         </tr>
 				@foreach($cart_ninis as $cart_nini)
-				<tr width="680px" id="{{$cart_nini->id}}">
+				<tr width="" id="{{$cart_nini->id}}">
 					<input name="cart_nini_id[]" type="hidden" value="{{$cart_nini->id}}" />
 					<td width="200px" class="cart_nini_id_{$cart_nini->id}}">
-						<input name="nini_item_name[]" class="nini_item_name text-center form-control" value="{{$cart_nini->item_name}}">
+						<input name="nini_item_name[]" class="nini_item_name form-control" value="{{$cart_nini->item_name}}">
 					</td>
-					<td width="200px" class="text-center">
+					<td width="140px" class="text-center">
 						<select name="nini_tantou[]" class="nini_tantou text-center form-control" value="{{$cart_nini->tantou_name}}">
 							<option value="{{$cart_nini->tantou_name}}">{{$cart_nini->tantou_name}}</option>
 							<option value="鮮魚">鮮魚</option>
