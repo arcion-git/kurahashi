@@ -67,6 +67,7 @@ class LoginPageController extends Controller
         if ($favorite_categories === null) {
           $categories = Category::get();
           $categories = $categories->groupBy('bu_ka_name');
+          // dd($categories);
           return view('user/auth/questionnaire', ['categories' => $categories]);
         }
 
@@ -301,17 +302,34 @@ class LoginPageController extends Controller
 
 
 
-// 商品の配送先を追加
+// カート画面から削除
   public function removecart(Request $request){
     $cart_id = $request->cart_id;
     $delete_cart = Cart::where(['id'=> $cart_id])->first()->delete();
-    $delete_order = Order::where(['cart_id'=> $cart_id])->delete();
+    $delete_order = Order::where(['cart_id'=> $cart_id])->first()->delete();
     $data = "sucsess";
     return redirect()->route('home',$data);
   }
 
 
-// 任意の商品の配送先を追加
+// 商品の配送先を削除
+  public function removeorder(Request $request){
+    $order_id = $request->order_id;
+    $cart_id = $request->cart_id;
+
+    $delete_order=Order::where(['id'=> $order_id])->first()->delete();
+
+    $orders=Order::where(['cart_id'=> $cart_id])->first();
+
+    if(empty($orders)){
+    $delete_cart=Cart::where(['id'=> $cart_id])->first()->delete();
+    }
+
+    $data = "sucsess";
+    return redirect()->route('home',$data);
+  }
+
+// 任意の商品の配送先を削除
   public function removeordernini(Request $request){
     $order_nini_id = $request->order_nini_id;
     $cart_nini_id = $request->cart_nini_id;
@@ -327,45 +345,11 @@ class LoginPageController extends Controller
     return redirect()->route('home',$data);
   }
 
-
-
-
-  public function nini_change_item_name(Request $request){
-    $cart_id = $request->cart_nini_id;
-    $item_name = $request->nini_item_name;
-
-    $cart_nini=CartNini::where(['id'=> $cart_id])->update(['item_name'=> $item_name]);
-
-    $data = "sucsess";
-    return redirect()->route('home',$data);
-  }
-
-  public function nini_change_tantou(Request $request){
-    $cart_id = $request->cart_nini_id;
-    $tantou_name = $request->nini_tantou;
-
-    $cart_nini=CartNini::where(['id'=> $cart_id])->update(['tantou_name'=> $tantou_name]);
-
-    $data = "sucsess";
-    return redirect()->route('home',$data);
-  }
-
   public function change_quantity(Request $request){
     $order_id = $request->order_id;
     $quantity = $request->quantity;
 
     $order=Order::where(['id'=> $order_id])->update(['quantity'=> $quantity]);
-
-    $data = "sucsess";
-    return redirect()->route('home',$data);
-  }
-
-
-  public function nini_change_quantity(Request $request){
-    $order_id = $request->order_nini_id;
-    $quantity = $request->nini_quantity;
-
-    $order_nini=OrderNini::where(['id'=> $order_id])->update(['quantity'=> $quantity]);
 
     $data = "sucsess";
     return redirect()->route('home',$data);
@@ -383,52 +367,32 @@ class LoginPageController extends Controller
   }
 
 
-  public function nini_change_nouhin_yoteibi(Request $request){
-    $order_id = $request->order_nini_id;
-    $nouhin_yoteibi = $request->nini_nouhin_yoteibi;
-
-    $order_nini=OrderNini::where(['id'=> $order_id])->update(['nouhin_yoteibi'=> $nouhin_yoteibi]);
-
-    $data = "sucsess";
-    return redirect()->route('home',$data);
-  }
-
-
   public function change_store(Request $request){
     $order_id = $request->order_id;
     $store_name = $request->store_name;
     $tokuisaki_name = $request->tokuisaki_name;
 
 
-    $store = Store::where(['tokuisaki_name'=> $tokuisaki_name,'store_name'=> $store_name ])->first();
+    $store = Store::where([ 'tokuisaki_name'=> $tokuisaki_name,'store_name'=> $store_name ])->first();
     $price_groupe = PriceGroupe::where([ 'tokuisaki_id'=> $store->tokuisaki_id,'store_id'=> $store->store_id ])->first();
+
+    dd($store->store_id);
+
 
 
     $order = Order::where(['id'=> $order_id])->first();
     $cart_id = $order->cart_id;
     $cart = Cart::where(['id'=> $cart_id])->first();
-    $item = Item::where('id',$cart->item_id)->first();
+    $item = Item::where('item_id',$cart->item_id)->first();
 
-    $price = Price::where(['price_groupe'=>$price_groupe->price_groupe, 'item_id'=> $item->item_id , 'sku_code'=> $item->sku_code])->first();
+    $price = Price::where(['price_groupe'=>$price_groupe->price_groupe, 'item_id'=> $item->item_id, 'sku_code'=> $item->sku_code])->first();
+    $order = Order::where(['id'=> $order_id])->update(['store_name'=> $store_name,'tokuisaki_name'=> $tokuisaki_name,'price'=> $price->price]);
 
-    $order=Order::where(['id'=> $order_id])->update(['store_name'=> $store_name,'tokuisaki_name'=> $tokuisaki_name,'price'=> $price->price]);
+    $data = "success";
 
-    $data = "sucsess";
     return redirect()->route('home',$data);
   }
 
-
-
-  public function nini_change_store(Request $request){
-    $order_id = $request->order_nini_id;
-    $store_name = $request->nini_store_name;
-    $tokuisaki_name = $request->nini_tokuisaki_name;
-
-    $order_nini=OrderNini::where(['id'=> $order_id])->update(['store_name'=> $store_name,'tokuisaki_name'=> $tokuisaki_name]);
-
-    $data = "sucsess";
-    return redirect()->route('home',$data);
-  }
 
   public function clonecart(Request $request){
     $user_id = Auth::guard('user')->user()->id;
@@ -600,8 +564,7 @@ class LoginPageController extends Controller
     $favorite_categories = FavoriteCategory::where('user_id', $user_id)->get();
 
     $deal = Deal::where('id',$id)->first();
-
-    // $carts = Cart::where(['user_id'=>$user_id, 'deal_id'=> $id])->get();
+    $carts = Cart::where(['user_id'=>$user_id, 'deal_id'=> $id])->get();
 
     $data=[
       // 'carts'=>$carts,
@@ -621,8 +584,7 @@ class LoginPageController extends Controller
     $deal =  Deal::where(['id'=>$deal_id])->first();
 
     // 取引IDが一致しているものを取得
-    $carts = Cart::where(['user_id'=>$user_id, 'deal_id'=> $deal_id])->get();
-    $cart_ninis = CartNini::where(['user_id'=>$user_id, 'deal_id'=> $deal_id])->get();
+    $carts =  Cart::where(['user_id'=>$user_id, 'deal_id'=> $deal_id])->get();
 
     // 休日についての処理
     $today = date("Y/m/d");
@@ -641,7 +603,6 @@ class LoginPageController extends Controller
 
     $data=
     ['carts' => $carts,
-     'cart_ninis' => $cart_ninis,
      'stores' => $stores,
      'holidays' => $holidays,
      'deal' => $deal,
@@ -653,14 +614,15 @@ class LoginPageController extends Controller
 
 
 
+
+
+
   public function adddeal(Request $request){
     $user_id = Auth::guard('user')->user()->id;
 
     $data = $request->all();
     $item_ids = $data['item_id'];
     // $quantitys = $data['quantity'];
-    $nini_item_ids = $data['cart_nini_id'];
-    // dd($nini_items);
 
     if(isset($request->memo)){
     $deal = Deal::create(['user_id'=> $user_id, 'memo'=> $request->memo]);
@@ -672,11 +634,6 @@ class LoginPageController extends Controller
 
     foreach($item_ids as $key => $input) {
       $cart = Cart::firstOrNew(['user_id'=> $user_id , 'item_id'=> $item_ids[$key], 'deal_id'=> null]);
-      $cart->deal_id = $deal_id;
-      $cart->save();
-    }
-    foreach($nini_item_ids as $key => $input) {
-      $cart = CartNini::firstOrNew(['user_id'=> $user_id , 'deal_id'=> null]);
       $cart->deal_id = $deal_id;
       $cart->save();
     }

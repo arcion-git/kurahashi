@@ -65,8 +65,8 @@ class DatabaseSeeder extends Seeder
       foreach ($file as $line) {
           if ($file->key() > 0 && ! $file->eof()) {
             $list[] = [
-              'category_id'=>$line[0],
-              'item_id'=>$line[1],
+              'category_id'=>$line[1],
+              'item_id'=>$line[0],
               "created_at" => $now,
               "updated_at" => $now,
             ];

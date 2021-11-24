@@ -494,7 +494,7 @@ if(document.URL.match("/admin/deal")) {
       })
       // Ajaxリクエスト成功時の処理
       .done(function(data) {
-        // console.log(data);
+        console.log(data);
       })
       // Ajaxリクエスト失敗時の処理
       .fail(function(jqXHR, textStatus, errorThrown) {
