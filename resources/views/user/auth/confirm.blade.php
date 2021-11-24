@@ -26,7 +26,7 @@
         <div class="invoice-print">
 
 
-          <form action="{{ url('/change_store') }}" method="POST" class="form-horizontal">
+          <!-- <form action="{{ url('/change_store') }}" method="POST" class="form-horizontal">
             {{ csrf_field() }}
             <input name="order_id" value="1" />
             <input name="store_name" value="引野" />
@@ -34,7 +34,7 @@
             <div class="float-right">
                 <button type="submit" class="btn btn-warning">この内容で問い合わせる</button>
             </div>
-          </form>
+          </form> -->
 
 
           <form action="{{ url('/adddeal') }}" method="POST" class="form-horizontal">

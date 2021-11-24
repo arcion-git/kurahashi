@@ -67,8 +67,10 @@ class AdminPageController extends Controller
     $deal = Deal::where('id',$id)->first();
 
     $carts = Cart::where(['user_id'=>$deal->user_id, 'deal_id'=> $id])->get();
+    $cart_ninis = CartNini::where(['user_id'=>$deal->user_id, 'deal_id'=> $id])->get();
     $data=[
       'carts'=>$carts,
+      'cart_ninis' => $cart_ninis,
       'deal'=>$deal
     ];
     return view('dealdetail', $data);
@@ -88,6 +90,7 @@ class AdminPageController extends Controller
 
     // 取引IDが一致しているものを取得
     $carts =  Cart::where(['user_id'=>$user_id, 'deal_id'=> $deal_id])->get();
+    $cart_ninis = CartNini::where(['user_id'=>$user_id, 'deal_id'=> $deal_id])->get();
 
     // 休日についての処理
     $today = date("Y/m/d");
@@ -105,6 +108,7 @@ class AdminPageController extends Controller
 
     $data=
     ['carts' => $carts,
+     'cart_ninis' => $cart_ninis,
      'stores' => $stores,
      'holidays' => $holidays,
     ];

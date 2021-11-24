@@ -367,18 +367,14 @@ class LoginPageController extends Controller
   }
 
 
+  // 配送先店舗を変更
   public function change_store(Request $request){
     $order_id = $request->order_id;
     $store_name = $request->store_name;
     $tokuisaki_name = $request->tokuisaki_name;
 
-
     $store = Store::where([ 'tokuisaki_name'=> $tokuisaki_name,'store_name'=> $store_name ])->first();
     $price_groupe = PriceGroupe::where([ 'tokuisaki_id'=> $store->tokuisaki_id,'store_id'=> $store->store_id ])->first();
-
-    dd($store->store_id);
-
-
 
     $order = Order::where(['id'=> $order_id])->first();
     $cart_id = $order->cart_id;
@@ -393,6 +389,51 @@ class LoginPageController extends Controller
     return redirect()->route('home',$data);
   }
 
+  // 任意の配送先店舗を変更
+  public function nini_change_store(Request $request){
+    $order_nini_id = $request->order_nini_id;
+    $nini_store_name = $request->nini_store_name;
+    $nini_tokuisaki_name = $request->nini_tokuisaki_name;
+    $order_nini = OrderNini::where(['id'=> $order_nini_id])->update(['store_name'=> $nini_store_name,'tokuisaki_name'=> $nini_tokuisaki_name]);
+    $data = "success";
+    return redirect()->route('home',$data);
+  }
+
+  // 任意の担当を保存
+  public function nini_change_tantou(Request $request){
+    $nini_tantou = $request->nini_tantou;
+    $cart_nini_id = $request->cart_nini_id;
+    $cart_nini_tantou= CartNini::where(['id'=> $cart_nini_id])->update(['tantou_name'=> $nini_tantou]);
+    $data = "success";
+    return redirect()->route('home',$data);
+  }
+
+  // 任意の商品名を保存
+  public function nini_change_item_name(Request $request){
+    $nini_item_name = $request->nini_item_name;
+    $cart_nini_id = $request->cart_nini_id;
+    $cart_nini_item_name= CartNini::where(['id'=> $cart_nini_id])->update(['item_name'=> $nini_item_name]);
+    $data = "success";
+    return redirect()->route('home',$data);
+  }
+
+  // 任意の数量を保存
+  public function nini_change_quantity(Request $request){
+    $nini_quantity = $request->nini_quantity;
+    $order_nini_id = $request->order_nini_id;
+    $order_nini_quantity = OrderNini::where(['id'=> $order_nini_id])->update(['quantity'=> $nini_quantity]);
+    $data = "success";
+    return redirect()->route('home',$data);
+  }
+
+  // 任意の納品予定日を保存
+  public function nini_change_nouhin_yoteibi(Request $request){
+    $nini_nouhin_yoteibi = $request->nini_nouhin_yoteibi;
+    $order_nini_id = $request->order_nini_id;
+    $order_nini_quantity = OrderNini::where(['id'=> $order_nini_id])->update(['nouhin_yoteibi'=> $nini_nouhin_yoteibi]);
+    $data = "success";
+    return redirect()->route('home',$data);
+  }
 
   public function clonecart(Request $request){
     $user_id = Auth::guard('user')->user()->id;
@@ -468,6 +509,7 @@ class LoginPageController extends Controller
   }
 
 
+// カート画面からの遷移先
   public function order(){
 
     $user_id = Auth::guard('user')->user()->id;
@@ -585,6 +627,7 @@ class LoginPageController extends Controller
 
     // 取引IDが一致しているものを取得
     $carts =  Cart::where(['user_id'=>$user_id, 'deal_id'=> $deal_id])->get();
+    $cart_ninis =  CartNini::where(['user_id'=>$user_id, 'deal_id'=> $deal_id])->get();
 
     // 休日についての処理
     $today = date("Y/m/d");
@@ -603,6 +646,7 @@ class LoginPageController extends Controller
 
     $data=
     ['carts' => $carts,
+     'cart_ninis' => $cart_ninis,
      'stores' => $stores,
      'holidays' => $holidays,
      'deal' => $deal,
@@ -622,6 +666,9 @@ class LoginPageController extends Controller
 
     $data = $request->all();
     $item_ids = $data['item_id'];
+    $item_nini_ids = $data['cart_nini_id'];
+
+    // dd($item_nini_ids);
     // $quantitys = $data['quantity'];
 
     if(isset($request->memo)){
@@ -631,12 +678,22 @@ class LoginPageController extends Controller
     }
     $deal_id = $deal->id;
 
+    // 任意のカートにオーダーIDを保存
+    foreach($item_nini_ids as $key => $input) {
+      $cart_nini = CartNini::firstOrNew(['user_id'=> $user_id , 'deal_id'=> null]);
+      $cart_nini->deal_id = $deal_id;
+      $cart_nini->save();
+    }
 
+    // カートにオーダーIDを保存
     foreach($item_ids as $key => $input) {
       $cart = Cart::firstOrNew(['user_id'=> $user_id , 'item_id'=> $item_ids[$key], 'deal_id'=> null]);
       $cart->deal_id = $deal_id;
       $cart->save();
     }
+
+
+
     return redirect('deal');
   }
 
