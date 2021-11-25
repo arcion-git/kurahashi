@@ -16,8 +16,8 @@ class CreateCategoryItemsTable extends Migration
         Schema::create('category_items', function (Blueprint $table) {
             $table->bigIncrements('id');
 
-            $table->string('category_id')->nullable()->comment('カテゴリID');
-            $table->string('item_id')->nullable()->comment('商品コード');
+            $table->string('category_id')->references('item_id')->on('categories')->nullable()->comment('カテゴリID');
+            $table->string('item_id')->references('category_id')->on('items')->nullable()->comment('商品コード');
 
             $table->timestamps();
         });

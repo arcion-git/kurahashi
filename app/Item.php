@@ -51,5 +51,6 @@ class Item extends Model
       return $this->belongsToMany('App\Tag','item_tag','tag_id','item_id');
   }
 
+  // protected $primaryKey = 'item_id';
 
 }
