@@ -65,7 +65,7 @@
                             </td>
                             <td class="text-center">{{$recommend->item()->zaikosuu}}</td>
                             <td class="text-center">{{$recommend->item()->tokkijikou}}</td>
-                            <td class="text-center"><button name="item_id" value="" id="{{$recommend->item()->id}}" class="addcart btn btn-warning">カートに入れる</button></td>
+                            <td class="text-center"><button name="item_id" value="{{$recommend->item()->id}}" id="{{$recommend->item()->id}}" class="addcart btn btn-warning">カートに入れる</button></td>
                           </form>
                         </tr>
                         @endif
