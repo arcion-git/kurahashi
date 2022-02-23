@@ -120,10 +120,10 @@
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header serch-form-header">
         <h5 class="modal-title" id="exampleModalLabel">商品一覧</h5>
         <!-- 検索窓 -->
-        <div class="float-right">
+        <div class="search-text">
           <form>
             <div class="input-group">
               <input type="text" id="search-text" class="form-control" placeholder="検索">
@@ -142,12 +142,14 @@
         <!-- 検索リスト -->
         <div class="search-result">
           <div class="search-result__hit-num"></div>
-          <div id="search-result__list"></div>
         </div>
 
         <form action="{{ url('/admin/user/addrecommend') }}" method="POST" class="form-horizontal">
           {{ csrf_field() }}
           <div class="table-responsive">
+            <table id="search-result__list" class="table table-striped">
+
+            </table>
             <table class="table table-striped target-area">
               <tr>
                 <th class="text-center">商品番号</th>
@@ -160,7 +162,7 @@
                 <!-- <th class="text-center">納品予定日</th>
                 <th class="text-center">参考価格</th>
                 <th class="text-center">個数</th> -->
-                <th class="text-center" style="min-width:180px;">操作</th>
+                <th class="text-center" style="min-width:130px;">操作</th>
               </tr>
               @foreach($items as $item)
               @if($item->zaikosuu == 0)
@@ -211,7 +213,7 @@ $('.datepicker').datepicker({
 	autoclose: true,
 	assumeNearbyYear: true,
 	language: 'ja',
-	// startDate: '+2d',
+	startDate: '+1d',
 	endDate: '+31d',
 	defaultViewDate: Date()
 });
@@ -239,23 +241,31 @@ $(function () {
       $('.target-area tr').each(function() {
         targetText = $(this).text();
 
-        console.log($(this));
-
         // 検索対象となるリストに入力された文字列が存在するかどうかを判断
         if (targetText.indexOf(searchText) != -1) {
           // 存在する場合はそのリストのテキストを用意した配列に格納
-          searchResult.push(targetText);
+          searchResult.push($(this).html());
         }
+        $('.target-area').hide();
       });
+      console.log(searchResult);
+
+      // 検索結果にヘッダーを追加
+      header = '<tr><th class="text-center">商品番号</th><th class="">商品名</th><th class="text-center">産地</th><th class="text-center">規格</th><th class="text-center">単位</th><th class="text-center">在庫数</th><th class="text-center">特記事項</th><th class="text-center" style="min-width:130px;">操作</th></tr>';
+
+      $('#search-result__list').append(header);
 
       // 検索結果をページに出力
       for (var i = 0; i < searchResult.length; i ++) {
-        $('<tr>').text(searchResult[i]).appendTo('#search-result__list');
+        $('<tr>').html(searchResult[i]).appendTo('#search-result__list');
       }
 
       // ヒットの件数をページに出力
       hitNum = '<span>検索結果</span>：' + searchResult.length + '件見つかりました。';
       $('.search-result__hit-num').append(hitNum);
+    }else{
+      // 検索ボックスに値が入っていない場合
+      $('.target-area').show();
     }
   };
 

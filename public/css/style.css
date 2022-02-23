@@ -3139,6 +3139,16 @@ a:not(.btn-social-icon):not(.btn-social):not(.page-link) .ion, a:not(.btn-social
     border: none;
 }
 
+.search-text{
+    margin-left: auto;
+}
+.serch-form-header{
+    align-items: center;
+}
+.serch-form-header .close{
+    margin: auto 0;
+}
+
 .head-price{
   width: 100px !important;
 }
