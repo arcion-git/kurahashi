@@ -122,15 +122,33 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">商品一覧</h5>
+        <!-- 検索窓 -->
+        <div class="float-right">
+          <form>
+            <div class="input-group">
+              <input type="text" id="search-text" class="form-control" placeholder="検索">
+              <div class="input-group-append">
+                <button class="btn btn-primary"><i class="fas fa-search"></i></button>
+              </div>
+            </div>
+          </form>
+        </div>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
+
+        <!-- 検索リスト -->
+        <div class="search-result">
+          <div class="search-result__hit-num"></div>
+          <div id="search-result__list"></div>
+        </div>
+
         <form action="{{ url('/admin/user/addrecommend') }}" method="POST" class="form-horizontal">
           {{ csrf_field() }}
           <div class="table-responsive">
-            <table class="table table-striped">
+            <table class="table table-striped target-area">
               <tr>
                 <th class="text-center">商品番号</th>
                 <th class="">商品名</th>
@@ -198,4 +216,52 @@ $('.datepicker').datepicker({
 	defaultViewDate: Date()
 });
 </script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+<script>
+$(function () {
+  searchWord = function(){
+    var searchResult,
+        searchText = $(this).val(), // 検索ボックスに入力された値
+        targetText,
+        hitNum;
+
+    // 検索結果を格納するための配列を用意
+    searchResult = [];
+
+    // 検索結果エリアの表示を空にする
+    $('#search-result__list').empty();
+    $('.search-result__hit-num').empty();
+
+    // 検索ボックスに値が入ってる場合
+    if (searchText != '') {
+      $('.target-area tr').each(function() {
+        targetText = $(this).text();
+
+        console.log($(this));
+
+        // 検索対象となるリストに入力された文字列が存在するかどうかを判断
+        if (targetText.indexOf(searchText) != -1) {
+          // 存在する場合はそのリストのテキストを用意した配列に格納
+          searchResult.push(targetText);
+        }
+      });
+
+      // 検索結果をページに出力
+      for (var i = 0; i < searchResult.length; i ++) {
+        $('<tr>').text(searchResult[i]).appendTo('#search-result__list');
+      }
+
+      // ヒットの件数をページに出力
+      hitNum = '<span>検索結果</span>：' + searchResult.length + '件見つかりました。';
+      $('.search-result__hit-num').append(hitNum);
+    }
+  };
+
+  // searchWordの実行
+  $('#search-text').on('input', searchWord);
+});
+</script>
+
 @endsection
