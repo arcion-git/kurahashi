@@ -168,7 +168,7 @@ p, ul:not(.list-unstyled), ol {
 select.form-control:not([size]):not([multiple]),
 .form-control:not(.form-control-sm):not(.form-control-lg) {
   font-size: 14px;
-  padding: 10px 15px;
+  padding: 10px 5px;
   height: 42px; }
 
 textarea.form-control {
@@ -930,7 +930,7 @@ select.form-control:not([size]):not([multiple]) {
     padding-bottom: 15px; }
   .table.table-md th,
   .table.table-md td {
-    padding: 10px 15px; }
+    padding: 10px 5px; }
   .table.table-bordered td,
   .table.table-bordered th {
     border-color: #f6f6f6; }
@@ -2992,7 +2992,7 @@ body:not(.sidebar-mini) .sidebar-style-2 .sidebar-menu li.active ul.dropdown-men
 }
 
 .quantity{
-  width:50px !important;
+  width:60px !important;
   margin:auto !important;
   text-align: center;
   padding: 3px !important;
@@ -3137,4 +3137,29 @@ a:not(.btn-social-icon):not(.btn-social):not(.page-link) .ion, a:not(.btn-social
 .navbar .form-inline input.form-control {
     border-radius: 0px;
     border: none;
+}
+
+.head-price{
+  width: 100px !important;
+}
+.head-store{
+  width: 130px !important;
+}
+.head-kikaku{
+  width: 70px !important;
+}
+.head-quantity{
+  width: 80px !important;
+}
+.head-tani{
+  width: 70px !important;
+}
+.head-yoteibi{
+  width: 100px !important;
+}
+.head-shoukei{
+  width: 80px !important;
+}
+.head-sousa{
+  width: 140px !important;
 }

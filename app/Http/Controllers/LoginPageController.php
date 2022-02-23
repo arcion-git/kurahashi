@@ -85,8 +85,10 @@ class LoginPageController extends Controller
       $kaiin_number = Auth::guard('user')->user()->kaiin_number;
 
       $now = Carbon::now()->addDay(3)->format('Y-m-d');
-      $recommends = Recommend::where('user_id', $kaiin_number)->whereDate('end', '>=', $now)->orWhere('end',null)->get();
-      // dd($recommends);
+
+      $recommends = Recommend::where('user_id', $kaiin_number)->whereDate('end', '>=', $now)->orWhere('end',null)->where('user_id', $kaiin_number)->get();
+
+      $special_prices = SpecialPrice::get();
 
       return view('user/home',
       ['items' => $items ,
@@ -94,6 +96,7 @@ class LoginPageController extends Controller
        'categories' => $categories ,
        'favorite_categories' => $favorite_categories,
        'recommends' => $recommends,
+       'special_prices' => $special_prices,
       ]);
   }
 
@@ -117,7 +120,12 @@ class LoginPageController extends Controller
 
         $cat = $request->cat;
         if($cat == -1){
-          $items = Item::where('zaikosuu', '!=', '0')->Where('item_id',$search)->orWhere('item_name','like', "%$search%")->paginate(30);
+          $items = Item::Where('zaikosuu', '>=', '0.01')
+          ->where(function($items) use($search){
+            $items->where('item_name','like', "%$search%")->orWhere('item_id','like', "%$search%");
+          })->paginate(30);
+          // $items::where('item_name','like', "%$search%")->orWhere('item_id','like', "%$search%")->paginate(30);
+          // $items = Item::Where('item_id',$search)->orWhere('item_name','like', "%$search%")->where('zaikosuu', '!=', '0')->paginate(30);
           $search_category = null;
           $search_category_parent = null;
         }elseif(is_numeric($cat)){
@@ -250,6 +258,11 @@ class LoginPageController extends Controller
     $recommend_item = Recommend::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'user_id'=>$kaiin_number])->first();
     if(isset($recommend_item->price)){
     $order->price = $recommend_item->price;
+    }
+
+    $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])->first();
+    if(isset($special_price_item->price)){
+    $order->price = $special_price_item->price;
     }
 
     $order->save();
@@ -665,7 +678,7 @@ class LoginPageController extends Controller
 
     $data = $request->all();
     $item_ids = $data['item_id'];
-    $item_nini_ids = $data['cart_nini_id'];
+
 
     // dd($item_nini_ids);
     // $quantitys = $data['quantity'];
@@ -677,11 +690,15 @@ class LoginPageController extends Controller
     }
     $deal_id = $deal->id;
 
-    // 任意のカートにオーダーIDを保存
-    foreach($item_nini_ids as $key => $input) {
-      $cart_nini = CartNini::firstOrNew(['user_id'=> $user_id , 'deal_id'=> null]);
-      $cart_nini->deal_id = $deal_id;
-      $cart_nini->save();
+
+    if(isset($data['cart_nini_id'])){
+      $item_nini_ids = $data['cart_nini_id'];
+      // 任意のカートにオーダーIDを保存
+      foreach($item_nini_ids as $key => $input) {
+        $cart_nini = CartNini::firstOrNew(['user_id'=> $user_id , 'deal_id'=> null]);
+        $cart_nini->deal_id = $deal_id;
+        $cart_nini->save();
+      }
     }
 
     // カートにオーダーIDを保存

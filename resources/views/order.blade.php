@@ -6,14 +6,14 @@
 			<th class="head text-center">産地</th>
 			<th class="head text-center">在庫数</th>
 			<th class="head text-center">特記事項</th>
-			<th width="120px" class="head text-center">金額</th>
-			<th width="180px" class="head text-center">納品先店舗</th>
-			<th width="80px" class="head text-center">規格</th>
-			<th width="100px" class="head text-center">数量</th>
-			<th width="80px" class="head text-center">単位</th>
-			<th width="120px" class="head text-center">納品予定日</th>
-			<th width="80px" class="head text-center">小計</th>
-			<th width="140px" class="head text-center">操作</th>
+			<th class="head-price head text-center">金額</th>
+			<th class="head-store head text-center">納品先店舗</th>
+			<th class="head-kikaku head text-center">規格</th>
+			<th class="head-quantity head text-center">数量</th>
+			<th class="head-tani head text-center">単位</th>
+			<th class="head-yoteibi head text-center">納品予定日</th>
+			<th class="head-shoukei head text-center">小計</th>
+			<th class="head-sousa head text-center">操作</th>
 		</tr>
 		@foreach($carts as $cart)
 		<tr id="{{$cart->id}}">
@@ -23,15 +23,15 @@
 			<td class="cartid_{$cart->id}} text-center">{{$cart->item->sanchi_name}}</td>
 			<td class="cartid_{$cart->id}} text-center">{{$cart->item->zaikosuu}}</td>
 			<td class="cartid_{$cart->id}} text-center">{{$cart->item->tokkijikou}}</td>
-			<td width="120px" colspan="8" class="order-table">
+			<td colspan="8" class="order-table">
 				<table class="table table-striped table-hover table-md">
 				@foreach($cart->orders as $val)
 					<tr id="{{$val->id}}">
-						<td width="120px" class="text-center">
+						<td class="head-price text-center">
 							<input name="price[]" class="price text-center form-control" value="{{$val->price}}"
 							@if ( Auth::guard('user')->check() ) readonly @endif>
 						</td>
-						<td width="180px" class="text-center">
+						<td class="head-store text-center">
 							<select name="store[]" class="store text-center form-control" value="{{$val->tokuisaki_name}} {{$val->store_name}}">
 								<option id="{{$val->tokuisaki_name}}" value="{{$val->store_name}}">{{$val->tokuisaki_name}} {{$val->store_name}}</option>
 								@foreach($stores as $store)
@@ -40,8 +40,8 @@
 								<option value="">全店舗に追加</option>
 							</select>
 						</td>
-						<td width="80px" class="text-center">{{$cart->item->kikaku}}</td>
-						<td width="100px" class="text-center">
+						<td class="head-kikaku text-center">{{$cart->item->kikaku}}</td>
+						<td class="head-quantity text-center">
 							<select name="quantity[]" class="quantity text-center form-control" value="{{$val->quantity}}">
 								@if($val->quantity == 1)
 								@elseif($val->quantity)
@@ -52,7 +52,7 @@
 								@endfor
 							</select>
 						</td>
-						<td width="80px" class="text-center">
+						<td class="head-tani text-center">
 							@if ($cart->item->tani == 1)
 							ｹｰｽ
 							@elseif ($cart->item->tani == 2)
@@ -63,11 +63,11 @@
 							Kg
 							@endif
 						</td>
-						<td width="120px" class="text-center">
+						<td class="head-yoteibi text-center">
 								<input type="text" name="nouhin_yoteibi[]" class="nouhin_yoteibi text-center form-control daterange-cus datepicker" value="{{$val->nouhin_yoteibi}}" autocomplete="off">
 						</td>
-						<td width="80px" class="total text-center"></td>
-						<td width="140px" class="text-center">
+						<td class="head-shoukei total text-center"></td>
+						<td class="head-sousa text-center">
 							<button type="button" id="{{$val->id}}" class="removeid_{{$val->id}} removeorder btn btn-info">削除</button>
 							<button style="margin-top:10px;" type="button" id="{{$cart->item->id}}" class="cloneid_{{$cart->item->id}} clonecart btn btn-success">配送先を追加</button>
 						<input name="order_id[]" class="order_id" type="hidden" value="{{$val->id}}" />
@@ -89,10 +89,10 @@
         <tbody><tr>
           <th width="200px" class="text-center">商品名</th>
           <th width="140px" class="text-center">担当</th>
-          <th width="100px" class="text-center">納品先店舗</th>
-          <th width="100px" class="text-center">数量（単位）</th>
-          <th width="60px" class="text-center">納品予定日</th>
-          <th width="80px" class="text-center">操作</th>
+          <th class="head-store text-center">納品先店舗</th>
+          <th class="head-quantity text-center">数量（単位）</th>
+          <th class="head-yoteibi text-center">納品予定日</th>
+          <th class="head-sousa text-center">操作</th>
         </tr>
 				@foreach($cart_ninis as $cart_nini)
 				<tr width="" id="{{$cart_nini->id}}">
@@ -112,11 +112,11 @@
 							<option value="水産">水産</option>
 						</select>
 					</td>
-					<td width="200px" colspan="5" class="order-table">
+					<td colspan="5" class="order-table">
 						<table class="table table-striped table-hover table-md">
 						@foreach($cart_nini->order_ninis as $val)
 							<tr id="{{$val->id}}">
-								<td width="180px" class="text-center">
+								<td class="head-store text-center">
 									<select name="nini_store[]" class="nini_store text-center form-control" value="{{$val->tokuisaki_name}} {{$val->store_name}}">
 										<option id="{{$val->tokuisaki_name}}" value="{{$val->store_name}}">{{$val->tokuisaki_name}} {{$val->store_name}}</option>
 										@foreach($stores as $store)
@@ -125,15 +125,14 @@
 										<option value="">全店舗に追加</option>
 									</select>
 								</td>
-								<td width="100px" class="text-center">
+								<td class="head-quantity text-center">
 									<input name="nini_quantity[]" class="nini_quantity text-center form-control" value="{{$val->quantity}}">
 								</td>
-								<td width="120px" class="text-center">
+								<td class="head-yoteibi text-center">
 										<input type="text" name="nini_nouhin_yoteibi[]" class="nini_nouhin_yoteibi text-center form-control daterange-cus datepicker" value="{{$val->nouhin_yoteibi}}" autocomplete="off">
 								</td>
-								<td width="80px" class="total text-center"></td>
-								<td width="140px" class="text-center">
-									<button type="button" id="{{$val->id}}" class="removeid_{{$val->id}} removeordernini btn btn-info">削除</button>
+								<td class="head-sousa text-center">
+									<button type="button" id="{{$val->id}}" class="removeid_{{$val->id}} removeordernini btn btn-info">削除</button><br />
 									<button style="margin-top:10px;" type="button" id="{{$cart_nini->id}}" class="cloneid_{{$cart_nini->id}} addordernini btn btn-success">配送先を追加</button>
 								</td>
 							</tr>
