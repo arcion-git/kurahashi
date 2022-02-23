@@ -88,6 +88,10 @@
   Route::get('/admin/csv', 'AdminPageController@csv')->name('admin.csv');
   Route::get('/admin/download', 'AdminPageController@download')->name('admin.download');
 
+  // 取引検索
+  Route::get('/admin/deal/search', 'AdminPageController@search');
+  Route::post('/admin/deal/search', 'AdminPageController@search');
+
   // 取引詳細画面
   Route::get('/admin/user/deal/{id}', 'AdminPageController@userdeal')->name('admin.user.deal');
 

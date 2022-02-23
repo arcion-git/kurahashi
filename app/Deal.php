@@ -12,7 +12,8 @@ class Deal extends Model
     'success_flg',
   ];
   public function user() {
-      return $this->belongsTo('App\User', 'user_id');
+      return $this->belongsTo('App\User');
   }
+
 
 }

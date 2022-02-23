@@ -72,7 +72,7 @@ class LoginPageController extends Controller
         }
 
 
-      $items = Item::where('zaikosuu', '!=', '0.00')->paginate(30);
+      $items = Item::where('zaikosuu', '>=', '0.01')->paginate(30);
 
       $categories = Category::get()->groupBy('bu_ka_name');
 
@@ -124,7 +124,7 @@ class LoginPageController extends Controller
           ->where(function($items) use($search){
             $items->where('item_name','like', "%$search%")->orWhere('item_id','like', "%$search%");
           })->paginate(30);
-          
+
           // $items::where('item_name','like', "%$search%")->orWhere('item_id','like', "%$search%")->paginate(30);
           // $items = Item::Where('item_id',$search)->orWhere('item_name','like', "%$search%")->where('zaikosuu', '!=', '0')->paginate(30);
           $search_category = null;
@@ -132,10 +132,17 @@ class LoginPageController extends Controller
         }elseif(is_numeric($cat)){
           $cat_id = $request->cat;
           $search_category = Category::where('category_id',$cat_id)->first();
-          $items = $search_category->items()->Where('item_name','like', "%$search%")->where('zaikosuu', '!=', '0')->paginate(30);
+          // $items = $search_category->items()->where('zaikosuu', '>=', '0.01')->Where('item_name','like', "%$search%")->paginate(30);
+
+          $items = $search_category->items()->where('zaikosuu', '>=', '0.01')->Where('item_name','like', "%$search%")->paginate(30);
+          // dd($items);
+
           $search_category_parent = null;
         }else{
-          $items = Item::Where('busho_name',$cat)->Where('item_name','like', "%$search%")->paginate(30);
+          $items = Item::Where('busho_name',$cat)->Where('zaikosuu', '>=', '0.01')
+          ->where(function($items) use($search){
+            $items->where('item_name','like', "%$search%")->orWhere('item_id','like', "%$search%");
+          })->paginate(30);
           $search_category = null;
           $search_category_parent = $cat;
         }
@@ -203,7 +210,7 @@ class LoginPageController extends Controller
 
       // $items = Tag::first()->items()->get();
 
-      $items = Category::where('category_id',$id)->first()->items()->paginate(30);
+      $items = Category::where('category_id',$id)->first()->items()->where('zaikosuu', '>=', '0.01')->paginate(30);
 
       $categories = Category::get()->groupBy('bu_ka_name');
       // $category_name = Category::where('category_id',$id)->first()->category_name;
@@ -604,7 +611,7 @@ class LoginPageController extends Controller
     $categories = Category::get()->groupBy('bu_ka_name');
 
     $favorite_categories = FavoriteCategory::where('user_id', $user_id)->get();
-    $deals =  Deal::where('user_id',$user_id)->get();
+    $deals =  Deal::where('user_id',$user_id)->latest('created_at')->paginate(30);
 
     return view('deal', ['deals' => $deals, 'categories' => $categories, 'favorite_categories' => $favorite_categories]);
   }

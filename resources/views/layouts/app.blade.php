@@ -142,12 +142,32 @@
         @endif
 
         @if ( Auth::guard('admin')->check() )
-        <form class="form-inline mr-auto">
+        <form id="saveform" action="{{ url('/admin/deal/search') }}" enctype="multipart/form-data" method="POST" class="form-inline mr-auto">
+          @csrf
           <ul class="navbar-nav mr-3">
             <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg"><i class="fas fa-bars"></i></a></li>
             <li><a href="#" data-toggle="search" class="nav-link nav-link-lg d-sm-none"><i class="fas fa-search"></i></a></li>
           </ul>
+          <div class="search-element">
+			      <select name="cat" id="cat" class="postform">
+            	<option value="-1">すべての取引</option>
+              <option class="level-0" value="交渉中">交渉中</option>
+              <option class="level-0" value="受注済">受注済</option>
+              <option class="level-0" value="キャンセル">キャンセル</option>
+            </select>
+            <input class="form-control" type="text" name="search" placeholder="検索" aria-label="Search" data-width="250" style="width: 250px;" value="@if(isset($search)){{$search}}@endif">
+            <button class="btn" type="submit"><i class="fas fa-search"></i></button>
+          </div>
         </form>
+        @endif
+
+        @if ( Auth::guard('admin')->check() )
+        <!-- <form class="form-inline mr-auto">
+          <ul class="navbar-nav mr-3">
+            <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg"><i class="fas fa-bars"></i></a></li>
+            <li><a href="#" data-toggle="search" class="nav-link nav-link-lg d-sm-none"><i class="fas fa-search"></i></a></li>
+          </ul>
+        </form> -->
         @endif
 
         <!-- <div class="float-right">

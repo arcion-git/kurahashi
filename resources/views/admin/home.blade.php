@@ -47,17 +47,6 @@
     @endif
         <div class="row mt-4">
           <div class="col-12">
-            <ul class="navbar-nav float-left">
-              <div class="form-group">
-                <select class="custom-select">
-                  <option selected="">全ての取引</option>
-                  <option value="1">交渉中</option>
-                  <option value="2">受注済み</option>
-                  <option value="3">過去受注</option>
-                  <option value="3">キャンセル</option>
-                </select>
-              </div>
-            </ul>
             <div class="float-right">
               <form>
                 <div class="input-group">
@@ -68,6 +57,16 @@
                 </div>
               </form>
             </div>
+            <ul class="navbar-nav float-right">
+              <div class="form-group">
+                <select class="custom-select">
+                  <option selected="">全ての取引</option>
+                  <option value="1">交渉中</option>
+                  <option value="2">受注済み</option>
+                  <option value="3">キャンセル</option>
+                </select>
+              </div>
+            </ul>
             <div class="clearfix mb-3"></div>
             <div class="table-responsive">
               <table class="table table-striped">
@@ -107,30 +106,11 @@
                 @endforeach
               </table>
             </div>
+
             <div class="float-right">
               <nav>
                 <ul class="pagination">
-                  <li class="page-item disabled">
-                    <a class="page-link" href="#" aria-label="Previous">
-                      <span aria-hidden="true">&laquo;</span>
-                      <span class="sr-only">Previous</span>
-                    </a>
-                  </li>
-                  <li class="page-item active">
-                    <a class="page-link" href="#">1</a>
-                  </li>
-                  <!-- <li class="page-item">
-                    <a class="page-link" href="#">2</a>
-                  </li>
-                  <li class="page-item">
-                    <a class="page-link" href="#">3</a>
-                  </li> -->
-                  <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Next">
-                      <span aria-hidden="true">&raquo;</span>
-                      <span class="sr-only">Next</span>
-                    </a>
-                  </li>
+                  {{ $deals->links() }}
                 </ul>
               </nav>
             </div>

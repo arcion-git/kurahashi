@@ -59,9 +59,46 @@ class AdminPageController extends Controller
 
   public function index()
   {
-    $deals =  Deal::get();
+    $deals =  Deal::latest('created_at')->paginate(30);
     return view('admin/home', ['deals' => $deals]);
   }
+
+
+  public function search(Request $request)
+  {
+
+      $search = $request->search;
+      $cat = $request->cat;
+      if($cat == -1){
+        $deals = Deal::whereHas('user', function ($deals) use ($search) {
+            $deals->where('name', 'like', "%".$search."%")->paginate(30);
+        });
+
+        // dd($deals);
+        //
+        //
+        // $deals_list = [];
+        // $n=1;
+        // foreach ($deals as $deal) {
+        // $deal = Deal::user()->first();
+        //   array_push($deals_list, $deal);
+        // $n++;
+        // }
+        // dd($deals_list);
+
+
+      }else{
+        $items = Item::Where('busho_name',$cat)->Where('zaikosuu', '>=', '0.01')
+        ->where(function($items) use($search){
+          $items->where('item_name','like', "%$search%")->orWhere('item_id','like', "%$search%");
+        })->paginate(30);
+        $search_category = null;
+        $search_category_parent = $cat;
+      }
+    return view('admin/home', ['deals' => $deals]);
+  }
+
+
 
   public function dealdetail($id){
     $deal = Deal::where('id',$id)->first();
