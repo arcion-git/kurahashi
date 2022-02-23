@@ -124,6 +124,7 @@ class LoginPageController extends Controller
           ->where(function($items) use($search){
             $items->where('item_name','like', "%$search%")->orWhere('item_id','like', "%$search%");
           })->paginate(30);
+          
           // $items::where('item_name','like', "%$search%")->orWhere('item_id','like', "%$search%")->paginate(30);
           // $items = Item::Where('item_id',$search)->orWhere('item_name','like', "%$search%")->where('zaikosuu', '!=', '0')->paginate(30);
           $search_category = null;
