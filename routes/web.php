@@ -89,10 +89,10 @@
   Route::get('/admin/download', 'AdminPageController@download')->name('admin.download');
 
   // 取引検索
-  Route::get('/admin/deal/search', 'AdminPageController@search');
-  Route::post('/admin/deal/search', 'AdminPageController@search');
+  Route::get('/admin/search', 'AdminPageController@search');
+  Route::post('/admin/search', 'AdminPageController@search');
 
-  // 取引詳細画面
+  // ユーザーごとの取引一覧画面
   Route::get('/admin/user/deal/{id}', 'AdminPageController@userdeal')->name('admin.user.deal');
 
   // カテゴリのおすすめ編集

@@ -47,6 +47,8 @@ use App\Imports\PriceGroupeImport;
 use App\Imports\PriceImport;
 use App\Imports\SpecialPriceImport;
 
+// ページネーション
+use Illuminate\Pagination\LengthAwarePaginator;
 
 
 use Maatwebsite\Excel\Facades\Excel;
@@ -66,34 +68,56 @@ class AdminPageController extends Controller
 
   public function search(Request $request)
   {
-
       $search = $request->search;
       $cat = $request->cat;
       if($cat == -1){
-        $deals = Deal::whereHas('user', function ($deals) use ($search) {
-            $deals->where('name', 'like', "%".$search."%")->paginate(30);
-        });
-
-        // dd($deals);
-        //
-        //
-        // $deals_list = [];
-        // $n=1;
-        // foreach ($deals as $deal) {
-        // $deal = Deal::user()->first();
-        //   array_push($deals_list, $deal);
-        // $n++;
-        // }
-        // dd($deals_list);
-
-
-      }else{
-        $items = Item::Where('busho_name',$cat)->Where('zaikosuu', '>=', '0.01')
-        ->where(function($items) use($search){
-          $items->where('item_name','like', "%$search%")->orWhere('item_id','like', "%$search%");
-        })->paginate(30);
-        $search_category = null;
-        $search_category_parent = $cat;
+        $all_deals = Deal::get();
+        $deals = [];
+        $n=1;
+        foreach ($all_deals as $all_deal) {
+        $user_name = User::where('id',$all_deal->user_id)->where('name','like', "%$search%")->first();
+        if($user_name){
+          array_push($deals, $all_deal);
+        }
+        $n++;
+        }
+        $deals = new LengthAwarePaginator($deals, count($deals), 10, 1);
+      }elseif($cat == '交渉中'){
+        $all_deals = Deal::where('success_flg',0)->get();
+        $deals = [];
+        $n=1;
+        foreach ($all_deals as $all_deal) {
+        $user_name = User::where('id',$all_deal->user_id)->where('name','like', "%$search%")->first();
+        if($user_name){
+          array_push($deals, $all_deal);
+        }
+        $n++;
+        }
+        $deals = new LengthAwarePaginator($deals, count($deals), 10, 1);
+      }elseif($cat == '受注済'){
+        $all_deals = Deal::where('success_flg',1)->get();
+        $deals = [];
+        $n=1;
+        foreach ($all_deals as $all_deal) {
+        $user_name = User::where('id',$all_deal->user_id)->where('name','like', "%$search%")->first();
+        if($user_name){
+          array_push($deals, $all_deal);
+        }
+        $n++;
+        }
+        $deals = new LengthAwarePaginator($deals, count($deals), 10, 1);
+      }elseif($cat == 'キャンセル'){
+        $all_deals = Deal::where('cancel_flg',1)->get();
+        $deals = [];
+        $n=1;
+        foreach ($all_deals as $all_deal) {
+        $user_name = User::where('id',$all_deal->user_id)->where('name','like', "%$search%")->first();
+        if($user_name){
+          array_push($deals, $all_deal);
+        }
+        $n++;
+        }
+        $deals = new LengthAwarePaginator($deals, count($deals), 10, 1);
       }
     return view('admin/home', ['deals' => $deals]);
   }
@@ -205,14 +229,14 @@ class AdminPageController extends Controller
 
   public function user(){
 
-    $users = User::get();
+    $users = User::paginate(30);
 
     return view('admin.auth.user', ['users' => $users]);
   }
 
   public function item(){
 
-    $items = Item::get();
+    $items = Item::paginate(30);
 
     return view('admin.auth.item', ['items' => $items]);
   }
@@ -298,7 +322,7 @@ class AdminPageController extends Controller
 
   public function userdeal($id){
 
-    $deals = Deal::where('user_id',$id)->get();
+    $deals = Deal::where('user_id',$id)->paginate(30);
     $user = User::where('id',$id)->first();
     $data=[
       'id'=>$id,

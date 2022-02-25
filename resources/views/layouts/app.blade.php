@@ -142,7 +142,7 @@
         @endif
 
         @if ( Auth::guard('admin')->check() )
-        <form id="saveform" action="{{ url('/admin/deal/search') }}" enctype="multipart/form-data" method="POST" class="form-inline mr-auto">
+        <form id="saveform" action="{{ url('/admin/search') }}" enctype="multipart/form-data" method="POST" class="form-inline mr-auto">
           @csrf
           <ul class="navbar-nav mr-3">
             <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg"><i class="fas fa-bars"></i></a></li>
