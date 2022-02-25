@@ -51,10 +51,12 @@
                     <th class="text-center">商品名</th>
                     <th class="text-center">産地</th>
                     <th class="text-center">規格</th>
-                    <th class="text-center">単位</th>
                     <th class="text-center">単価</th>
+                    <th class="text-center">数量</th>
+                    <th class="text-center">単位</th>
+                    <th class="text-center">納品</th>
                     <th class="text-center">次回納品予定日</th>
-                    <th class="text-center">納品曜日</th>
+                    <th class="text-center">小計</th>
                     <th class="text-center">有効/無効</th>
                     <th class="text-center">操作</th>
                   </tr>
@@ -73,6 +75,12 @@
                     <td class="text-center">
                       {{$repeatorder->item()->kikaku}}
                     </td>
+                    <td class="text-center" width="150">
+                      <input name="repeatorder[{{$repeatorder->id}}][price]" class="price text-center form-control" value="{{$repeatorder->price}}">
+                    </td>
+                    <td class="text-center" width="150">
+                      <input name="repeatorder[{{$repeatorder->id}}][quantity]" class="quantity text-center form-control" value="{{$repeatorder->quantity}}">
+                    </td>
                     <td class="text-center">
                       @if ($repeatorder->item()->tani == 1)
         							ｹｰｽ
@@ -84,15 +92,13 @@
         							Kg
         							@endif
                     </td>
-                    <td class="text-center" width="150">
-                      <input name="repeatorder[{{$repeatorder->id}}][price]" class="price text-center form-control" value="{{$repeatorder->price}}">
-                    </td>
                     <td class="text-center" width="160">
-      								<input type="text" name="repeatorder[{{$repeatorder->id}}][nouhin_youbi]" class="nouhin_youbi text-center form-control daterange-cus datepicker" value="{{$repeatorder->nouhin_youbi}}" autocomplete="off">
+                      <input id="repeatorder[{{$repeatorder->id}}][nouhin_youbi]" name="repeatorder[{{$repeatorder->id}}][nouhin_youbi]" class="nouhin_youbi text-center form-control" value="{{$repeatorder->nouhin_youbi}}" data-toggle="modal" data-target="#nouhin_youbi">
                     </td>
-                    <td class="text-center" width="150">
-                      <input type="text" name="" class="text-center form-control" value="">
+                    <td class="text-center head-nouhin_youbi" width="150">
+
                     </td>
+                    <td class="text-center"></td>
                     <td class="text-center" width="150">
                       <div class="form-group">
                         <label class="mt-4">
@@ -106,7 +112,7 @@
                               @else
                               @endif
                               >
-                              <span class="selectgroup-button">on</span>
+                              <span class="selectgroup-button">On</span>
                             </label>
                             <label class="selectgroup-item">
                               <input type="radio" name="repeatorder[{{$repeatorder->id}}][status]" value="無効" class="selectgroup-input"
@@ -115,7 +121,7 @@
                               @else
                               @endif
                               >
-                              <span class="selectgroup-button">off</span>
+                              <span class="selectgroup-button">Off</span>
                             </label>
                           </div>
                           <!-- <input type="checkbox" name="repeatorder[{{$repeatorder->id}}][status]" value="{{$repeatorder->status}}" class="custom-switch-input">
@@ -149,6 +155,7 @@
   <input name="kaiin_number" type="hidden" value="{{$id}}">
   <input id="remove_id" name="delete" type="hidden" value="">
 </form>
+
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -222,6 +229,37 @@
   </div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="nouhin_youbi" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">納品曜日選択</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <input class="checkbox-input" type="checkbox" id="月" name="nouhin_youbi" value="月">
+          <label for="月" class="checkbox-label">月</label>
+          <input class="checkbox-input" type="checkbox" id="火" name="nouhin_youbi" value="火">
+          <label for="火" class="checkbox-label">火</label>
+          <input class="checkbox-input" type="checkbox" id="水" name="nouhin_youbi" value="水">
+          <label for="水" class="checkbox-label">水</label>
+          <input class="checkbox-input" type="checkbox" id="木" name="nouhin_youbi" value="木">
+          <label for="木" class="checkbox-label">木</label>
+          <input class="checkbox-input" type="checkbox" id="金" name="nouhin_youbi" value="金">
+          <label for="金" class="checkbox-label">金</label>
+          <input class="checkbox-input" type="checkbox" id="土" name="nouhin_youbi" value="土">
+          <label for="土" class="checkbox-label">土</label>
+          <input class="checkbox-input" type="checkbox" id="日" name="nouhin_youbi" value="日">
+          <label for="日" class="checkbox-label">日</label>
+          <button id="" name="item_id" onclick="javaScript:OK()" data-dismiss="modal" aria-label="Close" value="" class="addrepeatorder btn btn-warning">設定</button></td>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 $('.datepicker').datepicker({
 	format: 'yyyy-mm-dd',
@@ -232,5 +270,18 @@ $('.datepicker').datepicker({
 	endDate: '+31d',
 	defaultViewDate: Date()
 });
+
+$(document).on("click", ".nouhin_youbi", function() {
+  var input = $(this).get(0).id;
+	var search = document.getElementsByName("nouhin_youbi").value;
+  console.log(input);
+  console.log(search);
+  return input;
+});
+function OK() {
+	var search = document.getElementsByName(input).value;
+  console.log(search);
+	document.getElementById(input).value = search;
+}
 </script>
 @endsection

@@ -21,8 +21,9 @@ class CreateRepeatordersTable extends Migration
             $table->string('sku_code')->nullable()->comment('SKUコード');
             $table->string('store')->nullable()->comment('納品先店舗');
             $table->string('price')->nullable()->comment('金額');
+            $table->string('quantity')->nullable()->comment('数量');
             $table->string('status')->nullable()->comment('有効/無効');
-            $table->date('nouhin_youbi')->nullable()->comment('納品曜日');
+            $table->string('nouhin_youbi')->nullable()->comment('納品曜日');
 
             $table->timestamps();
         });

@@ -513,6 +513,7 @@ class AdminPageController extends Controller
     foreach($repeatorders as  $key => $value) {
       $repeatorder = Repeatorder::firstOrNew(['id'=> $key]);
       $repeatorder->price = $value['price'];
+      $repeatorder->quantity = $value['quantity'];
       $repeatorder->nouhin_youbi = $value['nouhin_youbi'];
       $repeatorder->status = $value['status'];
       // $repeatorder->end = $value['end'];

@@ -543,6 +543,7 @@ class LoginPageController extends Controller
     $store_users = StoreUser::where('user_id',$kaiin_number)->get(['store_id','tokuisaki_id']);
     $stores = [];
     $n=1;
+
     foreach ($store_users as $store_user) {
     $store = Store::where([ 'tokuisaki_id'=> $store_user->tokuisaki_id,'store_id'=> $store_user->store_id ])->first();
       array_push($stores, $store);
