@@ -50,7 +50,7 @@
                         @if($recommend->item()->zaikosuu == 0)
                         @else
                         <tr>
-                          <form class="form-horizontal" role="form" method="POST" action="{{ url('/addcart') }}">
+                          <!-- <form class="form-horizontal" role="form" method="POST" action="{{ url('/addcart') }}"> -->
                             @csrf
                             <td class="text-center">{{$recommend->item()->item_id}}</td>
                             <td class="">{{$recommend->item()->item_name}}</td>
@@ -71,7 +71,7 @@
                             <td class="text-center">{{$recommend->item()->tokkijikou}}</td>
                             <td class="text-center">{{$recommend->price}}</td>
                             <td class="text-center"><button name="item_id" value="{{$recommend->item()->id}}" id="{{$recommend->item()->id}}" class="addcart btn btn-warning">カートに入れる</button></td>
-                          </form>
+                          <!-- </form> -->
                         </tr>
                         @endif
                         @endforeach
@@ -117,7 +117,7 @@
                         @if($special_price->item()->zaikosuu == 0)
                         @else
                         <tr>
-                          <form class="form-horizontal" role="form" method="POST" action="{{ url('/addcart') }}">
+                          <!-- <form class="form-horizontal" role="form" method="POST" action="{{ url('/addcart') }}"> -->
                             @csrf
                             <td class="text-center">{{$special_price->item()->item_id}}</td>
                             <td class="">{{$special_price->item()->item_name}}</td>
@@ -138,7 +138,7 @@
                             <td class="text-center">{{$special_price->item()->tokkijikou}}</td>
                             <td class="text-center">{{$special_price->price}}</td>
                             <td class="text-center"><button name="item_id" value="{{$special_price->item()->id}}" id="{{$special_price->item()->id}}" class="addcart btn btn-warning">カートに入れる</button></td>
-                          </form>
+                          <!-- </form> -->
                         </tr>
                         @endif
                         @endforeach
@@ -262,8 +262,8 @@
 
                         @foreach($items as $item)
                         <tr>
-                          <!-- <form class="form-horizontal" role="form" method="POST" action="{{ url('/addcart') }}">
-                            @csrf -->
+                          <!-- <form class="form-horizontal" role="form" method="POST" action="{{ url('/addcart') }}"> -->
+                            @csrf
                             <td class="text-center">{{$item->item_id}}</td>
                             <td class="">{{$item->item_name}}</td>
                             <td class="text-center">{{$item->sanchi_name}}</td>

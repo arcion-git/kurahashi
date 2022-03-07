@@ -37,6 +37,15 @@ $(function() {
       });
       $('#toggle').addClass('beep');
       $('#toggle').trigger('click');
+      Swal.fire({
+        type:"success",
+        title: "カートに追加しました",
+        position: 'top-end',
+        toast: true,
+        icon: 'success',
+        showConfirmButton: false,
+        timer: 1500
+      });
   });
 
   // カートの中身を更新
@@ -674,7 +683,7 @@ if(document.URL.match("/admin/deal")) {
 
 
 
-  // 顧客側オーダー内容を随時取得
+// 顧客側オーダー内容を随時取得
 
 if(document.URL.match("/user/deal")) {
   $(function(){
