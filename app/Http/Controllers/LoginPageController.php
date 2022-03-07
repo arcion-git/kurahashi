@@ -22,6 +22,10 @@ use App\RecommendCategory;
 use App\CartNini;
 use App\OrderNini;
 
+// デバッグを出力
+use Log;
+use Response;
+
 // 時間に関する処理
 use Carbon\Carbon;
 
@@ -399,10 +403,13 @@ class LoginPageController extends Controller
     $order = Order::where(['id'=> $order_id])->first();
     $cart_id = $order->cart_id;
     $cart = Cart::where(['id'=> $cart_id])->first();
-    $item = Item::where('item_id',$cart->item_id)->first();
+    $item = Item::where('id',$cart->item_id)->first();
 
     $price = Price::where(['price_groupe'=>$price_groupe->price_groupe, 'item_id'=> $item->item_id, 'sku_code'=> $item->sku_code])->first();
+
     $order = Order::where(['id'=> $order_id])->update(['store_name'=> $store_name,'tokuisaki_name'=> $tokuisaki_name,'price'=> $price->price]);
+
+    // Log::debug($order);
 
     $data = "success";
 
