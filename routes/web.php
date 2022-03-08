@@ -22,6 +22,10 @@
 
   // 顧客側ページ
   Route::get('/', 'LoginPageController@index')->name('home');
+
+  Route::get('/special_price', 'LoginPageController@index')->name('home');
+  Route::get('/recommend', 'LoginPageController@index')->name('home');
+
   Route::get('/category/{id}', 'LoginPageController@category');
   Route::get('/confirm', 'LoginPageController@confirm');
   Route::get('/deal', 'LoginPageController@deal')->name('deal');

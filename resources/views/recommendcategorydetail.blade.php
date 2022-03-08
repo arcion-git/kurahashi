@@ -80,7 +80,7 @@
                 </table>
               </div>
               <input name="category_id" type="hidden" value="{{$id}}">
-              <button form="saveform" type="submit" class="btn btn-warning float-right">内容を保存</button>
+              <button type="submit" class="btn btn-warning float-right">内容を保存</button>
             </form>
             <button class="addrecommendcategory btn btn-success" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus"></i> 商品を追加</button>
           </div>

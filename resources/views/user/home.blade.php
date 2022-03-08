@@ -17,8 +17,11 @@
 
 
 
-
+          @if(Request::is('recommend'))
           @if(!isset($recommends[0]))
+          <p>
+            担当のおすすめ商品が見つかりませんでした。
+          </p>
           @else
           <div class="section-body">
             <div class="row">
@@ -84,8 +87,14 @@
             </div>
           </div>
           @endif
+          @endif
 
+
+          @if(Request::is('special_price'))
           @if(!isset($special_prices[0]))
+          <p>
+            時価商品が見つかりませんでした。
+          </p>
           @else
           <div class="section-body">
             <div class="row">
@@ -151,6 +160,8 @@
             </div>
           </div>
           @endif
+          @endif
+
 
           @if(!isset($recommendcategories[0]))
           @else
@@ -217,6 +228,7 @@
 
 
 
+          @if(Request::is('/') or Request::is('*category*'))
           <div class="section-body">
             <div class="row">
               <div class="col-12">
@@ -312,6 +324,8 @@
               </div>
             </div>
           </div>
+          @endif
+
         </section>
 
 

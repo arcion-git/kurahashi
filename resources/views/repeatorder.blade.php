@@ -138,7 +138,7 @@
                 </table>
               </div>
               <input name="kaiin_number" type="hidden" value="{{$id}}">
-              <button form="saveform" type="submit" class="btn btn-warning float-right">内容を保存</button>
+              <button type="submit" class="btn btn-warning float-right">内容を保存</button>
             </form>
             <button class="addrepeatorder btn btn-success" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus"></i> 商品を追加</button>
           </div>

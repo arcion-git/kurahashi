@@ -328,10 +328,10 @@
               <a href="{{ url('/') }}" class="nav-link"><i class="fas fa-list"></i><span>すべての商品</span></a>
             </li>
             <li class="nav-item">
-              <a href="{{ url('/') }}" class="nav-link"><i class="far fa-user"></i><span>担当のおすすめ商品</span></a>
+              <a href="{{ url('/recommend') }}" class="nav-link"><i class="far fa-user"></i><span>担当のおすすめ商品</span></a>
             </li>
             <li class="nav-item">
-              <a href="{{ url('/') }}" class="nav-link"><i class="fas fa-fire"></i><span>時価商品</span></a>
+              <a href="{{ url('/special_price') }}" class="nav-link"><i class="fas fa-fire"></i><span>時価商品</span></a>
             </li>
 
 
