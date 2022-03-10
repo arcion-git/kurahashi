@@ -402,7 +402,11 @@
     </div>
   </div>
 
-
+  <div id="overlayajax">
+    <div class="cv-spinner">
+      <span class="spinner"></span>
+    </div>
+  </div>
 
 
     <!-- General JS Scripts -->

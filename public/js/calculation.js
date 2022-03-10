@@ -9,7 +9,11 @@
 $(function() {
 
   $(document).ajaxSend(function() {
-    $("#overlay").fadeIn(300);　
+    $("#overlayajax").fadeIn(300);　
+  });
+
+  $(document).ajaxSuccess(function() {
+    $("#overlayajax").fadeOut(300);
   });
 
   function doReload() {

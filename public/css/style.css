@@ -3180,7 +3180,7 @@ a:not(.btn-social-icon):not(.btn-social):not(.page-link) .ion, a:not(.btn-social
 }
 
 
-#overlay{
+#overlayajax{
   position: fixed;
   top: 0;
   z-index: 100;
