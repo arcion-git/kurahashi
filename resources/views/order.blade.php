@@ -37,7 +37,7 @@
 								@foreach($stores as $store)
 								<option id="{{$store->tokuisaki_name}}" value="{{$store->store_name}}">{{$store->tokuisaki_name}} {{$store->store_name}}</option>
 								@endforeach
-								<option value="">全店舗に追加</option>
+								<option value="all_store">全店舗に追加</option>
 							</select>
 						</td>
 						<td class="head-kikaku text-center">{{$cart->item->kikaku}}</td>
@@ -122,7 +122,7 @@
 										@foreach($stores as $store)
 										<option id="{{$store->tokuisaki_name}}" value="{{$store->store_name}}">{{$store->tokuisaki_name}} {{$store->store_name}}</option>
 										@endforeach
-										<option value="">全店舗に追加</option>
+										<option value="all_store_nini">全店舗に追加</option>
 									</select>
 								</td>
 								<td class="head-quantity text-center">

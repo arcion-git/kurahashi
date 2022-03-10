@@ -57,7 +57,9 @@
   Route::post('/change_nouhin_yoteibi', 'LoginPageController@change_nouhin_yoteibi');
   Route::post('/nini_change_nouhin_yoteibi', 'LoginPageController@nini_change_nouhin_yoteibi');
   Route::post('/change_store', 'LoginPageController@change_store');
+  Route::post('/add_all_store', 'LoginPageController@add_all_store');
   Route::post('/nini_change_store', 'LoginPageController@nini_change_store');
+  Route::post('/nini_add_all_store', 'LoginPageController@nini_add_all_store');
   Route::post('/clonecart', 'LoginPageController@clonecart');
   Route::post('/addordernini', 'LoginPageController@addordernini');
   Route::post('/updatecart', 'LoginPageController@updatecart');

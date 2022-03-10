@@ -12,7 +12,7 @@ $(function() {
     $("#overlayajax").fadeIn(300);　
   });
 
-  $(document).ajaxSuccess(function() {
+  $(document).ajaxComplete(function() {
     $("#overlayajax").fadeOut(300);
   });
 
@@ -587,6 +587,65 @@ if(document.URL.match("/admin/deal")) {
     console.log(order_id);
     console.log(store_name);
     console.log(tokuisaki_name);
+    // 全店舗に追加の分岐
+    if(store_name == 'all_store') {
+      Swal.fire({
+        // title: "納品予定日を変更しました",
+        text: "全店舗に追加する場合、この商品の納品先、個数の設定は削除されます。よろしいですか？",
+        // position: 'top-end',
+        // toast: true,
+        icon: 'warning',
+        // showConfirmButton: true,
+        showCancelButton: true,
+        confirmButtonColor: '#47c363',
+        cancelButtonColor: '#3abaf4',
+        confirmButtonText: 'はい',
+        cancelButtonText: 'いいえ',
+        // timer: 1500
+      }).then((result) => {
+      if (result.value) {
+        $.ajax({
+            headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }, //Headersを書き忘れるとエラーになる
+            url: location.origin + '/add_all_store',
+            type: 'POST', //リクエストタイプ
+            data: {
+              'order_id': order_id,
+              'store_name': store_name,
+              'tokuisaki_name': tokuisaki_name,
+            } //Laravelに渡すデータ
+          })
+          // Ajaxリクエスト成功時の処理
+          .done(function(data) {
+            // console.log(data);
+            // setTimeout(doReload);
+            setTimeout(order_update);
+            setTimeout(dealorder_update);
+            Swal.fire({
+              type:"success",
+              title: "配送先店舗を変更しました",
+              // position: 'top-end',
+              // toast: true,
+              icon: 'success',
+              showConfirmButton: false,
+              // timer: 1500
+            });
+          })
+          // Ajaxリクエスト失敗時の処理
+          .fail(function(jqXHR, textStatus, errorThrown) {
+            alert('配送先店舗を保存できません。');
+            console.log("ajax通信に失敗しました");
+            console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+            console.log("textStatus     : " + textStatus);
+            console.log("errorThrown    : " + errorThrown.message);
+          });
+      }else{
+        setTimeout(order_update);
+        setTimeout(dealorder_update);
+      }
+      });
+    }else{
     $.ajax({
         headers: {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -623,6 +682,7 @@ if(document.URL.match("/admin/deal")) {
         console.log("textStatus     : " + textStatus);
         console.log("errorThrown    : " + errorThrown.message);
       });
+    }
   });
 
 
@@ -805,6 +865,65 @@ if(document.URL.match("/admin/deal")) {
     console.log(order_nini_id);
     console.log(nini_store_name);
     console.log(nini_tokuisaki_name);
+    // 全店舗に追加の分岐
+    if(nini_store_name == 'all_store_nini') {
+      Swal.fire({
+        // title: "納品予定日を変更しました",
+        text: "全店舗に追加する場合、この商品の納品先、個数の設定は削除されます。よろしいですか？",
+        // position: 'top-end',
+        // toast: true,
+        icon: 'warning',
+        // showConfirmButton: true,
+        showCancelButton: true,
+        confirmButtonColor: '#47c363',
+        cancelButtonColor: '#3abaf4',
+        confirmButtonText: 'はい',
+        cancelButtonText: 'いいえ',
+        // timer: 1500
+      }).then((result) => {
+      if (result.value) {
+        $.ajax({
+            headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }, //Headersを書き忘れるとエラーになる
+            url: location.origin + '/nini_add_all_store',
+            type: 'POST', //リクエストタイプ
+            data: {
+              'order_nini_id': order_nini_id,
+              'nini_store_name': nini_store_name,
+              'nini_tokuisaki_name': nini_tokuisaki_name,
+            } //Laravelに渡すデータ
+          })
+          // Ajaxリクエスト成功時の処理
+          .done(function(data) {
+            // console.log(data);
+            // setTimeout(doReload);
+            setTimeout(order_update);
+            setTimeout(dealorder_update);
+            Swal.fire({
+              type:"success",
+              title: "配送先店舗を変更しました",
+              // position: 'top-end',
+              // toast: true,
+              icon: 'success',
+              showConfirmButton: false,
+              // timer: 1500
+            });
+          })
+          // Ajaxリクエスト失敗時の処理
+          .fail(function(jqXHR, textStatus, errorThrown) {
+            alert('配送先店舗を保存できません。');
+            console.log("ajax通信に失敗しました");
+            console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+            console.log("textStatus     : " + textStatus);
+            console.log("errorThrown    : " + errorThrown.message);
+          });
+      }else{
+        setTimeout(order_update);
+        setTimeout(dealorder_update);
+      }
+      });
+    }else{
     $.ajax({
         headers: {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -840,6 +959,7 @@ if(document.URL.match("/admin/deal")) {
         console.log("textStatus     : " + textStatus);
         console.log("errorThrown    : " + errorThrown.message);
       });
+    }
   });
 
 

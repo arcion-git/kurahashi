@@ -408,9 +408,40 @@ class LoginPageController extends Controller
     $price = Price::where(['price_groupe'=>$price_groupe->price_groupe, 'item_id'=> $item->item_id, 'sku_code'=> $item->sku_code])->first();
 
     $order = Order::where(['id'=> $order_id])->update(['store_name'=> $store_name,'tokuisaki_name'=> $tokuisaki_name,'price'=> $price->price]);
-
     // Log::debug($order);
 
+    $data = "success";
+
+    return redirect()->route('home',$data);
+  }
+
+  // 全店舗に追加
+  public function add_all_store(Request $request){
+    $order_id = $request->order_id;
+
+    $order = Order::where(['id'=> $order_id])->first();
+    $cart_id = $order->cart_id;
+    $cart = Cart::where(['id'=> $cart_id])->first();
+
+    $item = Item::where('id',$cart->item_id)->first();
+
+    // 保存中の店舗を削除
+    $order_delete = Order::where('cart_id', $cart_id)->delete();
+
+    // 店舗を抽出して保存
+    $kaiin_number = Auth::guard('user')->user()->kaiin_number;
+    $store_users = StoreUser::where('user_id',$kaiin_number)->get(['store_id','tokuisaki_id']);
+
+    foreach ($store_users as $store_user) {
+      $store = Store::where([ 'tokuisaki_id'=> $store_user->tokuisaki_id,'store_id'=> $store_user->store_id ])->first();
+
+      $price_groupe = PriceGroupe::where([ 'tokuisaki_id'=> $store_user->tokuisaki_id,'store_id'=> $store_user->store_id ])->first();
+
+      $price = Price::where(['price_groupe'=>$price_groupe->price_groupe, 'item_id'=> $item->item_id , 'sku_code'=> $item->sku_code])->first();
+
+      $order=Order::create(['cart_id'=> $cart->id , 'tokuisaki_name'=> $store->tokuisaki_name , 'store_name'=> $store->store_name , 'quantity'=> 1 , 'price'=> $price->price ])->first();
+      // Log::debug("count");
+    }
     $data = "success";
 
     return redirect()->route('home',$data);
@@ -423,6 +454,32 @@ class LoginPageController extends Controller
     $nini_tokuisaki_name = $request->nini_tokuisaki_name;
     $order_nini = OrderNini::where(['id'=> $order_nini_id])->update(['store_name'=> $nini_store_name,'tokuisaki_name'=> $nini_tokuisaki_name]);
     $data = "success";
+    return redirect()->route('home',$data);
+  }
+
+  // 任意の商品の配送先を全店舗に追加
+  public function nini_add_all_store(Request $request){
+    $order_nini_id = $request->order_nini_id;
+
+    $order_nini = Ordernini::where(['id'=> $order_nini_id])->first();
+
+
+
+    // 保存中の店舗を削除
+    $order_nini_delete = Ordernini::where('cart_nini_id', $order_nini->cart_nini_id)->delete();
+
+    // 店舗を抽出して保存
+    $kaiin_number = Auth::guard('user')->user()->kaiin_number;
+    $store_users = StoreUser::where('user_id',$kaiin_number)->get(['store_id','tokuisaki_id']);
+
+    // Log::debug($store_users);
+
+    foreach ($store_users as $store_user) {
+      $store = Store::where([ 'tokuisaki_id'=> $store_user->tokuisaki_id,'store_id'=> $store_user->store_id ])->first();
+      $order_nini=Ordernini::create(['cart_nini_id'=> $order_nini->cart_nini_id , 'tokuisaki_name'=> $store->tokuisaki_name , 'store_name'=> $store->store_name , 'quantity'=> 1])->first();
+    }
+    $data = "success";
+
     return redirect()->route('home',$data);
   }
 
