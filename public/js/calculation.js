@@ -8,6 +8,37 @@
 
 $(function() {
 
+  function doReload() {
+      window.location.reload();
+  }
+
+  function keep_scroll_reload() {
+            var re = /&page_x=(\d+)&page_y=(\d+)/;
+            var page_x = document.documentElement ? document.documentElement.scrollLeft : document.body.scrollLeft;
+            var page_y = document.documentElement ? document.documentElement.scrollTop : document.body.scrollTop;
+            var position = '&page_x=' + page_x + '&page_y=' + page_y;
+            if(!url.match(re)) {
+                    //初回
+                    location.href = url + position;
+            } else {
+                    //2回目以降
+                    location.href = url.replace(/&page_x=(\d+)&page_y=(\d+)/,position);
+            }
+  }
+
+  // スクロール位置を復元
+  function restore_scroll() {
+          var re = /&page_x=(\d+)&page_y=(\d+)/;
+          if(window.location.href.match(re)) {
+                  var position = window.location.href.match(re)
+                  window.scrollTo(position[1],position[2]);
+          }
+  }
+
+  (window.onload = function() {
+          restore_scroll();
+  })();
+
   // カートに追加
   $(document).on("click", ".addcart", function() {
     var item_id = $(this).get(0).id;
@@ -279,17 +310,18 @@ if(document.URL.match("/admin/deal")) {
         console.log("textStatus     : " + textStatus);
         console.log("errorThrown    : " + errorThrown.message);
       });
-      setTimeout(order_update);
-      setTimeout(dealorder_update);
-      Swal.fire({
-        type:"success",
-        title: "配送先を追加しました",
-        position: 'top-end',
-        toast: true,
-        icon: 'success',
-        showConfirmButton: false,
-        timer: 1500
-      });
+      setTimeout(doReload);
+      // setTimeout(order_update);
+      // setTimeout(dealorder_update);
+      // Swal.fire({
+      //   type:"success",
+      //   title: "配送先を追加しました",
+      //   position: 'top-end',
+      //   toast: true,
+      //   icon: 'success',
+      //   showConfirmButton: false,
+      //   timer: 1500
+      // });
   });
 
 
@@ -321,17 +353,18 @@ if(document.URL.match("/admin/deal")) {
         console.log("textStatus     : " + textStatus);
         console.log("errorThrown    : " + errorThrown.message);
       });
-      setTimeout(order_update);
-      setTimeout(dealorder_update);
-      Swal.fire({
-        type:"success",
-        title: "配送先を追加しました",
-        position: 'top-end',
-        toast: true,
-        icon: 'success',
-        showConfirmButton: false,
-        timer: 1500
-      });
+      $.keepPosition.reload();
+      // setTimeout(order_update);
+      // setTimeout(dealorder_update);
+      // Swal.fire({
+      //   type:"success",
+      //   title: "配送先を追加しました",
+      //   position: 'top-end',
+      //   toast: true,
+      //   icon: 'success',
+      //   showConfirmButton: false,
+      //   timer: 1500
+      // });
   });
 
 
@@ -362,17 +395,18 @@ if(document.URL.match("/admin/deal")) {
         console.log("textStatus     : " + textStatus);
         console.log("errorThrown    : " + errorThrown.message);
       });
-      setTimeout(order_update);
-      setTimeout(dealorder_update);
-      Swal.fire({
-        type:"success",
-        title: "任意の商品を追加しました",
-        position: 'top-end',
-        toast: true,
-        icon: 'success',
-        showConfirmButton: false,
-        timer: 1500
-      });
+      setTimeout(doReload);
+      // setTimeout(order_update);
+      // setTimeout(dealorder_update);
+      // Swal.fire({
+      //   type:"success",
+      //   title: "任意の商品を追加しました",
+      //   position: 'top-end',
+      //   toast: true,
+      //   icon: 'success',
+      //   showConfirmButton: false,
+      //   timer: 1500
+      // });
   });
 
 
@@ -408,17 +442,18 @@ if(document.URL.match("/admin/deal")) {
         console.log("textStatus     : " + textStatus);
         console.log("errorThrown    : " + errorThrown.message);
       });
-      setTimeout(order_update);
-      setTimeout(dealorder_update);
-      Swal.fire({
-        type:"success",
-        title: "カートから削除しました",
-        position: 'top-end',
-        toast: true,
-        icon: 'success',
-        showConfirmButton: false,
-        timer: 1500
-      });
+      setTimeout(doReload);
+      // setTimeout(order_update);
+      // setTimeout(dealorder_update);
+      // Swal.fire({
+      //   type:"success",
+      //   title: "カートから削除しました",
+      //   position: 'top-end',
+      //   toast: true,
+      //   icon: 'success',
+      //   showConfirmButton: false,
+      //   timer: 1500
+      // });
   });
 
 
@@ -455,17 +490,18 @@ if(document.URL.match("/admin/deal")) {
           console.log("textStatus     : " + textStatus);
           console.log("errorThrown    : " + errorThrown.message);
         });
-        setTimeout(order_update);
-        setTimeout(dealorder_update);
-        Swal.fire({
-          type:"success",
-          title: "カートから削除しました",
-          position: 'top-end',
-          toast: true,
-          icon: 'success',
-          showConfirmButton: false,
-          timer: 1500
-        });
+        setTimeout(doReload);
+        // setTimeout(order_update);
+        // setTimeout(dealorder_update);
+        // Swal.fire({
+        //   type:"success",
+        //   title: "カートから削除しました",
+        //   position: 'top-end',
+        //   toast: true,
+        //   icon: 'success',
+        //   showConfirmButton: false,
+        //   timer: 1500
+        // });
     });
 
 
@@ -499,17 +535,18 @@ if(document.URL.match("/admin/deal")) {
         console.log("textStatus     : " + textStatus);
         console.log("errorThrown    : " + errorThrown.message);
       });
-      setTimeout(order_update);
-      setTimeout(dealorder_update);
-      Swal.fire({
-        type:"success",
-        title: "個数を変更しました",
-        position: 'top-end',
-        toast: true,
-        icon: 'success',
-        showConfirmButton: false,
-        timer: 1500
-      });
+      setTimeout(doReload);
+      // setTimeout(order_update);
+      // setTimeout(dealorder_update);
+      // Swal.fire({
+      //   type:"success",
+      //   title: "個数を変更しました",
+      //   position: 'top-end',
+      //   toast: true,
+      //   icon: 'success',
+      //   showConfirmButton: false,
+      //   timer: 1500
+      // });
   });
 
 
@@ -542,17 +579,18 @@ if(document.URL.match("/admin/deal")) {
         console.log("textStatus     : " + textStatus);
         console.log("errorThrown    : " + errorThrown.message);
       });
-      setTimeout(order_update);
-      setTimeout(dealorder_update);
-      Swal.fire({
-        type:"success",
-        title: "納品予定日を変更しました",
-        position: 'top-end',
-        toast: true,
-        icon: 'success',
-        showConfirmButton: false,
-        timer: 1500
-      });
+      setTimeout(doReload);
+      // setTimeout(order_update);
+      // setTimeout(dealorder_update);
+      // Swal.fire({
+      //   type:"success",
+      //   title: "納品予定日を変更しました",
+      //   position: 'top-end',
+      //   toast: true,
+      //   icon: 'success',
+      //   showConfirmButton: false,
+      //   timer: 1500
+      // });
   });
 
   // 配送先店舗を保存
@@ -587,17 +625,18 @@ if(document.URL.match("/admin/deal")) {
         console.log("textStatus     : " + textStatus);
         console.log("errorThrown    : " + errorThrown.message);
       });
-      setTimeout(order_update);
-      setTimeout(dealorder_update);
-      Swal.fire({
-        type:"success",
-        title: "配送先店舗を変更しました",
-        position: 'top-end',
-        toast: true,
-        icon: 'success',
-        showConfirmButton: false,
-        timer: 1500
-      });
+      setTimeout(doReload);
+      // setTimeout(order_update);
+      // setTimeout(dealorder_update);
+      // Swal.fire({
+      //   type:"success",
+      //   title: "配送先店舗を変更しました",
+      //   position: 'top-end',
+      //   toast: true,
+      //   icon: 'success',
+      //   showConfirmButton: false,
+      //   timer: 1500
+      // });
   });
 
 
@@ -630,17 +669,18 @@ if(document.URL.match("/admin/deal")) {
         console.log("textStatus     : " + textStatus);
         console.log("errorThrown    : " + errorThrown.message);
       });
-      setTimeout(order_update);
-      setTimeout(dealorder_update);
-      Swal.fire({
-        type:"success",
-        title: "任意の商品名を保存しました",
-        position: 'top-end',
-        toast: true,
-        icon: 'success',
-        showConfirmButton: false,
-        timer: 1500
-      });
+      setTimeout(doReload);
+      // setTimeout(order_update);
+      // setTimeout(dealorder_update);
+      // Swal.fire({
+      //   type:"success",
+      //   title: "任意の商品名を保存しました",
+      //   position: 'top-end',
+      //   toast: true,
+      //   icon: 'success',
+      //   showConfirmButton: false,
+      //   timer: 1500
+      // });
   });
 
   // 任意の担当を保存
@@ -672,17 +712,18 @@ if(document.URL.match("/admin/deal")) {
         console.log("textStatus     : " + textStatus);
         console.log("errorThrown    : " + errorThrown.message);
       });
-      setTimeout(order_update);
-      setTimeout(dealorder_update);
-      Swal.fire({
-        type:"success",
-        title: "担当を変更しました",
-        position: 'top-end',
-        toast: true,
-        icon: 'success',
-        showConfirmButton: false,
-        timer: 1500
-      });
+      setTimeout(doReload);
+      // setTimeout(order_update);
+      // setTimeout(dealorder_update);
+      // Swal.fire({
+      //   type:"success",
+      //   title: "担当を変更しました",
+      //   position: 'top-end',
+      //   toast: true,
+      //   icon: 'success',
+      //   showConfirmButton: false,
+      //   timer: 1500
+      // });
   });
 
   // 任意の個数変更を保存
@@ -714,17 +755,18 @@ if(document.URL.match("/admin/deal")) {
         console.log("textStatus     : " + textStatus);
         console.log("errorThrown    : " + errorThrown.message);
       });
-      setTimeout(order_update);
-      setTimeout(dealorder_update);
-      Swal.fire({
-        type:"success",
-        title: "数量（単位）を変更しました",
-        position: 'top-end',
-        toast: true,
-        icon: 'success',
-        showConfirmButton: false,
-        timer: 1500
-      });
+      setTimeout(doReload);
+      // setTimeout(order_update);
+      // setTimeout(dealorder_update);
+      // Swal.fire({
+      //   type:"success",
+      //   title: "数量（単位）を変更しました",
+      //   position: 'top-end',
+      //   toast: true,
+      //   icon: 'success',
+      //   showConfirmButton: false,
+      //   timer: 1500
+      // });
   });
 
   // 任意の納品予定日を保存
@@ -756,17 +798,18 @@ if(document.URL.match("/admin/deal")) {
         console.log("textStatus     : " + textStatus);
         console.log("errorThrown    : " + errorThrown.message);
       });
-      setTimeout(order_update);
-      setTimeout(dealorder_update);
-      Swal.fire({
-        type:"success",
-        title: "納品予定日を変更しました",
-        position: 'top-end',
-        toast: true,
-        icon: 'success',
-        showConfirmButton: false,
-        timer: 1500
-      });
+      setTimeout(doReload);
+      // setTimeout(order_update);
+      // setTimeout(dealorder_update);
+      // Swal.fire({
+      //   type:"success",
+      //   title: "納品予定日を変更しました",
+      //   position: 'top-end',
+      //   toast: true,
+      //   icon: 'success',
+      //   showConfirmButton: false,
+      //   timer: 1500
+      // });
   });
 
   // 任意の配送先店舗を保存
@@ -801,17 +844,18 @@ if(document.URL.match("/admin/deal")) {
         console.log("textStatus     : " + textStatus);
         console.log("errorThrown    : " + errorThrown.message);
       });
-      setTimeout(order_update);
-      setTimeout(dealorder_update);
-      Swal.fire({
-        type:"success",
-        title: "納品先店舗を変更しました",
-        position: 'top-end',
-        toast: true,
-        icon: 'success',
-        showConfirmButton: false,
-        timer: 1500
-      });
+      setTimeout(doReload);
+      // setTimeout(order_update);
+      // setTimeout(dealorder_update);
+      // Swal.fire({
+      //   type:"success",
+      //   title: "納品先店舗を変更しました",
+      //   position: 'top-end',
+      //   toast: true,
+      //   icon: 'success',
+      //   showConfirmButton: false,
+      //   timer: 1500
+      // });
   });
 
 
