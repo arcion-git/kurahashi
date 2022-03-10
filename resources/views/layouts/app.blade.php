@@ -400,13 +400,14 @@
         </div> -->
       </footer>
     </div>
-  </div>
-
-  <div id="overlayajax">
-    <div class="cv-spinner">
-      <span class="spinner"></span>
+    <div id="overlayajax">
+      <div class="cv-spinner">
+        <span class="spinner"></span>
+      </div>
     </div>
   </div>
+
+
 
 
     <!-- General JS Scripts -->
