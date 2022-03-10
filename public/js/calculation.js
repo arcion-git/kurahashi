@@ -969,7 +969,7 @@ if(document.URL.match("/admin/deal")) {
 
 if(document.URL.match("/user/deal")) {
   $(function(){
-      setInterval(function(){
+    setInterval(function(){
 
 
     var prices = $(".price").map(function (index, el) {
@@ -1000,6 +1000,7 @@ if(document.URL.match("/user/deal")) {
         }, //Headersを書き忘れるとエラーになる
         url: location.origin + '/updateorder',
         type: 'POST', //リクエストタイプ
+        global: false,
         data: {
           'array': array,
         } //Laravelに渡すデータ
