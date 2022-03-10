@@ -8,10 +8,13 @@
 
 $(function() {
 
+  $(document).ajaxSend(function() {
+    $("#overlay").fadeIn(300);　
+  });
+
   function doReload() {
       window.location.reload();
   }
-
 
   // カートに追加
   $(document).on("click", ".addcart", function() {
@@ -289,6 +292,9 @@ if(document.URL.match("/admin/deal")) {
           showConfirmButton: false,
           // timer: 1500
         });
+        setTimeout(function(){
+          $("#overlay").fadeOut(300);
+        },500);
       })
       // Ajaxリクエスト失敗時の処理
       .fail(function(jqXHR, textStatus, errorThrown) {
