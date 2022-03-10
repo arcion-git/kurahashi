@@ -1793,7 +1793,8 @@ a.dropdown-item {
   border-top-color: #f9f9f9; }
 
 .dropdown-list {
-  width: 400px;
+  width: 580px;
+  max-width: 580px;
   padding: 0; }
   .dropdown-list .dropdown-item {
     display: inline-block;
@@ -3172,4 +3173,8 @@ a:not(.btn-social-icon):not(.btn-social):not(.page-link) .ion, a:not(.btn-social
 }
 .head-sousa{
   width: 140px !important;
+}
+
+.swal2-popup.swal2-toast .swal2-title{
+    margin: 1em 0.5em !important;
 }
