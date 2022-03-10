@@ -31,7 +31,18 @@ $(function() {
         }
       })
       .done(function(data) {
-        console.log(data);
+        // console.log(data);
+        $('#toggle').addClass('beep');
+        // $('#toggle').trigger('click');
+        Swal.fire({
+          type:"success",
+          title: "カートに追加しました",
+          // position: 'top-end',
+          // toast: true,
+          icon: 'success',
+          showConfirmButton: false,
+          // timer: 1500
+        });
       })
       .fail(function(jqXHR, textStatus, errorThrown) {
         alert('ユーザーに紐づく得意先店舗がありません');
@@ -39,17 +50,6 @@ $(function() {
         console.log("XMLHttpRequest : " + XMLHttpRequest.status);
         console.log("textStatus     : " + textStatus);
         console.log("errorThrown    : " + errorThrown.message);
-      });
-      $('#toggle').addClass('beep');
-      // $('#toggle').trigger('click');
-      Swal.fire({
-        type:"success",
-        title: "カートに追加しました",
-        // position: 'top-end',
-        // toast: true,
-        icon: 'success',
-        showConfirmButton: false,
-        // timer: 1500
       });
   });
 
@@ -107,7 +107,23 @@ $(function() {
       })
       // Ajaxリクエスト成功時の処理
       .done(function(data) {
-        console.log(data);
+        // console.log(data);
+        setTimeout(order_update);
+        setTimeout(dealorder_update);
+        Swal.fire({
+          type:"success",
+          title: "商品を削除しました",
+          // position: 'top-end',
+          // toast: true,
+          icon: 'success',
+          showConfirmButton: false,
+          // timer: 1500
+        });
+        // 送信画面のときは、カートのポップアップを出さない
+        if(!document.URL.match(/confirm/)){
+        $('#toggle').addClass('beep');
+        $('#toggle').trigger('click');
+        }
       })
       // Ajaxリクエスト失敗時の処理
       .fail(function(jqXHR, textStatus, errorThrown) {
@@ -117,22 +133,6 @@ $(function() {
         console.log("textStatus     : " + textStatus);
         console.log("errorThrown    : " + errorThrown.message);
       });
-      setTimeout(order_update);
-      setTimeout(dealorder_update);
-      Swal.fire({
-        type:"success",
-        title: "商品を削除しました",
-        // position: 'top-end',
-        // toast: true,
-        icon: 'success',
-        showConfirmButton: false,
-        // timer: 1500
-      });
-      // 送信画面のときは、カートのポップアップを出さない
-      if(!document.URL.match(/confirm/)){
-      $('#toggle').addClass('beep');
-      $('#toggle').trigger('click');
-      }
   });
 
 
@@ -276,7 +276,19 @@ if(document.URL.match("/admin/deal")) {
       })
       // Ajaxリクエスト成功時の処理
       .done(function(data) {
-        console.log(data);
+        // console.log(data);
+        // setTimeout(doReload);
+        setTimeout(order_update);
+        setTimeout(dealorder_update);
+        Swal.fire({
+          type:"success",
+          title: "配送先を追加しました",
+          // position: 'top-end',
+          // toast: true,
+          icon: 'success',
+          showConfirmButton: false,
+          // timer: 1500
+        });
       })
       // Ajaxリクエスト失敗時の処理
       .fail(function(jqXHR, textStatus, errorThrown) {
@@ -285,18 +297,6 @@ if(document.URL.match("/admin/deal")) {
         console.log("XMLHttpRequest : " + XMLHttpRequest.status);
         console.log("textStatus     : " + textStatus);
         console.log("errorThrown    : " + errorThrown.message);
-      });
-      // setTimeout(doReload);
-      setTimeout(order_update);
-      setTimeout(dealorder_update);
-      Swal.fire({
-        type:"success",
-        title: "配送先を追加しました",
-        // position: 'top-end',
-        // toast: true,
-        icon: 'success',
-        showConfirmButton: false,
-        // timer: 1500
       });
   });
 
@@ -319,7 +319,19 @@ if(document.URL.match("/admin/deal")) {
       })
       // Ajaxリクエスト成功時の処理
       .done(function(data) {
-        console.log(data);
+        // console.log(data);
+        // setTimeout(doReload);
+        setTimeout(order_update);
+        setTimeout(dealorder_update);
+        Swal.fire({
+          type:"success",
+          title: "配送先を追加しました",
+          // position: 'top-end',
+          // toast: true,
+          icon: 'success',
+          showConfirmButton: false,
+          // timer: 1500
+        });
       })
       // Ajaxリクエスト失敗時の処理
       .fail(function(jqXHR, textStatus, errorThrown) {
@@ -328,18 +340,6 @@ if(document.URL.match("/admin/deal")) {
         console.log("XMLHttpRequest : " + XMLHttpRequest.status);
         console.log("textStatus     : " + textStatus);
         console.log("errorThrown    : " + errorThrown.message);
-      });
-      // setTimeout(doReload);
-      setTimeout(order_update);
-      setTimeout(dealorder_update);
-      Swal.fire({
-        type:"success",
-        title: "配送先を追加しました",
-        // position: 'top-end',
-        // toast: true,
-        icon: 'success',
-        showConfirmButton: false,
-        // timer: 1500
       });
   });
 
@@ -361,7 +361,19 @@ if(document.URL.match("/admin/deal")) {
       })
       // Ajaxリクエスト成功時の処理
       .done(function(data) {
-        console.log(data);
+        // console.log(data);
+        // setTimeout(doReload);
+        setTimeout(order_update);
+        setTimeout(dealorder_update);
+        Swal.fire({
+          type:"success",
+          title: "任意の商品を追加しました",
+          // position: 'top-end',
+          // toast: true,
+          icon: 'success',
+          showConfirmButton: false,
+          // timer: 1500
+        });
       })
       // Ajaxリクエスト失敗時の処理
       .fail(function(jqXHR, textStatus, errorThrown) {
@@ -370,18 +382,6 @@ if(document.URL.match("/admin/deal")) {
         console.log("XMLHttpRequest : " + XMLHttpRequest.status);
         console.log("textStatus     : " + textStatus);
         console.log("errorThrown    : " + errorThrown.message);
-      });
-      // setTimeout(doReload);
-      setTimeout(order_update);
-      setTimeout(dealorder_update);
-      Swal.fire({
-        type:"success",
-        title: "任意の商品を追加しました",
-        // position: 'top-end',
-        // toast: true,
-        icon: 'success',
-        showConfirmButton: false,
-        // timer: 1500
       });
   });
 
@@ -409,6 +409,18 @@ if(document.URL.match("/admin/deal")) {
       // Ajaxリクエスト成功時の処理
       .done(function(data) {
         // console.log(data);
+        // setTimeout(doReload);
+        setTimeout(order_update);
+        setTimeout(dealorder_update);
+        Swal.fire({
+          type:"success",
+          title: "カートから削除しました",
+          // position: 'top-end',
+          // toast: true,
+          icon: 'success',
+          showConfirmButton: false,
+          // timer: 1500
+        });
       })
       // Ajaxリクエスト失敗時の処理
       .fail(function(jqXHR, textStatus, errorThrown) {
@@ -417,18 +429,6 @@ if(document.URL.match("/admin/deal")) {
         console.log("XMLHttpRequest : " + XMLHttpRequest.status);
         console.log("textStatus     : " + textStatus);
         console.log("errorThrown    : " + errorThrown.message);
-      });
-      // setTimeout(doReload);
-      setTimeout(order_update);
-      setTimeout(dealorder_update);
-      Swal.fire({
-        type:"success",
-        title: "カートから削除しました",
-        // position: 'top-end',
-        // toast: true,
-        icon: 'success',
-        showConfirmButton: false,
-        // timer: 1500
       });
   });
 
@@ -457,6 +457,18 @@ if(document.URL.match("/admin/deal")) {
         // Ajaxリクエスト成功時の処理
         .done(function(data) {
           // console.log(data);
+          // setTimeout(doReload);
+          setTimeout(order_update);
+          setTimeout(dealorder_update);
+          Swal.fire({
+            type:"success",
+            title: "カートから削除しました",
+            // position: 'top-end',
+            // toast: true,
+            icon: 'success',
+            showConfirmButton: false,
+            // timer: 1500
+          });
         })
         // Ajaxリクエスト失敗時の処理
         .fail(function(jqXHR, textStatus, errorThrown) {
@@ -465,18 +477,6 @@ if(document.URL.match("/admin/deal")) {
           console.log("XMLHttpRequest : " + XMLHttpRequest.status);
           console.log("textStatus     : " + textStatus);
           console.log("errorThrown    : " + errorThrown.message);
-        });
-        // setTimeout(doReload);
-        setTimeout(order_update);
-        setTimeout(dealorder_update);
-        Swal.fire({
-          type:"success",
-          title: "カートから削除しました",
-          // position: 'top-end',
-          // toast: true,
-          icon: 'success',
-          showConfirmButton: false,
-          // timer: 1500
         });
     });
 
@@ -502,6 +502,18 @@ if(document.URL.match("/admin/deal")) {
       // Ajaxリクエスト成功時の処理
       .done(function(data) {
         // console.log(data);
+        // setTimeout(doReload);
+        setTimeout(order_update);
+        setTimeout(dealorder_update);
+        Swal.fire({
+          type:"success",
+          title: "個数を変更しました",
+          // position: 'top-end',
+          // toast: true,
+          icon: 'success',
+          showConfirmButton: false,
+          // timer: 1500
+        });
       })
       // Ajaxリクエスト失敗時の処理
       .fail(function(jqXHR, textStatus, errorThrown) {
@@ -510,18 +522,6 @@ if(document.URL.match("/admin/deal")) {
         console.log("XMLHttpRequest : " + XMLHttpRequest.status);
         console.log("textStatus     : " + textStatus);
         console.log("errorThrown    : " + errorThrown.message);
-      });
-      // setTimeout(doReload);
-      setTimeout(order_update);
-      setTimeout(dealorder_update);
-      Swal.fire({
-        type:"success",
-        title: "個数を変更しました",
-        // position: 'top-end',
-        // toast: true,
-        icon: 'success',
-        showConfirmButton: false,
-        // timer: 1500
       });
   });
 
@@ -546,6 +546,18 @@ if(document.URL.match("/admin/deal")) {
       // Ajaxリクエスト成功時の処理
       .done(function(data) {
         // console.log(data);
+        // setTimeout(doReload);
+        setTimeout(order_update);
+        setTimeout(dealorder_update);
+        Swal.fire({
+          type:"success",
+          title: "納品予定日を変更しました",
+          // position: 'top-end',
+          // toast: true,
+          icon: 'success',
+          showConfirmButton: false,
+          // timer: 1500
+        });
       })
       // Ajaxリクエスト失敗時の処理
       .fail(function(jqXHR, textStatus, errorThrown) {
@@ -554,18 +566,6 @@ if(document.URL.match("/admin/deal")) {
         console.log("XMLHttpRequest : " + XMLHttpRequest.status);
         console.log("textStatus     : " + textStatus);
         console.log("errorThrown    : " + errorThrown.message);
-      });
-      // setTimeout(doReload);
-      setTimeout(order_update);
-      setTimeout(dealorder_update);
-      Swal.fire({
-        type:"success",
-        title: "納品予定日を変更しました",
-        // position: 'top-end',
-        // toast: true,
-        icon: 'success',
-        showConfirmButton: false,
-        // timer: 1500
       });
   });
 
@@ -591,7 +591,19 @@ if(document.URL.match("/admin/deal")) {
       })
       // Ajaxリクエスト成功時の処理
       .done(function(data) {
-        console.log(data);
+        // console.log(data);
+        // setTimeout(doReload);
+        setTimeout(order_update);
+        setTimeout(dealorder_update);
+        Swal.fire({
+          type:"success",
+          title: "配送先店舗を変更しました",
+          // position: 'top-end',
+          // toast: true,
+          icon: 'success',
+          showConfirmButton: false,
+          // timer: 1500
+        });
       })
       // Ajaxリクエスト失敗時の処理
       .fail(function(jqXHR, textStatus, errorThrown) {
@@ -600,18 +612,6 @@ if(document.URL.match("/admin/deal")) {
         console.log("XMLHttpRequest : " + XMLHttpRequest.status);
         console.log("textStatus     : " + textStatus);
         console.log("errorThrown    : " + errorThrown.message);
-      });
-      // setTimeout(doReload);
-      setTimeout(order_update);
-      setTimeout(dealorder_update);
-      Swal.fire({
-        type:"success",
-        title: "配送先店舗を変更しました",
-        // position: 'top-end',
-        // toast: true,
-        icon: 'success',
-        showConfirmButton: false,
-        // timer: 1500
       });
   });
 
@@ -636,6 +636,18 @@ if(document.URL.match("/admin/deal")) {
       // Ajaxリクエスト成功時の処理
       .done(function(data) {
         // console.log(data);
+        // setTimeout(doReload);
+        setTimeout(order_update);
+        setTimeout(dealorder_update);
+        Swal.fire({
+          type:"success",
+          title: "任意の商品名を保存しました",
+          // position: 'top-end',
+          // toast: true,
+          icon: 'success',
+          showConfirmButton: false,
+          // timer: 1500
+        });
       })
       // Ajaxリクエスト失敗時の処理
       .fail(function(jqXHR, textStatus, errorThrown) {
@@ -644,18 +656,6 @@ if(document.URL.match("/admin/deal")) {
         console.log("XMLHttpRequest : " + XMLHttpRequest.status);
         console.log("textStatus     : " + textStatus);
         console.log("errorThrown    : " + errorThrown.message);
-      });
-      // setTimeout(doReload);
-      setTimeout(order_update);
-      setTimeout(dealorder_update);
-      Swal.fire({
-        type:"success",
-        title: "任意の商品名を保存しました",
-        // position: 'top-end',
-        // toast: true,
-        icon: 'success',
-        showConfirmButton: false,
-        // timer: 1500
       });
   });
 
@@ -679,6 +679,18 @@ if(document.URL.match("/admin/deal")) {
       // Ajaxリクエスト成功時の処理
       .done(function(data) {
         // console.log(data);
+        // setTimeout(doReload);
+        setTimeout(order_update);
+        setTimeout(dealorder_update);
+        Swal.fire({
+          type:"success",
+          title: "担当を変更しました",
+          // position: 'top-end',
+          // toast: true,
+          icon: 'success',
+          showConfirmButton: false,
+          // timer: 1500
+        });
       })
       // Ajaxリクエスト失敗時の処理
       .fail(function(jqXHR, textStatus, errorThrown) {
@@ -687,18 +699,6 @@ if(document.URL.match("/admin/deal")) {
         console.log("XMLHttpRequest : " + XMLHttpRequest.status);
         console.log("textStatus     : " + textStatus);
         console.log("errorThrown    : " + errorThrown.message);
-      });
-      // setTimeout(doReload);
-      setTimeout(order_update);
-      setTimeout(dealorder_update);
-      Swal.fire({
-        type:"success",
-        title: "担当を変更しました",
-        // position: 'top-end',
-        // toast: true,
-        icon: 'success',
-        showConfirmButton: false,
-        // timer: 1500
       });
   });
 
@@ -722,6 +722,18 @@ if(document.URL.match("/admin/deal")) {
       // Ajaxリクエスト成功時の処理
       .done(function(data) {
         // console.log(data);
+        // setTimeout(doReload);
+        setTimeout(order_update);
+        setTimeout(dealorder_update);
+        Swal.fire({
+          type:"success",
+          title: "数量（単位）を変更しました",
+          // position: 'top-end',
+          // toast: true,
+          icon: 'success',
+          showConfirmButton: false,
+          // timer: 1500
+        });
       })
       // Ajaxリクエスト失敗時の処理
       .fail(function(jqXHR, textStatus, errorThrown) {
@@ -730,18 +742,6 @@ if(document.URL.match("/admin/deal")) {
         console.log("XMLHttpRequest : " + XMLHttpRequest.status);
         console.log("textStatus     : " + textStatus);
         console.log("errorThrown    : " + errorThrown.message);
-      });
-      // setTimeout(doReload);
-      setTimeout(order_update);
-      setTimeout(dealorder_update);
-      Swal.fire({
-        type:"success",
-        title: "数量（単位）を変更しました",
-        // position: 'top-end',
-        // toast: true,
-        icon: 'success',
-        showConfirmButton: false,
-        // timer: 1500
       });
   });
 
@@ -764,7 +764,18 @@ if(document.URL.match("/admin/deal")) {
       })
       // Ajaxリクエスト成功時の処理
       .done(function(data) {
-        // console.log(data);
+        // setTimeout(doReload);
+        setTimeout(order_update);
+        setTimeout(dealorder_update);
+        Swal.fire({
+          type:"success",
+          title: "納品予定日を変更しました",
+          // position: 'top-end',
+          // toast: true,
+          icon: 'success',
+          showConfirmButton: false,
+          // timer: 1500
+        });
       })
       // Ajaxリクエスト失敗時の処理
       .fail(function(jqXHR, textStatus, errorThrown) {
@@ -773,18 +784,6 @@ if(document.URL.match("/admin/deal")) {
         console.log("XMLHttpRequest : " + XMLHttpRequest.status);
         console.log("textStatus     : " + textStatus);
         console.log("errorThrown    : " + errorThrown.message);
-      });
-      // setTimeout(doReload);
-      setTimeout(order_update);
-      setTimeout(dealorder_update);
-      Swal.fire({
-        type:"success",
-        title: "納品予定日を変更しました",
-        // position: 'top-end',
-        // toast: true,
-        icon: 'success',
-        showConfirmButton: false,
-        // timer: 1500
       });
   });
 
@@ -810,7 +809,18 @@ if(document.URL.match("/admin/deal")) {
       })
       // Ajaxリクエスト成功時の処理
       .done(function(data) {
-        // console.log(data);
+        // setTimeout(doReload);
+        setTimeout(order_update);
+        setTimeout(dealorder_update);
+        Swal.fire({
+          type:"success",
+          title: "納品先店舗を変更しました",
+          // position: 'top-end',
+          // toast: true,
+          icon: 'success',
+          showConfirmButton: false,
+          // timer: 1500
+        });
       })
       // Ajaxリクエスト失敗時の処理
       .fail(function(jqXHR, textStatus, errorThrown) {
@@ -819,18 +829,6 @@ if(document.URL.match("/admin/deal")) {
         console.log("XMLHttpRequest : " + XMLHttpRequest.status);
         console.log("textStatus     : " + textStatus);
         console.log("errorThrown    : " + errorThrown.message);
-      });
-      // setTimeout(doReload);
-      setTimeout(order_update);
-      setTimeout(dealorder_update);
-      Swal.fire({
-        type:"success",
-        title: "納品先店舗を変更しました",
-        // position: 'top-end',
-        // toast: true,
-        icon: 'success',
-        showConfirmButton: false,
-        // timer: 1500
       });
   });
 
