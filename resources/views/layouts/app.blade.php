@@ -432,8 +432,8 @@
 
     <script src="{{ asset('js/calculation.js') }}"></script>
 
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.3.1/jquery.cookie.min.js"></script>
-    <script src="{{ asset('js/jquery.utility-kit.js') }}"></script>
+    <!-- <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.3.1/jquery.cookie.min.js"></script>
+    <script src="{{ asset('js/jquery.utility-kit.js') }}"></script> -->
     <!-- <script src="{{ asset('js/realtime.js') }}"></script> -->
 
 
