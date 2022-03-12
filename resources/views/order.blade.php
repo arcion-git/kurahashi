@@ -32,7 +32,7 @@
 							@if ( Auth::guard('user')->check() ) readonly @endif>
 						</td>
 						<td class="head-store text-center">
-							<select name="store[]" class="store text-center form-control" value="{{$val->tokuisaki_name}} {{$val->store_name}}">
+							<select name="store[]" class="store text-center form-control" value="{{$val->tokuisaki_name}} {{$val->store_name}}" required>
 								<option id="{{$val->tokuisaki_name}}" value="{{$val->store_name}}">{{$val->tokuisaki_name}} {{$val->store_name}}</option>
 								@foreach($stores as $store)
 								<option id="{{$store->tokuisaki_name}}" value="{{$store->store_name}}">{{$store->tokuisaki_name}} {{$store->store_name}}</option>
@@ -42,7 +42,7 @@
 						</td>
 						<td class="head-kikaku text-center">{{$cart->item->kikaku}}</td>
 						<td class="head-quantity text-center">
-							<select name="quantity[]" class="quantity text-center form-control" value="{{$val->quantity}}">
+							<select name="quantity[]" class="quantity text-center form-control" value="{{$val->quantity}}" required>
 								@if($val->quantity == 1)
 								@elseif($val->quantity)
 								<option value="{{$val->quantity}}">{{$val->quantity}}</option>
@@ -64,7 +64,7 @@
 							@endif
 						</td>
 						<td class="head-yoteibi text-center">
-								<input type="text" name="nouhin_yoteibi[]" class="nouhin_yoteibi text-center form-control daterange-cus datepicker" value="{{$val->nouhin_yoteibi}}" autocomplete="off">
+								<input type="text" name="nouhin_yoteibi[]" class="nouhin_yoteibi text-center form-control daterange-cus datepicker" value="{{$val->nouhin_yoteibi}}" autocomplete="off" required>
 						</td>
 						<td class="head-shoukei total text-center"></td>
 						<td class="head-sousa text-center">
@@ -98,10 +98,10 @@
 				<tr width="" id="{{$cart_nini->id}}">
 					<input name="cart_nini_id[]" type="hidden" value="{{$cart_nini->id}}" />
 					<td width="200px" class="cart_nini_id_{$cart_nini->id}}">
-						<input name="nini_item_name[]" class="nini_item_name form-control" value="{{$cart_nini->item_name}}">
+						<input name="nini_item_name[]" class="nini_item_name form-control" value="{{$cart_nini->item_name}}" required>
 					</td>
 					<td width="140px" class="text-center">
-						<select name="nini_tantou[]" class="nini_tantou text-center form-control" value="{{$cart_nini->tantou_name}}">
+						<select name="nini_tantou[]" class="nini_tantou text-center form-control" value="{{$cart_nini->tantou_name}}" required>
 							<option value="{{$cart_nini->tantou_name}}">{{$cart_nini->tantou_name}}</option>
 							<option value="鮮魚">鮮魚</option>
 							<option value="青物">青物</option>
@@ -117,7 +117,7 @@
 						@foreach($cart_nini->order_ninis as $val)
 							<tr id="{{$val->id}}">
 								<td class="head-store text-center">
-									<select name="nini_store[]" class="nini_store text-center form-control" value="{{$val->tokuisaki_name}} {{$val->store_name}}">
+									<select name="nini_store[]" class="nini_store text-center form-control" value="{{$val->tokuisaki_name}} {{$val->store_name}}" required>
 										<option id="{{$val->tokuisaki_name}}" value="{{$val->store_name}}">{{$val->tokuisaki_name}} {{$val->store_name}}</option>
 										@foreach($stores as $store)
 										<option id="{{$store->tokuisaki_name}}" value="{{$store->store_name}}">{{$store->tokuisaki_name}} {{$store->store_name}}</option>
@@ -126,10 +126,10 @@
 									</select>
 								</td>
 								<td class="head-quantity text-center">
-									<input name="nini_quantity[]" class="nini_quantity text-center form-control" value="{{$val->quantity}}">
+									<input name="nini_quantity[]" class="nini_quantity text-center form-control" value="{{$val->quantity}}" required>
 								</td>
 								<td class="head-yoteibi text-center">
-										<input type="text" name="nini_nouhin_yoteibi[]" class="nini_nouhin_yoteibi text-center form-control daterange-cus datepicker" value="{{$val->nouhin_yoteibi}}" autocomplete="off">
+										<input type="text" name="nini_nouhin_yoteibi[]" class="nini_nouhin_yoteibi text-center form-control daterange-cus datepicker" value="{{$val->nouhin_yoteibi}}" autocomplete="off" required>
 								</td>
 								<td class="head-sousa text-center">
 									<button type="button" id="{{$val->id}}" class="removeid_{{$val->id}} removeordernini btn btn-info">削除</button><br />
@@ -200,7 +200,7 @@
 
 
 
-@if(isset( $holidays ))
+@if(isset($holidays))
 <script>
 $('.datepicker').datepicker({
 	format: 'yyyy-mm-dd',
@@ -218,3 +218,17 @@ $('.datepicker').datepicker({
 });
 </script>
 @endif
+
+<script>
+if(document.URL.match("/approval")) {
+  $(function(){
+		$('input').attr('readonly',true);
+		$('select').attr('readonly',true);
+		$('select').addClass('arrow_hidden');
+		$("select[readonly] > option:not(:selected)").attr('disabled', 'disabled');
+		$('textarea').attr('readonly',true);
+		$('.head-sousa').remove();
+		$('.addniniorder').remove();
+  });
+}
+</script>

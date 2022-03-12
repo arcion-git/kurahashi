@@ -27,7 +27,9 @@
   Route::get('/recommend', 'LoginPageController@index')->name('home');
 
   Route::get('/category/{id}', 'LoginPageController@category');
-  Route::get('/confirm', 'LoginPageController@confirm');
+  Route::get('/confirm', 'LoginPageController@confirm')->name('confirm');
+  Route::get('/approval', 'LoginPageController@approval');
+  Route::get('/cart', 'LoginPageController@cart');
   Route::get('/deal', 'LoginPageController@deal')->name('deal');
   Route::get('/line', 'LoginPageController@line')->name('line');
   Route::get('/favorite', 'LoginPageController@favorite')->name('favorite');

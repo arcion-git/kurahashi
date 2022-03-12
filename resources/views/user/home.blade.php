@@ -229,6 +229,11 @@
 
 
           @if(Request::is('/') or Request::is('*category*') or Request::is('*user/home*'))
+          @if(!isset($items[0]))
+          <p>
+            商品が売り切れました。
+          </p>
+          @else
           <div class="section-body">
             <div class="row">
               <div class="col-12">
@@ -324,6 +329,7 @@
               </div>
             </div>
           </div>
+          @endif
           @endif
 
         </section>

@@ -37,8 +37,7 @@
           </form> -->
 
 
-          <!-- <form action="{{ url('/adddeal') }}" method="POST" class="form-horizontal"> -->
-          <form action="{{ url('/approval') }}" method="GET" class="form-horizontal">
+          <form action="{{ url('/adddeal') }}" method="POST" name="cart_id" value="" class="form-horizontal">
             {{ csrf_field() }}
             <div class="row mt-4 order">
               <div class="col-md-12">
@@ -47,10 +46,13 @@
               </div>
             </div>
             <div class="float-right">
-                <button type="submit" class="btn btn-warning">内容確認画面に進む</button>
+                <button type="submit" name="adddeal_btn" class="btn btn-warning">この内容で問い合わせる</button>
+                <button type="submit" name="addsuscess_btn" class="btn btn-success">この内容で注文する</button>
             </div>
           </form>
-
+          <div class="float-right">
+              <a href="{{ url('/confirm') }}"><button class="btn btn-info">戻って編集する</button></a>
+          </div>
 
           <br style="clear:both;" />
 
@@ -59,39 +61,5 @@
     </div>
   </section>
 
-<script>
-$(function(){
-  //ＵＲＬのパラメータを取得するための関数
-  function getUrlParam(param){
-      var pageUrl = window.location.search.substring(1);
-      var urlVar = pageUrl.split('&');
-      for (var i = 0; i < urlVar.length; i++)
-      {
-          var paramName = urlVar[i].split('=');
-          if (paramName[0] == param)
-          {
-              return decodeURI(paramName[1]);
-          }
-      }
-  }
-  $(function() {
-      var nokori_zaiko = getUrlParam('nokori_zaiko');
-      var nokori_zaiko = -(nokori_zaiko);
-      var item_name = getUrlParam('item_name');
-      if (nokori_zaiko) {
-        console.log(nokori_zaiko);
-        console.log(item_name);
-        Swal.fire({
-          html: item_name + ' は在庫が ' + nokori_zaiko + ' 不足しています。<br />数量を変更してください。',
-          // position: 'top-end',
-          // toast: true,
-          icon: 'warning',
-          showConfirmButton: false,
-          // timer: 1500
-        });
-      }
-  });
-});
-</script>
 
 @endsection

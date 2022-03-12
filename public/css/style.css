@@ -3211,3 +3211,13 @@ a:not(.btn-social-icon):not(.btn-social):not(.page-link) .ion, a:not(.btn-social
 .is-hide{
   display:none;
 }
+
+select.arrow_hidden{
+-webkit-appearance: none;
+-moz-appearance: none;
+appearance: none;
+}
+
+select.arrow_hidden::-ms-expand{
+display: none;
+}

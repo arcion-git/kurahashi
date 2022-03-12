@@ -522,7 +522,7 @@ class LoginPageController extends Controller
   public function clonecart(Request $request){
     $user_id = Auth::guard('user')->user()->id;
     $cart_id = $request->cart_id;
-    $order=Order::Create(['cart_id'=> $cart_id , 'tokuisaki_name'=>'------' , 'nouhin_yoteibi'=> '', 'quantity'=> 1]);
+    $order=Order::Create(['cart_id'=> $cart_id , 'tokuisaki_name'=>'' , 'nouhin_yoteibi'=> '', 'quantity'=> 1]);
     $data = "sucsess";
     return redirect()->route('home',$data);
   }
@@ -530,7 +530,7 @@ class LoginPageController extends Controller
   public function addniniorder(Request $request){
     $user_id = Auth::guard('user')->user()->id;
     $cart_nini=CartNini::Create(['user_id'=> $user_id]);
-    $order_nini=OrderNini::Create(['cart_nini_id'=> $cart_nini->id , 'tokuisaki_name'=>'------' , 'nouhin_yoteibi'=> '', 'quantity'=> 1]);
+    $order_nini=OrderNini::Create(['cart_nini_id'=> $cart_nini->id , 'tokuisaki_name'=>'' , 'nouhin_yoteibi'=> '', 'quantity'=> 1]);
     $data = "sucsess";
     return redirect()->route('home',$data);
   }
@@ -538,7 +538,7 @@ class LoginPageController extends Controller
   public function addordernini(Request $request){
     $user_id = Auth::guard('user')->user()->id;
     $cart_nini_id = $request->cart_nini_id;
-    $order=OrderNini::Create(['cart_nini_id'=> $cart_nini_id , 'tokuisaki_name'=>'------' , 'nouhin_yoteibi'=> '', 'quantity'=> 1]);
+    $order=OrderNini::Create(['cart_nini_id'=> $cart_nini_id , 'tokuisaki_name'=>'' , 'nouhin_yoteibi'=> '', 'quantity'=> 1]);
     $data = "sucsess";
     return redirect()->route('home',$data);
   }
@@ -588,6 +588,29 @@ class LoginPageController extends Controller
      // 'stores' => $stores,
      'holidays' => $holidays,
      'user_id' => $user_id,
+    ]);
+
+  }
+
+  public function approval(){
+
+    $categories = Category::get()->groupBy('bu_ka_name');
+    $user_id = Auth::guard('user')->user()->id;
+    $favorite_categories = FavoriteCategory::where('user_id', $user_id)->get();
+    $carts =  Cart::where(['user_id'=>$user_id, 'deal_id'=> null])->get();
+
+    $today = date("Y/m/d");
+    $holidays = Holiday::pluck('date');
+    $approval = 1;
+
+    return view('user/auth/approval',
+    ['carts' => $carts,
+     'categories' => $categories,
+     'favorite_categories' => $favorite_categories,
+     // 'stores' => $stores,
+     'holidays' => $holidays,
+     'user_id' => $user_id,
+     'approval' => $approval,
     ]);
 
   }
@@ -752,6 +775,37 @@ class LoginPageController extends Controller
     $data = $request->all();
     $item_ids = $data['item_id'];
 
+    // dd($data);
+
+    // 在庫チェック
+    if($request->has('addsuscess_btn')){
+      foreach($item_ids as $key => $input) {
+        $cart = Cart::where(['user_id'=> $user_id , 'item_id'=> $item_ids[$key], 'deal_id'=> null])->first();
+        $item = item::where(['id'=> $item_ids[$key]])->first();
+        $item_name = $item->item_name;
+        // dd($item);
+        $orders = Order::where(['cart_id'=> $cart->id])->get();
+        // dd($orders);
+        // 注文個数計算
+        $total = 0;
+        foreach ($orders as $order) {
+            $total += $order['quantity'];
+        }
+        $nokori_zaiko = $item->zaikosuu - $total;
+        // dd($nokori_zaiko);
+        if($nokori_zaiko < 0){
+          // 在庫不足の場合カート画面に戻す
+          $data=[
+            'nokori_zaiko' => $nokori_zaiko,
+            'item_name' => $item_name,
+          ];
+          return redirect()->route('confirm',$data);
+        }
+        // 在庫がある場合商品の在庫数を減らす
+        // $item->zaikosuu = $nokori_zaiko;
+        // $item->save();
+      }
+    }
 
     // dd($item_nini_ids);
     // $quantitys = $data['quantity'];
@@ -779,6 +833,17 @@ class LoginPageController extends Controller
       $cart = Cart::firstOrNew(['user_id'=> $user_id , 'item_id'=> $item_ids[$key], 'deal_id'=> null]);
       $cart->deal_id = $deal_id;
       $cart->save();
+    }
+
+    if($request->has('addsuscess_btn')){
+
+      // $carts = Cart::where(['user_id'=>$user_id, 'deal_id'=> $$deal_id])->get();
+      // dd($carts);
+
+      $deal=Deal::firstOrNew(['id'=> $deal_id]);
+      $deal->success_flg = True;
+      $deal->success_time = Carbon::now();
+      $deal->save();
     }
 
 
