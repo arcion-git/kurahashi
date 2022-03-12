@@ -15,8 +15,9 @@
     </div>
   </div>
 
-  <div class="section-body">
 
+  @if(!empty($deals))
+  <div class="section-body">
     @if(isset($user))
     <div class="invoice">
       <div class="invoice-print">
@@ -120,6 +121,10 @@
       </div>
     </div>
   </div>
+  @else
+  <p>取引情報が見つかりませんでした</p>
+  @endif
+
 </section>
 
 

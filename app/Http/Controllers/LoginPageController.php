@@ -472,11 +472,11 @@ class LoginPageController extends Controller
     $kaiin_number = Auth::guard('user')->user()->kaiin_number;
     $store_users = StoreUser::where('user_id',$kaiin_number)->get(['store_id','tokuisaki_id']);
 
-    // Log::debug($store_users);
+    Log::debug($store_users);
 
     foreach ($store_users as $store_user) {
       $store = Store::where([ 'tokuisaki_id'=> $store_user->tokuisaki_id,'store_id'=> $store_user->store_id ])->first();
-      $order_nini=Ordernini::create(['cart_nini_id'=> $order_nini->cart_nini_id , 'tokuisaki_name'=> $store->tokuisaki_name , 'store_name'=> $store->store_name , 'quantity'=> 1])->first();
+      $order_nini=Ordernini::create(['cart_nini_id'=> $order_nini->cart_nini_id , 'tokuisaki_name'=> $store->tokuisaki_name , 'store_name'=> $store->store_name , 'quantity'=> 1]);
     }
     $data = "success";
 

@@ -228,7 +228,7 @@
 
 
 
-          @if(Request::is('/') or Request::is('*category*'))
+          @if(Request::is('/') or Request::is('*category*') or Request::is('*user/home*'))
           <div class="section-body">
             <div class="row">
               <div class="col-12">
