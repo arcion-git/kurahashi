@@ -259,7 +259,43 @@ class LoginPageController extends Controller
     $cart=Cart::firstOrNew(['user_id'=> $user_id , 'item_id'=> $item->id , 'deal_id'=> null]);
     $cart->save();
 
-    $order=Order::firstOrNew(['cart_id'=> $cart->id , 'tokuisaki_name'=> $store->tokuisaki_name , 'store_name'=> $store->store_name , 'quantity'=> 1 ]);
+    // 直近の納品予定日を取得
+    $today = date("Y/m/d");
+    $holidays = Holiday::get();
+    $holidays = Holiday::pluck('date');
+    // $holiday = array_column($holidays, 'date');
+    Log::debug($holidays);
+    // $today_plus2 = date('Y/m/d', strtotime($today . '+2 day'));
+    //
+    // $key = 	array_search('2022/03/15', $holidays);
+    //
+    // if($key){
+    //     Log::debug('配列の中に'.$today_plus2.'は見つかりました');
+    // }else{
+    //     Log::debug('配列の中に'.$today_plus2.'は見つかりません');
+    // }
+
+    // $key = in_array($today_plus2, $holidays , true);
+    // if($key){
+    //     Log::debug('配列の中に'.$today_plus2.'は見つかりました');
+    // }else{
+    //     Log::debug('配列の中に'.$today_plus2.'は見つかりません');
+    // }
+
+    // foreach ($holidays as $holiday) {
+    //   if($holiday == $today_plus2){
+    //     Log::debug('あるからこの日付は使えないよ');
+    //     $today_plus3 = date('Y/m/d', strtotime($today . '+3 day'));
+    //     if($holiday == $today_plus3){
+    //     Log::debug('あるからこの日付も使えないよ');
+    //     }
+    //   }else{
+    //
+    //   }
+    // }
+    // $nouhin_yoteibi = $today_second;
+
+    $order=Order::firstOrNew(['cart_id'=> $cart->id , 'tokuisaki_name'=> $store->tokuisaki_name , 'store_name'=> $store->store_name , 'quantity'=> 1 , 'nouhin_yoteibi'=> '2022-09-22']);
     if(isset($price->price)){
     $order->price = $price->price;
     }
@@ -801,9 +837,24 @@ class LoginPageController extends Controller
           ];
           return redirect()->route('confirm',$data);
         }
-        // 在庫がある場合商品の在庫数を減らす
-        // $item->zaikosuu = $nokori_zaiko;
-        // $item->save();
+      }
+      // 在庫がある場合商品の在庫数を減らす
+      foreach($item_ids as $key => $input) {
+        $cart = Cart::where(['user_id'=> $user_id , 'item_id'=> $item_ids[$key], 'deal_id'=> null])->first();
+        $item = item::where(['id'=> $item_ids[$key]])->first();
+        $item_name = $item->item_name;
+        // dd($item);
+        $orders = Order::where(['cart_id'=> $cart->id])->get();
+        // dd($orders);
+        // 注文個数計算
+        $total = 0;
+        foreach ($orders as $order) {
+            $total += $order['quantity'];
+        }
+        $nokori_zaiko = $item->zaikosuu - $total;
+        // dd($nokori_zaiko);
+        $item->zaikosuu = $nokori_zaiko;
+        $item->save();
       }
     }
 
@@ -844,6 +895,7 @@ class LoginPageController extends Controller
       $deal->success_flg = True;
       $deal->success_time = Carbon::now();
       $deal->save();
+
     }
 
 
