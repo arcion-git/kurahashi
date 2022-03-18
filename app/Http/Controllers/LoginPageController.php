@@ -242,22 +242,23 @@ class LoginPageController extends Controller
   public function test(Request $request){
     // 直近の納品予定日を取得
     $today = date("Y/m/d");
-    $holidays = Holiday::get('date');
-    $holidays = Holiday::pluck('date');
+    $holidays = Holiday::get();
+    // $holidays = Holiday::pluck('date');
+    $holidays = array_column($holidays->all(),null,"date");
     // $holiday = array_column($holidays, 'date');
     // Log::debug($holidays);
     // dd($holidays);
+    $today_plus2 = date('Y/m/d', strtotime($today.'+2 day'));
+    dd($today_plus2);
+    $key = array_search($today_plus2,(array)$holidays,true);
 
+    dd($key);
 
-    $today_plus2 = date('Y/m/d', strtotime($today . '+2 day'));
-
-    $key = 	in_array('2022/02/27',(array)$holidays);
-
-    if($key){
-        dd('配列の中に'.$today_plus2.'は見つかりました');
-    }else{
-        dd('配列の中に'.$today_plus2.'は見つかりません');
-    }
+    // if($key){
+    //     dd('配列の中に'.$today_plus2.'は見つかりました');
+    // }else{
+    //     dd('配列の中に'.$today_plus2.'は見つかりません');
+    // }
 
     // $key = in_array($today_plus2, $holidays , true);
     // if($key){
