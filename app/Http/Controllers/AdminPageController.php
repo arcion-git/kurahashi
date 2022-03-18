@@ -61,6 +61,9 @@ class AdminPageController extends Controller
 
   public function index()
   {
+    if ( Auth::guard('user')->check() ){
+        Auth::guard('user')->logout();
+    }
     $deals =  Deal::latest('created_at')->paginate(30);
     return view('admin/home', ['deals' => $deals]);
   }

@@ -35,6 +35,8 @@
   Route::get('/favorite', 'LoginPageController@favorite')->name('favorite');
   Route::get('/user/deal/{id}', 'LoginPageController@dealdetail')->name('dealdetail');
 
+  Route::get('/user/test', 'LoginPageController@test');
+
   // Ajax GET
   Route::get('/cart', 'LoginPageController@cart');
   Route::get('/order', 'LoginPageController@order');

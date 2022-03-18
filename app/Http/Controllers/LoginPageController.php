@@ -47,6 +47,10 @@ class LoginPageController extends Controller
 
   public function questionnaire()
   {
+    if ( Auth::guard('admin')->check() ){
+        Auth::guard('admin')->logout();
+    }
+
       $categories = Category::get();
       $categories = $categories->groupBy('bu_ka_name');
       // dd($categories);
@@ -61,6 +65,9 @@ class LoginPageController extends Controller
 
   public function index()
   {
+    if ( Auth::guard('admin')->check() ){
+        Auth::guard('admin')->logout();
+    }
 
       // $search = $request->search;
       // dd($search);
@@ -232,6 +239,48 @@ class LoginPageController extends Controller
   }
 
 
+  public function test(Request $request){
+    // 直近の納品予定日を取得
+    $today = date("Y/m/d");
+    $holidays = Holiday::get('date');
+    $holidays = Holiday::pluck('date');
+    // $holiday = array_column($holidays, 'date');
+    // Log::debug($holidays);
+    // dd($holidays);
+
+
+    $today_plus2 = date('Y/m/d', strtotime($today . '+2 day'));
+
+    $key = 	in_array('2022/02/27',(array)$holidays);
+
+    if($key){
+        dd('配列の中に'.$today_plus2.'は見つかりました');
+    }else{
+        dd('配列の中に'.$today_plus2.'は見つかりません');
+    }
+
+    // $key = in_array($today_plus2, $holidays , true);
+    // if($key){
+    //     Log::debug('配列の中に'.$today_plus2.'は見つかりました');
+    // }else{
+    //     Log::debug('配列の中に'.$today_plus2.'は見つかりません');
+    // }
+
+    // foreach ($holidays as $holiday) {
+    //   if($holiday == $today_plus2){
+    //     Log::debug('あるからこの日付は使えないよ');
+    //     $today_plus3 = date('Y/m/d', strtotime($today . '+3 day'));
+    //     if($holiday == $today_plus3){
+    //     Log::debug('あるからこの日付も使えないよ');
+    //     }
+    //   }else{
+    //
+    //   }
+    // }
+    // $nouhin_yoteibi = $today_second;
+    return redirect()->route('home');
+  }
+
 
   public function addcart(Request $request){
 
@@ -261,13 +310,15 @@ class LoginPageController extends Controller
 
     // 直近の納品予定日を取得
     $today = date("Y/m/d");
-    $holidays = Holiday::get();
-    $holidays = Holiday::pluck('date');
+    $holidays = Holiday::get('date');
+    // $holidays = Holiday::pluck('date');
     // $holiday = array_column($holidays, 'date');
     Log::debug($holidays);
+
+
     // $today_plus2 = date('Y/m/d', strtotime($today . '+2 day'));
     //
-    // $key = 	array_search('2022/03/15', $holidays);
+    // $key = 	array_search($today_plus2, $holidays['date']);
     //
     // if($key){
     //     Log::debug('配列の中に'.$today_plus2.'は見つかりました');
