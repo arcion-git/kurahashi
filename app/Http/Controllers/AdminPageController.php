@@ -65,6 +65,7 @@ class AdminPageController extends Controller
         Auth::guard('user')->logout();
     }
     $deals =  Deal::latest('created_at')->paginate(30);
+
     return view('admin/home', ['deals' => $deals]);
   }
 
@@ -508,17 +509,24 @@ class AdminPageController extends Controller
 
   public function saverepeatorder(Request $request){
 
+    // dd($request->repeatorder);
+
     $kaiin_number = $request->kaiin_number;
     $repeatorders = $request->repeatorder;
 
-    // dd($repeatorders);
+    $nouhin_youbi = $request->nouhin_youbi;
 
     foreach($repeatorders as  $key => $value) {
+      $nouhin_youbi = $value['nouhin_youbi'];
+      $nouhin_youbi = implode(',', $nouhin_youbi);
+      // dd($nouhin_youbi);
       $repeatorder = Repeatorder::firstOrNew(['id'=> $key]);
       $repeatorder->price = $value['price'];
       $repeatorder->quantity = $value['quantity'];
       $repeatorder->nouhin_youbi = $value['nouhin_youbi'];
       $repeatorder->status = $value['status'];
+      // $repeatorder->status = $value['store'];
+      $repeatorder->startdate = $value['startdate'];
       // $repeatorder->end = $value['end'];
       $repeatorder->save();
     }

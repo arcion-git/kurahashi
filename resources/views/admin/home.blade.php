@@ -24,7 +24,7 @@
         <div class="row">
           <div class="col-lg-12">
             <div class="invoice-title">
-              <h3>{{ $user->name}} <span class="small">様</span></h3>
+              <h3>{{$user->name}} <span class="small">様</span></h3>
             </div>
             <hr>
             <div class="row">

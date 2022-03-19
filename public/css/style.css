@@ -3221,3 +3221,20 @@ appearance: none;
 select.arrow_hidden::-ms-expand{
 display: none;
 }
+
+.nouhin_youbi input{
+  display: none;
+}
+
+.nouhin_youbi{
+  min-width: 190px;
+}
+
+.nouhin_youbi .checkbox-label{
+  cursor: pointer;
+}
+
+.nouhin_youbi_checkbox:checked + .checkbox-label{
+  color: #2f6db5;
+  font-weight: bold;
+}

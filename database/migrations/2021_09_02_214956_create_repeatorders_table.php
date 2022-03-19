@@ -24,6 +24,7 @@ class CreateRepeatordersTable extends Migration
             $table->string('quantity')->nullable()->comment('数量');
             $table->string('status')->nullable()->comment('有効/無効');
             $table->string('nouhin_youbi')->nullable()->comment('納品曜日');
+            $table->string('startdate')->nullable()->comment('開始日');
 
             $table->timestamps();
         });

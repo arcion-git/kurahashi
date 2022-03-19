@@ -55,7 +55,7 @@
                     <th class="text-center">数量</th>
                     <th class="text-center">単位</th>
                     <th class="text-center">納品</th>
-                    <th class="text-center">次回納品予定日</th>
+                    <th class="head-yoteibi text-center">開始日</th>
                     <th class="text-center">小計</th>
                     <th class="text-center">有効/無効</th>
                     <th class="text-center">操作</th>
@@ -79,7 +79,7 @@
                       <input name="repeatorder[{{$repeatorder->id}}][price]" class="price text-center form-control" value="{{$repeatorder->price}}">
                     </td>
                     <td class="text-center" width="150">
-                      <input name="repeatorder[{{$repeatorder->id}}][quantity]" class="quantity text-center form-control" value="{{$repeatorder->quantity}}">
+                      <input name="repeatorder[{{$repeatorder->id}}][quantity]" class="repeatorder_quantity text-center form-control" value="{{$repeatorder->quantity}}">
                     </td>
                     <td class="text-center">
                       @if ($repeatorder->item()->tani == 1)
@@ -92,11 +92,49 @@
         							Kg
         							@endif
                     </td>
-                    <td class="text-center" width="160">
-                      <input id="repeatorder[{{$repeatorder->id}}][nouhin_youbi]" name="repeatorder[{{$repeatorder->id}}][nouhin_youbi]" class="nouhin_youbi text-center form-control" value="{{$repeatorder->nouhin_youbi}}" data-toggle="modal" data-target="#nouhin_youbi">
+                    <td id="" class="nouhin_youbi" class="text-center" width="160">
+
+                      <input class="nouhin_youbi_checkbox" type="checkbox" id="repeatorder[{{$repeatorder->id}}][nouhin_youbi]月" name="repeatorder[{{$repeatorder->id}}][nouhin_youbi][]" value="mon" @if(strpos($repeatorder->nouhin_youbi,'mon'))
+                      checked
+                      @endif
+                      >
+                      <label for="repeatorder[{{$repeatorder->id}}][nouhin_youbi]月" class="checkbox-label">月</label>
+                      <input class="nouhin_youbi_checkbox" type="checkbox" id="repeatorder[{{$repeatorder->id}}][nouhin_youbi]火" name="repeatorder[{{$repeatorder->id}}][nouhin_youbi][]" value="tue" @if(strpos($repeatorder->nouhin_youbi,'tue'))
+                      checked
+                      @endif
+                      >
+                      <label for="repeatorder[{{$repeatorder->id}}][nouhin_youbi]火" class="checkbox-label">火</label>
+                      <input class="nouhin_youbi_checkbox" type="checkbox" id="repeatorder[{{$repeatorder->id}}][nouhin_youbi]水" name="repeatorder[{{$repeatorder->id}}][nouhin_youbi][]" value="wed" @if(strpos($repeatorder->nouhin_youbi,'wed'))
+                      checked
+                      @endif
+                      >
+                      <label for="repeatorder[{{$repeatorder->id}}][nouhin_youbi]水" class="checkbox-label">水</label>
+                      <input class="nouhin_youbi_checkbox" type="checkbox" id="repeatorder[{{$repeatorder->id}}][nouhin_youbi]木" name="repeatorder[{{$repeatorder->id}}][nouhin_youbi][]" value="thu" @if(strpos($repeatorder->nouhin_youbi,'thu'))
+                      checked
+                      @endif
+                      >
+                      <label for="repeatorder[{{$repeatorder->id}}][nouhin_youbi]木" class="checkbox-label">木</label>
+                      <input class="nouhin_youbi_checkbox" type="checkbox" id="repeatorder[{{$repeatorder->id}}][nouhin_youbi]金" name="repeatorder[{{$repeatorder->id}}][nouhin_youbi][]" value="fri" @if(strpos($repeatorder->nouhin_youbi,'fri'))
+                      checked
+                      @endif
+                      >
+                      <label for="repeatorder[{{$repeatorder->id}}][nouhin_youbi]金" class="checkbox-label">金</label>
+                      <input class="nouhin_youbi_checkbox" type="checkbox" id="repeatorder[{{$repeatorder->id}}][nouhin_youbi]土" name="repeatorder[{{$repeatorder->id}}][nouhin_youbi][]" value="sat" @if(strpos($repeatorder->nouhin_youbi,'sat'))
+                      checked
+                      @endif
+                      >
+                      <label for="repeatorder[{{$repeatorder->id}}][nouhin_youbi]土" class="checkbox-label">土</label>
+                      <input class="nouhin_youbi_checkbox" type="checkbox" id="repeatorder[{{$repeatorder->id}}][nouhin_youbi]日" name="repeatorder[{{$repeatorder->id}}][nouhin_youbi][]" value="sun" @if(strpos($repeatorder->nouhin_youbi,'sun'))
+                      checked
+                      @endif
+                      >
+                      <label for="repeatorder[{{$repeatorder->id}}][nouhin_youbi]日" class="checkbox-label">日</label>
+
+                      <!-- <input id="repeatorder[{{$repeatorder->id}}][nouhin_youbi]" name="repeatorder[{{$repeatorder->id}}][nouhin_youbi]" class="nouhin_youbi text-center form-control" value="{{$repeatorder->nouhin_youbi}}" data-toggle="modal" data-target="#nouhin_youbi"> -->
+
                     </td>
                     <td class="text-center head-nouhin_youbi" width="150">
-
+  										<input type="text" name="repeatorder[{{$repeatorder->id}}][startdate]" class="startdate text-center form-control daterange-cus datepicker" value="{{$repeatorder->startdate}}" autocomplete="off" required>
                     </td>
                     <td class="text-center"></td>
                     <td class="text-center" width="150">
@@ -155,6 +193,9 @@
   <input name="kaiin_number" type="hidden" value="{{$id}}">
   <input id="remove_id" name="delete" type="hidden" value="">
 </form>
+
+
+
 
 
 <!-- Modal -->
@@ -230,7 +271,7 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="nouhin_youbi" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- <div class="modal fade" id="nouhin_youbi" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -254,11 +295,30 @@
           <label for="土" class="checkbox-label">土</label>
           <input class="checkbox-input" type="checkbox" id="日" name="nouhin_youbi" value="日">
           <label for="日" class="checkbox-label">日</label>
-          <button id="" name="item_id" onclick="javaScript:OK()" data-dismiss="modal" aria-label="Close" value="" class="addrepeatorder btn btn-warning">設定</button></td>
+          <button id="nouhin_youbi_set" name="item_id" data-dismiss="modal" aria-label="Close" value="" class="addrepeatorder btn btn-warning">設定</button></td>
       </div>
     </div>
   </div>
-</div>
+</div> -->
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.ja.min.js"></script>
+
+
+<!-- <link rel="stylesheet" href="{{ asset('css/jquery.weekLine.css') }}">
+<link rel="stylesheet" href="{{ asset('css/jquery.weekLine-white.css') }}">
+<script src="{{ asset('js/jquery.weekLine.js') }}"></script> -->
+
+
+<!-- <script>
+$(document).ready(function(){
+  $("#demo1").weekLine();
+  $("#demo2").weekLine({
+    dayLabels: ["日", "月", "火", "水", "木", "金", "土"]
+  });
+});
+</script> -->
+
 
 <script>
 $('.datepicker').datepicker({
@@ -270,18 +330,30 @@ $('.datepicker').datepicker({
 	endDate: '+31d',
 	defaultViewDate: Date()
 });
-
+// $('.nouhin_youbi_checkbox').on('click', function(){
+//   $(this).toggleClass('isActive');
+// })
 $(document).on("click", ".nouhin_youbi", function() {
   var input = $(this).get(0).id;
 	var search = document.getElementsByName("nouhin_youbi").value;
   console.log(input);
-  console.log(search);
+  // console.log(search);
   return input;
+  $("#nouhin_youbi_set").click(function () {
+    const colors = [];
+    $(':checkbox[name="nouhin_youbi"]:checked').each(function () {
+      colors.push($(this).val());
+      $("#nouhin_youbi_set").val(colors);
+      $(input).val(colors);
+      console.log(colors);
+      console.log(input);
+    });
+  });
 });
-function OK() {
-	var search = document.getElementsByName(input).value;
-  console.log(search);
-	document.getElementById(input).value = search;
-}
+// function OK() {
+// 	var search = document.getElementsByName(input).value;
+//   console.log(search);
+// 	document.getElementById(input).value = search;
+// }
 </script>
 @endsection
