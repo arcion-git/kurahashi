@@ -203,7 +203,7 @@
 @if(isset($holidays))
 <script>
 $('.datepicker').datepicker({
-	format: 'yyyy-mm-dd',
+	format: 'yyyy/mm/dd',
 	autoclose: true,
 	assumeNearbyYear: true,
 	language: 'ja',

@@ -242,43 +242,19 @@ class LoginPageController extends Controller
   public function test(Request $request){
     // 直近の納品予定日を取得
     $today = date("Y/m/d");
-    $holidays = Holiday::get();
-    // $holidays = Holiday::pluck('date');
-    $holidays = array_column($holidays->all(),null,"date");
-    // $holiday = array_column($holidays, 'date');
-    // Log::debug($holidays);
-    // dd($holidays);
-    $today_plus2 = date('Y/m/d', strtotime($today.'+2 day'));
-    dd($today_plus2);
-    $key = array_search($today_plus2,(array)$holidays,true);
-
-    dd($key);
-
-    // if($key){
-    //     dd('配列の中に'.$today_plus2.'は見つかりました');
-    // }else{
-    //     dd('配列の中に'.$today_plus2.'は見つかりません');
-    // }
-
-    // $key = in_array($today_plus2, $holidays , true);
-    // if($key){
-    //     Log::debug('配列の中に'.$today_plus2.'は見つかりました');
-    // }else{
-    //     Log::debug('配列の中に'.$today_plus2.'は見つかりません');
-    // }
-
-    // foreach ($holidays as $holiday) {
-    //   if($holiday == $today_plus2){
-    //     Log::debug('あるからこの日付は使えないよ');
-    //     $today_plus3 = date('Y/m/d', strtotime($today . '+3 day'));
-    //     if($holiday == $today_plus3){
-    //     Log::debug('あるからこの日付も使えないよ');
-    //     }
-    //   }else{
-    //
-    //   }
-    // }
-    // $nouhin_yoteibi = $today_second;
+    $holidays = Holiday::pluck('date')->toArray();
+    for($i = 2; $i < 10; $i++){
+      $today_plus = date('Y/m/d', strtotime($today.'+'.$i.'day'));
+      // dd($today_plus2);
+      $key = array_search($today_plus,(array)$holidays,true);
+      if($key){
+          // 休みでないので納品日を格納
+          $nouhin_yoteibi = $today_plus;
+          break;
+      }else{
+          // 休みなので次の日付を探す
+      }
+    }
     return redirect()->route('home');
   }
 
@@ -317,37 +293,22 @@ class LoginPageController extends Controller
     Log::debug($holidays);
 
 
-    // $today_plus2 = date('Y/m/d', strtotime($today . '+2 day'));
-    //
-    // $key = 	array_search($today_plus2, $holidays['date']);
-    //
-    // if($key){
-    //     Log::debug('配列の中に'.$today_plus2.'は見つかりました');
-    // }else{
-    //     Log::debug('配列の中に'.$today_plus2.'は見つかりません');
-    // }
+    $today = date("Y/m/d");
+    $holidays = Holiday::pluck('date')->toArray();
+    for($i = 3; $i < 10; $i++){
+      $today_plus = date('Y/m/d', strtotime($today.'+'.$i.'day'));
+      // dd($today_plus2);
+      $key = array_search($today_plus,(array)$holidays,true);
+      if($key){
+          // 休みでないので納品日を格納
+      }else{
+          // 休みなので次の日付を探す
+          $nouhin_yoteibi = $today_plus;
+          break;
+      }
+    }
 
-    // $key = in_array($today_plus2, $holidays , true);
-    // if($key){
-    //     Log::debug('配列の中に'.$today_plus2.'は見つかりました');
-    // }else{
-    //     Log::debug('配列の中に'.$today_plus2.'は見つかりません');
-    // }
-
-    // foreach ($holidays as $holiday) {
-    //   if($holiday == $today_plus2){
-    //     Log::debug('あるからこの日付は使えないよ');
-    //     $today_plus3 = date('Y/m/d', strtotime($today . '+3 day'));
-    //     if($holiday == $today_plus3){
-    //     Log::debug('あるからこの日付も使えないよ');
-    //     }
-    //   }else{
-    //
-    //   }
-    // }
-    // $nouhin_yoteibi = $today_second;
-
-    $order=Order::firstOrNew(['cart_id'=> $cart->id , 'tokuisaki_name'=> $store->tokuisaki_name , 'store_name'=> $store->store_name , 'quantity'=> 1 , 'nouhin_yoteibi'=> '2022-09-22']);
+    $order=Order::firstOrNew(['cart_id'=> $cart->id , 'tokuisaki_name'=> $store->tokuisaki_name , 'store_name'=> $store->store_name , 'quantity'=> 1 , 'nouhin_yoteibi'=> $nouhin_yoteibi]);
     if(isset($price->price)){
     $order->price = $price->price;
     }

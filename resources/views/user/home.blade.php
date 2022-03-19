@@ -15,7 +15,7 @@
           </div>
 
 
-          <a href="{{ url('/user/test') }}"><button class="btn btn-warning">TEST</button></a>
+          <!-- <a href="{{ url('/user/test') }}"><button class="btn btn-warning">TEST</button></a> -->
 
           @if(Request::is('recommend'))
           @if(!isset($recommends[0]))
