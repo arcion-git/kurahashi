@@ -68,7 +68,7 @@ class LoginPageController extends Controller
     if ( Auth::guard('admin')->check() ){
         Auth::guard('admin')->logout();
     }
-    
+
       // $search = $request->search;
       // dd($search);
 
@@ -521,7 +521,7 @@ class LoginPageController extends Controller
     $kaiin_number = Auth::guard('user')->user()->kaiin_number;
     $store_users = StoreUser::where('user_id',$kaiin_number)->get(['store_id','tokuisaki_id']);
 
-    Log::debug($store_users);
+    // Log::debug($store_users);
 
     foreach ($store_users as $store_user) {
       $store = Store::where([ 'tokuisaki_id'=> $store_user->tokuisaki_id,'store_id'=> $store_user->store_id ])->first();

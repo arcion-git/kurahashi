@@ -311,6 +311,56 @@ if(document.URL.match("/admin/deal")) {
   });
 
 
+  // リピートオーダーの配送先を追加
+  $(document).on("click", ".clonerepeatorder", function() {
+    // var kaiin_number = $('#kaiin_number').val();
+    var item_id = $(this).get(0).id;
+    var cart_id = $(this).parent().parent().parent().parent().parent().parent().get(0).id;
+    console.log(item_id);
+    console.log(cart_id);
+    // $(this).parent().parent().clone(true).insertAfter($(this).parent().parent());
+
+      $.ajax({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }, //Headersを書き忘れるとエラーになる
+        url: location.origin + '/admin/user/clonerepeatorder',
+        type: 'POST', //リクエストタイプ
+        data: {
+          'item_id': item_id,
+          'cart_id': cart_id,
+        } //Laravelに渡すデータ
+      })
+      // Ajaxリクエスト成功時の処理
+      .done(function(data) {
+        // console.log(data);
+        setTimeout(doReload);
+        // setTimeout(order_update);
+        // setTimeout(dealorder_update);
+        // Swal.fire({
+        //   type:"success",
+        //   title: "配送先を追加しました",
+        //   // position: 'top-end',
+        //   // toast: true,
+        //   icon: 'success',
+        //   showConfirmButton: false,
+        //   // timer: 1500
+        // });
+        // setTimeout(function(){
+        //   $("#overlay").fadeOut(300);
+        // },500);
+      })
+      // Ajaxリクエスト失敗時の処理
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        alert('配送先を追加できません。');
+        console.log("ajax通信に失敗しました");
+        console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+        console.log("textStatus     : " + textStatus);
+        console.log("errorThrown    : " + errorThrown.message);
+      });
+  });
+
+
   // 任意の配送先を追加
   $(document).on("click", ".addordernini", function() {
     var cart_nini_id = $(this).get(0).id;
@@ -1052,6 +1102,20 @@ if(document.URL.match("/admin/recommendcategory")) {
   });
 }
 
+// リピートオーダー商品削除（formタグ回避）
+if(document.URL.match("/admin/user/repeatorder")) {
+  $(function(){
+    $(".delete_button").on("click",function(){
+      var cart_id = $(this).parent().parent().parent().parent().parent().parent().get(0).id;
+      var remove_id = $(this).data('id');
+      console.log(cart_id);
+      console.log(remove_id);
+      $("#remove_id").val(remove_id);
+      $("#cart_id").val(cart_id);
+      $('#remove_form').submit();
+    });
+  });
+}
 
 
 });

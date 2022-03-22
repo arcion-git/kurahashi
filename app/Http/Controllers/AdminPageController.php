@@ -15,6 +15,7 @@ use App\Store;
 use App\StoreUser;
 use App\Recommend;
 use App\FavoriteCategory;
+use App\Repeatcart;
 use App\Repeatorder;
 use App\RecommendCategory;
 use App\CartNini;
@@ -52,6 +53,10 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 
 use Maatwebsite\Excel\Facades\Excel;
+
+// デバッグを出力
+use Log;
+use Response;
 
 class AdminPageController extends Controller
 {
@@ -476,13 +481,13 @@ class AdminPageController extends Controller
     $user = User::where('id',$id)->first();
     $items = Item::get();
 
-    $repeatorders = Repeatorder::where('kaiin_number',$user->kaiin_number)->get();
-    // dd($repeatorders);
+    $repeatcarts = Repeatcart::where('kaiin_number',$user->kaiin_number)->get();
+    // dd($repeatcarts);
     $data=[
       'id'=>$id,
       'items'=>$items,
       'user'=>$user,
-      'repeatorders'=>$repeatorders,
+      'repeatcarts'=>$repeatcarts,
     ];
     return view('repeatorder', $data);
   }
@@ -496,8 +501,15 @@ class AdminPageController extends Controller
     $user = User::where('id',$kaiin_number)->first();
     $item = Item::where('id',$item_id)->first();
     // dd($user);
+    // dd($user->kaiin_number);
+    $store_user = StoreUser::where('user_id',$user->kaiin_number)->first(['store_id','tokuisaki_id']);
 
-    $repeatorder = Repeatorder::firstOrNew(['kaiin_number'=> $user->kaiin_number , 'item_id'=> $item->item_id , 'sku_code'=> $item->sku_code ]);
+    $store = Store::where(['tokuisaki_id'=> $store_user->tokuisaki_id,'store_id'=> $store_user->store_id ])->first();
+    // dd($store);
+    $repeatcart = Repeatcart::firstOrNew(['kaiin_number'=> $user->kaiin_number , 'item_id'=> $item->item_id , 'sku_code'=> $item->sku_code ]);
+    $repeatcart -> save();
+
+    $repeatorder = Repeatorder::firstOrNew(['cart_id'=> $repeatcart->id , 'tokuisaki_name'=> $store->tokuisaki_name , 'store_name'=> $store->store_name , 'quantity'=> 1]);
     $repeatorder -> save();
 
     $id = $kaiin_number;
@@ -505,11 +517,17 @@ class AdminPageController extends Controller
     return redirect()->route('repeatorder', $id);
   }
 
-
+  public function clonerepeatorder(Request $request){
+    $cart_id = $request->cart_id;
+    $repeatorder=Repeatorder::Create(['cart_id'=> $cart_id , 'tokuisaki_name'=>'' , 'nouhin_yoteibi'=> '', 'quantity'=> 1]);
+    $data = "sucsess";
+    // Log::debug($repeatorder);
+    return redirect()->route('home',$data);
+  }
 
   public function saverepeatorder(Request $request){
 
-    // dd($request->repeatorder);
+    dd($request);
 
     $kaiin_number = $request->kaiin_number;
     $repeatorders = $request->repeatorder;
@@ -537,10 +555,19 @@ class AdminPageController extends Controller
 
   public function removerepeatorder(Request $request){
     $delete_id = $request->delete;
-    $delete = Repeatorder::where('id',$delete_id)->first()->delete();
+    $cart_id = $request->cart_id;
+
+    $delete_order = Repeatorder::where('id',$delete_id)->first()->delete();
+
+    $order = Repeatorder::where(['cart_id'=> $cart_id])->first();
+    if(empty($order)){
+    $delete_cart=Repeatcart::where(['id' => $cart_id])->first()->delete();
+    }
+
     $id = $request->kaiin_number;
     return redirect()->route('repeatorder', $id);
   }
+
 
 
 

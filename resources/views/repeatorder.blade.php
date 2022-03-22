@@ -18,7 +18,7 @@
       @endif
     </div>
   </div>
-  <div class="section-body">
+  <div class="section-body repeatorder">
     <div class="invoice">
       <div class="invoice-print">
         <div class="row">
@@ -45,137 +45,147 @@
             <form id="saveform" action="{{ url('/admin/user/saverepeatorder') }}" enctype="multipart/form-data" method="POST" class="form-horizontal">
               @csrf
               <div class="table-responsive">
-                <table class="table table-striped">
+                <table class="table table-striped table-md">
                   <tr>
                     <th class="text-center">商品番号</th>
                     <th class="text-center">商品名</th>
                     <th class="text-center">産地</th>
                     <th class="text-center">規格</th>
-                    <th class="text-center">単価</th>
-                    <th class="text-center">数量</th>
-                    <th class="text-center">単位</th>
-                    <th class="text-center">納品</th>
-                    <th class="head-yoteibi text-center">開始日</th>
-                    <th class="text-center">小計</th>
-                    <th class="text-center">有効/無効</th>
-                    <th class="text-center">操作</th>
+                    <th class="text-center head-price">単価</th>
+                    <th class="text-center head-quantity">数量</th>
+                    <th class="text-center head-tani">単位</th>
+                    <th class="text-center head-nouhin_youbi">納品</th>
+                    <th class="text-center head-startdate">開始日</th>
+                    <th class="text-center head-shoukei">小計</th>
+                    <th class="text-center head-yuukou">有効/無効</th>
+                    <th class="text-center head-sousa">操作</th>
                   </tr>
+  		            @foreach($repeatcarts as $repeatcart)
+                  <tr id="{{$repeatcart->id}}">
+                    <td class="text-center">
+                      {{$repeatcart->item()->item_id}}
+                    </td>
+                    <td class="text-center">
+                      {{$repeatcart->item()->item_name}}
+                    </td>
+                    <td class="text-center">
+                      {{$repeatcart->item()->sanchi_name}}
+                    </td>
+                    <td class="text-center">
+                      {{$repeatcart->item()->kikaku}}
+                    </td>
 
-  		            @foreach($repeatorders as $repeatorder)
-                  <tr>
-                    <td class="text-center">
-                      {{$repeatorder->item()->item_id}}
-                    </td>
-                    <td class="text-center">
-                      {{$repeatorder->item()->item_name}}
-                    </td>
-                    <td class="text-center">
-                      {{$repeatorder->item()->sanchi_name}}
-                    </td>
-                    <td class="text-center">
-                      {{$repeatorder->item()->kikaku}}
-                    </td>
-                    <td class="text-center" width="150">
-                      <input name="repeatorder[{{$repeatorder->id}}][price]" class="price text-center form-control" value="{{$repeatorder->price}}">
-                    </td>
-                    <td class="text-center" width="150">
-                      <input name="repeatorder[{{$repeatorder->id}}][quantity]" class="repeatorder_quantity text-center form-control" value="{{$repeatorder->quantity}}">
-                    </td>
-                    <td class="text-center">
-                      @if ($repeatorder->item()->tani == 1)
-        							ｹｰｽ
-        							@elseif ($repeatorder->item()->tani == 2)
-        							ﾎﾞｰﾙ
-        							@elseif ($repeatorder->item()->tani == 3)
-        							ﾊﾞﾗ
-        							@elseif ($repeatorder->item()->tani == 4)
-        							Kg
-        							@endif
-                    </td>
-                    <td id="" class="nouhin_youbi" class="text-center" width="160">
+                    <td colspan="8" class="order-table">
+              				<table class="table table-striped table-hover table-md">
+              				@foreach($repeatcart->orders as $val)
+              					<tr id="{{$val->id}}">
+                          <td class="text-center head-price">
+                            <input name="repeatorder[{{$repeatcart->price}}][price]" class="price text-center form-control" value="{{$repeatcart->price}}">
+                          </td>
+                          <td class="text-center head-quantity">
+                            <input name="repeatorder[{{$val->id}}][quantity]" class="repeatorder_quantity text-center form-control" value="{{$val->quantity}}">
+                          </td>
+                          <td class="text-center head-tani">
+                            @if ($repeatcart->item()->tani == 1)
+              							ｹｰｽ
+              							@elseif ($repeatcart->item()->tani == 2)
+              							ﾎﾞｰﾙ
+              							@elseif ($repeatcart->item()->tani == 3)
+              							ﾊﾞﾗ
+              							@elseif ($repeatcart->item()->tani == 4)
+              							Kg
+              							@endif
+                          </td>
+                          <td id="" class="nouhin_youbi head-nouhin_youbi" class="text-center">
 
-                      <input class="nouhin_youbi_checkbox" type="checkbox" id="repeatorder[{{$repeatorder->id}}][nouhin_youbi]月" name="repeatorder[{{$repeatorder->id}}][nouhin_youbi][]" value="mon" @if(strpos($repeatorder->nouhin_youbi,'mon'))
-                      checked
-                      @endif
-                      >
-                      <label for="repeatorder[{{$repeatorder->id}}][nouhin_youbi]月" class="checkbox-label">月</label>
-                      <input class="nouhin_youbi_checkbox" type="checkbox" id="repeatorder[{{$repeatorder->id}}][nouhin_youbi]火" name="repeatorder[{{$repeatorder->id}}][nouhin_youbi][]" value="tue" @if(strpos($repeatorder->nouhin_youbi,'tue'))
-                      checked
-                      @endif
-                      >
-                      <label for="repeatorder[{{$repeatorder->id}}][nouhin_youbi]火" class="checkbox-label">火</label>
-                      <input class="nouhin_youbi_checkbox" type="checkbox" id="repeatorder[{{$repeatorder->id}}][nouhin_youbi]水" name="repeatorder[{{$repeatorder->id}}][nouhin_youbi][]" value="wed" @if(strpos($repeatorder->nouhin_youbi,'wed'))
-                      checked
-                      @endif
-                      >
-                      <label for="repeatorder[{{$repeatorder->id}}][nouhin_youbi]水" class="checkbox-label">水</label>
-                      <input class="nouhin_youbi_checkbox" type="checkbox" id="repeatorder[{{$repeatorder->id}}][nouhin_youbi]木" name="repeatorder[{{$repeatorder->id}}][nouhin_youbi][]" value="thu" @if(strpos($repeatorder->nouhin_youbi,'thu'))
-                      checked
-                      @endif
-                      >
-                      <label for="repeatorder[{{$repeatorder->id}}][nouhin_youbi]木" class="checkbox-label">木</label>
-                      <input class="nouhin_youbi_checkbox" type="checkbox" id="repeatorder[{{$repeatorder->id}}][nouhin_youbi]金" name="repeatorder[{{$repeatorder->id}}][nouhin_youbi][]" value="fri" @if(strpos($repeatorder->nouhin_youbi,'fri'))
-                      checked
-                      @endif
-                      >
-                      <label for="repeatorder[{{$repeatorder->id}}][nouhin_youbi]金" class="checkbox-label">金</label>
-                      <input class="nouhin_youbi_checkbox" type="checkbox" id="repeatorder[{{$repeatorder->id}}][nouhin_youbi]土" name="repeatorder[{{$repeatorder->id}}][nouhin_youbi][]" value="sat" @if(strpos($repeatorder->nouhin_youbi,'sat'))
-                      checked
-                      @endif
-                      >
-                      <label for="repeatorder[{{$repeatorder->id}}][nouhin_youbi]土" class="checkbox-label">土</label>
-                      <input class="nouhin_youbi_checkbox" type="checkbox" id="repeatorder[{{$repeatorder->id}}][nouhin_youbi]日" name="repeatorder[{{$repeatorder->id}}][nouhin_youbi][]" value="sun" @if(strpos($repeatorder->nouhin_youbi,'sun'))
-                      checked
-                      @endif
-                      >
-                      <label for="repeatorder[{{$repeatorder->id}}][nouhin_youbi]日" class="checkbox-label">日</label>
+                            <input class="nouhin_youbi_checkbox" type="checkbox" id="repeatorder[{{$val->id}}][nouhin_youbi]月" name="repeatorder[{{$val->id}}][nouhin_youbi][]" value="mon" @if(strpos($val->nouhin_youbi,'mon'))
+                            checked
+                            @endif
+                            >
+                            <label for="repeatorder[{{$val->id}}][nouhin_youbi]月" class="checkbox-label">月</label>
+                            <input class="nouhin_youbi_checkbox" type="checkbox" id="repeatorder[{{$val->id}}][nouhin_youbi]火" name="repeatorder[{{$val->id}}][nouhin_youbi][]" value="tue" @if(strpos($val->nouhin_youbi,'tue'))
+                            checked
+                            @endif
+                            >
+                            <label for="repeatorder[{{$val->id}}][nouhin_youbi]火" class="checkbox-label">火</label>
+                            <input class="nouhin_youbi_checkbox" type="checkbox" id="repeatorder[{{$val->id}}][nouhin_youbi]水" name="repeatorder[{{$val->id}}][nouhin_youbi][]" value="wed" @if(strpos($val->nouhin_youbi,'wed'))
+                            checked
+                            @endif
+                            >
+                            <label for="repeatorder[{{$val->id}}][nouhin_youbi]水" class="checkbox-label">水</label>
+                            <input class="nouhin_youbi_checkbox" type="checkbox" id="repeatorder[{{$val->id}}][nouhin_youbi]木" name="repeatorder[{{$val->id}}][nouhin_youbi][]" value="thu" @if(strpos($val->nouhin_youbi,'thu'))
+                            checked
+                            @endif
+                            >
+                            <label for="repeatorder[{{$val->id}}][nouhin_youbi]木" class="checkbox-label">木</label>
+                            <input class="nouhin_youbi_checkbox" type="checkbox" id="repeatorder[{{$val->id}}][nouhin_youbi]金" name="repeatorder[{{$val->id}}][nouhin_youbi][]" value="fri" @if(strpos($val->nouhin_youbi,'fri'))
+                            checked
+                            @endif
+                            >
+                            <label for="repeatorder[{{$val->id}}][nouhin_youbi]金" class="checkbox-label">金</label>
+                            <input class="nouhin_youbi_checkbox" type="checkbox" id="repeatorder[{{$val->id}}][nouhin_youbi]土" name="repeatorder[{{$val->id}}][nouhin_youbi][]" value="sat" @if(strpos($val->nouhin_youbi,'sat'))
+                            checked
+                            @endif
+                            >
+                            <label for="repeatorder[{{$val->id}}][nouhin_youbi]土" class="checkbox-label">土</label>
+                            <input class="nouhin_youbi_checkbox" type="checkbox" id="repeatorder[{{$val->id}}][nouhin_youbi]日" name="repeatorder[{{$val->id}}][nouhin_youbi][]" value="sun" @if(strpos($val->nouhin_youbi,'sun'))
+                            checked
+                            @endif
+                            >
+                            <label for="repeatorder[{{$val->id}}][nouhin_youbi]日" class="checkbox-label">日</label>
 
-                      <!-- <input id="repeatorder[{{$repeatorder->id}}][nouhin_youbi]" name="repeatorder[{{$repeatorder->id}}][nouhin_youbi]" class="nouhin_youbi text-center form-control" value="{{$repeatorder->nouhin_youbi}}" data-toggle="modal" data-target="#nouhin_youbi"> -->
+                            <!-- <input id="repeatorder[{{$val->id}}][nouhin_youbi]" name="repeatorder[{{$val->id}}][nouhin_youbi]" class="nouhin_youbi text-center form-control" value="{{$val->nouhin_youbi}}" data-toggle="modal" data-target="#nouhin_youbi"> -->
 
-                    </td>
-                    <td class="text-center head-nouhin_youbi" width="150">
-  										<input type="text" name="repeatorder[{{$repeatorder->id}}][startdate]" class="startdate text-center form-control daterange-cus datepicker" value="{{$repeatorder->startdate}}" autocomplete="off" required>
-                    </td>
-                    <td class="text-center"></td>
-                    <td class="text-center" width="150">
-                      <div class="form-group">
-                        <label class="mt-4">
-                          <div class="selectgroup w-100">
-                            <label class="selectgroup-item">
-                              <input type="radio" name="repeatorder[{{$repeatorder->id}}][status]" value="有効" class="selectgroup-input"
-                              @if($repeatorder->status == "有効")
-                              checked
-                              @elseif($repeatorder->status == "")
-                              checked
-                              @else
-                              @endif
-                              >
-                              <span class="selectgroup-button">On</span>
-                            </label>
-                            <label class="selectgroup-item">
-                              <input type="radio" name="repeatorder[{{$repeatorder->id}}][status]" value="無効" class="selectgroup-input"
-                              @if($repeatorder->status == "無効")
-                              checked
-                              @else
-                              @endif
-                              >
-                              <span class="selectgroup-button">Off</span>
-                            </label>
-                          </div>
-                          <!-- <input type="checkbox" name="repeatorder[{{$repeatorder->id}}][status]" value="{{$repeatorder->status}}" class="custom-switch-input">
-                          <span class="custom-switch-indicator"></span> -->
-                        </label>
-                      </div>
-                    </td>
-                    <td class="text-center">
-                      <div class="btn btn-primary delete_button" data-id="{{$repeatorder->id}}"/>削除</div>
-                    </td>
+                          </td>
+                          <td class="text-center head-startdate" width="150">
+        										<input type="text" name="repeatorder[{{$val->id}}][startdate]" class="startdate text-center form-control daterange-cus datepicker" value="{{$val->startdate}}" autocomplete="off" required>
+                          </td>
+                          <td class="text-center head-shoukei"></td>
+                          <td class="text-center head-yuukou">
+                            <div class="form-group">
+                              <label class="mt-4">
+                                <div class="selectgroup w-100">
+                                  <label class="selectgroup-item">
+                                    <input type="radio" name="repeatorder[{{$val->id}}][status]" value="有効" class="selectgroup-input"
+                                    @if($val->status == "有効")
+                                    checked
+                                    @elseif($val->status == "")
+                                    checked
+                                    @else
+                                    @endif
+                                    >
+                                    <span class="selectgroup-button">On</span>
+                                  </label>
+                                  <label class="selectgroup-item">
+                                    <input type="radio" name="repeatorder[{{$val->id}}][status]" value="無効" class="selectgroup-input"
+                                    @if($val->status == "無効")
+                                    checked
+                                    @else
+                                    @endif
+                                    >
+                                    <span class="selectgroup-button">Off</span>
+                                  </label>
+                                </div>
+                                <!-- <input type="checkbox" name="repeatorder[{{$val->id}}][status]" value="{{$val->status}}" class="custom-switch-input">
+                                <span class="custom-switch-indicator"></span> -->
+                              </label>
+                            </div>
+                          </td>
+              						<td class="head-sousa text-center">
+              							<button type="button" id="{{$val->id}}" data-id="{{$val->id}}" class="removeid_{{$val->id}} delete_button btn btn-info">削除</button>
+              							<button style="margin-top:10px;" type="button" id="{{$repeatcart->item()->id}}" class="cloneid_{{$val->id}} clonerepeatorder btn btn-success">配送先を追加</button>
+              						<input name="order_id[]" class="order_id" type="hidden" value="{{$val->id}}" />
+              						</td>
+              					</tr>
+              				@endforeach
+              				</table>
+              			</td>
                   </tr>
                   @endforeach
 
                 </table>
               </div>
-              <input name="kaiin_number" type="hidden" value="{{$id}}">
+              <input id="kaiin_number" name="kaiin_number" type="hidden" value="{{$id}}">
               <button type="submit" class="btn btn-warning float-right">内容を保存</button>
             </form>
             <button class="addrepeatorder btn btn-success" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus"></i> 商品を追加</button>
@@ -192,8 +202,8 @@
   @csrf
   <input name="kaiin_number" type="hidden" value="{{$id}}">
   <input id="remove_id" name="delete" type="hidden" value="">
+  <input id="cart_id" name="cart_id" type="hidden" value="">
 </form>
-
 
 
 

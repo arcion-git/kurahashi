@@ -123,6 +123,7 @@
   Route::post('/admin/user/addrepeatorder', 'AdminPageController@addrepeatorder');
   Route::post('/admin/user/saverepeatorder', 'AdminPageController@saverepeatorder');
   Route::post('/admin/user/removerepeatorder', 'AdminPageController@removerepeatorder');
+  Route::post('/admin/user/clonerepeatorder', 'AdminPageController@clonerepeatorder');
 
   // CSVインポート
   Route::post('/admin/userimport', 'AdminPageController@userimport');

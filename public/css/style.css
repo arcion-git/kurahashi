@@ -2982,7 +2982,7 @@ body:not(.sidebar-mini) .sidebar-style-2 .sidebar-menu li.active ul.dropdown-men
     -webkit-transform: scale(1.2, 1.2);
     opacity: 0.0; } }
 
-
+.repeatorder input,
 .order input{
   /* width:50px !important; */
   /* margin:auto !important; */
@@ -3165,6 +3165,7 @@ a:not(.btn-social-icon):not(.btn-social):not(.page-link) .ion, a:not(.btn-social
 .head-tani{
   width: 70px !important;
 }
+.head-startdate,
 .head-yoteibi{
   width: 100px !important;
 }
@@ -3174,6 +3175,13 @@ a:not(.btn-social-icon):not(.btn-social):not(.page-link) .ion, a:not(.btn-social
 .head-sousa{
   width: 140px !important;
 }
+.head-nouhin_youbi{
+  width: 190px !important;
+}
+.head-yuukou{
+  width: 160px !important;
+}
+
 
 .swal2-popup.swal2-toast .swal2-title{
     margin: 1em 0.5em !important;
@@ -3222,12 +3230,12 @@ select.arrow_hidden::-ms-expand{
 display: none;
 }
 
+
+.nouhin_youbi {
+  text-align: center;
+}
 .nouhin_youbi input{
   display: none;
-}
-
-.nouhin_youbi{
-  min-width: 190px;
 }
 
 .nouhin_youbi .checkbox-label{
