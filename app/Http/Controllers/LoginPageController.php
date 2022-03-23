@@ -34,6 +34,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
+// API通信
+use GuzzleHttp\Client;
 
 
 class LoginPageController extends Controller
@@ -965,8 +967,94 @@ class LoginPageController extends Controller
     return ;
   }
 
+  public function getzipcode(){
+    return view('zipcode');
+  }
 
 
+  public function postzipcode(Request $request){
+      $zipcode = $request->zipcode;
+
+      // dd($zipcode);
+      $client = new Client();
+
+      // $url = 'http://zipcloud.ibsnet.co.jp/api/search';
+      // $option = [
+      //   'headers' => [
+      //     'Accept' => '*/*',
+      //     'Content-Type' => 'application/x-www-form-urlencoded'
+      //   ],
+      //   'form_params' => [
+      //     'zipcode' => $zipcode
+      //   ]
+      // ];
+      // $response = $client->request('POST', $url, $option);
+      // $result = json_decode($response->getBody()->getContents(), true);
+      // dd($result);
+
+      $url = 'https://demo.yamato-credit-finance.jp/kuroneko-anshin/AN060APIAction.action';
+      $option = [
+        'headers' => [
+          'Accept' => '*/*',
+          'Content-Type' => 'application/x-www-form-urlencoded',
+          'charset' => 'UTF-8',
+        ],
+        'form_params' => [
+          'traderCode' => '330000051',
+          'cId' => '1234-57',
+          'hjkjKbn' => '1',
+          'houjinKaku' => '1',
+          'houjinZengo' => '1',
+          'sMei' => '黒猫商店',
+          'shitenMei' => '高田馬場支店',
+          'sMeikana' => 'クロネコショウテン',
+          'shitenMeikana' => 'タカ',
+          'ybnNo' => '7200824',
+          'Adress' => '広島県福山市多治米町',
+          'telNo' => '080-2888-5281',
+          'keitaiNo' => '080-2888-5281',
+          'gyscod1' => '07',
+          'gyscod2' => '082',
+          'setsurituNgt' => '200104',
+          'shk' => '12345',
+          'nsyo' => '12345',
+          'kmssyainsu' => '12345',
+          'daikjmeiSei' => '黒猫',
+          'daikjmeiMei' => '花子',
+          'daiknameiSei' => 'クロネコ',
+          'daiknameiMei' => 'ハナコ',
+          'daiYbnno' => '7200824',
+          'daiAddress' => '広島県福山市多治米町',
+          'szUmu' => '0',
+          'szHjkjKbn' => '1',
+          'szHoujinKaku' => '12',
+          'szHoujinZengo' => '1',
+          'szHonknjmei' => '黒猫商店',
+          'szHonknamei' => 'クロネコショウテン',
+          'szYbnno' => '7200824',
+          'szAddress' => '広島県福山市多治米町',
+          'szTelno' => '0849525627',
+          'szDaikjmei_sei' => '黒猫',
+          'szDaikjmei_mei' => '花子',
+          'szDaiknamei_sei' => 'クロネコ',
+          'szDaiknamei_mei' => 'ハナコ',
+          'sqssfKbn' => '1',
+          'sqYbnno' => '7200824',
+          'sqAddress' => '広島県福山市多治米町',
+          'sofuKnjnam' => '黒猫商店',
+          'sofuTntnam' => '黒猫花子',
+          'syz' => '購買部',
+          'kmsTelno' => '084-952-5627',
+          'shrhohKbn' => '2',
+          'passWord' => 'UzhJlu8E'
+        ]
+      ];
+      $response = $client->request('POST', $url, $option);
+      $result = simplexml_load_string($response->getBody()->getContents());
+      // $result = json_decode($response->getBody()->getContents(), true);
+      dd($result);
+
+  }
 
 
 

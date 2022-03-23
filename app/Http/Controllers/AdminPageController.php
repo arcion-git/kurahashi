@@ -25,6 +25,9 @@ use App\PriceGroupe;
 use App\Price;
 use App\SpecialPrice;
 
+// API通信
+use GuzzleHttp\Client;
+
 // 時間に関する処理
 use Carbon\Carbon;
 
@@ -567,9 +570,6 @@ class AdminPageController extends Controller
     $id = $request->kaiin_number;
     return redirect()->route('repeatorder', $id);
   }
-
-
-
 
 
 }

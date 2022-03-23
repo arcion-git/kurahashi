@@ -37,6 +37,10 @@
 
   Route::get('/user/test', 'LoginPageController@test');
 
+  // register
+  Route::get('/getzipcode', 'LoginPageController@getzipcode');
+  Route::post('/postzipcode', 'LoginPageController@postzipcode');
+
   // Ajax GET
   Route::get('/cart', 'LoginPageController@cart');
   Route::get('/order', 'LoginPageController@order');
