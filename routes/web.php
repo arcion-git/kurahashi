@@ -34,6 +34,7 @@
   Route::get('/line', 'LoginPageController@line')->name('line');
   Route::get('/favorite', 'LoginPageController@favorite')->name('favorite');
   Route::get('/user/deal/{id}', 'LoginPageController@dealdetail')->name('dealdetail');
+  Route::get('/repeatorder', 'LoginPageController@repeatorder')->name('repeatorder');
 
   Route::get('/user/test', 'LoginPageController@test');
 

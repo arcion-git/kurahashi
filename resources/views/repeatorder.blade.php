@@ -5,11 +5,11 @@
 
 <section class="section">
   <div class="section-header">
-    <h1>リピートオーダー登録</h1>
+    <h1>リピートオーダー</h1>
     <div class="section-header-breadcrumb">
       @if ( Auth::guard('user')->check() )
       <div class="breadcrumb-item"><a href="{{ url('/') }}">HOME</a></div>
-      <div class="breadcrumb-item">担当のおすすめ商品</div>
+      <div class="breadcrumb-item">リピートオーダー</div>
       @endif
       @if ( Auth::guard('admin')->check() )
       <div class="breadcrumb-item active"><a href="{{ url('/admin/home') }}">HOME</a></div>
@@ -45,7 +45,7 @@
             <form id="saveform" action="{{ url('/admin/user/saverepeatorder') }}" enctype="multipart/form-data" method="POST" class="form-horizontal">
               @csrf
               <div class="table-responsive">
-                <table class="table table-striped table-md">
+                <table class="table table-striped table-md" style="table-layout: fixed;">
                   <tr>
                     <th class="text-center">商品番号</th>
                     <th class="text-center">商品名</th>
@@ -55,6 +55,7 @@
                     <th class="text-center head-quantity">数量</th>
                     <th class="text-center head-tani">単位</th>
                     <th class="text-center head-nouhin_youbi">納品</th>
+                    <th class="text-center head-store">納品先店舗</th>
                     <th class="text-center head-startdate">開始日</th>
                     <th class="text-center head-shoukei">小計</th>
                     <th class="text-center head-yuukou">有効/無効</th>
@@ -76,14 +77,14 @@
                     </td>
 
                     <td colspan="8" class="order-table">
-              				<table class="table table-striped table-hover table-md">
+              				<table class="table table-striped table-hover table-md" style="table-layout: fixed;">
               				@foreach($repeatcart->orders as $val)
               					<tr id="{{$val->id}}">
                           <td class="text-center head-price">
-                            <input name="repeatorder[{{$repeatcart->price}}][price]" class="price text-center form-control" value="{{$repeatcart->price}}">
+                            <input name="repeatorder[{{$val->id}}][price]" class="price text-center form-control" value="{{$val->price}}" required>
                           </td>
                           <td class="text-center head-quantity">
-                            <input name="repeatorder[{{$val->id}}][quantity]" class="repeatorder_quantity text-center form-control" value="{{$val->quantity}}">
+                            <input name="repeatorder[{{$val->id}}][quantity]" class="repeatorder_quantity text-center form-control" value="{{$val->quantity}}" required>
                           </td>
                           <td class="text-center head-tani">
                             @if ($repeatcart->item()->tani == 1)
@@ -137,6 +138,14 @@
                             <!-- <input id="repeatorder[{{$val->id}}][nouhin_youbi]" name="repeatorder[{{$val->id}}][nouhin_youbi]" class="nouhin_youbi text-center form-control" value="{{$val->nouhin_youbi}}" data-toggle="modal" data-target="#nouhin_youbi"> -->
 
                           </td>
+                          <td class="head-store text-center">
+              							<select name="repeatorder[{{$val->id}}][store]" class="store text-center form-control" value="{{$val->tokuisaki_name}},{{$val->store_name}}" required>
+              								<option id="{{$val->tokuisaki_name}}" value="{{$val->tokuisaki_name}},{{$val->store_name}}">{{$val->tokuisaki_name}} {{$val->store_name}}</option>
+              								@foreach($stores as $store)
+              								<option id="{{$store->tokuisaki_name}}" value="{{$store->tokuisaki_name}},{{$store->store_name}}">{{$store->tokuisaki_name}} {{$store->store_name}}</option>
+              								@endforeach
+              							</select>
+              						</td>
                           <td class="text-center head-startdate" width="150">
         										<input type="text" name="repeatorder[{{$val->id}}][startdate]" class="startdate text-center form-control daterange-cus datepicker" value="{{$val->startdate}}" autocomplete="off" required>
                           </td>
@@ -186,7 +195,7 @@
                 </table>
               </div>
               <input id="kaiin_number" name="kaiin_number" type="hidden" value="{{$id}}">
-              <button type="submit" class="btn btn-warning float-right">内容を保存</button>
+              <button id="send" type="submit" class="btn btn-warning float-right">内容を保存</button>
             </form>
             <button class="addrepeatorder btn btn-success" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus"></i> 商品を追加</button>
           </div>
@@ -360,6 +369,7 @@ $(document).on("click", ".nouhin_youbi", function() {
     });
   });
 });
+
 // function OK() {
 // 	var search = document.getElementsByName(input).value;
 //   console.log(search);

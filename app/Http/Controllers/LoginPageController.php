@@ -17,10 +17,12 @@ use App\Price;
 use App\PriceGroupe;
 use App\SpecialPrice;
 use App\Recommend;
-use App\Repeatorder;
 use App\RecommendCategory;
 use App\CartNini;
 use App\OrderNini;
+use App\Repeatcart;
+use App\Repeatorder;
+
 
 // デバッグを出力
 use Log;
@@ -448,7 +450,7 @@ class LoginPageController extends Controller
     $store_name = $request->store_name;
     $tokuisaki_name = $request->tokuisaki_name;
 
-    $store = Store::where([ 'tokuisaki_name'=> $tokuisaki_name,'store_name'=> $store_name ])->first();
+    $store = Store::where(['tokuisaki_name'=>$tokuisaki_name,'store_name'=> $store_name])->first();
     $price_groupe = PriceGroupe::where([ 'tokuisaki_id'=> $store->tokuisaki_id,'store_id'=> $store->store_id ])->first();
 
     $order = Order::where(['id'=> $order_id])->first();
@@ -966,6 +968,40 @@ class LoginPageController extends Controller
     echo json_encode($data);
     return ;
   }
+
+  public function repeatorder(){
+    $user = Auth::guard('user')->user();
+    $user_id = $user->id;
+    $kaiin_number = $user->kaiin_number;
+    // dd($user_id);
+    $items = Item::get();
+    // 店舗一覧取得
+    $store_users = StoreUser::where('user_id',$kaiin_number)->get(['store_id','tokuisaki_id']);
+    $stores = [];
+    $n=1;
+    foreach ($store_users as $store_user) {
+    $store = Store::where([ 'tokuisaki_id'=> $store_user->tokuisaki_id,'store_id'=> $store_user->store_id ])->first();
+      array_push($stores, $store);
+    $n++;
+    }
+    $repeatcarts = Repeatcart::where('kaiin_number',$user->kaiin_number)->get();
+
+    $user_id = Auth::guard('user')->user()->id;
+    $categories = Category::get()->groupBy('bu_ka_name');
+    $favorite_categories = FavoriteCategory::where('user_id', $user_id)->get();
+
+    $data=[
+      'id'=>$user_id,
+      'items'=>$items,
+      'stores'=>$stores,
+      'user'=>$user,
+      'repeatcarts'=>$repeatcarts,
+      'categories' => $categories,
+      'favorite_categories' => $favorite_categories
+    ];
+    return view('repeatorder', $data);
+  }
+
 
   public function getzipcode(){
     return view('zipcode');

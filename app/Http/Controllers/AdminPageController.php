@@ -169,9 +169,12 @@ class AdminPageController extends Controller
     $today = date("Y/m/d");
     $holidays = Holiday::pluck('date');
 
+    $user = User::where('id',$deal->user_id)->first();
+
     // 店舗一覧取得
-    $store_users = StoreUser::where('user_id',$user_id)->get(['store_id','tokuisaki_id']);
+    $store_users = StoreUser::where('user_id',$user->kaiin_number)->get(['store_id','tokuisaki_id']);
     $stores = [];
+
     $n=1;
     foreach ($store_users as $store_user) {
     $store = Store::where([ 'tokuisaki_id'=> $store_user->tokuisaki_id,'store_id'=> $store_user->store_id ])->first();
@@ -482,13 +485,26 @@ class AdminPageController extends Controller
   public function userrepeatorder($id){
 
     $user = User::where('id',$id)->first();
+    $kaiin_number = $user->kaiin_number;
+    // dd($user_id);
     $items = Item::get();
+
+    // 店舗一覧取得
+    $store_users = StoreUser::where('user_id',$kaiin_number)->get(['store_id','tokuisaki_id']);
+    $stores = [];
+    $n=1;
+    foreach ($store_users as $store_user) {
+    $store = Store::where([ 'tokuisaki_id'=> $store_user->tokuisaki_id,'store_id'=> $store_user->store_id ])->first();
+      array_push($stores, $store);
+    $n++;
+    }
 
     $repeatcarts = Repeatcart::where('kaiin_number',$user->kaiin_number)->get();
     // dd($repeatcarts);
     $data=[
       'id'=>$id,
       'items'=>$items,
+      'stores'=>$stores,
       'user'=>$user,
       'repeatcarts'=>$repeatcarts,
     ];
@@ -530,23 +546,28 @@ class AdminPageController extends Controller
 
   public function saverepeatorder(Request $request){
 
-    dd($request);
+    // dd($request->repeatorder);
 
     $kaiin_number = $request->kaiin_number;
     $repeatorders = $request->repeatorder;
 
-    $nouhin_youbi = $request->nouhin_youbi;
+    // dd($kaiin_number);
 
     foreach($repeatorders as  $key => $value) {
+
+      $store = explode(',',$value['store']);
+
       $nouhin_youbi = $value['nouhin_youbi'];
       $nouhin_youbi = implode(',', $nouhin_youbi);
-      // dd($nouhin_youbi);
       $repeatorder = Repeatorder::firstOrNew(['id'=> $key]);
       $repeatorder->price = $value['price'];
       $repeatorder->quantity = $value['quantity'];
       $repeatorder->nouhin_youbi = $value['nouhin_youbi'];
       $repeatorder->status = $value['status'];
-      // $repeatorder->status = $value['store'];
+
+      $repeatorder->tokuisaki_name = $store[0];
+      $repeatorder->store_name = $store[1];
+
       $repeatorder->startdate = $value['startdate'];
       // $repeatorder->end = $value['end'];
       $repeatorder->save();
