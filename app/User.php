@@ -45,5 +45,9 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Store','store_users','store_id','user_id');
     }
 
+    public function setonagi()
+    {
+        return $this->belongsTo('App\Setonagi');
+    }
 
 }

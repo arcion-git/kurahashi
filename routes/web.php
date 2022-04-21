@@ -36,6 +36,8 @@
   Route::get('/user/deal/{id}', 'LoginPageController@dealdetail')->name('dealdetail');
   Route::get('/repeatorder', 'LoginPageController@repeatorder')->name('repeatorder');
 
+  Route::get('/setonagi', 'LoginPageController@setonagi')->name('setonagi');
+
   Route::get('/user/test', 'LoginPageController@test');
 
   // register
@@ -106,6 +108,10 @@
   // 取引検索
   Route::get('/admin/search', 'AdminPageController@search');
   Route::post('/admin/search', 'AdminPageController@search');
+
+  // 商品画像アップロード
+  Route::get('/admin/imgupload', 'AdminPageController@imgupload')->name('imgupload');
+  Route::post('/admin/imgsave', 'AdminPageController@imgsave');
 
   // ユーザーごとの取引一覧画面
   Route::get('/admin/user/deal/{id}', 'AdminPageController@userdeal')->name('admin.user.deal');

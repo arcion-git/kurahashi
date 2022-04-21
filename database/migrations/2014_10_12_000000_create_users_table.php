@@ -19,6 +19,8 @@ class CreateUsersTable extends Migration
             $table->string('name')->nullable();
             $table->string('name_kana')->nullable();
 
+            $table->boolean('setonagi')->nullable();
+
             // $table->string('company')->nullable();
             // $table->string('company_kana')->nullable();
 

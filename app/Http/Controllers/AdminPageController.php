@@ -25,6 +25,9 @@ use App\PriceGroupe;
 use App\Price;
 use App\SpecialPrice;
 
+use App\Stonagi;
+use App\ItemImage;
+
 // API通信
 use GuzzleHttp\Client;
 
@@ -592,5 +595,20 @@ class AdminPageController extends Controller
     return redirect()->route('repeatorder', $id);
   }
 
+
+  public function imgupload(){
+    return view('admin.auth.imgupload');
+  }
+
+  public function imgsave(Request $request){
+  if(isset($request->file)){
+  $files = $request->file;
+  foreach ($files as $file) {
+    $filename = $file->getClientOriginalName();
+    $filesave = $file->storeAs('public/item',$filename);
+  }
+  }
+  return redirect()->route('imgupload');
+  }
 
 }

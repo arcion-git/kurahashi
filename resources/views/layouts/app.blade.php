@@ -305,6 +305,9 @@
                 <a href="/admin/home" class="nav-link"><span>×社内営業</span></a>
               </li> -->
               <li class="nav-item">
+                <a href="/admin/imgupload" class="nav-link"><i class="fas fa-file-image"></i><span>商品画像登録</span></a>
+              </li>
+              <li class="nav-item">
                 <a href="/admin/csv" class="nav-link"><i class="fas fa-file-csv"></i><span>CSVデータ</span></a>
               </li>
               <li class="nav-item">

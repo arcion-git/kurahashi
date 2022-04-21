@@ -275,8 +275,6 @@
                           <th class="text-center">個数</th> -->
                           <th class="text-center" style="min-width:180px;">操作</th>
                         </tr>
-
-
                         @foreach($items as $item)
                         <tr>
                           <!-- <form class="form-horizontal" role="form" method="POST" action="{{ url('/addcart') }}"> -->

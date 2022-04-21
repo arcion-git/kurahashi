@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
 
 
 
+
       $file = new SplFileObject('database/csv/CategoryMaster.csv');
       $file->setFlags(
           \SplFileObject::READ_CSV |
@@ -359,6 +360,31 @@ class DatabaseSeeder extends Seeder
       }
       DB::table("special_prices")->insert($list);
 
+
+      $file = new SplFileObject('database/csv/SetonagiItem.csv');
+      $file->setFlags(
+          \SplFileObject::READ_CSV |
+          \SplFileObject::READ_AHEAD |
+          \SplFileObject::SKIP_EMPTY |
+          \SplFileObject::DROP_NEW_LINE
+      );
+      $list = [];
+      $now = Carbon::now();
+
+      foreach ($file as $line) {
+          if ($file->key() > 0 && ! $file->eof()) {
+            $list[] = [
+              'item_id'=>$line[0],
+              'sku_code'=>$line[1],
+              'price'=>$line[2],
+              'start_date'=>$line[3],
+              'end_date'=>$line[4],
+              'created_at' => $now,
+              'updated_at' => $now,
+            ];
+          }
+      }
+      DB::table("setonagi_items")->insert($list);
 
 
 

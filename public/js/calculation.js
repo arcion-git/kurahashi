@@ -40,15 +40,15 @@ $(function() {
       .done(function(data) {
         // console.log(data);
         $('#toggle').addClass('beep');
-        // $('#toggle').trigger('click');
+        $('#toggle').trigger('click');
         Swal.fire({
           type:"success",
           title: "カートに追加しました",
-          // position: 'top-end',
-          // toast: true,
+          position: 'bottom-end',
+          toast: true,
           icon: 'success',
           showConfirmButton: false,
-          // timer: 1500
+          timer: 1500
         });
       })
       .fail(function(jqXHR, textStatus, errorThrown) {
