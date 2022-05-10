@@ -81,7 +81,20 @@
 
     <!-- Scripts -->
     <script src="/js/app.js"></script>
-
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+    $(function() {
+      $(document).on("change", "#houjin_kojin", function() {
+        var selected = $(this).val();
+        alert('test');
+            console.log(selected);
+        // if ( selected === '法人' ) {
+        //   alert($('#houjin_kojin').val());
+        //   $('#maekabu').show();
+        // }
+      });
+    });
+    </script>
 
 </body>
 </html>

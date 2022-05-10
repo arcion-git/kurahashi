@@ -76,6 +76,21 @@
 
     <!-- Page Specific JS File -->
     <script src="{{ asset('js/page/auth-register.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+    $(function() {
+      $(document).on("change", "#houjin_kojin", function() {
+        var selected = $(this).val();
+        // alert('test');
+        //     console.log(selected);
+        if ( selected === '法人' ) {
+          $('#maekabu').show();
+        } else{
+          $('#maekabu').hide();
+        }
+      });
+    });
+    </script>
 
 </body>
 </html>

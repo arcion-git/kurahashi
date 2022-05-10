@@ -34,11 +34,11 @@
                                 </div>
                               </div>
                               <div class="article-details">
-                                <div class="article-category"><a href="#">産地</a> <div class="bullet"></div><a href="#">{{$setonagi_item->item()->sanchi_name}}</a></div>
+                                <div class="article-category"><a href="#">産地</a><div class="bullet"></div><a href="#">{{$setonagi_item->item()->sanchi_name}}</a></div>
                                 <div class="article-title">
                                   <h2><a href="#">{{$setonagi_item->item()->item_name}}</a></h2>
                                 </div>
-                                <p>規格：{{$setonagi_item->item()->kikaku}} / 在庫数：{{$setonagi_item->item()->zaikosuu}} / 単位：
+                                <p class="setonagi_price">¥{{$setonagi_item->price}} /
                                   @if ($setonagi_item->item()->tani == 1)
                                   ｹｰｽ
                                   @elseif ($setonagi_item->item()->tani == 2)
@@ -48,7 +48,11 @@
                                   @elseif ($setonagi_item->item()->tani == 4)
                                   Kg
                                   @endif
-                                / 特記事項：{{$setonagi_item->item()->tokkijikou}}
+                                  <span class="setonagi_stock"></spab>（残り{{$setonagi_item->item()->zaikosuu}} ）</span></p>
+                                <p>規格：{{$setonagi_item->item()->kikaku}}<br />
+                                  @if($setonagi_item->item()->tokkijikou)
+                                  特記事項：{{$setonagi_item->item()->tokkijikou}}
+                                  @endif
                                 </p>
                                 <button name="item_id" value="{{$setonagi_item->item()->id}}" id="{{$setonagi_item->item()->id}}" class="addcart btn btn-warning">カートに入れる</button>
 

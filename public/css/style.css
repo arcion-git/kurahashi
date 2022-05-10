@@ -3246,3 +3246,21 @@ display: none;
   color: #2f6db5;
   font-weight: bold;
 }
+
+.article.article-style-c .article-details .article-category a{
+  font-size: 13px !important;
+}
+
+.article.article-style-c .article-details p.setonagi_price{
+  color: #d00!important;
+  font-size: 1.2em;
+  margin-bottom: 5px;
+}
+
+.setonagi_stock{
+  font-size: 0.7em;
+}
+
+#maekabu{
+  display: none;
+}

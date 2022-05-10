@@ -22,8 +22,63 @@
 
       <div class="row">
         <div class="form-group col-6">
-          <label for="company">会社名</label>
-          <input id="company" type="text" class="form-control" name="company" placeholder="株式会社クラハシ" value="株式会社クラハシ" autofocus>
+          <label for="company">法人・個人</label>
+          <select id="houjin_kojin" value="" name="houjin_kojin" class="houjin_kojin form-control">
+          <option value="" selected>選択してください</option>
+          <option value="法人">法人</option>
+          <option value="個人事業主">個人事業主</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row" id="maekabu">
+        <div class="form-group col-6">
+          <label for="company">法人格</label>
+            <select name="houjinkaku" name="example" class="form-control">
+                <option value="0">選択してください</option>
+                <option value="001">株式会社</option>
+                <option value="002">有限会社</option>
+                <option value="003">合同会社</option>
+                <option value="004">合資会社</option>
+                <option value="005">合名会社</option>
+                <option value="006">医療法人</option>
+                <option value="007">医療法人社団</option>
+                <option value="008">医療法人財団</option>
+                <option value="009">社会医療法人</option>
+                <option value="010">一般社団法人</option>
+                <option value="011">公益社団法人</option>
+                <option value="012">一般財団法人</option>
+                <option value="013">公益財団法人</option>
+                <option value="014">協同組合</option>
+                <option value="015">社会福祉法人</option>
+                <option value="016">特定非営利活動法人</option>
+                <option value="017">学校法人</option>
+                <option value="018">国立大学法人</option>
+                <option value="019">公立大学法人</option>
+                <option value="020">宗教法人</option>
+            </select>
+        </div>
+        <div class="form-group col-6">
+          <label for="company">法人格前後</label>
+            <input class="radio-input" type="radio" id="銀行振込" name="pay"><label for="銀行振込">銀行振込</label>
+            <input class="radio-input" type="radio" id="口座振替" name="pay"><label for="口座振替">口座振替</label>
+            <input class="radio-input" type="radio" id="コンビニ払い" name="pay"><label for="コンビニ払い">コンビニ払い</label>
+            <div class="invalid-feedback">
+            </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="form-group col-6">
+          <label for="company">事業者名（法人格を除く）</label>
+          <input id="company" type="text" class="form-control" name="company" placeholder="クラハシ" value="クラハシ" autofocus>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="form-group col-6">
+          <label for="company">事業者名（フリガナ）</label>
+          <input id="company" type="text" class="form-control" name="company" placeholder="クラハシ" value="クラハシ" autofocus>
         </div>
       </div>
 
