@@ -12,13 +12,13 @@
   @endif
 </ul>
 <div class="card card-primary">
-  <div class="card-header"><h4>新規会員登録</h4></div>
+  <div class="card-header"><h4>お取引先情報</h4></div>
   <div class="card-body">
     <form class="form-horizontal" role="form" method="POST" action="{{ url('/user/register') }}">
     @csrf
-      <div class="form-divider">
+      <!-- <div class="form-divider">
         お名前
-      </div>
+      </div> -->
 
       <div class="row">
         <div class="form-group col-6">
@@ -32,7 +32,8 @@
       </div>
 
       <div class="row" id="maekabu">
-        <div class="form-group col-6">
+        <div class="col-6">
+          <div class="form-group">
           <label for="company">法人格</label>
             <select name="houjinkaku" name="example" class="form-control">
                 <option value="0">選択してください</option>
@@ -57,38 +58,40 @@
                 <option value="019">公立大学法人</option>
                 <option value="020">宗教法人</option>
             </select>
+          </div>
         </div>
-        <div class="form-group col-6">
-          <label for="company">法人格前後</label>
-            <input class="radio-input" type="radio" id="銀行振込" name="pay"><label for="銀行振込">銀行振込</label>
-            <input class="radio-input" type="radio" id="口座振替" name="pay"><label for="口座振替">口座振替</label>
-            <input class="radio-input" type="radio" id="コンビニ払い" name="pay"><label for="コンビニ払い">コンビニ払い</label>
+        <div class="col-6">
+          <div class="form-group">
+            <label for="zengo">法人格前後</label><br />
+            <input class="radio-input" id="前" type="radio" value="1" name="zengo"> <label for="前">前</label>
+            <input class="radio-input" id="後" type="radio" value="" name="zengo"> <label for="後">後</label>
             <div class="invalid-feedback">
             </div>
+          </div>
         </div>
       </div>
 
       <div class="row">
         <div class="form-group col-6">
           <label for="company">事業者名（法人格を除く）</label>
-          <input id="company" type="text" class="form-control" name="company" placeholder="クラハシ" value="クラハシ" autofocus>
+          <input id="company" type="text" class="form-control" name="company" placeholder="クラハシ" value="黒猫商事" autofocus>
         </div>
       </div>
 
       <div class="row">
         <div class="form-group col-6">
           <label for="company">事業者名（フリガナ）</label>
-          <input id="company" type="text" class="form-control" name="company" placeholder="クラハシ" value="クラハシ" autofocus>
+          <input id="company" type="text" class="form-control" name="company" placeholder="クラハシ" value="クロネコショウジ" autofocus>
         </div>
       </div>
 
       <div class="row">
         <div class="form-group col-6">
-          <label for="last_name">お名前（姓）</label>
+          <label for="last_name">代表者名（姓）</label>
           <input id="last_name" type="text" class="form-control" name="last_name" placeholder="山田" autofocus value="山田">
         </div>
         <div class="form-group col-6">
-          <label for="last_name">お名前（名）</label>
+          <label for="last_name">代表者名（名）</label>
           <input id="last_name" type="text" class="form-control" name="first_name" placeholder="太郎" value="太郎">
         </div>
       </div>
@@ -139,17 +142,17 @@
       </div>
       <div class="row">
         <div class="form-group col-6">
-          <label for="tel">電話番号</label>
+          <label for="tel">電話番号(代表)</label>
           <input id="tel" type="tel" class="form-control" name="tel" value="080-2888-5281">
           <div class="invalid-feedback">
           </div>
         </div>
-        <div class="form-group col-6">
+        <!-- <div class="form-group col-6">
           <label for="tel">FAX番号</label>
           <input id="fax" type="fax" class="form-control" name="fax" value="084-952-5527">
           <div class="invalid-feedback">
           </div>
-        </div>
+        </div> -->
       </div>
 
       <div class="form-divider">
@@ -165,13 +168,26 @@
       </div>
 
       <div class="form-divider">
+        書類送付先
+      </div>
+      <div class="row">
+        <div class="form-group col-12">
+          <input class="radio-input" type="radio" id="上記入力の取引先情報と同様" value="1" name="soufu"><label for="上記入力の取引先情報と同様"> 上記入力の取引先情報と同様</label>
+          <input class="radio-input" type="radio" id="上記入力の運営会社情報と同様" name="soufu"><label for="上記入力の運営会社情報と同様"> 上記入力の運営会社情報と同様</label>
+          <input class="radio-input" type="radio" id="その他" name="soufu"><label for="その他"> その他</label>
+          <div class="invalid-feedback">
+          </div>
+        </div>
+      </div>
+
+      <div class="form-divider">
         掛け払い代金の支払い方法
       </div>
       <div class="row">
         <div class="form-group col-12">
-          <input class="radio-input" type="radio" id="銀行振込" name="pay"><label for="銀行振込">銀行振込</label>
-          <input class="radio-input" type="radio" id="口座振替" name="pay"><label for="口座振替">口座振替</label>
-          <input class="radio-input" type="radio" id="コンビニ払い" name="pay"><label for="コンビニ払い">コンビニ払い</label>
+          <input class="radio-input" type="radio" id="銀行振込" name="pay"><label for="銀行振込"> 銀行振込</label>
+          <input class="radio-input" type="radio" id="口座振替" name="pay"><label for="口座振替"> 口座振替</label>
+          <input class="radio-input" type="radio" id="コンビニ払い" name="pay"><label for="コンビニ払い"> コンビニ払い</label>
           <label>※掛け払い代金のお支払い方法を上記よりお選びください。<br />（掛け払いの代金は、月末締め翌々月5日払いでのご請求となります。）<br />※クレジットカード払いのみ（掛け払いを使わない）場合は、「銀行振込」を選択してください。</label>
           <div class="invalid-feedback">
           </div>
