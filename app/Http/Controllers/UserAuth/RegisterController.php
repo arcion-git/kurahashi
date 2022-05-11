@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use GuzzleHttp\Client;
 
 class RegisterController extends Controller
 {
@@ -76,6 +77,7 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+      // dd($data);
       $create_user = User::create([
           'email' => $data['email'],
           'password' => Hash::make($data['password']),
@@ -104,67 +106,79 @@ class RegisterController extends Controller
       // }
 
       // かけ払いAPIに送信
-      // $client = new Client();
-      // $url = 'https://demo.yamato-credit-finance.jp/kuroneko-anshin/AN060APIAction.action';
-      // $option = [
-      //   'headers' => [
-      //     'Accept' => '*/*',
-      //     'Content-Type' => 'application/x-www-form-urlencoded',
-      //     'charset' => 'UTF-8',
-      //   ],
-      //   'form_params' => [
-      //     'traderCode' => '330000051',
-      //     'cId' => $user_id,
-      //     'hjkjKbn' => '1',
-      //     'houjinKaku' => '1',
-      //     'houjinZengo' => '1',
-      //     'sMei' => '黒猫商店',
-      //     'shitenMei' => '高田馬場支店',
-      //     'sMeikana' => 'クロネコショウテン',
-      //     'shitenMeikana' => 'タカ',
-      //     'ybnNo' => '7200824',
-      //     'Adress' => '広島県福山市多治米町',
-      //     'telNo' => '080-2888-5281',
-      //     'keitaiNo' => '080-2888-5281',
-      //     'gyscod1' => '07',
-      //     'gyscod2' => '082',
-      //     'setsurituNgt' => '200104',
-      //     'shk' => '12345',
-      //     'nsyo' => '12345',
-      //     'kmssyainsu' => '12345',
-      //     'daikjmeiSei' => '黒猫',
-      //     'daikjmeiMei' => '花子',
-      //     'daiknameiSei' => 'クロネコ',
-      //     'daiknameiMei' => 'ハナコ',
-      //     'daiYbnno' => '7200824',
-      //     'daiAddress' => '広島県福山市多治米町',
-      //     'szUmu' => '0',
-      //     'szHjkjKbn' => '1',
-      //     'szHoujinKaku' => '12',
-      //     'szHoujinZengo' => '1',
-      //     'szHonknjmei' => '黒猫商店',
-      //     'szHonknamei' => 'クロネコショウテン',
-      //     'szYbnno' => '7200824',
-      //     'szAddress' => '広島県福山市多治米町',
-      //     'szTelno' => '0849525627',
-      //     'szDaikjmei_sei' => '黒猫',
-      //     'szDaikjmei_mei' => '花子',
-      //     'szDaiknamei_sei' => 'クロネコ',
-      //     'szDaiknamei_mei' => 'ハナコ',
-      //     'sqssfKbn' => '1',
-      //     'sqYbnno' => '7200824',
-      //     'sqAddress' => '広島県福山市多治米町',
-      //     'sofuKnjnam' => '黒猫商店',
-      //     'sofuTntnam' => '黒猫花子',
-      //     'syz' => '購買部',
-      //     'kmsTelno' => '084-952-5627',
-      //     'shrhohKbn' => '2',
-      //     'passWord' => 'UzhJlu8E'
-      //   ]
-      // ];
-      // $response = $client->request('POST', $url, $option);
-      // $result = simplexml_load_string($response->getBody()->getContents());
-      // dd($result);
+      $client = new Client();
+      $url = 'https://demo.yamato-credit-finance.jp/kuroneko-anshin/AN060APIAction.action';
+      $option = [
+        'headers' => [
+          'Accept' => '*/*',
+          'Content-Type' => 'application/x-www-form-urlencoded',
+          'charset' => 'UTF-8',
+        ],
+        'form_params' => [
+          'traderCode' => '330000051',
+          'cId' => $user_id,
+          'hjkjKbn' => $data['hjkjKbn'],
+          'houjinKaku' => $data['houjinKaku'],
+          'houjinZengo' => $data['houjinZengo'],
+          'sMei' => $data['company'],
+          'shitenMei' => '',
+          'sMeikana' => $data['company_kana'],
+          'shitenMeikana' => '',
+          'ybnNo' => '7200824',
+          'Adress' => $data['address02'].$data['address03'].$data['address04'].$data['address05'],
+          'telNo' => '080-2888-5281',
+          // 'keitaiNo' => '080-2888-5281',
+          // 'gyscod1' => '',
+          // 'gyscod2' => '',
+          // 'setsurituNgt' => '',
+          // 'shk' => '',
+          // 'nsyo' => '',
+          // 'kmssyainsu' => '',
+          'daikjmeiSei' => $data['last_name'],
+          'daikjmeiMei' => $data['first_name'],
+          'daiknameiSei' => $data['last_name_kana'],
+          'daiknameiMei' => $data['first_name_kana'],
+
+          // 代表者情報エリア(No.3 「法人・個人事業主」が「個人事業主:2」の場合に、指定可能です。)
+          // 'daiYbnno' => '',
+          // 'daiAddress' => '',
+
+          // 運営会社有無
+          'szUmu' => 0,
+
+          // 運営会社情報エリア(No.26「運営会社有無」が「運営会社有り:1」の場合に、指定可能です。)
+          // 'szHjkjKbn' => '1',
+          // 'szHoujinKaku' => '12',
+          // 'szHoujinZengo' => '1',
+          // 'szHonknjmei' => '黒猫商店',
+          // 'szHonknamei' => 'クロネコショウテン',
+          // 'szYbnno' => '7200824',
+          // 'szAddress' => '広島県福山市多治米町',
+          // 'szTelno' => '0849525627',
+          // 'szDaikjmei_sei' => '黒猫',
+          // 'szDaikjmei_mei' => '花子',
+          // 'szDaiknamei_sei' => 'クロネコ',
+          // 'szDaiknamei_mei' => 'ハナコ',
+
+          // 送付先選択
+          'sqssfKbn' => '1',
+
+          // 請求書送付先情報エリア(No.39「送付先選択」が「その他:9」の場合に、指定可能です。)
+          // 'sqYbnno' => '7200824',
+          // 'sqAddress' => '広島県福山市多治米町',
+          // 'sofuKnjnam' => '黒猫商店',
+          // 'sofuTntnam' => '黒猫花子',
+          // 'syz' => '購買部',
+          // 'kmsTelno' => '084-952-5627',
+
+          'shrhohKbn' => $data['pay'],
+          'passWord' => 'UzhJlu8E'
+        ]
+      ];
+      // dd($option);
+      $response = $client->request('POST', $url, $option);
+      $result = simplexml_load_string($response->getBody()->getContents());
+      dd($result);
 
       return $create_user;
     }
