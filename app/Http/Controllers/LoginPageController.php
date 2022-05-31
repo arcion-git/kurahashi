@@ -22,7 +22,7 @@ use App\CartNini;
 use App\OrderNini;
 use App\Repeatcart;
 use App\Repeatorder;
-use App\Stonagi;
+use App\Setonagi;
 use App\SetonagiItem;
 
 // デバッグを出力
@@ -127,6 +127,8 @@ class LoginPageController extends Controller
       // $search = $request->search;
       // dd($search);
 
+
+
       $user_id = Auth::guard('user')->user()->id;
       $favorite_categories = FavoriteCategory::where('user_id', $user_id)->first();
 
@@ -138,13 +140,25 @@ class LoginPageController extends Controller
         }
       $categories = Category::get()->groupBy('bu_ka_name');
 
+      // $items = Item::where('zaikosuu', '>=', '0.01')->paginate(30);
 
 
-      $setonagi_items = SetonagiItem::paginate(30);
-      foreach($setonagi_items as $setonagi_item){
-        $setonagi_item = $setonagi_item->item()->item_name;
-        // dd($setonagi_item);
+      // foreach($setonagi_items as $setonagi_item){
+      //   $setonagi_item = $setonagi_item->item()->item_name;
+      // }
+
+      $setonagi_items = SetonagiItem::get();
+      $items = [];
+      $n=1;
+
+      foreach ($setonagi_items as $setonagi_item) {
+      $item = $setonagi_item->item();
+      if($item->zaikosuu >= 0.01){
+        array_push($items, $setonagi_item);
       }
+      $n++;
+      }
+      $setonagi_items = $items;
 
       $user_id = Auth::guard('user')->user()->id;
 
@@ -320,24 +334,31 @@ class LoginPageController extends Controller
 
     $user_id = Auth::guard('user')->user()->id;
     $item_id = $request->item_id;
-
     $item = Item::where('id',$item_id)->first();
 
-    $kaiin_number = Auth::guard('user')->user()->kaiin_number;
-    // dd($kaiin_number);
-    $store_user = StoreUser::where('user_id',$kaiin_number)->first(['store_id','tokuisaki_id']);
-    // dd($store_user);
-    $store = Store::where([ 'tokuisaki_id'=> $store_user->tokuisaki_id,'store_id'=> $store_user->store_id ])->first();
-    // dd($store);
 
-    $price_groupe = PriceGroupe::where([ 'tokuisaki_id'=> $store_user->tokuisaki_id,'store_id'=> $store_user->store_id ])->first();
-    // dd($price_groupe->price_groupe);
-    // $price_groupe = $store->price_groupe();
 
-    // dd($item);
-    // dd($item->sku_code);
-    $price = Price::where(['price_groupe'=>$price_groupe->price_groupe, 'item_id'=> $item->item_id , 'sku_code'=> $item->sku_code])->first();
- // dd($price);
+    $setonagi_user = Auth::guard('user')->user()->setonagi;
+    // dd($setonagi_user);
+
+    // セトナギユーザーの場合は取得しない
+    if(!$setonagi_user){
+      $kaiin_number = Auth::guard('user')->user()->kaiin_number;
+      // dd($kaiin_number);
+      $store_user = StoreUser::where('user_id',$kaiin_number)->first(['store_id','tokuisaki_id']);
+      // dd($store_user);
+      $store = Store::where([ 'tokuisaki_id'=> $store_user->tokuisaki_id,'store_id'=> $store_user->store_id ])->first();
+      // dd($store);
+
+      $price_groupe = PriceGroupe::where([ 'tokuisaki_id'=> $store_user->tokuisaki_id,'store_id'=> $store_user->store_id ])->first();
+      // dd($price_groupe->price_groupe);
+      // $price_groupe = $store->price_groupe();
+
+      // dd($item);
+      // dd($item->sku_code);
+      $price = Price::where(['price_groupe'=>$price_groupe->price_groupe, 'item_id'=> $item->item_id , 'sku_code'=> $item->sku_code])->first();
+      // dd($price);
+    }
 
     $cart=Cart::firstOrNew(['user_id'=> $user_id , 'item_id'=> $item->id , 'deal_id'=> null]);
     $cart->save();
@@ -347,8 +368,7 @@ class LoginPageController extends Controller
     $holidays = Holiday::get('date');
     // $holidays = Holiday::pluck('date');
     // $holiday = array_column($holidays, 'date');
-    Log::debug($holidays);
-
+    // Log::debug($holidays);
 
     $today = date("Y/m/d");
     $holidays = Holiday::pluck('date')->toArray();
@@ -365,22 +385,54 @@ class LoginPageController extends Controller
       }
     }
 
-    $order=Order::firstOrNew(['cart_id'=> $cart->id , 'tokuisaki_name'=> $store->tokuisaki_name , 'store_name'=> $store->store_name , 'quantity'=> 1 , 'nouhin_yoteibi'=> $nouhin_yoteibi]);
-    if(isset($price->price)){
-    $order->price = $price->price;
-    }
+    // hiddenで値を持たせる
+    // $setonagi_item_id = $request->setonagi_item_id;
+    // if(isset($setonagi_item_id)){
+    //   $setonagi_item = SetonagiItem::where(['id'=>$setonagi_item_id])->first();
+    //   $price = $setonagi_item->price;
+    //   $order=Order::firstOrNew(['cart_id'=> $cart->id , 'tokuisaki_name'=> $store->tokuisaki_name , 'store_name'=> $store->store_name , 'quantity'=> 1 , 'nouhin_yoteibi'=> $nouhin_yoteibi]);
+    //   if(isset($price)){
+    //   $order->price = $price;
+    //   }
+    // }else{
+    //  $order=Order::firstOrNew(['cart_id'=> $cart->id , 'tokuisaki_name'=> $store->tokuisaki_name , 'store_name'=> $store->store_name , 'quantity'=> 1 , 'nouhin_yoteibi'=> $nouhin_yoteibi]);
+    //  if(isset($price->price)){
+    //  $order->price = $price->price;
+    //  }
+    // }
 
+    // セトナギユーザーの場合は得意先を取得しない
+    if(!$setonagi_user){
+      $order=Order::firstOrNew(['cart_id'=> $cart->id , 'tokuisaki_name'=> $store->tokuisaki_name , 'store_name'=> $store->store_name , 'quantity'=> 1 , 'nouhin_yoteibi'=> $nouhin_yoteibi]);
+      if(isset($price->price)){
+      $order->price = $price->price;
+      }
+    }else{
+      $order=Order::firstOrNew(['cart_id'=> $cart->id , 'quantity'=> 1 , 'nouhin_yoteibi'=> $nouhin_yoteibi]);
+      if(isset($price->price)){
+      $order->price = $price->price;
+      }
+    }
+    // ユーザーの会員番号を取得
     $kaiin_number = Auth::guard('user')->user()->kaiin_number;
     $item = Item::where('id',$item_id)->first();
 
+    // 担当のおすすめ商品価格上書き
     $recommend_item = Recommend::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'user_id'=>$kaiin_number])->first();
     if(isset($recommend_item->price)){
     $order->price = $recommend_item->price;
     }
 
+    // 市況商品価格上書き
     $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])->first();
     if(isset($special_price_item->price)){
     $order->price = $special_price_item->price;
+    }
+
+    // セトナギ商品上書き
+    $setonagi_item = SetonagiItem::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])->first();
+    if(isset($setonagi_item->price)){
+    $order->price = $setonagi_item->price;
     }
 
     $order->save();
@@ -680,12 +732,33 @@ class LoginPageController extends Controller
   public function confirm(){
 
     $categories = Category::get()->groupBy('bu_ka_name');
+    $user = Auth::guard('user')->user();
     $user_id = Auth::guard('user')->user()->id;
+    $setonagi = Setonagi::where('user_id',$user_id)->first();
+    // $setonagi_uketori_place = $setonagi->uketori_place;
+    // dd($setonagi_uketori_place);
+
     $favorite_categories = FavoriteCategory::where('user_id', $user_id)->get();
     $carts =  Cart::where(['user_id'=>$user_id, 'deal_id'=> null])->get();
 
     $today = date("Y/m/d");
     $holidays = Holiday::pluck('date');
+
+    // 直近の納品予定日を取得
+    $today = date("Y/m/d");
+    $holidays = Holiday::pluck('date')->toArray();
+    for($i = 3; $i < 10; $i++){
+      $today_plus = date('Y/m/d', strtotime($today.'+'.$i.'day'));
+      // dd($today_plus2);
+      $key = array_search($today_plus,(array)$holidays,true);
+      if($key){
+          // 休みでないので納品日を格納
+      }else{
+          // 休みなので次の日付を探す
+          $nouhin_yoteibi = $today_plus;
+          break;
+      }
+    }
 
     return view('user/auth/confirm',
     ['carts' => $carts,
@@ -694,11 +767,25 @@ class LoginPageController extends Controller
      // 'stores' => $stores,
      'holidays' => $holidays,
      'user_id' => $user_id,
+     'user' => $user,
+     'setonagi' => $setonagi,
+     'today_plus' => $today_plus,
     ]);
 
   }
 
-  public function approval(){
+  public function approval(Request $request){
+
+    // dd($request->memo);
+
+    if($request->setonagi_id){
+      $setonagi = Setonagi::where('id',$request->setonagi_id)->first();
+      // $setonagi = 1;
+      $setonagi->uketori_place = $request->uketori_place;
+      $setonagi->uketori_time = $request->uketori_time;
+      $setonagi->uketori_siharai = $request->uketori_siharai;
+      $setonagi->save();
+    }
 
     $categories = Category::get()->groupBy('bu_ka_name');
     $user_id = Auth::guard('user')->user()->id;
@@ -709,7 +796,10 @@ class LoginPageController extends Controller
     $holidays = Holiday::pluck('date');
     $approval = 1;
 
-    return view('user/auth/approval',
+    // $memo = $request->memo;
+    // dd($memo);
+
+    $data =
     ['carts' => $carts,
      'categories' => $categories,
      'favorite_categories' => $favorite_categories,
@@ -717,13 +807,27 @@ class LoginPageController extends Controller
      'holidays' => $holidays,
      'user_id' => $user_id,
      'approval' => $approval,
-    ]);
+     // 'memo' => $memo,
+    ];
+
+    return view('user/auth/approval',$data);
+
+    // return view('user/auth/approval',
+    // ['carts' => $carts,
+    //  'categories' => $categories,
+    //  'favorite_categories' => $favorite_categories,
+    //  // 'stores' => $stores,
+    //  'holidays' => $holidays,
+    //  'user_id' => $user_id,
+    //  'approval' => $approval,
+    //  'memo' => $memo,
+    // ]);
 
   }
 
 
 // カート画面からの遷移先
-  public function order(){
+  public function order(Request $request){
 
     $user_id = Auth::guard('user')->user()->id;
     $carts =  Cart::where(['user_id'=>$user_id, 'deal_id'=> null])->get();
@@ -743,11 +847,22 @@ class LoginPageController extends Controller
     $n++;
     }
 
+    $user = Auth::guard('user')->user();
+    $setonagi = Setonagi::where('user_id',$user_id)->first();
+    // dd($user->setonagi);
+
+    if(isset($data->memo)){
+    $memo -> $request->memo;
+    dd($request->memo);
+    }
+
     $data=
     ['carts' => $carts,
      'cart_ninis' => $cart_ninis,
      'stores' => $stores,
      'holidays' => $holidays,
+     'user' => $user,
+     'setonagi' => $setonagi,
     ];
     return view('order', $data);
   }
@@ -908,7 +1023,61 @@ class LoginPageController extends Controller
           return redirect()->route('confirm',$data);
         }
       }
-      // 在庫がある場合商品の在庫数を減らす
+    }
+
+    // dd($item_nini_ids);
+    // $quantitys = $data['quantity'];
+
+    if(isset($request->memo)){
+      $deal = Deal::create(['user_id'=> $user_id, 'memo'=> $request->memo]);
+      }else{
+      $deal = Deal::create(['user_id'=> $user_id]);
+      }
+    $deal_id = $deal->id;
+
+
+    $now = Carbon::now()->format('Ymd');
+    // dd($now);
+
+    if($request->uketori_siharai == 'クロネコかけ払い'){
+      // ヤマトAPI連携確認
+      $client = new Client();
+      $url = 'https://demo.yamato-credit-finance.jp/kuroneko-anshin/AN010APIAction.action';
+      $option = [
+        'headers' => [
+          'Accept' => '*/*',
+          'Content-Type' => 'application/x-www-form-urlencoded',
+          'charset' => 'UTF-8',
+        ],
+        'form_params' => [
+          'traderCode' => '330000051',
+          // 日付
+          'orderDate' => $now,
+          'orderNo' => $deal_id,
+          // バイヤーid
+          'buyerId' => $user_id,
+          'settlePrice' => $request->all_total_val,
+          'shohiZei' => $request->tax_val,
+          'meisaiUmu' => '2',
+          'passWord' => 'UzhJlu8E'
+        ]
+      ];
+      // dd($option);
+      $response = $client->request('POST', $url, $option);
+      $result = simplexml_load_string($response->getBody()->getContents());
+      // dd($returnCode);
+      if($result->returnCode == 1){
+        $delete_deal = Deal::where(['id'=> $deal_id])->first()->delete();
+        $message = 'error';
+        $data=[
+          'message' => $message,
+        ];
+        return redirect()->route('confirm',$data);
+      }
+    }
+
+    if($request->has('addsuscess_btn')){
+    // 在庫がある場合商品の在庫数を減らす
       foreach($item_ids as $key => $input) {
         $cart = Cart::where(['user_id'=> $user_id , 'item_id'=> $item_ids[$key], 'deal_id'=> null])->first();
         $item = item::where(['id'=> $item_ids[$key]])->first();
@@ -927,16 +1096,6 @@ class LoginPageController extends Controller
         $item->save();
       }
     }
-
-    // dd($item_nini_ids);
-    // $quantitys = $data['quantity'];
-
-    if(isset($request->memo)){
-    $deal = Deal::create(['user_id'=> $user_id, 'memo'=> $request->memo]);
-    }else{
-    $deal = Deal::create(['user_id'=> $user_id]);
-    }
-    $deal_id = $deal->id;
 
 
     if(isset($data['cart_nini_id'])){

@@ -24,7 +24,7 @@
           <label for="company">法人・個人</label>
           <select id="hjkjKbn" value="" name="hjkjKbn" class="hjkjKbn form-control">
           <option value="" selected>選択してください</option>
-          <option value="1" selected>法人</option>
+          <option value="1">法人</option>
           <option value="2">個人事業主</option>
           </select>
         </div>
@@ -168,9 +168,9 @@
       </div>
       <div class="row">
         <div class="form-group col-12">
-          <input class="radio-input" type="radio" id="上記入力の取引先情報と同様" value="1" name="soufu"><label for="上記入力の取引先情報と同様"> 上記入力の取引先情報と同様</label>
-          <input class="radio-input" type="radio" id="上記入力の運営会社情報と同様" name="soufu"><label for="上記入力の運営会社情報と同様"> 上記入力の運営会社情報と同様</label>
-          <input class="radio-input" type="radio" id="その他" name="soufu"><label for="その他"> その他</label>
+          <input class="radio-input" type="radio" id="上記入力の取引先情報と同様" value="1" name="soufu" checked><label for="上記入力の取引先情報と同様" checked selected> 上記入力の取引先情報と同様</label>
+          <input class="radio-input" type="radio" id="上記入力の運営会社情報と同様" value="2" name="soufu"><label for="上記入力の運営会社情報と同様"> 上記入力の運営会社情報と同様</label>
+          <input class="radio-input" type="radio" id="その他" value="3" name="soufu"><label for="その他"> その他</label>
           <div class="invalid-feedback">
           </div>
         </div>
@@ -181,7 +181,7 @@
       </div>
       <div class="row">
         <div class="form-group col-12">
-          <input class="radio-input" type="radio" id="銀行振込" value="2" name="pay"><label for="銀行振込"> 銀行振込</label>
+          <input class="radio-input" type="radio" id="銀行振込" value="2" name="pay" checked><label for="銀行振込"> 銀行振込</label>
           <input class="radio-input" type="radio" id="口座振替" value="8" name="pay"><label for="口座振替"> 口座振替</label>
           <input class="radio-input" type="radio" id="コンビニ払い" value="9" name="pay"><label for="コンビニ払い"> コンビニ払い</label>
           <label>※掛け払い代金のお支払い方法を上記よりお選びください。<br />（掛け払いの代金は、月末締め翌々月5日払いでのご請求となります。）<br />※クレジットカード払いのみ（掛け払いを使わない）場合は、「銀行振込」を選択してください。</label>
@@ -196,7 +196,7 @@
       <div class="row">
       <div class="form-group col-6">
         <label for="email">メールアドレス</label>
-        <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" value="kitamura.yusei@gmail.com">
+        <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" required autocomplete="email" value="kitamura.yusei@gmail.com">
         @error('email')
             <span class="invalid-feedback" role="alert">
                 <strong>{{ $message }}</strong>

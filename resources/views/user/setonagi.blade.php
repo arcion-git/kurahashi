@@ -54,6 +54,7 @@
                                   特記事項：{{$setonagi_item->item()->tokkijikou}}
                                   @endif
                                 </p>
+                                <input type="hidden" value="{{$setonagi_item->id}}" name="setonagi_item_id" class="setonagi_item_id" />
                                 <button name="item_id" value="{{$setonagi_item->item()->id}}" id="{{$setonagi_item->item()->id}}" class="addcart btn btn-warning">カートに入れる</button>
 
                                 <!-- <div class="article-user">

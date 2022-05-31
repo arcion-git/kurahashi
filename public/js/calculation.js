@@ -24,8 +24,10 @@ $(function() {
   $(document).on("click", ".addcart", function() {
     var item_id = $(this).get(0).id;
     var quantity = $(this).parent().parent().find('.quantity').val();
+    var setonagi_item_id = $(this).parent().find('.setonagi_item_id').val();
     console.log(item_id);
-    console.log(quantity);
+    // console.log(quantity);
+    console.log(setonagi_item_id);
     $.ajax({
         headers: {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -35,6 +37,7 @@ $(function() {
         data: {
           'item_id': item_id,
           'quantity': quantity,
+          'setonagi_item_id' : setonagi_item_id,
         }
       })
       .done(function(data) {
@@ -1147,7 +1150,6 @@ if(document.URL.match("/admin/user/repeatorder")) {
 
 
 
-
 // 合計金額アップデート
 // function update_field(){
 //     $('input').on('keyup change',function(){
@@ -1241,34 +1243,33 @@ if(document.URL.match("/admin/user/repeatorder")) {
 //    });
 // }
 
+
 // 合計金額アップデート画面を開たとき
 // $(document).ready( function(){
-//     update_field();
-//
-//       var target = $('.total').map(function (index, el) {
-//       $(this).closest('tr').find('.total').text(
-//       $(this).closest('tr').find('input.teika').val() *
-//       $(this).closest('tr').find('input.quantity').val());});
-//       // console.log(target);
-//
-//       var sum = 0;
-//       $('.total').each(function () {
-//           sum += parseInt(this.innerText);
-//           var item_total = $('#item_total').map(function (index, el) {
-//           $(this).text("¥ "+ sum.toLocaleString() );});
-//
-//           var all_total = $('#all_total').map(function (index, el) {
-//           var all_total = sum * 1.1;
-//           var all_total = Math.round(all_total);
-//           $(this).text("¥ "+ all_total.toLocaleString());});
-//
-//           var tax = $('#tax').map(function (index, el) {
-//           var tax = sum * 1.1 - sum;
-//           var tax = Math.round(tax);
-//           $(this).text("¥ "+ tax.toLocaleString());});
-//       });
-//
-//
+    // update_field();
+
+      // var target = $('.total').map(function (index, el) {
+      // $(this).closest('tr').find('.total').text(
+      // $(this).closest('tr').find('input.price').val() *
+      // $(this).closest('tr').find('select.quantity').val());});
+      // console.log(target);
+
+      // var sum = 0;
+      // $('.total').each(function () {
+      //     sum += parseInt(this.innerText);
+      //     var item_total = $('#item_total').map(function (index, el) {
+      //     $(this).text("¥ "+ sum.toLocaleString() );});
+      //
+      //     var all_total = $('#all_total').map(function (index, el) {
+      //     var all_total = sum * 1.1;
+      //     var all_total = Math.round(all_total);
+      //     $(this).text("¥ "+ all_total.toLocaleString());});
+      //
+      //     var tax = $('#tax').map(function (index, el) {
+      //     var tax = sum * 1.1 - sum;
+      //     var tax = Math.round(tax);
+      //     $(this).text("¥ "+ tax.toLocaleString());});
+      // });
 // });
 
 

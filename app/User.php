@@ -47,7 +47,8 @@ class User extends Authenticatable
 
     public function setonagi()
     {
-        return $this->belongsTo('App\Setonagi');
+        $setonagi_user = Setonagi::where('user_id', $this->id)->first();
+        return $setonagi_user;
     }
 
 }

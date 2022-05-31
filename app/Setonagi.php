@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Setonagi extends Model
 {
   protected $fillable = [
-  'use_id',
+  'user_id',
   'company',
   'company_kana',
   'last_name',
@@ -24,7 +24,9 @@ class Setonagi extends Model
   'setonagi_ok',
   'kakebarai_limit',
   'kakebarai_update_time',
+  'uketori_place',
+  'uketori_time',
+  'uketori_siharai',
   ];
-
 
 }

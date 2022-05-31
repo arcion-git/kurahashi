@@ -16,7 +16,7 @@ class CreateSetonagisTable extends Migration
         Schema::create('setonagis', function (Blueprint $table) {
             $table->bigIncrements('id');
 
-            $table->integer('use_id')->nullable();
+            $table->integer('user_id')->nullable();
 
             $table->string('company')->nullable();
             $table->string('company_kana')->nullable();
@@ -42,6 +42,10 @@ class CreateSetonagisTable extends Migration
 
             $table->integer('kakebarai_limit')->nullable();
             $table->date('kakebarai_update_time')->nullable();
+
+            $table->string('uketori_place')->nullable();
+            $table->string('uketori_time')->nullable();
+            $table->string('uketori_siharai')->nullable();
 
             $table->timestamps();
         });

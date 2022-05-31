@@ -81,12 +81,16 @@ class RegisterController extends Controller
       $create_user = User::create([
           'email' => $data['email'],
           'password' => Hash::make($data['password']),
+          'name' => $data['last_name'].$data['first_name'],
+          'name_kana' => $data['last_name_kana'].$data['first_name_kana'],
           'tel' => $data['tel'],
-          'setonagi' => 1,
       ]);
-      $user_id = $create_user->id;
+      $create_user->setonagi = 1;
+      $create_user->save();
+
+
       $setonagi = Setonagi::create([
-          'user_id' => $user_id,
+          // 'user_id' => $user_id,
           'company' => $data['company'],
           // 'company_kana' => $data['company_kana'],
           'last_name' => $data['last_name'],
@@ -101,6 +105,9 @@ class RegisterController extends Controller
           // 'unei_company' => $data['unei_company'],
           // 'pay' => $data['pay'],
       ]);
+      $user_id = $create_user->id;
+      $setonagi->user_id = $user_id;
+      $setonagi->save();
       // if(isset($data['unei_company'])){
       // 'unei_company' => $data['unei_company'],
       // }
@@ -176,9 +183,9 @@ class RegisterController extends Controller
         ]
       ];
       // dd($option);
-      $response = $client->request('POST', $url, $option);
-      $result = simplexml_load_string($response->getBody()->getContents());
-      dd($result);
+      // $response = $client->request('POST', $url, $option);
+      // $result = simplexml_load_string($response->getBody()->getContents());
+      // dd($result);
 
       return $create_user;
     }

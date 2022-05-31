@@ -3264,3 +3264,13 @@ display: none;
 #maekabu{
   display: none;
 }
+
+.order label {
+    display: inline-block;
+    margin-bottom: 0.5rem;
+    height: calc(2.25rem + 6px);
+}
+
+.total_price{
+  text-align: right;
+}

@@ -296,6 +296,9 @@
                 <a href="/admin/user" class="nav-link"><i class="fa fa-users"></i><span>顧客担当者一覧</span></a>
               </li>
               <li class="nav-item">
+                <a href="/admin/setonagiuser" class="nav-link"><i class="fa fa-users"></i><span>セトナギユーザー審査</span></a>
+              </li>
+              <li class="nav-item">
                 <a href="/admin/recommendcategory" class="nav-link"><i class="fa fa-bullhorn"></i><span>カテゴリーのおすすめ</span></a>
               </li>
               <li class="nav-item">

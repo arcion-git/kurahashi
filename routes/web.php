@@ -28,7 +28,7 @@
 
   Route::get('/category/{id}', 'LoginPageController@category');
   Route::get('/confirm', 'LoginPageController@confirm')->name('confirm');
-  Route::get('/approval', 'LoginPageController@approval');
+  Route::get('/approval', 'LoginPageController@approval')->name('approval');
   Route::get('/cart', 'LoginPageController@cart');
   Route::get('/deal', 'LoginPageController@deal')->name('deal');
   Route::get('/line', 'LoginPageController@line')->name('line');
@@ -100,6 +100,7 @@
   Route::get('/admin/home', 'AdminPageController@index')->name('admin.home');
   Route::get('/admin/deal/{id}', 'AdminPageController@dealdetail')->name('admin.dealdetail');
   Route::get('/admin/user', 'AdminPageController@user')->name('admin.user');
+  Route::get('/admin/setonagiuser', 'AdminPageController@setonagiuser')->name('admin.setonagiuser');
   Route::get('/admin/item', 'AdminPageController@item')->name('admin.item');
   Route::get('/admin/sales', 'AdminPageController@sales')->name('admin.sales');
   Route::get('/admin/csv', 'AdminPageController@csv')->name('admin.csv');

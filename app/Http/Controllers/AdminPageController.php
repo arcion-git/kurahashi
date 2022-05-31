@@ -25,7 +25,7 @@ use App\PriceGroupe;
 use App\Price;
 use App\SpecialPrice;
 
-use App\Stonagi;
+use App\Setonagi;
 use App\ItemImage;
 
 // API通信
@@ -248,9 +248,118 @@ class AdminPageController extends Controller
   public function user(){
 
     $users = User::paginate(30);
+    $setonagi_users = Setonagi::get();
+    $now = Carbon::now();
+
+
+    // $user = User::where('id', 7 )->first();
+    // dd($user->setonagi()->kakebarai_limit);
+
+    // dd($setonagi);
+
+    // ヤマトAPI連携確認
+    foreach ($setonagi_users as $setonagi_user) {
+      $user_id = $setonagi_user->user_id;
+      $client = new Client();
+      $url = 'https://demo.yamato-credit-finance.jp/kuroneko-anshin/AN070APIAction.action';
+      $option = [
+        'headers' => [
+          'Accept' => '*/*',
+          'Content-Type' => 'application/x-www-form-urlencoded',
+          'charset' => 'UTF-8',
+        ],
+        'form_params' => [
+          'traderCode' => '330000051',
+          // バイヤーid
+          'buyerId' => $user_id,
+          'buyerTelNo' => '',
+          'passWord' => 'UzhJlu8E'
+        ]
+      ];
+      // dd($option);
+      $response = $client->request('POST', $url, $option);
+      $result = simplexml_load_string($response->getBody()->getContents());
+      // dd($result);
+      $setonagi_user = Setonagi::where('user_id',$user_id)->first();
+      $setonagi_user->kakebarai_limit = $result->useOverLimit;
+      $setonagi_user->kakebarai_sinsa = $result->judgeStatus;
+      $setonagi_user->kakebarai_update_time = $now;
+      $setonagi_user->save();
+    }
+
+    // dd($sinsa );
+    // if($result->returnCode == 1){
+    //   $delete_deal = Deal::where(['id'=> $deal_id])->first()->delete();
+    //   $message = 'error';
+    //   $data=[
+    //     'message' => $message,
+    //   ];
+    //   return redirect()->route('confirm',$data);
+    // }
+
+
 
     return view('admin.auth.user', ['users' => $users]);
   }
+
+
+  public function setonagiuser(){
+
+    $users = User::where('setonagi',1)->paginate(30);
+    $setonagi_users = Setonagi::get();
+    $now = Carbon::now();
+
+
+    // $user = User::where('id', 7 )->first();
+    // dd($user->setonagi()->kakebarai_limit);
+
+    // dd($setonagi);
+
+    // ヤマトAPI連携確認
+    foreach ($setonagi_users as $setonagi_user) {
+      $user_id = $setonagi_user->user_id;
+      $client = new Client();
+      $url = 'https://demo.yamato-credit-finance.jp/kuroneko-anshin/AN070APIAction.action';
+      $option = [
+        'headers' => [
+          'Accept' => '*/*',
+          'Content-Type' => 'application/x-www-form-urlencoded',
+          'charset' => 'UTF-8',
+        ],
+        'form_params' => [
+          'traderCode' => '330000051',
+          // バイヤーid
+          'buyerId' => $user_id,
+          'buyerTelNo' => '',
+          'passWord' => 'UzhJlu8E'
+        ]
+      ];
+      // dd($option);
+      $response = $client->request('POST', $url, $option);
+      $result = simplexml_load_string($response->getBody()->getContents());
+      // dd($result);
+      $setonagi_user = Setonagi::where('user_id',$user_id)->first();
+      $setonagi_user->kakebarai_limit = $result->useOverLimit;
+      $setonagi_user->kakebarai_sinsa = $result->judgeStatus;
+      $setonagi_user->kakebarai_update_time = $now;
+      $setonagi_user->save();
+    }
+
+    // dd($sinsa );
+    // if($result->returnCode == 1){
+    //   $delete_deal = Deal::where(['id'=> $deal_id])->first()->delete();
+    //   $message = 'error';
+    //   $data=[
+    //     'message' => $message,
+    //   ];
+    //   return redirect()->route('confirm',$data);
+    // }
+
+
+
+    return view('admin.auth.setonagiuser', ['users' => $users]);
+  }
+
 
   public function item(){
 

@@ -40,12 +40,21 @@
           <!-- <form action="{{ url('/adddeal') }}" method="POST" class="form-horizontal"> -->
           <form action="{{ url('/approval') }}" method="GET" class="form-horizontal">
             {{ csrf_field() }}
+
+            <div class="row mt-4 order">
+              <div class="col-md-12">
+                <div class="section-title">只今ご注文いただいた場合の商品受け渡しは{{$today_plus}}です。</div>
+              </div>
+            </div>
+
             <div class="row mt-4 order">
               <div class="col-md-12">
                 <div class="section-title">オーダー内容</div>
                 <div id="order"></div>
               </div>
             </div>
+
+
             <div class="float-right">
                 <button type="submit" class="btn btn-warning">内容確認画面に進む</button>
             </div>
@@ -78,11 +87,22 @@ $(function(){
       var nokori_zaiko = getUrlParam('nokori_zaiko');
       var nokori_zaiko = -(nokori_zaiko);
       var item_name = getUrlParam('item_name');
+      var message = getUrlParam('message');
       if (nokori_zaiko) {
         console.log(nokori_zaiko);
         console.log(item_name);
         Swal.fire({
-          html: item_name + ' は在庫が ' + nokori_zaiko + ' 不足しています。<br />数量を変更してください。',
+          html: item_name + ' は在庫が ' + nokori_zaiko + ' 不足しています。<br />数量を変更・もしくは削除してください。',
+          // position: 'top-end',
+          // toast: true,
+          icon: 'warning',
+          showConfirmButton: false,
+          // timer: 1500
+        });
+      }
+      if (message) {
+        Swal.fire({
+          html: 'かけ払い限度額オーバーのため別の決済方法をお試しください。',
           // position: 'top-end',
           // toast: true,
           icon: 'warning',
