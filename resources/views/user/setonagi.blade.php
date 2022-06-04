@@ -28,10 +28,10 @@
 
             <div class="row mb-4">
               <div class="col-lg-6">
-                  <a href="http://127.0.0.1:8000/saiji"><img src="https://setonagi.net/wp-content/uploads/2022/03/%E2%97%8FSETOnagi%E5%82%AC%E4%BA%8B%E3%83%90%E3%83%8A%E3%83%BC_5%E6%9C%88%E5%82%AC%E4%BA%8B%E3%83%90%E3%83%8A%E3%83%BC.jpg"  width="100%"/></a>
+                  <a href="/saiji"><img src="https://setonagi.net/wp-content/uploads/2022/03/%E2%97%8FSETOnagi%E5%82%AC%E4%BA%8B%E3%83%90%E3%83%8A%E3%83%BC_5%E6%9C%88%E5%82%AC%E4%BA%8B%E3%83%90%E3%83%8A%E3%83%BC.jpg"  width="100%"/></a>
               </div>
               <div class="col-lg-6">
-                  <a href="http://127.0.0.1:8000/saiji"><img src="https://setonagi.net/wp-content/uploads/2022/03/%E2%97%8FSETOnagi%E5%82%AC%E4%BA%8B%E3%83%90%E3%83%8A%E3%83%BC_6%E6%9C%88%E5%82%AC%E4%BA%8B.jpg" width="100%"/></a>
+                  <a href="/saiji"><img src="https://setonagi.net/wp-content/uploads/2022/03/%E2%97%8FSETOnagi%E5%82%AC%E4%BA%8B%E3%83%90%E3%83%8A%E3%83%BC_6%E6%9C%88%E5%82%AC%E4%BA%8B.jpg" width="100%"/></a>
               </div>
             </div>
           </div>
