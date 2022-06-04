@@ -36,8 +36,6 @@
                   <th class="text-center">住所</th> -->
                   <th class="text-center">電話番号</th>
                   <th class="text-center">メールアドレス</th>
-                  <th class="text-center">かけ払い審査状況</th>
-                  <th class="text-center">利用限度額</th>
                   <th class="text-center">操作</th>
                 </tr>
 
@@ -51,16 +49,6 @@
                   </td>
                   <td class="text-center">
                     {{$user->email}}
-                  </td>
-                  <td class="text-center">
-                    @if(isset($user->setonagi))
-                    {{$user->setonagi()->kakebarai_sinsa}}
-                    @endif
-                  </td>
-                  <td class="text-center">
-                    @if(isset($user->setonagi))
-                    {{$user->setonagi()->kakebarai_limit}}
-                    @endif
                   </td>
                   <td class="text-center">
                     <a href="{{ url('/admin/user/deal/'.$user->id) }}"><button class="btn btn-primary">取引一覧</button></a>

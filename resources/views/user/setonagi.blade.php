@@ -22,13 +22,27 @@
             担当のおすすめ商品が見つかりませんでした。
           </p>
           @else
+
+
           <div class="section-body">
 
+            <div class="row mb-4">
+              <div class="col-lg-6">
+                  <a href="http://127.0.0.1:8000/saiji"><img src="https://setonagi.net/wp-content/uploads/2022/03/%E2%97%8FSETOnagi%E5%82%AC%E4%BA%8B%E3%83%90%E3%83%8A%E3%83%BC_5%E6%9C%88%E5%82%AC%E4%BA%8B%E3%83%90%E3%83%8A%E3%83%BC.jpg"  width="100%"/></a>
+              </div>
+              <div class="col-lg-6">
+                  <a href="http://127.0.0.1:8000/saiji"><img src="https://setonagi.net/wp-content/uploads/2022/03/%E2%97%8FSETOnagi%E5%82%AC%E4%BA%8B%E3%83%90%E3%83%8A%E3%83%BC_6%E6%9C%88%E5%82%AC%E4%BA%8B.jpg" width="100%"/></a>
+              </div>
+            </div>
+          </div>
 
+          <div class="section-body">
                         <div class="row">
                           @foreach($setonagi_items as $setonagi_item)
                           <div class="col-6 col-md-3 col-lg-3">
                             <article class="article article-style-c">
+                              <!-- <button class="addrecommendcategory btn btn-success" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus"></i> 商品を追加</button>
+                              <button class="btn btn-success" data-toggle="modal" data-target="#modal{{$setonagi_item->item()->item_id}}"><i class="fas fa-plus"></i> 商品を追加</button> -->
                               <div class="article-header">
                                 <div class="article-image" data-background="/storage/item/{{$setonagi_item->item()->item_id}}_{{$setonagi_item->item()->sku_code}}.jpg" style="background-image: url(&quot;/storage/item/{{$setonagi_item->item()->item_id}}_{{$setonagi_item->item()->sku_code}}.jpg&quot;);">
                                 </div>
@@ -70,6 +84,38 @@
                               </div>
                             </article>
                           </div>
+                          <div class="modal fade" id="#modal{{$setonagi_item->item()->item_id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="exampleModalLabel">商品一覧</h5>
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                </div>
+                                <div class="modal-body">
+                                    {{ csrf_field() }}
+                                    <div class="table-responsive">
+                                      <table class="table table-striped">
+                                        <tr>
+                                          <th class="text-center">商品番号</th>
+                                          <th class="">商品名</th>
+                                          <th class="text-center">産地</th>
+                                          <th class="text-center">規格</th>
+                                          <th class="text-center">単位</th>
+                                          <th class="text-center">在庫数</th>
+                                          <th class="text-center">特記事項</th>
+                                          <!-- <th class="text-center">納品予定日</th>
+                                          <th class="text-center">参考価格</th>
+                                          <th class="text-center">個数</th> -->
+                                          <th class="text-center" style="min-width:180px;">操作</th>
+                                        </tr>
+                                      </table>
+                                    </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                           @endforeach
                         </div>
 
@@ -80,5 +126,43 @@
           @endif
         </section>
 
-
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">商品一覧</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form action="{{ url('/admin/addrecommendcategory') }}" method="POST" class="form-horizontal">
+                  {{ csrf_field() }}
+                  <div class="table-responsive">
+                    <table class="table table-striped">
+                      <tr>
+                        <th class="text-center">商品番号</th>
+                        <th class="">商品名</th>
+                        <th class="text-center">産地</th>
+                        <th class="text-center">規格</th>
+                        <th class="text-center">単位</th>
+                        <th class="text-center">在庫数</th>
+                        <th class="text-center">特記事項</th>
+                        <!-- <th class="text-center">納品予定日</th>
+                        <th class="text-center">参考価格</th>
+                        <th class="text-center">個数</th> -->
+                        <th class="text-center" style="min-width:180px;">操作</th>
+                      </tr>
+                    </table>
+                  </div>
+                  <input type="hidden" name="category_id" value="" />
+                </form>
+              </div>
+              <!-- <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+              </div> -->
+            </div>
+          </div>
+        </div>
 @endsection

@@ -339,12 +339,8 @@
               <a href="{{ url('/recommend') }}" class="nav-link"><i class="far fa-user"></i><span>担当のおすすめ商品</span></a>
             </li>
             <li class="nav-item">
-              <a href="{{ url('/special_price') }}" class="nav-link"><i class="fas fa-fire"></i><span>時価商品</span></a>
+              <a href="{{ url('/special_price') }}" class="nav-link"><i class="fas fa-fire"></i><span>市況商品（時価）</span></a>
             </li>
-
-
-
-
 
 
             <li class="nav-item dropdown active">
@@ -363,6 +359,20 @@
               </ul>
             </li>
 
+
+            <li class="menu-header">特集カテゴリ</li>
+            <li class="nav-item mb-1">
+              <a href="{{ url('/setonagi') }}" class="nav-link"><img src="https://setonagi.net/wp-content/themes/welcart_basic-beldad/assets/images/top-assets/setonagi_top36.jpg" width="100%"/></a>
+            </li>
+            <li class="nav-item mb-1">
+              <a href="{{ url('') }}/category/8193" class="nav-link"><img src="https://setonagi.net/wp-content/themes/welcart_basic-beldad/assets/images/top-assets/setonagi_top17.jpg" width="100%"/></a>
+            </li>
+            <li class="nav-item mb-1">
+              <a href="{{ url('/setonagi') }}" class="nav-link"><img src="https://setonagi.net/wp-content/themes/welcart_basic-beldad/assets/images/top-assets/setonagi_top19.jpg" width="100%"/></a>
+            </li>
+            <li class="nav-item mb-1">
+              <a href="{{ url('') }}/category/2908" class="nav-link"><img src="https://setonagi.net/wp-content/themes/welcart_basic-beldad/assets/images/top-assets/setonagi_top20.jpg" width="100%"/></a>
+            </li>
 
             <li class="menu-header">カテゴリ一覧</li>
 

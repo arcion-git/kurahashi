@@ -19,7 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('name')->nullable();
             $table->string('name_kana')->nullable();
 
-            $table->boolean('setonagi')->nullable();
+
 
             // $table->string('company')->nullable();
             // $table->string('company_kana')->nullable();
@@ -33,6 +33,7 @@ class CreateUsersTable extends Migration
             $table->string('tel')->nullable();
             $table->string('email')->unique();
             $table->string('password');
+            $table->boolean('setonagi')->nullable();
             $table->boolean('first_login')->nullable();
             $table->rememberToken();
             $table->timestamps();

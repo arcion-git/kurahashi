@@ -96,9 +96,9 @@ class DatabaseSeeder extends Seeder
               'tel'=> $line[3],
               'email'=> $line[4],
               'password'=> \Hash::make('secret') ,
-              // 'first_login'=> $line[6],
-              "created_at" => $now,
-              "updated_at" => $now,
+              'setonagi'=> $line[5],
+              'created_at' => $now,
+              'updated_at' => $now,
             ];
           }
       }
@@ -385,6 +385,41 @@ class DatabaseSeeder extends Seeder
           }
       }
       DB::table("setonagi_items")->insert($list);
+
+
+      $file = new SplFileObject('database/csv/Setonagi.csv');
+      $file->setFlags(
+          \SplFileObject::READ_CSV |
+          \SplFileObject::READ_AHEAD |
+          \SplFileObject::SKIP_EMPTY |
+          \SplFileObject::DROP_NEW_LINE
+      );
+      $list = [];
+      $now = Carbon::now();
+
+      foreach ($file as $line) {
+          if ($file->key() > 0 && ! $file->eof()) {
+            $list[] = [
+              'user_id'=>$line[0],
+              'company'=>$line[1],
+              'company_kana'=>$line[2],
+              'last_name'=>$line[3],
+              'first_name'=>$line[4],
+              'last_name_kana'=>$line[5],
+              'first_name_kana'=>$line[6],
+              'address01'=>$line[7],
+              'address02'=>$line[8],
+              'address03'=>$line[9],
+              'address04'=>$line[10],
+              'address05'=>$line[11],
+              'unei_company'=>$line[12],
+              'pay'=>$line[13],
+              'created_at' => $now,
+              'updated_at' => $now,
+            ];
+          }
+      }
+      DB::table("setonagis")->insert($list);
 
 
 

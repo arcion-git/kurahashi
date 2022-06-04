@@ -41,6 +41,7 @@ class CreateSetonagisTable extends Migration
             $table->boolean('setonagi_ok')->nullable();
 
             $table->integer('kakebarai_limit')->nullable();
+            $table->integer('kakebarai_usepay')->nullable();
             $table->date('kakebarai_update_time')->nullable();
 
             $table->string('uketori_place')->nullable();

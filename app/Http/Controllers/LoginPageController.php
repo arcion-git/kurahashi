@@ -118,6 +118,46 @@ class LoginPageController extends Controller
 
 
 
+  public function saiji()
+  {
+
+      $user_id = Auth::guard('user')->user()->id;
+      $favorite_categories = FavoriteCategory::where('user_id', $user_id)->first();
+
+        if ($favorite_categories === null) {
+          $categories = Category::get();
+          $categories = $categories->groupBy('bu_ka_name');
+          // dd($categories);
+          return view('user/auth/questionnaire', ['categories' => $categories]);
+        }
+
+      $categories = Category::get()->groupBy('bu_ka_name');
+
+      $user_id = Auth::guard('user')->user()->id;
+
+      $favorite_categories = FavoriteCategory::where('user_id', $user_id)->get();
+
+      $carts =  Cart::where('user_id',$user_id)->get();
+
+      $kaiin_number = Auth::guard('user')->user()->kaiin_number;
+
+      $now = Carbon::now()->addDay(3)->format('Y-m-d');
+
+      $recommends = Recommend::where('user_id', $kaiin_number)->whereDate('end', '>=', $now)->orWhere('end',null)->where('user_id', $kaiin_number)->get();
+
+      $special_prices = SpecialPrice::get();
+
+      return view('user/saiji',
+      ['carts' => $carts ,
+       'categories' => $categories ,
+       'favorite_categories' => $favorite_categories,
+       'recommends' => $recommends,
+       'special_prices' => $special_prices,
+      ]);
+  }
+
+
+
   public function setonagi()
   {
     if ( Auth::guard('admin')->check() ){
@@ -853,7 +893,6 @@ class LoginPageController extends Controller
 
     if(isset($data->memo)){
     $memo -> $request->memo;
-    dd($request->memo);
     }
 
     $data=
@@ -929,8 +968,33 @@ class LoginPageController extends Controller
 
   public function dealdetail($id){
 
-    $categories = Category::get()->groupBy('bu_ka_name');
+
+    $user = Auth::guard('user')->user();
     $user_id = Auth::guard('user')->user()->id;
+    $setonagi = Setonagi::where('user_id',$user_id)->first();
+
+
+    $today = date("Y/m/d");
+    $holidays = Holiday::pluck('date');
+
+    // 直近の納品予定日を取得
+    $today = date("Y/m/d");
+    $holidays = Holiday::pluck('date')->toArray();
+    for($i = 3; $i < 10; $i++){
+      $today_plus = date('Y/m/d', strtotime($today.'+'.$i.'day'));
+      // dd($today_plus2);
+      $key = array_search($today_plus,(array)$holidays,true);
+      if($key){
+          // 休みでないので納品日を格納
+      }else{
+          // 休みなので次の日付を探す
+          $nouhin_yoteibi = $today_plus;
+          break;
+      }
+    }
+
+
+    $categories = Category::get()->groupBy('bu_ka_name');
 
     $favorite_categories = FavoriteCategory::where('user_id', $user_id)->get();
 
@@ -942,6 +1006,11 @@ class LoginPageController extends Controller
       'deal'=>$deal,
       'categories' => $categories,
       'favorite_categories' => $favorite_categories,
+      'holidays' => $holidays,
+      'user_id' => $user_id,
+      'user' => $user,
+      'setonagi' => $setonagi,
+      'today_plus' => $today_plus,
     ];
     return view('dealdetail', $data);
   }
@@ -973,12 +1042,19 @@ class LoginPageController extends Controller
     $n++;
     }
 
+    $user = Auth::guard('user')->user();
+    $setonagi = Setonagi::where('user_id',$user_id)->first();
+    // dd($user->setonagi);
+
+
     $data=
     ['carts' => $carts,
      'cart_ninis' => $cart_ninis,
      'stores' => $stores,
      'holidays' => $holidays,
      'deal' => $deal,
+     'user' => $user,
+     'setonagi' => $setonagi,
     ];
     return view('order', $data);
   }

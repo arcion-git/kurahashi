@@ -46,9 +46,7 @@
               </div>
             </div>
             <div class="float-right">
-                @if(isset($user->setonagi))
                 <button type="submit" name="adddeal_btn" class="btn btn-warning">この内容で問い合わせる</button>
-                @endif
                 <button type="submit" name="addsuscess_btn" class="btn btn-success">この内容で注文する</button>
             </div>
           </form>

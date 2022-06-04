@@ -5,7 +5,7 @@
 
 <section class="section">
   <div class="section-header">
-    <h1>顧客一覧</h1>
+    <h1>セトナギユーザー管理</h1>
     <div class="section-header-breadcrumb">
     </div>
   </div>
@@ -37,11 +37,12 @@
                   <th class="text-center">住所</th> -->
                   <th class="text-center">電話番号</th>
                   <th class="text-center">メールアドレス</th>
-                  <th class="text-center">利用許可</th>
                   <th class="text-center">かけ払い審査状況</th>
                   <th class="text-center">利用限度額</th>
-                  <th class="text-center">利用を開始</th>
-                  <th class="text-center">メール通知</th>
+                  <th class="text-center">利用金額</th>
+                  <th class="text-center">操作</th>
+                  <th class="text-center">利用許可</th>
+                  <!-- <th class="text-center">メール通知</th> -->
                 </tr>
 
                 @foreach($users as $user)
@@ -60,11 +61,6 @@
                   </td>
                   <td class="text-center">
                     @if(isset($user->setonagi))
-                    {{$user->setonagi()->kakebarai_ok}}
-                    @endif
-                  </td>
-                  <td class="text-center">
-                    @if(isset($user->setonagi))
                     {{$user->setonagi()->kakebarai_sinsa}}
                     @endif
                   </td>
@@ -74,10 +70,29 @@
                     @endif
                   </td>
                   <td class="text-center">
-                    <a href="{{ url('/admin/user/repeatorder/'.$user->id) }}"><button class="btn btn-warning">登録</button></a>
+                    @if(isset($user->setonagi))
+                    {{$user->setonagi()->kakebarai_usepay}}
+                    @endif
                   </td>
                   <td class="text-center">
-                    <a href="{{ url('/admin/user/repeatorder/'.$user->id) }}"><button class="btn btn-warning">通知</button></a>
+                    @if($user->setonagi()->kakebarai_sinsa == 'ご利用可' & $user->setonagi()->kakebarai_riyou == '')
+                    <a href="{{ url('/admin/user/repeatorder/'.$user->id) }}"><button class="btn btn-warning">利用許可</button></a>
+                    @endif
+                    @if($user->setonagi()->kakebarai_sinsa == 'ご利用不可' & $user->setonagi()->kakebarai_riyou == '')
+                    <a href="{{ url('/admin/user/repeatorder/'.$user->id) }}"><button class="btn btn-primary">カード払いのみで利用許可</button></a>
+                    @endif
+                    @if($user->setonagi()->kakebarai_riyou == '1')
+                    <a href="{{ url('/admin/user/repeatorder/'.$user->id) }}"><button class="btn btn-success">利用停止</button></a>
+                    @endif
+                  </td>
+                  <td class="text-center">
+                    @if(isset($user->setonagi))
+                    @if($user->setonagi()->kakebarai_riyou == 1)
+                    利用許可済
+                    @else
+                    -
+                    @endif
+                    @endif
                   </td>
                 </tr>
                 @endforeach

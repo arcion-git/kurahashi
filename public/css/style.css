@@ -3274,3 +3274,9 @@ display: none;
 .total_price{
   text-align: right;
 }
+
+
+.saiji img{
+  width: 100% !important;
+  height: auto !important;
+}

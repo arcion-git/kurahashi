@@ -37,6 +37,7 @@
   Route::get('/repeatorder', 'LoginPageController@repeatorder')->name('repeatorder');
 
   Route::get('/setonagi', 'LoginPageController@setonagi')->name('setonagi');
+  Route::get('/saiji', 'LoginPageController@saiji')->name('setonagi');
 
   Route::get('/user/test', 'LoginPageController@test');
 

@@ -15,37 +15,21 @@
     </div>
 
 
-    <!-- <div class="input-group">
-      <input type="text" name="nouhinbi[]" class="nouhinbi text-center form-control datepicker" value="2021-06-26">
-    </div> -->
-
-
-
     <div class="section-body">
       <div class="invoice">
         <div class="invoice-print">
-
-
-          <!-- <form action="{{ url('/change_store') }}" method="POST" class="form-horizontal">
-            {{ csrf_field() }}
-            <input name="order_id" value="1" />
-            <input name="store_name" value="引野" />
-            <input name="tokuisaki_name" value="ﾊﾛｰｽﾞ 水産" />
-            <div class="float-right">
-                <button type="submit" class="btn btn-warning">この内容で問い合わせる</button>
-            </div>
-          </form> -->
-
 
           <!-- <form action="{{ url('/adddeal') }}" method="POST" class="form-horizontal"> -->
           <form action="{{ url('/approval') }}" method="GET" class="form-horizontal">
             {{ csrf_field() }}
 
+            @if(isset($setonagi))
             <div class="row mt-4 order">
               <div class="col-md-12">
                 <div class="section-title">只今ご注文いただいた場合の商品受け渡しは{{$today_plus}}です。</div>
               </div>
             </div>
+            @endif
 
             <div class="row mt-4 order">
               <div class="col-md-12">

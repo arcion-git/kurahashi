@@ -109,26 +109,6 @@
               <div class="col-md-12">
                 <div class="section-title">オーダー内容</div>
                   <div id="dealorder"></div>
-                <div class="row mt-4">
-                  <div class="col-lg-8">
-                    <div class="section-title">お支払い</div>
-                  </div>
-                  <div class="col-lg-4 text-right">
-                    <div class="invoice-detail-item">
-                      <div class="invoice-detail-name">商品合計</div>
-                      <div id="item_total" class="invoice-detail-value"></div>
-                    </div>
-                    <div class="invoice-detail-item">
-                      <div class="invoice-detail-name">消費税</div>
-                      <div id="tax" class="invoice-detail-value"></div>
-                    </div>
-                    <hr class="mt-2 mb-2">
-                    <div class="invoice-detail-item">
-                      <div class="invoice-detail-name">合計</div>
-                      <div id="all_total" class="invoice-detail-value invoice-detail-value-lg"></div>
-                    </div>
-                  </div>
-                </div>
                 <input name="deal_id" type="hidden" value="{{$deal->id}}" id="deal_id"/>
 
                 @if ( Auth::guard('user')->check() )
