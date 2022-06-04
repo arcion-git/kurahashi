@@ -26,6 +26,7 @@ use App\Price;
 use App\SpecialPrice;
 
 use App\Setonagi;
+use App\SetonagiItem;
 use App\ItemImage;
 
 // API通信
@@ -49,6 +50,9 @@ use App\Imports\CategoryItemImport;
 use App\Imports\HolidayImport;
 use App\Imports\StoreImport;
 use App\Imports\StoreUserImport;
+
+use App\Imports\SetonagiImport;
+use App\Imports\SetonagiItemImport;
 
 use App\Imports\PriceGroupeImport;
 use App\Imports\PriceImport;
@@ -470,6 +474,18 @@ class AdminPageController extends Controller
   public function SpecialPriceImport(){
   SpecialPrice::truncate();
   Excel::import(new SpecialPriceImport, request()->file('file'));
+  return back();
+  }
+
+  public function SetonagiImport(){
+  Setonagi::truncate();
+  Excel::import(new SetonagiImport, request()->file('file'));
+  return back();
+  }
+
+  public function SetonagiItemImport(){
+  SetonagiItem::truncate();
+  Excel::import(new SetonagiItemImport, request()->file('file'));
   return back();
   }
 

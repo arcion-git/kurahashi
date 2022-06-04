@@ -304,6 +304,58 @@
               </div>
             </div>
 
+            <div class="row mt-4">
+              <div class="col-12">
+                <h4>セトナギ</h4>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-6">
+                <div class="form-group">
+                  <label>セトナギユーザー</label>
+                  @if ($errors->any())
+                  <div class="alert alert-danger">
+                  	<ul>
+                  		@foreach ($errors->all() as $error)
+                  			<li>{{ $error }}</li>
+                  		@endforeach
+                  	</ul>
+                  </div>
+                  @endif
+                  <form action="SetonagiImport" method="POST" enctype="multipart/form-data">
+                  	@csrf
+                  	<div class="form-group">
+                  		<input type="file" class="form-control" name="file" style="padding-bottom:37px;">
+                  		<br>
+                  		<button class="btn btn-success">インポート</button>
+                  	</div>
+                  </form>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="form-group">
+                  <label>セトナギ商品</label>
+                  @if ($errors->any())
+                  <div class="alert alert-danger">
+                  	<ul>
+                  		@foreach ($errors->all() as $error)
+                  			<li>{{ $error }}</li>
+                  		@endforeach
+                  	</ul>
+                  </div>
+                  @endif
+                  <form action="SetonagiItemImport" method="POST" enctype="multipart/form-data">
+                  	@csrf
+                  	<div class="form-group">
+                  		<input type="file" class="form-control" name="file" style="padding-bottom:37px;">
+                  		<br>
+                  		<button class="btn btn-success">インポート</button>
+                  	</div>
+                  </form>
+                </div>
+              </div>
+            </div>
+
 
             <!-- <div class="row mt-4">
               <div class="col-12">

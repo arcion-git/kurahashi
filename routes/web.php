@@ -150,6 +150,8 @@
   Route::post('/admin/PriceGroupeImport', 'AdminPageController@PriceGroupeImport');
   Route::post('/admin/PriceImport', 'AdminPageController@PriceImport');
   Route::post('/admin/SpecialPriceImport', 'AdminPageController@SpecialPriceImport');
+  Route::post('/admin/SetonagiImport', 'AdminPageController@SetonagiImport');
+  Route::post('/admin/SetonagiItemImport', 'AdminPageController@SetonagiItemImport');
 
 
 
