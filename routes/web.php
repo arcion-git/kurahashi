@@ -107,6 +107,11 @@
   Route::get('/admin/csv', 'AdminPageController@csv')->name('admin.csv');
   Route::get('/admin/download', 'AdminPageController@download')->name('admin.download');
 
+  // 管理側セトナギユーザーの承認などのポスト
+  Route::post('/admin/riyoukyoka', 'AdminPageController@riyoukyoka');
+  Route::post('/admin/card_riyoukyoka', 'AdminPageController@card_riyoukyoka');
+  Route::post('/admin/riyouteisi', 'AdminPageController@riyouteisi');
+
   // 取引検索
   Route::get('/admin/search', 'AdminPageController@search');
   Route::post('/admin/search', 'AdminPageController@search');

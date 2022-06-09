@@ -332,6 +332,7 @@
             <li class="nav-item">
               <a href="{{ url('/setonagi') }}" class="nav-link"><i class="fas fa-check"></i><span>限定お買い得商品</span></a>
             </li>
+
             <li class="nav-item">
               <a href="{{ url('/') }}" class="nav-link"><i class="fas fa-list"></i><span>すべての商品</span></a>
             </li>
@@ -341,7 +342,6 @@
             <li class="nav-item">
               <a href="{{ url('/special_price') }}" class="nav-link"><i class="fas fa-fire"></i><span>市況商品（時価）</span></a>
             </li>
-
 
             <li class="nav-item dropdown active">
               <a href="#" class="nav-link has-dropdown">

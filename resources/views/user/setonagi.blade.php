@@ -52,7 +52,17 @@
                                 <div class="article-title">
                                   <h2><a href="#">{{$setonagi_item->item()->item_name}}</a></h2>
                                 </div>
-                                <p class="setonagi_price">¥{{$setonagi_item->price}} /
+                                <p class="setonagi_price">¥
+                                @if ( Auth::guard('user')->user()->setonagi == 1 )
+                                  @if ( Auth::guard('user')->user()->setonagi()->kakebarai_riyou == 1 )
+                                  {{$setonagi_item->price}}
+                                  @else
+                                  ---
+                                  @endif
+                                @else
+                                  {{$setonagi_item->price}}
+                                @endif
+                                 /
                                   @if ($setonagi_item->item()->tani == 1)
                                   ｹｰｽ
                                   @elseif ($setonagi_item->item()->tani == 2)
@@ -69,7 +79,16 @@
                                   @endif
                                 </p>
                                 <input type="hidden" value="{{$setonagi_item->id}}" name="setonagi_item_id" class="setonagi_item_id" />
+
+                                @if ( Auth::guard('user')->user()->setonagi == 1 )
+                                  @if ( Auth::guard('user')->user()->setonagi()->kakebarai_riyou == 1 )
+                                  <button name="item_id" value="{{$setonagi_item->item()->id}}" id="{{$setonagi_item->item()->id}}" class="addcart btn btn-warning">カートに入れる</button>
+                                  @else
+                                  <a name="item_id" href="{{ url('/user/register') }}" class="btn btn-primary">新規会員登録はこちら</a>
+                                  @endif
+                                @else
                                 <button name="item_id" value="{{$setonagi_item->item()->id}}" id="{{$setonagi_item->item()->id}}" class="addcart btn btn-warning">カートに入れる</button>
+                                @endif
 
                                 <!-- <div class="article-user">
                                   <img alt="image" src="assets/img/avatar/avatar-1.png">

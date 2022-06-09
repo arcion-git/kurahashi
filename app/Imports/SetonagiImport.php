@@ -36,6 +36,7 @@ class SetonagiImport implements OnEachRow, WithHeadingRow
               'address03'=>$row['address03'],
               'address04'=>$row['address04'],
               'address05'=>$row['address05'],
+              'kakebarai_riyou'=>$row['kakebarai_riyou'],
             ]
         );
     }

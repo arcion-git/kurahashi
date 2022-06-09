@@ -416,6 +416,7 @@ class DatabaseSeeder extends Seeder
               'pay'=>$line[13],
               'created_at' => $now,
               'updated_at' => $now,
+              'kakebarai_riyou'=>$line[14],
             ];
           }
       }

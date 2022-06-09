@@ -457,12 +457,6 @@ class LoginPageController extends Controller
     $kaiin_number = Auth::guard('user')->user()->kaiin_number;
     $item = Item::where('id',$item_id)->first();
 
-    // 担当のおすすめ商品価格上書き
-    $recommend_item = Recommend::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'user_id'=>$kaiin_number])->first();
-    if(isset($recommend_item->price)){
-    $order->price = $recommend_item->price;
-    }
-
     // 市況商品価格上書き
     $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])->first();
     if(isset($special_price_item->price)){
@@ -473,6 +467,12 @@ class LoginPageController extends Controller
     $setonagi_item = SetonagiItem::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])->first();
     if(isset($setonagi_item->price)){
     $order->price = $setonagi_item->price;
+    }
+
+    // 担当のおすすめ商品価格上書き
+    $recommend_item = Recommend::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'user_id'=>$kaiin_number])->first();
+    if(isset($recommend_item->price)){
+    $order->price = $recommend_item->price;
     }
 
     $order->save();
@@ -606,7 +606,31 @@ class LoginPageController extends Controller
     $price = Price::where(['price_groupe'=>$price_groupe->price_groupe, 'item_id'=> $item->item_id, 'sku_code'=> $item->sku_code])->first();
 
     $order = Order::where(['id'=> $order_id])->update(['store_name'=> $store_name,'tokuisaki_name'=> $tokuisaki_name,'price'=> $price->price]);
-    // Log::debug($order);
+
+    $order = Order::where(['id'=> $order_id])->first();
+
+    $kaiin_number = Auth::guard('user')->user()->kaiin_number;
+    // Log::debug($kaiin_number);
+
+    // 市況商品価格上書き
+    $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])->first();
+    if(isset($special_price_item->price)){
+    $order->price = $special_price_item->price;
+    }
+
+    // セトナギ商品上書き
+    $setonagi_item = SetonagiItem::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])->first();
+    if(isset($setonagi_item->price)){
+      $order->price = $setonagi_item->price;
+    }
+
+    // 担当のおすすめ商品価格上書き
+    $recommend_item = Recommend::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'user_id'=>$kaiin_number])->first();
+    if(isset($recommend_item->price)){
+    $order->price = $recommend_item->price;
+    }
+
+    $order->save();
 
     $data = "success";
 
@@ -785,18 +809,34 @@ class LoginPageController extends Controller
     $holidays = Holiday::pluck('date');
 
     // 直近の納品予定日を取得
-    $today = date("Y/m/d");
-    $holidays = Holiday::pluck('date')->toArray();
-    for($i = 3; $i < 10; $i++){
-      $today_plus = date('Y/m/d', strtotime($today.'+'.$i.'day'));
-      // dd($today_plus2);
-      $key = array_search($today_plus,(array)$holidays,true);
-      if($key){
-          // 休みでないので納品日を格納
-      }else{
-          // 休みなので次の日付を探す
-          $nouhin_yoteibi = $today_plus;
-          break;
+    $currentTime = date('H:i:s');
+    if (strtotime($currentTime) < strtotime('18:00:00')) {
+      $holidays = Holiday::pluck('date')->toArray();
+      for($i = 3; $i < 10; $i++){
+        $today_plus = date('Y/m/d', strtotime($today.'+'.$i.'day'));
+        // dd($today_plus2);
+        $key = array_search($today_plus,(array)$holidays,true);
+        if($key){
+            // 休みでないので納品日を格納
+        }else{
+            // 休みなので次の日付を探す
+            $nouhin_yoteibi = $today_plus;
+            break;
+        }
+      }
+    }else{
+      $holidays = Holiday::pluck('date')->toArray();
+      for($i = 2; $i < 10; $i++){
+        $today_plus = date('Y/m/d', strtotime($today.'+'.$i.'day'));
+        // dd($today_plus2);
+        $key = array_search($today_plus,(array)$holidays,true);
+        if($key){
+            // 休みでないので納品日を格納
+        }else{
+            // 休みなので次の日付を探す
+            $nouhin_yoteibi = $today_plus;
+            break;
+        }
       }
     }
 
