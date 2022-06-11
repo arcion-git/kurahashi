@@ -205,11 +205,12 @@
           <li class="dropdown">
             <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
               <img alt="image" src="{{ asset('img/avatar/avatar-1.png') }}" class="rounded-circle mr-1">
-
+              @if ( Auth::guard('admin')->check() )
+              <div class="d-sm-none d-lg-inline-block">{{ Auth::guard('admin')->user()->name }}</div>
+              @endif
               @if ( Auth::guard('user')->check() )
               <div class="d-sm-none d-lg-inline-block">{{ Auth::guard('user')->user()->name }}  様</div>
               @endif
-
             </a>
             <div class="dropdown-menu dropdown-menu-right">
 
@@ -273,6 +274,7 @@
             @endif
                 <img src="{{ asset('img/logo.png') }}" alt="logo" width="195" class="">
             </a>
+
           </div>
           <div class="sidebar-brand sidebar-brand-sm">
             <a href="{{ url('/') }}">
@@ -401,7 +403,6 @@
 
           </ul><br /><br /><br /><br /><br />
           @endif
-
         </aside>
       </div>
 
@@ -457,8 +458,13 @@
     <script src="{{ asset('js/jquery.utility-kit.js') }}"></script> -->
     <!-- <script src="{{ asset('js/realtime.js') }}"></script> -->
 
-
-
+    @if ( Auth::guard('admin')->check() )
+    <style>
+    .navbar-bg {
+        background-color: #00A8D9;
+    }
+    </style>
+    @endif
 
 
 </body>

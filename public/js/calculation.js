@@ -25,9 +25,9 @@ $(function() {
     var item_id = $(this).get(0).id;
     var quantity = $(this).parent().parent().find('.quantity').val();
     var setonagi_item_id = $(this).parent().find('.setonagi_item_id').val();
-    console.log(item_id);
+    // console.log(item_id);
     // console.log(quantity);
-    console.log(setonagi_item_id);
+    // console.log(setonagi_item_id);
     $.ajax({
         headers: {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -40,19 +40,36 @@ $(function() {
           'setonagi_item_id' : setonagi_item_id,
         }
       })
-      .done(function(data) {
-        // console.log(data);
-        $('#toggle').addClass('beep');
-        $('#toggle').trigger('click');
-        Swal.fire({
-          type:"success",
-          title: "カートに追加しました",
-          position: 'bottom-end',
-          toast: true,
-          icon: 'success',
-          showConfirmButton: false,
-          timer: 1500
-        });
+      .done(function(json) {
+        // 既にカートにあるときの分岐
+        console.log(json['message']);
+        if(json['message']=='cart_in'){
+          $('#toggle').addClass('beep');
+          $('#toggle').trigger('click');
+          Swal.fire({
+            title: "既にカートに追加されています",
+            position: 'bottom-end',
+            toast: true,
+            icon: 'info',
+            showConfirmButton: false,
+            timer: 3000
+          });
+        }else{
+          $('#toggle').addClass('beep');
+          $('#toggle').trigger('click');
+          Swal.fire({
+            type:"success",
+            title: "カートに追加しました",
+            position: 'bottom-end',
+            toast: true,
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1500
+          });
+        }
+
+
+
       })
       .fail(function(jqXHR, textStatus, errorThrown) {
         alert('ユーザーに紐づく得意先店舗がありません');

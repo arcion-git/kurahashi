@@ -248,7 +248,7 @@ $(document).ready( function(){
     // update_field();
       var target = $('.total').map(function (index, el) {
 			var total = $(this).closest('tr').find('input.price').val() * $(this).closest('tr').find('select.quantity').val();
-      $(this).closest('tr').find('.total').text(total);
+      $(this).closest('tr').find('.total').text(total.toLocaleString() );
 			});
       // console.log(target);
       var sum = 0;
@@ -268,8 +268,6 @@ $(document).ready( function(){
           var tax = Math.round(tax);
 					$("#tax_val").val(tax);
           $(this).text("¥ "+ tax.toLocaleString());});
-
-
 
       });
 });

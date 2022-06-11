@@ -773,18 +773,23 @@ class AdminPageController extends Controller
 
   public function riyoukyoka(Request $request){
     $riyoukyoka_user_id = $request->user_id;
+    $user = User::where('id',$riyoukyoka_user_id)->first();
     $setonagi = User::where('id',$riyoukyoka_user_id)->first()->setonagi();
     $setonagi->kakebarai_riyou = 1;
     $setonagi->save();
 
-    $name = 'テスト ユーザー';
-    $email = 'sk8.panda.27@gmail.com';
-
-    Mail::send('emails.register', [
-        'name' => $name,
-    ], function ($message) use ($email) {
-        $message->to($email)->subject('テストタイトル');
-    });
+    // $name = $user->name;
+    // $email = 'sk8.panda.27@gmail.com';
+    //
+    // Mail::send('emails.register', [
+    //     'name' => $name,
+    // ], function ($message) use ($email) {
+    //     $message->to($email)
+    //     ->subject('テストタイトル')
+    //     ->replyTo('reply@example.com', 'Reply Guy')
+    //     ->from('example@example.com', 'Example');
+    //
+    // });
 
 
     return redirect()->route('admin.setonagiuser');

@@ -400,6 +400,13 @@ class LoginPageController extends Controller
       // dd($price);
     }
 
+    $cart_in=Cart::where(['user_id'=> $user_id , 'item_id'=> $item->id , 'deal_id'=> null])->first();
+    if($cart_in){
+      return response()->json([
+      'message' => 'cart_in',
+      ]);
+    }
+
     $cart=Cart::firstOrNew(['user_id'=> $user_id , 'item_id'=> $item->id , 'deal_id'=> null]);
     $cart->save();
 
