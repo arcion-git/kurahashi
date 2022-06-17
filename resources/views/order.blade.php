@@ -248,7 +248,7 @@ $(document).ready( function(){
     // update_field();
       var target = $('.total').map(function (index, el) {
 			var total = $(this).closest('tr').find('input.price').val() * $(this).closest('tr').find('select.quantity').val();
-      $(this).closest('tr').find('.total').text(total.toLocaleString() );
+      $(this).closest('tr').find('.total').text(total);
 			});
       // console.log(target);
       var sum = 0;

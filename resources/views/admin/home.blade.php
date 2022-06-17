@@ -94,11 +94,15 @@
                     {{$deal->success_time}}
                   </td>
                   <td class="text-center">
-                    @empty($deal->success_flg)
-                    <div class="badge badge-warning">交渉中</div>
-                    @else
+                    @if($deal->status == '発注済')
                     <div class="badge badge-success">受注済</div>
-                    @endempty
+                    @elseif($deal->status == '交渉中')
+                    <div class="badge badge-warning">交渉中</div>
+                    @elseif($deal->status == '確認待')
+                    <div class="badge badge-info">確認待</div>
+                    @elseif($deal->status == 'キャンセル')
+                    <div class="badge badge-danger">キャンセル</div>
+                    @endif
                   </td>
                   <td class="text-center">
                     <a href="{{ url('/admin/deal/'.$deal->id) }}"><button class="btn btn-primary">詳細を見る</button></a>

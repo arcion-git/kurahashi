@@ -86,6 +86,7 @@
   // POST
   Route::post('/adddeal', 'LoginPageController@adddeal');
   Route::post('/addsuscess', 'LoginPageController@addsuscess');
+  Route::post('/dealcancel', 'LoginPageController@dealcancel');
 
   Route::post('/dealcart', 'LoginPageController@dealcart');
   Route::get('/showdealcart', 'LoginPageController@showdealcart');

@@ -131,9 +131,9 @@ class RegisterController extends Controller
           'shitenMei' => '',
           'sMeikana' => $data['company_kana'],
           'shitenMeikana' => '',
-          'ybnNo' => '7200824',
+          'ybnNo' => $data['address01'],
           'Adress' => $data['address02'].$data['address03'].$data['address04'].$data['address05'],
-          'telNo' => '080-2888-5281',
+          'telNo' => $data['tel'],
           // 'keitaiNo' => '080-2888-5281',
           // 'gyscod1' => '',
           // 'gyscod2' => '',
@@ -183,8 +183,8 @@ class RegisterController extends Controller
         ]
       ];
       // dd($option);
-      // $response = $client->request('POST', $url, $option);
-      // $result = simplexml_load_string($response->getBody()->getContents());
+      $response = $client->request('POST', $url, $option);
+      $result = simplexml_load_string($response->getBody()->getContents());
       // dd($result);
 
       return $create_user;

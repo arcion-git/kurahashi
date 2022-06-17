@@ -37,6 +37,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
+// 配列をページネーションする
+use Illuminate\Pagination\LengthAwarePaginator;
+
 // API通信
 use GuzzleHttp\Client;
 
@@ -68,7 +71,7 @@ class LoginPageController extends Controller
 
 
 
-  public function index()
+  public function index(Request $request)
   {
     if ( Auth::guard('admin')->check() ){
         Auth::guard('admin')->logout();
@@ -87,8 +90,60 @@ class LoginPageController extends Controller
           return view('user/auth/questionnaire', ['categories' => $categories]);
         }
 
+      $setonagi_user = Auth::guard('user')->user()->setonagi;
+      // セトナギユーザーの場合は取得しない
+      if(!$setonagi_user){
+        // 価格が存在するユーザーごとの商品に絞り込み
+        $kaiin_number = Auth::guard('user')->user()->kaiin_number;
+        // dd($kaiin_number);
+        $store_user = StoreUser::where('user_id',$kaiin_number)->first(['store_id','tokuisaki_id']);
+        // dd($store_user);
+        $store = Store::where([ 'tokuisaki_id'=> $store_user->tokuisaki_id,'store_id'=> $store_user->store_id ])->first();
+        // dd($store);
+        $price_groupe = PriceGroupe::where([ 'tokuisaki_id'=> $store_user->tokuisaki_id,'store_id'=> $store_user->store_id ])->first();
+        // dd($price_groupe->price_groupe);
+        // $price_groupe = $store->price_groupe();
+        // dd($price_groupe->price_groupe);
 
-      $items = Item::where('zaikosuu', '>=', '0.01')->paginate(30);
+        $prices = Price::where(['price_groupe'=>$price_groupe->price_groupe])->get();
+
+        $user_items = [];
+        $n=1;
+        foreach ($prices as $price) {
+          $item = $price->item();
+          // dd($item);
+        if($item->zaikosuu >= 0.01){
+          array_push($user_items, $item);
+        }
+        $n++;
+        }
+        $items = $user_items;
+        $items = collect($items);
+        // dd($request->page);
+        // dd($items);
+        // $all_num = count($items);
+        // $disp_limit = '10';
+        // $items = new LengthAwarePaginator($items , $all_num, $disp_limit, $request->page, array('path' => $request->url()));
+        $items = new LengthAwarePaginator(
+                    // $items->forPage($request->page, 30),
+                    $items->forPage($request->page, 30),
+                    // $items->get($request->page - 30),
+                    count($items),
+                    30,
+                    $request->page,
+                    array('path' => $request->url() , "pageName" => "page")
+                );
+
+        // $items = Item::where('zaikosuu', '>=', '0.01')->paginate(30);
+                // dd($items->first());
+      }else{
+        $items = Item::where('zaikosuu', '>=', '0.01')->paginate(30);
+      }
+      // dd($items);
+
+
+
+
 
       $categories = Category::get()->groupBy('bu_ka_name');
 
@@ -113,6 +168,7 @@ class LoginPageController extends Controller
        'favorite_categories' => $favorite_categories,
        'recommends' => $recommends,
        'special_prices' => $special_prices,
+       'page' => $request->page,
       ]);
   }
 
@@ -1122,7 +1178,7 @@ class LoginPageController extends Controller
     // dd($data);
 
     // 在庫チェック
-    if($request->has('addsuscess_btn')){
+    // if($request->has('addsuscess_btn')){
       foreach($item_ids as $key => $input) {
         $cart = Cart::where(['user_id'=> $user_id , 'item_id'=> $item_ids[$key], 'deal_id'=> null])->first();
         $item = item::where(['id'=> $item_ids[$key]])->first();
@@ -1146,7 +1202,7 @@ class LoginPageController extends Controller
           return redirect()->route('confirm',$data);
         }
       }
-    }
+    // }
 
     // dd($item_nini_ids);
     // $quantitys = $data['quantity'];
@@ -1199,6 +1255,83 @@ class LoginPageController extends Controller
       }
     }
 
+
+
+    if($request->uketori_siharai == 'クレジットカード払い'){
+      // 決済tokenの取得
+      $client = new Client();
+      $url = 'https://ptwebcollect.jp/test_gateway/token/js/embeddedTokenLib.js';
+
+      $option = [
+        'headers' => [
+          'Accept' => '*/*',
+          'Content-Type' => 'application/x-www-form-urlencoded',
+          'charset' => 'UTF-8',
+        ],
+        'form_params' => [
+          'function_div' => 'A12',
+          'trader_code' => '888888709',
+          'device_div' => 1,
+        ]
+      ];
+      // dd($option);
+      $response = $client->request('POST', $url, $option);
+      $result = $response->getBody()->getContents();
+      dd($result);
+      // if($result->returnCode == 1){
+      //   $delete_deal = Deal::where(['id'=> $deal_id])->first()->delete();
+      //   $message = 'error';
+      //   $data=[
+      //     'message' => $message,
+      //   ];
+      //   return redirect()->route('confirm',$data);
+      // }
+    }
+
+
+    if($request->uketori_siharai == 'クレジットカード払い'){
+      // ヤマトAPI連携確認
+      $client = new Client();
+      $url = 'https://api.kuronekoyamato.co.jp/api/credit';
+      $url = 'https://ptwebcollect.jp/test_gateway/getTraderToken.api';
+
+      $option = [
+        'headers' => [
+          'Accept' => '*/*',
+          'Content-Type' => 'application/x-www-form-urlencoded',
+          'charset' => 'UTF-8',
+        ],
+        'form_params' => [
+          'function_div' => 'A08',
+          'trader_code' => '888888709',
+          'device_div' => 2,
+          'order_no' => $deal_id,
+          'goods_name' => $request->tax_val,
+          'settle_price' => $request->all_total_val,
+          'buyer_name_kanji' => '濱本 悠世',
+          'buyer_tel' => '08028885281',
+          'buyer_email' => 'info@arcion.jp',
+          'token' => '',
+          'auth_div' => 1,
+          'pay_way' => 1,
+          'option_service_div' => '00'
+        ]
+      ];
+      // dd($option);
+      $response = $client->request('POST', $url, $option);
+      $result = simplexml_load_string($response->getBody()->getContents());
+      dd($result);
+      // if($result->returnCode == 1){
+      //   $delete_deal = Deal::where(['id'=> $deal_id])->first()->delete();
+      //   $message = 'error';
+      //   $data=[
+      //     'message' => $message,
+      //   ];
+      //   return redirect()->route('confirm',$data);
+      // }
+    }
+
+
     if($request->has('addsuscess_btn')){
     // 在庫がある場合商品の在庫数を減らす
       foreach($item_ids as $key => $input) {
@@ -1238,13 +1371,18 @@ class LoginPageController extends Controller
       $cart->save();
     }
 
+    $deal=Deal::firstOrNew(['id'=> $deal_id]);
+    $deal->status = '交渉中';
+    $deal->start_time = Carbon::now();
+    $deal->save();
+
     if($request->has('addsuscess_btn')){
 
       // $carts = Cart::where(['user_id'=>$user_id, 'deal_id'=> $$deal_id])->get();
       // dd($carts);
 
       $deal=Deal::firstOrNew(['id'=> $deal_id]);
-      $deal->success_flg = True;
+      $deal->status = '発注済';
       $deal->success_time = Carbon::now();
       $deal->save();
 
@@ -1265,7 +1403,7 @@ class LoginPageController extends Controller
     $deal_id = $request->deal_id;
 
     $deal=Deal::firstOrNew(['id'=> $deal_id]);
-    $deal->success_flg = True;
+    $deal->status = '発注済';
     $deal->success_time = Carbon::now();
     $deal->memo = $request->memo;
     $deal->save();
@@ -1280,6 +1418,33 @@ class LoginPageController extends Controller
 
     return redirect('deal');
   }
+
+  public function dealcancel(Request $request){
+    $user_id = Auth::guard('user')->user()->id;
+
+    // $data = $request->all();
+    // $item_ids = $data['item_id'];
+    // $quantitys = $data['quantity'];
+
+    $deal_id = $request->deal_id;
+
+    $deal=Deal::firstOrNew(['id'=> $deal_id]);
+    $deal->status = 'キャンセル';
+    $deal->cancel_time = Carbon::now();
+    $deal->save();
+
+    // foreach($item_ids as $key => $input) {
+    //   $cart = Cart::firstOrNew(['user_id'=> $user_id , 'item_id'=> $item_ids[$key], 'deal_id'=> $deal_id]);
+    //   $cart->user_id = $user_id;
+    //   $cart->deal_id = $deal_id;
+    //   $cart->quantity = isset($quantitys[$key]) ? $quantitys[$key] : null;
+    //   $cart->save();
+    // }
+
+    return redirect('deal');
+  }
+
+
 
   public function updatecart(Request $request){
 

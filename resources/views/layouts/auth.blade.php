@@ -89,6 +89,23 @@
           $('#maekabu').hide();
         }
       });
+      $('#unei_company').click(function(){
+          if($('#unei_company').prop('checked')){
+              $('#unei_company_detail').show();
+              // alert('checked!');
+          }else{
+              $('#unei_company_detail').hide();
+              // alert('not checked!');
+          }
+      });
+      $('[name="soufu"]:radio').change( function() {
+        if($('[id=その他]').prop('checked')){
+              $('#soufu_detail').show();
+              alert('checked!');
+        }else{
+        }
+      });
+
     });
     </script>
 

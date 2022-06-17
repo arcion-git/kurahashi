@@ -1139,6 +1139,16 @@ if(document.URL.match("/admin/user/repeatorder")) {
 
 
 
+
+
+
+$(function(){
+  $("#deal_cancel_button").on("click",function(){
+    $('#deal_cancel').submit();
+  });
+});
+
+
     $(document).on("change", "#houjin_kojin", function() {
       var selected = $(this).val();
       alert('test');

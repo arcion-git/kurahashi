@@ -45,11 +45,30 @@
                         {{$deal->success_time}}
                       </td>
                       <td class="text-center">
-                        @empty($deal->success_flg)
-                        <div class="badge badge-warning">問合中</div>
-                        @else
+                        @if($deal->status == '発注済')
+                        @if ( Auth::guard('user')->check() )
                         <div class="badge badge-success">発注済</div>
-                        @endempty
+                        @endif
+                        @if ( Auth::guard('admin')->check() )
+                        <div class="badge badge-success">受注済</div>
+                        @endif
+                        @elseif($deal->status == '交渉中')
+                        @if ( Auth::guard('user')->check() )
+                        <div class="badge badge-warning">問合中</div>
+                        @endif
+                        @if ( Auth::guard('admin')->check() )
+                        <div class="badge badge-warning">交渉中</div>
+                        @endif
+                        @elseif($deal->status == '確認待')
+                        @if ( Auth::guard('user')->check() )
+                        <div class="badge badge-info">確認待</div>
+                        @endif
+                        @if ( Auth::guard('admin')->check() )
+                        <div class="badge badge-info">確認待</div>
+                        @endif
+                        @elseif($deal->status == 'キャンセル')
+                        <div class="badge badge-danger">キャンセル</div>
+                        @endif
                       </td>
                       <td class="text-center">
                         <a href="{{ url('/user/deal/'.$deal->id) }}"><button class="btn btn-primary">詳細を見る</button></a>

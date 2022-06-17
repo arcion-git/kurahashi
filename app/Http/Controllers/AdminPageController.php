@@ -102,7 +102,7 @@ class AdminPageController extends Controller
         }
         $deals = new LengthAwarePaginator($deals, count($deals), 10, 1);
       }elseif($cat == '交渉中'){
-        $all_deals = Deal::where('success_flg',0)->get();
+        $all_deals = Deal::where('status','交渉中')->get();
         $deals = [];
         $n=1;
         foreach ($all_deals as $all_deal) {
@@ -114,7 +114,7 @@ class AdminPageController extends Controller
         }
         $deals = new LengthAwarePaginator($deals, count($deals), 10, 1);
       }elseif($cat == '受注済'){
-        $all_deals = Deal::where('success_flg',1)->get();
+        $all_deals = Deal::where('status','発注済')->get();
         $deals = [];
         $n=1;
         foreach ($all_deals as $all_deal) {
@@ -126,7 +126,7 @@ class AdminPageController extends Controller
         }
         $deals = new LengthAwarePaginator($deals, count($deals), 10, 1);
       }elseif($cat == 'キャンセル'){
-        $all_deals = Deal::where('cancel_flg',1)->get();
+        $all_deals = Deal::where('status','キャンセル')->get();
         $deals = [];
         $n=1;
         foreach ($all_deals as $all_deal) {
@@ -226,6 +226,13 @@ class AdminPageController extends Controller
     }
 
 
+    $deal_id = $request->deal_id;
+    $deal = Deal::where('id',$deal_id)->first();
+    $deal->status = '確認待';
+    $deal->kakunin_time = Carbon::now();
+    $deal->save();
+
+
     // foreach (array_map(null, $order_ids, $prices) as [$val1, $val2]) {
     //   $order = Order::where(['id'=> $val1 , 'price'=> $val2])->first();
     //   $order->price = $val2;
@@ -269,34 +276,34 @@ class AdminPageController extends Controller
     // dd($setonagi);
 
     // ヤマトAPI連携確認
-    foreach ($setonagi_users as $setonagi_user) {
-      $user_id = $setonagi_user->user_id;
-      $client = new Client();
-      $url = 'https://demo.yamato-credit-finance.jp/kuroneko-anshin/AN070APIAction.action';
-      $option = [
-        'headers' => [
-          'Accept' => '*/*',
-          'Content-Type' => 'application/x-www-form-urlencoded',
-          'charset' => 'UTF-8',
-        ],
-        'form_params' => [
-          'traderCode' => '330000051',
-          // バイヤーid
-          'buyerId' => $user_id,
-          'buyerTelNo' => '',
-          'passWord' => 'UzhJlu8E'
-        ]
-      ];
-      // dd($option);
-      $response = $client->request('POST', $url, $option);
-      $result = simplexml_load_string($response->getBody()->getContents());
-      // dd($result);
-      $setonagi_user = Setonagi::where('user_id',$user_id)->first();
-      $setonagi_user->kakebarai_limit = $result->useOverLimit;
-      $setonagi_user->kakebarai_sinsa = $result->judgeStatus;
-      $setonagi_user->kakebarai_update_time = $now;
-      $setonagi_user->save();
-    }
+    // foreach ($setonagi_users as $setonagi_user) {
+    //   $user_id = $setonagi_user->user_id;
+    //   $client = new Client();
+    //   $url = 'https://demo.yamato-credit-finance.jp/kuroneko-anshin/AN070APIAction.action';
+    //   $option = [
+    //     'headers' => [
+    //       'Accept' => '*/*',
+    //       'Content-Type' => 'application/x-www-form-urlencoded',
+    //       'charset' => 'UTF-8',
+    //     ],
+    //     'form_params' => [
+    //       'traderCode' => '330000051',
+    //       // バイヤーid
+    //       'buyerId' => $user_id,
+    //       'buyerTelNo' => '',
+    //       'passWord' => 'UzhJlu8E'
+    //     ]
+    //   ];
+    //   // dd($option);
+    //   $response = $client->request('POST', $url, $option);
+    //   $result = simplexml_load_string($response->getBody()->getContents());
+    //   // dd($result);
+    //   $setonagi_user = Setonagi::where('user_id',$user_id)->first();
+    //   $setonagi_user->kakebarai_limit = $result->useOverLimit;
+    //   $setonagi_user->kakebarai_sinsa = $result->judgeStatus;
+    //   $setonagi_user->kakebarai_update_time = $now;
+    //   $setonagi_user->save();
+    // }
 
     // dd($sinsa );
     // if($result->returnCode == 1){
@@ -773,23 +780,18 @@ class AdminPageController extends Controller
 
   public function riyoukyoka(Request $request){
     $riyoukyoka_user_id = $request->user_id;
-    $user = User::where('id',$riyoukyoka_user_id)->first();
     $setonagi = User::where('id',$riyoukyoka_user_id)->first()->setonagi();
-    $setonagi->kakebarai_riyou = 1;
-    $setonagi->save();
+    // $setonagi->kakebarai_riyou = 1;
+    // $setonagi->save();
 
-    // $name = $user->name;
-    // $email = 'sk8.panda.27@gmail.com';
-    //
-    // Mail::send('emails.register', [
-    //     'name' => $name,
-    // ], function ($message) use ($email) {
-    //     $message->to($email)
-    //     ->subject('テストタイトル')
-    //     ->replyTo('reply@example.com', 'Reply Guy')
-    //     ->from('example@example.com', 'Example');
-    //
-    // });
+    $name = 'テスト ユーザー';
+    $email = 'sk8.panda.27@gmail.com';
+
+    Mail::send('emails.register', [
+        'name' => $name,
+    ], function ($message) use ($email) {
+        $message->to($email)->subject('テストタイトル');
+    });
 
 
     return redirect()->route('admin.setonagiuser');

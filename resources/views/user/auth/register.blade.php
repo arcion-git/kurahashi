@@ -162,6 +162,45 @@
           </div>
         </div>
       </div>
+      <div class="row" id="unei_company_detail" style="display;none;">
+        <div class="col-6">
+          <div class="form-group">
+          <label for="company">法人格</label>
+            <select name="houjinKaku" name="example" class="form-control">
+                <option value="0">選択してください</option>
+                <option value="1" selected>株式会社</option>
+                <option value="2">有限会社</option>
+                <option value="3">合同会社</option>
+                <option value="4">合資会社</option>
+                <option value="5">合名会社</option>
+                <option value="6">医療法人</option>
+                <option value="7">医療法人社団</option>
+                <option value="8">医療法人財団</option>
+                <option value="9">社会医療法人</option>
+                <option value="10">一般社団法人</option>
+                <option value="11">公益社団法人</option>
+                <option value="12">一般財団法人</option>
+                <option value="13">公益財団法人</option>
+                <option value="14">協同組合</option>
+                <option value="15">社会福祉法人</option>
+                <option value="16">特定非営利活動法人</option>
+                <option value="17">学校法人</option>
+                <option value="18">国立大学法人</option>
+                <option value="19">公立大学法人</option>
+                <option value="20">宗教法人</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="form-group">
+            <label for="zengo">法人格前後</label><br />
+            <input class="radio-input" id="前" type="radio" value="0" name="houjinZengo"> <label for="前">前</label selected>
+            <input class="radio-input" id="後" type="radio" value="1" name="houjinZengo"> <label for="後">後</label>
+            <div class="invalid-feedback">
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div class="form-divider">
         書類送付先
@@ -172,6 +211,45 @@
           <input class="radio-input" type="radio" id="上記入力の運営会社情報と同様" value="2" name="soufu"><label for="上記入力の運営会社情報と同様"> 上記入力の運営会社情報と同様</label>
           <input class="radio-input" type="radio" id="その他" value="3" name="soufu"><label for="その他"> その他</label>
           <div class="invalid-feedback">
+          </div>
+        </div>
+      </div>
+      <div class="row" id="soufu_detail">
+        <div class="col-6">
+          <div class="form-group">
+          <label for="company">法人格</label>
+            <select name="houjinKaku" name="example" class="form-control">
+                <option value="0">選択してください</option>
+                <option value="1" selected>株式会社</option>
+                <option value="2">有限会社</option>
+                <option value="3">合同会社</option>
+                <option value="4">合資会社</option>
+                <option value="5">合名会社</option>
+                <option value="6">医療法人</option>
+                <option value="7">医療法人社団</option>
+                <option value="8">医療法人財団</option>
+                <option value="9">社会医療法人</option>
+                <option value="10">一般社団法人</option>
+                <option value="11">公益社団法人</option>
+                <option value="12">一般財団法人</option>
+                <option value="13">公益財団法人</option>
+                <option value="14">協同組合</option>
+                <option value="15">社会福祉法人</option>
+                <option value="16">特定非営利活動法人</option>
+                <option value="17">学校法人</option>
+                <option value="18">国立大学法人</option>
+                <option value="19">公立大学法人</option>
+                <option value="20">宗教法人</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="form-group">
+            <label for="zengo">法人格前後</label><br />
+            <input class="radio-input" id="前" type="radio" value="0" name="houjinZengo"> <label for="前">前</label selected>
+            <input class="radio-input" id="後" type="radio" value="1" name="houjinZengo"> <label for="後">後</label>
+            <div class="invalid-feedback">
+            </div>
           </div>
         </div>
       </div>

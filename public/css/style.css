@@ -3261,7 +3261,9 @@ display: none;
   font-size: 0.7em;
 }
 
-#maekabu{
+#unei_company_detail,
+#maekabu,
+#soufu_detail{
   display: none;
 }
 
@@ -3279,4 +3281,20 @@ display: none;
 .saiji img{
   width: 100% !important;
   height: auto !important;
+}
+
+/* セルの線を重ねる */
+table {
+    border-collapse: collapse;
+}
+.table-striped tbody tr{
+  border: 1px solid #6c757d !important;
+}
+.table-striped tbody .order-table tr{
+  border: none !important;
+  border-left: 1px solid #8f8f8f !important;
+  border-bottom:  1px solid #6c757d !important;
+}
+.table-striped tbody .order-table tr:last-child{
+  border-bottom:  0px solid #6c757d !important;
 }

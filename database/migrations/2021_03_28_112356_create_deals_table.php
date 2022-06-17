@@ -18,7 +18,12 @@ class CreateDealsTable extends Migration
 
             $table->integer('user_id')->unsigned()->nullable();
             $table->string('memo')->nullable();
-            $table->boolean('success_flg')->default(False);
+
+            $table->string('status')->nullable();
+
+            $table->datetime('start_time')->nullable();
+            $table->datetime('kakunin_time')->nullable();
+            $table->datetime('cancel_time')->nullable();
             $table->datetime('success_time')->nullable();
 
             $table->timestamps();

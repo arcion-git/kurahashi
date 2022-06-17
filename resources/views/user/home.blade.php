@@ -3,6 +3,9 @@
 @section('content')
 
 
+
+
+
         <section class="section">
           <div class="section-header">
             <h1>
@@ -229,7 +232,7 @@
 
 
           @if(Request::is('/') or Request::is('*category*') or Request::is('*user/home*'))
-          @if(!isset($items[0]))
+          @if(empty($items))
           <p>
             商品が売り切れました。
           </p>
