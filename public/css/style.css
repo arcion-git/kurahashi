@@ -3260,11 +3260,14 @@ display: none;
 .setonagi_stock{
   font-size: 0.7em;
 }
-
+#kojin,
 #unei_company_detail,
+#unei_company_detail_houjinkaku,
 #maekabu,
 #soufu_detail{
   display: none;
+  border-left: 3px solid #b9b6b6;
+  padding: 0 0 0 20px;
 }
 
 .order label {
@@ -3287,14 +3290,43 @@ display: none;
 table {
     border-collapse: collapse;
 }
+/* table td{
+  display: inline-block;
+} */
 .table-striped tbody tr{
-  border: 1px solid #6c757d !important;
+  border: 1px solid #bfc1c3 !important;
 }
 .table-striped tbody .order-table tr{
   border: none !important;
-  border-left: 1px solid #8f8f8f !important;
-  border-bottom:  1px solid #6c757d !important;
+  border-left: 1px solid #bfc1c3 !important;
+  border-bottom: 1px solid #bfc1c3 !important;
 }
 .table-striped tbody .order-table tr:last-child{
   border-bottom:  0px solid #6c757d !important;
+}
+#cart-container .table-striped tbody tr{
+  border-left: 0px !important;
+  border-right: 0px !important;
+}
+.table td, .table th {
+  color: #000;
+}
+.main-sidebar .sidebar-menu li ul.dropdown-menu li a,
+.main-sidebar .sidebar-menu li a{
+  color: #000;
+}
+
+.repeat_order_table table{
+  width: 100px;
+}
+.sidebar_youtube {
+    border-left: 3px solid #1D2C6B;
+    border-right: 3px solid #1D2C6B;
+    border-bottom: 3px solid #1D2C6B;
+}
+.nav_banner img{
+  width: 100%;
+}
+.nav_banner{
+  margin-top: 10px;
 }

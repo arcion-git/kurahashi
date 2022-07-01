@@ -131,7 +131,7 @@
                     <div id="deal_cancel_button" class="btn btn-danger">キャンセル</div>
                 @endif
 
-                @if($deal->status == '発注済')
+                @if($deal->status == '発注済' or $deal->status == 'キャンセル')
                 @else
                     <button type="submit" name="deal_id" value="{{ $deal->id }}" class="btn btn-warning">この内容で発注する</button>
                 @endif
@@ -139,8 +139,11 @@
                 <!-- <div class="float-right">
                     <button type="submit" name="deal_id" value="{{ $deal->id }}" class="btn btn-warning">キャンセルする</button>
                 </div> -->
+                @if($deal->status == '発注済' or $deal->status == 'キャンセル')
+                @else
                 @if ( Auth::guard('admin')->check() )
                     <button type="submit" name="deal_id" value="{{ $deal->id }}" class="btn btn-warning">更新を通知する</button>
+                @endif
                 @endif
                 </div>
                 <!-- <button type="button" class="updateorder btn">更新確認</button> -->
@@ -166,4 +169,6 @@
       </div>
     </div>
   </section>
+
+
 @endsection

@@ -83,10 +83,25 @@
         var selected = $(this).val();
         // alert('test');
         //     console.log(selected);
-        if ( selected === '1' ) {
+        if ( selected == '1' ) {
           $('#maekabu').show();
-        } else{
+          $('#kojin').hide();
+        }else if ( selected == '2' ){
+          $('#kojin').show();
           $('#maekabu').hide();
+        }else{
+          $('#maekabu').hide();
+          $('#kojin').hide();
+        }
+      });
+      $(document).on("change", "#unei_company_hjkjKbn", function() {
+        var selected = $(this).val();
+        // alert('test');
+        //     console.log(selected);
+        if ( selected === '1' ) {
+          $('#unei_company_detail_houjinkaku').show();
+        } else{
+          $('#unei_company_detail_houjinkaku').hide();
         }
       });
       $('#unei_company').click(function(){
@@ -98,13 +113,15 @@
               // alert('not checked!');
           }
       });
-      $('[name="soufu"]:radio').change( function() {
+      $('[name="sqssfKbn"]:radio').change( function() {
         if($('[id=その他]').prop('checked')){
               $('#soufu_detail').show();
-              alert('checked!');
         }else{
+              $('#soufu_detail').hide();
         }
       });
+
+
 
     });
     </script>

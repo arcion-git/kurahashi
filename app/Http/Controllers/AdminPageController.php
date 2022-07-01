@@ -151,7 +151,7 @@ class AdminPageController extends Controller
     $data=[
       'carts'=>$carts,
       'cart_ninis' => $cart_ninis,
-      'deal'=>$deal
+      'deal'=>$deal,
     ];
     return view('dealdetail', $data);
   }
@@ -269,54 +269,6 @@ class AdminPageController extends Controller
     $setonagi_users = Setonagi::get();
     $now = Carbon::now();
 
-
-    // $user = User::where('id', 7 )->first();
-    // dd($user->setonagi()->kakebarai_limit);
-
-    // dd($setonagi);
-
-    // ヤマトAPI連携確認
-    // foreach ($setonagi_users as $setonagi_user) {
-    //   $user_id = $setonagi_user->user_id;
-    //   $client = new Client();
-    //   $url = 'https://demo.yamato-credit-finance.jp/kuroneko-anshin/AN070APIAction.action';
-    //   $option = [
-    //     'headers' => [
-    //       'Accept' => '*/*',
-    //       'Content-Type' => 'application/x-www-form-urlencoded',
-    //       'charset' => 'UTF-8',
-    //     ],
-    //     'form_params' => [
-    //       'traderCode' => '330000051',
-    //       // バイヤーid
-    //       'buyerId' => $user_id,
-    //       'buyerTelNo' => '',
-    //       'passWord' => 'UzhJlu8E'
-    //     ]
-    //   ];
-    //   // dd($option);
-    //   $response = $client->request('POST', $url, $option);
-    //   $result = simplexml_load_string($response->getBody()->getContents());
-    //   // dd($result);
-    //   $setonagi_user = Setonagi::where('user_id',$user_id)->first();
-    //   $setonagi_user->kakebarai_limit = $result->useOverLimit;
-    //   $setonagi_user->kakebarai_sinsa = $result->judgeStatus;
-    //   $setonagi_user->kakebarai_update_time = $now;
-    //   $setonagi_user->save();
-    // }
-
-    // dd($sinsa );
-    // if($result->returnCode == 1){
-    //   $delete_deal = Deal::where(['id'=> $deal_id])->first()->delete();
-    //   $message = 'error';
-    //   $data=[
-    //     'message' => $message,
-    //   ];
-    //   return redirect()->route('confirm',$data);
-    // }
-
-
-
     return view('admin.auth.user', ['users' => $users]);
   }
 
@@ -327,77 +279,63 @@ class AdminPageController extends Controller
     $setonagi_users = Setonagi::get();
     $now = Carbon::now();
 
-
-    // $user = User::where('id', 7 )->first();
-    // dd($user->setonagi()->kakebarai_limit);
-
     // dd($setonagi);
 
     // // ヤマトAPI連携審査状況確認
-    // foreach ($setonagi_users as $setonagi_user) {
-    //   $user_id = $setonagi_user->user_id;
-    //   $client = new Client();
-    //   $url = 'https://demo.yamato-credit-finance.jp/kuroneko-anshin/AN070APIAction.action';
-    //   $option = [
-    //     'headers' => [
-    //       'Accept' => '*/*',
-    //       'Content-Type' => 'application/x-www-form-urlencoded',
-    //       'charset' => 'UTF-8',
-    //     ],
-    //     'form_params' => [
-    //       'traderCode' => '330000051',
-    //       // バイヤーid
-    //       'buyerId' => $user_id,
-    //       'buyerTelNo' => '',
-    //       'passWord' => 'UzhJlu8E'
-    //     ]
-    //   ];
-    //   // dd($option);
-    //   $response = $client->request('POST', $url, $option);
-    //   $result = simplexml_load_string($response->getBody()->getContents());
-    //   // dd($result);
-    //   $setonagi_user = Setonagi::where('user_id',$user_id)->first();
-    //   $setonagi_user->kakebarai_limit = $result->useOverLimit;
-    //   $setonagi_user->kakebarai_sinsa = $result->judgeStatus;
-    //   $setonagi_user->kakebarai_update_time = $now;
-    //   $setonagi_user->save();
-    //
-    // // ヤマトAPI連携利用金額確認
-    //   $client = new Client();
-    //   $url = 'https://demo.yamato-credit-finance.jp/kuroneko-anshin/AN050APIAction.action';
-    //   $option = [
-    //     'headers' => [
-    //       'Accept' => '*/*',
-    //       'Content-Type' => 'application/x-www-form-urlencoded',
-    //       'charset' => 'UTF-8',
-    //     ],
-    //     'form_params' => [
-    //       'traderCode' => '330000051',
-    //       // バイヤーid
-    //       'buyerId' => $user_id,
-    //       'buyerTelNo' => '',
-    //       'passWord' => 'UzhJlu8E'
-    //     ]
-    //   ];
-    //   // dd($option);
-    //   $response = $client->request('POST', $url, $option);
-    //   $result = simplexml_load_string($response->getBody()->getContents());
-    //   // dd($result->usePayment);
-    //   $setonagi_user = Setonagi::where('user_id',$user_id)->first();
-    //   $setonagi_user->kakebarai_usepay = $result->usePayment;
-    //   $setonagi_user->save();
-    // }
+    foreach ($setonagi_users as $setonagi_user) {
+      $user_id = $setonagi_user->user_id;
+      $client = new Client();
+      $url = 'https://demo.yamato-credit-finance.jp/kuroneko-anshin/AN070APIAction.action';
+      $option = [
+        'headers' => [
+          'Accept' => '*/*',
+          'Content-Type' => 'application/x-www-form-urlencoded',
+          'charset' => 'UTF-8',
+        ],
+        'form_params' => [
+          'traderCode' => '330000051',
+          // バイヤーid
+          'buyerId' => $user_id,
+          'buyerTelNo' => '',
+          'passWord' => 'UzhJlu8E'
+        ]
+      ];
+      // dd($option);
+      $response = $client->request('POST', $url, $option);
+      $result = simplexml_load_string($response->getBody()->getContents());
+      // dd($result);
+      $setonagi_user = Setonagi::where('user_id',$user_id)->first();
+      $setonagi_user->kakebarai_limit = $result->useOverLimit;
+      $setonagi_user->kakebarai_sinsa = $result->judgeStatus;
+      $setonagi_user->kakebarai_update_time = $now;
+      $setonagi_user->save();
 
+    // ヤマトAPI連携利用金額確認
+      $client = new Client();
+      $url = 'https://demo.yamato-credit-finance.jp/kuroneko-anshin/AN050APIAction.action';
+      $option = [
+        'headers' => [
+          'Accept' => '*/*',
+          'Content-Type' => 'application/x-www-form-urlencoded',
+          'charset' => 'UTF-8',
+        ],
+        'form_params' => [
+          'traderCode' => '330000051',
+          // バイヤーid
+          'buyerId' => $user_id,
+          'buyerTelNo' => '',
+          'passWord' => 'UzhJlu8E'
+        ]
+      ];
+      // dd($option);
+      $response = $client->request('POST', $url, $option);
+      $result = simplexml_load_string($response->getBody()->getContents());
+      // dd($result->usePayment);
+      $setonagi_user = Setonagi::where('user_id',$user_id)->first();
+      $setonagi_user->kakebarai_usepay = $result->usePayment;
+      $setonagi_user->save();
+    }
 
-    // dd($sinsa );
-    // if($result->returnCode == 1){
-    //   $delete_deal = Deal::where(['id'=> $deal_id])->first()->delete();
-    //   $message = 'error';
-    //   $data=[
-    //     'message' => $message,
-    //   ];
-    //   return redirect()->route('confirm',$data);
-    // }
 
 
 
@@ -679,7 +617,7 @@ class AdminPageController extends Controller
     return view('repeatorder', $data);
   }
 
-
+// リピートオーダー追加
   public function addrepeatorder(Request $request){
 
     $item_id = $request->item_id;
@@ -807,5 +745,270 @@ class AdminPageController extends Controller
 
 
 
+
+
+
+  // Ajax
+  // 商品の配送先を削除
+  public function removeorder(Request $request){
+    $order_id = $request->order_id;
+    $cart_id = $request->cart_id;
+
+    $delete_order=Order::where(['id'=> $order_id])->first()->delete();
+
+    $orders=Order::where(['cart_id'=> $cart_id])->first();
+
+    if(empty($orders)){
+    $delete_cart=Cart::where(['id'=> $cart_id])->first()->delete();
+    }
+
+    $data = "sucsess";
+    return redirect()->route('home',$data);
+  }
+
+  // 任意の商品の配送先を削除
+  public function removeordernini(Request $request){
+    $order_nini_id = $request->order_nini_id;
+    $cart_nini_id = $request->cart_nini_id;
+
+    $delete_order=OrderNini::where(['id'=> $order_nini_id])->first()->delete();
+
+    $orders=OrderNini::where(['cart_nini_id'=> $cart_nini_id])->first();
+    if(empty($orders)){
+    $delete_cart=CartNini::where(['id'=> $cart_nini_id])->first()->delete();
+    }
+
+    $data = "sucsess";
+    return redirect()->route('home',$data);
+  }
+
+  // 個数を変更
+  public function change_quantity(Request $request){
+    $order_id = $request->order_id;
+    $quantity = $request->quantity;
+
+    $order=Order::where(['id'=> $order_id])->update(['quantity'=> $quantity]);
+
+    $data = "sucsess";
+    return redirect()->route('home',$data);
+  }
+
+  // 納品予定日を変更
+  public function change_nouhin_yoteibi(Request $request){
+    $order_id = $request->order_id;
+    $nouhin_yoteibi = $request->nouhin_yoteibi;
+
+    $order=Order::where(['id'=> $order_id])->update(['nouhin_yoteibi'=> $nouhin_yoteibi]);
+
+    $data = "sucsess";
+    return redirect()->route('home',$data);
+  }
+
+  // 配送先店舗を変更
+  public function change_store(Request $request){
+    $order_id = $request->order_id;
+    $store_name = $request->store_name;
+    $tokuisaki_name = $request->tokuisaki_name;
+
+    $store = Store::where(['tokuisaki_name'=>$tokuisaki_name,'store_name'=> $store_name])->first();
+    $price_groupe = PriceGroupe::where([ 'tokuisaki_id'=> $store->tokuisaki_id,'store_id'=> $store->store_id ])->first();
+
+    $order = Order::where(['id'=> $order_id])->first();
+    $cart_id = $order->cart_id;
+    $cart = Cart::where(['id'=> $cart_id])->first();
+    $item = Item::where('id',$cart->item_id)->first();
+
+    $price = Price::where(['price_groupe'=>$price_groupe->price_groupe, 'item_id'=> $item->item_id, 'sku_code'=> $item->sku_code])->first();
+
+    $order = Order::where(['id'=> $order_id])->update(['store_name'=> $store_name,'tokuisaki_name'=> $tokuisaki_name,'price'=> $price->price]);
+
+    $order = Order::where(['id'=> $order_id])->first();
+
+    $kaiin_number = Auth::guard('user')->user()->kaiin_number;
+    // Log::debug($kaiin_number);
+
+    // 市況商品価格上書き
+    $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])->first();
+    if(isset($special_price_item->price)){
+    $order->price = $special_price_item->price;
+    }
+
+    // セトナギ商品上書き
+    $setonagi_item = SetonagiItem::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])->first();
+    if(isset($setonagi_item->price)){
+      $order->price = $setonagi_item->price;
+    }
+
+    // 担当のおすすめ商品価格上書き
+    $recommend_item = Recommend::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'user_id'=>$kaiin_number])->first();
+    if(isset($recommend_item->price)){
+    $order->price = $recommend_item->price;
+    }
+
+    $order->save();
+
+    $data = "success";
+
+    return redirect()->route('home',$data);
+  }
+
+  // 全店舗に追加
+  public function add_all_store(Request $request){
+    $order_id = $request->order_id;
+
+    $order = Order::where(['id'=> $order_id])->first();
+    $cart_id = $order->cart_id;
+    $cart = Cart::where(['id'=> $cart_id])->first();
+
+    $item = Item::where('id',$cart->item_id)->first();
+
+    // 保存中の店舗を削除
+    $order_delete = Order::where('cart_id', $cart_id)->delete();
+
+    // 店舗を抽出して保存
+    $kaiin_number = Auth::guard('user')->user()->kaiin_number;
+    $store_users = StoreUser::where('user_id',$kaiin_number)->get(['store_id','tokuisaki_id']);
+
+    foreach ($store_users as $store_user) {
+      $store = Store::where([ 'tokuisaki_id'=> $store_user->tokuisaki_id,'store_id'=> $store_user->store_id ])->first();
+
+      $price_groupe = PriceGroupe::where([ 'tokuisaki_id'=> $store_user->tokuisaki_id,'store_id'=> $store_user->store_id ])->first();
+
+      $price = Price::where(['price_groupe'=>$price_groupe->price_groupe, 'item_id'=> $item->item_id , 'sku_code'=> $item->sku_code])->first();
+
+      $price = $price->price;
+
+      // 市況商品価格上書き
+      $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])->first();
+      if(isset($special_price_item->price)){
+        $price = $special_price_item->price;
+      }
+
+      // セトナギ商品上書き
+      $setonagi_item = SetonagiItem::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])->first();
+      if(isset($setonagi_item->price)){
+        $price = $setonagi_item->price;
+      }
+
+      // 担当のおすすめ商品価格上書き
+      $recommend_item = Recommend::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'user_id'=>$kaiin_number])->first();
+      if(isset($recommend_item->price)){
+        $price = $recommend_item->price;
+      }
+
+      $order=Order::create(['cart_id'=> $cart->id , 'tokuisaki_name'=> $store->tokuisaki_name , 'store_name'=> $store->store_name , 'quantity'=> 1 , 'price'=> $price ])->first();
+      // Log::debug("count");
+
+      $order->save();
+
+    }
+    $data = "success";
+
+    return redirect()->route('home',$data);
+  }
+
+  // 任意の配送先店舗を変更
+  public function nini_change_store(Request $request){
+    $order_nini_id = $request->order_nini_id;
+    $nini_store_name = $request->nini_store_name;
+    $nini_tokuisaki_name = $request->nini_tokuisaki_name;
+    $order_nini = OrderNini::where(['id'=> $order_nini_id])->update(['store_name'=> $nini_store_name,'tokuisaki_name'=> $nini_tokuisaki_name]);
+    $data = "success";
+    return redirect()->route('home',$data);
+  }
+
+  // 任意の商品の配送先を全店舗に追加
+  public function nini_add_all_store(Request $request){
+    $order_nini_id = $request->order_nini_id;
+
+    $order_nini = Ordernini::where(['id'=> $order_nini_id])->first();
+
+
+
+    // 保存中の店舗を削除
+    $order_nini_delete = Ordernini::where('cart_nini_id', $order_nini->cart_nini_id)->delete();
+
+    // 店舗を抽出して保存
+    $kaiin_number = Auth::guard('user')->user()->kaiin_number;
+    $store_users = StoreUser::where('user_id',$kaiin_number)->get(['store_id','tokuisaki_id']);
+
+    // Log::debug($store_users);
+
+    foreach ($store_users as $store_user) {
+      $store = Store::where([ 'tokuisaki_id'=> $store_user->tokuisaki_id,'store_id'=> $store_user->store_id ])->first();
+      $order_nini=Ordernini::create(['cart_nini_id'=> $order_nini->cart_nini_id , 'tokuisaki_name'=> $store->tokuisaki_name , 'store_name'=> $store->store_name , 'quantity'=> 1]);
+    }
+    $data = "success";
+
+    return redirect()->route('home',$data);
+  }
+
+  // 任意の担当を保存
+  public function nini_change_tantou(Request $request){
+    $nini_tantou = $request->nini_tantou;
+    $cart_nini_id = $request->cart_nini_id;
+    $cart_nini_tantou= CartNini::where(['id'=> $cart_nini_id])->update(['tantou_name'=> $nini_tantou]);
+    $data = "success";
+    return redirect()->route('home',$data);
+  }
+
+  // 任意の商品名を保存
+  public function nini_change_item_name(Request $request){
+    $nini_item_name = $request->nini_item_name;
+    $cart_nini_id = $request->cart_nini_id;
+    $cart_nini_item_name= CartNini::where(['id'=> $cart_nini_id])->update(['item_name'=> $nini_item_name]);
+    $data = "success";
+    return redirect()->route('home',$data);
+  }
+
+  // 任意の数量を保存
+  public function nini_change_quantity(Request $request){
+    $nini_quantity = $request->nini_quantity;
+    $order_nini_id = $request->order_nini_id;
+    $order_nini_quantity = OrderNini::where(['id'=> $order_nini_id])->update(['quantity'=> $nini_quantity]);
+    $data = "success";
+    return redirect()->route('home',$data);
+  }
+
+  // 任意の納品予定日を保存
+  public function nini_change_nouhin_yoteibi(Request $request){
+    $nini_nouhin_yoteibi = $request->nini_nouhin_yoteibi;
+    $order_nini_id = $request->order_nini_id;
+    $order_nini_quantity = OrderNini::where(['id'=> $order_nini_id])->update(['nouhin_yoteibi'=> $nini_nouhin_yoteibi]);
+    $data = "success";
+    return redirect()->route('home',$data);
+  }
+
+  // 配送先店舗を追加
+  public function clonecart(Request $request){
+    $user_id = Auth::guard('user')->user()->id;
+    $cart_id = $request->cart_id;
+    $order=Order::Create(['cart_id'=> $cart_id , 'tokuisaki_name'=>'' , 'nouhin_yoteibi'=> '', 'quantity'=> 1]);
+    $data = "sucsess";
+    return redirect()->route('home',$data);
+  }
+
+  // 任意の商品を追加
+  public function addniniorder(Request $request){
+    $user_id = Auth::guard('user')->user()->id;
+    if(isset($request->deal_id)){
+      $cart_nini=CartNini::Create(['user_id'=> $user_id , 'deal_id'=> $request->deal_id]);
+      $order_nini=OrderNini::Create(['cart_nini_id'=> $cart_nini->id , 'deal_id'=> $request->deal_id , 'tokuisaki_name'=>'' , 'nouhin_yoteibi'=> '', 'quantity'=> 1]);
+    }else{
+      $cart_nini=CartNini::Create(['user_id'=> $user_id]);
+      $order_nini=OrderNini::Create(['cart_nini_id'=> $cart_nini->id , 'tokuisaki_name'=>'' , 'nouhin_yoteibi'=> '', 'quantity'=> 1]);
+    }
+    $data = "sucsess";
+    return redirect()->route('home',$data);
+  }
+
+  // 任意の配送先を追加
+  public function addordernini(Request $request){
+    $user_id = Auth::guard('user')->user()->id;
+    $cart_nini_id = $request->cart_nini_id;
+    $order=OrderNini::Create(['cart_nini_id'=> $cart_nini_id , 'tokuisaki_name'=>'' , 'nouhin_yoteibi'=> '', 'quantity'=> 1]);
+    $data = "sucsess";
+    return redirect()->route('home',$data);
+  }
 
 }

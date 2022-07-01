@@ -77,6 +77,18 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+
+      // $array1 = array(
+      // 	"color" => "red",
+      // );
+      // $array2 = array(
+      // 	"color" => "green",
+      //   "shape" => "trapezoid",
+      // );
+      // $result = array_merge($array1, $array2);
+      //
+      // dd($result);
+
       // dd($data);
       $create_user = User::create([
           'email' => $data['email'],
@@ -125,8 +137,6 @@ class RegisterController extends Controller
           'traderCode' => '330000051',
           'cId' => $user_id,
           'hjkjKbn' => $data['hjkjKbn'],
-          'houjinKaku' => $data['houjinKaku'],
-          'houjinZengo' => $data['houjinZengo'],
           'sMei' => $data['company'],
           'shitenMei' => '',
           'sMeikana' => $data['company_kana'],
@@ -154,8 +164,8 @@ class RegisterController extends Controller
           'szUmu' => 0,
 
           // 運営会社情報エリア(No.26「運営会社有無」が「運営会社有り:1」の場合に、指定可能です。)
-          // 'szHjkjKbn' => '1',
-          // 'szHoujinKaku' => '12',
+          // 'szHjkjKbn' => '',
+          // 'szHoujinKaku' => '',
           // 'szHoujinZengo' => '1',
           // 'szHonknjmei' => '黒猫商店',
           // 'szHonknamei' => 'クロネコショウテン',
@@ -182,6 +192,75 @@ class RegisterController extends Controller
           'passWord' => 'UzhJlu8E'
         ]
       ];
+      if($data['hjkjKbn'] == '1'){
+        $option_add = [
+          'form_params' => [
+            'houjinKaku' => $data['houjinKaku'],
+            'houjinZengo' => $data['houjinZengo'],
+            // 代表者情報エリア(No.3 「法人・個人事業主」が「個人事業主:2」の場合に、指定可能です。)
+            // 'daiYbnno' => $data['daiYbnno'],
+            // 'daiAddress' => $data['daiAddress']
+          ]
+        ];
+      }
+      // 運営会社情報エリア(No.26「運営会社有無」が「運営会社有り:1」の場合に、指定可能です。)
+      if(isset($data['unei_company'])){
+        if($data['unei_company'] == '1'){
+          $option_add = [
+          'form_params' => [
+            // 運営会社有無
+            'szUmu' => 1,
+            // 法人個人
+            'szHjkjKbn' => $data['unei_company_hjkjKbn'],
+            // 運営会社情報エリア
+            'szHonknjmei' => $data['szHonknjmei'],
+            'szHonknamei' => $data['szHonknamei'],
+            'szYbnno' => $data['szaddress01'],
+            'szAddress' => $data['szaddress02'].$data['szaddress03'].$data['szaddress04'].$data['szaddress05'],
+            'szTelno' => $data['szTelno'],
+            'szDaikjmei_sei' => $data['szDaikjmei_sei'],
+            // 'szDaikjmei_mei' => $data['szDaikjmei_mei'],
+            // 'szDaiknamei_sei' => $data['szDaiknamei_sei'],
+            // 'szDaiknamei_mei' => $data['szDaiknamei_mei'],
+            ]
+          ];
+          $option = array_replace_recursive($option, $option_add);
+          // dd($option);
+        }
+        if($data['szHjkjKbn'] == '1'){
+          $option_add = [
+          'form_params' => [
+            'szhoujinKaku' => $data['szhoujinKaku'],
+            'szHoujinZengo' => $data['szHoujinZengo'],
+            ]
+          ];
+          $option = array_replace_recursive($option, $option_add);
+          // dd($option);
+        }
+      }
+      // 請求書送付先情報エリア(No.39「送付先選択」が「その他:9」の場合に、指定可能です。
+      if(isset($data['sqssfKbn'])){
+        if($data['sqssfKbn'] == '9'){
+          $option_add = [
+            'form_params' => [
+              // 送付先選択
+              'sqssfKbn' => '9',
+              // 請求書送付先情報エリア
+              'sqYbnno' => $data['sqaddress01'],
+              'sqAddress' => $data['sqaddress02'].$data['sqaddress03'].$data['sqaddress04'].$data['sqaddress05'],
+              'sofuKnjnam' => $data['sofuKnjnam'],
+              'sofuTntnam' => $data['sofuTntnam'],
+              'syz' => $data['syz'],
+              'kmsTelno' => $data['kmsTelno'],
+            ]
+          ];
+          $option = array_replace_recursive($option, $option_add);
+          // dd($option);
+        }
+      }
+
+
+
       // dd($option);
       $response = $client->request('POST', $url, $option);
       $result = simplexml_load_string($response->getBody()->getContents());

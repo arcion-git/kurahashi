@@ -19,6 +19,7 @@ class CreateItemsTable extends Migration
             $table->string('item_id')->nullable()->comment('商品コード');
             $table->string('sku_code')->nullable()->comment('SKUコード');
             $table->string('item_name')->nullable()->comment('商品名');
+            $table->string('item_name_kana')->nullable()->comment('商品名ひらがな');
             $table->string('keiyaku')->nullable()->comment('契約区分');
             $table->string('kikaku')->nullable()->comment('規格');
             $table->string('ninushi_code')->nullable()->comment('荷主コード');

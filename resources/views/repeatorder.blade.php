@@ -45,7 +45,7 @@
             <form id="saveform" action="{{ url('/admin/user/saverepeatorder') }}" enctype="multipart/form-data" method="POST" class="form-horizontal">
               @csrf
               <div class="table-responsive">
-                <table class="table table-striped table-md" style="table-layout: fixed;">
+                <table class="table table-striped table-md" style="table-layout: auto;">
                   <tr>
                     <th class="text-center">商品番号</th>
                     <th class="text-center">商品名</th>
@@ -57,9 +57,11 @@
                     <th class="text-center head-nouhin_youbi">納品</th>
                     <th class="text-center head-store">納品先店舗</th>
                     <th class="text-center head-startdate">開始日</th>
-                    <th class="text-center head-shoukei">小計</th>
+                    <!-- <th class="text-center head-shoukei">小計</th> -->
+                    @if ( Auth::guard('admin')->check() )
                     <th class="text-center head-yuukou">有効/無効</th>
                     <th class="text-center head-sousa">操作</th>
+                    @endif
                   </tr>
   		            @foreach($repeatcarts as $repeatcart)
                   <tr id="{{$repeatcart->id}}">
@@ -76,7 +78,7 @@
                       {{$repeatcart->item()->kikaku}}
                     </td>
 
-                    <td colspan="8" class="order-table">
+                    <td colspan="8" class="order-table repeat_order_table">
               				<table class="table table-striped table-hover table-md" style="table-layout: fixed;">
               				@foreach($repeatcart->orders as $val)
               					<tr id="{{$val->id}}">
@@ -139,7 +141,7 @@
 
                           </td>
                           <td class="head-store text-center">
-              							<select name="repeatorder[{{$val->id}}][store]" class="store text-center form-control" value="{{$val->tokuisaki_name}},{{$val->store_name}}" required>
+              							<select name="repeatorder[{{$val->id}}][store]" class="repeatorder_store text-center form-control" value="{{$val->tokuisaki_name}},{{$val->store_name}}" required>
               								<option id="{{$val->tokuisaki_name}}" value="{{$val->tokuisaki_name}},{{$val->store_name}}">{{$val->tokuisaki_name}} {{$val->store_name}}</option>
               								@foreach($stores as $store)
               								<option id="{{$store->tokuisaki_name}}" value="{{$store->tokuisaki_name}},{{$store->store_name}}">{{$store->tokuisaki_name}} {{$store->store_name}}</option>
@@ -149,7 +151,8 @@
                           <td class="text-center head-startdate" width="150">
         										<input type="text" name="repeatorder[{{$val->id}}][startdate]" class="startdate text-center form-control daterange-cus datepicker" value="{{$val->startdate}}" autocomplete="off" required>
                           </td>
-                          <td class="text-center head-shoukei"></td>
+                          <!-- <td class="text-center head-shoukei"></td> -->
+                          @if ( Auth::guard('admin')->check() )
                           <td class="text-center head-yuukou">
                             <div class="form-group">
                               <label class="mt-4">
@@ -185,6 +188,7 @@
               							<button style="margin-top:10px;" type="button" id="{{$repeatcart->item()->id}}" class="cloneid_{{$val->id}} clonerepeatorder btn btn-success">配送先を追加</button>
               						<input name="order_id[]" class="order_id" type="hidden" value="{{$val->id}}" />
               						</td>
+                          @endif
               					</tr>
               				@endforeach
               				</table>
@@ -194,10 +198,14 @@
 
                 </table>
               </div>
+              @if ( Auth::guard('admin')->check() )
               <input id="kaiin_number" name="kaiin_number" type="hidden" value="{{$id}}">
               <button id="send" type="submit" class="btn btn-warning float-right">内容を保存</button>
+              @endif
             </form>
+            @if ( Auth::guard('admin')->check() )
             <button class="addrepeatorder btn btn-success" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus"></i> 商品を追加</button>
+            @endif
           </div>
         </div>
       </div>
@@ -221,17 +229,36 @@
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header serch-form-header">
         <h5 class="modal-title" id="exampleModalLabel">商品一覧</h5>
+        <!-- 検索窓 -->
+        <div class="search-text">
+          <form>
+            <div class="input-group">
+              <input type="text" id="search-text" class="form-control" placeholder="検索">
+              <div class="input-group-append">
+                <button class="btn btn-primary"><i class="fas fa-search"></i></button>
+              </div>
+            </div>
+          </form>
+        </div>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
+        <!-- 検索リスト -->
+        <div class="search-result">
+          <div class="search-result__hit-num"></div>
+        </div>
+        <!-- 検索リスト -->
         <form action="{{ url('/admin/user/addrepeatorder') }}" method="POST" class="form-horizontal">
           {{ csrf_field() }}
           <div class="table-responsive">
-            <table class="table table-striped">
+            <table id="search-result__list" class="table table-striped">
+
+            </table>
+            <table class="table table-striped target-area">
               <tr>
                 <th class="text-center">商品番号</th>
                 <th class="">商品名</th>
@@ -340,6 +367,7 @@ $(document).ready(function(){
 
 
 <script>
+@if ( Auth::guard('admin')->check() )
 $('.datepicker').datepicker({
 	format: 'yyyy-mm-dd',
 	autoclose: true,
@@ -349,6 +377,7 @@ $('.datepicker').datepicker({
 	endDate: '+31d',
 	defaultViewDate: Date()
 });
+@endif
 // $('.nouhin_youbi_checkbox').on('click', function(){
 //   $(this).toggleClass('isActive');
 // })
@@ -375,5 +404,76 @@ $(document).on("click", ".nouhin_youbi", function() {
 //   console.log(search);
 // 	document.getElementById(input).value = search;
 // }
+
+@if ( Auth::guard('user')->check() )
+if(document.URL.match("/repeatorder")) {
+  $(function(){
+		$('input').attr('readonly',true);
+		$('select').attr('readonly',true);
+		$('select').addClass('arrow_hidden');
+		$("select[readonly] > option:not(:selected)").attr('disabled', 'disabled');
+		$('textarea').attr('readonly',true);
+		$('select').attr("disabled", true);
+		$('.nouhin_youbi_checkbox').attr("disabled", true);
+		$('.head-sousa').remove();
+		$('.addniniorder').remove();
+  });
+}
+@endif
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+<script>
+$(function () {
+  searchWord = function(){
+    var searchResult,
+        searchText = $(this).val(), // 検索ボックスに入力された値
+        targetText,
+        hitNum;
+
+    // 検索結果を格納するための配列を用意
+    searchResult = [];
+
+    // 検索結果エリアの表示を空にする
+    $('#search-result__list').empty();
+    $('.search-result__hit-num').empty();
+
+    // 検索ボックスに値が入ってる場合
+    if (searchText != '') {
+      $('.target-area tr').each(function() {
+        targetText = $(this).text();
+
+        // 検索対象となるリストに入力された文字列が存在するかどうかを判断
+        if (targetText.indexOf(searchText) != -1) {
+          // 存在する場合はそのリストのテキストを用意した配列に格納
+          searchResult.push($(this).html());
+        }
+        $('.target-area').hide();
+      });
+      console.log(searchResult);
+
+      // 検索結果にヘッダーを追加
+      header = '<tr><th class="text-center">商品番号</th><th class="">商品名</th><th class="text-center">産地</th><th class="text-center">規格</th><th class="text-center">単位</th><th class="text-center">在庫数</th><th class="text-center">特記事項</th><th class="text-center" style="min-width:130px;">操作</th></tr>';
+
+      $('#search-result__list').append(header);
+
+      // 検索結果をページに出力
+      for (var i = 0; i < searchResult.length; i ++) {
+        $('<tr>').html(searchResult[i]).appendTo('#search-result__list');
+      }
+
+      // ヒットの件数をページに出力
+      hitNum = '<span>検索結果</span>：' + searchResult.length + '件見つかりました。';
+      $('.search-result__hit-num').append(hitNum);
+    }else{
+      // 検索ボックスに値が入っていない場合
+      $('.target-area').show();
+    }
+  };
+
+  // searchWordの実行
+  $('#search-text').on('input', searchWord);
+});
 </script>
 @endsection

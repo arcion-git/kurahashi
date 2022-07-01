@@ -79,7 +79,7 @@
                     <form action="{{ url('/admin/riyoukyoka') }}" method="POST" class="form-horizontal">
                       {{ csrf_field() }}
                       <input type="hidden" name="user_id" value="{{$user->id}}" />
-                      <button type="submit" class="btn btn-warning">利用許可</button>
+                      <button type="submit" class="riyoukyoka_btn btn btn-warning">利用許可</button>
                     </form>
                     @endif
                     @if($user->setonagi()->kakebarai_sinsa == 'ご利用不可' & $user->setonagi()->kakebarai_riyou == '')
@@ -125,25 +125,6 @@
   </div>
 </section>
 
-
-<script>
-$(".btn").click(function(e){
-  e.preventDefault();
-  var form = $(this).parents('form');
-  Swal.fire({
-    title: '送信確認',
-    html : 'ユーザーにメールを送信して利用を許可しますか？',
-    icon : 'warning',
-    showCancelButton: true,
-	  cancelButtonText: 'キャンセル',
-    confirmButtonText: '利用を許可'
-  }).then((result) => {
-    if (result.value) {
-      form.submit();
-    }
-  });
-});
-</script>
 
 
 @endsection

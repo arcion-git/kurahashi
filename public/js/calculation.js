@@ -426,8 +426,10 @@ if(document.URL.match("/admin/deal")) {
 
   // 任意の商品を追加
   $(document).on("click", ".addniniorder", function() {
-    // var deal_id = $(this).parent().parent().parent().parent().parent().parent().get(0).id;
-    // console.log(deal_id);
+    var deal_id = $(this).get(0).id;
+    var kaiin_number = $(this).prev().get(0).id;
+    console.log(deal_id);
+    console.log(kaiin_number);
     // $(this).parent().parent().clone(true).insertAfter($(this).parent().parent());
 
       $.ajax({
@@ -437,6 +439,8 @@ if(document.URL.match("/admin/deal")) {
         url: location.origin + '/addniniorder',
         type: 'POST', //リクエストタイプ
         data: {
+          'deal_id': deal_id,
+          'kaiin_number': kaiin_number,
         } //Laravelに渡すデータ
       })
       // Ajaxリクエスト成功時の処理
@@ -651,12 +655,14 @@ if(document.URL.match("/admin/deal")) {
 
   // 配送先店舗を保存
   $(document).on("change", ".store", function() {
+    var kaiin_number = $(this).parent().parent().parent().parent().parent().parent().parent().parent().get(0).id;
     var order_id = $(this).parent().parent().get(0).id;
     var store_name = $(this).val();
     var tokuisaki_name = $(this).find('option:selected').get(0).id;
     console.log(order_id);
     console.log(store_name);
     console.log(tokuisaki_name);
+    console.log(kaiin_number);
     // 全店舗に追加の分岐
     if(store_name == 'all_store') {
       Swal.fire({
@@ -681,6 +687,7 @@ if(document.URL.match("/admin/deal")) {
             url: location.origin + '/add_all_store',
             type: 'POST', //リクエストタイプ
             data: {
+              'kaiin_number': kaiin_number,
               'order_id': order_id,
               'store_name': store_name,
               'tokuisaki_name': tokuisaki_name,
@@ -723,6 +730,7 @@ if(document.URL.match("/admin/deal")) {
         url: location.origin + '/change_store',
         type: 'POST', //リクエストタイプ
         data: {
+          'kaiin_number': kaiin_number,
           'order_id': order_id,
           'store_name': store_name,
           'tokuisaki_name': tokuisaki_name,
@@ -929,9 +937,11 @@ if(document.URL.match("/admin/deal")) {
 
   // 任意の配送先店舗を保存
   $(document).on("change", ".nini_store", function() {
+    var kaiin_number = $(this).parent().parent().parent().parent().parent().parent().parent().parent().get(0).id;
     var order_nini_id = $(this).parent().parent().get(0).id;
     var nini_store_name = $(this).val();
     var nini_tokuisaki_name = $(this).find('option:selected').get(0).id;
+    console.log(kaiin_number);
     console.log(order_nini_id);
     console.log(nini_store_name);
     console.log(nini_tokuisaki_name);
@@ -959,6 +969,7 @@ if(document.URL.match("/admin/deal")) {
             url: location.origin + '/nini_add_all_store',
             type: 'POST', //リクエストタイプ
             data: {
+              'kaiin_number': kaiin_number,
               'order_nini_id': order_nini_id,
               'nini_store_name': nini_store_name,
               'nini_tokuisaki_name': nini_tokuisaki_name,
@@ -1001,6 +1012,7 @@ if(document.URL.match("/admin/deal")) {
         url: location.origin + '/nini_change_store',
         type: 'POST', //リクエストタイプ
         data: {
+          'kaiin_number': kaiin_number,
           'order_nini_id': order_nini_id,
           'nini_store_name': nini_store_name,
           'nini_tokuisaki_name': nini_tokuisaki_name,
@@ -1138,15 +1150,67 @@ if(document.URL.match("/admin/user/repeatorder")) {
 }
 
 
-
-
-
-
-$(function(){
-  $("#deal_cancel_button").on("click",function(){
-    $('#deal_cancel').submit();
+// 取引キャンセル前のポップアップ
+$("#deal_cancel_button").on("click",function(e){
+  Swal.fire({
+    title: 'キャンセル確認',
+    html : 'この取引を本当にキャンセルしますか？',
+    icon : 'warning',
+    showCancelButton: true,
+	  cancelButtonText: '前の画面に戻る',
+    confirmButtonText: 'キャンセルする'
+  }).then(function(result){
+    if (result.value) {
+      // Swal.fire({
+      //   type:"success",
+      //   title: "キャンセル処理を行いました。",
+      //   position: 'bottom-end',
+      //   toast: true,
+      //   icon: 'success',
+      //   showConfirmButton: false,
+      //   timer: 1500
+      // });
+      $('#deal_cancel').submit();
+    }
   });
 });
+
+// SETOnagiユーザーの利用を許可する
+$(".riyoukyoka_btn").click(function(e){
+  e.preventDefault();
+  var form = $(this).parents('form');
+  Swal.fire({
+    title: '送信確認',
+    html : 'ユーザーにメールを送信して利用を許可しますか？',
+    icon : 'warning',
+    showCancelButton: true,
+	  cancelButtonText: 'キャンセル',
+    confirmButtonText: '利用を許可'
+  }).then((result) => {
+    if (result.value) {
+      form.submit();
+    }
+  });
+});
+
+// $("#btn09").click(function(){
+//   Swal.fire({
+//     title: "好きなタイトルを入力",
+//     text: "好きなテキストを入力",
+//     input: "text",
+//     confirmButtonText: '送信',
+//     allowOutsideClick: false
+//   }).then(function(result){
+//     if (result.value) {
+//       Swal.fire({
+//         type: 'success',
+//         title: '送信は成功しました',
+//         html: ' 送信内容：' + result.value
+//       });
+//     }
+//   });
+// });
+
 
 
     $(document).on("change", "#houjin_kojin", function() {

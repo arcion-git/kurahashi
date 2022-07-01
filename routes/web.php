@@ -60,24 +60,29 @@
   // Ajax POST
   Route::post('/addcart', 'LoginPageController@addcart');
   Route::post('/removecart', 'LoginPageController@removecart');
-  Route::post('/removeorder', 'LoginPageController@removeorder');
-  Route::post('/removeordernini', 'LoginPageController@removeordernini');
-  Route::post('/change_quantity', 'LoginPageController@change_quantity');
-  Route::post('/nini_change_item_name', 'LoginPageController@nini_change_item_name');
-  Route::post('/nini_change_tantou', 'LoginPageController@nini_change_tantou');
-  Route::post('/nini_change_quantity', 'LoginPageController@nini_change_quantity');
-  Route::post('/change_nouhin_yoteibi', 'LoginPageController@change_nouhin_yoteibi');
-  Route::post('/nini_change_nouhin_yoteibi', 'LoginPageController@nini_change_nouhin_yoteibi');
-  Route::post('/change_store', 'LoginPageController@change_store');
-  Route::post('/add_all_store', 'LoginPageController@add_all_store');
-  Route::post('/nini_change_store', 'LoginPageController@nini_change_store');
-  Route::post('/nini_add_all_store', 'LoginPageController@nini_add_all_store');
-  Route::post('/clonecart', 'LoginPageController@clonecart');
-  Route::post('/addordernini', 'LoginPageController@addordernini');
+
+  Route::post('/removeorder', 'BothController@removeorder');
+  Route::post('/removeordernini', 'BothController@removeordernini');
+  Route::post('/change_quantity', 'BothController@change_quantity');
+  Route::post('/nini_change_item_name', 'BothController@nini_change_item_name');
+  Route::post('/nini_change_tantou', 'BothController@nini_change_tantou');
+  Route::post('/nini_change_quantity', 'BothController@nini_change_quantity');
+  Route::post('/change_nouhin_yoteibi', 'BothController@change_nouhin_yoteibi');
+  Route::post('/nini_change_nouhin_yoteibi', 'BothController@nini_change_nouhin_yoteibi');
+  Route::post('/change_store', 'BothController@change_store');
+  Route::post('/add_all_store', 'BothController@add_all_store');
+  Route::post('/nini_change_store', 'BothController@nini_change_store');
+  Route::post('/nini_add_all_store', 'BothController@nini_add_all_store');
+  Route::post('/clonecart', 'BothController@clonecart');
+  Route::post('/addordernini', 'BothController@addordernini');
+  Route::post('/addniniorder', 'BothController@addniniorder');
+
+  // カートの内容を自動更新
   Route::post('/updatecart', 'LoginPageController@updatecart');
+  // 注文画面で内容を自動更新
   Route::post('/updateorder', 'LoginPageController@updateorder');
 
-  Route::post('/addniniorder', 'LoginPageController@addniniorder');
+
 
 
   // Ajax POST テスト

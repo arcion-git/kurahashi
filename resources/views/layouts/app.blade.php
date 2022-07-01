@@ -362,7 +362,7 @@
             </li>
 
 
-            <li class="menu-header">特集カテゴリ</li>
+            <!-- <li class="menu-header">特集カテゴリ</li>
             <li class="nav-item mb-1">
               <a href="{{ url('/setonagi') }}" class="nav-link"><img src="https://setonagi.net/wp-content/themes/welcart_basic-beldad/assets/images/top-assets/setonagi_top36.jpg" width="100%"/></a>
             </li>
@@ -374,7 +374,7 @@
             </li>
             <li class="nav-item mb-1">
               <a href="{{ url('') }}/category/2908" class="nav-link"><img src="https://setonagi.net/wp-content/themes/welcart_basic-beldad/assets/images/top-assets/setonagi_top20.jpg" width="100%"/></a>
-            </li>
+            </li> -->
 
             <li class="menu-header">カテゴリ一覧</li>
 
@@ -397,8 +397,28 @@
 
 
 
-
-
+            <li class="nav-item nav_banner"><a href="https://setonagi.net/fish-feature"><img class="" src="https://setonagi.net/wp-content/themes/welcart_basic-beldad/assets/images/top-assets/setonagi_top53.jpg" /></a></li>
+        		<li class="nav-item nav_banner"><a href="https://www.youtube.com/channel/UCqGOp5wPW6-RgcMLRc4jTPw" target="_blank"><img class="" src="https://setonagi.net/wp-content/themes/welcart_basic-beldad/assets/images/top-assets/setonagi_top23.jpg" /></a>
+        <?php
+        $xml = simplexml_load_file('https://www.youtube.com/feeds/videos.xml?channel_id=UCqGOp5wPW6-RgcMLRc4jTPw');
+        if( $xml !== false):
+        $count = 0;
+        foreach($xml as $item){
+        	if($item->id) {
+        		$title = $item->title;
+        		$id = $item->children('yt', true)->videoId[0];
+        		$html = '<a href="https://www.youtube.com/watch?v='.$id.'" target="_blank"><img src="https://i1.ytimg.com/vi/'.$id.'/hqdefault.jpg"><br>';
+        		echo $html;
+        		$count++;
+        	}
+        	if($count >= 1) {
+        		break;
+        	}
+        }
+        endif;
+        ?>
+        </li>
+		<li class="nav-item nav_banner"><a href="https://zeitaku-shiko.com/" target="_blank"><img class="" src="https://setonagi.net/wp-content/themes/welcart_basic-beldad/assets/images/top-assets/setonagi_top26.jpg" /></a></li>
 
 
           </ul><br /><br /><br /><br /><br />

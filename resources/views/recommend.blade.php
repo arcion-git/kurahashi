@@ -213,8 +213,8 @@ $('.datepicker').datepicker({
 	autoclose: true,
 	assumeNearbyYear: true,
 	language: 'ja',
-	startDate: '+1d',
-	endDate: '+31d',
+	// startDate: '+1d',
+	// endDate: '+31d',
 	defaultViewDate: Date()
 });
 </script>

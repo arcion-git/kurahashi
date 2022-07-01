@@ -1,5 +1,5 @@
 <div class="table-responsive">
-	<table class="table table-striped table-hover table-md">
+	<table id="{{$user->kaiin_number}}" class="table table-striped table-hover table-md">
 		<tr>
 			<th class="head text-center">商品番号</th>
 			<th class="head">商品名</th>
@@ -174,65 +174,66 @@
   <div class="col-md-12">
     <div class="section-title">任意の商品</div>
     <div class="table-responsive">
-      <table class="table table-striped table-hover table-md">
-        <tbody><tr>
-          <th width="200px" class="text-center">商品名</th>
-          <th width="140px" class="text-center">担当</th>
-          <th class="head-store text-center">納品先店舗</th>
-          <th class="head-quantity text-center">数量（単位）</th>
-          <th class="head-yoteibi text-center">納品予定日</th>
-          <th class="head-sousa text-center">操作</th>
-        </tr>
-				@foreach($cart_ninis as $cart_nini)
-				<tr width="" id="{{$cart_nini->id}}">
-					<input name="cart_nini_id[]" type="hidden" value="{{$cart_nini->id}}" />
-					<td width="200px" class="cart_nini_id_{$cart_nini->id}}">
-						<input name="nini_item_name[]" class="nini_item_name form-control" value="{{$cart_nini->item_name}}" required>
-					</td>
-					<td width="140px" class="text-center">
-						<select name="nini_tantou[]" class="nini_tantou text-center form-control" value="{{$cart_nini->tantou_name}}" required>
-							<option value="{{$cart_nini->tantou_name}}">{{$cart_nini->tantou_name}}</option>
-							<option value="鮮魚">鮮魚</option>
-							<option value="青物">青物</option>
-							<option value="太物">太物</option>
-							<option value="近海">近海</option>
-							<option value="特殊">特殊</option>
-							<option value="養魚">養魚</option>
-							<option value="水産">水産</option>
-						</select>
-					</td>
-					<td colspan="5" class="order-table">
-						<table class="table table-striped table-hover table-md">
-						@foreach($cart_nini->order_ninis as $val)
-							<tr id="{{$val->id}}">
-								<td class="head-store text-center">
-									<select name="nini_store[]" class="nini_store text-center form-control" value="{{$val->tokuisaki_name}} {{$val->store_name}}" required>
-										<option id="{{$val->tokuisaki_name}}" value="{{$val->store_name}}">{{$val->tokuisaki_name}} {{$val->store_name}}</option>
-										@foreach($stores as $store)
-										<option id="{{$store->tokuisaki_name}}" value="{{$store->store_name}}">{{$store->tokuisaki_name}} {{$store->store_name}}</option>
-										@endforeach
-										<option value="all_store_nini">全店舗に追加</option>
-									</select>
-								</td>
-								<td class="head-quantity text-center">
-									<input name="nini_quantity[]" class="nini_quantity text-center form-control" value="{{$val->quantity}}" required>
-								</td>
-								<td class="head-yoteibi text-center">
-										<input type="text" name="nini_nouhin_yoteibi[]" class="nini_nouhin_yoteibi text-center form-control daterange-cus datepicker" value="{{$val->nouhin_yoteibi}}" autocomplete="off" required>
-								</td>
-								<td class="head-sousa text-center">
-									<button type="button" id="{{$val->id}}" class="removeid_{{$val->id}} removeordernini btn btn-info">削除</button><br />
-									<button style="margin-top:10px;" type="button" id="{{$cart_nini->id}}" class="cloneid_{{$cart_nini->id}} addordernini btn btn-success">配送先を追加</button>
-								</td>
-							</tr>
-						@endforeach
-						</table>
-					</td>
-				</tr>
-				@endforeach
-      </tbody>
-		</table>
-    <button style="min-width:200px;" type="button" name="" id="" class="addniniorder btn btn-success"><i class="fas fa-plus"></i> 任意の商品を追加</button>
+      <table id="{{$user->kaiin_number}}" class="table table-striped table-hover table-md">
+        <tbody>
+					<tr>
+	          <th width="200px" class="text-center">商品名</th>
+	          <th width="140px" class="text-center">担当</th>
+	          <th class="head-store text-center">納品先店舗</th>
+	          <th class="head-quantity text-center">数量（単位）</th>
+	          <th class="head-yoteibi text-center">納品予定日</th>
+	          <th class="head-sousa text-center">操作</th>
+	        </tr>
+					@foreach($cart_ninis as $cart_nini)
+					<tr width="" id="{{$cart_nini->id}}">
+						<input name="cart_nini_id[]" type="hidden" value="{{$cart_nini->id}}" />
+						<td width="200px" class="cart_nini_id_{$cart_nini->id}}">
+							<input name="nini_item_name[]" class="nini_item_name form-control" value="{{$cart_nini->item_name}}" required>
+						</td>
+						<td width="140px" class="text-center">
+							<select name="nini_tantou[]" class="nini_tantou text-center form-control" value="{{$cart_nini->tantou_name}}" required>
+								<option value="{{$cart_nini->tantou_name}}">{{$cart_nini->tantou_name}}</option>
+								<option value="鮮魚">鮮魚</option>
+								<option value="青物">青物</option>
+								<option value="太物">太物</option>
+								<option value="近海">近海</option>
+								<option value="特殊">特殊</option>
+								<option value="養魚">養魚</option>
+								<option value="水産">水産</option>
+							</select>
+						</td>
+						<td colspan="5" class="order-table">
+							<table class="table table-striped table-hover table-md">
+							@foreach($cart_nini->order_ninis as $val)
+								<tr id="{{$val->id}}">
+									<td class="head-store text-center">
+										<select name="nini_store[]" class="nini_store text-center form-control" value="{{$val->tokuisaki_name}} {{$val->store_name}}" required>
+											<option id="{{$val->tokuisaki_name}}" value="{{$val->store_name}}">{{$val->tokuisaki_name}} {{$val->store_name}}</option>
+											@foreach($stores as $store)
+											<option id="{{$store->tokuisaki_name}}" value="{{$store->store_name}}">{{$store->tokuisaki_name}} {{$store->store_name}}</option>
+											@endforeach
+											<option value="all_store_nini">全店舗に追加</option>
+										</select>
+									</td>
+									<td class="head-quantity text-center">
+										<input name="nini_quantity[]" class="nini_quantity text-center form-control" value="{{$val->quantity}}" required>
+									</td>
+									<td class="head-yoteibi text-center">
+											<input type="text" name="nini_nouhin_yoteibi[]" class="nini_nouhin_yoteibi text-center form-control daterange-cus datepicker" value="{{$val->nouhin_yoteibi}}" autocomplete="off" required>
+									</td>
+									<td class="head-sousa text-center">
+										<button type="button" id="{{$val->id}}" class="removeid_{{$val->id}} removeordernini btn btn-info">削除</button><br />
+										<button style="margin-top:10px;" type="button" id="{{$cart_nini->id}}" class="cloneid_{{$cart_nini->id}} addordernini btn btn-success">配送先を追加</button>
+									</td>
+								</tr>
+							@endforeach
+							</table>
+						</td>
+					</tr>
+					@endforeach
+      	</tbody>
+			</table>
+    <button style="min-width:200px;" type="button" name="" id="@if(isset($deal)){{$deal->id}}@endif" class="addniniorder btn btn-success"><i class="fas fa-plus"></i> 任意の商品を追加</button>
     </div>
   </div>
 </div>
@@ -365,6 +366,8 @@ $('.datepicker').datepicker({
 </script>
 @endif
 
+
+<!-- 取引確認画面で操作ができないようにする -->
 <script>
 if(document.URL.match("/approval")) {
   $(function(){
@@ -373,11 +376,35 @@ if(document.URL.match("/approval")) {
 		$('select').addClass('arrow_hidden');
 		$("select[readonly] > option:not(:selected)").attr('disabled', 'disabled');
 		$('textarea').attr('readonly',true);
+		$('select').attr("disabled", true);
+		$('.datepicker').attr("disabled", true);
 		$('.head-sousa').remove();
 		$('.addniniorder').remove();
   });
 }
 </script>
+<!-- 発注済、キャンセルの場合操作ができないようにする -->
+@if(isset($deal))
+	@if($deal->status == '発注済' or $deal->status == 'キャンセル')
+<script>
+  $(function(){
+		$('input').attr('readonly',true);
+		$('select').attr('readonly',true);
+		$('select').addClass('arrow_hidden');
+		$("select[readonly] > option:not(:selected)").attr('disabled', 'disabled');
+		$('textarea').attr('readonly',true);
+		$('select').attr("disabled", true);
+		$('.datepicker').attr("disabled", true);
+		$('.head-sousa').remove();
+		$('.addniniorder').remove();
+  });
+</script>
+	@endif
+@endif
+
+
+
+
 
 <script>
 $(function(){
