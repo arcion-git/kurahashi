@@ -83,8 +83,8 @@ a:not(.btn-social-icon):not(.btn-social):not(.page-link) .fab {
   background-color: #cdd3d8 !important; }
 
 .bg-success {
-  background-color: #47c363 !important; }
-
+  background-color: #47c363 !important;
+}
 .bg-info {
   background-color: #3abaf4 !important; }
 
@@ -1238,8 +1238,9 @@ h6 .badge {
   color: #fff !important; }
 
 .btn-success, .btn-success.disabled {
-  box-shadow: 0 2px 6px #81d694;
-  background-color: #47c363;
+  box-shadow: 0 2px 6px rgba(#82d694,1);
+  /* background-color: #47c363; */
+  background-color: rgba(#35a44e,1) !important;
   border-color: #47c363;
   color: #fff; }
   .btn-success:hover, .btn-success:focus, .btn-success:active, .btn-success.disabled:hover, .btn-success.disabled:focus, .btn-success.disabled:active {
@@ -1291,7 +1292,8 @@ h6 .badge {
 
 .btn-warning, .btn-warning.disabled {
   box-shadow: 0 2px 6px #ffc473;
-  background-color: #ffa426;
+  /* background-color: #ffa426; */
+  background-color: #f2981b !important;
   border-color: #ffa426;
   color: #fff; }
   .btn-warning:hover, .btn-warning:focus, .btn-warning:active, .btn-warning.disabled:hover, .btn-warning.disabled:focus, .btn-warning.disabled:active {

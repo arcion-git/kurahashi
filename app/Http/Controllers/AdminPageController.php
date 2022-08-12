@@ -29,6 +29,12 @@ use App\Setonagi;
 use App\SetonagiItem;
 use App\ItemImage;
 
+// PhpSpreadsheet
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Shared\File;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+
 // API通信
 use GuzzleHttp\Client;
 
@@ -173,7 +179,7 @@ class AdminPageController extends Controller
     $cart_ninis = CartNini::where(['user_id'=>$user_id, 'deal_id'=> $deal_id])->get();
 
     // 休日についての処理
-    $today = date("Y/m/d");
+    $today = date("Y-m-d");
     $holidays = Holiday::pluck('date');
 
     $user = User::where('id',$deal->user_id)->first();
@@ -193,6 +199,43 @@ class AdminPageController extends Controller
     $setonagi = Setonagi::where('user_id',$user_id)->first();
     // dd($user->setonagi);
 
+    // 直近の納品予定日を取得
+    $today = date("Y-m-d");
+    $holidays = Holiday::pluck('date');
+    $currentTime = date('H:i:s');
+    // 19時より前の処理
+    if (strtotime($currentTime) < strtotime('19:00:00')) {
+      $holidays = Holiday::pluck('date')->toArray();
+      for($i = 1; $i < 10; $i++){
+        $today_plus = date('Y-m-d', strtotime($today.'+'.$i.'day'));
+        // dd($today_plus2);
+        $key = array_search($today_plus,(array)$holidays,true);
+        if($key){
+            // 休みでないので納品日を格納
+        }else{
+            // 休みなので次の日付を探す
+            $nouhin_yoteibi = $today_plus;
+            break;
+        }
+      }
+    }else{
+    // 19時より後の処理
+      $holidays = Holiday::pluck('date')->toArray();
+      for($i = 2; $i < 10; $i++){
+        $today_plus = date('Y-m-d', strtotime($today.'+'.$i.'day'));
+        // dd($today_plus2);
+        $key = array_search($today_plus,(array)$holidays,true);
+        if($key){
+            // 休みでないので納品日を格納
+        }else{
+            // 休みなので次の日付を探す
+            $nouhin_yoteibi = $today_plus;
+            break;
+        }
+      }
+    }
+    $sano_nissuu = '+'.((strtotime($nouhin_yoteibi) - strtotime($today)) / 86400).'d';
+
     $data=
     ['deal' => $deal,
      'carts' => $carts,
@@ -201,6 +244,7 @@ class AdminPageController extends Controller
      'holidays' => $holidays,
      'user' => $user,
      'setonagi' => $setonagi,
+     'sano_nissuu' => $sano_nissuu,
     ];
     return view('order', $data);
   }
@@ -266,6 +310,13 @@ class AdminPageController extends Controller
   public function user(){
 
     $users = User::paginate(30);
+
+    $kaiin_number = User::first()->kaiin_number;
+    $tokuisaki = StoreUser::where('user_id',$kaiin_number)->first();
+    $tokuisaki_name = Store::where(['tokuisaki_id' => $tokuisaki->tokuisaki_id ,'store_id' => $tokuisaki->store_id])->first()->tokuisaki_name;
+
+
+
     $setonagi_users = Setonagi::get();
     $now = Carbon::now();
 
@@ -1009,6 +1060,212 @@ class AdminPageController extends Controller
     $order=OrderNini::Create(['cart_nini_id'=> $cart_nini_id , 'tokuisaki_name'=>'' , 'nouhin_yoteibi'=> '', 'quantity'=> 1]);
     $data = "sucsess";
     return redirect()->route('home',$data);
+  }
+
+  public function Export(Request $request){
+
+    $kikan = $request->kikan;
+    $start = $request->start;
+    $end = $request->end;
+
+
+    // 次の営業日を取得
+    $today = date("Y-m-d");
+    $holidays = Holiday::pluck('date');
+    $currentTime = date('H:i:s');
+    $holidays = Holiday::pluck('date')->toArray();
+    for($i = 1; $i < 10; $i++){
+      $today_plus = date('Y-m-d', strtotime($today.'+'.$i.'day'));
+      // dd($today_plus2);
+      $key = array_search($today_plus,(array)$holidays,true);
+      if($key){
+          // 休みでないので納品日を格納
+      }else{
+          // 休みなので次の日付を探す
+          $nouhin_yoteibi = $today_plus;
+          break;
+      }
+    }
+
+
+    // テンプレートファイルを読み込み
+    $spreadsheet = IOFactory::load(public_path() . '/storage/excel/template.csv');
+
+    // アクティブなシートを取得
+    $sheet = $spreadsheet->getActiveSheet();
+    // シートを指定する場合は記述
+		// $sheet = $spreadsheet->getSheetByName("原本");
+
+    $deals =  Deal::where('status','発注済')->get();
+    // dd($deals);
+
+
+
+    if($deals){
+      $order_list=[];
+      foreach ($deals as $deal) {
+        // dd($deal);
+        $carts = Cart::where(['deal_id'=> $deal->id])->get();
+        foreach ($carts as $cart) {
+          if($kikan){
+            // dd($end);
+            $orders = Order::where(['cart_id'=> $cart->id])->whereBetween('nouhin_yoteibi', [$start, $end])->get();
+            // dd($orders);
+          }else{
+            $orders = Order::where(['cart_id'=> $cart->id , 'nouhin_yoteibi'=> $nouhin_yoteibi])->get();
+          }
+          foreach ($orders as $order) {
+            // dd($orders);
+            // orderslist出力
+            $user = User::where('id',$deal->user_id)->first();
+            // dd($user);
+            $store = Store::where(['tokuisaki_name'=> $order->tokuisaki_name , 'store_name'=> $order->store_name])->first();
+            $item = Item::where(['id'=> $cart->item_id])->first();
+            // dd($store);
+
+            $array = [
+              // ID
+              $cart->id,
+              // 注文番号
+              $cart->id,
+              // 注文日時
+              $deal->success_time,
+              // 会員No
+              $user->kaiin_number,
+              // Eメール
+              $user->email,
+              // 氏名
+              $user->name,
+              // 屋号_会社名
+              $order->tokuisaki_name,
+              // フリガナ
+              $user->name_kana,
+              // 郵便番号
+              $store->yuubin,
+              // 国
+              '国',
+              // 都道府県
+              $store->jyuusho1,
+              // 市区郡町村
+              $store->jyuusho2,
+              // 番地
+              '',
+              // ビル名
+              '',
+              // 電話番号
+              $store->tel,
+              // FAX番号
+              $store->fax,
+              // 配送先氏名
+              $order->store_name,
+              // 配送先フリガナ
+              '',
+              // 配送先郵便番号
+              $store->yuubin,
+              // 配送先住所
+              $store->jyuusho1.$store->jyuusho2,
+              // 配送先電話番号
+              $store->tel,
+              // 配送先FAX番号
+              $store->fax,
+              // 取引種別
+              $store->torihiki_shubetu,
+              // 発送日
+              '',
+              // 支払方法
+              'クラハシ払い',
+              // 決済ID
+              '',
+              // 配送方法
+              '',
+              // 配送希望日
+              $order->nouhin_yoteibi,
+              // 配送時間帯
+              '',
+              // 発送予定日
+              '',
+              // ステータス
+              $deal->status,
+              // 送り状番号
+              '',
+              // 総合計金額
+              '',
+              // 商品合計
+              '',
+              // 送料
+              '',
+              // 代引手数料
+              '',
+              // 内消費税
+              '10%',
+              // 備考
+              $deal->memo,
+              // 注文行番号
+              '',
+              // 商品コード
+              $item->item_id,
+              // SKUコード
+              $item->sku_code,
+              // 商品名
+              $item->item_name,
+              // SKU表示名
+              $item->sku_code,
+              // 商品オプション
+              '',
+              // 数量
+              $order->quantity,
+              // 単価
+              $order->price,
+              // 単位
+              $item->tani,
+              // 引渡場所
+              '',
+              // 発注先企業
+              '',
+              // 発注先部署コード
+              '',
+              // 発注先部署名
+              '',
+              // 発注先当者者コード
+              $item->tantou_code,
+              // 発注先当者名
+              $item->tantou_name,
+              // 入荷日
+              $item->nyuukabi,
+              // 荷主コード
+              '',
+              // ロット番号
+              $item->lot_bangou,
+              // ロット行
+              $item->lot_gyou,
+              // ロット枝
+              $item->lot_eda,
+              // 倉庫コード
+              $item->souko_code,
+              // 値引率
+              '',
+            ];
+      			array_push($order_list, $array);
+          }
+        }
+        // $cart_ninis = CartNini::where(['user_id'=>$deal->user_id, 'deal_id'=> $id])->get();
+      }
+    }
+    // dd($deals);
+    // dd($order_list);
+    $sheet->fromArray($order_list,null,'A2');
+    // データを上書き
+		// $sheet->setCellValue('A1', 'test');
+
+    // アップロードディレクトリを指定
+    File::setUseUploadTempDirectory(public_path());
+
+    $writer = new Xlsx($spreadsheet);
+    $writer->save(public_path() . '/storage/excel/export.xlsx');
+
+    // return response()->download(public_path() . '/storage/excel/output.xlsm', 'filename.xlsm',['content-type' => 'application/vnd.ms-excel',])->deleteFileAfterSend(true);
+
+    return response()->download(public_path() . '/storage/excel/export.xlsx', 'filename.xlsx',['content-type' => 'application/vnd.ms-excel',])->deleteFileAfterSend(true);
   }
 
 }

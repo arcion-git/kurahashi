@@ -350,11 +350,11 @@ $(document).ready( function(){
 @if(isset($holidays))
 <script>
 $('.datepicker').datepicker({
-	format: 'yyyy/mm/dd',
+	format: 'yyyy-mm-dd',
 	autoclose: true,
 	assumeNearbyYear: true,
 	language: 'ja',
-	startDate: '+2d',
+	startDate: '{{$sano_nissuu}}',
 	endDate: '+31d',
 	defaultViewDate: Date(),
 	datesDisabled: [

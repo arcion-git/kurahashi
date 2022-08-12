@@ -24,7 +24,7 @@
   Route::get('/', 'LoginPageController@index')->name('home');
 
   Route::get('/special_price', 'LoginPageController@index')->name('home');
-  Route::get('/recommend', 'LoginPageController@index')->name('home');
+  Route::get('/recommend', 'LoginPageController@index')->name('recommend');
 
   Route::get('/category/{id}', 'LoginPageController@category');
   Route::get('/confirm', 'LoginPageController@confirm')->name('confirm');
@@ -164,10 +164,13 @@
   Route::post('/admin/SetonagiImport', 'AdminPageController@SetonagiImport');
   Route::post('/admin/SetonagiItemImport', 'AdminPageController@SetonagiItemImport');
 
+  // CSVエクスポート
+  Route::post('/admin/export', 'AdminPageController@Export');
 
-
-
+  // 割引修正
   Route::post('/admin/discount', 'AdminPageController@discount');
+
+  // カート画面自動更新
   Route::post('/admin/intervalupdatecart', 'AdminPageController@intervalupdatecart');
 
 

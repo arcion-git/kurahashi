@@ -44,7 +44,7 @@
                               <!-- <button class="addrecommendcategory btn btn-success" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus"></i> 商品を追加</button>
                               <button class="btn btn-success" data-toggle="modal" data-target="#modal{{$setonagi_item->item()->item_id}}"><i class="fas fa-plus"></i> 商品を追加</button> -->
                               <div class="article-header">
-                                <div class="article-image" data-background="/storage/item/{{$setonagi_item->item()->item_id}}_{{$setonagi_item->item()->sku_code}}.jpg" style="background-image: url(&quot;/storage/item/{{$setonagi_item->item()->item_id}}_{{$setonagi_item->item()->sku_code}}.jpg&quot;);">
+                                <div class="article-image" data-background="/storage/item/{{$setonagi_item->item()->item_id}}.jpg" style="background-image: url(&quot;/storage/item/{{$setonagi_item->item()->item_id}}.jpg&quot;);">
                                 </div>
                               </div>
                               <div class="article-details">

@@ -61,4 +61,10 @@ class LoginController extends Controller
     {
         return Auth::guard('user');
     }
+
+    // ログイン後のリダイレクト先を変更
+    public function redirectPath()
+    {
+        return 'recommend';
+    }
 }

@@ -2,6 +2,9 @@
 
 namespace App;
 
+use App\Store;
+use App\StoreUser;
+
 use App\Notifications\UserResetPassword;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -49,6 +52,21 @@ class User extends Authenticatable
     {
         $setonagi_user = Setonagi::where('user_id', $this->id)->first();
         return $setonagi_user;
+    }
+
+    // public function tokuisaki_name() {
+    //     return $this->belongsTo('App\Store', 'tokuisaki_id')
+    //     ->first()->tokuisaki_name;
+    // }
+
+    public function tokuisaki_name()
+    {
+      $kaiin_number = $this->kaiin_number;
+      $tokuisaki = StoreUser::where('user_id',$kaiin_number)->first();
+      if ($tokuisaki) {
+      $tokuisaki_name = Store::where(['tokuisaki_id' => $tokuisaki->tokuisaki_id ,'store_id' => $tokuisaki->store_id])->first()->tokuisaki_name;
+        return $tokuisaki_name;
+      }
     }
 
 }

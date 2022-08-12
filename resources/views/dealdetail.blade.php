@@ -170,5 +170,36 @@
     </div>
   </section>
 
-
+  <script>
+  $(function(){
+    //ＵＲＬのパラメータを取得するための関数
+    function getUrlParam(param){
+        var pageUrl = window.location.search.substring(1);
+        var urlVar = pageUrl.split('&');
+        for (var i = 0; i < urlVar.length; i++)
+        {
+            var paramName = urlVar[i].split('=');
+            if (paramName[0] == param)
+            {
+                return decodeURI(paramName[1]);
+            }
+        }
+    }
+    $(function() {
+        var order_id = getUrlParam('order_id');
+        var nouhin_yoteibi = getUrlParam('nouhin_yoteibi');
+        if (order_id) {
+          console.log(order_id);
+          Swal.fire({
+            html: '納品予定日' + nouhin_yoteibi + 'は指定できません。<br />再度指定してください。',
+            // position: 'top-end',
+            // toast: true,
+            icon: 'warning',
+            showConfirmButton: false,
+            // timer: 1500
+          });
+        }
+    });
+  });
+  </script>
 @endsection

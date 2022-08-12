@@ -58,8 +58,11 @@
             <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg"><i class="fas fa-bars"></i></a></li>
             <li><a href="#" data-toggle="search" class="nav-link nav-link-lg d-sm-none"><i class="fas fa-search"></i></a></li>
           </ul>
-          <div class="search-element">
 
+
+
+          <div class="search-element">
+            {{--
 			      <select name="cat" id="cat" class="postform">
               @if(isset($search_category_parent))<option value="{{$search_category_parent}}">{{$search_category_parent}}</option>@endif
               @if(isset($search_category))<option value="{{$search_category->category_id}}">{{$search_category->category_name}}</option>@endif
@@ -76,9 +79,9 @@
                 </li>
                 @endforeach
             </select>
-
             <input class="form-control" type="text" name="search" placeholder="検索" aria-label="Search" data-width="250" style="width: 250px;" value="@if(isset($search)){{$search}}@endif">
             <button class="btn" type="submit"><i class="fas fa-search"></i></button>
+
             <!-- <div class="search-backdrop"></div>
             <div class="search-result">
               <div class="search-header">
@@ -137,8 +140,10 @@
                 </a>
               </div>
             </div> -->
+            --}}
           </div>
         </form>
+
         @endif
 
         @if ( Auth::guard('admin')->check() )
@@ -228,9 +233,11 @@
               <!-- <a href="{{ url('/deal') }}" class="dropdown-item has-icon">
                 <i class="far fa-user"></i> ×ご提案商品
               </a> -->
+              {{--
               <a href="{{ url('/favorite') }}" class="dropdown-item has-icon">
                 <i class="far fa-heart"></i> お気に入り編集
               </a>
+              --}}
               <a href="{{ url('/line') }}" class="dropdown-item has-icon">
                 <i class="far fa-comments"></i> LINEでお問い合わせ
               </a>
@@ -267,7 +274,7 @@
         <aside id="sidebar-wrapper">
           <div class="sidebar-brand">
             @if ( Auth::guard('user')->check() )
-            <a href="{{ url('/') }}">
+            <a href="{{ url('/recommend') }}">
             @endif
             @if ( Auth::guard('admin')->check() )
             <a href="{{ url('/admin/home') }}">
@@ -313,7 +320,10 @@
                 <a href="/admin/imgupload" class="nav-link"><i class="fas fa-file-image"></i><span>商品画像登録</span></a>
               </li>
               <li class="nav-item">
-                <a href="/admin/csv" class="nav-link"><i class="fas fa-file-csv"></i><span>CSVデータ</span></a>
+                <a href="/admin/csv" class="nav-link"><i class="fas fa-file-csv"></i><span>CSVインポート</span></a>
+              </li>
+              <li class="nav-item">
+                <a href="/admin/download" class="nav-link"><i class="fas fa-file-csv"></i><span>CSVダウンロード</span></a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
@@ -335,15 +345,18 @@
               <a href="{{ url('/setonagi') }}" class="nav-link"><i class="fas fa-check"></i><span>限定お買い得商品</span></a>
             </li>
 
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               <a href="{{ url('/') }}" class="nav-link"><i class="fas fa-list"></i><span>すべての商品</span></a>
-            </li>
+            </li> -->
             <li class="nav-item">
               <a href="{{ url('/recommend') }}" class="nav-link"><i class="far fa-user"></i><span>担当のおすすめ商品</span></a>
             </li>
             <li class="nav-item">
               <a href="{{ url('/special_price') }}" class="nav-link"><i class="fas fa-fire"></i><span>市況商品（時価）</span></a>
             </li>
+
+
+{{--
 
             <li class="nav-item dropdown active">
               <a href="#" class="nav-link has-dropdown">
@@ -394,7 +407,7 @@
               </ul>
             </li>
             @endforeach
-
+            --}}
 
 
             <li class="nav-item nav_banner"><a href="https://setonagi.net/fish-feature"><img class="" src="https://setonagi.net/wp-content/themes/welcart_basic-beldad/assets/images/top-assets/setonagi_top53.jpg" /></a></li>

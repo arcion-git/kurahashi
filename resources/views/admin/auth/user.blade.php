@@ -31,6 +31,7 @@
             <div class="table-responsive">
               <table class="table table-striped">
                 <tr>
+                  <th class="text-center">バイヤー</th>
                   <th class="text-center">お名前</th>
                   <!-- <th class="text-center">会社名</th>
                   <th class="text-center">住所</th> -->
@@ -41,6 +42,9 @@
 
                 @foreach($users as $user)
                 <tr>
+                  <td class="text-center">
+                    {{$user->tokuisaki_name()}}
+                  </td>
                   <td class="text-center">
                     {{$user->name}}
                   </td>
