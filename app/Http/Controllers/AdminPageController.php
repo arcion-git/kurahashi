@@ -1099,18 +1099,16 @@ class AdminPageController extends Controller
     $deals =  Deal::where('status','発注済')->get();
     // dd($deals);
 
-
-
     if($deals){
       $order_list=[];
       foreach ($deals as $deal) {
         // dd($deal);
         $carts = Cart::where(['deal_id'=> $deal->id])->get();
+        // カート商品の出力
         foreach ($carts as $cart) {
           if($kikan){
             // dd($end);
             $orders = Order::where(['cart_id'=> $cart->id])->whereBetween('nouhin_yoteibi', [$start, $end])->get();
-            // dd($orders);
           }else{
             $orders = Order::where(['cart_id'=> $cart->id , 'nouhin_yoteibi'=> $nouhin_yoteibi])->get();
           }
@@ -1118,11 +1116,69 @@ class AdminPageController extends Controller
             // dd($orders);
             // orderslist出力
             $user = User::where('id',$deal->user_id)->first();
-            // dd($user);
-            $store = Store::where(['tokuisaki_name'=> $order->tokuisaki_name , 'store_name'=> $order->store_name])->first();
+            if($user->setonagi == 1){
+              $setonagi_user = Setonagi::where('user_id',$user->id)->first();
+              // dd($setonagi_user);
+            }
             $item = Item::where(['id'=> $cart->item_id])->first();
+            // dd($user);
+            if(!($user->setonagi == 1)){
+              $store = Store::where(['tokuisaki_name'=> $order->tokuisaki_name , 'store_name'=> $order->store_name])->first();
+            }
+            if(!($user->setonagi == 1)){
+              // 会社名
+              $company = $order->tokuisaki_name;
+              // 会員No
+              $kaiin_number = $user->kaiin_number;
+              // 郵便番号
+              $yuubin = $store->yuubin;
+              // 住所
+              $jyuusho = $store->jyuusho1;
+              // 電話番号
+              $tel = $store->tel;
+              // FAX番号
+              $fax = $store->fax;
+              // 配送先氏名
+              $store_name = $order->store_name;
+              // 配送先郵便番号
+              $yuubin = $store->yuubin;
+              // 配送先住所
+              $jyuusho = $store->jyuusho1.$store->jyuusho2;
+              // 配送先電話番号
+              $tel = $store->tel;
+              // 配送先FAX番号
+              $fax = $store->fax;
+              // 支払方法
+              $pay = 'クラハシ払い';
+              // 取引種別
+              $torihiki_shubetu = $store->torihiki_shubetu;
+            }else{
+              // 会社名
+              $company = $setonagi_user->company;
+              // 会員No
+              $kaiin_number = $user->kaiin_number;
+              // 郵便番号
+              $yuubin = $setonagi_user->address01;
+              // 住所
+              $jyuusho = $setonagi_user->address02.$setonagi_user->address03.$setonagi_user->address04;
+              // 電話番号
+              $tel = $setonagi_user->tel;
+              // FAX番号
+              $fax = $setonagi_user->fax;
+              // 配送先氏名
+              $store_name = $setonagi_user->last_name.$setonagi_user->first_name;
+              // 配送先住所
+              $jyuusho = $store->jyuusho1.$store->jyuusho2;
+              // 配送先電話番号
+              $tel = $store->tel;
+              // 配送先FAX番号
+              $fax = $store->fax;
+              // 支払方法
+              $pay = '';
+              // 取引種別
+              $torihiki_shubetu = '受け取り';
+            }
             // dd($store);
-
             $array = [
               // ID
               $cart->id,
@@ -1137,43 +1193,43 @@ class AdminPageController extends Controller
               // 氏名
               $user->name,
               // 屋号_会社名
-              $order->tokuisaki_name,
+              $company,
               // フリガナ
               $user->name_kana,
               // 郵便番号
-              $store->yuubin,
+              $yuubin,
               // 国
-              '国',
+              '',
               // 都道府県
-              $store->jyuusho1,
+              $jyuusho,
               // 市区郡町村
-              $store->jyuusho2,
+              '',
               // 番地
               '',
               // ビル名
               '',
               // 電話番号
-              $store->tel,
+              $tel,
               // FAX番号
-              $store->fax,
+              $fax,
               // 配送先氏名
-              $order->store_name,
+              $store_name,
               // 配送先フリガナ
               '',
               // 配送先郵便番号
-              $store->yuubin,
+              $yuubin,
               // 配送先住所
-              $store->jyuusho1.$store->jyuusho2,
+              $jyuusho,
               // 配送先電話番号
-              $store->tel,
+              $tel,
               // 配送先FAX番号
-              $store->fax,
+              $fax,
               // 取引種別
-              $store->torihiki_shubetu,
+              $torihiki_shubetu,
               // 発送日
               '',
               // 支払方法
-              'クラハシ払い',
+              $pay,
               // 決済ID
               '',
               // 配送方法
@@ -1248,6 +1304,154 @@ class AdminPageController extends Controller
       			array_push($order_list, $array);
           }
         }
+        // dd($order_list);
+        // 任意の商品を出力
+        $cart_ninis = CartNini::where(['deal_id'=> $deal->id])->get();
+        // dd($cart_ninis);
+        foreach ($cart_ninis as $cart_nini) {
+          if($kikan){
+            $order_ninis = OrderNini::where(['cart_nini_id'=> $cart_nini->id])->whereBetween('nouhin_yoteibi', [$start, $end])->get();
+            // dd($order_ninis);
+          }else{
+            $order_ninis = OrderNini::where(['cart_nini_id'=> $cart_nini->id , 'nouhin_yoteibi'=> $nouhin_yoteibi])->get();
+          }
+          foreach ($order_ninis as $order_nini) {
+            // dd($orders);
+            // orderslist出力
+            $user = User::where('id',$deal->user_id)->first();
+            // dd($user);
+            $store = Store::where(['tokuisaki_name'=> $order_nini->tokuisaki_name , 'store_name'=> $order_nini->store_name])->first();
+            // $item = Item::where(['id'=> $cart->item_id])->first();
+            // dd($store);
+            $array = [
+              // ID
+              $cart_nini->id,
+              // 注文番号
+              $cart_nini->id,
+              // 注文日時
+              $deal->success_time,
+              // 会員No
+              $user->kaiin_number,
+              // Eメール
+              $user->email,
+              // 氏名
+              $user->name,
+              // 屋号_会社名
+              $order_nini->tokuisaki_name,
+              // フリガナ
+              $user->name_kana,
+              // 郵便番号
+              $store->yuubin,
+              // 国
+              '日本',
+              // 都道府県
+              $store->jyuusho1,
+              // 市区郡町村
+              $store->jyuusho2,
+              // 番地
+              '',
+              // ビル名
+              '',
+              // 電話番号
+              $store->tel,
+              // FAX番号
+              $store->fax,
+              // 配送先氏名
+              $order_nini->store_name,
+              // 配送先フリガナ
+              '',
+              // 配送先郵便番号
+              $store->yuubin,
+              // 配送先住所
+              $store->jyuusho1.$store->jyuusho2,
+              // 配送先電話番号
+              $store->tel,
+              // 配送先FAX番号
+              $store->fax,
+              // 取引種別
+              $store->torihiki_shubetu,
+              // 発送日
+              '',
+              // 支払方法
+              'クラハシ払い',
+              // 決済ID
+              '',
+              // 配送方法
+              '',
+              // 配送希望日
+              $order_nini->nouhin_yoteibi,
+              // 配送時間帯
+              '',
+              // 発送予定日
+              '',
+              // ステータス
+              $deal->status,
+              // 送り状番号
+              '',
+              // 総合計金額
+              '',
+              // 商品合計
+              '',
+              // 送料
+              '',
+              // 代引手数料
+              '',
+              // 内消費税
+              '10%',
+              // 備考
+              $deal->memo,
+              // 注文行番号
+              '',
+              // 商品コード
+              '',
+              // SKUコード
+              '',
+              // 商品名
+              $cart_nini->item_name,
+              // SKU表示名
+              '',
+              // 商品オプション
+              '',
+              // 数量
+              $order_nini->quantity,
+              // 単価
+              $order_nini->price,
+              // 単位
+              '',
+              // 引渡場所
+              '',
+              // 発注先企業
+              '',
+              // 発注先部署コード
+              '',
+              // 発注先部署名
+              '',
+              // 発注先当者者コード
+              '',
+              // 発注先当者名
+              '',
+              // 入荷日
+              '',
+              // 荷主コード
+              '',
+              // ロット番号
+              '',
+              // ロット行
+              '',
+              // ロット枝
+              '',
+              // 倉庫コード
+              '',
+              // 値引率
+              '',
+              // 任意の商品
+              '1',
+              // 担当
+              $order_nini->tantou_name,
+            ];
+      			array_push($order_list, $array);
+          }
+        }
         // $cart_ninis = CartNini::where(['user_id'=>$deal->user_id, 'deal_id'=> $id])->get();
       }
     }
@@ -1261,11 +1465,11 @@ class AdminPageController extends Controller
     File::setUseUploadTempDirectory(public_path());
 
     $writer = new Xlsx($spreadsheet);
-    $writer->save(public_path() . '/storage/excel/export.xlsx');
+    $writer->save(public_path() . '/storage/excel/export.csv');
 
     // return response()->download(public_path() . '/storage/excel/output.xlsm', 'filename.xlsm',['content-type' => 'application/vnd.ms-excel',])->deleteFileAfterSend(true);
 
-    return response()->download(public_path() . '/storage/excel/export.xlsx', 'filename.xlsx',['content-type' => 'application/vnd.ms-excel',])->deleteFileAfterSend(true);
+    return response()->download(public_path() . '/storage/excel/export.csv', 'filename.csv')->deleteFileAfterSend(true);
   }
 
 }

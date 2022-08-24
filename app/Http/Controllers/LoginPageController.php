@@ -924,6 +924,73 @@ class LoginPageController extends Controller
     $deal = Deal::where('id',$id)->first();
     $carts = Cart::where(['user_id'=>$user_id, 'deal_id'=> $id])->get();
 
+
+
+    // キャンセルができるか判定
+    $user = User::where(['id'=> $user_id])->first();
+
+    // セトナギユーザーの場合
+    // 注文完了時間
+    $success_time = $deal->success_time;
+    $success_jikan = date('H:i:s', strtotime($success_time));
+    // dd($success_jikan);
+
+    // 注文完了日から受け取り予定日時を取得
+    $today = date("Y-m-d");
+    $holidays = Holiday::pluck('date');
+    $currentTime = date('H:i:s');
+    // 19時より前の処理
+    if (strtotime($success_jikan) < strtotime('19:00:00')) {
+      $holidays = Holiday::pluck('date')->toArray();
+      for($i = 1; $i < 10; $i++){
+        $today_plus = date('Y-m-d', strtotime($success_time.'+'.$i.'day'));
+        // dd($today_plus2);
+        $key = array_search($today_plus,(array)$holidays,true);
+        if($key){
+            // 休みでないので納品日を格納
+        }else{
+            // 休みなので次の日付を探す
+            $nouhin_yoteibi = $today_plus;
+            break;
+        }
+      }
+    }else{
+    // 19時より後の処理
+      $holidays = Holiday::pluck('date')->toArray();
+      for($i = 2; $i < 10; $i++){
+        $today_plus = date('Y-m-d', strtotime($success_time.'+'.$i.'day'));
+        // dd($today_plus2);
+        $key = array_search($today_plus,(array)$holidays,true);
+        if($key){
+            // 休みでないので納品日を格納
+        }else{
+            // 休みなので次の日付を探す
+            $nouhin_yoteibi = $today_plus;
+            break;
+        }
+      }
+    }
+    // dd($nouhin_yoteibi);
+    // 注文の翌営業日の納品予定19時を取得
+    $zenjitu19ji = date($nouhin_yoteibi.'19:00:00');
+    // 納品予定日の19時を取得
+    $zenjitu19ji = date('Y-m-d H:i:s', strtotime($zenjitu19ji.'-1 day'));
+    // dd($zenjitu19ji);
+
+    // 今の日付時間
+    $now = date("Y-m-d H:i:s");
+    // 次の営業日の前日19時以降はキャンセル不可
+
+    // 翌営業日締め時間より前
+    if (strtotime($now) < strtotime($zenjitu19ji)) {
+      // dd('キャンセル可');
+      $deal_cancel_button = 1;
+    }else{
+      // dd('キャンセル不可');
+      $deal_cancel_button = null;
+    }
+
+
     $data=[
       // 'carts'=>$carts,
       'deal'=>$deal,
@@ -934,6 +1001,7 @@ class LoginPageController extends Controller
       'user' => $user,
       'setonagi' => $setonagi,
       'today_plus' => $today_plus,
+      'deal_cancel_button' => $deal_cancel_button,
     ];
     return view('dealdetail', $data);
   }
@@ -1089,7 +1157,7 @@ class LoginPageController extends Controller
           'traderCode' => '330000051',
           // 日付
           'orderDate' => $now,
-          'orderNo' => $deal_id,
+          'orderNo' => $deal_id.'1d',
           // バイヤーid
           'buyerId' => $user_id,
           'settlePrice' => $request->all_total_val,
@@ -1101,23 +1169,60 @@ class LoginPageController extends Controller
       // dd($option);
       $response = $client->request('POST', $url, $option);
       $result = simplexml_load_string($response->getBody()->getContents());
-      // dd($returnCode);
+      // dd($result);
       if($result->returnCode == 1){
         $delete_deal = Deal::where(['id'=> $deal_id])->first()->delete();
-        $message = 'error';
-        $data=[
-          'message' => $message,
-        ];
+        if($result->errorCode == 123456){
+          // 後で処理を作る
+          $message = '掛け払い金額オーバー';
+          $data=[
+            'message' => $message,
+          ];
+        }else{
+          $message = 'error';
+          $data=[
+            'message' => $message,
+          ];
+        }
         return redirect()->route('confirm',$data);
       }
     }
 
 
 
+    // if($request->uketori_siharai == 'クレジットカード払い'){
+    //   // 決済tokenの取得
+    //   $client = new Client();
+    //   $url = 'https://ptwebcollect.jp/test_gateway/token/js/embeddedTokenLib.js';
+    //   $option = [
+    //     'headers' => [
+    //       'Accept' => '*/*',
+    //       'Content-Type' => 'application/x-www-form-urlencoded',
+    //       'charset' => 'UTF-8',
+    //     ],
+    //     'form_params' => [
+    //       'function_div' => 'A12',
+    //       'trader_code' => '888888709',
+    //       'device_div' => 1,
+    //     ]
+    //   ];
+    //   $response = $client->request('POST', $url, $option);
+    //   $result = $response->getBody()->getContents();
+    //   dd($result);
+    // }
+
+
+
+
+
+// check_sumを作るところからスタート
+
     if($request->uketori_siharai == 'クレジットカード払い'){
-      // 決済tokenの取得
+
+      // EPトークン取得
       $client = new Client();
-      $url = 'https://ptwebcollect.jp/test_gateway/token/js/embeddedTokenLib.js';
+      // $url = 'https://api.kuronekoyamato.co.jp/api/credit';
+      $url = 'https://ptwebcollect.jp/test_gateway/getEpToken.api';
 
       $option = [
         'headers' => [
@@ -1129,27 +1234,29 @@ class LoginPageController extends Controller
           'function_div' => 'A12',
           'trader_code' => '888888709',
           'device_div' => 1,
+          'device_info' => 1,
+          'option_service_div' => 00,
+          'check_sum' => '',
+          'cardNo' => '',
+          'cardOwner' => '',
+          'cardExp' => '',
+          'securityCode' => '',
         ]
       ];
       // dd($option);
       $response = $client->request('POST', $url, $option);
       $result = $response->getBody()->getContents();
       dd($result);
-      // if($result->returnCode == 1){
-      //   $delete_deal = Deal::where(['id'=> $deal_id])->first()->delete();
-      //   $message = 'error';
-      //   $data=[
-      //     'message' => $message,
-      //   ];
-      //   return redirect()->route('confirm',$data);
-      // }
-    }
 
 
-    if($request->uketori_siharai == 'クレジットカード払い'){
+
+
+
+
+
       // ヤマトAPI連携確認
       $client = new Client();
-      $url = 'https://api.kuronekoyamato.co.jp/api/credit';
+      // $url = 'https://api.kuronekoyamato.co.jp/api/credit';
       $url = 'https://ptwebcollect.jp/test_gateway/getTraderToken.api';
 
       $option = [
@@ -1159,24 +1266,31 @@ class LoginPageController extends Controller
           'charset' => 'UTF-8',
         ],
         'form_params' => [
-          'function_div' => 'A08',
+          'function_div' => 'A13',
           'trader_code' => '888888709',
           'device_div' => 2,
-          'order_no' => $deal_id,
-          'goods_name' => $request->tax_val,
-          'settle_price' => $request->all_total_val,
-          'buyer_name_kanji' => '濱本 悠世',
-          'buyer_tel' => '08028885281',
-          'buyer_email' => 'info@arcion.jp',
-          'token' => '',
-          'auth_div' => 1,
-          'pay_way' => 1,
-          'option_service_div' => '00'
+          'option_service_div' => 00,
+          'check_sum' => '',
+
+
+
+          // 'order_no' => $deal_id,
+          // 'goods_name' => $request->tax_val,
+          // 'settle_price' => $request->all_total_val,
+          // 'buyer_name_kanji' => '濱本 悠世',
+          // 'buyer_tel' => '08028885281',
+          // 'buyer_email' => 'info@arcion.jp',
+          // 'token' => '',
+          // 'auth_div' => 1,
+          // 'pay_way' => 1,
+          // 'option_service_div' => '00'
         ]
       ];
+
+      // A138888887092004111111111111111KURONEKO TARO10241234'EPトークン'
       // dd($option);
       $response = $client->request('POST', $url, $option);
-      $result = simplexml_load_string($response->getBody()->getContents());
+      $result = $response->getBody()->getContents();
       dd($result);
       // if($result->returnCode == 1){
       //   $delete_deal = Deal::where(['id'=> $deal_id])->first()->delete();
@@ -1228,9 +1342,17 @@ class LoginPageController extends Controller
       $cart->save();
     }
 
+
     $deal=Deal::firstOrNew(['id'=> $deal_id]);
     $deal->status = '交渉中';
     $deal->start_time = Carbon::now();
+
+    // セトナギユーザーのみ「受け取り場所」「時間帯」「支払い方法を保存」
+    if($request->uketori_siharai){
+      $deal->uketori_siharai = $request->uketori_siharai;
+      $deal->uketori_place = $request->uketori_place;
+      $deal->uketori_time = $request->uketori_time;
+    }
     $deal->save();
 
     if($request->has('addsuscess_btn')){
@@ -1241,6 +1363,7 @@ class LoginPageController extends Controller
       $deal=Deal::firstOrNew(['id'=> $deal_id]);
       $deal->status = '発注済';
       $deal->success_time = Carbon::now();
+
       $deal->save();
 
     }
@@ -1258,8 +1381,6 @@ class LoginPageController extends Controller
     // $quantitys = $data['quantity'];
 
     $deal_id = $request->deal_id;
-
-
     // 直近の納品予定日に問題がないかチェックする
     $today = date("Y-m-d");
     $holidays = Holiday::pluck('date');
@@ -1321,6 +1442,12 @@ class LoginPageController extends Controller
     $deal=Deal::firstOrNew(['id'=> $deal_id]);
     $deal->status = '発注済';
     $deal->success_time = Carbon::now();
+    // セトナギユーザーのみ「受け取り場所」「時間帯」「支払い方法を保存」
+    if($request->uketori_siharai){
+      $deal->uketori_siharai = $request->uketori_siharai;
+      $deal->uketori_place = $request->uketori_place;
+      $deal->uketori_time = $request->uketori_time;
+    }
     $deal->memo = $request->memo;
     $deal->save();
 
@@ -1345,6 +1472,79 @@ class LoginPageController extends Controller
     // $quantitys = $data['quantity'];
 
     $deal_id = $request->deal_id;
+
+    // キャンセルができるか判定
+    $deal=Deal::where(['id'=> $deal_id])->first();
+    $user = User::where(['id'=> $user_id])->first();
+
+    // セトナギユーザーの場合
+    // 注文完了時間
+    $success_time = $deal->success_time;
+    $success_jikan = date('H:i:s', strtotime($success_time));
+    // dd($success_jikan);
+
+    // 注文完了日から受け取り予定日時を取得
+    $today = date("Y-m-d");
+    $holidays = Holiday::pluck('date');
+    $currentTime = date('H:i:s');
+    // 19時より前の処理
+    if (strtotime($success_jikan) < strtotime('19:00:00')) {
+      $holidays = Holiday::pluck('date')->toArray();
+      for($i = 1; $i < 10; $i++){
+        $today_plus = date('Y-m-d', strtotime($success_time.'+'.$i.'day'));
+        // dd($today_plus2);
+        $key = array_search($today_plus,(array)$holidays,true);
+        if($key){
+            // 休みでないので納品日を格納
+        }else{
+            // 休みなので次の日付を探す
+            $nouhin_yoteibi = $today_plus;
+            break;
+        }
+      }
+    }else{
+    // 19時より後の処理
+      $holidays = Holiday::pluck('date')->toArray();
+      for($i = 2; $i < 10; $i++){
+        $today_plus = date('Y-m-d', strtotime($success_time.'+'.$i.'day'));
+        // dd($today_plus2);
+        $key = array_search($today_plus,(array)$holidays,true);
+        if($key){
+            // 休みでないので納品日を格納
+        }else{
+            // 休みなので次の日付を探す
+            $nouhin_yoteibi = $today_plus;
+            break;
+        }
+      }
+    }
+    // dd($nouhin_yoteibi);
+    // 注文の翌営業日の納品予定19時を取得
+    $zenjitu19ji = date($nouhin_yoteibi.'19:00:00');
+    // 納品予定日の19時を取得
+    $zenjitu19ji = date('Y-m-d H:i:s', strtotime($zenjitu19ji.'-1 day'));
+    // dd($zenjitu19ji);
+
+    // 今の日付時間
+    $now = date("Y-m-d H:i:s");
+    // 次の営業日の前日19時以降はキャンセル不可
+
+    // 翌営業日締め時間より前
+    if (strtotime($now) < strtotime($zenjitu19ji)) {
+      // dd('キャンセル可');
+    }else{
+      // dd('キャンセル不可');
+    // 翌営業日締め時間より後
+    // キャンセルはできないのでその旨をアラート
+      $id= $deal_id;
+      $data=[
+        'id' => $deal_id,
+        'cancel_error' => 'キャンセルエラーです',
+      ];
+      return redirect()->route('dealdetail',$data);
+    }
+
+
 
     $deal=Deal::firstOrNew(['id'=> $deal_id]);
     $deal->status = 'キャンセル';
@@ -1510,7 +1710,44 @@ class LoginPageController extends Controller
 
   }
 
-
+  // 繰り返し使う納品予定日
+  function nouhin_yoteibi(){
+    $today = date("Y-m-d");
+    $holidays = Holiday::pluck('date');
+    $currentTime = date('H:i:s');
+    // 19時より前の処理
+    if (strtotime($currentTime) < strtotime('19:00:00')) {
+      $holidays = Holiday::pluck('date')->toArray();
+      for($i = 1; $i < 10; $i++){
+        $today_plus = date('Y-m-d', strtotime($today.'+'.$i.'day'));
+        // dd($today_plus2);
+        $key = array_search($today_plus,(array)$holidays,true);
+        if($key){
+            // 休みでないので納品日を格納
+        }else{
+            // 休みなので次の日付を探す
+            $nouhin_yoteibi = $today_plus;
+            break;
+        }
+      }
+    }else{
+    // 19時より後の処理
+      $holidays = Holiday::pluck('date')->toArray();
+      for($i = 2; $i < 10; $i++){
+        $today_plus = date('Y-m-d', strtotime($today.'+'.$i.'day'));
+        // dd($today_plus2);
+        $key = array_search($today_plus,(array)$holidays,true);
+        if($key){
+            // 休みでないので納品日を格納
+        }else{
+            // 休みなので次の日付を探す
+            $nouhin_yoteibi = $today_plus;
+            break;
+        }
+      }
+    }
+    return $nouhin_yoteibi;
+  }
 
 
 }

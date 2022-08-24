@@ -82,7 +82,7 @@
                   <address>
                     <strong>お問い合わせ日時:</strong><br>
                     {{ $deal->created_at }}<br>
-                    @if($deal->success_flg)
+                    @if($deal->status == '発注済')
                     <br><strong>発注日時:</strong><br>
                     {{ $deal->success_time }}<br>
                     @else
@@ -127,8 +127,10 @@
 
                 @if($deal->status == 'キャンセル')
                 @else
-                  {{ csrf_field() }}
-                    <div id="deal_cancel_button" class="btn btn-danger">キャンセル</div>
+                  @if($deal_cancel_button)
+                    {{ csrf_field() }}
+                      <div id="deal_cancel_button" class="btn btn-danger">キャンセル</div>
+                  @endif
                 @endif
 
                 @if($deal->status == '発注済' or $deal->status == 'キャンセル')
@@ -191,7 +193,20 @@
         if (order_id) {
           console.log(order_id);
           Swal.fire({
-            html: '納品予定日' + nouhin_yoteibi + 'は指定できません。<br />再度指定してください。',
+            html: '納品予定日' + nouhin_yoteibi + 'は指定できません。<br />納品予定日を修正してください。',
+            // position: 'top-end',
+            // toast: true,
+            icon: 'warning',
+            showConfirmButton: false,
+            // timer: 1500
+          });
+        }
+    });
+    $(function() {
+        var cancel_error = getUrlParam('cancel_error');
+        if (cancel_error) {
+          Swal.fire({
+            html: '締め時間を過ぎているためキャンセルできません。',
             // position: 'top-end',
             // toast: true,
             icon: 'warning',

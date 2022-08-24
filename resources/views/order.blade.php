@@ -163,6 +163,147 @@
 					<div class="invalid-feedback">
 					</div>
 			</div>
+
+
+
+
+			<form method="POST" action="https://ptwebcollect.jp/test_gateway/creditToken.api" name="charge_form" onsubmit="return false;">
+			<h4>カード情報</h4> <div class="input-form">
+			<label>カード番号</label>
+			<input type="text" name="card_no" maxlength="16" placeholder="************1234" value="0000000000000001"> </div>
+			<div class="input-form">
+			<label>カード名義人</label>
+			<input type="text" name="card_owner" maxlength="30" placeholder="KURONEKO TARO" value="KURONEKO TARO">
+			</div>
+			<div class="input-form">
+			<label>カード有効期限</label>
+			<input type="text" name="exp_month" maxlength="2" placeholder="10" value="10">月/ <input type="text" name="exp_year" maxlength="2" value="24" placeholder="20">年
+			</div>
+			<div class="input-form">
+			<label>セキュリティコード</label>
+			<input type="text" name="security_code" maxlength="4" placeholder="1234" value="1234"> </div>
+			<div class="input-form">
+			<input type="submit" value="送信" onclick="executePay()">
+			</div>
+			</form>
+
+			<!-- JavaScript ライブラリ読み込み body タグ内に記述する必要があります。-->
+			<script type="text/javascript" class="webcollect-embedded-token" src="https://ptwebcollect.jp/test_gateway/token/js/embeddedTokenLib.js"></script>
+
+			<script type="text/javascript">
+			/*
+			* 送信ボタン押下時に実行する JavaScript 関数
+			*/
+			function executePay() {
+			var text = '11111112';
+			function async_digestMessage(message) {
+			  return new Promise(function(resolve){
+			  var msgUint8 = new TextEncoder("utf-8").encode(message);
+			  crypto.subtle.digest('SHA-256', msgUint8).then(
+			      function(hashBuffer){
+			          var hashArray = Array.from(new Uint8Array(hashBuffer));
+			          var hashHex = hashArray.map(function(b){return b.toString(16).padStart(2, '0')}).join('');
+			          return resolve(hashHex);
+			      });
+			  })
+			}
+			if(window.Promise && window.crypto){
+			  async_digestMessage(text).then(
+			      function(shatxt){
+			          getHashText(shatxt);
+			      }
+			  ).catch(function(e){
+			      console.log('エラー：', e.message);
+			  })
+			}else{
+			  console.log('Promiseかcryptoに非対応');
+			}
+			function getHashText(text) {
+			console.log(text);
+
+			var elements = document.querySelectorAll('input[type="text"]'); Array.prototype.forEach.call(elements, function(element) {
+			element.style.backgroundColor = "#fff"; });
+
+			// コールバック関数(「正常」の場合)
+			var callbackSuccess = function(response) {
+			var formElement = document.charge_form;
+
+			// カード情報がリクエストパラメータに含まれないようにする
+			formElement.card_no.removeAttribute("name");
+			formElement.card_owner.removeAttribute("name");
+			formElement.exp_month.removeAttribute("name");
+			formElement.exp_year.removeAttribute("name");
+			formElement.security_code.removeAttribute("name");
+
+			// form に発行したトークンを追加する
+			var hiddenElement = document.createElement("input");
+			hiddenElement.type = "hidden";
+			hiddenElement.name = "webcollectToken";
+			hiddenElement.value = response.token;
+			formElement.appendChild(hiddenElement);
+
+			var token = Object(response['token']);
+			// alert(token);
+
+			document.location.href = "https://www.ipentec.com/"+token;
+
+			// form をサブミットする
+			formElement.submit(params);
+			};
+
+			// コールバック関数(「異常」の場合)
+			var callbackFailure = function(response) {
+
+			//エラー情報を取得
+			var errorInfo = response.errorInfo;
+
+			//errorItem の内容に応じてテキストボックスの背景色を変更する関数
+			function changeColor(errorItem) {
+			switch(errorItem) {
+			case "cardNo":
+			document.charge_form.card_no.style.backgroundColor = "#fdeef1";
+			break;
+			case "cardOwner":
+			document.charge_form.card_owner.style.backgroundColor = "#fdeef1";
+			break;
+			case "cardExp":
+			document.charge_form.exp_month.style.backgroundColor = "#fdeef1"; document.charge_form.exp_year.style.backgroundColor = "#fdeef1";
+			break;
+			case "securityCode":
+			document.charge_form.security_code.style.backgroundColor = "#fdeef1";
+			break; }
+			}
+
+			//エラーの数だけ処理を繰り返す
+			for (var i = 0; i<errorInfo.length; i++) {
+			if (errorInfo[i].errorItem) {
+			changeColor(errorInfo[i].errorItem); }
+
+			//メッセージを alert で出力
+			alert(errorInfo[i].errorCode + " : " + errorInfo[i].errorMsg); }
+			};
+
+			// トークン発行 API へ渡すパラメータ
+			var createTokenInfo = {
+			traderCode: "888888709",
+			authDiv: "2",
+			optServDiv: "00",
+			checkSum: text,
+			cardNo: document.charge_form.card_no.value,
+			cardOwner: document.charge_form.card_owner.value,
+			cardExp: document.charge_form.exp_month.value + document.charge_form.exp_year.value,
+			securityCode: document.charge_form.security_code.value
+			};
+			// webコレクトが提供する JavaScript 関数を実行し、トークンを発行する。
+			WebcollectTokenLib.createToken(createTokenInfo, callbackSuccess, callbackFailure); }
+			}
+			</script>
+
+
+
+
+
+
 			<input type="hidden" name="setonagi_id" value="{{$setonagi->id}}"/>
 		</div>
 	</div>
@@ -269,8 +410,9 @@ $(document).ready( function(){
           var tax = Math.round(tax);
 					$("#tax_val").val(tax);
           $(this).text("¥ "+ tax.toLocaleString());});
-
       });
+
+
 });
 </script>
 
@@ -365,8 +507,6 @@ $('.datepicker').datepicker({
 });
 </script>
 @endif
-
-
 <!-- 取引確認画面で操作ができないようにする -->
 <script>
 if(document.URL.match("/approval")) {
@@ -376,7 +516,8 @@ if(document.URL.match("/approval")) {
 		$('select').addClass('arrow_hidden');
 		$("select[readonly] > option:not(:selected)").attr('disabled', 'disabled');
 		$('textarea').attr('readonly',true);
-		$('select').attr("disabled", true);
+		$('select').on('selectstart', false);
+		$('select').on('contextmenu', false);
 		$('.datepicker').attr("disabled", true);
 		$('.head-sousa').remove();
 		$('.addniniorder').remove();
