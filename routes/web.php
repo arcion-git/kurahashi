@@ -33,6 +33,7 @@
   Route::get('/deal', 'LoginPageController@deal')->name('deal');
   Route::get('/line', 'LoginPageController@line')->name('line');
   Route::get('/favorite', 'LoginPageController@favorite')->name('favorite');
+  Route::get('/favoriteitem', 'LoginPageController@favoriteitem')->name('favoriteitem');
   Route::get('/user/deal/{id}', 'LoginPageController@dealdetail')->name('dealdetail');
   Route::get('/repeatorder', 'LoginPageController@repeatorder')->name('repeatorder');
 
@@ -60,6 +61,9 @@
   // Ajax POST
   Route::post('/addcart', 'LoginPageController@addcart');
   Route::post('/removecart', 'LoginPageController@removecart');
+
+  Route::post('/addfavoriteitem', 'LoginPageController@addfavoriteitem');
+  Route::post('/removefavoriteitem', 'LoginPageController@removefavoriteitem');
 
   Route::post('/removeorder', 'BothController@removeorder');
   Route::post('/removeordernini', 'BothController@removeordernini');

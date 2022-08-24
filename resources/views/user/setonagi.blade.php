@@ -90,6 +90,12 @@
                                 <button name="item_id" value="{{$setonagi_item->item()->id}}" id="{{$setonagi_item->item()->id}}" class="addcart btn btn-warning">カートに入れる</button>
                                 @endif
 
+                                @if($setonagi_item->favoriteitem())
+                                <button name="item_id" value="{{$setonagi_item->item()->id}}" id="{{$setonagi_item->item()->id}}" class="removefavoriteitem"><i class="fa fa-heart"></i></button>
+                                @else
+                                <button name="item_id" value="{{$setonagi_item->item()->id}}" id="{{$setonagi_item->item()->id}}" class="addfavoriteitem"><i class="far fa-heart"></i></button>
+                                @endif
+
                                 <!-- <div class="article-user">
                                   <img alt="image" src="assets/img/avatar/avatar-1.png">
                                   <div class="article-user-details">

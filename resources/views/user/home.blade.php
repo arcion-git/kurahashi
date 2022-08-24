@@ -78,7 +78,13 @@
                             <td class="text-center">{{$recommend->item()->zaikosuu}}</td>
                             <td class="text-center">{{$recommend->item()->tokkijikou}}</td>
                             <td class="text-center">{{$recommend->price}}</td>
-                            <td class="text-center"><button name="item_id" value="{{$recommend->item()->id}}" id="{{$recommend->item()->id}}" class="addcart btn btn-warning">カートに入れる</button></td>
+                            <td class="text-center">
+                              @if($recommend->favoriteitem())
+                              <button name="item_id" value="{{$recommend->item()->id}}" id="{{$recommend->item()->id}}" class="removefavoriteitem"><i class="fa fa-heart"></i></button>
+                              @else
+                              <button name="item_id" value="{{$recommend->item()->id}}" id="{{$recommend->item()->id}}" class="addfavoriteitem"><i class="far fa-heart"></i></button>
+                              @endif
+                              <button name="item_id" value="{{$recommend->item()->id}}" id="{{$recommend->item()->id}}" class="addcart btn btn-warning">カートに入れる</button></td>
                           <!-- </form> -->
                         </tr>
                         @endif
@@ -151,7 +157,14 @@
                             <td class="text-center">{{$special_price->item()->zaikosuu}}</td>
                             <td class="text-center">{{$special_price->item()->tokkijikou}}</td>
                             <td class="text-center">{{$special_price->price}}</td>
-                            <td class="text-center"><button name="item_id" value="{{$special_price->item()->id}}" id="{{$special_price->item()->id}}" class="addcart btn btn-warning">カートに入れる</button></td>
+
+                            <td class="text-center">
+                              @if($special_price->favoriteitem())
+                              <button name="item_id" value="{{$special_price->item()->id}}" id="{{$special_price->item()->id}}" class="removefavoriteitem"><i class="fa fa-heart"></i></button>
+                              @else
+                              <button name="item_id" value="{{$special_price->item()->id}}" id="{{$special_price->item()->id}}" class="addfavoriteitem"><i class="far fa-heart"></i></button>
+                              @endif
+                              <button name="item_id" value="{{$special_price->item()->id}}" id="{{$special_price->item()->id}}" class="addcart btn btn-warning">カートに入れる</button></td>
                           <!-- </form> -->
                         </tr>
                         @endif

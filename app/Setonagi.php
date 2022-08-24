@@ -29,4 +29,5 @@ class Setonagi extends Model
   'uketori_siharai',
   ];
 
+
 }

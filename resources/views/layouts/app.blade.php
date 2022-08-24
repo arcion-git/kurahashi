@@ -227,6 +227,9 @@
               <a href="{{ url('/deal') }}" class="dropdown-item has-icon">
                 <i class="fa fa-clipboard-list"></i> 取引一覧
               </a>
+              <a href="{{ url('/favoriteitem') }}" class="dropdown-item has-icon">
+                <i class="far fa-heart"></i> お気に入り商品一覧
+              </a>
               <a href="{{ url('/repeatorder') }}" class="dropdown-item has-icon">
                 <i class="fa fa-redo-alt"></i> リピートオーダー
               </a>
@@ -353,6 +356,9 @@
             </li>
             <li class="nav-item">
               <a href="{{ url('/special_price') }}" class="nav-link"><i class="fas fa-fire"></i><span>市況商品（時価）</span></a>
+            </li>
+            <li class="nav-item">
+              <a href="{{ url('/favoriteitem') }}" class="nav-link"><i class="far fa-heart"></i><span>お気に入り商品</span></a>
             </li>
 
 

@@ -24,6 +24,7 @@ use App\Repeatcart;
 use App\Repeatorder;
 use App\Setonagi;
 use App\SetonagiItem;
+use App\Favorite;
 
 // デバッグを出力
 use Log;
@@ -151,6 +152,9 @@ class LoginPageController extends Controller
 
       $favorite_categories = FavoriteCategory::where('user_id', $user_id)->get();
 
+      $favorite_items = Favorite::where('user_id', $user_id)->get();
+      // dd($favorite_items);
+
       $carts =  Cart::where('user_id',$user_id)->get();
 
       $kaiin_number = Auth::guard('user')->user()->kaiin_number;
@@ -166,6 +170,7 @@ class LoginPageController extends Controller
        'carts' => $carts ,
        'categories' => $categories ,
        'favorite_categories' => $favorite_categories,
+       'favorite_items' => $favorite_items,
        'recommends' => $recommends,
        'special_prices' => $special_prices,
        'page' => $request->page,
@@ -223,8 +228,6 @@ class LoginPageController extends Controller
       // $search = $request->search;
       // dd($search);
 
-
-
       $user_id = Auth::guard('user')->user()->id;
       $favorite_categories = FavoriteCategory::where('user_id', $user_id)->first();
 
@@ -260,6 +263,8 @@ class LoginPageController extends Controller
 
       $favorite_categories = FavoriteCategory::where('user_id', $user_id)->get();
 
+      $favorite_items = Favorite::where('user_id', $user_id)->get();
+
       $carts =  Cart::where('user_id',$user_id)->get();
 
       $kaiin_number = Auth::guard('user')->user()->kaiin_number;
@@ -275,6 +280,7 @@ class LoginPageController extends Controller
        'carts' => $carts ,
        'categories' => $categories ,
        'favorite_categories' => $favorite_categories,
+       'favorite_items' => $favorite_items,
        'recommends' => $recommends,
        'special_prices' => $special_prices,
       ]);
@@ -1748,6 +1754,66 @@ class LoginPageController extends Controller
     }
     return $nouhin_yoteibi;
   }
+
+
+
+  public function favoriteitem(){
+    $user_id = Auth::guard('user')->user()->id;
+    $categories = Category::get()->groupBy('bu_ka_name');
+    $favorite_categories = FavoriteCategory::where('user_id', $user_id)->get();
+
+    $favorite_items= favorite::where('user_id',$user_id)->get();
+
+    $data=[
+      'categories' => $categories,
+      'favorite_categories' => $favorite_categories,
+      'favorite_items' => $favorite_items,
+    ];
+    return view('user.auth.favoriteitem', $data);
+
+  }
+
+
+  public function addfavoriteitem(Request $request){
+
+    $user_id = Auth::guard('user')->user()->id;
+    $item_id = $request->item_id;
+
+    $favorite_in = Favorite::where(['user_id'=> $user_id , 'item_id'=> $item_id])->first();
+    if($favorite_in){
+      return response()->json([
+      'message' => 'favorite_in',
+      ]);
+    }
+    // $cart_in=Cart::where(['user_id'=> $user_id , 'item_id'=> $item->id , 'deal_id'=> null])->first();
+    // if($cart_in){
+    //   return response()->json([
+    //   'message' => 'cart_in',
+    //   ]);
+    // }
+    $favorite_item = Favorite::firstOrNew(['user_id'=> $user_id , 'item_id'=> $item_id]);
+    $favorite_item->save();
+
+    $data = "sucsess";
+    return redirect()->route('home',$data);
+  }
+
+
+  public function removefavoriteitem(Request $request){
+
+    $user_id = Auth::guard('user')->user()->id;
+    $item_id = $request->item_id;
+
+    $favorite_in = Favorite::where(['user_id'=> $user_id , 'item_id'=> $item_id])->first()->delete();;
+
+    $data = "sucsess";
+    return redirect()->route('home',$data);
+
+
+
+
+  }
+
 
 
 }
