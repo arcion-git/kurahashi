@@ -4,6 +4,7 @@ namespace App\Notifications;
 
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Support\Facades\Lang;
 
 class UserResetPassword extends Notification
 {
@@ -44,8 +45,10 @@ class UserResetPassword extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->line('You are receiving this email because we received a password reset request for your account.')
-            ->action('Reset Password', url('user/password/reset', $this->token))
-            ->line('If you did not request a password reset, no further action is required.');
+            ->subject('SETOnagiオーダーブック パスワードの再発行')
+            ->line('あなたのアカウントからパスワード再設定のリクエストがありました。')
+            ->line(Lang::get('This password reset link will expire in :count minutes.', ['count' => config('auth.passwords.'.config('auth.defaults.passwords').'.expire')]))
+            ->action('パスワードのリセットはこちら', url('user/password/reset', $this->token))
+            ->line('もしこのメールにお心当たりがない場合は、このメールを破棄してください。');
     }
 }
