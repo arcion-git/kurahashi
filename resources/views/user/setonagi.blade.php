@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
+
 @section('content')
 
 
@@ -39,13 +40,87 @@
           <div class="section-body">
                         <div class="row">
                           @foreach($setonagi_items as $setonagi_item)
-                          <div class="col-6 col-md-3 col-lg-3">
+                          <div class="col-12 col-md-4 col-lg-3">
                             <article class="article article-style-c">
                               <!-- <button class="addrecommendcategory btn btn-success" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus"></i> 商品を追加</button>
                               <button class="btn btn-success" data-toggle="modal" data-target="#modal{{$setonagi_item->item()->item_id}}"><i class="fas fa-plus"></i> 商品を追加</button> -->
                               <div class="article-header">
-                                <div class="article-image" data-background="/storage/item/{{$setonagi_item->item()->item_id}}.jpg" style="background-image: url(&quot;/storage/item/{{$setonagi_item->item()->item_id}}.jpg&quot;);">
+                                <!-- <div class="article-image" data-background="/storage/item/{{$setonagi_item->item()->item_id}}.jpg" style="background-image: url(&quot;/storage/item/{{$setonagi_item->item()->item_id}}.jpg&quot;);">
+                                </div> -->
+
+
+
+                                <!-- <div class="card-body">
+                                  <div id="carouselExampleIndicators{{$setonagi_item->item()->item_id}}" class="carousel slide" data-ride="carousel">
+                                    <ol class="carousel-indicators">
+                                      <li data-target="#carouselExampleIndicators{{$setonagi_item->item()->item_id}}" data-slide-to="0" class="active"></li>
+                                      <li data-target="#carouselExampleIndicators{{$setonagi_item->item()->item_id}}" data-slide-to="1"></li>
+                                      <li data-target="#carouselExampleIndicators{{$setonagi_item->item()->item_id}}" data-slide-to="2"></li>
+                                    </ol>
+                                    <div class="carousel-inner">
+                                      <div class="carousel-item active">
+                                        <img class="d-block w-100" src="/storage/item/{{$setonagi_item->item()->item_id}}_1.jpg" alt="First slide">
+                                      </div>
+                                      <div class="carousel-item">
+                                        <img class="d-block w-100" src="/storage/item/{{$setonagi_item->item()->item_id}}_2.jpg" alt="Second slide">
+                                      </div>
+                                      <div class="carousel-item">
+                                        <img class="d-block w-100" src="/storage/item/{{$setonagi_item->item()->item_id}}_3.jpg" alt="Third slide">
+                                      </div>
+                                    </div>
+                                    <a class="carousel-control-prev" href="#carouselExampleIndicators{{$setonagi_item->item()->item_id}}" role="button" data-slide="prev">
+                                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                      <span class="sr-only">Previous</span>
+                                    </a>
+                                    <a class="carousel-control-next" href="#carouselExampleIndicators{{$setonagi_item->item()->item_id}}" role="button" data-slide="next">
+                                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                      <span class="sr-only">Next</span>
+                                    </a>
+                                  </div>
+                                </div> -->
+
+
+                                <!-- 画像表示 -->
+                                <div id="carouselExampleIndicators{{$setonagi_item->item()->item_id}}" class="carousel slide" data-ride="">
+                                  <ol class="carousel-indicators">
+                                    <li data-target="#carouselExampleIndicators{{$setonagi_item->item()->item_id}}" data-slide-to="0" class="active"></li>
+                                    @for($i = 1; $i < 5; $i++)
+                                      <?php $filename = public_path().'/storage/item/'.$setonagi_item->item()->item_id.'_'.$i.'.jpg'; ?>
+                                      @if(file_exists($filename))
+                                      <li data-target="#carouselExampleIndicators{{$setonagi_item->item()->item_id}}" data-slide-to="{{$i}}" class=""></li>
+                                      @else
+                                      @endif
+                                    @endfor
+                                  </ol>
+                                  <div class="carousel-inner">
+                                    <div class="carousel-item active">
+                                      <a href="/storage/item/{{$setonagi_item->item()->item_id}}.jpg" class="luminous">
+                                        <img class="d-block w-100" src="/storage/item/{{$setonagi_item->item()->item_id}}.jpg" alt="First slide">
+                                      </a>
+                                    </div>
+                                    @for($i = 1; $i < 5; $i++)
+                                      <?php $filename = public_path().'/storage/item/'.$setonagi_item->item()->item_id.'_'.$i.'.jpg'; ?>
+                                      @if(file_exists($filename))
+                                      <div class="carousel-item">
+                                        <img class="d-block w-100" src="/storage/item/{{$setonagi_item->item()->item_id}}_{{$i}}.jpg" alt="slide" class="">
+                                      </div>
+                                      @else
+                                      @endif
+                                    @endfor
+                                  </div>
+                                  <a class="carousel-control-prev" href="#carouselExampleIndicators{{$setonagi_item->item()->item_id}}" role="button" data-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Previous</span>
+                                  </a>
+                                  <a class="carousel-control-next" href="#carouselExampleIndicators{{$setonagi_item->item()->item_id}}" role="button" data-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Next</span>
+                                  </a>
                                 </div>
+
+
+
+
                               </div>
                               <div class="article-details">
                                 <div class="article-category"><a href="#">産地</a><div class="bullet"></div><a href="#">{{$setonagi_item->item()->sanchi_name}}</a></div>
@@ -73,18 +148,25 @@
                                   Kg
                                   @endif
                                   <span class="setonagi_stock"></spab>（残り{{$setonagi_item->item()->zaikosuu}} ）</span></p>
-                                <p>規格：{{$setonagi_item->item()->kikaku}}<br />
-                                  @if($setonagi_item->item()->tokkijikou)
-                                  特記事項：{{$setonagi_item->item()->tokkijikou}}
-                                  @endif
-                                </p>
+
+
+                                <p><button class="tokkijikou_btn" type="button" data-toggle="collapse" data-target="#collapseExample{{$setonagi_item->item()->tokkijikou}}" aria-expanded="true" aria-controls="collapseExample">詳細を見る<i class="fa fa-chevron-down"></i></button></p>
+                                <div class="collapse" id="collapseExample{{$setonagi_item->item()->tokkijikou}}" style="">
+                                  <p>
+                                    規格：{{$setonagi_item->item()->kikaku}}<br />
+                                    @if($setonagi_item->item()->tokkijikou)
+                                    特記事項：<br>{{$setonagi_item->item()->tokkijikou}}
+                                    @endif
+                                  </p>
+                                </div>
+
                                 <input type="hidden" value="{{$setonagi_item->id}}" name="setonagi_item_id" class="setonagi_item_id" />
 
                                 @if ( Auth::guard('user')->user()->setonagi == 1 )
-                                  @if ( Auth::guard('user')->user()->setonagi()->kakebarai_riyou == 1 )
+                                  @if ( Auth::guard('user')->user()->setonagi()->kakebarai_riyou == 1 || Auth::guard('user')->user()->setonagi()->setonagi_ok == 1)
                                   <button name="item_id" value="{{$setonagi_item->item()->id}}" id="{{$setonagi_item->item()->id}}" class="addcart btn btn-warning">カートに入れる</button>
                                   @else
-                                  <a name="item_id" href="{{ url('/user/register') }}" class="btn btn-primary">新規会員登録はこちら</a>
+                                  <div class="btn btn-primary">現在審査中です</div>
                                   @endif
                                 @else
                                 <button name="item_id" value="{{$setonagi_item->item()->id}}" id="{{$setonagi_item->item()->id}}" class="addcart btn btn-warning">カートに入れる</button>
@@ -190,4 +272,10 @@
             </div>
           </div>
         </div>
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/luminous-lightbox@2.3.2/dist/luminous-basic.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/luminous-lightbox@2.3.2/dist/luminous.min.js"></script>
+        <script>
+        new LuminousGallery(document.querySelectorAll('.luminous'));
+        </script>
 @endsection

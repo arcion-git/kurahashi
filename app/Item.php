@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\File;
 
 class Item extends Model
 {
@@ -49,6 +50,16 @@ class Item extends Model
   public function tags()
   {
       return $this->belongsToMany('App\Tag','item_tag','tag_id','item_id');
+  }
+
+  public function img()
+  {
+    $filepath = public_path().'/storage/item/'.$this->item_id.'.jpg';
+    if(\File::exists($filepath)){
+        return 1;
+    }else{
+        return null;
+    }
   }
 
   // protected $primaryKey = 'item_id';

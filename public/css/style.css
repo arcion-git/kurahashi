@@ -3347,10 +3347,80 @@ table {
   appearance: none;
   margin-right: 15px;
 }
+
+.article-details .removefavoriteitem,
+.article-details .addfavoriteitem{
+  margin-right: 0px;
+  margin-top: 8px;
+  float: right;
+}
+
+.tokkijikou_btn i{
+  margin-left: 10px;
+}
+
+.tokkijikou_btn{
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  padding: 0;
+  appearance: none;
+  margin-right: 15px;
+}
+
 .removefavoriteitem{
   color: #FF4141
 }
 .removefavoriteitem i,
 .addfavoriteitem i{
   font-size: 1.2em;
+}
+
+.article.article-style-c .article-header {
+    height: auto !important;
+}
+
+@media (max-width: 767px) {
+/* .table:not(.table-sm):not(.table-md):not(.dataTable) td,
+.table:not(.table-sm):not(.table-md):not(.dataTable) th {
+    padding: 0px;
+    min-width: inherit;
+} */
+#cart .table-responsive table {
+    min-width: inherit !important;
+    width: 100% !important;
+}
+#memo{
+  min-width: inherit !important;
+  width: 100% !important;
+}
+.table-striped tbody tr {
+    border: 3px solid #bfc1c3 !important;
+}
+table th,
+table td{
+  font-size: 0.5em;
+  border: 1px solid #bfc1c3 !important;
+}
+.btn{
+  font-size: 0.5em;
+}
+/* table th,
+table td{
+  display: block;
+} */
+
+
+
+
+/* .head{
+  display: none !important;
+} */
+}
+
+
+.lum-lightbox.lum-open {
+    display: block;
+    z-index: 999 !important;
 }

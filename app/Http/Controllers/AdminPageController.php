@@ -769,28 +769,70 @@ class AdminPageController extends Controller
 
   public function riyoukyoka(Request $request){
     $riyoukyoka_user_id = $request->user_id;
+    $user = User::where('id',$riyoukyoka_user_id)->first();
     $setonagi = User::where('id',$riyoukyoka_user_id)->first()->setonagi();
-    // $setonagi->kakebarai_riyou = 1;
-    // $setonagi->save();
+    $setonagi->kakebarai_riyou = 1;
+    $setonagi->setonagi_ok = null;
+    $setonagi->save();
 
-    $name = 'テスト ユーザー';
-    $email = 'sk8.panda.27@gmail.com';
-
+    $name = $user->name;
+    $email = $user->email;
+    $url = url('');
+    $text = 'この度、ヤマトクレジットファイナンス株式会社の審査の結果、オーダーブックが利用可能となりました。<br />
+    ユーザー登録時にご登録いただいたメールアドレスとパスワードにて、下記URLよりご利用いただけます。<br />
+    URL：<a href="'.$url.'">'.$url.'</a>';
     Mail::send('emails.register', [
         'name' => $name,
+        'text' => $text,
     ], function ($message) use ($email) {
-        $message->to($email)->subject('テストタイトル');
+        $message->to($email)->subject('SETOnagiオーダーブック審査通過のお知らせ');
     });
-
-
     return redirect()->route('admin.setonagiuser');
   }
 
   public function riyouteisi(Request $request){
+    $user_id = $request->user_id;
+    $user = User::where('id',$user_id)->first();
+    $setonagi = User::where('id',$user_id)->first()->setonagi();
+    $setonagi->kakebarai_riyou = null;
+    $setonagi->setonagi_ok = null;
+    $setonagi->save();
+
+    $name = $user->name;
+    $email = $user->email;
+    $url = url('');
+    $text = 'この度、ヤマトクレジットファイナンス株式会社の審査の結果、<br />
+    オーダーブックが利用不可となりましたことをお知らせいたします。';
+    Mail::send('emails.register', [
+        'name' => $name,
+        'text' => $text,
+    ], function ($message) use ($email) {
+        $message->to($email)->subject('SETOnagiオーダーブック利用停止のお知らせ');
+    });
     return redirect()->route('admin.setonagiuser');
   }
 
   public function card_riyoukyoka(Request $request){
+    $user_id = $request->user_id;
+    $user = User::where('id',$user_id)->first();
+    $setonagi = User::where('id',$user_id)->first()->setonagi();
+    $setonagi->kakebarai_riyou = null;
+    $setonagi->setonagi_ok = 1;
+    $setonagi->save();
+
+    $name = $user->name;
+    $email = $user->email;
+    $url = url('');
+    $text = 'この度、ヤマトクレジットファイナンス株式会社の審査の結果、かけ払いでのお支払いはご利用いただけない結果となりました。<br />
+    クレジットカード払いでの利用については可能です。<br />
+    ユーザー登録時にご登録いただいたメールアドレスとパスワードにて、下記URLよりご利用いただけます。<br />
+    URL：<a href="'.$url.'">'.$url.'</a>';
+    Mail::send('emails.register', [
+        'name' => $name,
+        'text' => $text,
+    ], function ($message) use ($email) {
+        $message->to($email)->subject('SETOnagiオーダーブック審査結果のお知らせ');
+    });
     return redirect()->route('admin.setonagiuser');
   }
 

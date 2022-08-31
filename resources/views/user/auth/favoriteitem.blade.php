@@ -75,7 +75,16 @@
                               @else
                               <button name="item_id" value="{{$favorite_item->item()->id}}" id="{{$favorite_item->item()->id}}" class="addfavoriteitem"><i class="far fa-heart"></i></button>
                               @endif
-                              <button name="item_id" value="{{$favorite_item->item()->id}}" id="{{$favorite_item->item()->id}}" class="addcart btn btn-warning">カートに入れる</button></td>
+                              @if ( Auth::guard('user')->user()->setonagi == 1 )
+                                @if ( Auth::guard('user')->user()->setonagi()->kakebarai_riyou == 1 || Auth::guard('user')->user()->setonagi()->setonagi_ok == 1)
+                                <button name="item_id" value="{{$favorite_item->item()->id}}" id="{{$favorite_item->item()->id}}" class="addcart btn btn-warning">カートに入れる</button>
+                                @else
+                                <div class="btn btn-primary">現在審査中です</div>
+                                @endif
+                              @else
+                              <button name="item_id" value="{{$favorite_item->item()->id}}" id="{{$favorite_item->item()->id}}" class="addcart btn btn-warning">カートに入れる</button>
+                              @endif
+                            </td>
                           <!-- </form> -->
                         </tr>
                         @endif

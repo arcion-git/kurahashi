@@ -43,7 +43,8 @@
                 $images = glob('storage/item/*jpg');
                 $images = array_reverse($images);
                 foreach($images as $image) {
-                	echo '<div class="col-3"><a class="luminous" href="' , $image , '"><img src="/' , $image , '" alt="" width="100%"></a><p>' , $image , '</p></div>';
+                	// echo '<div class="col-3"><a class="luminous" href="' , $image , '"><img src="/' , $image , '" alt="" width="100%"></a><p>' , $image , '</p></div>';
+                	echo '<div class="col-3"><img src="/' , $image , '" alt="" width="100%"><p>' , $image , '</p></div>';
                 }
                 ?>
               </div>

@@ -82,28 +82,34 @@
                       <button type="submit" class="riyoukyoka_btn btn btn-warning">利用許可</button>
                     </form>
                     @endif
-                    @if($user->setonagi()->kakebarai_sinsa == 'ご利用不可' & $user->setonagi()->kakebarai_riyou == '')
+                    @if($user->setonagi()->kakebarai_sinsa == 'ご利用不可' & $user->setonagi()->setonagi_ok == '')
                     <form action="{{ url('/admin/card_riyoukyoka') }}" method="POST" class="form-horizontal">
                       {{ csrf_field() }}
                       <input type="hidden" name="user_id" value="{{$user->id}}" />
-                      <button type="submit" class="btn btn-primary">カード払いのみで利用許可</button>
+                      <button type="submit" class="card_riyoukyoka_btn btn btn-primary">カード払いのみで利用許可</button>
                     </form>
                     @endif
-                    @if($user->setonagi()->kakebarai_riyou == '1')
-                    <form action="{{ url('/admin/riyoukyoka') }}" method="POST" class="form-horizontal">
+                    @if($user->setonagi()->kakebarai_riyou == '1' || $user->setonagi()->setonagi_ok == '1')
+                    <form action="{{ url('/admin/riyouteisi') }}" method="POST" class="form-horizontal">
                       {{ csrf_field() }}
                       <input type="hidden" name="user_id" value="{{$user->id}}" />
-                      <button type="submit" class="btn btn-success">利用停止</button>
+                      <button type="submit" class="riyouteisi_btn btn btn-success">利用停止</button>
                     </form>
                     @endif
                   </td>
                   <td class="text-center">
                     @if(isset($user->setonagi))
-                    @if($user->setonagi()->kakebarai_riyou == 1)
-                    利用許可済
-                    @else
-                    -
-                    @endif
+                      @if($user->setonagi()->kakebarai_riyou == 1)
+                      利用許可済
+                      @elseif($user->setonagi()->setonagi_ok == 1)
+                      カード払い利用許可済
+                      @elseif($user->setonagi()->kakebarai_sinsa == 'ご利用可' & $user->setonagi()->kakebarai_riyou == 0)
+                      利用許可待ち
+                      @elseif($user->setonagi()->kakebarai_sinsa == '審査受付中')
+                      審査中
+                      @else
+                      利用不可
+                      @endif
                     @endif
                   </td>
                 </tr>

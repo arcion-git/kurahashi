@@ -819,7 +819,9 @@ class LoginPageController extends Controller
         }
       }
     }
-    $sano_nissuu = '+'.((strtotime($nouhin_yoteibi) - strtotime($today)) / 86400).'d';
+    // $sano_nissuu = '+'.((strtotime($nouhin_yoteibi) - strtotime($today)) / 86400).'d';
+    // dd($sano_nissuu);
+    $sano_nissuu = $nouhin_yoteibi;
 
     if(isset($data->memo)){
     $memo -> $request->memo;
@@ -1106,6 +1108,8 @@ class LoginPageController extends Controller
     $data = $request->all();
     $item_ids = $data['item_id'];
 
+
+
     // dd($data);
 
     // 在庫チェック
@@ -1362,16 +1366,197 @@ class LoginPageController extends Controller
     $deal->save();
 
     if($request->has('addsuscess_btn')){
-
       // $carts = Cart::where(['user_id'=>$user_id, 'deal_id'=> $$deal_id])->get();
       // dd($carts);
-
       $deal=Deal::firstOrNew(['id'=> $deal_id]);
       $deal->status = '発注済';
       $deal->success_time = Carbon::now();
-
       $deal->save();
 
+
+      // 注文完了メール送信
+      $user = User::where('id',$user_id)->first();
+
+      $name = $user->name;
+      // $email = $user->email;
+      $email = 'sk8.panda.27@gmail.com';
+      $url = url('');
+      $text = 'SETOnagiオーダーブックをご利用くださいまして誠にありがとうございます。<br />
+      下記の通りご注文をお受けいたしましたのでご確認をお願いいたします。<br />
+      <br />
+      【ご注文内容】';
+      if($user->setonagi == 1){
+        // 支払方法
+        $pay = '【お支払い方法】<br />'.$deal->uketori_siharai;
+        // 受け取り場所
+        $uketori_place = '【受け取り場所】<br />'.$deal->uketori_place;
+        // 受け取り予定日
+        $uketori_time = '【受け取り時間】<br />'.$deal->uketori_time;
+      }else{
+        // 支払方法
+        $pay = null;
+        // 受け取り場所
+        $uketori_place = null;
+        // 受け取り時間
+        $uketori_time = null;
+      }
+      // メモ
+      $memo =  '【メモ】<br />'.$deal->memo;
+
+      // 合計金額
+      $total_price = [];
+      $carts = Cart::where(['deal_id'=> $deal->id])->get();
+      // カート商品の出力
+      foreach ($carts as $cart) {
+        $orders = Order::where(['cart_id'=> $cart->id])->get();
+        foreach ($orders as $order) {
+          // dd($store);
+          $array = $order->price;
+          array_push($total_price, $array);
+        }
+      }
+      $total_price = array_sum($total_price);
+      $total_price = $total_price * 1.1;
+      $total_price =  '【合計金額】<br />'.$total_price.'円（税込）';
+
+      // オーダーリストの作成
+      $order_list=[];
+        $carts = Cart::where(['deal_id'=> $deal->id])->get();
+        // カート商品の出力
+        foreach ($carts as $cart) {
+          $orders = Order::where(['cart_id'=> $cart->id])->get();
+          foreach ($orders as $order) {
+            $user = User::where('id',$deal->user_id)->first();
+            $item = Item::where(['id'=> $cart->item_id])->first();
+            // セトナギユーザーの場合
+            if($user->setonagi == 1){
+              $setonagi_user = Setonagi::where('user_id',$user->id)->first();
+            }
+            // BtoBユーザーの場合
+            if(!($user->setonagi == 1)){
+              $store = Store::where(['tokuisaki_name'=> $order->tokuisaki_name , 'store_name'=> $order->store_name])->first();
+            }
+
+            // 単位を取得
+            if ($item->tani == 1){
+            $tani = 'ｹｰｽ';
+            }
+            elseif ($item->tani == 2){
+            $tani = 'ﾎﾞｰﾙ';
+            }
+            elseif ($item->tani == 3){
+            $tani = 'ﾊﾞﾗ';
+            }
+            elseif ($item->tani == 4){
+            $tani = 'kg';
+            }
+
+            // 出力が分岐する項目
+            // BtoBユーザー
+            if(!($user->setonagi == 1)){
+
+              // BtoBの場合は配送先の店舗を追加する
+              $store = $order->tokuisaki_name.$order->store_name;
+              $nouhin_yoteibi = $order->nouhin_yoteibi;
+              $array =
+                '・'.
+                // 商品コード
+                // $item->item_id.
+                // SKUコード
+                // $item->sku_code.
+                // 商品名
+                $item->item_name.' × '.
+                // 数量
+                $order->quantity.
+                // 単位
+                $tani.' '.
+                // 単価
+                $order->price.'円 '.$store.' '.$nouhin_yoteibi
+                // 配送希望日
+                // $order->nouhin_yoteibi.
+                // 受け取り
+                // ''.
+                // 内消費税
+                // '10%'
+              ;
+            // セトナギユーザー
+            }else{
+              $store = null;
+              // 受け取り予定日
+              $nouhin_yoteibi = '【受け取り予定日】<br />'.$order->nouhin_yoteibi;
+              $array =
+                '・'.
+                // 商品コード
+                // $item->item_id.
+                // SKUコード
+                // $item->sku_code.
+                // 商品名
+                $item->item_name.' × '.
+                // 数量
+                $order->quantity.
+                // 単位
+                $tani.' '.
+                // 単価
+                $order->price.'円'
+                // 配送希望日
+                // $order->nouhin_yoteibi.
+                // 受け取り
+                // ''.
+                // 内消費税
+                // '10%'
+              ;
+            }
+            array_push($order_list, $array);
+          }
+        }
+        // BtoBユーザーのみ任意の商品を出力
+        if(!($user->setonagi == 1)){
+          $cart_ninis = CartNini::where(['deal_id'=> $deal->id])->get();
+          // dd($cart_ninis);
+          foreach ($cart_ninis as $cart_nini) {
+            $order_ninis = OrderNini::where(['cart_nini_id'=> $cart_nini->id])->get();
+            foreach ($order_ninis as $order_nini) {
+              // dd($orders);
+              // orderslist出力
+              $user = User::where('id',$deal->user_id)->first();
+              // dd($user);
+              $store = Store::where(['tokuisaki_name'=> $order_nini->tokuisaki_name , 'store_name'=> $order_nini->store_name])->first();
+              // 出力が分岐する項目
+              // BtoBユーザー
+              if(!($user->setonagi == 1)){
+                // BtoBの場合は配送先の店舗を追加する
+                $store = $order_nini->tokuisaki_name.$order_nini->store_name;
+                $nouhin_yoteibi = $order_nini->nouhin_yoteibi;
+                $array =
+                  '・[任意の商品]'.
+                  $cart_nini->item_name.' × '.
+                  // 数量
+                  $order_nini->quantity.' '.$store.' '.$nouhin_yoteibi
+                ;
+              // セトナギユーザー
+              }
+              array_push($order_list, $array);
+            }
+          }
+        }
+      $order_list = implode('<br>', $order_list);
+      // dd($order_list);
+
+      Mail::send('emails.register', [
+          'name' => $name,
+          'user' => $user,
+          'text' => $text,
+          'pay' => $pay,
+          'uketori_place' => $uketori_place,
+          'uketori_time' => $uketori_time,
+          'order_list' => $order_list,
+          'total_price' => $total_price,
+          'memo' => $memo,
+          'nouhin_yoteibi' => $nouhin_yoteibi,
+      ], function ($message) use ($email) {
+          $message->to($email)->subject('SETOnagiオーダーブックご注文承りました。');
+      });
+      // 注文完了メール送信ここまで
     }
 
 
