@@ -94,7 +94,7 @@
                                   </ol>
                                   <div class="carousel-inner">
                                     <div class="carousel-item active">
-                                      <a href="/storage/item/{{$setonagi_item->item()->item_id}}.jpg" class="luminous">
+                                      <a href="/storage/item/{{$setonagi_item->item()->item_id}}.jpg" data-fancybox="images-{{$setonagi_item->item()->item_id}}">
                                         <img class="d-block w-100" src="/storage/item/{{$setonagi_item->item()->item_id}}.jpg" alt="First slide">
                                       </a>
                                     </div>
@@ -102,7 +102,9 @@
                                       <?php $filename = public_path().'/storage/item/'.$setonagi_item->item()->item_id.'_'.$i.'.jpg'; ?>
                                       @if(file_exists($filename))
                                       <div class="carousel-item">
-                                        <img class="d-block w-100" src="/storage/item/{{$setonagi_item->item()->item_id}}_{{$i}}.jpg" alt="slide" class="">
+                                        <a href="/storage/item/{{$setonagi_item->item()->item_id}}_{{$i}}.jpg" data-fancybox="images-{{$setonagi_item->item()->item_id}}">
+                                          <img class="d-block w-100" src="/storage/item/{{$setonagi_item->item()->item_id}}_{{$i}}.jpg" alt="slide" class="">
+                                        </a>
                                       </div>
                                       @else
                                       @endif
@@ -272,9 +274,14 @@
           </div>
         </div>
 
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/luminous-lightbox@2.3.2/dist/luminous-basic.min.css">
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+        <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+
+
+        <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/luminous-lightbox@2.3.2/dist/luminous-basic.min.css">
         <script src="https://cdn.jsdelivr.net/npm/luminous-lightbox@2.3.2/dist/luminous.min.js"></script>
         <script>
         new LuminousGallery(document.querySelectorAll('.luminous'));
-        </script>
+        </script> -->
 @endsection
