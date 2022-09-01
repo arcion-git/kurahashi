@@ -40,7 +40,8 @@
 
 
             <div class="float-right">
-                <button type="submit" class="btn btn-warning">内容確認画面に進む</button>
+                <button id="approval_btn" type="submit" class="btn btn-warning">内容確認画面に進む</button>
+                <div id="card_approval_btn" class="btn btn-warning" onclick="executePay">内容確認画面に進む</div>
             </div>
           </form>
 
@@ -96,6 +97,8 @@ $(function(){
       }
   });
 });
+
+
 </script>
 
 @endsection

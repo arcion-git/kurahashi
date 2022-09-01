@@ -37,25 +37,27 @@
           </form> -->
 
 
-          <form action="{{ url('/adddeal') }}" method="POST" name="cart_id" value="" class="form-horizontal">
+          <form id="cart_form" action="{{ url('/adddeal') }}" method="POST" name="cart_id" value="" class="form-horizontal">
             {{ csrf_field() }}
             <div class="row mt-4 order">
               <div class="col-md-12">
                 <div class="section-title">オーダー内容</div>
                 <div id="order"></div>
+
+                @if(app('request')->input('uketori_siharai') == 'クレジットカード払い')
+                @endif
+
               </div>
             </div>
             <div class="float-right">
                 <!-- <button type="submit" name="adddeal_btn" class="btn btn-warning">この内容で問い合わせる</button> -->
-                <button type="submit" name="addsuscess_btn" class="btn btn-success">この内容で注文する</button>
+                <button type="submit" name="addsuscess_btn" id="addsuscess_btn" class="btn btn-success">この内容で注文する</button>
             </div>
           </form>
           <div class="float-right" style="margin-right:5px;">
               <a href="javascript:history.back()"><button class="btn btn-info">戻って編集する</button></a>
           </div>
-
           <br style="clear:both;" />
-
         </div>
       </div>
     </div>

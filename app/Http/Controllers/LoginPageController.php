@@ -1110,8 +1110,8 @@ class LoginPageController extends Controller
 
 
 
-    // dd($data);
 
+    // dd($data);
     // 在庫チェック
     // if($request->has('addsuscess_btn')){
       foreach($item_ids as $key => $input) {
@@ -1200,39 +1200,13 @@ class LoginPageController extends Controller
 
 
 
-    // if($request->uketori_siharai == 'クレジットカード払い'){
-    //   // 決済tokenの取得
-    //   $client = new Client();
-    //   $url = 'https://ptwebcollect.jp/test_gateway/token/js/embeddedTokenLib.js';
-    //   $option = [
-    //     'headers' => [
-    //       'Accept' => '*/*',
-    //       'Content-Type' => 'application/x-www-form-urlencoded',
-    //       'charset' => 'UTF-8',
-    //     ],
-    //     'form_params' => [
-    //       'function_div' => 'A12',
-    //       'trader_code' => '888888709',
-    //       'device_div' => 1,
-    //     ]
-    //   ];
-    //   $response = $client->request('POST', $url, $option);
-    //   $result = $response->getBody()->getContents();
-    //   dd($result);
-    // }
-
-
-
-
-
-// check_sumを作るところからスタート
 
     if($request->uketori_siharai == 'クレジットカード払い'){
-
+      dd($request->token_api);
       // EPトークン取得
       $client = new Client();
       // $url = 'https://api.kuronekoyamato.co.jp/api/credit';
-      $url = 'https://ptwebcollect.jp/test_gateway/getEpToken.api';
+      $url = 'https://ptwebcollect.jp/test_gateway/creditToken.api';
 
       $option = [
         'headers' => [
@@ -1241,75 +1215,33 @@ class LoginPageController extends Controller
           'charset' => 'UTF-8',
         ],
         'form_params' => [
-          'function_div' => 'A12',
+          'function_div' => 'A08',
           'trader_code' => '888888709',
+          // パソコンかスマホか
           'device_div' => 1,
-          'device_info' => 1,
-          'option_service_div' => 00,
-          'check_sum' => '',
-          'cardNo' => '',
-          'cardOwner' => '',
-          'cardExp' => '',
-          'securityCode' => '',
+          'order_no' => $deal_id,
+          // 決済合計金額
+          'settle_price' => $request->all_total_val,
+          'buyer_name_kanji' => $user->name,
+          'buyer_tel' => $user->tel,
+          'buyer_email' => $user->email,
+          'pay_way' => 1,
+          'token' => $request->token_api,
+
+          // 'device_info' => 1,
+          // 'option_service_div' => 00,
+          // 'check_sum' => '',
+          // 'cardNo' => '',
+          // 'cardOwner' => '',
+          // 'cardExp' => '',
+          // 'securityCode' => '',
         ]
       ];
       // dd($option);
       $response = $client->request('POST', $url, $option);
-      $result = $response->getBody()->getContents();
+      $result = simplexml_load_string($response->getBody()->getContents());
+      // $result = $response->getBody()->getContents();
       dd($result);
-
-
-
-
-
-
-
-      // ヤマトAPI連携確認
-      $client = new Client();
-      // $url = 'https://api.kuronekoyamato.co.jp/api/credit';
-      $url = 'https://ptwebcollect.jp/test_gateway/getTraderToken.api';
-
-      $option = [
-        'headers' => [
-          'Accept' => '*/*',
-          'Content-Type' => 'application/x-www-form-urlencoded',
-          'charset' => 'UTF-8',
-        ],
-        'form_params' => [
-          'function_div' => 'A13',
-          'trader_code' => '888888709',
-          'device_div' => 2,
-          'option_service_div' => 00,
-          'check_sum' => '',
-
-
-
-          // 'order_no' => $deal_id,
-          // 'goods_name' => $request->tax_val,
-          // 'settle_price' => $request->all_total_val,
-          // 'buyer_name_kanji' => '濱本 悠世',
-          // 'buyer_tel' => '08028885281',
-          // 'buyer_email' => 'info@arcion.jp',
-          // 'token' => '',
-          // 'auth_div' => 1,
-          // 'pay_way' => 1,
-          // 'option_service_div' => '00'
-        ]
-      ];
-
-      // A138888887092004111111111111111KURONEKO TARO10241234'EPトークン'
-      // dd($option);
-      $response = $client->request('POST', $url, $option);
-      $result = $response->getBody()->getContents();
-      dd($result);
-      // if($result->returnCode == 1){
-      //   $delete_deal = Deal::where(['id'=> $deal_id])->first()->delete();
-      //   $message = 'error';
-      //   $data=[
-      //     'message' => $message,
-      //   ];
-      //   return redirect()->route('confirm',$data);
-      // }
     }
 
 
