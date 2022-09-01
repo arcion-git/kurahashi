@@ -35,7 +35,7 @@
             <div class="row">
               <div class="col-12">
                 <div class="form-group">
-                  <label>商品詳細</label>
+                  <label>商品詳細（ProductItemDetail）</label>
                   <form action="itemimport" method="POST" enctype="multipart/form-data">
                   	@csrf
                   	<div class="form-group">
@@ -51,7 +51,7 @@
 
               <div class="col-12">
                 <div class="form-group">
-                  <label>価格グループ</label>
+                  <label>価格グループ（PriceGroupInfo）</label>
                   @if ($errors->any())
                   <div class="alert alert-danger">
                   	<ul>
@@ -73,7 +73,7 @@
               </div>
               <div class="col-6">
                 <div class="form-group">
-                  <label>商品価格</label>
+                  <label>商品価格（ListPriceInfo）</label>
                   @if ($errors->any())
                   <div class="alert alert-danger">
                   	<ul>
@@ -95,7 +95,7 @@
               </div>
               <div class="col-6">
                 <div class="form-group">
-                  <label>商品特別価格</label>
+                  <label>商品特別価格（SpecialPriceInfo）</label>
                   @if ($errors->any())
                   <div class="alert alert-danger">
                   	<ul>
@@ -131,7 +131,7 @@
               </div> -->
               <div class="col-6">
                 <div class="form-group">
-                  <label>商品カテゴリマスター</label>
+                  <label>商品カテゴリマスター（CategoryMaster）</label>
                   @if ($errors->any())
                   <div class="alert alert-danger">
                   	<ul>
@@ -153,7 +153,7 @@
               </div>
               <div class="col-6">
                 <div class="form-group">
-                  <label>商品カテゴリ</label>
+                  <label>商品カテゴリ（ProductCategory）</label>
                   @if ($errors->any())
                   <div class="alert alert-danger">
                   	<ul>
@@ -205,7 +205,7 @@
             <div class="row">
               <div class="col-12">
                 <div class="form-group">
-                  <label>顧客担当者</label>
+                  <label>顧客担当者（CustomerRep）</label>
                   @if ($errors->any())
                   <div class="alert alert-danger">
                   	<ul>
@@ -229,7 +229,7 @@
             <div class="row">
               <div class="col-6">
                 <div class="form-group">
-                  <label>顧客担当店舗</label>
+                  <label>顧客担当店舗（CustomerResponsibleStore）</label>
                   @if ($errors->any())
                   <div class="alert alert-danger">
                   	<ul>
@@ -251,7 +251,7 @@
               </div>
               <div class="col-6">
                 <div class="form-group">
-                  <label>得意先店舗</label>
+                  <label>得意先店舗（CustomerStore）</label>
                   @if ($errors->any())
                   <div class="alert alert-danger">
                     <ul>
@@ -282,7 +282,7 @@
             <div class="row">
               <div class="col-6">
                 <div class="form-group">
-                  <label>休日カレンダー</label>
+                  <label>休日カレンダー（Calendar）</label>
                   @if ($errors->any())
                   <div class="alert alert-danger">
                   	<ul>
@@ -334,7 +334,7 @@
               </div>
               <div class="col-6">
                 <div class="form-group">
-                  <label>セトナギ商品</label>
+                  <label>セトナギ商品（SetonagiItem）</label>
                   @if ($errors->any())
                   <div class="alert alert-danger">
                   	<ul>

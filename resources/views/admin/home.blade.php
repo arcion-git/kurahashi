@@ -73,6 +73,7 @@
               <table class="table table-striped">
                 <tr>
                   <th class="text-center">取引ID</th>
+                  <th class="text-center">バイヤー</th>
                   <th class="text-center">お名前</th>
                   <th class="text-center">お問い合わせ日時</th>
                   <th class="text-center">受注日時</th>
@@ -83,6 +84,9 @@
                 <tr>
                   <td class="text-center">
                     {{$deal->id}}
+                  </td>
+                  <td class="text-center">
+                    {{$deal->user->tokuisaki_name()}}
                   </td>
                   <td class="text-center">
                     {{$deal->user->name}}
