@@ -147,11 +147,10 @@
                                   @elseif ($setonagi_item->item()->tani == 4)
                                   Kg
                                   @endif
-                                  <span class="setonagi_stock"></spab>（残り{{$setonagi_item->item()->zaikosuu}} ）</span></p>
-
-
-                                <p><button class="tokkijikou_btn" type="button" data-toggle="collapse" data-target="#collapseExample{{$setonagi_item->item()->tokkijikou}}" aria-expanded="true" aria-controls="collapseExample">詳細を見る<i class="fa fa-chevron-down"></i></button></p>
-                                <div class="collapse" id="collapseExample{{$setonagi_item->item()->tokkijikou}}" style="">
+                                  <span class="setonagi_stock">（残り{{$setonagi_item->item()->zaikosuu}} ）</span>
+                                </p>
+                                <p><button class="tokkijikou_btn" type="button" data-toggle="collapse" data-target="#collapseExample{{$setonagi_item->item()->item_id}}" aria-expanded="true" aria-controls="collapseExample">詳細を見る<i class="fa fa-chevron-down"></i></button></p>
+                                <div class="collapse" id="collapseExample{{$setonagi_item->item()->item_id}}" style="">
                                   <p>
                                     規格：{{$setonagi_item->item()->kikaku}}<br />
                                     @if($setonagi_item->item()->tokkijikou)

@@ -2,15 +2,17 @@
 <br />
 {!! $text !!}
 <br />
-@if($order_list){!! $order_list !!}<br /><br />@endif
-@if($total_price){!! $total_price !!}<br /><br />@endif
+@if(isset($order_list)){!! $order_list !!}<br /><br />@endif
+@if(isset($total_price)){!! $total_price !!}<br /><br />@endif
+@if(isset($user))
 @if($user->setonagi == 1)
-{!! $pay !!}<br /><br />
-{!! $uketori_place !!}<br /><br />
-{!! $nouhin_yoteibi !!}<br /><br />
-{!! $uketori_time !!}<br /><br />
+@if(isset($pay)){!! $pay !!}<br /><br />@endif
+@if(isset($uketori_place)){!! $uketori_place !!}<br /><br />@endif
+@if(isset($nouhin_yoteibi)){!! $nouhin_yoteibi !!}<br /><br />@endif
+@if(isset($uketori_time)){!! $uketori_time !!}<br /><br />@endif
 @endif
-@if($memo){!! $memo !!}<br /><br />@endif
+@endif
+@if(isset($memo)){!! $memo !!}<br /><br />@endif
 引き続き、SETOnagiのご利用を心よりお待ちしております。<br />
 <br />
 =============================================<br />
