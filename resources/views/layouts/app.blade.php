@@ -246,6 +246,16 @@
               <a href="{{ url('/line') }}" class="dropdown-item has-icon">
                 <i class="far fa-comments"></i> LINEでお問い合わせ
               </a>
+              <a href="{{ url('/guide') }}" class="dropdown-item has-icon">
+                <i class="fa fa-map-signs"></i> ご利用ガイド
+              </a>
+              <div class="dropdown-divider"></div>
+              <a href="{{ url('/law') }}" class="dropdown-item has-icon">
+                特商法取引に基づく表記
+              </a>
+              <a href="{{ url('/privacypolicy') }}" class="dropdown-item has-icon">
+                プライバシーポリシー
+              </a>
               <div class="dropdown-divider"></div>
               @endif
               <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
@@ -362,6 +372,9 @@
             <li class="nav-item">
               <a href="{{ url('/favoriteitem') }}" class="nav-link"><i class="far fa-heart"></i><span>お気に入り商品</span></a>
             </li>
+            <li class="nav-item">
+              <a href="{{ url('/guide') }}"  class="nav-link"><i class="fa fa-map-signs"></i><span>ご利用ガイド<span></a>
+            </li>
 
 
 {{--
@@ -418,8 +431,8 @@
             --}}
 
 
-            <li class="nav-item nav_banner"><a href="https://setonagi.net/fish-feature"><img class="" src="https://setonagi.net/wp-content/themes/welcart_basic-beldad/assets/images/top-assets/setonagi_top53.jpg" /></a></li>
-        		<li class="nav-item nav_banner"><a href="https://www.youtube.com/channel/UCqGOp5wPW6-RgcMLRc4jTPw" target="_blank"><img class="" src="https://setonagi.net/wp-content/themes/welcart_basic-beldad/assets/images/top-assets/setonagi_top23.jpg" /></a>
+            <!-- <li class="nav-item nav_banner"><a href="https://setonagi.net/fish-feature"><img class="" src="https://setonagi.net/wp-content/themes/welcart_basic-beldad/assets/images/top-assets/setonagi_top53.jpg" /></a></li> -->
+        		<li class="nav-item nav_banner"><a href="https://www.youtube.com/c/KurahashiCoJp" target="_blank"><img class="" src="{{ asset('img/kurahashi_channel.jpg') }}" /></a>
         <?php
         $xml = simplexml_load_file('https://www.youtube.com/feeds/videos.xml?channel_id=UCqGOp5wPW6-RgcMLRc4jTPw');
         if( $xml !== false):
@@ -455,9 +468,10 @@
         <div class="footer-left">
           Copyright &copy; KURAHASHI
         </div>
-        <!-- <div class="footer-right">
-          2.3.0
-        </div> -->
+        <div class="footer-right small">
+          <span class="" ></span>運営：<a href="https://www.kurahashi.co.jp/" target="_blank">株式会社クラハシ</a></span>
+          <span class="">開発：<a href="http://u-midas.com/" target="_blank">株式会社U-midas</a></span>
+        </div>
       </footer>
     </div>
     <div id="overlayajax">

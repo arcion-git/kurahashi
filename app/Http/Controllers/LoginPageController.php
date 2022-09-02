@@ -218,6 +218,85 @@ class LoginPageController extends Controller
   }
 
 
+  public function guide()
+  {
+      $user_id = Auth::guard('user')->user()->id;
+      $favorite_categories = FavoriteCategory::where('user_id', $user_id)->first();
+        if ($favorite_categories === null) {
+          $categories = Category::get();
+          $categories = $categories->groupBy('bu_ka_name');
+          // dd($categories);
+          return view('user/auth/questionnaire', ['categories' => $categories]);
+        }
+      $categories = Category::get()->groupBy('bu_ka_name');
+      $user_id = Auth::guard('user')->user()->id;
+      $favorite_categories = FavoriteCategory::where('user_id', $user_id)->get();
+      $carts =  Cart::where('user_id',$user_id)->get();
+      $kaiin_number = Auth::guard('user')->user()->kaiin_number;
+      $now = Carbon::now()->addDay(3)->format('Y-m-d');
+      $recommends = Recommend::where('user_id', $kaiin_number)->whereDate('end', '>=', $now)->orWhere('end',null)->where('user_id', $kaiin_number)->get();
+      $special_prices = SpecialPrice::get();
+      return view('user/guide',
+      ['carts' => $carts ,
+       'categories' => $categories ,
+       'favorite_categories' => $favorite_categories,
+       'recommends' => $recommends,
+       'special_prices' => $special_prices,
+      ]);
+  }
+  public function law()
+  {
+      $user_id = Auth::guard('user')->user()->id;
+      $favorite_categories = FavoriteCategory::where('user_id', $user_id)->first();
+        if ($favorite_categories === null) {
+          $categories = Category::get();
+          $categories = $categories->groupBy('bu_ka_name');
+          // dd($categories);
+          return view('user/auth/questionnaire', ['categories' => $categories]);
+        }
+      $categories = Category::get()->groupBy('bu_ka_name');
+      $user_id = Auth::guard('user')->user()->id;
+      $favorite_categories = FavoriteCategory::where('user_id', $user_id)->get();
+      $carts =  Cart::where('user_id',$user_id)->get();
+      $kaiin_number = Auth::guard('user')->user()->kaiin_number;
+      $now = Carbon::now()->addDay(3)->format('Y-m-d');
+      $recommends = Recommend::where('user_id', $kaiin_number)->whereDate('end', '>=', $now)->orWhere('end',null)->where('user_id', $kaiin_number)->get();
+      $special_prices = SpecialPrice::get();
+      return view('user/law',
+      ['carts' => $carts ,
+       'categories' => $categories ,
+       'favorite_categories' => $favorite_categories,
+       'recommends' => $recommends,
+       'special_prices' => $special_prices,
+      ]);
+  }
+  public function privacypolicy()
+  {
+      $user_id = Auth::guard('user')->user()->id;
+      $favorite_categories = FavoriteCategory::where('user_id', $user_id)->first();
+        if ($favorite_categories === null) {
+          $categories = Category::get();
+          $categories = $categories->groupBy('bu_ka_name');
+          // dd($categories);
+          return view('user/auth/questionnaire', ['categories' => $categories]);
+        }
+      $categories = Category::get()->groupBy('bu_ka_name');
+      $user_id = Auth::guard('user')->user()->id;
+      $favorite_categories = FavoriteCategory::where('user_id', $user_id)->get();
+      $carts =  Cart::where('user_id',$user_id)->get();
+      $kaiin_number = Auth::guard('user')->user()->kaiin_number;
+      $now = Carbon::now()->addDay(3)->format('Y-m-d');
+      $recommends = Recommend::where('user_id', $kaiin_number)->whereDate('end', '>=', $now)->orWhere('end',null)->where('user_id', $kaiin_number)->get();
+      $special_prices = SpecialPrice::get();
+      return view('user/privacypolicy',
+      ['carts' => $carts ,
+       'categories' => $categories ,
+       'favorite_categories' => $favorite_categories,
+       'recommends' => $recommends,
+       'special_prices' => $special_prices,
+      ]);
+  }
+
 
   public function setonagi()
   {

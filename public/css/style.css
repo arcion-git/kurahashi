@@ -3440,3 +3440,33 @@ table td{
 #pay_card .securitycode{
   max-width: 80px;
 }
+
+.guide {
+  color: #34395e;
+  font-size: 15px;
+  line-height: 160%;
+}
+.guide h2{
+  margin-top: 20px;
+  font-size: 160%;
+}
+.guide h3{
+  margin-top: 20px;
+  font-size: 140%;
+}
+
+
+.guide .title {
+    font-weight: bold;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    font-size: 1.2em;
+}
+
+.guide tbody tr:nth-child(odd) {
+    background-color: #f0f0f0;
+}
+.guide td {
+    padding: 0.714286em;
+    /* border: 1px solid #ccc; */
+}
