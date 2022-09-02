@@ -87,7 +87,7 @@ $(function(){
       }
       if (message) {
         Swal.fire({
-          html: 'かけ払い決済エラーのため別の決済方法をお試しください。',
+          html: message,
           // position: 'top-end',
           // toast: true,
           icon: 'warning',
@@ -97,7 +97,6 @@ $(function(){
       }
   });
 });
-
 
 </script>
 

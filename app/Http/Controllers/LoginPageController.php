@@ -1103,11 +1103,11 @@ class LoginPageController extends Controller
 
 
   public function adddeal(Request $request){
-    $user_id = Auth::guard('user')->user()->id;
 
+    $user = Auth::guard('user')->user();
+    $user_id = $user->id;
     $data = $request->all();
     $item_ids = $data['item_id'];
-
 
 
 
@@ -1189,7 +1189,7 @@ class LoginPageController extends Controller
             'message' => $message,
           ];
         }else{
-          $message = 'error';
+          $message = '決済エラーのため別の決済方法をお試しください。';
           $data=[
             'message' => $message,
           ];
@@ -1202,7 +1202,7 @@ class LoginPageController extends Controller
 
 
     if($request->uketori_siharai == 'クレジットカード払い'){
-      dd($request->token_api);
+      // dd($request->token_api);
       // EPトークン取得
       $client = new Client();
       // $url = 'https://api.kuronekoyamato.co.jp/api/credit';
@@ -1240,8 +1240,22 @@ class LoginPageController extends Controller
       // dd($option);
       $response = $client->request('POST', $url, $option);
       $result = simplexml_load_string($response->getBody()->getContents());
-      // $result = $response->getBody()->getContents();
-      dd($result);
+      if($result->returnCode == 1){
+        $delete_deal = Deal::where(['id'=> $deal_id])->first()->delete();
+        if($result->errorCode == 123456){
+          // 後で処理を作る
+          $message = '掛け払い金額オーバー';
+          $data=[
+            'message' => $message,
+          ];
+        }else{
+          $message = '決済エラーのため別の決済方法をお試しください。';
+          $data=[
+            'message' => $message,
+          ];
+        }
+        return redirect()->route('confirm',$data);
+      }
     }
 
 

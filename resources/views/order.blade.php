@@ -311,6 +311,8 @@
 		document.charge_form.security_code.style.backgroundColor = "#fdeef1";
 		break; }
 		}
+		//フェードアウト
+		$("#overlayajax").fadeOut(300);
 
 		//エラーの数だけ処理を繰り返す
 		for (var i = 0; i<errorInfo.length; i++) {
@@ -635,9 +637,9 @@ $('#pay_card').show();
 
 $(function() {
 if ($("[id=クロネコかけ払い]").prop("checked") == true) {
-$('#card_approval_btn').show();
-$('#approval_btn').hide();
-} else if ($('[id=クレジットカード払い]').prop('checked')) {
+$('#card_approval_btn').hide();
+$('#approval_btn').show();
+} else if ($('[id=クレジットカード払い]').prop('checked') == true) {
 $('#card_approval_btn').show();
 $('#approval_btn').hide();
 }

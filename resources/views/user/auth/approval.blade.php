@@ -50,12 +50,13 @@
               </div>
             </div>
             <div class="float-right">
+                <input type="hidden" name="token_api" id="token_api" value="{{app('request')->input('token_api')}}"/>
                 <!-- <button type="submit" name="adddeal_btn" class="btn btn-warning">この内容で問い合わせる</button> -->
                 <button type="submit" name="addsuscess_btn" id="addsuscess_btn" class="btn btn-success">この内容で注文する</button>
             </div>
           </form>
           <div class="float-right" style="margin-right:5px;">
-              <a href="javascript:history.back()"><button class="btn btn-info">戻って編集する</button></a>
+              <a href="{{ url('/confirm') }}"><button class="btn btn-info">戻って編集する</button></a>
           </div>
           <br style="clear:both;" />
         </div>
