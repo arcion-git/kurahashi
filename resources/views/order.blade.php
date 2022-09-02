@@ -183,7 +183,7 @@
 							<label for="card_no">カード番号</label>
 						</div>
 						<div class="col-5">
-							<input type="text" class="" name="card_no" maxlength="16" placeholder="************1234" value="0000000000000001">
+							<input type="text" class="form-control" name="card_no" maxlength="16" placeholder="************1234" value="0000000000000001">
 						</div>
 					</div>
 					<div class="input-form row">
@@ -191,7 +191,7 @@
 							<label>カード名義人</label>
 						</div>
 						<div class="col-5">
-							<input type="text" name="card_owner" maxlength="30" placeholder="KURONEKO TARO" value="KURONEKO TARO">
+							<input type="text" class="form-control" name="card_owner" maxlength="30" placeholder="KURONEKO TARO" value="KURONEKO TARO">
 						</div>
 					</div>
 					<div class="input-form row">
@@ -199,7 +199,7 @@
 							<label>カード有効期限</label>
 						</div>
 						<div class="col-5">
-							<input type="text" name="exp_month" maxlength="2" placeholder="10" value="10">月/ <input type="text" name="exp_year" maxlength="2" value="24" placeholder="20">年
+							<input type="text" class="form-control yuukoukigen" name="exp_month" maxlength="2" placeholder="10" value="10">月/ <input class="form-control yuukoukigen" type="text" name="exp_year" maxlength="2" value="24" placeholder="20">年
 						</div>
 					</div>
 					<div class="input-form row">
@@ -207,7 +207,7 @@
 							<label>セキュリティコード</label>
 						</div>
 						<div class="col-5">
-							<input type="text" name="security_code" maxlength="4" placeholder="1234" value="1234">
+							<input type="text" class="form-control" name="security_code" maxlength="4" placeholder="1234" value="1234">
 						</div>
 					</div>
 					<div class="input-form" style="display:none;">
@@ -228,7 +228,7 @@
 		function executePay() {
 		$("#overlayajax").fadeIn(300);
 
-		var text = '11111112';
+		var text = '{{$collect}}';
 		function async_digestMessage(message) {
 			return new Promise(function(resolve){
 			var msgUint8 = new TextEncoder("utf-8").encode(message);

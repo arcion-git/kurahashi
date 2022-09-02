@@ -3424,3 +3424,19 @@ table td{
     display: block;
     z-index: 999 !important;
 }
+
+
+#pay_card .form-control{
+  max-width: 200px;
+  text-align: left;
+}
+
+#pay_card .yuukoukigen{
+  max-width: 50px;
+  display: inline;
+  margin-right: 5px;
+}
+
+#pay_card .securitycode{
+  max-width: 80px;
+}

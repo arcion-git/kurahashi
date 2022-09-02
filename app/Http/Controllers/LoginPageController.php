@@ -647,6 +647,8 @@ class LoginPageController extends Controller
 
   public function confirm(){
 
+
+
     $categories = Category::get()->groupBy('bu_ka_name');
     $user = Auth::guard('user')->user();
     $user_id = Auth::guard('user')->user()->id;
@@ -656,6 +658,13 @@ class LoginPageController extends Controller
 
     $favorite_categories = FavoriteCategory::where('user_id', $user_id)->get();
     $carts =  Cart::where(['user_id'=>$user_id, 'deal_id'=> null])->get();
+    if($carts->isEmpty()){
+      // dd("カートが空です");
+      $data=[
+        'message' => 'カートが空です。',
+      ];
+      return redirect()->route('setonagi',$data);
+    }
 
     // 直近の納品予定日を取得
     $today = date("Y-m-d");
@@ -724,6 +733,14 @@ class LoginPageController extends Controller
     $user_id = Auth::guard('user')->user()->id;
     $favorite_categories = FavoriteCategory::where('user_id', $user_id)->get();
     $carts =  Cart::where(['user_id'=>$user_id, 'deal_id'=> null])->get();
+
+    if($carts->isEmpty()){
+      // dd("カートが空です");
+      $data=[
+        'message' => 'カートが空です。',
+      ];
+      return redirect()->route('confirm',$data);
+    }
 
     $today = date("Y-m-d");
     $holidays = Holiday::pluck('date');
@@ -827,6 +844,8 @@ class LoginPageController extends Controller
     $memo -> $request->memo;
     }
 
+    $collect = config('app.collect_password');
+
     $data=
     ['carts' => $carts,
      'cart_ninis' => $cart_ninis,
@@ -836,6 +855,7 @@ class LoginPageController extends Controller
      'setonagi' => $setonagi,
      'today_plus' => $today_plus,
      'sano_nissuu' => $sano_nissuu,
+     'collect' => $collect,
     ];
     return view('order', $data);
   }
@@ -1156,7 +1176,11 @@ class LoginPageController extends Controller
     if($request->uketori_siharai == 'クロネコかけ払い'){
       // ヤマトAPI連携確認
       $client = new Client();
-      $url = 'https://demo.yamato-credit-finance.jp/kuroneko-anshin/AN010APIAction.action';
+
+      $url = config('app.kakebarai_touroku');
+      $kakebarai_traderCode = config('app.kakebarai_traderCode');
+      $kakebarai_passWord = config('app.kakebarai_passWord');
+
       $option = [
         'headers' => [
           'Accept' => '*/*',
@@ -1164,16 +1188,16 @@ class LoginPageController extends Controller
           'charset' => 'UTF-8',
         ],
         'form_params' => [
-          'traderCode' => '330000051',
+          'traderCode' => $kakebarai_traderCode,
           // 日付
           'orderDate' => $now,
-          'orderNo' => $deal_id.'1d',
+          'orderNo' => $deal_id.'2a',
           // バイヤーid
           'buyerId' => $user_id,
           'settlePrice' => $request->all_total_val,
           'shohiZei' => $request->tax_val,
           'meisaiUmu' => '2',
-          'passWord' => 'UzhJlu8E'
+          'passWord' => $kakebarai_passWord
         ]
       ];
       // dd($option);
@@ -1206,7 +1230,9 @@ class LoginPageController extends Controller
       // EPトークン取得
       $client = new Client();
       // $url = 'https://api.kuronekoyamato.co.jp/api/credit';
-      $url = 'https://ptwebcollect.jp/test_gateway/creditToken.api';
+
+      $url = config('app.collect_touroku');
+      $collect_tradercode = config('app.collect_tradercode');
 
       $option = [
         'headers' => [
@@ -1216,7 +1242,7 @@ class LoginPageController extends Controller
         ],
         'form_params' => [
           'function_div' => 'A08',
-          'trader_code' => '888888709',
+          'trader_code' => $collect_tradercode,
           // パソコンかスマホか
           'device_div' => 1,
           'order_no' => $deal_id,
@@ -1614,7 +1640,7 @@ class LoginPageController extends Controller
     $deal=Deal::where(['id'=> $deal_id])->first();
     $user = User::where(['id'=> $user_id])->first();
 
-    // セトナギユーザーの場合
+
     // 注文完了時間
     $success_time = $deal->success_time;
     $success_jikan = date('H:i:s', strtotime($success_time));
@@ -1680,6 +1706,85 @@ class LoginPageController extends Controller
       ];
       return redirect()->route('dealdetail',$data);
     }
+
+
+    // セトナギユーザーの場合
+    if($user->setonagi == 1){
+
+      // ヤマトAPIキャンセル
+      if($deal->uketori_siharai == 'クロネコかけ払い'){
+        $client = new Client();
+        $url = config('app.kakebarai_cancel');
+        $kakebarai_traderCode = config('app.kakebarai_traderCode');
+        $kakebarai_passWord = config('app.kakebarai_passWord');
+        $option = [
+          'headers' => [
+            'Accept' => '*/*',
+            'Content-Type' => 'application/x-www-form-urlencoded',
+            'charset' => 'UTF-8',
+          ],
+          'form_params' => [
+            'traderCode' => $kakebarai_traderCode,
+            // 取引id
+            'orderNo' => $deal_id.'2a',
+            // バイヤーid
+            'buyerId' => $user_id,
+            'passWord' => $kakebarai_passWord
+          ]
+        ];
+        // dd($option);
+        $response = $client->request('POST', $url, $option);
+        $result = simplexml_load_string($response->getBody()->getContents());
+        // dd($result);
+        if($result->returnCode == 1){
+            $id= $deal_id;
+            $message = 'キャンセル期間を過ぎたためキャンセルできませんでした。';
+            $data=[
+              'id' => $deal_id,
+              'cancel_error' => $message,
+            ];
+            return redirect()->route('dealdetail',$data);
+          }
+        }
+
+
+
+
+      // クレジットカードAPIキャンセル
+      if($request->uketori_siharai == 'クレジットカード払い'){
+        // dd($request->token_api);
+        // EPトークン取得
+        $client = new Client();
+        // $url = 'https://api.kuronekoyamato.co.jp/api/credit';
+        $url = config('app.collect_cancel');
+        $collect_tradercode = config('app.collect_tradercode');
+        $option = [
+          'headers' => [
+            'Accept' => '*/*',
+            'Content-Type' => 'application/x-www-form-urlencoded',
+            'charset' => 'UTF-8',
+          ],
+          'form_params' => [
+            'function_div' => 'A06',
+            'trader_code' => $collect_tradercode,
+            'order_no' => $deal_id,
+          ]
+        ];
+        // dd($option);
+        $response = $client->request('POST', $url, $option);
+        $result = simplexml_load_string($response->getBody()->getContents());
+        if($result->returnCode == 1){
+          $id= $deal_id;
+          $message = 'キャンセル期間を過ぎたためキャンセルできませんでした。';
+          $data=[
+            'id' => $deal_id,
+            'cancel_error' => $message,
+          ];
+          return redirect()->route('dealdetail',$data);
+        }
+      }
+    }
+
 
 
 

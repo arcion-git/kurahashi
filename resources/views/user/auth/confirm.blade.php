@@ -85,16 +85,16 @@ $(function(){
           // timer: 1500
         });
       }
-      if (message) {
-        Swal.fire({
-          html: message,
-          // position: 'top-end',
-          // toast: true,
-          icon: 'warning',
-          showConfirmButton: false,
-          // timer: 1500
-        });
-      }
+      // if (message) {
+      //   Swal.fire({
+      //     html: message,
+      //     // position: 'top-end',
+      //     // toast: true,
+      //     icon: 'warning',
+      //     showConfirmButton: false,
+      //     // timer: 1500
+      //   });
+      // }
   });
 });
 

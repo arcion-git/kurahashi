@@ -123,6 +123,27 @@ return [
 
     'cipher' => 'AES-256-CBC',
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | Autoloaded Service Providers
+    |--------------------------------------------------------------------------
+    |
+    | The service providers listed here will be automatically loaded on the
+    | request to your application. Feel free to add your own services to
+    | this array to grant expanded functionality to your applications.
+    |
+    */
+    'kakebarai_touroku' => env('KAKEBARAI_TOUROKU'),
+    'kakebarai_cancel' => env('KAKEBARAI_CANCEL'),
+    'kakebarai_traderCode' => env('KAKEBARAI_TRADERCODE'),
+    'kakebarai_passWord' => env('KAKEBARAI_PASSWORD'),
+
+    'collect_touroku' => env('COLLECT_TOUROKU'),
+    'collect_cancel' => env('COLLECT_CANCEL'),
+    'collect_tradercode' => env('COLLECT_TRADERCODE'),
+    'collect_password' => env('COLLECT_PASSWORD'),
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers
@@ -134,8 +155,8 @@ return [
     |
     */
 
-    'providers' => [
 
+    'providers' => [
         /*
          * Laravel Framework Service Providers...
          */

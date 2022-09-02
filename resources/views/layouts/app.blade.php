@@ -495,6 +495,35 @@
     <script src="{{ asset('js/page/auth-register.js') }}"></script>
     <script src="{{ asset('js/calculation.js') }}"></script>
 
+    <script>
+    //ＵＲＬのパラメータを取得するための関数
+    function getUrlParam(param){
+        var pageUrl = window.location.search.substring(1);
+        var urlVar = pageUrl.split('&');
+        for (var i = 0; i < urlVar.length; i++)
+        {
+            var paramName = urlVar[i].split('=');
+            if (paramName[0] == param)
+            {
+                return decodeURI(paramName[1]);
+            }
+        }
+    }
+    $(function() {
+        var message = getUrlParam('message');
+        console.log(message);
+        if (message) {
+          Swal.fire({
+            html: message,
+            // position: 'top-end',
+            // toast: true,
+            icon: 'warning',
+            showConfirmButton: false,
+            // timer: 1500
+          });
+        }
+    });
+    </script>
     <!-- <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.3.1/jquery.cookie.min.js"></script>
     <script src="{{ asset('js/jquery.utility-kit.js') }}"></script> -->
     <!-- <script src="{{ asset('js/realtime.js') }}"></script> -->
