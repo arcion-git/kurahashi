@@ -635,7 +635,16 @@ $('#pay_card').show();
 });
 
 
+
+
 $(function() {
+if ($("[id=クロネコかけ払い]").prop("checked") == false) {
+$('#card_approval_btn').hide();
+$('#approval_btn').hide();
+} else if ($('[id=クレジットカード払い]').prop('checked') == false) {
+$('#card_approval_btn').hide();
+$('#approval_btn').hide();
+}
 if ($("[id=クロネコかけ払い]").prop("checked") == true) {
 $('#card_approval_btn').hide();
 $('#approval_btn').show();
@@ -643,6 +652,8 @@ $('#approval_btn').show();
 $('#card_approval_btn').show();
 $('#approval_btn').hide();
 }
+
+
 
 $('[name="uketori_siharai"]:radio').change( function() {
 if($('[id=クロネコかけ払い]').prop('checked')){

@@ -75,7 +75,7 @@
                     @endif
                   </td>
                   <td class="text-center">
-                    @if($user->setonagi()->kakebarai_sinsa == 'ご利用可' & $user->setonagi()->kakebarai_riyou == '')
+                    @if($user->setonagi()->kakebarai_sinsa == '利用可' & $user->setonagi()->kakebarai_riyou == '')
                     <form action="{{ url('/admin/riyoukyoka') }}" method="POST" class="form-horizontal">
                       {{ csrf_field() }}
                       <input type="hidden" name="user_id" value="{{$user->id}}" />

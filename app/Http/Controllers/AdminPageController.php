@@ -235,6 +235,7 @@ class AdminPageController extends Controller
       }
     }
     $sano_nissuu = '+'.((strtotime($nouhin_yoteibi) - strtotime($today)) / 86400).'d';
+    $collect = config('app.collect_password');
 
     $data=
     ['deal' => $deal,
@@ -245,6 +246,7 @@ class AdminPageController extends Controller
      'user' => $user,
      'setonagi' => $setonagi,
      'sano_nissuu' => $sano_nissuu,
+     'collect' => $collect,
     ];
     return view('order', $data);
   }
@@ -336,7 +338,10 @@ class AdminPageController extends Controller
     foreach ($setonagi_users as $setonagi_user) {
       $user_id = $setonagi_user->user_id;
       $client = new Client();
-      $url = 'https://demo.yamato-credit-finance.jp/kuroneko-anshin/AN070APIAction.action';
+      $user =  User::where('id',$user_id)->first();
+      $url = config('app.kakebarai_sinsa');
+      $kakebarai_traderCode = config('app.kakebarai_traderCode');
+      $kakebarai_passWord = config('app.kakebarai_passWord');
       $option = [
         'headers' => [
           'Accept' => '*/*',
@@ -344,26 +349,27 @@ class AdminPageController extends Controller
           'charset' => 'UTF-8',
         ],
         'form_params' => [
-          'traderCode' => '330000051',
+          'traderCode' => $kakebarai_traderCode,
           // バイヤーid
-          'buyerId' => $user_id,
-          'buyerTelNo' => '',
-          'passWord' => 'UzhJlu8E'
+          'buyerId' => 7,
+          'buyerTelNo' => $user->tel,
+          'passWord' => $kakebarai_passWord
         ]
       ];
       // dd($option);
       $response = $client->request('POST', $url, $option);
       $result = simplexml_load_string($response->getBody()->getContents());
       // dd($result);
-      $setonagi_user = Setonagi::where('user_id',$user_id)->first();
-      $setonagi_user->kakebarai_limit = $result->useOverLimit;
-      $setonagi_user->kakebarai_sinsa = $result->judgeStatus;
-      $setonagi_user->kakebarai_update_time = $now;
-      $setonagi_user->save();
+      if($result->returnCode == 0){
+        $setonagi_user = Setonagi::where('user_id',$user_id)->first();
+        $setonagi_user->kakebarai_sinsa = $result->judgeStatus;
+        $setonagi_user->kakebarai_update_time = $now;
+        $setonagi_user->save();
+      }
 
     // ヤマトAPI連携利用金額確認
       $client = new Client();
-      $url = 'https://demo.yamato-credit-finance.jp/kuroneko-anshin/AN050APIAction.action';
+      $url = config('app.kakebarai_riyoukingaku');
       $option = [
         'headers' => [
           'Accept' => '*/*',
@@ -371,20 +377,25 @@ class AdminPageController extends Controller
           'charset' => 'UTF-8',
         ],
         'form_params' => [
-          'traderCode' => '330000051',
+          'traderCode' => $kakebarai_traderCode,
           // バイヤーid
           'buyerId' => $user_id,
           'buyerTelNo' => '',
-          'passWord' => 'UzhJlu8E'
+          'passWord' => $kakebarai_passWord
         ]
       ];
       // dd($option);
       $response = $client->request('POST', $url, $option);
       $result = simplexml_load_string($response->getBody()->getContents());
-      // dd($result->usePayment);
-      $setonagi_user = Setonagi::where('user_id',$user_id)->first();
-      $setonagi_user->kakebarai_usepay = $result->usePayment;
-      $setonagi_user->save();
+      // dd($result);
+      if($result->returnCode == 0){
+        $setonagi_user = Setonagi::where('user_id',$user_id)->first();
+        $setonagi_user->kakebarai_usepay = $result->usePayment;
+        $setonagi_user->kakebarai_limit = $result->useOverLimit;
+        $setonagi_user->kakebarai_sinsa = $result->useUsable;
+        $setonagi_user->kakebarai_update_time = $now;
+        $setonagi_user->save();
+      }
     }
 
 

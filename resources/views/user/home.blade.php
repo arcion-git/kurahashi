@@ -13,7 +13,13 @@
               @if(isset($category_name))
               {{$category_name}}
               @else
+              @if(Request::is('recommend'))
+              担当のおすすめ商品
+              @elseif(Request::is('special_price'))
+              市況商品（時価）
+              @else
               商品一覧
+              @endif
               @endif
             </h1>
           </div>
@@ -140,7 +146,6 @@
                           <th class="text-center">価格</th>
                           <th class="text-center" style="min-width:180px;">操作</th>
                         </tr>
-
 
                         @foreach($special_prices as $special_price)
                         @if($special_price->item()->zaikosuu == 0)

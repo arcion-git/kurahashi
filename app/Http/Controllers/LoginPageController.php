@@ -84,12 +84,12 @@ class LoginPageController extends Controller
       $user_id = Auth::guard('user')->user()->id;
       $favorite_categories = FavoriteCategory::where('user_id', $user_id)->first();
 
-        if ($favorite_categories === null) {
-          $categories = Category::get();
-          $categories = $categories->groupBy('bu_ka_name');
-          // dd($categories);
-          return view('user/auth/questionnaire', ['categories' => $categories]);
-        }
+      if ($favorite_categories === null) {
+        $categories = Category::get();
+        $categories = $categories->groupBy('bu_ka_name');
+        // dd($categories);
+        return view('user/auth/questionnaire', ['categories' => $categories]);
+      }
 
       $setonagi_user = Auth::guard('user')->user()->setonagi;
       // セトナギユーザーの場合は取得しない
@@ -135,12 +135,21 @@ class LoginPageController extends Controller
                     array('path' => $request->url() , "pageName" => "page")
                 );
 
+        $special_prices = SpecialPrice::where(['price_groupe'=>$price_groupe])->paginate(30);
+        // dd($special_prices);
+
         // $items = Item::where('zaikosuu', '>=', '0.01')->paginate(30);
                 // dd($items->first());
       }else{
+        // セトナギユーザーに対する処理
         $items = Item::where('zaikosuu', '>=', '0.01')->paginate(30);
+        // セトナギユーザーにはC帯の商品を出力
+        $special_prices = SpecialPrice::where(['price_groupe'=>'10000000004'])->paginate(30);
       }
       // dd($items);
+
+
+
 
 
 
@@ -163,7 +172,7 @@ class LoginPageController extends Controller
 
       $recommends = Recommend::where('user_id', $kaiin_number)->whereDate('end', '>=', $now)->orWhere('end',null)->where('user_id', $kaiin_number)->get();
 
-      $special_prices = SpecialPrice::get();
+
 
       return view('user/home',
       ['items' => $items ,
@@ -1180,6 +1189,7 @@ class LoginPageController extends Controller
       }
     }
     $sano_nissuu = '+'.((strtotime($nouhin_yoteibi) - strtotime($today)) / 86400).'d';
+    $collect = config('app.collect_password');
 
     $data=
     ['carts' => $carts,
@@ -1190,6 +1200,7 @@ class LoginPageController extends Controller
      'user' => $user,
      'setonagi' => $setonagi,
      'sano_nissuu' => $sano_nissuu,
+     'collect' => $collect,
     ];
     return view('order', $data);
   }
@@ -1830,7 +1841,7 @@ class LoginPageController extends Controller
 
 
       // クレジットカードAPIキャンセル
-      if($request->uketori_siharai == 'クレジットカード払い'){
+      if($deal->uketori_siharai == 'クレジットカード払い'){
         // dd($request->token_api);
         // EPトークン取得
         $client = new Client();

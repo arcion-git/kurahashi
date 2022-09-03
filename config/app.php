@@ -138,6 +138,9 @@ return [
     'kakebarai_cancel' => env('KAKEBARAI_CANCEL'),
     'kakebarai_traderCode' => env('KAKEBARAI_TRADERCODE'),
     'kakebarai_passWord' => env('KAKEBARAI_PASSWORD'),
+    'kakebarai_sinsa' => env('KAKEBARAI_SINSA'),
+    'kakebarai_riyoukingaku' => env('KAKEBARAI_RIYOUKINGAKU'),
+
 
     'collect_touroku' => env('COLLECT_TOUROKU'),
     'collect_cancel' => env('COLLECT_CANCEL'),
