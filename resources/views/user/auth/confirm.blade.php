@@ -41,7 +41,9 @@
 
             <div class="float-right">
                 <button id="approval_btn" type="submit" class="btn btn-warning">内容確認画面に進む</button>
+                @if(isset($setonagi))
                 <div id="card_approval_btn" class="btn btn-warning" onclick="executePay">内容確認画面に進む</div>
+                @endif
             </div>
           </form>
 

@@ -173,6 +173,7 @@
 
 
 		<!-- カード情報confirmでクレジットカード払いが選択されたら表示 -->
+		@if($user->setonagi & Auth::guard('user')->check() )
 		<div id="pay_card">
 			<div class="row mt-4">
 				<div class="col-md-12">
@@ -344,6 +345,7 @@
 
 
 		</script>
+		@endif
 
 
 
@@ -619,8 +621,15 @@ $(function(){
 			}
 	});
 });
+</script>
+
+
+@if($user->setonagi & Auth::guard('user')->check() )
+<script>
+if(document.URL.match("/confirm")) {
 
 $(function() {
+
 if ($("[id=クロネコかけ払い]").prop("checked") == true) {
 $('#pay_card').hide();
 } else if ($('[id=クレジットカード払い]').prop('checked')) {
@@ -636,8 +645,6 @@ $('#pay_card').show();
 }
 });
 });
-
-
 
 
 $(function() {
@@ -673,9 +680,16 @@ $('#approval_btn').hide();
 
 $(function(){
   $("#card_approval_btn").click(function(e){
-    $(".executePay").trigger("click");  //#btn1のクリックイベントを呼ぶ
-    $(".executePay").click();         //この書き方でもOK
+    $(".executePay").trigger("click");
+    $(".executePay").click();
   })
 });
 
+}else{
+	$(function(){
+		$('#pay_card').hide();
+	});
+}
+
 </script>
+@endif
