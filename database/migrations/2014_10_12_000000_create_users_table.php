@@ -33,7 +33,7 @@ class CreateUsersTable extends Migration
             $table->string('tel')->nullable();
             $table->string('email')->unique();
             $table->string('password');
-            $table->boolean('setonagi')->nullable();
+            $table->string('setonagi')->nullable();
             $table->boolean('first_login')->nullable();
             $table->rememberToken();
             $table->timestamps();

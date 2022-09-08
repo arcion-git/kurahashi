@@ -2,15 +2,59 @@
 
 
 use App\Cart;
+use App\Order;
 use App\Deal;
+use App\User;
 use App\Item;
 use App\Category;
+use App\CategoryItem;
 use App\Tag;
-use App\User;
 use App\Holiday;
+use App\Store;
+use App\StoreUser;
+use App\Recommend;
+use App\FavoriteCategory;
+use App\Repeatcart;
+use App\Repeatorder;
+use App\RecommendCategory;
+use App\CartNini;
+use App\OrderNini;
+
+use App\PriceGroupe;
+use App\Price;
+use App\SpecialPrice;
+
+use App\Setonagi;
+use App\SetonagiItem;
+use App\ItemImage;
+
 
 use Illuminate\Database\Seeder;
 use Carbon\Carbon;
+
+
+// PhpSpreadsheet
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Shared\File;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+
+// CSVインポート
+use App\Imports\ItemImport;
+use App\Imports\UserImport;
+use App\Imports\CategoryImport;
+use App\Imports\TagImport;
+use App\Imports\CategoryItemImport;
+use App\Imports\HolidayImport;
+use App\Imports\StoreImport;
+use App\Imports\StoreUserImport;
+
+use App\Imports\SetonagiImport;
+use App\Imports\SetonagiItemImport;
+
+use App\Imports\PriceGroupeImport;
+use App\Imports\PriceImport;
+use App\Imports\SpecialPriceImport;
 
 class DatabaseSeeder extends Seeder
 {
@@ -34,6 +78,8 @@ class DatabaseSeeder extends Seeder
       );
       $list = [];
       $now = Carbon::now();
+
+
 
       foreach ($file as $line) {
           if ($file->key() > 0 && ! $file->eof()) {
@@ -96,13 +142,15 @@ class DatabaseSeeder extends Seeder
               'tel'=> $line[3],
               'email'=> $line[4],
               'password'=> \Hash::make('secret') ,
-              'setonagi'=> $line[5],
+              'setonagi'=> $line[6],
               'created_at' => $now,
               'updated_at' => $now,
             ];
           }
       }
       DB::table("users")->insert($list);
+
+
 
 
 
@@ -148,39 +196,11 @@ class DatabaseSeeder extends Seeder
               'haisou_nissuu'=> $line[26],
               'shoudan_umu'=> $line[27],
               'nebiki_umu'=> $line[28],
-
-              // 'item_name_kana'=>$line[3],
-              // 'keiyaku'=> $line[4],
-              // 'kikaku'=> $line[5],
-              // 'ninushi_code'=> $line[6],
-              // 'ninushi_name'=> $line[7],
-              // 'sanchi_code'=> $line[8],
-              // 'sanchi_name'=> $line[9],
-              // 'tani'=> $line[10],
-              // 'zaikosuu'=> $line[11],
-              // 'kigyou_code'=> $line[12],
-              // 'busho_code'=> $line[13],
-              // 'busho_name'=> $line[14],
-              // 'tantou_code'=> $line[15],
-              // 'tantou_name'=> $line[16],
-              // 'jan_code'=> $line[17],
-              // 'nouhin_yoteibi_start'=> $line[18],
-              // 'nouhin_yoteibi_end'=> $line[19],
-              // 'nyuukabi'=> $line[20],
-              // 'lot_bangou'=> $line[21],
-              // 'lot_gyou'=> $line[22],
-              // 'lot_eda'=> $line[23],
-              // 'souko_code'=> $line[24],
-              // 'tokkijikou'=> $line[25],
-              // 'haisou_simekiri_jikan'=> $line[26],
-              // 'haisou_nissuu'=> $line[27],
-              // 'shoudan_umu'=> $line[28],
-              // 'nebiki_umu'=> $line[29],
-
               "created_at" => $now,
               "updated_at" => $now,
             ];
           }
+          $line = NULL;
       }
       DB::table("items")->insert($list);
 
@@ -405,11 +425,11 @@ class DatabaseSeeder extends Seeder
             $list[] = [
               'item_id'=>$line[0],
               'sku_code'=>$line[1],
-              'price'=>$line[2],
-              'start_date'=>$line[3],
-              'end_date'=>$line[4],
-              'created_at' => $now,
-              'updated_at' => $now,
+              'price'=>$line[3],
+              'start_date'=>$line[4],
+              'end_date'=>$line[5],
+              'created_at'=>$now,
+              'updated_at'=>$now,
             ];
           }
       }

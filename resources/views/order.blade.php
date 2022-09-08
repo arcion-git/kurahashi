@@ -5,7 +5,7 @@
 			<th class="head">商品名</th>
 			<th class="head text-center">産地</th>
 			<th class="head text-center">在庫数</th>
-			<th class="head text-center">特記事項</th>
+			<!-- <th class="head text-center">特記事項</th> -->
 			<div class="sp_block">
 			<th class="head-price head text-center">金額</th>
 			@if(!$user->setonagi)
@@ -28,7 +28,7 @@
 			<td class="cartid_{$cart->id}}">{{$cart->item->item_name}}</td>
 			<td class="cartid_{$cart->id}} text-center">{{$cart->item->sanchi_name}}</td>
 			<td class="cartid_{$cart->id}} text-center">{{$cart->item->zaikosuu}}</td>
-			<td class="cartid_{$cart->id}} text-center">{{$cart->item->tokkijikou}}</td>
+			<!-- <td class="cartid_{$cart->id}} text-center">{{$cart->item->tokkijikou}}</td> -->
 			<td colspan="8" class="order-table">
 				<table class="table table-striped table-hover table-md">
 				@foreach($cart->orders as $val)
@@ -169,7 +169,10 @@
 		</div>
 
 
-		<!-- カード情報approvalでクレジットカード払いが選択されたら表示 -->
+
+
+
+		<!-- カード情報confirmでクレジットカード払いが選択されたら表示 -->
 		<div id="pay_card">
 			<div class="row mt-4">
 				<div class="col-md-12">

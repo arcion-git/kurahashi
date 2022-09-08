@@ -101,37 +101,37 @@
                           </td>
                           <td id="" class="nouhin_youbi head-nouhin_youbi" class="text-center">
 
-                            <input class="nouhin_youbi_checkbox" type="checkbox" id="repeatorder[{{$val->id}}][nouhin_youbi]月" name="repeatorder[{{$val->id}}][nouhin_youbi][]" value="mon" @if(strpos($val->nouhin_youbi,'mon'))
+                            <input class="nouhin_youbi_checkbox" type="checkbox" id="repeatorder[{{$val->id}}][nouhin_youbi]月" name="repeatorder[{{$val->id}}][nouhin_youbi][]" value="mon" @if(strstr($val->nouhin_youbi,'mon'))
                             checked
                             @endif
                             >
                             <label for="repeatorder[{{$val->id}}][nouhin_youbi]月" class="checkbox-label">月</label>
-                            <input class="nouhin_youbi_checkbox" type="checkbox" id="repeatorder[{{$val->id}}][nouhin_youbi]火" name="repeatorder[{{$val->id}}][nouhin_youbi][]" value="tue" @if(strpos($val->nouhin_youbi,'tue'))
+                            <input class="nouhin_youbi_checkbox" type="checkbox" id="repeatorder[{{$val->id}}][nouhin_youbi]火" name="repeatorder[{{$val->id}}][nouhin_youbi][]" value="tue" @if(strstr($val->nouhin_youbi,'tue'))
                             checked
                             @endif
                             >
                             <label for="repeatorder[{{$val->id}}][nouhin_youbi]火" class="checkbox-label">火</label>
-                            <input class="nouhin_youbi_checkbox" type="checkbox" id="repeatorder[{{$val->id}}][nouhin_youbi]水" name="repeatorder[{{$val->id}}][nouhin_youbi][]" value="wed" @if(strpos($val->nouhin_youbi,'wed'))
+                            <input class="nouhin_youbi_checkbox" type="checkbox" id="repeatorder[{{$val->id}}][nouhin_youbi]水" name="repeatorder[{{$val->id}}][nouhin_youbi][]" value="wed" @if(strstr($val->nouhin_youbi,'wed'))
                             checked
                             @endif
                             >
                             <label for="repeatorder[{{$val->id}}][nouhin_youbi]水" class="checkbox-label">水</label>
-                            <input class="nouhin_youbi_checkbox" type="checkbox" id="repeatorder[{{$val->id}}][nouhin_youbi]木" name="repeatorder[{{$val->id}}][nouhin_youbi][]" value="thu" @if(strpos($val->nouhin_youbi,'thu'))
+                            <input class="nouhin_youbi_checkbox" type="checkbox" id="repeatorder[{{$val->id}}][nouhin_youbi]木" name="repeatorder[{{$val->id}}][nouhin_youbi][]" value="thu" @if(strstr($val->nouhin_youbi,'thu'))
                             checked
                             @endif
                             >
                             <label for="repeatorder[{{$val->id}}][nouhin_youbi]木" class="checkbox-label">木</label>
-                            <input class="nouhin_youbi_checkbox" type="checkbox" id="repeatorder[{{$val->id}}][nouhin_youbi]金" name="repeatorder[{{$val->id}}][nouhin_youbi][]" value="fri" @if(strpos($val->nouhin_youbi,'fri'))
+                            <input class="nouhin_youbi_checkbox" type="checkbox" id="repeatorder[{{$val->id}}][nouhin_youbi]金" name="repeatorder[{{$val->id}}][nouhin_youbi][]" value="fri" @if(strstr($val->nouhin_youbi,'fri'))
                             checked
                             @endif
                             >
                             <label for="repeatorder[{{$val->id}}][nouhin_youbi]金" class="checkbox-label">金</label>
-                            <input class="nouhin_youbi_checkbox" type="checkbox" id="repeatorder[{{$val->id}}][nouhin_youbi]土" name="repeatorder[{{$val->id}}][nouhin_youbi][]" value="sat" @if(strpos($val->nouhin_youbi,'sat'))
+                            <input class="nouhin_youbi_checkbox" type="checkbox" id="repeatorder[{{$val->id}}][nouhin_youbi]土" name="repeatorder[{{$val->id}}][nouhin_youbi][]" value="sat" @if(strstr($val->nouhin_youbi,'sat'))
                             checked
                             @endif
                             >
                             <label for="repeatorder[{{$val->id}}][nouhin_youbi]土" class="checkbox-label">土</label>
-                            <input class="nouhin_youbi_checkbox" type="checkbox" id="repeatorder[{{$val->id}}][nouhin_youbi]日" name="repeatorder[{{$val->id}}][nouhin_youbi][]" value="sun" @if(strpos($val->nouhin_youbi,'sun'))
+                            <input class="nouhin_youbi_checkbox" type="checkbox" id="repeatorder[{{$val->id}}][nouhin_youbi]日" name="repeatorder[{{$val->id}}][nouhin_youbi][]" value="sun" @if(strstr($val->nouhin_youbi,'sun'))
                             checked
                             @endif
                             >

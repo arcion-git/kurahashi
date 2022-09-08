@@ -21,8 +21,8 @@ class CreateSpecialPricesTable extends Migration
             $table->string('sku_code')->nullable()->comment('SKUコード');
             $table->date('start')->nullable()->comment('掲載開始日');
             $table->date('end')->nullable()->comment('掲載期限');
-            $table->integer('teika')->nullable()->comment('定価');
-            $table->integer('price')->nullable()->comment('単価');
+            $table->string('teika')->nullable()->comment('定価');
+            $table->string('price')->nullable()->comment('単価');
 
             $table->timestamps();
         });

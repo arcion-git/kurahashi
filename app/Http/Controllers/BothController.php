@@ -60,7 +60,7 @@ class BothController extends Controller
     }
 
     $data = "sucsess";
-    return redirect()->route('home',$data);
+    return redirect()->route('setonagi',$data);
   }
 
   // 任意の商品の配送先を削除
@@ -76,7 +76,7 @@ class BothController extends Controller
     }
 
     $data = "sucsess";
-    return redirect()->route('home',$data);
+    return redirect()->route('setonagi',$data);
   }
 
   // 個数を変更
@@ -87,7 +87,7 @@ class BothController extends Controller
     $order=Order::where(['id'=> $order_id])->update(['quantity'=> $quantity]);
 
     $data = "sucsess";
-    return redirect()->route('home',$data);
+    return redirect()->route('setonagi',$data);
   }
 
   // 納品予定日を変更
@@ -98,7 +98,7 @@ class BothController extends Controller
     $order=Order::where(['id'=> $order_id])->update(['nouhin_yoteibi'=> $nouhin_yoteibi]);
 
     $data = "sucsess";
-    return redirect()->route('home',$data);
+    return redirect()->route('setonagi',$data);
   }
 
 
@@ -112,7 +112,7 @@ class BothController extends Controller
     $nini_tokuisaki_name = $request->nini_tokuisaki_name;
     $order_nini = OrderNini::where(['id'=> $order_nini_id])->update(['store_name'=> $nini_store_name,'tokuisaki_name'=> $nini_tokuisaki_name]);
     $data = "success";
-    return redirect()->route('home',$data);
+    return redirect()->route('setonagi',$data);
   }
 
 
@@ -123,7 +123,7 @@ class BothController extends Controller
     $cart_nini_id = $request->cart_nini_id;
     $cart_nini_tantou= CartNini::where(['id'=> $cart_nini_id])->update(['tantou_name'=> $nini_tantou]);
     $data = "success";
-    return redirect()->route('home',$data);
+    return redirect()->route('setonagi',$data);
   }
 
   // 任意の商品名を保存
@@ -132,7 +132,7 @@ class BothController extends Controller
     $cart_nini_id = $request->cart_nini_id;
     $cart_nini_item_name= CartNini::where(['id'=> $cart_nini_id])->update(['item_name'=> $nini_item_name]);
     $data = "success";
-    return redirect()->route('home',$data);
+    return redirect()->route('setonagi',$data);
   }
 
   // 任意の数量を保存
@@ -141,7 +141,7 @@ class BothController extends Controller
     $order_nini_id = $request->order_nini_id;
     $order_nini_quantity = OrderNini::where(['id'=> $order_nini_id])->update(['quantity'=> $nini_quantity]);
     $data = "success";
-    return redirect()->route('home',$data);
+    return redirect()->route('setonagi',$data);
   }
 
   // 任意の納品予定日を保存
@@ -150,7 +150,7 @@ class BothController extends Controller
     $order_nini_id = $request->order_nini_id;
     $order_nini_quantity = OrderNini::where(['id'=> $order_nini_id])->update(['nouhin_yoteibi'=> $nini_nouhin_yoteibi]);
     $data = "success";
-    return redirect()->route('home',$data);
+    return redirect()->route('setonagi',$data);
   }
 
   // 配送先店舗を追加
@@ -158,14 +158,14 @@ class BothController extends Controller
     $cart_id = $request->cart_id;
     $order=Order::Create(['cart_id'=> $cart_id , 'tokuisaki_name'=>'' , 'nouhin_yoteibi'=> '', 'quantity'=> 1]);
     $data = "sucsess";
-    return redirect()->route('home',$data);
+    return redirect()->route('setonagi',$data);
   }
   // 任意の配送先を追加
   public function addordernini(Request $request){
     $cart_nini_id = $request->cart_nini_id;
-    $order=OrderNini::Create(['cart_nini_id'=> $cart_nini_id , 'tokuisaki_name'=>'' , 'nouhin_yoteibi'=> '', 'quantity'=> 1]);
+    $order=OrderNini::Create(['cart_nini_id'=> $cart_nini_id , 'quantity'=> 1]);
     $data = "sucsess";
-    return redirect()->route('home',$data);
+    return redirect()->route('setonagi',$data);
   }
 
 
@@ -183,17 +183,27 @@ class BothController extends Controller
     $tokuisaki_name = $request->tokuisaki_name;
     $kaiin_number = $request->kaiin_number;
 
+
+
     $store = Store::where(['tokuisaki_name'=>$tokuisaki_name,'store_name'=> $store_name])->first();
+
     $price_groupe = PriceGroupe::where([ 'tokuisaki_id'=> $store->tokuisaki_id,'store_id'=> $store->store_id ])->first();
+
+    // Log::debug($price_groupe);
+    // return Response::json($price_groupe);
 
     $order = Order::where(['id'=> $order_id])->first();
     $cart_id = $order->cart_id;
     $cart = Cart::where(['id'=> $cart_id])->first();
     $item = Item::where('id',$cart->item_id)->first();
 
-    $price = Price::where(['price_groupe'=>$price_groupe->price_groupe, 'item_id'=> $item->item_id, 'sku_code'=> $item->sku_code])->first();
+    // 価格グループを取得
+    // $price = Price::where(['price_groupe'=>$price_groupe->price_groupe, 'item_id'=> $item->item_id, 'sku_code'=> $item->sku_code])->first();
 
-    $order = Order::where(['id'=> $order_id])->update(['store_name'=> $store_name,'tokuisaki_name'=> $tokuisaki_name,'price'=> $price->price]);
+    // 価格の上書きを行う
+    // $order = Order::where(['id'=> $order_id])->update(['store_name'=> $store_name,'tokuisaki_name'=> $tokuisaki_name,'price'=> $price->price]);
+
+    $order = Order::where(['id'=> $order_id])->update(['store_name'=> $store_name,'tokuisaki_name'=> $tokuisaki_name]);
 
     $order = Order::where(['id'=> $order_id])->first();
 
@@ -221,7 +231,7 @@ class BothController extends Controller
 
     $data = "success";
 
-    return redirect()->route('home',$data);
+    return redirect()->route('setonagi',$data);
   }
 
   // 全店舗に追加
@@ -247,9 +257,9 @@ class BothController extends Controller
 
       $price_groupe = PriceGroupe::where([ 'tokuisaki_id'=> $store_user->tokuisaki_id,'store_id'=> $store_user->store_id ])->first();
 
-      $price = Price::where(['price_groupe'=>$price_groupe->price_groupe, 'item_id'=> $item->item_id , 'sku_code'=> $item->sku_code])->first();
-
-      $price = $price->price;
+      // $price = Price::where(['price_groupe'=>$price_groupe->price_groupe, 'item_id'=> $item->item_id , 'sku_code'=> $item->sku_code])->first();
+      //
+      // $price = $price->price;
 
       // 市況商品価格上書き
       $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])->first();
@@ -277,7 +287,7 @@ class BothController extends Controller
     }
     $data = "success";
 
-    return redirect()->route('home',$data);
+    return redirect()->route('setonagi',$data);
   }
 
   // 任意の商品の配送先を全店舗に追加
@@ -301,7 +311,7 @@ class BothController extends Controller
     }
     $data = "success";
 
-    return redirect()->route('home',$data);
+    return redirect()->route('setonagi',$data);
   }
 
   // 任意の商品を追加
@@ -310,15 +320,19 @@ class BothController extends Controller
     $kaiin_number = $request->kaiin_number;
     $user_id = User::where(['kaiin_number'=> $kaiin_number])->first()->id;
 
+
+
     if(isset($request->deal_id)){
       $cart_nini=CartNini::Create(['user_id'=> $user_id , 'deal_id'=> $request->deal_id]);
       $order_nini=OrderNini::Create(['cart_nini_id'=> $cart_nini->id , 'deal_id'=> $request->deal_id , 'tokuisaki_name'=>'' , 'nouhin_yoteibi'=> '', 'quantity'=> 1]);
     }else{
       $cart_nini=CartNini::Create(['user_id'=> $user_id]);
-      $order_nini=OrderNini::Create(['cart_nini_id'=> $cart_nini->id , 'tokuisaki_name'=>'' , 'nouhin_yoteibi'=> '', 'quantity'=> 1]);
+      // Log::debug($cart_nini);
+      // return Response::json($cart_nini);
+      $order_nini=OrderNini::Create(['cart_nini_id'=> $cart_nini->id ,'quantity'=> 1]);
     }
     $data = "sucsess";
-    return redirect()->route('home',$data);
+    return redirect()->route('setonagi',$data);
   }
 
 

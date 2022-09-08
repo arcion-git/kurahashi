@@ -80,6 +80,7 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
 
+
       // $array1 = array(
       // 	"color" => "red",
       // );

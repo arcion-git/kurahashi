@@ -36,8 +36,8 @@ class CreateSetonagisTable extends Migration
             $table->string('unei_company')->nullable();
             $table->string('pay')->nullable();
 
-            $table->boolean('kakebarai_sinsa')->nullable();
-            $table->boolean('kakebarai_riyou')->nullable();
+            $table->string('kakebarai_sinsa')->nullable();
+            $table->string('kakebarai_riyou')->nullable();
             $table->boolean('setonagi_ok')->nullable();
 
             $table->integer('kakebarai_limit')->nullable();

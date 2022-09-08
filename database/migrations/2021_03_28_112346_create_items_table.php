@@ -16,10 +16,10 @@ class CreateItemsTable extends Migration
         Schema::create('items', function (Blueprint $table) {
             $table->bigIncrements('id');
 
-            $table->string('item_id')->nullable()->comment('商品コード');
+            $table->string('item_id')->index()->nullable()->comment('商品コード');
             $table->string('sku_code')->nullable()->comment('SKUコード');
             $table->string('item_name')->nullable()->comment('商品名');
-            $table->string('item_name_kana')->nullable()->comment('商品名ひらがな');
+            // $table->string('item_name_kana')->nullable()->comment('商品名ひらがな');
             $table->string('keiyaku')->nullable()->comment('契約区分');
             $table->string('kikaku')->nullable()->comment('規格');
             $table->string('ninushi_code')->nullable()->comment('荷主コード');
@@ -42,7 +42,7 @@ class CreateItemsTable extends Migration
             $table->string('lot_gyou')->nullable()->comment('ロット行');
             $table->string('lot_eda')->nullable()->comment('ロット枝');
             $table->string('souko_code')->nullable()->comment('倉庫コード');
-            $table->string('tokkijikou')->nullable()->comment('特記事項');
+            $table->text('tokkijikou')->nullable()->comment('特記事項');
             $table->string('haisou_simekiri_jikan')->nullable()->comment('配送締切時間');
             $table->string('haisou_nissuu')->nullable()->comment('配送日数');
             $table->string('shoudan_umu')->nullable()->comment('商談有無');

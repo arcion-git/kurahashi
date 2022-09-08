@@ -16,11 +16,11 @@ class CreateRepeatordersTable extends Migration
         Schema::create('repeatorders', function (Blueprint $table) {
             $table->bigIncrements('id');
 
-            $table->integer('cart_id')->unsigned()->nullable();
-            $table->string('price')->unsigned()->nullable()->comment('金額');
-            $table->integer('tokuisaki_name')->unsigned()->nullable()->comment('得意先名');
-            $table->integer('store_name')->unsigned()->nullable()->comment('店舗名');
-            $table->integer('quantity')->unsigned()->nullable()->comment('数量');
+            $table->integer('cart_id')->nullable();
+            $table->string('price')->nullable()->comment('金額');
+            $table->string('tokuisaki_name')->nullable()->comment('得意先名');
+            $table->string('store_name')->nullable()->comment('店舗名');
+            $table->integer('quantity')->nullable()->comment('数量');
             $table->string('nouhin_youbi')->nullable()->comment('納品曜日');
             $table->string('startdate')->nullable()->comment('開始日');
             $table->string('status')->nullable()->comment('有効/無効');

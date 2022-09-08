@@ -17,10 +17,10 @@ class CreateOrderNinisTable extends Migration
             $table->bigIncrements('id');
 
             $table->integer('cart_nini_id')->unsigned()->nullable();
-            $table->integer('tokuisaki_name')->unsigned()->nullable();
-            $table->integer('store_name')->unsigned()->nullable();
+            $table->string('tokuisaki_name')->nullable();
+            $table->string('store_name')->nullable();
             $table->string('price')->nullable();
-            $table->integer('nouhin_yoteibi')->unsigned()->nullable();
+            $table->string('nouhin_yoteibi')->nullable();
             $table->integer('quantity')->unsigned()->nullable();
 
             $table->timestamps();

@@ -15,10 +15,10 @@ class CreateCartNinisTable extends Migration
     {
         Schema::create('cart_ninis', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('user_id')->unsigned()->nullable();
-            $table->integer('deal_id')->unsigned()->nullable();
-            $table->string('item_name')->unsigned()->nullable();
-            $table->string('tantou_name')->unsigned()->nullable();
+            $table->integer('user_id')->nullable();
+            $table->integer('deal_id')->nullable();
+            $table->string('item_name')->nullable();
+            $table->string('tantou_name')->nullable();
             $table->timestamps();
         });
     }

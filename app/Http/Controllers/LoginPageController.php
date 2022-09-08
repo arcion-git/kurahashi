@@ -106,6 +106,7 @@ class LoginPageController extends Controller
         // $price_groupe = $store->price_groupe();
         // dd($price_groupe->price_groupe);
 
+        // 価格グループの取得はしない
         $prices = Price::where(['price_groupe'=>$price_groupe->price_groupe])->get();
 
         $user_items = [];
@@ -113,13 +114,16 @@ class LoginPageController extends Controller
         foreach ($prices as $price) {
           $item = $price->item();
           // dd($item);
-        if($item->zaikosuu >= 0.01){
+          if($item->zaikosuu >= 0.01){
           array_push($user_items, $item);
         }
         $n++;
         }
         $items = $user_items;
         $items = collect($items);
+        // 価格グループの取得はしない
+
+
         // dd($request->page);
         // dd($items);
         // $all_num = count($items);
@@ -171,6 +175,7 @@ class LoginPageController extends Controller
       $now = Carbon::now()->addDay(3)->format('Y-m-d');
 
       $recommends = Recommend::where('user_id', $kaiin_number)->whereDate('end', '>=', $now)->orWhere('end',null)->where('user_id', $kaiin_number)->get();
+
 
 
 
@@ -335,13 +340,16 @@ class LoginPageController extends Controller
       // }
 
       $setonagi_items = SetonagiItem::get();
+
       $items = [];
       $n=1;
 
       foreach ($setonagi_items as $setonagi_item) {
       $item = $setonagi_item->item();
-      if($item->zaikosuu >= 0.01){
-        array_push($items, $setonagi_item);
+      if($item){
+        if($item->zaikosuu >= 0.01){
+          array_push($items, $setonagi_item);
+        }
       }
       $n++;
       }
@@ -462,7 +470,7 @@ class LoginPageController extends Controller
     $user->save();
 
     $data = "sucsess";
-    return redirect()->route('home',$data);
+    return redirect()->route('setonagi',$data);
   }
 
 
@@ -516,7 +524,7 @@ class LoginPageController extends Controller
           // 休みなので次の日付を探す
       }
     }
-    return redirect()->route('home');
+    return redirect()->route('setonagi');
   }
 
 
@@ -558,6 +566,8 @@ class LoginPageController extends Controller
     $cart=Cart::firstOrNew(['user_id'=> $user_id , 'item_id'=> $item->id , 'deal_id'=> null]);
     $cart->save();
 
+
+
     // 直近の納品予定日を取得
     $today = date("Y-m-d");
     $holidays = Holiday::pluck('date');
@@ -594,6 +604,8 @@ class LoginPageController extends Controller
       }
     }
 
+
+
     // hiddenで値を持たせる
     // $setonagi_item_id = $request->setonagi_item_id;
     // if(isset($setonagi_item_id)){
@@ -610,6 +622,10 @@ class LoginPageController extends Controller
     //  }
     // }
 
+
+    // Log::debug($setonagi_user);
+    // return Response::json($setonagi_user);
+
     // セトナギユーザーの場合は得意先を取得しない
     if(!$setonagi_user){
       $order=Order::firstOrNew(['cart_id'=> $cart->id , 'tokuisaki_name'=> $store->tokuisaki_name , 'store_name'=> $store->store_name , 'quantity'=> 1 , 'nouhin_yoteibi'=> $nouhin_yoteibi]);
@@ -618,13 +634,14 @@ class LoginPageController extends Controller
       }
     }else{
       $order=Order::firstOrNew(['cart_id'=> $cart->id , 'quantity'=> 1 , 'nouhin_yoteibi'=> $nouhin_yoteibi]);
-      if(isset($price->price)){
-      $order->price = $price->price;
-      }
     }
     // ユーザーの会員番号を取得
-    $kaiin_number = Auth::guard('user')->user()->kaiin_number;
+    if(!$setonagi_user){
+      $kaiin_number = Auth::guard('user')->user()->kaiin_number;
+    }
     $item = Item::where('id',$item_id)->first();
+
+
 
     // 市況商品価格上書き
     $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])->first();
@@ -639,15 +656,16 @@ class LoginPageController extends Controller
     }
 
     // 担当のおすすめ商品価格上書き
-    $recommend_item = Recommend::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'user_id'=>$kaiin_number])->first();
-    if(isset($recommend_item->price)){
-    $order->price = $recommend_item->price;
+    if(!$setonagi_user){
+      $recommend_item = Recommend::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'user_id'=>$kaiin_number])->first();
+      if(isset($recommend_item->price)){
+      $order->price = $recommend_item->price;
+      }
     }
-
     $order->save();
 
     $data = "sucsess";
-    return redirect()->route('home',$data);
+    return redirect()->route('setonagi',$data);
   }
 
 
@@ -699,7 +717,7 @@ class LoginPageController extends Controller
     $delete_cart = Cart::where(['id'=> $cart_id])->first()->delete();
     $delete_order = Order::where(['cart_id'=> $cart_id])->first()->delete();
     $data = "sucsess";
-    return redirect()->route('home',$data);
+    return redirect()->route('setonagi',$data);
   }
 
 
@@ -866,6 +884,8 @@ class LoginPageController extends Controller
 
 // カート画面からの遷移先
   public function order(Request $request){
+
+    // ユーザーがいるURLを取得
 
     $user_id = Auth::guard('user')->user()->id;
     $carts =  Cart::where(['user_id'=>$user_id, 'deal_id'=> null])->get();
@@ -1281,7 +1301,7 @@ class LoginPageController extends Controller
           'traderCode' => $kakebarai_traderCode,
           // 日付
           'orderDate' => $now,
-          'orderNo' => $deal_id.'2a',
+          'orderNo' => $deal_id.'3a',
           // バイヤーid
           'buyerId' => $user_id,
           'settlePrice' => $request->all_total_val,
@@ -1816,7 +1836,7 @@ class LoginPageController extends Controller
           'form_params' => [
             'traderCode' => $kakebarai_traderCode,
             // 取引id
-            'orderNo' => $deal_id.'2a',
+            'orderNo' => $deal_id.'3a',
             // バイヤーid
             'buyerId' => $user_id,
             'passWord' => $kakebarai_passWord
@@ -2121,7 +2141,7 @@ class LoginPageController extends Controller
     $favorite_item->save();
 
     $data = "sucsess";
-    return redirect()->route('home',$data);
+    return redirect()->route('setonagi',$data);
   }
 
 
@@ -2133,7 +2153,7 @@ class LoginPageController extends Controller
     $favorite_in = Favorite::where(['user_id'=> $user_id , 'item_id'=> $item_id])->first()->delete();;
 
     $data = "sucsess";
-    return redirect()->route('home',$data);
+    return redirect()->route('setonagi',$data);
 
 
 
