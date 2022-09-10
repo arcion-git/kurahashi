@@ -150,8 +150,8 @@
                         @foreach($special_prices as $special_price)
                         @if($special_price->item())
                         @if($special_price->item()->zaikosuu == 0)
+                        @else
                         @if($now >= $special_price->start && $now < $special_price->end)
-
                         <tr>
                           <!-- <form class="form-horizontal" role="form" method="POST" action="{{ url('/addcart') }}"> -->
                             @csrf
