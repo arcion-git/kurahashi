@@ -139,8 +139,10 @@ class LoginPageController extends Controller
                     array('path' => $request->url() , "pageName" => "page")
                 );
 
-        $special_prices = SpecialPrice::where(['price_groupe'=>$price_groupe])->paginate(30);
-        // dd($special_prices);
+
+        // dd($now);
+        $special_prices = SpecialPrice::where(['price_groupe'=>$price_groupe->price_groupe])->paginate(30);
+        // dd($price_groupe->price_groupe);
 
         // $items = Item::where('zaikosuu', '>=', '0.01')->paginate(30);
                 // dd($items->first());
@@ -176,6 +178,8 @@ class LoginPageController extends Controller
 
       $recommends = Recommend::where('user_id', $kaiin_number)->whereDate('end', '>=', $now)->orWhere('end',null)->where('user_id', $kaiin_number)->get();
 
+      $now = Carbon::now()->toDateTimeString();
+
 
 
 
@@ -188,6 +192,7 @@ class LoginPageController extends Controller
        'recommends' => $recommends,
        'special_prices' => $special_prices,
        'page' => $request->page,
+       'now' => $now,
       ]);
   }
 
@@ -370,6 +375,7 @@ class LoginPageController extends Controller
       $recommends = Recommend::where('user_id', $kaiin_number)->whereDate('end', '>=', $now)->orWhere('end',null)->where('user_id', $kaiin_number)->get();
 
       $special_prices = SpecialPrice::get();
+      $now = Carbon::now()->toDateTimeString();
 
       return view('user/setonagi',
       ['setonagi_items' => $setonagi_items,
@@ -379,6 +385,7 @@ class LoginPageController extends Controller
        'favorite_items' => $favorite_items,
        'recommends' => $recommends,
        'special_prices' => $special_prices,
+       'now' => $now,
       ]);
   }
 

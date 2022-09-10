@@ -20,8 +20,8 @@ class CreateSetonagiItemsTable extends Migration
             $table->string('sku_code')->nullable()->comment('SKUコード');
             $table->string('img')->nullable()->comment('商品画像');
             $table->string('price')->nullable()->comment('価格');
-            $table->date('start_date')->nullable()->comment('掲載開始日');
-            $table->date('end_date')->nullable()->comment('掲載終了日');
+            $table->datetime('start_date')->nullable()->comment('掲載開始日');
+            $table->datetime('end_date')->nullable()->comment('掲載終了日');
 
             $table->timestamps();
         });

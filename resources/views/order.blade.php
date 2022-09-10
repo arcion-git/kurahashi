@@ -624,7 +624,8 @@ $(function(){
 </script>
 
 
-@if($user->setonagi & Auth::guard('user')->check() )
+@if(isset($user->setonagi))
+	@if(Auth::guard('user')->check() )
 <script>
 if(document.URL.match("/confirm")) {
 
@@ -692,4 +693,5 @@ $(function(){
 }
 
 </script>
+	@endif
 @endif

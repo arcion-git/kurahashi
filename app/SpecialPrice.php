@@ -18,14 +18,19 @@ class SpecialPrice extends Model
     'teika',
     'price',
   ];
+
   /**
-   * リピートオーダーに所属する商品を取得
+   * 商品を取得
    */
   public function item()
   {
-    return $this->belongsTo('App\Item', 'item_id','item_id')
+        // dd($this->sku_code);
+    $item = $this->belongsTo('App\Item', 'item_id','item_id')
     ->where('sku_code', $this->sku_code)
     ->first();
+
+    return $item;
+
   }
 
   public function favoriteitem()

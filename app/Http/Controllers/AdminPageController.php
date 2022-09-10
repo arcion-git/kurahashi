@@ -649,7 +649,7 @@ class AdminPageController extends Controller
 
 
 
-// リピートオーダー処理
+// リピートオーダー詳細ページを修正（user_idで取得してSETOnagiユーザーも使えるように）
   public function userrepeatorder($id){
 
     $user = User::where('id',$id)->first();
@@ -1545,6 +1545,9 @@ class AdminPageController extends Controller
           // dd($nouhin_youbi);
           // dd($weekday);
           // 曜日が含まれているか確認
+
+          dd($repeatorder->cart);
+
           $key = in_array($weekday, $nouhin_youbi);
           if($key == true){
             // 会員IDを取得して、ユーザー情報を取得するところから
@@ -1554,7 +1557,6 @@ class AdminPageController extends Controller
               // dd($setonagi_user);
             }
             $item = Item::where(['id'=> $cart->item_id])->first();
-            $zei = '10%';
             // dd($user);
             if(!($user->setonagi == 1)){
               $store = Store::where(['tokuisaki_name'=> $order->tokuisaki_name , 'store_name'=> $order->store_name])->first();
