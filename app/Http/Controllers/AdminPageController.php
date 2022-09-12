@@ -1148,7 +1148,7 @@ class AdminPageController extends Controller
     // シートを指定する場合は記述
 		// $sheet = $spreadsheet->getSheetByName("原本");
 
-    $deals =  Deal::where('status','発注済')->get();
+    $deals =  Deal::where('status','発注済')->orwhere('status','キャンセル')->get();
     // dd($deals);
 
     if($deals){
@@ -1215,17 +1215,17 @@ class AdminPageController extends Controller
               // 住所
               $jyuusho = $setonagi_user->address02.$setonagi_user->address03.$setonagi_user->address04;
               // 電話番号
-              $tel = $setonagi_user->tel;
+              $tel = $user->tel;
               // FAX番号
-              $fax = $setonagi_user->fax;
+              $fax = null;
               // 配送先氏名
               $store_name = $setonagi_user->last_name.$setonagi_user->first_name;
               // 配送先住所
-              $jyuusho = $store->jyuusho1.$store->jyuusho2;
+              $jyuusho = $setonagi_user->address02.$setonagi_user->address03.$setonagi_user->address04;
               // 配送先電話番号
-              $tel = $store->tel;
+              $tel = $setonagi_user->tel;
               // 配送先FAX番号
-              $fax = $store->fax;
+              $fax = $setonagi_user->fax;
               // 支払方法
               if($deal->uketori_siharai == 'クレジットカード払い'){
                 $pay = 'クレジットカード払い';
@@ -1362,7 +1362,6 @@ class AdminPageController extends Controller
       			array_push($order_list, $array);
           }
         }
-        // dd($order_list);
         // 任意の商品を出力
         $cart_ninis = CartNini::where(['deal_id'=> $deal->id])->get();
         // dd($cart_ninis);
@@ -1718,7 +1717,7 @@ class AdminPageController extends Controller
         }
       }
     }
-    dd($repeatorders);
+    // dd($repeatorders);
     // dd($repeatorders);
     $today = date("Y-m-d");
     foreach ($repeatorders as $repeatorder) {
