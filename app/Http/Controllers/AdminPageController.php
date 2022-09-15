@@ -592,7 +592,7 @@ class AdminPageController extends Controller
     $user = User::where('id',$id)->first();
     $items = Item::get();
 
-    $recommends = Recommend::where('user_id',$user->kaiin_number)->get();
+    $recommends = Recommend::where('user_id',$user->id)->get();
     // dd($recommends);
     $data=[
       'id'=>$id,
@@ -613,7 +613,7 @@ class AdminPageController extends Controller
     $item = Item::where('id',$item_id)->first();
     // dd($user);
 
-    $recommend = Recommend::firstOrNew(['user_id'=> $user->kaiin_number , 'item_id'=> $item->item_id , 'sku_code'=> $item->sku_code ]);
+    $recommend = Recommend::firstOrNew(['user_id'=> $user->id , 'item_id'=> $item->item_id , 'sku_code'=> $item->sku_code ]);
     $recommend -> save();
 
     $id = $user_id;
@@ -1529,9 +1529,186 @@ class AdminPageController extends Controller
     }
 
     // リピートオーダーを出力
-    $repeatorders = Repeatorder::where('status','有効')->get();
 
+    $repeatorders = Repeatorder::where('status','有効')->get();
     if($kikan){
+      for ($nouhin_yoteibi = $start; $nouhin_yoteibi <= $end; $nouhin_yoteibi = date('Y-m-d', strtotime($nouhin_yoteibi . '+1 day'))) {
+        foreach ($repeatorders as $repeatorder) {
+          if($repeatorder->startdate <= $nouhin_yoteibi){
+            $date = new Carbon($nouhin_yoteibi);
+            $weekday = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+            $weekday = $weekday[$date->dayOfWeek];
+            // dd($weekday);
+            $nouhin_youbi = explode(',', $repeatorder->nouhin_youbi);
+            // dd($nouhin_youbi);
+            // dd($weekday);
+            // 曜日が含まれているか確認
+
+            // dd($repeatorder->cart);
+            $repeatcart = $repeatorder->cart;
+            $zei = '10%';
+            $key = in_array($weekday, $nouhin_youbi);
+            if($key == true){
+              // 会員IDを取得して、ユーザー情報を取得するところから
+              $user = User::where('kaiin_number',$repeatcart->kaiin_number)->first();
+              $item = Item::where(['item_id'=> $repeatcart->item_id, 'sku_code'=> $repeatcart->sku_code])->first();
+              $store = Store::where(['tokuisaki_name'=> $repeatorder->tokuisaki_name , 'store_name'=> $repeatorder->store_name])->first();
+              if(!($user->setonagi == 1)){
+                // 会社名
+                $company = $repeatorder->tokuisaki_name;
+                // 会員No
+                $kaiin_number = $user->kaiin_number;
+                // 郵便番号
+                $yuubin = $store->yuubin;
+                // 住所
+                $jyuusho = $store->jyuusho1;
+                // 電話番号
+                $tel = $store->tel;
+                // FAX番号
+                $fax = $store->fax;
+                // 配送先氏名
+                $store_name = $repeatorder->store_name;
+                // 配送先郵便番号
+                $yuubin = $repeatorder->yuubin;
+                // 配送先住所
+                $jyuusho = $store->jyuusho1.$store->jyuusho2;
+                // 配送先電話番号
+                $tel = $store->tel;
+                // 配送先FAX番号
+                $fax = $store->fax;
+                // 支払方法
+                $pay = 'クラハシ払い';
+                // 取引種別
+                $torihiki_shubetu = $store->torihiki_shubetu;
+              }
+              $array = [
+                // 取引番号
+                "\"".'r'.$repeatcart->id."\"",
+                // カート番号
+                "\"".'r'.$repeatcart->id."\"",
+                // 注文日時
+                "\"".$repeatorder->updated_at."\"",
+                // 会員No
+                "\"".$user->kaiin_number."\"",
+                // Eメール
+                "\"".$user->email."\"",
+                // 氏名
+                "\"".$user->name."\"",
+                // 屋号_会社名
+                "\"".$company."\"",
+                // フリガナ
+                "\"".$user->name_kana."\"",
+                // 郵便番号
+                "\"".$yuubin."\"",
+                // 国
+                '',
+                // 都道府県
+                "\"".$jyuusho."\"",
+                // 市区郡町村
+                '',
+                // 番地
+                '',
+                // ビル名
+                '',
+                // 電話番号
+                "\"".$tel."\"",
+                // FAX番号
+                "\"".$fax."\"",
+                // 配送先氏名
+                "\"".$store_name."\"",
+                // 配送先フリガナ
+                '',
+                // 配送先郵便番号
+                "\"".$yuubin."\"",
+                // 配送先住所
+                "\"".$jyuusho."\"",
+                // 配送先電話番号
+                "\"".$tel."\"",
+                // 配送先FAX番号
+                "\"".$fax."\"",
+                // 取引種別
+                "\"".$torihiki_shubetu."\"",
+                // 発送日
+                '',
+                // 支払方法
+                "\"".$pay."\"",
+                // 決済ID
+                '',
+                // 配送方法
+                '',
+                // 配送希望日
+                "\"".$date."\"",
+                // 配送時間帯
+                '',
+                // 発送予定日
+                '',
+                // ステータス
+                '有効',
+                // 送り状番号
+                '',
+                // 総合計金額
+                '',
+                // 商品合計
+                '',
+                // 送料
+                '',
+                // 代引手数料
+                '',
+                // 内消費税
+                "\"".$zei."\"",
+                // 備考
+                '',
+                // 注文行番号
+                "\"".'r'.$repeatorder->id."\"",
+                // 商品コード
+                "\"".$item->item_id."\"",
+                // SKUコード
+                "\"".$item->sku_code."\"",
+                // 商品名
+                "\"".$item->item_name."\"",
+                // SKU表示名
+                "\"".$item->sku_code."\"",
+                // 商品オプション
+                '',
+                // 数量
+                "\"".$repeatorder->quantity."\"",
+                // 単価
+                "\"".$repeatorder->price."\"",
+                // 単位
+                "\"".$item->tani."\"",
+                // 引渡場所
+                '',
+                // 発注先企業
+                '',
+                // 発注先部署コード
+                "\"".$item->kigyou_code."\"",
+                // 発注先部署名
+                "\"".$item->bucho_code."\"",
+                // 発注先当者者コード
+                "\"".$item->tantou_code."\"",
+                // 発注先当者名
+                "\"".$item->tantou_name."\"",
+                // 入荷日
+                "\"".$item->nyuukabi."\"",
+                // 荷主コード
+                '',
+                // ロット番号
+                "\"".$item->lot_bangou."\"",
+                // ロット行
+                "\"".$item->lot_gyou."\"",
+                // ロット枝
+                "\"".$item->lot_eda."\"",
+                // 倉庫コード
+                "\"".$item->souko_code."\"",
+                // 値引率
+                '',
+              ];
+              // dd($array);
+        			array_push($order_list, $array);
+            }
+          }
+        }
+      }
       // $repeatorders = Repeatorder::whereBetween('startdate', [$start, $end])->get();
       // dd($order_ninis);
     }else{
@@ -1540,29 +1717,24 @@ class AdminPageController extends Controller
           $date = new Carbon($nouhin_yoteibi);
           $weekday = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
           $weekday = $weekday[$date->dayOfWeek];
+          // dd($weekday);
           $nouhin_youbi = explode(',', $repeatorder->nouhin_youbi);
           // dd($nouhin_youbi);
           // dd($weekday);
           // 曜日が含まれているか確認
 
-          dd($repeatorder->cart);
-
+          // dd($repeatorder->cart);
+          $repeatcart = $repeatorder->cart;
+          $zei = '10%';
           $key = in_array($weekday, $nouhin_youbi);
           if($key == true){
             // 会員IDを取得して、ユーザー情報を取得するところから
-            $user = User::where('id',$deal->user_id)->first();
-            if($user->setonagi == 1){
-              $setonagi_user = Setonagi::where('user_id',$user->id)->first();
-              // dd($setonagi_user);
-            }
-            $item = Item::where(['id'=> $cart->item_id])->first();
-            // dd($user);
-            if(!($user->setonagi == 1)){
-              $store = Store::where(['tokuisaki_name'=> $order->tokuisaki_name , 'store_name'=> $order->store_name])->first();
-            }
+            $user = User::where('kaiin_number',$repeatcart->kaiin_number)->first();
+            $item = Item::where(['item_id'=> $repeatcart->item_id, 'sku_code'=> $repeatcart->sku_code])->first();
+            $store = Store::where(['tokuisaki_name'=> $repeatorder->tokuisaki_name , 'store_name'=> $repeatorder->store_name])->first();
             if(!($user->setonagi == 1)){
               // 会社名
-              $company = $order->tokuisaki_name;
+              $company = $repeatorder->tokuisaki_name;
               // 会員No
               $kaiin_number = $user->kaiin_number;
               // 郵便番号
@@ -1574,9 +1746,9 @@ class AdminPageController extends Controller
               // FAX番号
               $fax = $store->fax;
               // 配送先氏名
-              $store_name = $order->store_name;
+              $store_name = $repeatorder->store_name;
               // 配送先郵便番号
-              $yuubin = $store->yuubin;
+              $yuubin = $repeatorder->yuubin;
               // 配送先住所
               $jyuusho = $store->jyuusho1.$store->jyuusho2;
               // 配送先電話番号
@@ -1588,14 +1760,13 @@ class AdminPageController extends Controller
               // 取引種別
               $torihiki_shubetu = $store->torihiki_shubetu;
             }
-            // dd($store);
             $array = [
               // 取引番号
-              "\"".$deal->id."\"",
+              "\"".'r'.$repeatcart->id."\"",
               // カート番号
-              "\"".$cart->id."\"",
+              "\"".'r'.$repeatcart->id."\"",
               // 注文日時
-              "\"".$deal->success_time."\"",
+              "\"".$repeatorder->updated_at."\"",
               // 会員No
               "\"".$user->kaiin_number."\"",
               // Eメール
@@ -1641,17 +1812,17 @@ class AdminPageController extends Controller
               // 支払方法
               "\"".$pay."\"",
               // 決済ID
-              "\"".$deal->id."\"",
+              '',
               // 配送方法
               '',
               // 配送希望日
-              "\"".$order->nouhin_yoteibi."\"",
+              "\"".$date."\"",
               // 配送時間帯
               '',
               // 発送予定日
               '',
               // ステータス
-              "\"".$deal->status."\"",
+              '有効',
               // 送り状番号
               '',
               // 総合計金額
@@ -1665,9 +1836,9 @@ class AdminPageController extends Controller
               // 内消費税
               "\"".$zei."\"",
               // 備考
-              "\"".$deal->memo."\"",
+              '',
               // 注文行番号
-              "\"".$order->id."\"",
+              "\"".'r'.$repeatorder->id."\"",
               // 商品コード
               "\"".$item->item_id."\"",
               // SKUコード
@@ -1679,9 +1850,9 @@ class AdminPageController extends Controller
               // 商品オプション
               '',
               // 数量
-              "\"".$order->quantity."\"",
+              "\"".$repeatorder->quantity."\"",
               // 単価
-              "\"".$order->price."\"",
+              "\"".$repeatorder->price."\"",
               // 単位
               "\"".$item->tani."\"",
               // 引渡場所

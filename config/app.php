@@ -134,6 +134,7 @@ return [
     | this array to grant expanded functionality to your applications.
     |
     */
+    'kakebarai_user_touroku' => env('KAKEBARAI_USER_TOUROKU'),
     'kakebarai_touroku' => env('KAKEBARAI_TOUROKU'),
     'kakebarai_cancel' => env('KAKEBARAI_CANCEL'),
     'kakebarai_traderCode' => env('KAKEBARAI_TRADERCODE'),

@@ -176,7 +176,8 @@ class LoginPageController extends Controller
 
       $now = Carbon::now()->addDay(3)->format('Y-m-d');
 
-      $recommends = Recommend::where('user_id', $kaiin_number)->whereDate('end', '>=', $now)->orWhere('end',null)->where('user_id', $kaiin_number)->get();
+      $recommends = Recommend::where('user_id', $user_id)->whereDate('end', '>=', $now)->orWhere('end',null)->get();
+      // dd($recommends);
 
       $now = Carbon::now()->toDateTimeString();
 
@@ -663,11 +664,9 @@ class LoginPageController extends Controller
     }
 
     // 担当のおすすめ商品価格上書き
-    if(!$setonagi_user){
-      $recommend_item = Recommend::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'user_id'=>$kaiin_number])->first();
-      if(isset($recommend_item->price)){
-      $order->price = $recommend_item->price;
-      }
+    $recommend_item = Recommend::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'user_id'=>$user_id])->first();
+    if(isset($recommend_item->price)){
+    $order->price = $recommend_item->price;
     }
     $order->save();
 
@@ -783,12 +782,21 @@ class LoginPageController extends Controller
     $today = date("Y-m-d");
     $holidays = Holiday::pluck('date');
     $currentTime = date('H:i:s');
+
+
+
+    $today = date('Y-m-d');
+    // dd($holidays);
+    // 今日が休みの場合は無条件で19時以降の処理に飛ばす
+    $key = array_search($today,(array)$holidays,true);
+    // dd($key);
+
     // 19時より前の処理
     if (strtotime($currentTime) < strtotime('19:00:00')) {
       $holidays = Holiday::pluck('date')->toArray();
       for($i = 1; $i < 10; $i++){
         $today_plus = date('Y-m-d', strtotime($today.'+'.$i.'day'));
-        // dd($today_plus2);
+        // dd($today_plus);
         $key = array_search($today_plus,(array)$holidays,true);
         if($key){
             // 休みでないので納品日を格納
@@ -824,7 +832,7 @@ class LoginPageController extends Controller
      'user_id' => $user_id,
      'user' => $user,
      'setonagi' => $setonagi,
-     'today_plus' => $today_plus,
+     'nouhin_yoteibi' => $nouhin_yoteibi,
     ]);
 
   }

@@ -464,7 +464,7 @@
       <div class="main-content">
         @yield('content')
       </div>
-      <footer class="main-footer">
+      <!-- <footer class="main-footer">
         <div class="footer-left">
           Copyright &copy; KURAHASHI
         </div>
@@ -472,7 +472,50 @@
           <span class="" ></span>運営：<a href="https://www.kurahashi.co.jp/" target="_blank">株式会社クラハシ</a></span>
           <span class="">開発：<a href="http://u-midas.com/" target="_blank">株式会社U-midas</a></span>
         </div>
-      </footer>
+      </footer> -->
+
+
+      <footer id="colophon" class="main-footer">
+  			<div class="inner">
+  				<div class="bottom">
+  					<div class="column_footer">
+  						<div class="flex-container">
+  							<div class="footer_logo">
+  								<img src="{{ asset('img/logo-w.png') }}">
+  								<p>【運営元】<br><strong>株式会社クラハシ</strong><br>〒721-0942広島県福山市引野町1-1-1<br>福山市地方卸売市場内</p>
+  							</div>
+  							<div class="footer_menu">
+  								<ul class="">
+  									<li><a href="{{ url('/guide') }}">ご利用ガイド</a></li>
+  									<li><a href="{{ url('/law') }}">特商法取引に基づく表記</a></li>
+  									<li><a href="{{ url('/privacypolicy') }}">個人情報保護方針</a></li>
+  								</ul>
+  							</div>
+  							<div class="footer_contact">
+  								<h3>お問い合わせ窓口<span>CONTACT</span></h3>
+  								<p><strong>TEL 084-941-3510</strong></p>
+  								<p class="small">平日9：00～18：00（定休 土日祝）</p>
+  								<a href="{{ url('/line') }}"><div class="btn navy">お問い合わせフォーム</div></a>
+  							</div>
+  						</div>
+  						<div class="flex-container external_link">
+  							<ul class="">
+  								<li><a href="https://www.kurahashi.co.jp/" target="_blank">株式会社クラハシオフィシャルサイト<img src="https://setonagi.net/wp-content/themes/welcart_basic-beldad-expo/assets/images/expo/footer_link.png"></a></li>
+  								<li><a href="http://u-midas.com/" target="_blank">株式会U-midasフィシャルサイト<img src="https://setonagi.net/wp-content/themes/welcart_basic-beldad-expo/assets/images/expo/footer_link.png"></a></li>
+  							</ul>
+  						</div>
+  						<div class="flex-container sns_link">
+  							<ul class="">
+  								<li><a href="https://twitter.com/U_midas" target="_blank"><img src="https://setonagi.net/wp-content/themes/welcart_basic-beldad-expo/assets/images/expo/footer_twitter.png"></a></li>
+  								<li><a href="https://www.youtube.com/c/KurahashiCoJp" target="_blank"><img src="https://setonagi.net/wp-content/themes/welcart_basic-beldad-expo/assets/images/expo/footer_youtube.png"></a></li>
+  							</ul>
+  							<p class="copyright">© UMIDASU Co., Ltd.  All rights reserved.</p>
+  						</div>
+  						</div><!-- .flex-container -->
+  					</div><!-- .column1070 -->
+  				</div>
+  		</footer>
+
     </div>
     <div id="overlayajax">
       <div class="cv-spinner">
@@ -549,6 +592,8 @@
     }
     </style>
     @endif
+
+
 
 
 </body>

@@ -129,7 +129,9 @@ class RegisterController extends Controller
 
       // かけ払いAPIに送信
       $client = new Client();
-      $url = 'https://demo.yamato-credit-finance.jp/kuroneko-anshin/AN060APIAction.action';
+      $url = config('app.kakebarai_user_touroku');
+      $kakebarai_traderCode = config('app.kakebarai_traderCode');
+      $kakebarai_passWord = config('app.kakebarai_passWord');
       $option = [
         'headers' => [
           'Accept' => '*/*',
@@ -137,7 +139,7 @@ class RegisterController extends Controller
           'charset' => 'UTF-8',
         ],
         'form_params' => [
-          'traderCode' => '330000051',
+          'traderCode' => $kakebarai_traderCode,
           'cId' => $user_id,
           'hjkjKbn' => $data['hjkjKbn'],
           'sMei' => $data['company'],
@@ -192,7 +194,7 @@ class RegisterController extends Controller
           // 'kmsTelno' => '084-952-5627',
 
           'shrhohKbn' => $data['pay'],
-          'passWord' => 'UzhJlu8E'
+          'passWord' => $kakebarai_passWord
         ]
       ];
       if($data['hjkjKbn'] == '1'){

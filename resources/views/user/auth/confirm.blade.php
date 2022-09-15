@@ -26,7 +26,7 @@
             @if(isset($setonagi))
             <div class="row mt-4 order">
               <div class="col-md-12">
-                <div class="section-title">只今ご注文いただいた場合の商品受け渡しは{{$today_plus}}です。</div>
+                <div class="section-title">只今ご注文いただいた場合の商品受け渡しは{{$nouhin_yoteibi}}です。</div>
               </div>
             </div>
             @endif
