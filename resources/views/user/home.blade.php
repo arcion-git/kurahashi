@@ -61,6 +61,7 @@
 
 
                         @foreach($recommends as $recommend)
+                        @if($recommend->item())
                         @if($recommend->item()->zaikosuu == 0)
                         @else
                         <tr>
@@ -102,6 +103,7 @@
                               </td>
                           <!-- </form> -->
                         </tr>
+                        @endif
                         @endif
                         @endforeach
                       </table>

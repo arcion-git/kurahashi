@@ -467,7 +467,7 @@
         </div>
       </footer> -->
 
-
+      @if ( Auth::guard('user')->check() )
       <footer id="colophon" class="main-footer">
   			<div class="inner">
   				<div class="bottom">
@@ -508,6 +508,7 @@
   					</div><!-- .column1070 -->
   				</div>
   		</footer>
+      @endif
 
     </div>
     <div id="overlayajax">
