@@ -236,7 +236,7 @@ class LoginPageController extends Controller
       $shubetu = $request->shubetu;
       $naiyou = $request->naiyou;
       $contact = Contact::create(['name'=> $name, 'address'=> $address ,'email'=> $email, 'tel'=> $tel, 'shubetu'=> $shubetu, 'naiyou'=> $naiyou ]);
-      $admin_mail = 'info@arcion.jp';
+      $admin_mail = 'info@setonagi.net';
       $text = 'この度はお問い合わせいただきありがとうございます。<br />下記の内容でお問い合わせを受け付けました。<br />
       <br />
       お名前：'.$name.'<br />
@@ -1718,7 +1718,7 @@ class LoginPageController extends Controller
         }
       $order_list = implode('<br>', $order_list);
       // dd($order_list);
-
+      $admin_mail = 'info@setonagi.net';
       Mail::send('emails.register', [
           'name' => $name,
           'user' => $user,
@@ -1730,8 +1730,8 @@ class LoginPageController extends Controller
           'total_price' => $total_price,
           'memo' => $memo,
           'nouhin_yoteibi' => $nouhin_yoteibi,
-      ], function ($message) use ($email) {
-          $message->to($email)->subject('SETOnagiオーダーブックご注文承りました。');
+      ], function ($message) use ($email , $admin_mail) {
+          $message->to($email)->bcc($admin_mail)->subject('SETOnagiオーダーブックご注文承りました。');
       });
       // 注文完了メール送信ここまで
     }

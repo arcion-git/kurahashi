@@ -795,6 +795,7 @@ class AdminPageController extends Controller
 
     $name = $user->name;
     $email = $user->email;
+    $admin_mail = 'info@setonagi.net';
     $url = url('');
     $text = 'この度、ヤマトクレジットファイナンス株式会社の審査の結果、オーダーブックが利用可能となりました。<br />
     ユーザー登録時にご登録いただいたメールアドレスとパスワードにて、下記URLよりご利用いただけます。<br />
@@ -802,8 +803,8 @@ class AdminPageController extends Controller
     Mail::send('emails.register', [
         'name' => $name,
         'text' => $text,
-    ], function ($message) use ($email) {
-        $message->to($email)->subject('SETOnagiオーダーブック審査通過のお知らせ');
+    ], function ($message) use ($email ,$admin_mail) {
+        $message->to($email)->bcc($admin_mail)->subject('SETOnagiオーダーブック審査通過のお知らせ');
     });
     return redirect()->route('admin.setonagiuser');
   }
@@ -818,14 +819,15 @@ class AdminPageController extends Controller
 
     $name = $user->name;
     $email = $user->email;
+    $admin_mail = 'info@setonagi.net';
     $url = url('');
     $text = 'この度、ヤマトクレジットファイナンス株式会社の審査の結果、<br />
     オーダーブックが利用不可となりましたことをお知らせいたします。';
     Mail::send('emails.register', [
         'name' => $name,
         'text' => $text,
-    ], function ($message) use ($email) {
-        $message->to($email)->subject('SETOnagiオーダーブック利用停止のお知らせ');
+    ], function ($message) use ($email , $admin_mail) {
+        $message->to($email)->bcc($admin_mail)->subject('SETOnagiオーダーブック利用停止のお知らせ');
     });
     return redirect()->route('admin.setonagiuser');
   }
@@ -841,6 +843,7 @@ class AdminPageController extends Controller
     $name = $user->name;
     $email = $user->email;
     $url = url('');
+    $admin_mail = 'info@setonagi.net';
     $text = 'この度、ヤマトクレジットファイナンス株式会社の審査の結果、かけ払いでのお支払いはご利用いただけない結果となりました。<br />
     クレジットカード払いでの利用については可能です。<br />
     ユーザー登録時にご登録いただいたメールアドレスとパスワードにて、下記URLよりご利用いただけます。<br />
@@ -848,8 +851,8 @@ class AdminPageController extends Controller
     Mail::send('emails.register', [
         'name' => $name,
         'text' => $text,
-    ], function ($message) use ($email) {
-        $message->to($email)->subject('SETOnagiオーダーブック審査結果のお知らせ');
+    ], function ($message) use ($email , $admin_mail) {
+        $message->to($email)->bcc($admin_mail)->subject('SETOnagiオーダーブック審査結果のお知らせ');
     });
     return redirect()->route('admin.setonagiuser');
   }
