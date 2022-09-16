@@ -36,6 +36,8 @@
   Route::get('/favoriteitem', 'LoginPageController@favoriteitem')->name('favoriteitem');
   Route::get('/user/deal/{id}', 'LoginPageController@dealdetail')->name('dealdetail');
   Route::get('/repeatorder', 'LoginPageController@repeatorder')->name('repeatorder');
+  Route::get('/contact', 'LoginPageController@contact')->name('contact');
+  Route::post('/postcontact', 'LoginPageController@postcontact');
 
   Route::get('/setonagi', 'LoginPageController@setonagi')->name('setonagi');
   // Route::get('/saiji', 'LoginPageController@saiji')->name('setonagi');

@@ -105,27 +105,27 @@
 <div class="row">
 	<div class="form-group col-12">
 		<div class="row">
-			<div class="col-2">
+			<div class="col-sm-12 col-md-2">
 					<label for="company">ご注文者名</label>
 			</div>
-			<div class="col-5">
+			<div class="col-sm-12 col-md-5">
 					<label for="">{{$user->name}}</label>
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-2">
+			<div class="col-sm-12 col-md-2">
 					<label for="company">ご注文者住所</label>
 			</div>
-			<div class="col-5">
+			<div class="col-sm-12 col-md-5">
 					<label for="">{{$setonagi->address02}}{{$setonagi->address03}}{{$setonagi->address04}}<br />
 					<small>※商品の受け取りに取りに来られない場合は、上記ご住所に配送させていただきます。</small></label>
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-2">
+			<div class="col-sm-12 col-md-2">
 					<label for="company">受け渡し場所</label>
 			</div>
-			<div class="col-5">
+			<div class="col-sm-12 col-md-5">
 				<select id="uketori_place" value="" name="uketori_place" class="uketori_place form-control" required>
 				@if(isset($setonagi->uketori_place))
 				<option value="{{$setonagi->uketori_place}}" selected>{{$setonagi->uketori_place}}</option>
@@ -138,10 +138,10 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-2">
+			<div class="col-sm-12 col-md-2">
 					<label for="company">受け渡し希望時間</label>
 			</div>
-			<div class="col-5">
+			<div class="col-sm-12 col-md-5">
 				<select id="uketori_time" value="" name="uketori_time" class="uketori_time form-control" required>
 				@if(isset($setonagi->uketori_time))
 				<option value="{{$setonagi->uketori_time}}" selected>{{$setonagi->uketori_time}}</option>
@@ -156,7 +156,7 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-2">
+			<div class="col-sm-12 col-md-2">
 					<label for="company">お支払い方法</label>
 			</div>
 			<div class="col-10">
@@ -183,34 +183,34 @@
 			<div class="form-group col-12">
 				<form method="POST" action="https://ptwebcollect.jp/test_gateway/creditToken.api" name="charge_form" onsubmit="return false;">
 					<div class="input-form row">
-						<div class="col-2">
+						<div class="col-sm-12 col-md-2">
 							<label for="card_no">カード番号</label>
 						</div>
-						<div class="col-5">
+						<div class="col-sm-12 col-md-5">
 							<input type="text" class="form-control" name="card_no" maxlength="16" placeholder="************1234" value="0000000000000001">
 						</div>
 					</div>
 					<div class="input-form row">
-						<div class="col-2">
+						<div class="col-sm-12 col-md-2">
 							<label>カード名義人</label>
 						</div>
-						<div class="col-5">
+						<div class="col-sm-12 col-md-5">
 							<input type="text" class="form-control" name="card_owner" maxlength="30" placeholder="KURONEKO TARO" value="KURONEKO TARO">
 						</div>
 					</div>
 					<div class="input-form row">
-						<div class="col-2">
+						<div class="col-sm-12 col-md-2">
 							<label>カード有効期限</label>
 						</div>
-						<div class="col-5">
+						<div class="col-sm-12 col-md-5">
 							<input type="text" class="form-control yuukoukigen" name="exp_month" maxlength="2" placeholder="10" value="10">月/ <input class="form-control yuukoukigen" type="text" name="exp_year" maxlength="2" value="24" placeholder="20">年
 						</div>
 					</div>
 					<div class="input-form row">
-						<div class="col-2">
+						<div class="col-sm-12 col-md-2">
 							<label>セキュリティコード</label>
 						</div>
-						<div class="col-5">
+						<div class="col-sm-12 col-md-5">
 							<input type="text" class="form-control" name="security_code" maxlength="4" placeholder="1234" value="1234">
 						</div>
 					</div>
@@ -363,8 +363,8 @@
       <table id="{{$user->kaiin_number}}" class="table table-striped table-hover table-md">
         <tbody>
 					<tr>
-	          <th width="200px" class="text-center">商品名</th>
-	          <th width="140px" class="text-center">担当</th>
+	          <th class="head-nini_item_name text-center">商品名</th>
+	          <th class="head-nini_tantou text-center">担当</th>
 	          <th class="head-store text-center">納品先店舗</th>
 	          <th class="head-quantity text-center">数量（単位）</th>
 	          <th class="head-yoteibi text-center">納品予定日</th>
@@ -373,11 +373,11 @@
 					@foreach($cart_ninis as $cart_nini)
 					<tr width="" id="{{$cart_nini->id}}">
 						<input name="cart_nini_id[]" type="hidden" value="{{$cart_nini->id}}" />
-						<td width="200px" class="cart_nini_id_{$cart_nini->id}}">
+						<td class="cart_nini_id_{$cart_nini->id}} head-nini_item_name">
 							<input name="nini_item_name[]" class="nini_item_name form-control" value="{{$cart_nini->item_name}}" required>
 						</td>
-						<td width="140px" class="text-center">
-							<select name="nini_tantou[]" class="nini_tantou text-center form-control" value="{{$cart_nini->tantou_name}}" required>
+						<td class="head-nini_tantou text-center">
+							<select name="nini_tantou[]" class=" nini_tantou text-center form-control" value="{{$cart_nini->tantou_name}}" required>
 								<option value="{{$cart_nini->tantou_name}}">{{$cart_nini->tantou_name}}</option>
 								<option value="鮮魚">鮮魚</option>
 								<option value="青物">青物</option>
@@ -564,6 +564,7 @@ if(document.URL.match("/approval")) {
 		$('select').on('selectstart', false);
 		$('select').on('contextmenu', false);
 		$('.datepicker').attr("disabled", true);
+		$('.radio-input').attr("disabled", true);
 		$('.head-sousa').remove();
 		$('.addniniorder').remove();
   });
@@ -581,6 +582,7 @@ if(document.URL.match("/approval")) {
 		$('textarea').attr('readonly',true);
 		$('select').attr("disabled", true);
 		$('.datepicker').attr("disabled", true);
+		$('.radio-input').attr("disabled", true);
 		$('.head-sousa').remove();
 		$('.addniniorder').remove();
   });
@@ -622,6 +624,7 @@ $(function(){
 	});
 });
 </script>
+
 
 
 @if(isset($user->setonagi))

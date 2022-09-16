@@ -719,11 +719,19 @@ class AdminPageController extends Controller
     $kaiin_number = $request->kaiin_number;
     $repeatorders = $request->repeatorder;
 
-    // dd($kaiin_number);
+    // dd($request->kaiin_number);
 
     foreach($repeatorders as  $key => $value) {
-
       $store = explode(',',$value['store']);
+      if(isset($value['nouhin_youbi'])){
+      }else{
+        $message = '曜日を選択してください';
+        $data=[
+          'id'=>$request->kaiin_number,
+          'message'=>$message,
+        ];
+        return redirect()->route('repeatorder', $data);
+      }
       $nouhin_youbi = $value['nouhin_youbi'];
       $nouhin_youbi = implode(',', $nouhin_youbi);
       $repeatorder = Repeatorder::firstOrNew(['id'=> $key]);
@@ -1909,10 +1917,8 @@ class AdminPageController extends Controller
 
     $writer = new Xlsx($spreadsheet);
     $writer->save(public_path() . '/storage/excel/export.xlsx');
-
-    // return response()->download(public_path() . '/storage/excel/output.xlsm', 'filename.xlsm',['content-type' => 'application/vnd.ms-excel',])->deleteFileAfterSend(true);
-
-    return response()->download(public_path() . '/storage/excel/export.xlsx', 'filename.xlsx')->deleteFileAfterSend(true);
+    $now = Carbon::now();
+    return response()->download(public_path() . '/storage/excel/export.xlsx', 'orderbook'.$now.'.csv')->deleteFileAfterSend(true);
   }
 
 }

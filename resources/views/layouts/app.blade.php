@@ -250,13 +250,6 @@
                 <i class="fa fa-map-signs"></i> ご利用ガイド
               </a>
               <div class="dropdown-divider"></div>
-              <a href="{{ url('/law') }}" class="dropdown-item has-icon">
-                特商法取引に基づく表記
-              </a>
-              <a href="{{ url('/privacypolicy') }}" class="dropdown-item has-icon">
-                プライバシーポリシー
-              </a>
-              <div class="dropdown-divider"></div>
               @endif
               <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
                 <i class="fas fa-sign-out-alt"></i>
@@ -495,7 +488,7 @@
   								<h3>お問い合わせ窓口<span>CONTACT</span></h3>
   								<p><strong>TEL 084-941-3510</strong></p>
   								<p class="small">平日9：00～18：00（定休 土日祝）</p>
-  								<a href="{{ url('/line') }}"><div class="btn navy">お問い合わせフォーム</div></a>
+  								<a href="{{ url('/contact') }}"><div class="btn navy">お問い合わせフォーム</div></a>
   							</div>
   						</div>
   						<div class="flex-container external_link">

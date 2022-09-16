@@ -18,7 +18,7 @@
       <div class="col-12">
         <div class="card">
           <div class="card-body">
-            <div class="float-right">
+            <!-- <div class="float-right">
               <form>
                 <div class="input-group">
                   <input type="text" class="form-control" placeholder="検索">
@@ -27,7 +27,7 @@
                   </div>
                 </div>
               </form>
-            </div>
+            </div> -->
             <div class="clearfix mb-3"></div>
             <div class="table-responsive">
               <table class="table table-striped">

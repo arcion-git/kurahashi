@@ -35,6 +35,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('setonagi')->nullable();
             $table->boolean('first_login')->nullable();
+            $table->text('memo')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

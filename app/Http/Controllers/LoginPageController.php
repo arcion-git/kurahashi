@@ -25,6 +25,7 @@ use App\Repeatorder;
 use App\Setonagi;
 use App\SetonagiItem;
 use App\Favorite;
+use App\Contact;
 
 // デバッグを出力
 use Log;
@@ -198,19 +199,79 @@ class LoginPageController extends Controller
   }
 
 
-
-  public function saiji()
+  public function contact()
   {
-
       $user_id = Auth::guard('user')->user()->id;
       $favorite_categories = FavoriteCategory::where('user_id', $user_id)->first();
-
         if ($favorite_categories === null) {
           $categories = Category::get();
           $categories = $categories->groupBy('bu_ka_name');
           // dd($categories);
           return view('user/auth/questionnaire', ['categories' => $categories]);
         }
+      $categories = Category::get()->groupBy('bu_ka_name');
+      $user_id = Auth::guard('user')->user()->id;
+      $favorite_categories = FavoriteCategory::where('user_id', $user_id)->get();
+      $carts =  Cart::where('user_id',$user_id)->get();
+      $kaiin_number = Auth::guard('user')->user()->kaiin_number;
+      $now = Carbon::now()->addDay(3)->format('Y-m-d');
+      $recommends = Recommend::where('user_id', $kaiin_number)->whereDate('end', '>=', $now)->orWhere('end',null)->where('user_id', $kaiin_number)->get();
+      $special_prices = SpecialPrice::get();
+      return view('user/contact',
+      ['carts' => $carts ,
+       'categories' => $categories ,
+       'favorite_categories' => $favorite_categories,
+       'recommends' => $recommends,
+       'special_prices' => $special_prices,
+      ]);
+  }
+
+  public function postcontact(Request $request){
+      $name = $request->name;
+      $address = $request->address;
+      $email = $request->email;
+      $tel = $request->tel;
+      $shubetu = $request->shubetu;
+      $naiyou = $request->naiyou;
+      $contact = Contact::create(['name'=> $name, 'address'=> $address ,'email'=> $email, 'tel'=> $tel, 'shubetu'=> $shubetu, 'naiyou'=> $naiyou ]);
+      $admin_mail = 'info@arcion.jp';
+      $text = 'この度はお問い合わせいただきありがとうございます。<br />下記の内容でお問い合わせを受け付けました。<br />
+      <br />
+      お名前：'.$name.'<br />
+      ご住所：'.$address.'<br />
+      メールアドレス：'.$email.'<br />
+      電話番号：'.$tel.'<br />
+      お問い合わせ種別：'.$shubetu.'<br />
+      お問い合わせ内容：<br />
+      '.$naiyou.'<br />
+      <br />内容を確認し、担当より1〜3営業日以内にご返信させていただきます。
+      <br />今しばらくお待ちください。';
+      Mail::send('emails.register', [
+          'name' => $name,
+          'text' => $text,
+          'admin_mail' => $admin_mail,
+      ], function ($message) use ($email , $admin_mail) {
+          $message->to($email)->bcc($admin_mail)->subject('SETOnagiオーダーブックお問い合わせ完了のお知らせ');
+      });
+      $message = 'お問い合わせ内容が送信されました';
+      $data=[
+        'message'=>$message,
+      ];
+      return redirect()->route('contact',$data);
+  }
+
+
+
+  public function saiji(){
+      $user_id = Auth::guard('user')->user()->id;
+      $favorite_categories = FavoriteCategory::where('user_id', $user_id)->first();
+
+      if ($favorite_categories === null) {
+        $categories = Category::get();
+        $categories = $categories->groupBy('bu_ka_name');
+        // dd($categories);
+        return view('user/auth/questionnaire', ['categories' => $categories]);
+      }
 
       $categories = Category::get()->groupBy('bu_ka_name');
 
@@ -841,6 +902,8 @@ class LoginPageController extends Controller
 
     // dd($request->memo);
 
+
+
     if($request->setonagi_id){
       $setonagi = Setonagi::where('id',$request->setonagi_id)->first();
       // $setonagi = 1;
@@ -855,13 +918,24 @@ class LoginPageController extends Controller
     $favorite_categories = FavoriteCategory::where('user_id', $user_id)->get();
     $carts =  Cart::where(['user_id'=>$user_id, 'deal_id'=> null])->get();
 
-    if($carts->isEmpty()){
-      // dd("カートが空です");
+
+    $memo = $request->memo; //チェックしたい本文
+    $ng_words = array('"',','); //禁止ワード
+    $flg = 0;
+    foreach( $ng_words as $word ){
+        if(strpos($memo, $word) !== false){
+            $flg = 1;
+            break;
+        }
+    }
+    if($flg){
       $data=[
-        'message' => 'カートが空です。',
+        'message' => '「ダブルクオーテーション」「カンマ」の入力はできません。',
       ];
       return redirect()->route('confirm',$data);
     }
+
+
 
     $today = date("Y-m-d");
     $holidays = Holiday::pluck('date');
@@ -1476,7 +1550,7 @@ class LoginPageController extends Controller
 
       $name = $user->name;
       // $email = $user->email;
-      $email = 'sk8.panda.27@gmail.com';
+      $email = $user->email;
       $url = url('');
       $text = 'SETOnagiオーダーブックをご利用くださいまして誠にありがとうございます。<br />
       下記の通りご注文をお受けいたしましたのでご確認をお願いいたします。<br />
