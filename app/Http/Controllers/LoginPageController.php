@@ -177,7 +177,9 @@ class LoginPageController extends Controller
 
       $now = Carbon::now()->addDay(3)->format('Y-m-d');
 
-      $recommends = Recommend::where('user_id', $user_id)->whereDate('end', '>=', $now)->orWhere('end',null)->get();
+      // dd($user_id);
+
+      $recommends = Recommend::where('user_id', $user_id)->whereDate('end', '>=', $now)->get();
       // dd($recommends);
 
       $now = Carbon::now()->toDateTimeString();
@@ -920,21 +922,25 @@ class LoginPageController extends Controller
 
 
     $memo = $request->memo; //チェックしたい本文
-    $ng_words = array('"',','); //禁止ワード
-    $flg = 0;
-    foreach( $ng_words as $word ){
-        if(strpos($memo, $word) !== false){
-            $flg = 1;
-            break;
-        }
+    if($memo){
+      $ng_words = array('"',','); //禁止ワード
+      $flg = 0;
+      foreach( $ng_words as $word ){
+          if(strpos($memo, $word) !== false){
+              $flg = 1;
+              break;
+          }
+      }
+      if($flg){
+        $data=[
+          'message' => '「ダブルクオーテーション」「カンマ」の入力はできません。',
+        ];
+        return redirect()->route('confirm',$data);
+      }
+      $user = Auth::guard('user')->user();
+      $user->memo = $memo;
+      $user->save();
     }
-    if($flg){
-      $data=[
-        'message' => '「ダブルクオーテーション」「カンマ」の入力はできません。',
-      ];
-      return redirect()->route('confirm',$data);
-    }
-
 
 
     $today = date("Y-m-d");
@@ -1327,8 +1333,7 @@ class LoginPageController extends Controller
     $user_id = $user->id;
     $data = $request->all();
     $item_ids = $data['item_id'];
-
-
+    // dd($request);
 
     // dd($data);
     // 在庫チェック
@@ -1529,6 +1534,7 @@ class LoginPageController extends Controller
     $deal->start_time = Carbon::now();
 
     // セトナギユーザーのみ「受け取り場所」「時間帯」「支払い方法を保存」
+
     if($request->uketori_siharai){
       $deal->uketori_siharai = $request->uketori_siharai;
       $deal->uketori_place = $request->uketori_place;
@@ -1730,7 +1736,9 @@ class LoginPageController extends Controller
       // 注文完了メール送信ここまで
     }
 
-
+    $user = Auth::guard('user')->user();
+    $user->memo = null;
+    $user->save();
 
     return redirect('deal');
   }

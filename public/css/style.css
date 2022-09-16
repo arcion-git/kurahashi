@@ -3203,7 +3203,10 @@ a:not(.btn-social-icon):not(.btn-social):not(.page-link) .ion, a:not(.btn-social
   min-width: 160px !important;
   width: 160px !important;
 }
-
+.head-cartbtn{
+  min-width: 210px !important;
+  width: 210px !important;
+}
 
 .swal2-popup.swal2-toast .swal2-title{
     margin: 1em 0.5em !important;
@@ -3800,5 +3803,13 @@ footer .external_link ul{
 .head-yuukou{
   min-width: 160px !important;
   width: 160px !important;
+}
+.head-cartbtn{
+  min-width: 170px !important;
+  width: 170px !important;
+}
+.table:not(.table-sm):not(.table-md):not(.dataTable) td, .table:not(.table-sm):not(.table-md):not(.dataTable) th {
+    padding: 5px 5px;
+    height: auto;
 }
 }

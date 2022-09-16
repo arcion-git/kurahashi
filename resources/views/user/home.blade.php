@@ -56,7 +56,7 @@
                           <th class="text-center">在庫数</th>
                           <th class="text-center">特記事項</th>
                           <th class="text-center">価格</th>
-                          <th class="text-center" style="min-width:180px;">操作</th>
+                          <th class="text-center head-cartbtn">操作</th>
                         </tr>
 
 
@@ -146,7 +146,7 @@
                           <th class="text-center">在庫数</th>
                           <th class="text-center">特記事項</th>
                           <th class="text-center">価格</th>
-                          <th class="text-center" style="min-width:180px;">操作</th>
+                          <th class="text-center head-cartbtn">操作</th>
                         </tr>
 
                         @foreach($special_prices as $special_price)
@@ -234,7 +234,7 @@
                           <th class="text-center">単位</th>
                           <th class="text-center">在庫数</th>
                           <th class="text-center">特記事項</th>
-                          <th class="text-center" style="min-width:180px;">操作</th>
+                          <th class="text-center head-cartbtn">操作</th>
                         </tr>
 
 
@@ -321,7 +321,7 @@
                           <!-- <th class="text-center">納品予定日</th>
                           <th class="text-center">参考価格</th>
                           <th class="text-center">個数</th> -->
-                          <th class="text-center" style="min-width:180px;">操作</th>
+                          <th class="text-center head-cartbtn">操作</th>
                         </tr>
                         @foreach($items as $item)
                         <tr>

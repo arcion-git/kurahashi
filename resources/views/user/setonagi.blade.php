@@ -20,7 +20,7 @@
 
           @if(!isset($setonagi_items[0]))
           <p>
-            担当のおすすめ商品が見つかりませんでした。
+            限定お買い得商品が見つかりませんでした。
           </p>
           @else
 
@@ -96,7 +96,8 @@
                                   <div class="carousel-inner">
                                     <div class="carousel-item active">
                                       <a href="/storage/item/{{$setonagi_item->item()->item_id}}.jpg" data-fancybox="images-{{$setonagi_item->item()->item_id}}">
-                                        <img class="d-block w-100" src="/storage/item/{{$setonagi_item->item()->item_id}}.jpg" alt="First slide">
+                                        <img class="d-block w-100" src="/storage/item/{{$setonagi_item->item()->item_id}}.jpg" alt="First slide" onerror="this.src='{{ asset('img/no_image.jpg') }}'; this.removeAttribute('onerror'); this.removeAttribute('onload');"
+  onload="this.removeAttribute('onerror'); this.removeAttribute('onload');">
                                       </a>
                                     </div>
                                     @for($i = 1; $i < 5; $i++)

@@ -465,7 +465,7 @@ $(document).ready( function(){
 <div class="row mt-4">
 	<div class="col-lg-8">
 	  <div class="section-title">通信欄</div>
-	    <textarea id="memo" style="height:250px; width:500px;" name="memo" rows="10" value="@if(isset($deal)){{$deal->memo}}@endif" class="form-control selectric">@if(isset($deal)){{$deal->memo}}@endif</textarea>
+	    <textarea id="memo" style="height:250px; width:500px;" name="memo" rows="10" value="@if(isset($deal)){{$deal->memo}}@elseif(isset($user->memo)){{$user->memo}}@endif" class="form-control selectric">@if(isset($deal)){{$deal->memo}}@elseif(isset($user->memo)){{$user->memo}}@endif</textarea>
 	</div>
   <div class="col-lg-4 text-right">
     <div class="invoice-detail-item">
@@ -564,12 +564,17 @@ if(document.URL.match("/approval")) {
 		$('select').on('selectstart', false);
 		$('select').on('contextmenu', false);
 		$('.datepicker').attr("disabled", true);
-		$('.radio-input').attr("disabled", true);
 		$('.head-sousa').remove();
 		$('.addniniorder').remove();
   });
 }
 </script>
+<style>
+label,
+.radio-input{
+  pointer-events: none;
+}
+</style>
 <!-- 発注済、キャンセルの場合操作ができないようにする -->
 @if(isset($deal))
 	@if($deal->status == '発注済' or $deal->status == 'キャンセル')
@@ -582,11 +587,16 @@ if(document.URL.match("/approval")) {
 		$('textarea').attr('readonly',true);
 		$('select').attr("disabled", true);
 		$('.datepicker').attr("disabled", true);
-		$('.radio-input').attr("disabled", true);
 		$('.head-sousa').remove();
 		$('.addniniorder').remove();
   });
 </script>
+<style>
+label,
+.radio-input{
+  pointer-events: none;
+}
+</style>
 	@endif
 @endif
 

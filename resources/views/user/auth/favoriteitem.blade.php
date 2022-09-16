@@ -26,7 +26,7 @@
                 <div class="card">
                   <div class="card-body">
                     <div class="float-left">
-                      <h2 class="section-title">時価商品</h2>
+                      <h2 class="section-title">お気に入り商品</h2>
                     </div>
 
                     <div class="clearfix mb-3"></div>
@@ -41,7 +41,7 @@
                           <th class="text-center">単位</th>
                           <th class="text-center">在庫数</th>
                           <th class="text-center">特記事項</th>
-                          <th class="text-center" style="min-width:180px;">操作</th>
+                          <th class="text-center head-cartbtn">操作</th>
                         </tr>
 
 
