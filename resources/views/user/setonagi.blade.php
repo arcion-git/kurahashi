@@ -41,6 +41,8 @@
                         <div class="row">
                           @foreach($setonagi_items as $setonagi_item)
                           @if($now >= $setonagi_item->start_date && $now < $setonagi_item->end_date)
+                          @if($setonagi_item->item()->zaikosuu == 0)
+                          @else
                           <div class="col-12 col-md-4 col-lg-3">
                             <article class="article article-style-c">
                               <!-- <button class="addrecommendcategory btn btn-success" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus"></i> 商品を追加</button>
@@ -226,6 +228,7 @@
                               </div>
                             </div>
                           </div>
+                          @endif
                           @endif
                           @endforeach
                         </div>
