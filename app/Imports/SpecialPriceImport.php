@@ -3,27 +3,33 @@
 namespace App\Imports;
 
 use App\SpecialPrice;
-use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Row;
+use Maatwebsite\Excel\Concerns\OnEachRow;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
 
-class SpecialPriceImport implements ToModel, WithHeadingRow
+class SpecialPriceImport implements OnEachRow, WithHeadingRow
 {
     /**
     * @param array $row
     *
     * @return \Illuminate\Database\Eloquent\Model|null
     */
-    public function model(array $row)
+    public function OnRow(Row $row)
     {
-        return new SpecialPrice([
-          'price_groupe'=>$row['価格グループコード'],
-          'item_id'=>$row['商品コード'],
-          'sku_code'=>$row['SKUコード'],
-          'start'=>$row['掲載開始日'],
-          'end'=>$row['掲載期限'],
-          'teika'=>$row['定価'],
-          'price'=>$row['単価'],
-        ]);
+      $row=$row->toArray();
+      $user=SpecialPrice::updateOrCreate(
+           // キーカラム
+           [  'item_id'=>$row['商品コード'],
+              'sku_code'=>$row['SKUコード']],
+           // 上書き内容
+           [
+             'price_groupe'=>$row['価格グループコード'],
+             'start'=>$row['掲載開始日'],
+             'end'=>$row['掲載期限'],
+             'teika'=>$row['定価'],
+             'price'=>$row['単価'],
+           ]
+       );
     }
 }

@@ -419,13 +419,13 @@ class AdminPageController extends Controller
   }
 
   public function userimport(){
-  User::truncate();
+  // User::truncate();
   Excel::import(new UserImport, request()->file('file'));
   return back();
   }
 
   public function itemimport(){
-  Item::truncate();
+  // Item::truncate();
   Excel::import(new ItemImport, request()->file('file'));
   return back();
   }
@@ -479,7 +479,7 @@ class AdminPageController extends Controller
   }
 
   public function SpecialPriceImport(){
-  SpecialPrice::truncate();
+  // SpecialPrice::truncate();
   Excel::import(new SpecialPriceImport, request()->file('file'));
   return back();
   }
