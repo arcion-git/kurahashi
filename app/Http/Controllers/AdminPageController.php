@@ -1220,7 +1220,7 @@ class AdminPageController extends Controller
               // 会社名
               $company = $setonagi_user->company;
               // 会員No
-              $kaiin_number = $user->kaiin_number;
+              $kaiin_number = 's'.$user->id;
               // 郵便番号
               $yuubin = $setonagi_user->address01;
               // 住所
@@ -1244,7 +1244,12 @@ class AdminPageController extends Controller
                 $pay = 'クロネコかけ払い';
               }
               // 取引種別
-              $torihiki_shubetu = '受け取り';
+              $torihiki_shubetu = 2;
+            }
+            if($deal->status == '受注済'){
+              $deal_status = 1;
+            }elseif($deal->status == 'キャンセル'){
+              $deal_status = 0;
             }
             // dd($store);
             $array = [
@@ -1309,7 +1314,7 @@ class AdminPageController extends Controller
               // 発送予定日
               '',
               // ステータス
-              "\"".$deal->status."\"",
+              "\"".$deal_status."\"",
               // 送り状番号
               '',
               // 総合計金額
@@ -1407,7 +1412,11 @@ class AdminPageController extends Controller
               $item_code = '';
             }
             $pay = 'クラハシ払い';
-
+            if($deal->status == '受注済'){
+              $deal_status = 1;
+            }elseif($deal->status == 'キャンセル'){
+              $deal_status = 0;
+            }
             // $item = Item::where(['id'=> $cart->item_id])->first();
             // dd($store);
             $array = [
@@ -1472,7 +1481,7 @@ class AdminPageController extends Controller
               // 発送予定日
               '',
               // ステータス
-              "\"".$deal->status."\"",
+              "\"".$deal_status."\"",
               // 送り状番号
               '',
               // 総合計金額

@@ -107,21 +107,23 @@ class LoginPageController extends Controller
         // $price_groupe = $store->price_groupe();
         // dd($price_groupe->price_groupe);
 
-        // 価格グループの取得はしない
-        $prices = Price::where(['price_groupe'=>$price_groupe->price_groupe])->get();
+        // dd($price_groupe);
 
-        $user_items = [];
-        $n=1;
-        foreach ($prices as $price) {
-          $item = $price->item();
-          // dd($item);
-          if($item->zaikosuu >= 0.01){
-          array_push($user_items, $item);
-        }
-        $n++;
-        }
-        $items = $user_items;
-        $items = collect($items);
+        // 価格グループの取得はしない
+        // $prices = Price::where(['price_groupe'=>$price_groupe->price_groupe])->get();
+        //
+        // $user_items = [];
+        // $n=1;
+        // foreach ($prices as $price) {
+        //   $item = $price->item();
+        //   // dd($item);
+        //   if($item->zaikosuu >= 0.01){
+        //   array_push($user_items, $item);
+        // }
+        // $n++;
+        // }
+        // $items = $user_items;
+        // $items = collect($items);
         // 価格グループの取得はしない
 
 
@@ -130,18 +132,19 @@ class LoginPageController extends Controller
         // $all_num = count($items);
         // $disp_limit = '10';
         // $items = new LengthAwarePaginator($items , $all_num, $disp_limit, $request->page, array('path' => $request->url()));
-        $items = new LengthAwarePaginator(
-                    // $items->forPage($request->page, 30),
-                    $items->forPage($request->page, 30),
-                    // $items->get($request->page - 30),
-                    count($items),
-                    30,
-                    $request->page,
-                    array('path' => $request->url() , "pageName" => "page")
-                );
+        // $items = new LengthAwarePaginator(
+        //             // $items->forPage($request->page, 30),
+        //             $items->forPage($request->page, 30),
+        //             // $items->get($request->page - 30),
+        //             count($items),
+        //             30,
+        //             $request->page,
+        //             array('path' => $request->url() , "pageName" => "page")
+        //         );
 
 
         // dd($now);
+        $items = Item::where('zaikosuu', '>=', '0.01')->paginate(30);
         $special_prices = SpecialPrice::where(['price_groupe'=>$price_groupe->price_groupe])->paginate(30);
         // dd($price_groupe->price_groupe);
 

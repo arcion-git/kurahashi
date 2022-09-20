@@ -18,13 +18,15 @@ class SpecialPriceImport implements OnEachRow, WithHeadingRow
     public function OnRow(Row $row)
     {
       $row=$row->toArray();
-      $user=SpecialPrice::updateOrCreate(
+      // dd($row);
+      $item=SpecialPrice::updateOrCreate(
            // キーカラム
-           [  'item_id'=>$row['商品コード'],
+           [
+              'price_groupe'=>$row['価格グループコード'],
+              'item_id'=>$row['商品コード'],
               'sku_code'=>$row['SKUコード']],
            // 上書き内容
            [
-             'price_groupe'=>$row['価格グループコード'],
              'start'=>$row['掲載開始日'],
              'end'=>$row['掲載期限'],
              'teika'=>$row['定価'],
