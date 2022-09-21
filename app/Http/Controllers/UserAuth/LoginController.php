@@ -65,6 +65,6 @@ class LoginController extends Controller
     // ログイン後のリダイレクト先を変更
     public function redirectPath()
     {
-        return 'recommend';
+        return 'setonagi';
     }
 }

@@ -21,8 +21,10 @@
 
 
   // 顧客側ページ
-  Route::get('/', 'LoginPageController@index')->name('home');
+  // Route::get('/', 'LoginPageController@index')->name('home');
+  Route::get('/', 'LoginPageController@setonagi');
 
+  Route::get('/setonagi', 'LoginPageController@setonagi')->name('setonagi');
   Route::get('/special_price', 'LoginPageController@index')->name('home');
   Route::get('/recommend', 'LoginPageController@index')->name('recommend');
 
@@ -39,7 +41,6 @@
   Route::get('/contact', 'LoginPageController@contact')->name('contact');
   Route::post('/postcontact', 'LoginPageController@postcontact');
 
-  Route::get('/setonagi', 'LoginPageController@setonagi')->name('setonagi');
   // Route::get('/saiji', 'LoginPageController@saiji')->name('setonagi');
   Route::get('/guide', 'LoginPageController@guide')->name('guide');
   Route::get('/firstguide', 'LoginPageController@firstguide')->name('firstguide');

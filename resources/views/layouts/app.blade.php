@@ -282,7 +282,7 @@
         <aside id="sidebar-wrapper">
           <div class="sidebar-brand">
             @if ( Auth::guard('user')->check() )
-            <a href="{{ url('/recommend') }}">
+            <a href="{{ url('/setonagi') }}">
             @endif
             @if ( Auth::guard('admin')->check() )
             <a href="{{ url('/admin/home') }}">
