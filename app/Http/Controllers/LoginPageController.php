@@ -145,7 +145,7 @@ class LoginPageController extends Controller
 
         // dd($now);
         $items = Item::where('zaikosuu', '>=', '0.01')->paginate(30);
-        $special_prices = SpecialPrice::where(['price_groupe'=>$price_groupe->price_groupe])->paginate(30);
+        $special_prices = SpecialPrice::where(['price_groupe'=>$price_groupe->price_groupe])->get();
         // dd($price_groupe->price_groupe);
 
         // $items = Item::where('zaikosuu', '>=', '0.01')->paginate(30);
@@ -154,7 +154,7 @@ class LoginPageController extends Controller
         // セトナギユーザーに対する処理
         $items = Item::where('zaikosuu', '>=', '0.01')->paginate(30);
         // セトナギユーザーにはC帯の商品を出力
-        $special_prices = SpecialPrice::where(['price_groupe'=>'10000000005'])->paginate(30);
+        $special_prices = SpecialPrice::where(['price_groupe'=>'10000000005'])->get();
       }
       // dd($items);
 

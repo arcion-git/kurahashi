@@ -366,6 +366,9 @@
               <a href="{{ url('/favoriteitem') }}" class="nav-link"><i class="far fa-heart"></i><span>お気に入り商品</span></a>
             </li>
             <li class="nav-item">
+              <a href="{{ url('/firstguide') }}" class="nav-link"><i class="far fa-flag"></i><span>はじめてのお客様へ</span></a>
+            </li>
+            <li class="nav-item">
               <a href="{{ url('/guide') }}"  class="nav-link"><i class="fa fa-map-signs"></i><span>ご利用ガイド<span></a>
             </li>
 
