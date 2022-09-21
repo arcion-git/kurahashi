@@ -3813,3 +3813,7 @@ footer .external_link ul{
     height: auto;
 }
 }
+
+.uketori_siharai_radio{
+  pointer-events: none;
+}

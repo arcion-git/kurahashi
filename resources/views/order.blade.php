@@ -53,6 +53,9 @@
 						<td class="head-kikaku text-center">{{$cart->item->kikaku}}</td>
 						<td class="head-quantity text-center">
 							<select name="quantity[]" class="quantity text-center form-control" value="{{$val->quantity}}" required>
+								@if(isset($deal))
+								<option value="{{$val->quantity}}">{{$val->quantity}}</option>
+								@else
 								@if($val->quantity == 1)
 								@elseif($val->quantity)
 								<option value="{{$val->quantity}}">{{$val->quantity}}</option>
@@ -60,6 +63,7 @@
 								@for ($i = 1; $i <= $cart->item->zaikosuu; $i++)
 								<option value="{{$i}}">{{$i}}</option>
 								@endfor
+								@endif
 							</select>
 						</td>
 						<td class="head-tani text-center">
@@ -132,8 +136,9 @@
 				@else
 				<option value="" selected>選択してください</option>
 				@endif
-				<option value="福山市場受け取り">福山市場受け取り</option>
-				<option value="三原市場受け取り">三原市場受け取り</option>
+				<option value="福山魚市引き取り">福山魚市引き取り</option>
+				<option value="引取り（マリンネクスト）">引取り（マリンネクスト）</option>
+				<option value="引取り（尾道ケンスイ）">引取り（尾道ケンスイ）</option>
 				</select>
 			</div>
 		</div>
@@ -160,8 +165,8 @@
 					<label for="company">お支払い方法</label>
 			</div>
 			<div class="col-10">
-					<input required class="radio-input" type="radio" id="クロネコかけ払い" value="クロネコかけ払い" name="uketori_siharai" @if($setonagi->uketori_siharai == 'クロネコかけ払い') checked @endif ><label for="クロネコかけ払い"> クロネコかけ払い</label>
-					<input required class="radio-input" type="radio" id="クレジットカード払い" value="クレジットカード払い" name="uketori_siharai" @if($setonagi->uketori_siharai == 'クレジットカード払い') checked @endif><label for="クレジットカード払い"> クレジットカード払い</label>
+					<input required class="radio-input uketori_siharai_radio" type="radio" id="クロネコかけ払い" value="クロネコかけ払い" name="uketori_siharai" @if($setonagi->uketori_siharai == 'クロネコかけ払い') checked @endif ><label for="クロネコかけ払い"> クロネコかけ払い</label>
+					<input required class="radio-input uketori_siharai_radio" type="radio" id="クレジットカード払い" value="クレジットカード払い" name="uketori_siharai" @if($setonagi->uketori_siharai == 'クレジットカード払い') checked @endif><label for="クレジットカード払い"> クレジットカード払い</label>
 					<input type="hidden" name="token_api" id="token_api" value="{{app('request')->input('token_api')}}"/>
 					<div class="invalid-feedback">
 					</div>
@@ -379,12 +384,11 @@
 						<td class="head-nini_tantou text-center">
 							<select name="nini_tantou[]" class=" nini_tantou text-center form-control" value="{{$cart_nini->tantou_name}}" required>
 								<option value="{{$cart_nini->tantou_name}}">{{$cart_nini->tantou_name}}</option>
-								<option value="鮮魚">鮮魚</option>
 								<option value="青物">青物</option>
 								<option value="太物">太物</option>
 								<option value="近海">近海</option>
-								<option value="特殊">特殊</option>
 								<option value="養魚">養魚</option>
+								<option value="特殊">特殊</option>
 								<option value="水産">水産</option>
 							</select>
 						</td>
@@ -591,12 +595,6 @@ label,
 		$('.addniniorder').remove();
   });
 </script>
-<style>
-label,
-.radio-input{
-  pointer-events: none;
-}
-</style>
 	@endif
 @endif
 

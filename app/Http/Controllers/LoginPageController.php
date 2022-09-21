@@ -1398,7 +1398,7 @@ class LoginPageController extends Controller
           'traderCode' => $kakebarai_traderCode,
           // 日付
           'orderDate' => $now,
-          'orderNo' => $deal_id.'3a',
+          'orderNo' => $deal_id.'5a',
           // バイヤーid
           'buyerId' => $user_id,
           'settlePrice' => $request->all_total_val,

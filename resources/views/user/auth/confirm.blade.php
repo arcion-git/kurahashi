@@ -101,5 +101,10 @@ $(function(){
 });
 
 </script>
-
+<style>
+label,
+.uketori_siharai_radio{
+  pointer-events: auto;
+}
+</style>
 @endsection

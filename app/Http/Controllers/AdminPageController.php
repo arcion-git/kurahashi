@@ -479,7 +479,7 @@ class AdminPageController extends Controller
   }
 
   public function SpecialPriceImport(){
-  // SpecialPrice::truncate();
+  SpecialPrice::truncate();
   Excel::import(new SpecialPriceImport, request()->file('file'));
   return back();
   }
@@ -1216,6 +1216,8 @@ class AdminPageController extends Controller
               $pay = 'クラハシ払い';
               // 取引種別
               $torihiki_shubetu = $store->torihiki_shubetu;
+              // 引き渡し場所
+              $uketori_place = null;
             }else{
               // 会社名
               $company = $setonagi_user->company;
@@ -1234,9 +1236,9 @@ class AdminPageController extends Controller
               // 配送先住所
               $jyuusho = $setonagi_user->address02.$setonagi_user->address03.$setonagi_user->address04;
               // 配送先電話番号
-              $tel = $setonagi_user->tel;
+              // $tel = $setonagi_user->tel;
               // 配送先FAX番号
-              $fax = $setonagi_user->fax;
+              // $fax = $setonagi_user->fax;
               // 支払方法
               if($deal->uketori_siharai == 'クレジットカード払い'){
                 $pay = 'クレジットカード払い';
@@ -1245,13 +1247,20 @@ class AdminPageController extends Controller
               }
               // 取引種別
               $torihiki_shubetu = 2;
+              // 引き渡し場所
+              if($deal->uketori_place == '福山魚市引き取り'){
+                $uketori_place = '010';
+              }elseif($deal->uketori_place == '引取り（マリンネクスト）'){
+                $uketori_place = '020';
+              }elseif($deal->uketori_place == '引取り（尾道ケンスイ）'){
+                $uketori_place = '030';
+              }
             }
-            if($deal->status == '受注済'){
+            if($deal->status == '発注済'){
               $deal_status = 1;
             }elseif($deal->status == 'キャンセル'){
               $deal_status = 0;
             }
-            // dd($store);
             $array = [
               // 取引番号
               "\"".$deal->id."\"",
@@ -1260,7 +1269,7 @@ class AdminPageController extends Controller
               // 注文日時
               "\"".$deal->success_time."\"",
               // 会員No
-              "\"".$user->kaiin_number."\"",
+              "\"".$kaiin_number."\"",
               // Eメール
               "\"".$user->email."\"",
               // 氏名
@@ -1348,7 +1357,7 @@ class AdminPageController extends Controller
               // 単位
               "\"".$item->tani."\"",
               // 引渡場所
-              '',
+              "\"".$uketori_place."\"",
               // 発注先企業
               '',
               // 発注先部署コード
@@ -1396,11 +1405,11 @@ class AdminPageController extends Controller
             $store = Store::where(['tokuisaki_name'=> $order_nini->tokuisaki_name , 'store_name'=> $order_nini->store_name])->first();
 
             // 商品コード
-            if($cart_nini->tantou_name == '鮮魚'){
-              $item_code = 100000000;
-            }elseif($cart_nini->tantou_name == '青物'){
+            if($cart_nini->tantou_name == '青物'){
               $item_code = 101911009;
-            }elseif($cart_nini->tantou_name == '活魚'){
+            }elseif($cart_nini->tantou_name == '太物'){
+              $item_code = 101913009;
+            }elseif($cart_nini->tantou_name == '近海'){
               $item_code = 101914009;
             }elseif($cart_nini->tantou_name == '養魚'){
               $item_code = 101915009;

@@ -22,7 +22,7 @@ class UserImport implements OnEachRow, WithHeadingRow
        $row=$row->toArray();
        $user=User::updateOrCreate(
             // キーカラム
-            [   'kaiin_number'=>$row['会員No']],
+            [ 'kaiin_number'=>$row['会員No']],
             // 上書き内容
             [
               'name'=>$row['担当者名'],
