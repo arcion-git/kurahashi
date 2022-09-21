@@ -42,6 +42,7 @@
   Route::get('/setonagi', 'LoginPageController@setonagi')->name('setonagi');
   // Route::get('/saiji', 'LoginPageController@saiji')->name('setonagi');
   Route::get('/guide', 'LoginPageController@guide')->name('guide');
+  Route::get('/firstguide', 'LoginPageController@firstguide')->name('firstguide');
   Route::get('/law', 'LoginPageController@law')->name('law');
   Route::get('/privacypolicy', 'LoginPageController@privacypolicy')->name('privacypolicy');
 

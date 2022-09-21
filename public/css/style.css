@@ -3489,11 +3489,11 @@ table td{
 }
 .guide h2{
   margin-top: 20px;
-  font-size: 160%;
+  font-size: 120%;
 }
 .guide h3{
   margin-top: 20px;
-  font-size: 140%;
+  font-size: 110%;
 }
 
 
@@ -3816,4 +3816,24 @@ footer .external_link ul{
 
 .uketori_siharai_radio{
   pointer-events: none;
+}
+
+.firstguide_logo{
+  margin: auto;
+  width: 300px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.firstguide_logo img{
+  text-align: center;
+
+}
+
+.firstguide span{
+  font-weight: bold;
+  color: #E31E1B;
+}
+.firstguide i{
+  margin-right: 10px;
 }
