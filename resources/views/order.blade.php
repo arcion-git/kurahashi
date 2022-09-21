@@ -449,13 +449,13 @@ $(document).ready( function(){
           $(this).text("¥ "+ sum.toLocaleString() );});
 
           var all_total = $('#all_total').map(function (index, el) {
-          var all_total = sum * 1.1;
+          var all_total = sum * 108 / 100;
           var all_total = Math.round(all_total);
 					$("#all_total_val").val(all_total);
           $(this).text("¥ "+ all_total.toLocaleString());});
 
           var tax = $('#tax').map(function (index, el) {
-          var tax = sum * 1.1 - sum;
+          var tax = sum * 108 / 100 - sum;
           var tax = Math.round(tax);
 					$("#tax_val").val(tax);
           $(this).text("¥ "+ tax.toLocaleString());});
@@ -470,6 +470,7 @@ $(document).ready( function(){
 	<div class="col-lg-8">
 	  <div class="section-title">通信欄</div>
 	    <textarea id="memo" style="height:250px; width:500px;" name="memo" rows="10" value="@if(isset($deal)){{$deal->memo}}@elseif(isset($user->memo)){{$user->memo}}@endif" class="form-control selectric">@if(isset($deal)){{$deal->memo}}@elseif(isset($user->memo)){{$user->memo}}@endif</textarea>
+			<p class="memo_note">※通信欄は「内容確認画面に進む」を押すと保存されます。</p>
 	</div>
   <div class="col-lg-4 text-right">
     <div class="invoice-detail-item">

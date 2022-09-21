@@ -15,13 +15,10 @@
               <div class="col-lg-12">
                 <div class="card">
                   <div class="card-body">
-
-
                     <div class="entry-content">
-                    <div class="firstguide_logo">
-                      <img src="{{ asset('img/logo.png') }}" width="300px;">
-                    </div>
-
+                      <div class="firstguide_logo">
+                        <img src="{{ asset('img/logo.png') }}" width="300px;">
+                      </div>
                     <h2 class="firstguide_title">探す手間を市場が取り除く<i class="fa fa-lightbulb"></i></h2>
                     <p>この度は、SETOnagiデジタルオーダーブックのご利用をいただき、有難うございます。
 手軽に頼め安心できる食品を、<span>「市場からお届けする」</span>ことをコンセプトとしています。 <span>デジタル化が進むほど</span>、寧ろ気付かされる <span>”人と人との繋がり” の大切さ。</span>当社営業が、皆様の購買活動を<span>「人的パワー」</span>でバックアップいたします。 健康寿命を全うするにも、なにより「人間同志の繋がり」が大切。 SETOnagiは、<span>「美味しいで元気。」</span>を皆様にお届けします。</p>
@@ -42,6 +39,10 @@
 
                     <h2 class="firstguide_title"><i class="fa fa-redo-alt"></i>リピートオーダー機能</h2>
                     <p>「毎週」「指定する曜日」等、リピート発注したい場合に設定頂くと、自動的に発注する事が出来ます。</p>
+                    <div class="firstguide_btn">
+                      <a href="setonagi" class="btn-lg btn-warning">限定お買い得商品一覧はこちら</a>
+                    </div>
+
                   </div>
                 </div>
               </div>

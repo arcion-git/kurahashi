@@ -357,7 +357,7 @@
             </div>
 
 
-            <!-- <div class="row mt-4">
+            <div class="row mt-4">
               <div class="col-12">
                 <h4>社内営業インポート</h4>
               </div>
@@ -365,11 +365,29 @@
             <div class="row">
               <div class="col-12">
                 <div class="form-group">
-                  <label>社内営業</label>
-                  <input type="file" class="form-control" style="padding-bottom:37px;">
+                  <div class="form-group">
+                    <label>社内営業（InCompanySales）</label>
+                    @if ($errors->any())
+                    <div class="alert alert-danger">
+                    	<ul>
+                    		@foreach ($errors->all() as $error)
+                    			<li>{{ $error }}</li>
+                    		@endforeach
+                    	</ul>
+                    </div>
+                    @endif
+                    <form action="Adminimport" method="POST" enctype="multipart/form-data">
+                    	@csrf
+                    	<div class="form-group">
+                    		<input type="file" class="form-control" name="file" style="padding-bottom:37px;">
+                    		<br>
+                    		<button class="btn btn-success">インポート</button>
+                    	</div>
+                    </form>
+                  </div>
                 </div>
               </div>
-            </div> -->
+            </div>
 
 
               </nav>

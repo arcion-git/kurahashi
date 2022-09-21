@@ -114,6 +114,16 @@
           <form action="{{ url('/addsuscess') }}" method="POST" class="form-horizontal">
           @endif
             {{ csrf_field() }}
+
+
+            @if(isset($nouhin_yoteibi))
+            <div class="row mt-4 order">
+              <div class="col-md-12">
+                <div class="section-title">商品受け渡し予定日：{{$nouhin_yoteibi}}</div>
+              </div>
+            </div>
+            @endif
+
             <div class="row mt-4 order">
               <div class="col-md-12">
                 <div class="section-title">オーダー内容</div>

@@ -266,7 +266,7 @@
                 <th class="text-center">規格</th>
                 <th class="text-center">単位</th>
                 <th class="text-center">在庫数</th>
-                <th class="text-center">特記事項</th>
+                <!-- <th class="text-center">特記事項</th> -->
                 <!-- <th class="text-center">納品予定日</th>
                 <th class="text-center">参考価格</th>
                 <th class="text-center">個数</th> -->
@@ -292,7 +292,7 @@
                   @endif
                 </td>
                 <td class="text-center">{{$item->zaikosuu}}</td>
-                <td class="text-center">{{$item->tokkijikou}}</td>
+                <!-- <td class="text-center">{{$item->tokkijikou}}</td> -->
 
                 <!-- <td class="text-center">{{$item->nouhin_yoteibi_start}}</td>
                 <td class="text-center">

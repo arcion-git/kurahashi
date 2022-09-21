@@ -3817,6 +3817,9 @@ footer .external_link ul{
 .uketori_siharai_radio{
   pointer-events: none;
 }
+.memo_note{
+  display: none;
+}
 
 .firstguide_logo{
   margin: auto;
@@ -3836,4 +3839,28 @@ footer .external_link ul{
 }
 .firstguide i{
   margin-right: 10px;
+}
+
+.form-control, .input-group-text, .custom-select, .custom-file-label {
+    background-color: #fdfdff;
+    border-color: #c7e2fe;
+}
+
+
+.memo_note{
+  margin-top: 5px;
+}
+.firstguide_btn{
+  margin: 20px 0;
+  padding: 2em 0;
+}
+.firstguide_btn a{
+  margin: auto;
+  display: block;
+  padding: 20px;
+  text-align: center;
+  width: 320px;
+  font-size: 100%;
+  font-weight: bold;
+  text-decoration: none;
 }

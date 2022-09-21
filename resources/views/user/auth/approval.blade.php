@@ -7,7 +7,7 @@
 
   <section class="section">
     <div class="section-header">
-      <h1>カート編集</h1>
+      <h1>オーダー内容確認</h1>
       <div class="section-header-breadcrumb">
         <div class="breadcrumb-item active"><a href="/">HOME</a></div>
         <div class="breadcrumb-item">カート編集</div>

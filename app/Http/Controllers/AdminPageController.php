@@ -50,6 +50,7 @@ use Illuminate\Support\Facades\Mail;
 // CSVインポート
 use App\Imports\ItemImport;
 use App\Imports\UserImport;
+use App\Imports\AdminImport;
 use App\Imports\CategoryImport;
 use App\Imports\TagImport;
 use App\Imports\CategoryItemImport;
@@ -154,7 +155,16 @@ class AdminPageController extends Controller
 
     $carts = Cart::where(['user_id'=>$deal->user_id, 'deal_id'=> $id])->get();
     $cart_ninis = CartNini::where(['user_id'=>$deal->user_id, 'deal_id'=> $id])->get();
+
+    $user = User::where(['id'=>$deal->user_id])->first();
+    $nouhin_yoteibi = null;
+    if($user->setonagi == 1){
+      $cart_id = Cart::where(['user_id'=>$deal->user_id, 'deal_id'=> $id])->first()->id;
+      $nouhin_yoteibi = Order::where(['cart_id'=>$cart_id])->first()->nouhin_yoteibi;
+    }
+
     $data=[
+      'nouhin_yoteibi'=>$nouhin_yoteibi,
       'carts'=>$carts,
       'cart_ninis' => $cart_ninis,
       'deal'=>$deal,
@@ -421,6 +431,12 @@ class AdminPageController extends Controller
   public function userimport(){
   // User::truncate();
   Excel::import(new UserImport, request()->file('file'));
+  return back();
+  }
+
+  public function adminimport(){
+  User::truncate();
+  Excel::import(new AdminImport, request()->file('file'));
   return back();
   }
 
@@ -1184,7 +1200,7 @@ class AdminPageController extends Controller
               // dd($setonagi_user);
             }
             $item = Item::where(['id'=> $cart->item_id])->first();
-            $zei = '10%';
+            $zei = '8%';
             // dd($user);
             if(!($user->setonagi == 1)){
               $store = Store::where(['tokuisaki_name'=> $order->tokuisaki_name , 'store_name'=> $order->store_name])->first();
@@ -1576,7 +1592,7 @@ class AdminPageController extends Controller
 
               // dd($repeatorder->cart);
               $repeatcart = $repeatorder->cart;
-              $zei = '10%';
+              $zei = '8%';
               $key = in_array($weekday, $nouhin_youbi);
               if($key == true){
                 // 会員IDを取得して、ユーザー情報を取得するところから
@@ -1755,7 +1771,7 @@ class AdminPageController extends Controller
 
             // dd($repeatorder->cart);
             $repeatcart = $repeatorder->cart;
-            $zei = '10%';
+            $zei = '8%';
             $key = in_array($weekday, $nouhin_youbi);
             if($key == true){
               // 会員IDを取得して、ユーザー情報を取得するところから

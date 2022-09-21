@@ -167,7 +167,7 @@
         </div>
         <div class="form-group col-sm-12 col-md-6">
           <label for="address05">ビル・マンション名</label>
-          <input type="text" name="address05" id="address05" class="form-control" placeholder="◯◯ビル４階" value="" required>
+          <input type="text" name="address05" id="address05" class="form-control" placeholder="◯◯ビル４階" value="">
         </div>
       </div>
       <div class="form-divider">
@@ -409,13 +409,13 @@
         <div class="form-group col-sm-12 col-md-6">
           <label for="email">メールアドレス</label>
           <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" required autocomplete="email" value="">
+          <span class="small">※メールアドレス間違いの場合、再登録が必要となります。</span>
           @error('email')
               <span class="invalid-feedback" role="alert">
                   <strong>{{ $message }}</strong>
               </span>
           @enderror
         </div>
-          ※メールアドレスに間違えがあると上記項目への再入力が必要となります。
       </div>
 
       <div class="row">

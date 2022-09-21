@@ -570,7 +570,7 @@ class LoginPageController extends Controller
     $user->save();
 
     $data = "sucsess";
-    return redirect()->route('setonagi',$data);
+    return redirect()->route('firstguide',$data);
   }
 
 
@@ -611,19 +611,49 @@ class LoginPageController extends Controller
   public function test(Request $request){
     // 直近の納品予定日を取得
     $today = date("Y-m-d");
-    $holidays = Holiday::pluck('date')->toArray();
-    for($i = 2; $i < 10; $i++){
-      $today_plus = date('Y-m-d', strtotime($today.'+'.$i.'day'));
-      // dd($today_plus2);
-      $key = array_search($today_plus,(array)$holidays,true);
-      if($key){
-          // 休みでないので納品日を格納
-          $nouhin_yoteibi = $today_plus;
-          break;
-      }else{
-          // 休みなので次の日付を探す
+    $holidays = Holiday::pluck('date');
+    $currentTime = date('H:i:s');
+
+
+    // dd($holidays);
+    // 今日が休みの場合は無条件で19時以降の処理に飛ばす
+    // $key = array_search($today,(array)$holidays,true);
+    // dd($key);
+
+    // 19時より前の処理
+    if (strtotime($currentTime) < strtotime('19:00:00')) {
+      // dd('test');
+      $holidays = Holiday::pluck('date')->toArray();
+      for($i = 1; $i < 10; $i++){
+        $today_plus = date('Y-m-d', strtotime($today.'+'.$i.'day'));
+        // dd($today_plus);
+        $key = array_search($today_plus,(array)$holidays,true);
+        if($key){
+            // 休みでないので納品日を格納
+        }else{
+            // 休みなので次の日付を探す
+            $nouhin_yoteibi = $today_plus;
+            break;
+        }
+      }
+    }else{
+    // 19時より後の処理
+      $holidays = Holiday::pluck('date')->toArray();
+      for($i = 2; $i < 10; $i++){
+        $today_plus = date('Y-m-d', strtotime($today.'+'.$i.'day'));
+
+        $key = array_search($today_plus,(array)$holidays,true);
+                // dd($today_plus);
+        if($key){
+            // 休みでないので納品日を格納
+        }else{
+            // 休みなので次の日付を探す
+            $nouhin_yoteibi = $today_plus;
+            break;
+        }
       }
     }
+    // dd($nouhin_yoteibi);
     return redirect()->route('setonagi');
   }
 
@@ -1250,9 +1280,16 @@ class LoginPageController extends Controller
       $deal_cancel_button = null;
     }
 
+    $user = User::where(['id'=>$deal->user_id])->first();
+    $nouhin_yoteibi = null;
+    if($user->setonagi == 1){
+      $cart_id = Cart::where(['user_id'=>$deal->user_id, 'deal_id'=> $id])->first()->id;
+      $nouhin_yoteibi = Order::where(['cart_id'=>$cart_id])->first()->nouhin_yoteibi;
+    }
 
     $data=[
       // 'carts'=>$carts,
+      'nouhin_yoteibi'=>$nouhin_yoteibi,
       'deal'=>$deal,
       'categories' => $categories,
       'favorite_categories' => $favorite_categories,
@@ -1401,6 +1438,28 @@ class LoginPageController extends Controller
       $deal = Deal::create(['user_id'=> $user_id]);
       }
     $deal_id = $deal->id;
+
+    // 納品日が今の日付より前に設定されていないかチェック
+    $nouhin_youbi_list = [];
+    $carts = Cart::where(['deal_id'=> $deal_id])->get();
+    foreach ($carts as $cart) {
+      $orders = Order::where(['cart_id'=> $cart->id])->get();
+      foreach ($orders as $order) {
+        $array = $order->nouhin_yoteibi;
+        $sano_nissuu = ((strtotime($order->nouhin_yoteibi) - strtotime($today)) / 86400);
+        $nouhin_yoteibi = date('Y年m月d日', strtotime($order->nouhin_yoteibi));
+        if($sano_nissuu < 0){
+          // 納品日エラーの場合カート画面に戻す
+          $data=[
+            'id' => $deal_id,
+            'order_id' => $order->id,
+            'nouhin_yoteibi' => $nouhin_yoteibi,
+          ];
+          return redirect()->route('confirm',$data);
+        }
+        array_push($nouhin_youbi_list, $sano_nissuu);
+      }
+    }
 
 
     $now = Carbon::now()->format('Ymd');
@@ -1622,7 +1681,7 @@ class LoginPageController extends Controller
         }
       }
       $total_price = array_sum($total_price);
-      $total_price = $total_price * 1.1;
+      $total_price = $total_price * 108 / 100;
       $total_price =  '【合計金額】<br />'.$total_price.'円（税込）';
 
       // オーダーリストの作成

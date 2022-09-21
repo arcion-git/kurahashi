@@ -161,6 +161,7 @@
 
   // CSVインポート
   Route::post('/admin/userimport', 'AdminPageController@userimport');
+  Route::post('/admin/Adminimport', 'AdminPageController@adminimport');
   Route::post('/admin/itemimport', 'AdminPageController@itemimport');
   Route::post('/admin/CategoryItemImport', 'AdminPageController@CategoryItemImport');
   Route::post('/admin/CategoryImport', 'AdminPageController@CategoryImport');

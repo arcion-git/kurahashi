@@ -106,5 +106,8 @@ label,
 .uketori_siharai_radio{
   pointer-events: auto;
 }
+.memo_note{
+  display: block;
+}
 </style>
 @endsection
