@@ -427,7 +427,7 @@
             --}}
 
 
-            <li class="nav-item nav_banner"><a href="https://setonagi.net/column"><img class="" src="https://setonagi.net/wp-content/themes/welcart_basic-beldad/assets/images/top-assets/setonagi_top53.jpg" /></a></li>
+            <li class="nav-item nav_banner"><a target="_blank" href="https://setonagi.net/column"><img class="" src="https://setonagi.net/wp-content/themes/welcart_basic-beldad/assets/images/top-assets/setonagi_top53.jpg" /></a></li>
         		<li class="nav-item nav_banner"><a href="https://www.youtube.com/c/KurahashiCoJp" target="_blank"><img class="" src="{{ asset('img/kurahashi_channel.jpg') }}" /></a>
         <?php
         $xml = simplexml_load_file('https://www.youtube.com/feeds/videos.xml?channel_id=UCqGOp5wPW6-RgcMLRc4jTPw');
