@@ -54,6 +54,7 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
+          'hjkjKbn' => ['required'],
           'first_name' => ['required', 'string', 'max:255'],
           'last_name' => ['required', 'string', 'max:255'],
           'first_name_kana' => ['required', 'string', 'max:255'],
@@ -79,7 +80,6 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-
 
       // $array1 = array(
       // 	"color" => "red",

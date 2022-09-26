@@ -591,6 +591,17 @@
     @endif
 
 
+    @if ( Auth::guard('user')->check() )
+    @if ( Auth::guard('user')->user()->setonagi == 1)
+    @else
+    <style>
+    .navbar-bg {
+        background-color: #1D2C6B;
+    }
+    </style>
+    @endif
+    @endif
+
 
 
 </body>

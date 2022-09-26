@@ -1233,7 +1233,15 @@ class AdminPageController extends Controller
               // 取引種別
               $torihiki_shubetu = $store->torihiki_shubetu;
               // 引き渡し場所
-              $uketori_place = null;
+              $uketori_place = $store->uketori_place;
+              // 得意先コード
+              $tokuisaki_id = $store->tokuisaki_id;
+              // 得意先店舗コード
+              $store_id = $store->store_id;
+              // 得意先名
+              $tokuisaki_name = $store->tokuisaki_name;
+              // 得意先店舗名
+              $store_name = $store->tokuisaki_name;
             }else{
               // 会社名
               $company = $setonagi_user->company;
@@ -1271,6 +1279,14 @@ class AdminPageController extends Controller
               }elseif($deal->uketori_place == '引取り（尾道ケンスイ）'){
                 $uketori_place = '030';
               }
+              // 得意先コード
+              $tokuisaki_id = null;
+              // 得意先店舗コード
+              $store_id = null;
+              // 得意先名
+              $tokuisaki_name = null;
+              // 得意先店舗名
+              $store_name = null;
             }
             if($deal->status == '発注済'){
               $deal_status = 1;
@@ -1375,11 +1391,11 @@ class AdminPageController extends Controller
               // 引渡場所
               "\"".$uketori_place."\"",
               // 発注先企業
-              '',
-              // 発注先部署コード
               "\"".$item->kigyou_code."\"",
+              // 発注先部署コード
+              "\"".$item->busho_code."\"",
               // 発注先部署名
-              "\"".$item->bucho_code."\"",
+              "\"".$item->busho_name."\"",
               // 発注先当者者コード
               "\"".$item->tantou_code."\"",
               // 発注先当者名
@@ -1398,6 +1414,14 @@ class AdminPageController extends Controller
               "\"".$item->souko_code."\"",
               // 値引率
               '',
+              // 得意先コード
+              "\"".$tokuisaki_id."\"",
+              // 得意先店舗コード
+              "\"".$store_id."\"",
+              // 得意先名
+              "\"".$tokuisaki_name."\"",
+              // 得意先店舗名
+              "\"".$store_name."\"",
             ];
             // dd($array);
       			array_push($order_list, $array);
@@ -1522,7 +1546,7 @@ class AdminPageController extends Controller
               // 備考
               "\"".$deal->memo."\"",
               // 注文行番号
-              "\"".$order->id."\"",
+              "\""."s.".$order->id."\"",
               // 商品コード
               "\"".$item_code."\"",
               // SKUコード
@@ -1626,6 +1650,14 @@ class AdminPageController extends Controller
                   $pay = 'クラハシ払い';
                   // 取引種別
                   $torihiki_shubetu = $store->torihiki_shubetu;
+                  // 得意先コード
+                  $tokuisaki_id = $store->tokuisaki_id;
+                  // 得意先店舗コード
+                  $store_id = $store->store_id;
+                  // 得意先名
+                  $tokuisaki_name = $store->tokuisaki_name;
+                  // 得意先店舗名
+                  $store_name = $store->tokuisaki_name;
                 }
                 $array = [
                   // 取引番号
@@ -1725,11 +1757,11 @@ class AdminPageController extends Controller
                   // 引渡場所
                   '',
                   // 発注先企業
-                  '',
-                  // 発注先部署コード
                   "\"".$item->kigyou_code."\"",
+                  // 発注先部署コード
+                  "\"".$item->busho_code."\"",
                   // 発注先部署名
-                  "\"".$item->bucho_code."\"",
+                  "\"".$item->busho_name."\"",
                   // 発注先当者者コード
                   "\"".$item->tantou_code."\"",
                   // 発注先当者名
@@ -1748,6 +1780,14 @@ class AdminPageController extends Controller
                   "\"".$item->souko_code."\"",
                   // 値引率
                   '',
+                  // 得意先コード
+                  "\"".$tokuisaki_id."\"",
+                  // 得意先店舗コード
+                  "\"".$store_id."\"",
+                  // 得意先名
+                  "\"".$tokuisaki_name."\"",
+                  // 得意先店舗名
+                  "\"".$store_name."\"",
                 ];
                 // dd($array);
           			array_push($order_list, $array);
@@ -1805,6 +1845,14 @@ class AdminPageController extends Controller
                 $pay = 'クラハシ払い';
                 // 取引種別
                 $torihiki_shubetu = $store->torihiki_shubetu;
+                // 得意先コード
+                $tokuisaki_id = $store->tokuisaki_id;
+                // 得意先店舗コード
+                $store_id = $store->store_id;
+                // 得意先名
+                $tokuisaki_name = $store->tokuisaki_name;
+                // 得意先店舗名
+                $store_name = $store->tokuisaki_name;
               }
               $array = [
                 // 取引番号
@@ -1927,6 +1975,14 @@ class AdminPageController extends Controller
                 "\"".$item->souko_code."\"",
                 // 値引率
                 '',
+                // 得意先コード
+                "\"".$tokuisaki_id."\"",
+                // 得意先店舗コード
+                "\"".$store_id."\"",
+                // 得意先名
+                "\"".$tokuisaki_name."\"",
+                // 得意先店舗名
+                "\"".$store_name."\"",
               ];
               // dd($array);
         			array_push($order_list, $array);
