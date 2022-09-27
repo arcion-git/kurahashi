@@ -84,6 +84,7 @@
         <div class="form-group col-sm-12 col-md-6">
           <label for="company">事業者名（法人格を除く）</label>
           <input id="company" type="text" class="form-control" name="company" placeholder="クラハシ" value="{{ old('company') }}" autofocus required>
+          <span class="small">※全角文字で入力してください。</span>
         </div>
       </div>
 
@@ -91,6 +92,7 @@
         <div class="form-group col-sm-12 col-md-6">
           <label for="company_kana">事業者名（フリガナ）</label>
           <input id="company_kana" type="text" class="form-control" name="company_kana" placeholder="クラハシ" value="{{ old('company_kana') }}" autofocus required>
+          <span class="small">※全角文字で入力してください。</span>
         </div>
       </div>
 
@@ -109,10 +111,12 @@
         <div class="form-group col-sm-12 col-md-6">
           <label for="last_name">フリガナ（姓）</label>
           <input id="last_name" type="text" class="form-control" name="last_name_kana" placeholder="ヤマダ" value="{{ old('last_name_kana') }}" required>
+          <span class="small">※全角カナで入力してください。</span>
         </div>
         <div class="form-group col-sm-12 col-md-6">
           <label for="last_name">フリガナ（名）</label>
           <input id="last_name" type="text" class="form-control" name="first_name_kana" placeholder="タロウ" value="{{ old('first_name_kana') }}" required>
+          <span class="small">※全角カナで入力してください。</span>
         </div>
       </div>
 
@@ -151,6 +155,7 @@
         <div class="form-group col-sm-12 col-md-6">
           <label for="tel">電話番号(代表)</label>
           <input id="tel" type="tel" class="form-control" name="tel" value="{{ old('tel') }}" required>
+          <span class="small">※半角文字ハイフンありで入力してください。</span>
           <div class="invalid-feedback">
           </div>
         </div>

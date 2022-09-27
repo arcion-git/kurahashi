@@ -60,12 +60,11 @@ class RegisterController extends Controller
           'first_name_kana' => ['required', 'string', 'max:255'],
           'last_name_kana' => ['required', 'string', 'max:255'],
           'company' => ['required', 'string', 'max:255'],
-          // 'company_kana' => ['required', 'string', 'max:255'],
+          'company_kana' => ['required', 'string', 'max:255'],
           'address01' => ['required', 'string', 'max:8'],
           'address02' => ['required', 'string', 'max:255'],
           'address03' => ['required', 'string', 'max:255'],
           'address04' => ['required', 'string', 'max:255'],
-          'address05' => ['required', 'string', 'max:255'],
           'tel' => ['required', 'string', 'max:255'],
           'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
           'password' => ['required', 'string', 'min:8', 'confirmed'],
@@ -81,6 +80,7 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
 
+      // dd($data);
       // $array1 = array(
       // 	"color" => "red",
       // );
@@ -131,6 +131,7 @@ class RegisterController extends Controller
       $client = new Client();
       $url = config('app.kakebarai_user_touroku');
       $kakebarai_traderCode = config('app.kakebarai_traderCode');
+      // dd($kakebarai_traderCode);
       $kakebarai_passWord = config('app.kakebarai_passWord');
       $option = [
         'headers' => [
@@ -194,7 +195,7 @@ class RegisterController extends Controller
           // 'kmsTelno' => '084-952-5627',
 
           'shrhohKbn' => $data['pay'],
-          'passWord' => $kakebarai_passWord
+          'passWord' => $kakebarai_passWord,
         ]
       ];
       if($data['hjkjKbn'] == '1'){
@@ -207,6 +208,7 @@ class RegisterController extends Controller
             // 'daiAddress' => $data['daiAddress']
           ]
         ];
+        $option = array_replace_recursive($option, $option_add);
       }
       // 運営会社情報エリア(No.26「運営会社有無」が「運営会社有り:1」の場合に、指定可能です。)
       if(isset($data['unei_company'])){
@@ -269,7 +271,7 @@ class RegisterController extends Controller
       // dd($option);
       $response = $client->request('POST', $url, $option);
       $result = simplexml_load_string($response->getBody()->getContents());
-      // dd($result);
+      dd($result);
 
 
       // 登録メール送信
