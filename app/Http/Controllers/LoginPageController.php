@@ -992,7 +992,7 @@ class LoginPageController extends Controller
       }
       if($flg){
         $data=[
-          'message' => '「ダブルクオーテーション」「カンマ」の入力はできません。',
+          'message' => '「"」「半角カンマ」の入力はできません。',
         ];
         return redirect()->route('confirm',$data);
       }
