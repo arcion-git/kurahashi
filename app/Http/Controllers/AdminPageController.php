@@ -214,7 +214,7 @@ class AdminPageController extends Controller
     $holidays = Holiday::pluck('date');
     $currentTime = date('H:i:s');
     // 19時より前の処理
-    if (strtotime($currentTime) < strtotime('19:00:00')) {
+    if (strtotime($currentTime) < strtotime('17:00:00')) {
       $holidays = Holiday::pluck('date')->toArray();
       for($i = 1; $i < 10; $i++){
         $today_plus = date('Y-m-d', strtotime($today.'+'.$i.'day'));

@@ -156,7 +156,7 @@
 				<option value="午前中">午前中</option>
 				<option value="12時〜14時">12時〜14時</option>
 				<option value="14時〜16時">14時〜16時</option>
-				<option value="16時〜18時">16時〜18時</option>
+				<!-- <option value="16時〜18時">16時〜18時</option> -->
 				</select>
 			</div>
 		</div>

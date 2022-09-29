@@ -621,7 +621,7 @@ class LoginPageController extends Controller
     // dd($key);
 
     // 19時より前の処理
-    if (strtotime($currentTime) < strtotime('19:00:00')) {
+    if (strtotime($currentTime) < strtotime('17:00:00')) {
       // dd('test');
       $holidays = Holiday::pluck('date')->toArray();
       for($i = 1; $i < 10; $i++){
@@ -703,7 +703,7 @@ class LoginPageController extends Controller
     $holidays = Holiday::pluck('date');
     $currentTime = date('H:i:s');
     // 19時より前の処理
-    if (strtotime($currentTime) < strtotime('19:00:00')) {
+    if (strtotime($currentTime) < strtotime('17:00:00')) {
       $holidays = Holiday::pluck('date')->toArray();
       for($i = 1; $i < 10; $i++){
         $today_plus = date('Y-m-d', strtotime($today.'+'.$i.'day'));
@@ -914,7 +914,7 @@ class LoginPageController extends Controller
     // dd($key);
 
     // 19時より前の処理
-    if (strtotime($currentTime) < strtotime('19:00:00')) {
+    if (strtotime($currentTime) < strtotime('17:00:00')) {
       $holidays = Holiday::pluck('date')->toArray();
       for($i = 1; $i < 10; $i++){
         $today_plus = date('Y-m-d', strtotime($today.'+'.$i.'day'));
@@ -1068,7 +1068,7 @@ class LoginPageController extends Controller
     $holidays = Holiday::pluck('date');
     $currentTime = date('H:i:s');
     // 19時より前の処理
-    if (strtotime($currentTime) < strtotime('19:00:00')) {
+    if (strtotime($currentTime) < strtotime('17:00:00')) {
       $holidays = Holiday::pluck('date')->toArray();
       for($i = 1; $i < 10; $i++){
         $today_plus = date('Y-m-d', strtotime($today.'+'.$i.'day'));
@@ -1230,7 +1230,7 @@ class LoginPageController extends Controller
     $holidays = Holiday::pluck('date');
     $currentTime = date('H:i:s');
     // 19時より前の処理
-    if (strtotime($success_jikan) < strtotime('19:00:00')) {
+    if (strtotime($success_jikan) < strtotime('17:00:00')) {
       $holidays = Holiday::pluck('date')->toArray();
       for($i = 1; $i < 10; $i++){
         $today_plus = date('Y-m-d', strtotime($success_time.'+'.$i.'day'));
@@ -1262,7 +1262,7 @@ class LoginPageController extends Controller
     }
     // dd($nouhin_yoteibi);
     // 注文の翌営業日の納品予定19時を取得
-    $zenjitu19ji = date($nouhin_yoteibi.'19:00:00');
+    $zenjitu19ji = date($nouhin_yoteibi.'17:00:00');
     // 納品予定日の19時を取得
     $zenjitu19ji = date('Y-m-d H:i:s', strtotime($zenjitu19ji.'-1 day'));
     // dd($zenjitu19ji);
@@ -1339,7 +1339,7 @@ class LoginPageController extends Controller
     $holidays = Holiday::pluck('date');
     $currentTime = date('H:i:s');
     // 19時より前の処理
-    if (strtotime($currentTime) < strtotime('19:00:00')) {
+    if (strtotime($currentTime) < strtotime('17:00:00')) {
       $holidays = Holiday::pluck('date')->toArray();
       for($i = 1; $i < 10; $i++){
         $today_plus = date('Y-m-d', strtotime($today.'+'.$i.'day'));
@@ -1844,7 +1844,7 @@ class LoginPageController extends Controller
     $holidays = Holiday::pluck('date');
     $currentTime = date('H:i:s');
     // 19時より前の処理
-    if (strtotime($currentTime) < strtotime('19:00:00')) {
+    if (strtotime($currentTime) < strtotime('17:00:00')) {
       $holidays = Holiday::pluck('date')->toArray();
       for($i = 1; $i < 10; $i++){
         $today_plus = date('Y-m-d', strtotime($today.'+'.$i.'day'));
@@ -1946,7 +1946,7 @@ class LoginPageController extends Controller
     $holidays = Holiday::pluck('date');
     $currentTime = date('H:i:s');
     // 19時より前の処理
-    if (strtotime($success_jikan) < strtotime('19:00:00')) {
+    if (strtotime($success_jikan) < strtotime('17:00:00')) {
       $holidays = Holiday::pluck('date')->toArray();
       for($i = 1; $i < 10; $i++){
         $today_plus = date('Y-m-d', strtotime($success_time.'+'.$i.'day'));
@@ -1978,7 +1978,7 @@ class LoginPageController extends Controller
     }
     // dd($nouhin_yoteibi);
     // 注文の翌営業日の納品予定19時を取得
-    $zenjitu19ji = date($nouhin_yoteibi.'19:00:00');
+    $zenjitu19ji = date($nouhin_yoteibi.'17:00:00');
     // 納品予定日の19時を取得
     $zenjitu19ji = date('Y-m-d H:i:s', strtotime($zenjitu19ji.'-1 day'));
     // dd($zenjitu19ji);
@@ -2253,7 +2253,7 @@ class LoginPageController extends Controller
     $holidays = Holiday::pluck('date');
     $currentTime = date('H:i:s');
     // 19時より前の処理
-    if (strtotime($currentTime) < strtotime('19:00:00')) {
+    if (strtotime($currentTime) < strtotime('17:00:00')) {
       $holidays = Holiday::pluck('date')->toArray();
       for($i = 1; $i < 10; $i++){
         $today_plus = date('Y-m-d', strtotime($today.'+'.$i.'day'));

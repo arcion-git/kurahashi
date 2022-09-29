@@ -271,7 +271,7 @@ class RegisterController extends Controller
       // dd($option);
       $response = $client->request('POST', $url, $option);
       $result = simplexml_load_string($response->getBody()->getContents());
-      dd($result);
+      // dd($result);
 
 
       // 登録メール送信

@@ -18,7 +18,7 @@
 
 
                     <div class="entry-content">
-                    <h2>１．SETOnagiについて</h2>
+                    <h2>１．SETOnagiオーダーブックについて</h2>
                     <p>量販店・小売店向けの商品から、SETOnagiオリジナル商品まで、目利きの選んだ確かな全国の水産商品をご提供してまります。</p>
                     <ul>
                     <li>ハーフネットショッピング形式　～ ネットで簡単注文・お店でお受け取り～</li>
@@ -87,16 +87,17 @@
                     <p>◇ ご注文時にご指定のお時間にお引き取りにいらっしゃらない場合は、当日にヤマト運輸の宅急便にて、ご登録住所へ商品を郵送させていただきます。<br>
                     ◇ 郵送でのご納品の場合は、1個口につき、2,380円の配送手数料がかかります。</p>
                     <h2>６．お引渡し場所について</h2>
-                    <h3>マリンネクスト (三原市糸崎) <span class="red">受け取り可能時間：9時～15時</span></h3>
+                    <!-- <h3>マリンネクスト (三原市糸崎) <span class="red">受け取り可能時間：9時～15時</span></h3>
                     <p>〒729-0324 広島県三原市糸崎９丁目４<br>
                     お引渡受付時間　9:00～15:00（水・日・祝除く）<br>
                     TEL：084-863-6660</p>
-                    <p><iframe loading="lazy" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3292.7084462717876!2d133.11255571495488!3d34.38333490765722!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x355055c3a8c6db03%3A0xe8d6bd85d5e50ef9!2z44Oe44Oq44Oz44ON44Kv44K544OI!5e0!3m2!1sja!2sjp!4v1648661000311!5m2!1sja!2sjp" width="100%" height="300" frameborder="0" allowfullscreen="allowfullscreen" aria-hidden="false"></iframe></p>
+                    <p><iframe loading="lazy" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3292.7084462717876!2d133.11255571495488!3d34.38333490765722!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x355055c3a8c6db03%3A0xe8d6bd85d5e50ef9!2z44Oe44Oq44Oz44ON44Kv44K544OI!5e0!3m2!1sja!2sjp!4v1648661000311!5m2!1sja!2sjp" width="100%" height="300" frameborder="0" allowfullscreen="allowfullscreen" aria-hidden="false"></iframe></p> -->
                     <h3>福山魚市場（福山市引野町　福山引き取り窓口 ㈱クラハシ）<span class="red">受け取り可能時間：9時～16時</span></h3>
                     <p>〒721-0942 広島県福山市引野町1-1-1 福山市地方卸売市場内<br>
                     お引渡受付時間　9:00～16:00（水・日・祝除く）<br>
                     TEL：084-941-3510</p>
                     <p><iframe loading="lazy" style="border: 0;" tabindex="0" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3288.29273894009!2d133.401007915404!3d34.49546210168986!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x35511154f17b0dbd%3A0x498780d753ce4861!2z44CSNzIxLTA5NDIg5bqD5bO255yM56aP5bGx5biC5byV6YeO55S677yR5LiB55uu77yR4oiS77yR!5e0!3m2!1sja!2sjp!4v1629160088292!5m2!1sja!2sjp" width="100%" height="300" frameborder="0" allowfullscreen="allowfullscreen" aria-hidden="false"></iframe></p>
+                    <p>※お引き渡し場所は随時追加をいたします。</p>
                     <h2><strong>７．交換・返品について</strong></h2>
                     <ul style="list-style-type: square;">
                     <li>ご注文のキャンセルや商品の交換・返品は、食品を取り扱っている為<strong><span style="color: #ff0000;">当社が認めた不良品以外は原則お引き受けできません。</span></strong></li>
@@ -144,15 +145,15 @@
                     <li>ご登録メールアドレス宛にPDFにて送付させて頂きます。</li>
                     <li>&nbsp;紙面での領収書発行は対応しておりませんので、予めご了承下さい。</li>
                     </ul>
-                    <h2><strong>１０．賞味期限について</strong></h2>
-                    <p>いずれの商品も、裏面に【賞味期限】を記載しておりますのでご確認ください。</p>
-                    <h2><strong>１１．お問い合わせ</strong></h2>
+                    <!-- <h2><strong>１０．賞味期限について</strong></h2>
+                    <p>いずれの商品も、裏面に【賞味期限】を記載しておりますのでご確認ください。</p> -->
+                    <h2><strong>１０．お問い合わせ</strong></h2>
                     <p>SETOnagiについて、会員登録方法について、ご不明な点等ございましたら、下記までお問い合わせください。<br>
                     お問い合わせフォームからは、24時間受け付けております。(ご回答までに1営業日頂く場合がございます。)<br>
                     【お問い合わせ】<br>
-                    TEL: 080-2943-7978<br>
+                    TEL: 084-941-3510<br>
                     受付時間: 9:00-12:30、13:30-17:00（水・日・祝休み）</p>
-                    <p>運営会社：株式会社U-midas（ウミダス）<br>
+                    <p>開発：株式会社U-midas（ウミダス）<br>
                     〒729-0324 　広島県三原市糸崎7丁目8番22号<br>
                     EMAIL：<a href="mailto:info@setonagi.net">info@setonagi.net</a><br />
                     URL：<a href="http://u-midas.com/">http://u-midas.com/</a></p>
