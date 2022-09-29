@@ -435,7 +435,7 @@ class AdminPageController extends Controller
   }
 
   public function adminimport(){
-  User::truncate();
+  admin::truncate();
   Excel::import(new AdminImport, request()->file('file'));
   return back();
   }
