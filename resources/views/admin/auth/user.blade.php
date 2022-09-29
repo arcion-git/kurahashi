@@ -43,7 +43,10 @@
                 @foreach($users as $user)
                 <tr>
                   <td class="text-center">
+                    @if($user->setonagi == 1)
+                    @else
                     {{$user->tokuisaki_name()}}
+                    @endif
                   </td>
                   <td class="text-center">
                     {{$user->name}}
