@@ -7,10 +7,10 @@
 
   <section class="section">
     <div class="section-header">
-      <h1>カート編集</h1>
+      <h1>オーダー内容確認</h1>
       <div class="section-header-breadcrumb">
         <div class="breadcrumb-item active"><a href="/">HOME</a></div>
-        <div class="breadcrumb-item">カート編集</div>
+        <div class="breadcrumb-item">オーダー内容確認</div>
       </div>
     </div>
 
@@ -41,7 +41,8 @@
 
             <div class="float-right">
                 <button id="approval_btn" type="submit" class="btn btn-warning">内容確認画面に進む</button>
-                @if(isset($setonagi))
+
+                @if($user->setonagi == 1)
                 <div id="card_approval_btn" class="btn btn-warning" onclick="executePay">内容確認画面に進む</div>
                 @endif
             </div>
