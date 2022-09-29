@@ -2002,7 +2002,7 @@ class LoginPageController extends Controller
       return redirect()->route('dealdetail',$data);
     }
 
-    $now = date("YmdHis");
+
 
     // セトナギユーザーの場合
     if($user->setonagi == 1){
@@ -2022,7 +2022,7 @@ class LoginPageController extends Controller
           'form_params' => [
             'traderCode' => $kakebarai_traderCode,
             // 取引id
-            'orderNo' => $deal_id.$now,
+            'orderNo' => $deal_id.'123456',
             // バイヤーid
             'buyerId' => $user_id,
             'passWord' => $kakebarai_passWord
