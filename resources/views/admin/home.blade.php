@@ -86,7 +86,10 @@
                     {{$deal->id}}
                   </td>
                   <td class="text-center">
+                    @if($deal->user->setonagi == 1)
+                    @else
                     {{$deal->user->tokuisaki_name()}}
+                    @endif
                   </td>
                   <td class="text-center">
                     {{$deal->user->name}}
