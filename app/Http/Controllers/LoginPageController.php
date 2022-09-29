@@ -1483,7 +1483,7 @@ class LoginPageController extends Controller
           'traderCode' => $kakebarai_traderCode,
           // 日付
           'orderDate' => $now,
-          'orderNo' => $deal_id.'5a',
+          'orderNo' => $deal_id.'6a',
           // バイヤーid
           'buyerId' => $user_id,
           'settlePrice' => $request->all_total_val,
@@ -2003,7 +2003,6 @@ class LoginPageController extends Controller
     }
 
 
-
     // セトナギユーザーの場合
     if($user->setonagi == 1){
 
@@ -2022,7 +2021,7 @@ class LoginPageController extends Controller
           'form_params' => [
             'traderCode' => $kakebarai_traderCode,
             // 取引id
-            'orderNo' => $deal_id.'wq',
+            'orderNo' => $deal_id.'6a',
             // バイヤーid
             'buyerId' => $user_id,
             'passWord' => $kakebarai_passWord
