@@ -243,8 +243,8 @@
                 <i class="far fa-heart"></i> お気に入り編集
               </a>
               --}}
-              <a href="{{ url('/line') }}" class="dropdown-item has-icon">
-                <i class="far fa-comments"></i> LINEでお問い合わせ
+              <a href="{{ url('/contact') }}" class="dropdown-item has-icon">
+                <i class="far fa-comments"></i> お問い合わせフォーム
               </a>
               <a href="{{ url('/guide') }}" class="dropdown-item has-icon">
                 <i class="fa fa-map-signs"></i> ご利用ガイド

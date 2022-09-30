@@ -87,9 +87,9 @@
                             <td class="text-center">{{$recommend->price}}</td>
                             <td class="text-center">
                               @if($recommend->favoriteitem())
-                              <button name="item_id" value="{{$recommend->item()->id}}" id="{{$recommend->item()->id}}" class="removefavoriteitem"><i class="fa fa-heart"></i></button>
+                              <!-- <button name="item_id" value="{{$recommend->item()->id}}" id="{{$recommend->item()->id}}" class="removefavoriteitem"><i class="fa fa-heart"></i></button> -->
                               @else
-                              <button name="item_id" value="{{$recommend->item()->id}}" id="{{$recommend->item()->id}}" class="addfavoriteitem"><i class="far fa-heart"></i></button>
+                              <!-- <button name="item_id" value="{{$recommend->item()->id}}" id="{{$recommend->item()->id}}" class="addfavoriteitem"><i class="far fa-heart"></i></button> -->
                               @endif
                               @if ( Auth::guard('user')->user()->setonagi == 1 )
                                 @if ( Auth::guard('user')->user()->setonagi()->kakebarai_riyou == 1 || Auth::guard('user')->user()->setonagi()->setonagi_ok == 1)
