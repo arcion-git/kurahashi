@@ -1270,7 +1270,7 @@ class AdminPageController extends Controller
                 $pay = 'クロネコかけ払い';
               }
               // 取引種別
-              $torihiki_shubetu = 2;
+              $torihiki_shubetu = 1;
               // 引き渡し場所
               if($deal->uketori_place == '福山魚市引き取り'){
                 $uketori_place = '010';
@@ -1351,7 +1351,7 @@ class AdminPageController extends Controller
               // 配送希望日
               "\"".$order->nouhin_yoteibi."\"",
               // 配送時間帯
-              '',
+              "\"".$deal->uketori_time."\"",
               // 発送予定日
               '',
               // ステータス
