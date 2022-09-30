@@ -79,6 +79,21 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script>
     $(function() {
+      $(document).ready(function(){
+        var selected = $('#hjkjKbn').val();
+        // alert('test');
+        //     console.log(selected);
+        if ( selected == '1' ) {
+          $('#maekabu').show();
+          $('#kojin').hide();
+        }else if ( selected == '2' ){
+          $('#kojin').show();
+          $('#maekabu').hide();
+        }else{
+          $('#maekabu').hide();
+          $('#kojin').hide();
+        }
+      });
       $(document).on("change", "#hjkjKbn", function() {
         var selected = $(this).val();
         // alert('test');

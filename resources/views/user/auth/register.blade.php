@@ -29,7 +29,7 @@
           </select>
           @if($errors->has('hjkjKbn'))
           <span class="invalid-feedback" role="alert">
-              <strong>{{$errors->first('hjkjKbn')}}</strong>
+              <strong>法人・個人は必ず入力してください。</strong>
           </span>
           @endif
         </div>
@@ -84,7 +84,7 @@
         <div class="form-group col-sm-12 col-md-6">
           <label for="company">事業者名（法人格を除く）</label>
           <input id="company" type="text" class="form-control" name="company" placeholder="クラハシ" value="{{ old('company') }}" autofocus required>
-          <span class="small">※全角文字で入力してください。</span>
+          <span class="small">※<span class="red">全角</span>で入力してください。</span>
         </div>
       </div>
 
@@ -92,7 +92,7 @@
         <div class="form-group col-sm-12 col-md-6">
           <label for="company_kana">事業者名（フリガナ）</label>
           <input id="company_kana" type="text" class="form-control" name="company_kana" placeholder="クラハシ" value="{{ old('company_kana') }}" autofocus required>
-          <span class="small">※全角文字で入力してください。</span>
+          <span class="small">※<span class="red">全角</span>で入力してください。</span>
         </div>
       </div>
 
@@ -111,23 +111,24 @@
         <div class="form-group col-sm-12 col-md-6">
           <label for="last_name">フリガナ（姓）</label>
           <input id="last_name" type="text" class="form-control" name="last_name_kana" placeholder="ヤマダ" value="{{ old('last_name_kana') }}" required>
-          <span class="small">※全角カナで入力してください。</span>
+          <span class="small">※<span class="red">全角カナ</span>で入力してください。</span>
         </div>
         <div class="form-group col-sm-12 col-md-6">
           <label for="last_name">フリガナ（名）</label>
           <input id="last_name" type="text" class="form-control" name="first_name_kana" placeholder="タロウ" value="{{ old('first_name_kana') }}" required>
-          <span class="small">※全角カナで入力してください。</span>
+          <span class="small">※<span class="red">全角カナ</span>で入力してください。</span>
         </div>
       </div>
 
 
       <div class="form-divider">
-        ご住所
+        ご住所<span class="small">
       </div>
       <div class="row">
         <div class="form-group col-sm-12 col-md-6">
-          <label for="address01">郵便番号(ハイフン無し7桁)</label>
+          <label for="address01">郵便番号</label>
           <input type="text" name="address01" maxlength="7" onKeyUp="AjaxZip3.zip2addr(this,'','address02','address03');" class="form-control" id="address01" placeholder="1001000" value="{{ old('address01') }}" required>
+          <span class="small">※<span class="red">ハイフン無し半角7桁</span>で入力してください。</span>
         </div>
       </div>
       <div class="row">
@@ -142,10 +143,12 @@
         <div class="form-group col-sm-12 col-md-6">
           <label for="address04">番地</label>
           <input type="text" name="address04" id="address04" class="form-control" placeholder="３ー２ー２" value="{{ old('address04') }}" required>
+          <span class="small">※<span class="red">全角</span>で入力してください。</span>
         </div>
         <div class="form-group col-sm-12 col-md-6">
           <label for="address05">ビル・マンション名</label>
           <input type="text" name="address05" id="address05" class="form-control" placeholder="◯◯ビル４階" value="{{ old('address05') }}">
+          <span class="small">※<span class="red">全角</span>で入力してください。</span>
         </div>
       </div>
       <div class="form-divider">
@@ -155,7 +158,7 @@
         <div class="form-group col-sm-12 col-md-6">
           <label for="tel">電話番号(代表)</label>
           <input id="tel" type="tel" class="form-control" name="tel" value="{{ old('tel') }}" required>
-          <span class="small">※半角文字ハイフンありで入力してください。</span>
+          <span class="small">※<span class="red">半角ハイフンあり</span>で入力してください。</span>
           <div class="invalid-feedback">
           </div>
         </div>
@@ -371,13 +374,16 @@
         掛け払い代金の支払い方法
       </div>
       <div class="row">
-        <div class="form-group col-12">
-          <input class="radio-input" type="radio" id="銀行振込" value="2" name="pay" checked><label for="銀行振込"> 銀行振込</label>
-          <input class="radio-input" type="radio" id="口座振替" value="8" name="pay"><label for="口座振替"> 口座振替</label>
-          <input class="radio-input" type="radio" id="コンビニ払い" value="9" name="pay"><label for="コンビニ払い"> コンビニ払い</label>
+        <div class="form-group col-12 @if($errors->has('pay'))is-invalid @endif">
+          <input class="@if($errors->has('pay'))is-invalid @endif radio-input" type="radio" id="銀行振込" value="2" name="pay" @if(old('pay') == 2) checked @elseif(old('pay') == null) checked @endif><label for="銀行振込"> 銀行振込</label>
+          <input class="@if($errors->has('pay'))is-invalid @endif radio-input" type="radio" id="口座振替" value="8" name="pay" @if(old('pay') == 8) checked @endif><label for="口座振替"> 口座振替</label>
+          <input class="@if($errors->has('pay'))is-invalid @endif radio-input" type="radio" id="コンビニ払い" value="9" name="pay" @if(old('pay') == 9) checked @endif><label for="コンビニ払い"> コンビニ払い</label>
+          @if($errors->has('pay'))
+          <span class="invalid-feedback" role="alert">
+              <strong>支払い方法は必ず入力してください。</strong>
+          </span>
+          @endif
           <label>※掛け払い代金のお支払い方法を上記よりお選びください。<br />（掛け払いの代金は、月末締め翌々月5日払いでのご請求となります。）<br />※クレジットカード払いのみ（掛け払いを使わない）場合は、「銀行振込」を選択してください。</label>
-          <div class="invalid-feedback">
-          </div>
         </div>
       </div>
 
