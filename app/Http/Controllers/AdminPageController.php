@@ -611,7 +611,7 @@ class AdminPageController extends Controller
     $items = Item::where("busho_code", "LIKE", $code.'%')->get();
 
 
-    dd($items);
+    // dd($items);
 
     $recommends = Recommend::where('user_id',$user->id)->get();
     // dd($recommends);
