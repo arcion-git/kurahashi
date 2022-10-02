@@ -153,10 +153,10 @@
                     【お問い合わせ】<br>
                     TEL: 084-941-3510<br>
                     受付時間: 9:00-12:30、13:30-17:00（水・日・祝休み）</p>
-                    <p>開発：株式会社U-midas（ウミダス）<br>
-                    〒729-0324 　広島県三原市糸崎7丁目8番22号<br>
+                    <p>運営：株式会社クラハシ<br>
+                    〒721-0942 広島県福山市引野町１丁目１−１<br>
                     EMAIL：<a href="mailto:info@setonagi.net">info@setonagi.net</a><br />
-                    URL：<a href="http://u-midas.com/">http://u-midas.com/</a></p>
+                    URL：<a href="https://www.kurahashi.co.jp/">https://www.kurahashi.co.jp/</a></p>
                     </div>
 
 

@@ -606,7 +606,12 @@ class AdminPageController extends Controller
   public function userrecommend($id){
 
     $user = User::where('id',$id)->first();
-    $items = Item::get();
+    // 水産の前方コード
+    $code = 1103;
+    $items = Item::where("busho_code", "LIKE", $code.'%')->get();
+
+
+    dd($items);
 
     $recommends = Recommend::where('user_id',$user->id)->get();
     // dd($recommends);

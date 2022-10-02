@@ -111,7 +111,7 @@
   Route::post('/user/edit/favoritecategory','LoginPageController@EditFavoriteCategory');
 
   // アンケート画面
-  Route::get('/user/questionnaire', 'LoginPageController@questionnaire');
+  Route::get('/user/questionnaire', 'LoginPageController@questionnaire')->name('questionnaire');;
 
 
   // 管理側ページ

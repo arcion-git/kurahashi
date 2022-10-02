@@ -88,8 +88,9 @@ class LoginPageController extends Controller
       if ($favorite_categories === null) {
         $categories = Category::get();
         $categories = $categories->groupBy('bu_ka_name');
+
         // dd($categories);
-        return view('user/auth/questionnaire', ['categories' => $categories]);
+        return redirect()->route('questionnaire',$categories);
       }
 
       $setonagi_user = Auth::guard('user')->user()->setonagi;
@@ -553,11 +554,25 @@ class LoginPageController extends Controller
 
   public function PostFavoriteCategory(Request $request){
 
-    $user_id = Auth::guard('user')->user()->id;
-
-
     $favorite_categories = $request->input('favorite_category');
     // dd($favorite_categories);
+
+    if(!isset($favorite_categories)){
+      // dd("カートが空です");
+      $categories = Category::get();
+      $categories = $categories->groupBy('bu_ka_name');
+      $data=[
+        'categories' => $categories,
+        'message' => 'カテゴリーが1つも選択されていません。',
+      ];
+      // dd($categories);
+      return redirect()->route('questionnaire',$data);
+    }
+
+
+
+    $user_id = Auth::guard('user')->user()->id;
+
 
 
     foreach ($favorite_categories as $favorite_category) {

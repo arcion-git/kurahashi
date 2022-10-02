@@ -73,10 +73,42 @@
     <!-- Template JS File -->
     <script src="{{ asset('js/scripts.js') }}"></script>
     <script src="{{ asset('js/custom.js') }}"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Page Specific JS File -->
     <script src="{{ asset('js/page/auth-register.js') }}"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+    <script>
+    //ＵＲＬのパラメータを取得するための関数
+    function getUrlParam(param){
+        var pageUrl = window.location.search.substring(1);
+        var urlVar = pageUrl.split('&');
+        for (var i = 0; i < urlVar.length; i++)
+        {
+            var paramName = urlVar[i].split('=');
+            if (paramName[0] == param)
+            {
+                return decodeURI(paramName[1]);
+            }
+        }
+    }
+    $(function() {
+        var message = getUrlParam('message');
+        console.log(message);
+        if (message) {
+          Swal.fire({
+            html: message,
+            // position: 'top-end',
+            // toast: true,
+            icon: 'warning',
+            showConfirmButton: false,
+            // timer: 1500
+          });
+        }
+    });
+    </script>
+
     <script>
     $(function() {
       $(document).ready(function(){

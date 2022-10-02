@@ -130,7 +130,7 @@
                 <div class="card">
                   <div class="card-body">
                     <div class="float-left">
-                      <h2 class="section-title">時価商品</h2>
+                      <h2 class="section-title">時価商品<span class="small">（月曜、木曜、金曜の12時30分から17時までの限定掲載となります。）</span></h2>
                     </div>
 
                     <div class="clearfix mb-3"></div>

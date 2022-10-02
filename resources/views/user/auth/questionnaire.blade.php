@@ -7,7 +7,7 @@
 
 <div class="card card-primary">
   <div class="card-header">
-    <h4>初回アンケート</h4>
+    <h4>初回アンケート(今後の参考にさせていただきます。)</h4>
   </div>
   <div class="card-body">
     <form class="form-horizontal" role="form" method="POST" action="{{ url('/user/post/favoritecategory') }}">
