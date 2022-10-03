@@ -135,6 +135,8 @@
                                 @if ( Auth::guard('user')->user()->setonagi == 1 )
                                   @if ( Auth::guard('user')->user()->setonagi()->kakebarai_riyou == 1 )
                                   {{$setonagi_item->price}}
+                                  @elseif ( Auth::guard('user')->user()->setonagi()->setonagi_ok == 1 )
+                                  {{$setonagi_item->price}}
                                   @else
                                   ---
                                   @endif
