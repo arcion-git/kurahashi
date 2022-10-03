@@ -2056,7 +2056,7 @@ class LoginPageController extends Controller
           'form_params' => [
             'traderCode' => $kakebarai_traderCode,
             // 取引id
-            'orderNo' => $deal_id.'6a',
+            'orderNo' => $deal_id,
             // バイヤーid
             'buyerId' => $user_id,
             'passWord' => $kakebarai_passWord
