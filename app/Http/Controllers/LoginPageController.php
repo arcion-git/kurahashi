@@ -2097,7 +2097,7 @@ class LoginPageController extends Controller
           'form_params' => [
             'function_div' => 'A06',
             'trader_code' => $collect_tradercode,
-            'order_no' => '00'.$deal_id,
+            'order_no' => $deal_id,
           ]
         ];
         // dd($option);
