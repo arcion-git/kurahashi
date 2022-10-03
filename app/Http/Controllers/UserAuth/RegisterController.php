@@ -276,23 +276,23 @@ class RegisterController extends Controller
 
 
       // 登録メール送信
-      $name = $data['last_name'].$data['first_name'];
-      $email = $data['email'];
-      $url = url('');
-      $text = 'この度はSETOnagiオーダーブックにご登録くださいまして、誠にありがとうございます。<br />
-      <br />
-      SETOnagiオーダーブックのご利用には、ご登録頂いたメールアドレスとパスワードが必要となりますので、大切に保管くださいますようお願いいたします。<br />
-      <br />
-      ご登録くださいました情報に基づき、ヤマトクレジットファイナンス株式会社の審査に進ませていただきます。<br />
-      審査完了までに、最大で2営業日いただいております。<br />
-      審査が完了し次第、改めて、メールにてご案内いたします。<br />
-      オーダーブックのご利用開始まで、今しばらくお待ちください。';
-      Mail::send('emails.register', [
-          'name' => $name,
-          'text' => $text,
-      ], function ($message) use ($email) {
-          $message->to($email)->subject('SETOnagiオーダーブックにご登録いただきありがとうございます。');
-      });
+      // $name = $data['last_name'].$data['first_name'];
+      // $email = $data['email'];
+      // $url = url('');
+      // $text = 'この度はSETOnagiオーダーブックにご登録くださいまして、誠にありがとうございます。<br />
+      // <br />
+      // SETOnagiオーダーブックのご利用には、ご登録頂いたメールアドレスとパスワードが必要となりますので、大切に保管くださいますようお願いいたします。<br />
+      // <br />
+      // ご登録くださいました情報に基づき、ヤマトクレジットファイナンス株式会社の審査に進ませていただきます。<br />
+      // 審査完了までに、最大で2営業日いただいております。<br />
+      // 審査が完了し次第、改めて、メールにてご案内いたします。<br />
+      // オーダーブックのご利用開始まで、今しばらくお待ちください。';
+      // Mail::send('emails.register', [
+      //     'name' => $name,
+      //     'text' => $text,
+      // ], function ($message) use ($email) {
+      //     $message->to($email)->subject('SETOnagiオーダーブックにご登録いただきありがとうございます。');
+      // });
 
       return $create_user;
     }

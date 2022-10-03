@@ -90,7 +90,7 @@ class LoginPageController extends Controller
         $categories = $categories->groupBy('bu_ka_name');
 
         // dd($categories);
-        return redirect()->route('questionnaire',$categories);
+        return view('user/auth/questionnaire', ['categories' => $categories]);
       }
 
       $setonagi_user = Auth::guard('user')->user()->setonagi;
