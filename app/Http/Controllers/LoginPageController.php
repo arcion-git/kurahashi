@@ -1123,6 +1123,7 @@ class LoginPageController extends Controller
 
     $collect_tradercode = config('app.collect_tradercode');
     $collect_password = config('app.collect_password');
+    $collect_touroku = config('app.collect_touroku');
     $collect_token = config('app.collect_token');
 
     $data=
@@ -1136,6 +1137,7 @@ class LoginPageController extends Controller
      'sano_nissuu' => $sano_nissuu,
      'collect_tradercode' => $collect_tradercode,
      'collect_password' => $collect_password,
+     'collect_touroku' => $collect_touroku,
      'collect_token' => $collect_token,
     ];
     return view('order', $data);
