@@ -24,8 +24,8 @@
           <label for="company">法人・個人</label>
           <select id="hjkjKbn" name="hjkjKbn" class="hjkjKbn @if($errors->has('hjkjKbn')) is-invalid @endif form-control">
             <option value="">選択してください</option>
-            <option value="1" @if(old('hjkjKbn') == 1) selected @endif>法人</option>
-            <option value="2" @if(old('hjkjKbn') == 2) selected @endif>個人事業主</option>
+            <option value="1" @if(old('hjkjKbn') == 1) selected @endif selected>法人</option>
+            <!-- <option value="2" @if(old('hjkjKbn') == 2) selected @endif>個人事業主</option> -->
           </select>
           @if($errors->has('hjkjKbn'))
           <span class="invalid-feedback" role="alert">
