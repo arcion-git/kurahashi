@@ -19,9 +19,10 @@
 ありすぎる情報と品揃えの時代<br />
 【探す手間】を市場が解消します。<br />
 SETOnagi オーダーブック<br />
-株式会社U-midas（ウミダス）<br />
-〒729-0324<br />
-広島県三原市糸崎7丁目8番22号<br />
-URL:http://setonagi.net<br />
+株式会社クラハシ<br />
+〒721-0942<br />
+広島県福山市引野町1丁目1−1<br />
+URL:https://setonagi-orderbook.com/<br />
+公式HP:https://www.kurahashi.co.jp/<br />
 お問い合わせ:info@setonagi.net<br />
 =============================================
