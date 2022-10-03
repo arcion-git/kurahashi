@@ -3764,16 +3764,16 @@ footer .external_link ul{
   width: 80px !important;
 }
 .head-price{
-  min-width: 50px !important;
-  width: 50px !important;
+  min-width: 60px !important;
+  width: 60px !important;
 }
 .head-store{
   min-width: 50px !important;
   width: 50px !important;
 }
 .head-kikaku{
-  min-width: 60px !important;
-  width: 60px !important;
+  min-width: 30px !important;
+  width: 30px !important;
 }
 .head-quantity{
   min-width: 40px !important;
