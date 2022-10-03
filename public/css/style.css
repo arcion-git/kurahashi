@@ -3767,8 +3767,8 @@ footer .external_link ul{
   width: 80px !important;
 }
 .head-price{
-  min-width: 60px !important;
-  width: 60px !important;
+  min-width: 100px !important;
+  width: 100px !important;
 }
 .head-store{
   min-width: 50px !important;
