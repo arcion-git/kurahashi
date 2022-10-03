@@ -288,13 +288,13 @@ class RegisterController extends Controller
       審査完了までに、最大で2営業日いただいております。<br />
       審査が完了し次第、改めて、メールにてご案内いたします。<br />
       オーダーブックのご利用開始まで、今しばらくお待ちください。';
-      Mail::send('emails.register', [
-          'name' => $name,
-          'text' => $text,
-          'admin_mail' => $admin_mail,
-      ], function ($message) use ($email , $admin_mail) {
-          $message->to($email)->subject('SETOnagiオーダーブックにご登録いただきありがとうございます。');
-      });
+      // Mail::send('emails.register', [
+      //     'name' => $name,
+      //     'text' => $text,
+      //     'admin_mail' => $admin_mail,
+      // ], function ($message) use ($email , $admin_mail) {
+      //     $message->to($email)->subject('SETOnagiオーダーブックにご登録いただきありがとうございます。');
+      // });
 
       return $create_user;
     }
