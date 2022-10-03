@@ -1124,7 +1124,7 @@ class LoginPageController extends Controller
     $collect = config('app.collect_password');
 
     $collect_tradercode = config('app.collect_tradercode');
-    $collect_password = config('app.collect_password');
+    $collect_password = config('app.collect_password').'2';
     $collect_touroku = config('app.collect_touroku');
     $collect_token = config('app.collect_token');
 
