@@ -3772,8 +3772,8 @@ footer .external_link ul{
   width: 50px !important;
 }
 .head-kikaku{
-  min-width: 30px !important;
-  width: 30px !important;
+  min-width: 50px !important;
+  width: 50px !important;
 }
 .head-quantity{
   min-width: 40px !important;
@@ -3868,4 +3868,39 @@ footer .external_link ul{
 
 .red{
   color: red;
+}
+
+.carousel-control-prev-icon{
+    filter: drop-shadow(3px 3px 3px #000) !important;
+}
+.carousel-control-next-icon{
+    filter: drop-shadow(-3px 3px 3px #000) !important;
+}
+
+.carousel-indicators li{
+    filter: drop-shadow(0px 3px 3px #000) !important;
+}
+
+.fancybox-navigation .fancybox-button div {
+    height: 300% !important;
+}
+.fancybox-navigation .fancybox-button svg{
+  height: 300% !important;
+  width: 300% !important;
+}
+
+.fancybox-navigation .fancybox-button--arrow_right {
+    padding: 31px 6px 31px 26px;
+    right: 0;
+    right: env(safe-area-inset-right);
+}
+.fancybox-navigation .fancybox-button--arrow_right {
+    padding: 31px 6px 31px 26px;
+    right: 50px !important;
+}
+.fancybox-navigation .fancybox-button {
+    top: calc(50% - 150px) !important;
+}
+.fancybox-button {
+    background: transparent !important
 }
