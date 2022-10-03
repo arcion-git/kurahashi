@@ -142,11 +142,11 @@ return [
     'kakebarai_sinsa' => env('KAKEBARAI_SINSA'),
     'kakebarai_riyoukingaku' => env('KAKEBARAI_RIYOUKINGAKU'),
 
-
-    'collect_touroku' => env('COLLECT_TOUROKU'),
-    'collect_cancel' => env('COLLECT_CANCEL'),
     'collect_tradercode' => env('COLLECT_TRADERCODE'),
     'collect_password' => env('COLLECT_PASSWORD'),
+    'collect_token' => env('COLLECT_TOKEN'),
+    'collect_touroku' => env('COLLECT_TOUROKU'),
+    'collect_cancel' => env('COLLECT_CANCEL'),
 
     /*
     |--------------------------------------------------------------------------

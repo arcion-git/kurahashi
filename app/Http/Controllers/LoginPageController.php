@@ -1121,7 +1121,9 @@ class LoginPageController extends Controller
     $memo -> $request->memo;
     }
 
-    $collect = config('app.collect_password');
+    $collect_tradercode = config('app.collect_tradercode');
+    $collect_password = config('app.collect_password');
+    $collect_token = config('app.collect_token');
 
     $data=
     ['carts' => $carts,
@@ -1132,7 +1134,9 @@ class LoginPageController extends Controller
      'setonagi' => $setonagi,
      'today_plus' => $today_plus,
      'sano_nissuu' => $sano_nissuu,
-     'collect' => $collect,
+     'collect_tradercode' => $collect_tradercode,
+     'collect_password' => $collect_password,
+     'collect_token' => $collect_token,
     ];
     return view('order', $data);
   }

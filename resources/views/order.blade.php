@@ -227,7 +227,7 @@
 		</div>
 
 		<!-- JavaScript ライブラリ読み込み body タグ内に記述する必要があります。-->
-		<script type="text/javascript" class="webcollect-embedded-token" src="https://ptwebcollect.jp/test_gateway/token/js/embeddedTokenLib.js"></script>
+		<script type="text/javascript" class="webcollect-embedded-token" src="{{collect_token}}"></script>
 		<script type="text/javascript">
 		/*
 		* 送信ボタン押下時に実行する JavaScript 関数
@@ -237,7 +237,7 @@
 		function executePay() {
 		$("#overlayajax").fadeIn(300);
 
-		var text = '{{$collect}}';
+		var text = '{{collect_password}}';
 		function async_digestMessage(message) {
 			return new Promise(function(resolve){
 			var msgUint8 = new TextEncoder("utf-8").encode(message);
@@ -334,7 +334,7 @@
 
 		// トークン発行 API へ渡すパラメータ
 		var createTokenInfo = {
-		traderCode: "888888709",
+		traderCode: "{{collect_tradercode}}",
 		authDiv: "2",
 		optServDiv: "00",
 		checkSum: text,
