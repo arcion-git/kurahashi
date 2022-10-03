@@ -1121,6 +1121,8 @@ class LoginPageController extends Controller
     $memo -> $request->memo;
     }
 
+    $collect = config('app.collect_password');
+
     $collect_tradercode = config('app.collect_tradercode');
     $collect_password = config('app.collect_password');
     $collect_touroku = config('app.collect_touroku');
@@ -1137,6 +1139,7 @@ class LoginPageController extends Controller
      'sano_nissuu' => $sano_nissuu,
      'collect_tradercode' => $collect_tradercode,
      'collect_password' => $collect_password,
+     'collect' => $collect,
      'collect_touroku' => $collect_touroku,
      'collect_token' => $collect_token,
     ];
