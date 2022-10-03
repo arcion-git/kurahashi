@@ -1558,7 +1558,7 @@ class LoginPageController extends Controller
           'trader_code' => $collect_tradercode,
           // パソコンかスマホか
           'device_div' => 1,
-          'order_no' => $deal_id,
+          'order_no' => $deal_id.'12',
           // 決済合計金額
           'settle_price' => $request->all_total_val,
           'buyer_name_kanji' => $user->name,
