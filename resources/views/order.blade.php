@@ -137,8 +137,8 @@
 				<option value="" selected>選択してください</option>
 				@endif
 				<option value="福山魚市引き取り">福山魚市引き取り</option>
-				<option value="引取り（マリンネクスト）">引取り（マリンネクスト）</option>
-				<option value="引取り（尾道ケンスイ）">引取り（尾道ケンスイ）</option>
+				<!-- <option value="引取り（マリンネクスト）">引取り（マリンネクスト）</option>
+				<option value="引取り（尾道ケンスイ）">引取り（尾道ケンスイ）</option> -->
 				</select>
 			</div>
 		</div>
