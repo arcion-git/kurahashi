@@ -7,7 +7,7 @@
 			<th class="head text-center">在庫数</th>
 			<!-- <th class="head text-center">特記事項</th> -->
 			<div class="sp_block">
-			<th class="head-price head text-center">金額</th>
+			<th class="text-center">金額</th>
 			@if(!$user->setonagi)
 			<th class="head-store head text-center">納品先店舗</th>
 			@endif
