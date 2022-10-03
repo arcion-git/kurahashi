@@ -117,7 +117,6 @@ class RegisterController extends Controller
           'address02' => $data['address02'],
           'address03' => $data['address03'],
           'address04' => $data['address04'],
-          'address05' => $data['address05'],
           // 'unei_company' => $data['unei_company'],
           // 'pay' => $data['pay'],
       ]);
@@ -142,14 +141,14 @@ class RegisterController extends Controller
         ],
         'form_params' => [
           'traderCode' => $kakebarai_traderCode,
-          'cId' => $user_id,
+          'cId' => '00'.$user_id,
           'hjkjKbn' => $data['hjkjKbn'],
           'sMei' => $data['company'],
           'shitenMei' => '',
           'sMeikana' => $data['company_kana'],
           'shitenMeikana' => '',
           'ybnNo' => $data['address01'],
-          'Adress' => $data['address02'].$data['address03'].$data['address04'].$data['address05'],
+          'Adress' => $data['address02'].$data['address03'].$data['address04'],
           'telNo' => $data['tel'],
           // 'keitaiNo' => '080-2888-5281',
           // 'gyscod1' => '',
@@ -224,7 +223,7 @@ class RegisterController extends Controller
             'szHonknjmei' => $data['szHonknjmei'],
             'szHonknamei' => $data['szHonknamei'],
             'szYbnno' => $data['szaddress01'],
-            'szAddress' => $data['szaddress02'].$data['szaddress03'].$data['szaddress04'].$data['szaddress05'],
+            'szAddress' => $data['szaddress02'].$data['szaddress03'].$data['szaddress04'],
             'szTelno' => $data['szTelno'],
             'szDaikjmei_sei' => $data['szDaikjmei_sei'],
             // 'szDaikjmei_mei' => $data['szDaikjmei_mei'],
@@ -255,7 +254,7 @@ class RegisterController extends Controller
               'sqssfKbn' => '9',
               // 請求書送付先情報エリア
               'sqYbnno' => $data['sqaddress01'],
-              'sqAddress' => $data['sqaddress02'].$data['sqaddress03'].$data['sqaddress04'].$data['sqaddress05'],
+              'sqAddress' => $data['sqaddress02'].$data['sqaddress03'].$data['sqaddress04'],
               'sofuKnjnam' => $data['sofuKnjnam'],
               'sofuTntnam' => $data['sofuTntnam'],
               'syz' => $data['syz'],
@@ -288,13 +287,13 @@ class RegisterController extends Controller
       審査完了までに、最大で2営業日いただいております。<br />
       審査が完了し次第、改めて、メールにてご案内いたします。<br />
       オーダーブックのご利用開始まで、今しばらくお待ちください。';
-      Mail::send('emails.register', [
-          'name' => $name,
-          'text' => $text,
-          'admin_mail' => $admin_mail,
-      ], function ($message) use ($email , $admin_mail) {
-          $message->to($email)->subject('SETOnagiオーダーブックにご登録いただきありがとうございます。');
-      });
+      // Mail::send('emails.register', [
+      //     'name' => $name,
+      //     'text' => $text,
+      //     'admin_mail' => $admin_mail,
+      // ], function ($message) use ($email , $admin_mail) {
+      //     $message->to($email)->subject('SETOnagiオーダーブックにご登録いただきありがとうございます。');
+      // });
 
       return $create_user;
     }

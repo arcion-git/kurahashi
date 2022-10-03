@@ -141,15 +141,15 @@
           <input type="text" name="address03" id="address03" class="form-control" placeholder="福山市〇〇町" value="{{ old('address03') }}" required>
         </div>
         <div class="form-group col-sm-12 col-md-6">
-          <label for="address04">番地</label>
+          <label for="address04">番地（ビル・マンション名）</label>
           <input type="text" name="address04" id="address04" class="form-control" placeholder="３ー２ー２" value="{{ old('address04') }}" required>
           <span class="small">※<span class="red">全角</span>で入力してください。</span>
         </div>
-        <div class="form-group col-sm-12 col-md-6">
+        <!-- <div class="form-group col-sm-12 col-md-6">
           <label for="address05">ビル・マンション名</label>
-          <input type="text" name="address05" id="address05" class="form-control" placeholder="◯◯ビル４階" value="{{ old('address05') }}" required>
+          <input type="text" name="address05" id="address05" class="form-control" placeholder="◯◯ビル４階" value="{{ old('address05') }}">
           <span class="small">※<span class="red">全角</span>で入力してください。</span>
-        </div>
+        </div> -->
       </div>
       <div class="form-divider">
         ご連絡先
@@ -261,13 +261,13 @@
             <input type="text" name="szaddress03" id="szaddress03" class="form-control" placeholder="福山市〇〇町" value="{{ old('szaddress03') }}">
           </div>
           <div class="form-group col-sm-12 col-md-6">
-            <label for="szaddress04">番地</label>
+            <label for="szaddress04">番地（ビル・マンション名）</label>
             <input type="text" name="szaddress04" id="szaddress04" class="form-control" placeholder="３ー２ー２" value="{{ old('szaddress04') }}">
           </div>
-          <div class="form-group col-sm-12 col-md-6">
+          <!-- <div class="form-group col-sm-12 col-md-6">
             <label for="szaddress05">ビル・マンション名</label>
             <input type="text" name="szaddress05" id="szaddress05" class="form-control" placeholder="◯◯ビル４階" value="{{ old('szaddress05') }}">
-          </div>
+          </div> -->
         </div>
         <div class="form-divider">
           ご連絡先
@@ -331,13 +331,13 @@
             <input type="text" name="sqaddress03" id="sqaddress03" class="form-control" placeholder="福山市〇〇町" value="{{ old('sqaddress03') }}">
           </div>
           <div class="form-group col-sm-12 col-md-6">
-            <label for="sqaddress04">番地</label>
+            <label for="sqaddress04">番地（ビル・マンション名）</label>
             <input type="text" name="sqaddress04" id="sqaddress04" class="form-control" placeholder="３ー２ー２" value="{{ old('sqaddress04') }}">
           </div>
-          <div class="form-group col-sm-12 col-md-6">
+          <!-- <div class="form-group col-sm-12 col-md-6">
             <label for="sqaddress05">ビル・マンション名</label>
             <input type="text" name="sqaddress05" id="sqaddress05" class="form-control" placeholder="◯◯ビル４階" value="{{ old('sqaddress05') }}">
-          </div>
+          </div> -->
         </div>
         <div class="row">
           <div class="form-group col-sm-12 col-md-6">
