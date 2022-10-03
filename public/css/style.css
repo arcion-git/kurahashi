@@ -3154,7 +3154,59 @@ a:not(.btn-social-icon):not(.btn-social):not(.page-link) .ion, a:not(.btn-social
     margin: auto 0;
 }
 
-
+.head-nini_item_name{
+  min-width: 130px !important;
+  width: 130px !important;
+}
+.head-nini_tantou{
+  min-width: 80px !important;
+  width: 80px !important;
+}
+.head-price{
+  min-width: 100px !important;
+  width: 100px !important;
+}
+.head-store{
+  min-width: 130px !important;
+  width: 130px !important;
+}
+.head-kikaku{
+  min-width: 70px !important;
+  width: 70px !important;
+}
+.head-quantity{
+  min-width: 80px !important;
+  width: 80px !important;
+}
+.head-tani{
+  min-width: 70px !important;
+  width: 70px !important;
+}
+.head-startdate,
+.head-yoteibi{
+  min-width: 100px !important;
+  width: 100px !important;
+}
+.head-shoukei{
+  min-width: 80px !important;
+  width: 80px !important;
+}
+.head-sousa{
+  min-width: 140px !important;
+  width: 140px !important;
+}
+.head-nouhin_youbi{
+  min-width: 150px !important;
+  width: 150px !important;
+}
+.head-yuukou{
+  min-width: 160px !important;
+  width: 160px !important;
+}
+.head-cartbtn{
+  min-width: 210px !important;
+  width: 210px !important;
+}
 
 .swal2-popup.swal2-toast .swal2-title{
     margin: 1em 0.5em !important;
@@ -3703,7 +3755,7 @@ footer .external_link ul{
 
 
 
-/* .head-nini_item_name{
+.head-nini_item_name{
   min-width: 130px !important;
   width: 130px !important;
 }
@@ -3755,7 +3807,7 @@ footer .external_link ul{
 .head-cartbtn{
   min-width: 170px !important;
   width: 170px !important;
-} */
+}
 .table:not(.table-sm):not(.table-md):not(.dataTable) td, .table:not(.table-sm):not(.table-md):not(.dataTable) th {
     padding: 5px 5px;
     height: auto;
@@ -3816,59 +3868,4 @@ footer .external_link ul{
 
 .red{
   color: red;
-}
-
-
-.head-nini_item_name{
-  min-width: 130px !important;
-  width: 130px !important;
-}
-.head-nini_tantou{
-  min-width: 80px !important;
-  width: 80px !important;
-}
-.head-price{
-  min-width: 100px !important;
-  width: 100px !important;
-}
-.head-store{
-  min-width: 130px !important;
-  width: 130px !important;
-}
-.head-kikaku{
-  min-width: 70px !important;
-  width: 70px !important;
-}
-.head-quantity{
-  min-width: 80px !important;
-  width: 80px !important;
-}
-.head-tani{
-  min-width: 70px !important;
-  width: 70px !important;
-}
-.head-startdate,
-.head-yoteibi{
-  min-width: 100px !important;
-  width: 100px !important;
-}
-.head-shoukei{
-  min-width: 80px !important;
-  width: 80px !important;
-}
-.head-sousa{
-  min-width: 140px !important;
-  width: 140px !important;
-}
-.head-nouhin_youbi{
-  min-width: 150px !important;
-  width: 150px !important;
-}
-.head-yuukou{
-  min-width: 160px !important;
-  width: 160px !important;
-}
-.head-cartbtn{
-  min-width: 210px !important;
-  width: 210px !important;
 }
