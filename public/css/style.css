@@ -3154,6 +3154,8 @@ a:not(.btn-social-icon):not(.btn-social):not(.page-link) .ion, a:not(.btn-social
     margin: auto 0;
 }
 
+
+@media (min-width: 768px) {
 .head-nini_item_name{
   min-width: 130px !important;
   width: 130px !important;
@@ -3206,6 +3208,7 @@ a:not(.btn-social-icon):not(.btn-social):not(.page-link) .ion, a:not(.btn-social
 .head-cartbtn{
   min-width: 210px !important;
   width: 210px !important;
+}
 }
 
 .swal2-popup.swal2-toast .swal2-title{
