@@ -23,6 +23,7 @@
   // 顧客側ページ
   // Route::get('/', 'LoginPageController@index')->name('home');
   Route::get('/', 'LoginPageController@setonagi');
+  Route::get('/user/home', 'LoginPageController@setonagi');
 
   Route::get('/setonagi', 'LoginPageController@setonagi')->name('setonagi');
   Route::get('/special_price', 'LoginPageController@index')->name('home');
