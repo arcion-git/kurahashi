@@ -142,7 +142,7 @@ class RegisterController extends Controller
         ],
         'form_params' => [
           'traderCode' => $kakebarai_traderCode,
-          'cId' => $user_id,
+          'cId' => 4,
           'hjkjKbn' => $data['hjkjKbn'],
           'sMei' => $data['company'],
           'shitenMei' => '',
