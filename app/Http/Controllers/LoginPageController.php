@@ -1311,6 +1311,13 @@ class LoginPageController extends Controller
       $nouhin_yoteibi = Order::where(['cart_id'=>$cart_id])->first()->nouhin_yoteibi;
     }
 
+
+    $collect_tradercode = config('app.collect_tradercode');
+    $collect_password = config('app.collect_password').'2';
+    $collect_touroku = config('app.collect_touroku');
+    $collect_token = config('app.collect_token');
+
+
     $data=[
       // 'carts'=>$carts,
       'nouhin_yoteibi'=>$nouhin_yoteibi,
@@ -1323,6 +1330,10 @@ class LoginPageController extends Controller
       'setonagi' => $setonagi,
       'today_plus' => $today_plus,
       'deal_cancel_button' => $deal_cancel_button,
+      'collect_tradercode' => $collect_tradercode,
+      'collect_password' => $collect_password,
+      'collect_touroku' => $collect_touroku,
+      'collect_token' => $collect_token,
     ];
     return view('dealdetail', $data);
   }
@@ -1561,7 +1572,7 @@ class LoginPageController extends Controller
           'trader_code' => $collect_tradercode,
           // パソコンかスマホか
           'device_div' => 1,
-          'order_no' => '00'.$deal_id,
+          'order_no' => $deal_id,
           // 決済合計金額
           'settle_price' => $request->all_total_val,
           'buyer_name_kanji' => $user->name,
