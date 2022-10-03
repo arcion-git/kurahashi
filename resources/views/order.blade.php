@@ -164,7 +164,7 @@
 			<div class="col-sm-12 col-md-2">
 					<label for="company">お支払い方法</label>
 			</div>
-			<div class="col-10">
+			<div class="col-sm-12 col-md-10">
 
 
 				@if ( Auth::guard('user')->check() )
