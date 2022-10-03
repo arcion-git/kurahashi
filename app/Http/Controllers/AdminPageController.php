@@ -362,20 +362,24 @@ class AdminPageController extends Controller
           'traderCode' => $kakebarai_traderCode,
           // バイヤーid
           'buyerId' => $user->id,
-          'buyerTelNo' => $user->tel,
+          'buyerTelNo' => '',
           'passWord' => $kakebarai_passWord
         ]
       ];
       // dd($option);
-      // $response = $client->request('POST', $url, $option);
-      // $result = simplexml_load_string($response->getBody()->getContents());
+      $response = $client->request('POST', $url, $option);
+      $result = simplexml_load_string($response->getBody()->getContents());
       // dd($result);
-      // if($result->returnCode == 0){
-      //   $setonagi_user = Setonagi::where('user_id',$user_id)->first();
-      //   $setonagi_user->kakebarai_sinsa = $result->judgeStatus;
-      //   $setonagi_user->kakebarai_update_time = $now;
-      //   $setonagi_user->save();
-      // }
+      if($result->returnCode == 0){
+        $setonagi_user = Setonagi::where('user_id',$user_id)->first();
+        $setonagi_user->kakebarai_sinsa = $result->judgeStatus;
+        $setonagi_user->kakebarai_update_time = $now;
+        $setonagi_user->save();
+      }elseif($result->returnCode == 1){
+        $setonagi_user = Setonagi::where('user_id',$user_id)->first();
+        $setonagi_user->kakebarai_sinsa = '審査状況照会エラー';
+        $setonagi_user->save();
+      }
 
     // ヤマトAPI連携利用金額確認
       $client = new Client();
@@ -404,6 +408,10 @@ class AdminPageController extends Controller
         $setonagi_user->kakebarai_limit = $result->useOverLimit;
         $setonagi_user->kakebarai_sinsa = $result->useUsable;
         $setonagi_user->kakebarai_update_time = $now;
+        $setonagi_user->save();
+      }elseif($result->returnCode == 1){
+        $setonagi_user = Setonagi::where('user_id',$user_id)->first();
+        $setonagi_user->kakebarai_sinsa = '審査状況照会エラー';
         $setonagi_user->save();
       }
     }
