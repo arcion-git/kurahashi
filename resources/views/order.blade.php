@@ -165,7 +165,18 @@
 					<label for="company">お支払い方法</label>
 			</div>
 			<div class="col-10">
+
+
+				@if ( Auth::guard('user')->check() )
+					@if ( Auth::guard('user')->user()->setonagi()->kakebarai_riyou == 1 )
+						<input required class="radio-input uketori_siharai_radio" type="radio" id="クロネコかけ払い" value="クロネコかけ払い" name="uketori_siharai" @if($setonagi->uketori_siharai == 'クロネコかけ払い') checked @endif ><label for="クロネコかけ払い"> クロネコかけ払い</label>
+					@endif
+				@endif
+
+				@if ( Auth::guard('admin')->check() )
 					<input required class="radio-input uketori_siharai_radio" type="radio" id="クロネコかけ払い" value="クロネコかけ払い" name="uketori_siharai" @if($setonagi->uketori_siharai == 'クロネコかけ払い') checked @endif ><label for="クロネコかけ払い"> クロネコかけ払い</label>
+				@endif
+
 					<input required class="radio-input uketori_siharai_radio" type="radio" id="クレジットカード払い" value="クレジットカード払い" name="uketori_siharai" @if($setonagi->uketori_siharai == 'クレジットカード払い') checked @endif><label for="クレジットカード払い"> クレジットカード払い</label>
 					<input type="hidden" name="token_api" id="token_api" value="{{app('request')->input('token_api')}}"/>
 					<div class="invalid-feedback">
@@ -192,7 +203,7 @@
 							<label for="card_no">カード番号</label>
 						</div>
 						<div class="col-sm-12 col-md-5">
-							<input type="text" class="form-control" name="card_no" maxlength="16" placeholder="************1234" value="0000000000000001">
+							<input type="text" class="form-control" name="card_no" maxlength="16" placeholder="************1234" value="">
 						</div>
 					</div>
 					<div class="input-form row">
@@ -200,7 +211,7 @@
 							<label>カード名義人</label>
 						</div>
 						<div class="col-sm-12 col-md-5">
-							<input type="text" class="form-control" name="card_owner" maxlength="30" placeholder="KURONEKO TARO" value="KURONEKO TARO">
+							<input type="text" class="form-control" name="card_owner" maxlength="30" placeholder="KURONEKO TARO" value="">
 						</div>
 					</div>
 					<div class="input-form row">
@@ -208,7 +219,7 @@
 							<label>カード有効期限</label>
 						</div>
 						<div class="col-sm-12 col-md-5">
-							<input type="text" class="form-control yuukoukigen" name="exp_month" maxlength="2" placeholder="10" value="10">月/ <input class="form-control yuukoukigen" type="text" name="exp_year" maxlength="2" value="24" placeholder="20">年
+							<input type="text" class="form-control yuukoukigen" name="exp_month" maxlength="2" placeholder="10" value="">月/ <input class="form-control yuukoukigen" type="text" name="exp_year" maxlength="2" value="" placeholder="24">年
 						</div>
 					</div>
 					<div class="input-form row">
@@ -216,7 +227,7 @@
 							<label>セキュリティコード</label>
 						</div>
 						<div class="col-sm-12 col-md-5">
-							<input type="text" class="form-control" name="security_code" maxlength="4" placeholder="1234" value="1234">
+							<input type="text" class="form-control" name="security_code" maxlength="4" placeholder="1234" value="">
 						</div>
 					</div>
 					<div class="input-form" style="display:none;">
