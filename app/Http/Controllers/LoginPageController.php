@@ -2065,7 +2065,7 @@ class LoginPageController extends Controller
         // dd($option);
         $response = $client->request('POST', $url, $option);
         $result = simplexml_load_string($response->getBody()->getContents());
-        dd($result);
+        // dd($result);
         if($result->returnCode == 1){
             $id= $deal_id;
             $message = 'キャンセル期間を過ぎたためキャンセルできませんでした。';
@@ -2103,6 +2103,7 @@ class LoginPageController extends Controller
         // dd($option);
         $response = $client->request('POST', $url, $option);
         $result = simplexml_load_string($response->getBody()->getContents());
+                dd($result);
         if($result->returnCode == 1){
           $id= $deal_id;
           $message = 'キャンセル期間を過ぎたためキャンセルできませんでした。';
