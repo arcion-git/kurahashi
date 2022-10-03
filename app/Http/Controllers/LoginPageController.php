@@ -1718,7 +1718,7 @@ class LoginPageController extends Controller
       $total_price = array_sum($total_price);
       $total_price = $total_price * 108 / 100;
       $total_price = number_format($total_price);
-      $total_price =  '【合計金額】<br />'.$total_price.'円（税込）';
+      $total_price = '【合計金額】<br />'.$total_price.'円（税込）';
 
       // オーダーリストの作成
       $order_list=[];

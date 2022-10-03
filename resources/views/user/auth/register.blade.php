@@ -147,7 +147,7 @@
         </div>
         <div class="form-group col-sm-12 col-md-6">
           <label for="address05">ビル・マンション名</label>
-          <input type="text" name="address05" id="address05" class="form-control" placeholder="◯◯ビル４階" value="{{ old('address05') }}">
+          <input type="text" name="address05" id="address05" class="form-control" placeholder="◯◯ビル４階" value="{{ old('address05') }}" required>
           <span class="small">※<span class="red">全角</span>で入力してください。</span>
         </div>
       </div>
