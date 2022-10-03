@@ -1822,20 +1822,20 @@ class LoginPageController extends Controller
       $order_list = implode('<br>', $order_list);
       // dd($order_list);
       $admin_mail = 'info@setonagi.net';
-      Mail::send('emails.register', [
-          'name' => $name,
-          'user' => $user,
-          'text' => $text,
-          'pay' => $pay,
-          'uketori_place' => $uketori_place,
-          'uketori_time' => $uketori_time,
-          'order_list' => $order_list,
-          'total_price' => $total_price,
-          'memo' => $memo,
-          'nouhin_yoteibi' => $nouhin_yoteibi,
-      ], function ($message) use ($email , $admin_mail) {
-          $message->to($email)->bcc($admin_mail)->subject('SETOnagiオーダーブックご注文承りました。');
-      });
+      // Mail::send('emails.register', [
+      //     'name' => $name,
+      //     'user' => $user,
+      //     'text' => $text,
+      //     'pay' => $pay,
+      //     'uketori_place' => $uketori_place,
+      //     'uketori_time' => $uketori_time,
+      //     'order_list' => $order_list,
+      //     'total_price' => $total_price,
+      //     'memo' => $memo,
+      //     'nouhin_yoteibi' => $nouhin_yoteibi,
+      // ], function ($message) use ($email , $admin_mail) {
+      //     $message->to($email)->bcc($admin_mail)->subject('SETOnagiオーダーブックご注文承りました。');
+      // });
       // 注文完了メール送信ここまで
     }
 
