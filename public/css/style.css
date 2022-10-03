@@ -3155,7 +3155,6 @@ a:not(.btn-social-icon):not(.btn-social):not(.page-link) .ion, a:not(.btn-social
 }
 
 
-@media (min-width: 768px) {
 .head-nini_item_name{
   min-width: 130px !important;
   width: 130px !important;
@@ -3208,7 +3207,6 @@ a:not(.btn-social-icon):not(.btn-social):not(.page-link) .ion, a:not(.btn-social
 .head-cartbtn{
   min-width: 210px !important;
   width: 210px !important;
-}
 }
 
 .swal2-popup.swal2-toast .swal2-title{
@@ -3758,17 +3756,20 @@ footer .external_link ul{
 
 
 
-.head-nini_item_name{
+/* .head-nini_item_name{
   min-width: 130px !important;
   width: 130px !important;
+  max-width: 130px !important;
 }
 .head-nini_tantou{
   min-width: 80px !important;
   width: 80px !important;
+  max-width: 80px !important;
 }
 .head-price{
   min-width: 100px !important;
   width: 100px !important;
+  max-width: 100px !important;
 }
 .head-store{
   min-width: 50px !important;
@@ -3810,7 +3811,7 @@ footer .external_link ul{
 .head-cartbtn{
   min-width: 170px !important;
   width: 170px !important;
-}
+} */
 .table:not(.table-sm):not(.table-md):not(.dataTable) td, .table:not(.table-sm):not(.table-md):not(.dataTable) th {
     padding: 5px 5px;
     height: auto;
