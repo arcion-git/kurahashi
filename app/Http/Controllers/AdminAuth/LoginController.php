@@ -60,4 +60,12 @@ class LoginController extends Controller
     {
         return Auth::guard('admin');
     }
+    /**
+     *
+     * ログアウト後のリダイレクト先を「/admin/login」に設定する
+     *
+     */
+    public function logoutToPath() {
+        return '/admin/login';
+    }
 }
