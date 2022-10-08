@@ -3908,3 +3908,8 @@ footer .external_link ul{
 .fancybox-button {
     background: transparent !important
 }
+
+.disabled_btn{
+  pointer-events: none !important;
+  opacity: 0.5 !important;
+}

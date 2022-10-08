@@ -197,7 +197,7 @@
 				</div>
 			</div>
 			<div class="form-group col-12">
-				<form method="POST" action="@if(isset($collect_touroku)){{$collect_touroku}}@endif" name="charge_form" onsubmit="return false;">
+				<form method="POST" action="@if(isset($collect_touroku)){{$collect_touroku}}@endif" name="charge_form" class="charge_form" onsubmit="return false;">
 					<div class="input-form row">
 						<div class="col-sm-12 col-md-2">
 							<label for="card_no">カード番号</label>
@@ -658,6 +658,39 @@ if ($("[id=クロネコかけ払い]").prop("checked") == true) {
 $('#pay_card').hide();
 } else if ($('[id=クレジットカード払い]').prop('checked')) {
 $('#pay_card').show();
+$('input[name="card_no"]').attr('required', true);
+$('input[name="card_owner"]').attr('required', true);
+$('input[name="exp_month"]').attr('required', true);
+$('input[name="yuukoukigen"]').attr('required', true);
+$('input[name="exp_year"]').attr('required', true);
+$('input[name="security_code"]').attr('required', true);
+//始めにjQueryで送信ボタンを無効化する
+$('#card_approval_btn').addClass('disabled_btn');
+//始めにjQueryで必須欄を加工する
+$('.charge_form input:required').each(function () {
+		$(this).prev("label").addClass("required");
+});
+//入力欄の操作時
+$('.charge_form input:required').change(function () {
+		//必須項目が空かどうかフラグ
+		let flag = true;
+		//必須項目をひとつずつチェック
+		$('.charge_form input:required').each(function(e) {
+				//もし必須項目が空なら
+				if ($('.charge_form input:required').eq(e).val() === "") {
+						flag = false;
+				}
+		});
+		//全て埋まっていたら
+		if (flag) {
+				//送信ボタンを復活
+				$('#card_approval_btn').removeClass('disabled_btn');
+		}
+		else {
+				//送信ボタンを閉じる
+				$('#card_approval_btn').addClass('disabled_btn');
+		}
+});
 }
 
 $('[name="uketori_siharai"]:radio').change( function() {
@@ -666,6 +699,39 @@ $('#pay_card').hide();
 $('').fadeIn();
 } else if ($('[id=クレジットカード払い]').prop('checked')) {
 $('#pay_card').show();
+$('input[name="card_no"]').attr('required', true);
+$('input[name="card_owner"]').attr('required', true);
+$('input[name="exp_month"]').attr('required', true);
+$('input[name="yuukoukigen"]').attr('required', true);
+$('input[name="exp_year"]').attr('required', true);
+$('input[name="security_code"]').attr('required', true);
+//始めにjQueryで送信ボタンを無効化する
+$('#card_approval_btn').addClass('disabled_btn');
+//始めにjQueryで必須欄を加工する
+$('.charge_form input:required').each(function () {
+		$(this).prev("label").addClass("required");
+});
+//入力欄の操作時
+$('.charge_form input:required').change(function () {
+		//必須項目が空かどうかフラグ
+		let flag = true;
+		//必須項目をひとつずつチェック
+		$('.charge_form input:required').each(function(e) {
+				//もし必須項目が空なら
+				if ($('.charge_form input:required').eq(e).val() === "") {
+						flag = false;
+				}
+		});
+		//全て埋まっていたら
+		if (flag) {
+				//送信ボタンを復活
+				$('#card_approval_btn').removeClass('disabled_btn');
+		}
+		else {
+				//送信ボタンを閉じる
+				$('#card_approval_btn').addClass('disabled_btn');
+		}
+});
 }
 });
 });
