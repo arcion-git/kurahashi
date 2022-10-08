@@ -20,6 +20,8 @@ class LoginController extends Controller
     |
     */
 
+
+
     use AuthenticatesUsers, LogsoutGuard {
         LogsoutGuard::logout insteadof AuthenticatesUsers;
     }
@@ -52,6 +54,10 @@ class LoginController extends Controller
         return view('user.auth.login');
     }
 
+    public function showWelcome(){
+        return view('user.auth.welcome');
+    }
+
     /**
      * Get the guard to be used during authentication.
      *
@@ -67,4 +73,6 @@ class LoginController extends Controller
     {
         return 'setonagi';
     }
+
+
 }

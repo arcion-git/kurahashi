@@ -54,7 +54,6 @@ class LoginPageController extends Controller
 
 
 
-
   public function questionnaire()
   {
     // if ( Auth::guard('admin')->check() ){

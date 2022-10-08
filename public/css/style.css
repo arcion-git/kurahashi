@@ -3913,3 +3913,23 @@ footer .external_link ul{
   pointer-events: none !important;
   opacity: 0.5 !important;
 }
+.a4_img {
+  padding: 2em 2em 0;
+}
+@media (max-width: 767px) {
+  .a4_img {
+    padding: 0.5em 0.5em 0;
+  }
+}
+.a4_img img{
+  width: 100%;
+  margin-bottom: 2em;
+  border: 1px solid #ccc;
+}
+.welcome_btn button{
+  min-width: 150px;
+  margin-bottom: 20px;
+}
+.welcome_btn .col-6{
+  padding: 5px;
+}
