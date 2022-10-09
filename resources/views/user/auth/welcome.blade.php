@@ -15,10 +15,10 @@
 
   <div class="row a4_img">
     <div class="col-md-6">
-      <img alt="image" src="{{ asset('img/a401.jpg') }}" class="">
+      <a href="{{ asset('img/a401.jpg') }}"><img alt="image" src="{{ asset('img/a401.jpg') }}" class=""></a>
     </div>
     <div class="col-md-6">
-      <img alt="image" src="{{ asset('img/a402.jpg') }}" class="">
+      <a href="{{ asset('img/a402.jpg') }}"><img alt="image" src="{{ asset('img/a402.jpg') }}" class=""></a>
     </div>
   </div>
 
