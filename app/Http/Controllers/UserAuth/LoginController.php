@@ -7,6 +7,11 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
 use Hesto\MultiAuth\Traits\LogsoutGuard;
 
+use App\Contact;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+
 class LoginController extends Controller
 {
     /*
@@ -56,6 +61,57 @@ class LoginController extends Controller
 
     public function showWelcome(){
         return view('user.auth.welcome');
+    }
+
+    public function showWelcomeguide(){
+        return view('user.auth.welcomeguide');
+    }
+
+    public function showWelcomelow(){
+        return view('user.auth.welcomelow');
+    }
+
+    public function showWelcomeprivacypolicy(){
+        return view('user.auth.welcomeprivacypolicy');
+    }
+
+    public function showWelcomecontact(){
+        return view('user.auth.welcomecontact');
+    }
+
+    public function welcomepostcontact(Request $request){
+        $name = $request->name;
+        $address = $request->address;
+        $email = $request->email;
+        $tel = $request->tel;
+        $shubetu = $request->shubetu;
+        $naiyou = $request->naiyou;
+        $contact = Contact::create(['name'=> $name, 'address'=> $address ,'email'=> $email, 'tel'=> $tel, 'shubetu'=> $shubetu, 'naiyou'=> $naiyou ]);
+        $admin_mail = 'info@arcion.jp';
+        $text = 'この度はお問い合わせいただきありがとうございます。<br />下記の内容でお問い合わせを受け付けました。<br />
+        <br />
+        お名前：'.$name.'<br />
+        ご住所：'.$address.'<br />
+        メールアドレス：'.$email.'<br />
+        電話番号：'.$tel.'<br />
+        お問い合わせ種別：'.$shubetu.'<br />
+        お問い合わせ内容：<br />
+        '.$naiyou.'<br />
+        <br />内容を確認し、担当より1〜3営業日以内にご返信させていただきます。
+        <br />今しばらくお待ちください。';
+        Mail::send('emails.register', [
+            'name' => $name,
+            'text' => $text,
+            'admin_mail' => $admin_mail,
+        ], function ($message) use ($email , $admin_mail) {
+            $message->to($email)->bcc($admin_mail)->subject('SETOnagiオーダーブックお問い合わせ完了のお知らせ');
+        });
+        $message = 'お問い合わせ内容が送信されました';
+        $data=[
+          'message'=>$message,
+        ];
+        // return view()->route('welcomecontact',$data);
+        return view('user/auth/welcomecontact', ['data' => $data]);
     }
 
     /**

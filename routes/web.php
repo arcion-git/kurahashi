@@ -23,6 +23,11 @@
   // 顧客側ページ
   // Route::get('/', 'LoginPageController@index')->name('home');
   Route::get('/','UserAuth\LoginController@showWelcome')->name('welcom');
+  Route::get('/welcomeguide','UserAuth\LoginController@showWelcomeguide')->name('welcomguide');
+  Route::get('/welcomelow','UserAuth\LoginController@showWelcomelow')->name('welcomlow');
+  Route::get('/welcomeprivacypolicy','UserAuth\LoginController@showWelcomeprivacypolicy')->name('welcomprivacypolicy');
+  Route::get('/welcomecontact','UserAuth\LoginController@showwelcomecontact')->name('welcomecontact');
+  Route::post('/welcomepostcontact', 'UserAuth\LoginController@welcomepostcontact');
 
 
   Route::get('/user/home', 'LoginPageController@setonagi');

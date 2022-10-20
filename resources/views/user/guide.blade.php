@@ -66,20 +66,18 @@
                     </tr>
                     <tr>
                     <td><strong>17:00まで</strong></td>
-                    <td style="background-color: #f2f2f2;">翌営業日 市場引き渡し<br>
-                    9:00〜16:00</td>
+                    <td style="background-color: #f2f2f2;">翌営業日 市場引き渡し</td>
                     </tr>
                     <tr>
                     <td><strong>17:00以降</strong></td>
-                    <td style="background-color: #f2f2f2;">翌々営業日 市場引き渡し<br>
-                    9:00〜16:00</td>
+                    <td style="background-color: #f2f2f2;">翌々営業日 市場引き渡し</td>
                     </tr>
                     </tbody>
                     </table>
                     <p>&nbsp;<br>
                     <span class="red">日曜祝祭日並びに水曜日<a href="https://setonagi.net/wp-content/uploads/2021/12/２０２２年休市カレンダー.pdf" target="_blank" rel="noopener">（市場休日カレンダーはこちら）</a>等の市場休日については、注文は受け付けておりますが、出荷並びに市場渡しは休み明けとなりますのでご注意ください。</span></p>
                     <h2 id="haisou">５．商品のお引渡しについて</h2>
-                    <p>ご注文商品のお引渡し場所は、福山市内２ヶ所の市場のどちらかをご注文時にご指定ください。<br>
+                    <p>ご注文商品のお引渡し場所は、ご注文時に選択肢からご指定ください。<br>
                     ※ お引渡し受付時間が異なりますので、ご注意ください。</p>
                     <p>① お荷物のお受け取りにお越しいただきましたら、各所の受取カウンターにてお申し付け下さい。<br>
                     ② 受付担当者に、SETOnagiの商品お引き取りの旨と、お名前、メールにてご案内いたします「ご注文番号」をお伝えください。<br>
@@ -87,16 +85,25 @@
                     <p>◇ ご注文時にご指定のお時間にお引き取りにいらっしゃらない場合は、当日にヤマト運輸の宅急便にて、ご登録住所へ商品を郵送させていただきます。<br>
                     ◇ 郵送でのご納品の場合は、1個口につき、2,380円の配送手数料がかかります。</p>
                     <h2>６．お引渡し場所について</h2>
-                    <!-- <h3>マリンネクスト (三原市糸崎) <span class="red">受け取り可能時間：9時～15時</span></h3>
+
+                    <h3>マリンネクスト (三原市糸崎) <span class="red">受け取り可能時間：9時～15時</span></h3>
                     <p>〒729-0324 広島県三原市糸崎９丁目４<br>
                     お引渡受付時間　9:00～15:00（水・日・祝除く）<br>
                     TEL：084-863-6660</p>
-                    <p><iframe loading="lazy" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3292.7084462717876!2d133.11255571495488!3d34.38333490765722!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x355055c3a8c6db03%3A0xe8d6bd85d5e50ef9!2z44Oe44Oq44Oz44ON44Kv44K544OI!5e0!3m2!1sja!2sjp!4v1648661000311!5m2!1sja!2sjp" width="100%" height="300" frameborder="0" allowfullscreen="allowfullscreen" aria-hidden="false"></iframe></p> -->
-                    <h3>福山魚市場（福山市引野町　福山引き取り窓口 ㈱クラハシ）<span class="red">受け取り可能時間：9時～16時</span></h3>
+                    <p><iframe loading="lazy" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3292.7084462717876!2d133.11255571495488!3d34.38333490765722!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x355055c3a8c6db03%3A0xe8d6bd85d5e50ef9!2z44Oe44Oq44Oz44ON44Kv44K544OI!5e0!3m2!1sja!2sjp!4v1648661000311!5m2!1sja!2sjp" width="100%" height="300" frameborder="0" allowfullscreen="allowfullscreen" aria-hidden="false"></iframe></p>
+
+                    <h3>株式会社ケンスイ（尾道市東尾道）<span class="red">受け取り可能時間：8時～17時</span></h3>
+                    <p>〒722-0051 広島県尾道市東尾道7番地2<br>
+                    お引渡受付時間　8:00～17:00（水・日・祝除く）<br>
+                    TEL：0848-46-3515</p>
+                    <p><iframe style="border: 0;" tabindex="0" src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d13165.576922219221!2d133.2363559!3d34.41674!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x761df09f92408f2f!2z77yI5qCq77yJ44Kx44Oz44K544Kk!5e0!3m2!1sja!2sjp!4v1611846239024!5m2!1sja!2sjp" width="100%" height="300" frameborder="0" allowfullscreen="allowfullscreen" aria-hidden="false"></iframe></p>
+
+                    <!-- <h3>福山魚市場（福山市引野町　福山引き取り窓口 ㈱クラハシ）<span class="red">受け取り可能時間：9時～16時</span></h3>
                     <p>〒721-0942 広島県福山市引野町1-1-1 福山市地方卸売市場内<br>
                     お引渡受付時間　9:00～16:00（水・日・祝除く）<br>
                     TEL：084-941-3510</p>
-                    <p><iframe loading="lazy" style="border: 0;" tabindex="0" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3288.29273894009!2d133.401007915404!3d34.49546210168986!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x35511154f17b0dbd%3A0x498780d753ce4861!2z44CSNzIxLTA5NDIg5bqD5bO255yM56aP5bGx5biC5byV6YeO55S677yR5LiB55uu77yR4oiS77yR!5e0!3m2!1sja!2sjp!4v1629160088292!5m2!1sja!2sjp" width="100%" height="300" frameborder="0" allowfullscreen="allowfullscreen" aria-hidden="false"></iframe></p>
+                    <p><iframe loading="lazy" style="border: 0;" tabindex="0" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3288.29273894009!2d133.401007915404!3d34.49546210168986!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x35511154f17b0dbd%3A0x498780d753ce4861!2z44CSNzIxLTA5NDIg5bqD5bO255yM56aP5bGx5biC5byV6YeO55S677yR5LiB55uu77yR4oiS77yR!5e0!3m2!1sja!2sjp!4v1629160088292!5m2!1sja!2sjp" width="100%" height="300" frameborder="0" allowfullscreen="allowfullscreen" aria-hidden="false"></iframe></p> -->
+
                     <p>※お引き渡し場所は随時追加をいたします。</p>
                     <h2><strong>７．交換・返品について</strong></h2>
                     <ul style="list-style-type: square;">
@@ -150,13 +157,13 @@
                     <h2><strong>１０．お問い合わせ</strong></h2>
                     <p>SETOnagiについて、会員登録方法について、ご不明な点等ございましたら、下記までお問い合わせください。<br>
                     お問い合わせフォームからは、24時間受け付けております。(ご回答までに1営業日頂く場合がございます。)<br>
-                    【お問い合わせ】<br>
+                    <!-- 【お問い合わせ】<br>
                     TEL: 084-941-3510<br>
                     受付時間: 9:00-12:30、13:30-17:00（水・日・祝休み）</p>
                     <p>運営：株式会社クラハシ<br>
-                    〒721-0942 広島県福山市引野町１丁目１−１<br>
+                    〒721-0942 広島県福山市引野町１丁目１−１<br> -->
                     EMAIL：<a href="mailto:info@setonagi.net">info@setonagi.net</a><br />
-                    URL：<a href="https://www.kurahashi.co.jp/">https://www.kurahashi.co.jp/</a></p>
+                    <!-- URL：<a href="https://www.kurahashi.co.jp/">https://www.kurahashi.co.jp/</a></p> -->
                     </div>
 
 

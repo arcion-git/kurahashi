@@ -136,9 +136,9 @@
 				@else
 				<option value="" selected>選択してください</option>
 				@endif
-				<option value="福山魚市引き取り">福山魚市引き取り</option>
-				<!-- <option value="引取り（マリンネクスト）">引取り（マリンネクスト）</option>
-				<option value="引取り（尾道ケンスイ）">引取り（尾道ケンスイ）</option> -->
+				<!-- <option value="福山魚市引き取り">福山魚市引き取り</option> -->
+				<option value="引取り（マリンネクスト）">三原引き取り<（マリンネクスト）/option>
+				<option value="引取り（尾道ケンスイ）">尾道引取り（ケンスイ）</option>
 				</select>
 			</div>
 		</div>
@@ -155,7 +155,7 @@
 				@endif
 				<option value="午前中">午前中</option>
 				<option value="12時〜14時">12時〜14時</option>
-				<option value="14時〜16時">14時〜16時</option>
+				<option value="14時〜16時">14時〜15時</option>
 				<!-- <option value="16時〜18時">16時〜18時</option> -->
 				</select>
 			</div>

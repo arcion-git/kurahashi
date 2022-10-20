@@ -478,7 +478,8 @@
   						<div class="flex-container">
   							<div class="footer_logo">
   								<img src="{{ asset('img/logo-w.png') }}">
-  								<p>【運営元】<br><strong>株式会社クラハシ</strong><br>〒721-0942広島県福山市引野町1-1-1<br>福山市地方卸売市場内</p>
+  								<!-- <p>【運営元】<br><strong>株式会社クラハシ</strong><br>〒721-0942広島県福山市引野町1-1-1<br>福山市地方卸売市場内</p> -->
+  								<p>【運営元】<br><strong>株式会社U-midas</strong><br>広島県三原市糸崎７丁目８番２２号</p>
   							</div>
   							<div class="footer_menu">
   								<ul class="">
@@ -489,20 +490,21 @@
   							</div>
   							<div class="footer_contact">
   								<h3>お問い合わせ窓口<span>CONTACT</span></h3>
-  								<p><strong>TEL 084-941-3510</strong></p>
+  								<!-- <p><strong>TEL 084-941-3510</strong></p> -->
+  								<p><strong>TEL 080-2943-7978</strong></p>
   								<p class="small">平日9：00～18：00（定休 土日祝）</p>
   								<a href="{{ url('/contact') }}"><div class="btn navy">お問い合わせフォーム</div></a>
   							</div>
   						</div>
   						<div class="flex-container external_link">
   							<ul class="">
-  								<li><a href="https://www.kurahashi.co.jp/" target="_blank">株式会社クラハシオフィシャルサイト<img src="https://setonagi.net/wp-content/themes/welcart_basic-beldad-expo/assets/images/expo/footer_link.png"></a></li>
+  								<!-- <li><a href="https://www.kurahashi.co.jp/" target="_blank">株式会社クラハシオフィシャルサイト<img src="https://setonagi.net/wp-content/themes/welcart_basic-beldad-expo/assets/images/expo/footer_link.png"></a></li> -->
   								<li><a href="http://u-midas.com/" target="_blank">株式会U-midasフィシャルサイト<img src="https://setonagi.net/wp-content/themes/welcart_basic-beldad-expo/assets/images/expo/footer_link.png"></a></li>
   							</ul>
   						</div>
   						<div class="flex-container sns_link">
   							<ul class="">
-  								<li><a href="https://twitter.com/U_midas" target="_blank"><img src="https://setonagi.net/wp-content/themes/welcart_basic-beldad-expo/assets/images/expo/footer_twitter.png"></a></li>
+  								<!-- <li><a href="https://twitter.com/U_midas" target="_blank"><img src="https://setonagi.net/wp-content/themes/welcart_basic-beldad-expo/assets/images/expo/footer_twitter.png"></a></li> -->
   								<li><a href="https://www.youtube.com/c/KurahashiCoJp" target="_blank"><img src="https://setonagi.net/wp-content/themes/welcart_basic-beldad-expo/assets/images/expo/footer_youtube.png"></a></li>
   							</ul>
   							<p class="copyright">© UMIDASU Co., Ltd.  All rights reserved.</p>
@@ -532,9 +534,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="https://ajaxzip3.github.io/ajaxzip3.js" charset="UTF-8"></script>
     <script src="{{ asset('js/stisla.js') }}"></script>
-
-
-
 
     <!-- JS Libraies -->
     <!-- <script src="../node_modules/jquery-pwstrength/jquery.pwstrength.min.js"></script>

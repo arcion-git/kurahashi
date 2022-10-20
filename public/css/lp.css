@@ -1,0 +1,691 @@
+@charset "UTF-8";
+body{
+  background-color: #E2F1FC;
+}
+p{
+  color: #000000;
+}
+a:hover{
+  text-decoration: none;
+  opacity: 0.5;
+}
+.bg02{
+  background-image: url('../img/lp/bg02.jpg');
+  background-size: cover;
+  height: 200px;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+.bg03{
+  background-image: url('../img/lp/bg03.jpg');
+  background-size: cover;
+  height: 230px;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+.bg04{
+  background-image: url('../img/lp/bg04.jpg');
+  background-size: cover;
+  height: 230px;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+.small{
+  line-height: 160%;
+}
+.header_bg{
+  background-image: url('../img/lp/bg01.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  border: 0;
+}
+.header_bg header{
+  margin: auto;
+  padding-top: 1em;
+  display: flex;
+  justify-content:space-between;
+  max-width: 980px;
+}
+.header_bg .logo img{
+  max-width: 200px;
+}
+.header_bg .menu{
+  display: flex;
+  list-style: none;
+}
+.header_bg .menu li{
+  margin-left: 10px;
+}
+.header_bg .menu li a{
+  text-decoration: none;
+}
+.top_message{
+
+  margin: 3em auto;
+  display: flex;
+  justify-content:space-between;
+  max-width: 1500px;
+}
+.register_btn a{
+  border-radius: 5px;
+  border: 3px solid #1f499e;
+  padding: 5px 15px;
+  color: #1f499e;
+  font-weight: bold;
+}
+.login_btn a{
+  padding: 5px 15px;
+  border-radius: 5px;
+  border: 3px solid #1f499e;
+  background-color: #1f499e;
+  font-weight: bold;
+  color: #fff;
+}
+.device{
+  padding-top: 3%;
+  width: 50%;
+}
+.catch{
+  width: 50%;
+  padding-right: 5%;
+}
+.catch img,
+.device img{
+  width: 100%;
+}
+.catch p{
+  margin-top: 20px;
+}
+.nagi01{
+  padding-left: 100px;
+}
+.nagi01 img{
+  max-width: 200px;
+}
+section{
+  /* text-align: center; */
+  padding: 3em 0 !important;
+}
+.news{
+  margin: auto;
+  max-width: 600px;
+}
+.news li {
+  list-style: none;
+  font-size: 1.1em;
+}
+.news li span{
+  color: #1F499E;
+  margin-right: 1em;
+}
+h2{
+  font-size: 1.8em;
+  margin-bottom: 20px;
+  font-weight: bold;
+  color: #1F499E;
+  text-align: center;
+}
+.about{
+  display: flex;
+  justify-content:space-between;
+  background-color: #fff;
+  margin: auto;
+  max-width: 850px;
+  padding: 2em;
+  border-radius: 10px;
+}
+.about_logo{
+  width: 60%;
+  padding: 2em 2em 2em 0;
+  display: flex;
+  align-items: center;
+  justify-content:center;
+}
+.about_text{
+  background-image: url('../img/lp/nagi02.png');
+  background-size: 200px;
+  background-repeat: no-repeat;
+  background-position: right 15px bottom 45px;
+}
+.nagi06{
+  background-image: url('../img/lp/nagi06.png');
+  background-size: 200px;
+  background-repeat: no-repeat;
+  background-position: right 0px bottom 0px;
+}
+.nagi04 {
+    margin: auto;
+    max-width: 850px;
+    height: 150px;
+    background-image: url(../img/lp/nagi04.png);
+    background-size: 200px;
+    background-repeat: no-repeat;
+    background-position: right 0px bottom 0px;
+}
+.nagi05 h2 {
+    padding-top: 100px;
+}
+.nagi04 h2 {
+    padding-top: 100px;
+}
+.nagi05 {
+    margin: auto;
+    max-width: 850px;
+    height: 150px;
+    background-image: url('../img/lp/nagi05.png');
+    background-size: 200px;
+    background-repeat: no-repeat;
+    background-position: left 0px top 0px;
+}
+.about_text span{
+  background: linear-gradient(transparent 60%, #F8C489 60%);
+}
+.about_logo img{
+  max-width: 250px;
+}
+.about .blue{
+  color: #1F499E;
+  font-weight: bold;
+}
+.nagi03{
+  margin: auto;
+  max-width: 850px;
+  height: 150px;
+  background-image: url('../img/lp/nagi03.png');
+  background-size: 250px;
+  background-repeat: no-repeat;
+  background-position: left 0px bottom 0px;
+}
+.nagi03 h2{
+  padding-top: 100px;
+}
+.benefit{
+  display: flex;
+  justify-content:space-between;
+  background-color: #fff;
+  margin: auto;
+  max-width: 850px;
+  padding: 2em;
+  border-radius: 10px;
+}
+.benefit_item {
+  width: 32%;
+}
+.benefit_title{
+  margin: 1em 0;
+}
+.benefit_title h3{
+  font-size: 1.2em;
+  line-height: 160%;
+  text-align: center;
+  color: #1F499E;
+}
+.benefit_item img{
+  width: 100%;
+}
+.annotation{
+  text-align: center;
+  margin-top: 10px;
+}
+.function_bigtitle span{
+  color: #fc80a9;
+  font-size: 1.4em;
+}
+#FUNCTION,
+#GENTEI{
+  background-color: #fff;
+}
+.function{
+  flex-wrap: wrap;
+  display: flex;
+  justify-content:space-between;
+  background-color: #fff;
+  margin: auto;
+  max-width: 850px;
+  border-radius: 10px;
+}
+.function_item {
+  padding: 20px;
+  width: 33%;
+  background-color: #f7f8fb;
+  margin-bottom: 0.5%;
+}
+.function_title{
+  margin: 1em 0;
+}
+.function_img {
+  display: flex;
+  align-items: center;
+  justify-content:center;
+  padding: 2em;
+}
+.function_img img{
+  max-width: 80px;
+}
+.function_title h3{
+  font-size: 1.2em;
+  line-height: 160%;
+  text-align: center;
+  color: #fc80a9;
+}
+.function_text p{
+  margin: 0;
+}
+.function_text span{
+  font-weight: bold;
+}
+.function_item img{
+  width: 100%;
+}
+.pay_bigtitle{
+
+}
+.pay_bigtitle span{
+  font-size: 0.6em;
+}
+.pay{
+  flex-wrap: wrap;
+  display: flex;
+  justify-content:space-between;
+  margin: auto;
+  max-width: 850px;
+  border-radius: 10px;
+}
+.pay_item {
+
+}
+.kakebarai{
+  width: 33%;
+}
+.creditcard{
+  width: 66%;
+}
+.creditcard img{
+  max-width: 400px
+}
+.pay_title{
+  margin: 1em 0;
+}
+.pay_img {
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content:center;
+  padding: 3em;
+  height: 250px;
+  margin-bottom: 0.5%;
+}
+.pay_img img{
+  width: 100%;
+}
+.pay_title h3{
+  font-size: 1.2em;
+  line-height: 160%;
+  text-align: center;
+  color: #fc80a9;
+}
+.pay_text p{
+  margin: 0;
+}
+.kakebarai_merit{
+  margin: 20px auto;
+  max-width: 850px;
+  color: #000;
+}
+
+.kakebarai_merit_text {
+border: 2px solid #333;
+border-radius: 5px;
+padding: 30px 30px 20px;
+position: relative;
+}
+
+.kakebarai_merit_text::before {
+background-color: #E2F1FC;
+color: #333;
+content: "《クロネコ掛け払いサービスご利用のメリット》";
+font-weight: bold;
+left: 30px;
+padding: 3px 10px;
+position: absolute;
+top: -15px;
+}
+
+.kakebarai_merit_text span{
+  font-weight: bold;
+}
+
+.hikitori{
+  margin: 20px auto;
+  max-width: 850px;
+  color: #000;
+}
+#START{
+  background-color: #fff;
+}
+.start{
+  margin: 20px auto;
+  max-width: 850px;
+  color: #000;
+}
+.start img{
+  width: 100%;
+}
+.hikitori_title{
+  font-size: 1.2em;
+  line-height: 160%;
+  font-weight: bold;
+}
+.hikitori_item{
+  margin-bottom: 20px;
+}
+.hikitori_title{
+  font-size: 1.2em;
+  line-height: 160%;
+  font-weight: bold;
+}
+.start_item{
+  margin-bottom: 20px;
+}
+.start_title{
+  font-size: 1.2em;
+  line-height: 160%;
+  font-weight: bold;
+  text-align: center;
+  color: #fc80a9;
+  margin-bottom: 20px;
+}
+.start_btn{
+  margin: 20px 0;
+  text-align: center;
+  border-radius: 5px;
+  color: #fff;
+  font-weight: bold;
+  font-size: 1.2em;
+  padding: 1em;
+  background-color: #1d2189;
+  border: 5px solid  rgba(#161b95,1);
+  margin-bottom: 30px;
+}
+.welcome{
+  max-width: 1000px;
+  margin: auto;
+}
+.welcome h2{
+  text-align: left;
+}
+@media (min-width: 768px) {
+.sp{
+  display: none !important;
+}
+section {
+    padding: 3em 10px !important;
+}
+.header_bg{
+  padding: 0 10px;
+}
+}
+@media (max-width: 767px) {
+.about_text{
+  background-image: none;
+}
+.sp_nagi02 {
+  text-align: right;
+  margin-bottom: 20px;
+}
+.nagi05 h2 {
+    padding-top: 125px;
+}
+.sp_nagi02 img{
+  width: 200px;
+}
+h2 {
+    font-size: 1.3em;
+}
+.nagi06{
+  background-image: none;
+}
+.nagi04 {
+    margin: auto;
+    max-width: 850px;
+    height: 150px;
+    background-image: url(../img/lp/nagi04.png);
+    background-size: 200px;
+    background-repeat: no-repeat;
+    background-position: left 0px bottom 0px;
+}
+.function_title h3{
+  font-size: 1em;
+}
+.pc{
+  display: none !important;
+}
+.about_logo {
+    width: 100%;
+    padding: 1em 2em 2em 2em;
+}
+.news{
+  padding-left: 0px;
+}
+.header_bg{
+  padding: 0 10px;
+}
+.header_bg header{
+  display: block;
+}
+.top_message{
+  display: block;
+}
+.about{
+  display: block;
+}
+.benefit{
+  display: block;
+}
+.benefit_item {
+  width: 100%;
+}
+.function_item {
+  width: 49.5%;
+  margin-bottom: 1%;
+}
+.pay{
+  display: block;
+}
+.creditcard,
+.kakebarai {
+    width: 100%;
+}
+.catch,
+.device{
+  width: 100%;
+  padding-right: 0%;
+}
+.function_item{
+  padding: 10px;
+}
+.pay_img{
+  height: auto;
+  padding: 2em;
+}
+.kakebarai .pay_img img{
+  max-width: 200px;
+}
+.kakebarai_merit_text {
+    padding: 1em 1em 0.5em;
+}
+.kakebarai_merit_text::before {
+    left: 8px;
+    padding: 0px 0px;
+    top: -10px;
+}
+.pay_title h3{
+  font-size: 1.0em;
+}
+.start_btn {
+    font-size: 1em;
+    padding: 0.7em;
+}
+section {
+    padding: 3em 10px !important;
+}
+.bg02{
+  height: 50px;
+}
+.bg04{
+  height: 70px;
+}
+.bg03{
+  height: 90px;
+}
+/*
+hamburger(ハンバーガーアイコン)
+=================================== */
+.hamburger {
+  position: absolute;
+  right: 20px;
+  top: 25px;
+  width: 50px;
+  height: 40px;
+  cursor: pointer;
+  z-index: 300;
+}
+
+.hamburger__line {
+  position: absolute;
+  width: 40px;
+  height: 2px;
+  right: 0;
+  background-color: #000;
+  transition: all 0.5s;
+}
+
+.hamburger__line--1 {
+  top: 1px;
+}
+
+.hamburger__line--2 {
+  top: 10px;
+}
+
+.hamburger__line--3 {
+  top: 20px;
+}
+
+/*ハンバーガーがクリックされたら*/
+.open .hamburger__line--1 {
+  transform: rotate(-45deg);
+  top: 11px;
+}
+
+.open .hamburger__line--2 {
+  opacity: 0;
+}
+
+.open .hamburger__line--3 {
+  transform: rotate(45deg);
+  top: 11px;
+}
+
+/*
+sp-nav(ナビ)
+=================================== */
+.sp-nav {
+  position: fixed;
+  right: -100%; /*ハンバーガーがクリックされる前はWindow右側に隠す*/
+  top: 0;
+  width: 70%; /* 出てくるスライドメニューの幅 */
+  height: 100vh;
+  background-color: #fff;
+  transition: all 0.5s;
+  z-index: 200;
+  overflow-y: auto; /* メニューが多くなったらスクロールできるように */
+}
+
+/*ハンバーガーがクリックされたら右からスライド*/
+.open .sp-nav {
+  right: 0;
+}
+
+.sp-nav ul{
+  list-style: none;
+  padding: 30px 0 0 30px;
+}
+.sp-nav ul li{
+  height: 40px;
+}
+
+
+/*
+black-bg(ハンバーガーメニュー解除用bg)
+=================================== */
+.black-bg {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 5;
+  background-color: #000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.5s;
+  cursor: pointer;
+  z-index: 100;
+}
+
+/*ハンバーガーメニューが開いたら表示*/
+.open .black-bg {
+  opacity: 0.3;
+  visibility: visible;
+}
+#colophon {
+  padding: 20px 30px 20px 30px;
+  color: #98a6ad;
+  border-top: 1px solid #e3eaef;
+  display: inline-block;
+  width: 100%; }
+  .main-footer .footer-left {
+    float: left; }
+  .main-footer .footer-right {
+    float: right; }
+}
+
+
+#colophon {
+    background-color: #1366e0 !important;
+}
+#colophon p{
+  color: #fff;
+}
+.column_footer {
+    max-width: 1100px;
+    margin: 0px auto 0px;
+    padding: 50px 0 0 !important;
+}
+.top_welcome .header_bg{
+  background-color: #fff !important;
+  background-image: none;
+}
+.top_welcome .logo{
+  padding-bottom: 15px;
+}
+.top_welcome .menu{
+  margin-top: 10px;
+}
+.gentei{
+  padding: 1em;
+  border-radius: 5px;
+  background-color: #f4f7f9;
+  text-align: center;
+  margin: 20px auto;
+  max-width: 850px;
+}
+.gentei img{
+  width: 100%;
+}
+.nagi01{
+  padding-left: 200px;
+}
+}

@@ -1,9 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.lp')
 
 @section('content')
 
 
-<section class="section">
+<section class="section welcome">
   <div class="section-header">
     <h1>お問い合わせ</h1>
     <div class="section-header-breadcrumb">
@@ -17,7 +17,7 @@
     <div class="row mt-4">
       <div class="col-12">
         <div class="card">
-          <form class="form-horizontal" role="form" method="POST" action="{{ url('/postcontact') }}">
+          <form class="form-horizontal" role="form" method="POST" action="{{ url('/welcomepostcontact') }}">
           @csrf
             <div class="card-body mt-4">
               <div class="form-group row mb-4">
@@ -49,6 +49,7 @@
                 <div class="col-sm-12 col-md-7">
                   <div class="selectric-wrapper selectric-form-control selectric-selectric selectric-below">
                     <select class="form-control selectric" tabindex="-1" name="shubetu" value="">
+                    <option value="会員登録のお申し込み">会員登録のお申し込み</option>
                     <option value="商品について">商品について</option>
                     <option value="商品の不備・ご意見">商品の不備・ご意見</option>
                     <option value="ご注文について">ご注文について</option>
@@ -60,7 +61,7 @@
               <div class="form-group row mb-4">
                 <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">お問い合わせ内容</label>
                 <div class="col-sm-12 col-md-7">
-                  <textarea style="height:250px;" name="naiyou" rows="10" value="" class="form-control selectric"></textarea required>
+                  <textarea style="height:250px;" name="naiyou" rows="10" value="" class="form-control selectric"></textarea>
                 </div>
               </div>
               <div class="form-group row mb-4">

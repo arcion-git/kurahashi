@@ -1,0 +1,1 @@
+[10/17/2022, 6:54:47 PM] layer "kinou06.png200%": Invalid quality: 200
