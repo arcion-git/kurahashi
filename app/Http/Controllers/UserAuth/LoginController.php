@@ -87,7 +87,7 @@ class LoginController extends Controller
         $shubetu = $request->shubetu;
         $naiyou = $request->naiyou;
         $contact = Contact::create(['name'=> $name, 'address'=> $address ,'email'=> $email, 'tel'=> $tel, 'shubetu'=> $shubetu, 'naiyou'=> $naiyou ]);
-        $admin_mail = 'info@arcion.jp';
+        $admin_mail = 'info@setonagi.net';
         $text = 'この度はお問い合わせいただきありがとうございます。<br />下記の内容でお問い合わせを受け付けました。<br />
         <br />
         お名前：'.$name.'<br />
