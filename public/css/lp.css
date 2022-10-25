@@ -440,9 +440,12 @@ section {
 }
 }
 @media (max-width: 767px) {
-.start_img .sp img{
-  width: 90%;
-  margin: auto;
+.start_img{
+  text-align: center;
+}
+.start_img .sp{
+  width: 80%;
+  text-align: center;
 }
 .about_text{
   background-image: none;
