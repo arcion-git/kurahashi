@@ -90,11 +90,16 @@
     <section id="ABOUT">
       <h2>SETOnagiオーダーブックでできること</h2>
       <div class="about">
-        <div class="about_logo">
-            <img src="{{ asset('img/logo.png') }}" />
+        <div class="about_div">
+          <div class="about_logo">
+              <img src="{{ asset('img/logo.png') }}" />
+          </div>
+          <div class="about_text nagi02">
+              <p>SETOnagiオーダーブックは、<span>新鮮な市場のお魚をネットショプ感覚</span>でかんたんに<span>仕入れ・購入できるサービス</span>です。<br />また当サービスは、<span>老舗の「魚市場」が運営しています。</span><br />当社営業が、「人的パワー」でお客様の仕入れをバックアップ、<br /><span>今が旬の商品、おすすめの仕入れ商品をご提案</span>をさせていただきます。<br />安心できる食品・食材を市場から、<br /><span class="blue">「美味しいで元気。」</span><br />お届けいたします。<br /><div class="sp sp_nagi02"><img class="" src="{{ asset('img/lp/nagi02.png') }}" /></div><p class="small">※弊社と取引のないお客様はヤマト<br />掛け払いの審査があり、法人会員様限定となります。<br />※市場での引き取り限定となります。<br />（配送に関しましては、今後ご用意予定です。）</p>
+          </div>
         </div>
-        <div class="about_text nagi02">
-            <p>SETOnagiオーダーブックは、<span>新鮮な市場のお魚をネットショプ感覚</span>でかんたんに<span>仕入れ・購入できるサービス</span>です。<br />また当サービスは、<span>老舗の「魚市場」が運営しています。</span><br />当社営業が、「人的パワー」でお客様の仕入れをバックアップ、<br /><span>今が旬の商品、おすすめの仕入れ商品をご提案</span>をさせていただきます。<br />安心できる食品・食材を市場から、<br /><span class="blue">「美味しいで元気。」</span><br />お届けいたします。<br /><div class="sp sp_nagi02"><img class="" src="{{ asset('img/lp/nagi02.png') }}" /></div><p class="small">※弊社と取引のないお客様はヤマト掛け払いの審査があり、<br />　法人会員様限定となります。<br />※市場での引き取り限定となります。（配送に関しましては、今後ご用意予定です。）</p>
+        <div class="about_add">
+          <img src="{{ asset('img/lp/add.jpg') }}" />
         </div>
       </div>
     </section>
@@ -119,7 +124,7 @@
             <img src="{{ asset('img/lp/merit02.jpg') }}" />
           </div>
           <div class="benefit_title">
-            <h3>お支払いは月に１度<br />掛け払い・クレジットカード※で<br />まとめて決済</h3>
+            <h3>お支払いは月に１度<br />掛け払い・クレジットカード<br />まとめて決済</h3>
           </div>
           <div class="benefit_text">
               <p>企業間における請求業務の決済サービスになりますので、都度決済ではなく、ビジネスサイクルとして当サイトのお支払い方法をご活用いただけます。<span>毎回現金でお支払いする手間を省く</span>ことができます。<br /><a href="#PAY">決済方法の詳細はこちら</a></p>
@@ -284,13 +289,13 @@
       <div class="start">
         <div class="start_item">
           <div class="start_title">弊社とのお取引が初めてのお客様</div>
-          <div class="start_img"><img src="{{ asset('img/lp/start01.jpg') }}" /></div>
-          <a href="{{ route('register') }}"><div class="start_btn">会員登録はこちら</div></a>
+          <div class="start_img"><img class="pc" src="{{ asset('img/lp/start01.jpg') }}" /><img class="sp" src="{{ asset('img/lp/start01sp.jpg') }}" /></div>
+          <div class="start_btn start_btn01">会員登録はこちら</div>
         </div>
         <div class="start_item">
           <div class="start_title">既に弊社と取引があるお客様</div>
-          <div class="start_img"><img src="{{ asset('img/lp/start02.jpg') }}" /></div>
-          <a href="{{ url('/welcomecontact') }}"><div class="start_btn">既に弊社と取引があるお客様</div></a>
+          <div class="start_img"><img class="pc" src="{{ asset('img/lp/start02.jpg') }}" /><img class="sp" src="{{ asset('img/lp/start02sp.jpg') }}" /></div>
+          <div class="start_btn start_btn02">既に弊社と取引があるお客様</div>
         </div>
         <p class="annotation small">※お電話でお申し込みの場合は、担当営業にご連絡ください。</p>
       </div>
@@ -368,6 +373,37 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
     <script>
+
+    $(function() {
+      $(".start_btn01").click(function(){
+        Swal.fire({
+          title: '',
+          html : '弊社とのお取引が初めてですか？<br />会員登録画面に移動します。',
+          icon : 'warning',
+          showCancelButton: true,
+      	  cancelButtonText: 'いいえ',
+          confirmButtonText: 'はい'
+        }).then((result) => {
+          if (result.value) {
+            window.location.href = "{{ route('register') }}";
+          }
+        });
+      });
+      $(".start_btn02").click(function(){
+        Swal.fire({
+          title: '',
+          html : '過去に弊社と取引がありますか？<br />お問い合わせ画面に移動します。',
+          icon : 'warning',
+          showCancelButton: true,
+      	  cancelButtonText: 'いいえ',
+          confirmButtonText: 'はい'
+        }).then((result) => {
+          if (result.value) {
+            window.location.href = "{{ url('/welcomecontact') }}";
+          }
+        });
+      });
+    });
     //ＵＲＬのパラメータを取得するための関数
     function getUrlParam(param){
         var pageUrl = window.location.search.substring(1);
