@@ -440,6 +440,10 @@ section {
 }
 }
 @media (max-width: 767px) {
+.start_img .sp img{
+  width: 90%;
+  margin: auto;
+}
 .about_text{
   background-image: none;
 }
