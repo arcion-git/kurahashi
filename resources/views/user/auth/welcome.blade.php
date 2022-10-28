@@ -98,6 +98,8 @@
               <p>SETOnagiオーダーブックは、<span>新鮮な市場のお魚をネットショプ感覚</span>でかんたんに<span>仕入れ・購入できるサービス</span>です。<br />また当サービスは、<span>老舗の「魚市場」が運営しています。</span><br />当社営業が、「人的パワー」でお客様の仕入れをバックアップ、<br /><span>今が旬の商品、おすすめの仕入れ商品をご提案</span>をさせていただきます。<br />安心できる食品・食材を市場から、<br /><span class="blue">「美味しいで元気。」</span><br />お届けいたします。<br /><div class="sp sp_nagi02"><img class="" src="{{ asset('img/lp/nagi02.png') }}" /></div><p class="small">※弊社と取引のないお客様はヤマト<br />掛け払いの審査があり、法人会員様限定となります。<br />※市場での引き取り限定となります。<br />（配送に関しましては、今後ご用意予定です。）</p>
           </div>
         </div>
+      </div>
+      <div class="about">
         <div class="about_add">
           <img src="{{ asset('img/lp/add.jpg') }}" />
         </div>

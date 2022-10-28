@@ -35,7 +35,7 @@ a:hover{
 }
 .small{
   line-height: 160%;
-  font-size: 90%;
+  font-size: 95%;
 }
 .header_bg{
   background-image: url('../img/lp/bg01.jpg');
@@ -136,6 +136,9 @@ h2{
   max-width: 850px;
   padding: 2em;
   border-radius: 10px;
+}
+.about{
+  margin-bottom: 20px;
 }
 .about_div{
   display: flex;
@@ -293,7 +296,7 @@ h2{
 
 }
 .pay_bigtitle span{
-  font-size: 0.6em;
+  font-size: 0.8em;
 }
 .pay{
   flex-wrap: wrap;
@@ -709,4 +712,7 @@ black-bg(ハンバーガーメニュー解除用bg)
 .nagi01{
   padding-left: 200px;
 }
+}
+section{
+  border-bottom: 1px solid #000;
 }
