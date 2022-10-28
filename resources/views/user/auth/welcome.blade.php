@@ -99,7 +99,7 @@
           </div>
         </div>
       </div>
-      <div class="about">
+      <div class="about02">
         <div class="about_add">
           <img src="{{ asset('img/lp/add.jpg') }}" />
         </div>

@@ -136,9 +136,14 @@ h2{
   max-width: 850px;
   padding: 2em;
   border-radius: 10px;
-}
-.about{
   margin-bottom: 20px;
+}
+.about02{
+  background-color: #fff;
+  margin: auto;
+  max-width: 850px;
+  padding: 0.5em;
+  border-radius: 10px;
 }
 .about_div{
   display: flex;
