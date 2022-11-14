@@ -239,7 +239,7 @@ class LoginPageController extends Controller
       $shubetu = $request->shubetu;
       $naiyou = $request->naiyou;
       $contact = Contact::create(['name'=> $name, 'address'=> $address ,'email'=> $email, 'tel'=> $tel, 'shubetu'=> $shubetu, 'naiyou'=> $naiyou ]);
-      $admin_mail = 'info@setonagi.net';
+      $admin_mail = 'info@arcion.jp';
       $text = 'この度はお問い合わせいただきありがとうございます。<br />下記の内容でお問い合わせを受け付けました。<br />
       <br />
       お名前：'.$name.'<br />
@@ -1506,6 +1506,7 @@ class LoginPageController extends Controller
       $url = config('app.kakebarai_touroku');
       $kakebarai_traderCode = config('app.kakebarai_traderCode');
       $kakebarai_passWord = config('app.kakebarai_passWord');
+      $envi = config('app.envi');
 
       $option = [
         'headers' => [
@@ -1517,7 +1518,7 @@ class LoginPageController extends Controller
           'traderCode' => $kakebarai_traderCode,
           // 日付
           'orderDate' => $now,
-          'orderNo' => $deal_id.'6a',
+          'orderNo' => $deal_id.$envi,
           // バイヤーid
           'buyerId' => $user_id,
           'settlePrice' => $request->all_total_val,
@@ -1841,7 +1842,7 @@ class LoginPageController extends Controller
         }
       $order_list = implode('<br>', $order_list);
       // dd($order_list);
-      $admin_mail = 'info@setonagi.net';
+      $admin_mail = 'info@arcion.jp';
       Mail::send('emails.register', [
           'name' => $name,
           'user' => $user,
@@ -2047,6 +2048,7 @@ class LoginPageController extends Controller
         $url = config('app.kakebarai_cancel');
         $kakebarai_traderCode = config('app.kakebarai_traderCode');
         $kakebarai_passWord = config('app.kakebarai_passWord');
+        $envi = config('app.envi');
         $option = [
           'headers' => [
             'Accept' => '*/*',
@@ -2056,7 +2058,7 @@ class LoginPageController extends Controller
           'form_params' => [
             'traderCode' => $kakebarai_traderCode,
             // 取引id
-            'orderNo' => $deal_id,
+            'orderNo' => $deal_id.$envi,
             // バイヤーid
             'buyerId' => $user_id,
             'passWord' => $kakebarai_passWord

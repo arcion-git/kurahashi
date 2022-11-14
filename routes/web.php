@@ -82,9 +82,11 @@
 
   Route::post('/removeorder', 'BothController@removeorder');
   Route::post('/removeordernini', 'BothController@removeordernini');
+  Route::post('/change_price', 'BothController@change_price');
   Route::post('/change_quantity', 'BothController@change_quantity');
   Route::post('/nini_change_item_name', 'BothController@nini_change_item_name');
   Route::post('/nini_change_tantou', 'BothController@nini_change_tantou');
+  Route::post('/nini_change_price', 'BothController@nini_change_price');
   Route::post('/nini_change_quantity', 'BothController@nini_change_quantity');
   Route::post('/change_nouhin_yoteibi', 'BothController@change_nouhin_yoteibi');
   Route::post('/nini_change_nouhin_yoteibi', 'BothController@nini_change_nouhin_yoteibi');

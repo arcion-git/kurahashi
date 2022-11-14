@@ -44,8 +44,8 @@ $(function() {
         // 既にカートにあるときの分岐
         console.log(json['message']);
         if(json['message']=='cart_in'){
-          $('#toggle').addClass('beep');
-          $('#toggle').trigger('click');
+          // $('#toggle').addClass('beep');
+          // $('#toggle').trigger('click');
           Swal.fire({
             title: "既にカートに追加されています",
             position: 'bottom-end',
@@ -55,8 +55,8 @@ $(function() {
             timer: 3000
           });
         }else{
-          $('#toggle').addClass('beep');
-          $('#toggle').trigger('click');
+          // $('#toggle').addClass('beep');
+          // $('#toggle').trigger('click');
           Swal.fire({
             type:"success",
             title: "カートに追加しました",
@@ -562,6 +562,49 @@ if(document.URL.match("/admin/deal")) {
     });
 
 
+    // 価格変更を保存
+    $(document).on("change", ".price", function() {
+      var order_id = $(this).parent().parent().get(0).id;
+      var price = $(this).val();
+      console.log(price);
+      console.log(order_id);
+      $.ajax({
+          headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }, //Headersを書き忘れるとエラーになる
+          url: location.origin + '/change_price',
+          type: 'POST', //リクエストタイプ
+          data: {
+            'order_id': order_id,
+            'price': price,
+          } //Laravelに渡すデータ
+        })
+        // Ajaxリクエスト成功時の処理
+        .done(function(data) {
+          // console.log(data);
+          // setTimeout(doReload);
+          setTimeout(order_update);
+          setTimeout(dealorder_update);
+          Swal.fire({
+            type:"success",
+            title: "金額を変更しました",
+            position: 'bottom-end',
+            toast: true,
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1500
+          });
+        })
+        // Ajaxリクエスト失敗時の処理
+        .fail(function(jqXHR, textStatus, errorThrown) {
+          alert('金額を変更できませんでした。');
+          console.log("ajax通信に失敗しました");
+          console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+          console.log("textStatus     : " + textStatus);
+          console.log("errorThrown    : " + errorThrown.message);
+        });
+    });
+
 
   // 個数変更を保存
   $(document).on("change", ".quantity", function() {
@@ -840,6 +883,49 @@ if(document.URL.match("/admin/deal")) {
       // Ajaxリクエスト失敗時の処理
       .fail(function(jqXHR, textStatus, errorThrown) {
         alert('担当を変更できませんでした。');
+        console.log("ajax通信に失敗しました");
+        console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+        console.log("textStatus     : " + textStatus);
+        console.log("errorThrown    : " + errorThrown.message);
+      });
+  });
+
+  // 任意の価格変更を保存
+  $(document).on("change", ".nini_price", function() {
+    var order_nini_id = $(this).parent().parent().get(0).id;
+    var nini_price = $(this).val();
+    console.log(nini_price);
+    console.log(order_nini_id);
+    $.ajax({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }, //Headersを書き忘れるとエラーになる
+        url: location.origin + '/nini_change_price',
+        type: 'POST', //リクエストタイプ
+        data: {
+          'order_nini_id': order_nini_id,
+          'nini_price': nini_price,
+        } //Laravelに渡すデータ
+      })
+      // Ajaxリクエスト成功時の処理
+      .done(function(data) {
+        // console.log(data);
+        // setTimeout(doReload);
+        setTimeout(order_update);
+        setTimeout(dealorder_update);
+        Swal.fire({
+          type:"success",
+          title: "価格を変更しました",
+          position: 'bottom-end',
+          toast: true,
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 1500
+        });
+      })
+      // Ajaxリクエスト失敗時の処理
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        alert('価格を変更できませんでした。');
         console.log("ajax通信に失敗しました");
         console.log("XMLHttpRequest : " + XMLHttpRequest.status);
         console.log("textStatus     : " + textStatus);

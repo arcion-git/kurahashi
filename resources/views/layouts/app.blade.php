@@ -327,12 +327,14 @@
               <li class="nav-item">
                 <a href="/admin/imgupload" class="nav-link"><i class="fas fa-file-image"></i><span>商品画像登録</span></a>
               </li>
+              @if(Auth::guard('admin')->user()->kengen == 1)
               <li class="nav-item">
                 <a href="/admin/csv" class="nav-link"><i class="fas fa-file-csv"></i><span>CSVインポート</span></a>
               </li>
               <li class="nav-item">
                 <a href="/admin/download" class="nav-link"><i class="fas fa-file-csv"></i><span>CSVダウンロード</span></a>
               </li>
+              @endif
               <li class="nav-item">
                 <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
                   <i class="fas fa-sign-out-alt"></i><span>{{ __('Logout') }}</span>

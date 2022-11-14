@@ -281,13 +281,153 @@ class AdminPageController extends Controller
       $order->save();
     }
 
-
     $deal_id = $request->deal_id;
     $deal = Deal::where('id',$deal_id)->first();
-    $deal->status = '確認待';
+    $user = User::where('id',$deal->user_id)->first();
+    $user_id = $deal->user_id;
+
+    if($user->setonagi == 1){
+      // SETOnagiユーザーはクレジットカード、もしくは、ヤマトかけばらいの金額を変更する
+      // クロネコかけ払い決済取消
+      if($deal->uketori_siharai == 'クロネコかけ払い'){
+        // ヤマトAPI連携確認
+        $client = new Client();
+        $url = config('app.kakebarai_torikesi');
+        $kakebarai_traderCode = config('app.kakebarai_traderCode');
+        $kakebarai_passWord = config('app.kakebarai_passWord');
+        $envi = config('app.envi');
+        $option = [
+          'headers' => [
+            'Accept' => '*/*',
+            'Content-Type' => 'application/x-www-form-urlencoded',
+            'charset' => 'UTF-8',
+          ],
+          'form_params' => [
+            'traderCode' => $kakebarai_traderCode,
+            'orderNo' => $deal_id.$envi,
+            'buyerId' => $user_id,
+            'passWord' => $kakebarai_passWord
+          ]
+        ];
+        // dd($option);
+        $response = $client->request('POST', $url, $option);
+        $result = simplexml_load_string($response->getBody()->getContents());
+        // dd($result);
+        // エラーの場合戻す
+        if($result->returnCode == 1){
+          $delete_deal = Deal::where(['id'=> $deal_id])->first()->delete();
+          if($result->errorCode == 123456){
+            // 後で処理を作る
+            $message = '掛け払い金額オーバー';
+            $data=[
+              'message' => $message,
+            ];
+          }else{
+            $message = '決済金額変更エラー。金額の変更ができませんでした。';
+            $data=[
+              'message' => $message,
+            ];
+          }
+          return redirect()->route('admin.dealdetail',$id);
+        }
+        // かけ払い決済再登録
+        $client = new Client();
+        $url = config('app.kakebarai_touroku');
+        $now = Carbon::now()->format('Ymd');
+        $option = [
+          'headers' => [
+            'Accept' => '*/*',
+            'Content-Type' => 'application/x-www-form-urlencoded',
+            'charset' => 'UTF-8',
+          ],
+          'form_params' => [
+            'traderCode' => $kakebarai_traderCode,
+            // 日付
+            'orderDate' => $now,
+            'orderNo' => $deal_id.$envi,
+            // バイヤーid
+            'buyerId' => $user_id,
+            'settlePrice' => $request->all_total_val,
+            'shohiZei' => $request->tax_val,
+            'meisaiUmu' => '2',
+            'passWord' => $kakebarai_passWord
+          ]
+        ];
+        // dd($option);
+        $response = $client->request('POST', $url, $option);
+        $result = simplexml_load_string($response->getBody()->getContents());
+        // dd($result);
+        if($result->returnCode == 1){
+          $delete_deal = Deal::where(['id'=> $deal_id])->first()->delete();
+          if($result->errorCode == 123456){
+            // 後で処理を作る
+            $message = '掛け払い金額オーバー';
+            $data=[
+              'message' => $message,
+            ];
+          }else{
+            $message = '決済金額変更エラー。金額の変更ができませんでした。';
+            $data=[
+              'message' => $message,
+            ];
+          }
+          return redirect()->route('admin.dealdetail',$id);
+        }
+      }
+
+
+
+      // クレジットカード決済の金額を変更
+      if($request->uketori_siharai == 'クレジットカード払い'){
+        // dd($request->token_api);
+        // EPトークン取得
+        $client = new Client();
+        // $url = 'https://api.kuronekoyamato.co.jp/api/credit';
+
+        $url = config('app.collect_pricechange');
+        $collect_tradercode = config('app.collect_tradercode');
+
+        $option = [
+          'headers' => [
+            'Accept' => '*/*',
+            'Content-Type' => 'application/x-www-form-urlencoded',
+            'charset' => 'UTF-8',
+          ],
+          'form_params' => [
+            'function_div' => 'A07',
+            'trader_code' => $collect_tradercode,
+            'order_no' => $deal_id,
+            // 決済変更金額
+            'new_price' => $request->all_total_val,
+          ]
+        ];
+        // dd($option);
+        $response = $client->request('POST', $url, $option);
+        $result = simplexml_load_string($response->getBody()->getContents());
+        if($result->returnCode == 1){
+          $delete_deal = Deal::where(['id'=> $deal_id])->first()->delete();
+          if($result->errorCode == 123456){
+            // 後で処理を作る
+            $message = '掛け払い金額オーバー';
+            $data=[
+              'message' => $message,
+            ];
+          }else{
+            $message = '決済金額変更エラー。金額の変更ができませんでした。';
+            $data=[
+              'message' => $message,
+            ];
+          }
+          return redirect()->route('admin.dealdetail',$id);
+        }
+      }
+
+    }else{
+      // 法人ユーザーのみ確認待ちに変更
+      $deal->status = '確認待';
+    }
     $deal->kakunin_time = Carbon::now();
     $deal->save();
-
 
     // foreach (array_map(null, $order_ids, $prices) as [$val1, $val2]) {
     //   $order = Order::where(['id'=> $val1 , 'price'=> $val2])->first();
@@ -822,7 +962,7 @@ class AdminPageController extends Controller
 
     $name = $user->name;
     $email = $user->email;
-    $admin_mail = 'info@setonagi.net';
+    $admin_mail = config('app.admin_mail');
     $url = url('');
     $text = 'この度、ヤマトクレジットファイナンス株式会社の審査の結果、オーダーブックが利用可能となりました。<br />
     ユーザー登録時にご登録いただいたメールアドレスとパスワードにて、下記URLよりご利用いただけます。<br />
@@ -846,7 +986,7 @@ class AdminPageController extends Controller
 
     $name = $user->name;
     $email = $user->email;
-    $admin_mail = 'info@setonagi.net';
+    $admin_mail = config('app.admin_mail');
     $url = url('');
     $text = 'この度、ヤマトクレジットファイナンス株式会社の審査の結果、<br />
     オーダーブックが利用不可となりましたことをお知らせいたします。';
@@ -870,7 +1010,7 @@ class AdminPageController extends Controller
     $name = $user->name;
     $email = $user->email;
     $url = url('');
-    $admin_mail = 'info@setonagi.net';
+    $admin_mail = config('app.admin_mail');
     $text = 'この度、ヤマトクレジットファイナンス株式会社の審査の結果、かけ払いでのお支払いはご利用いただけない結果となりました。<br />
     クレジットカード払いでの利用については可能です。<br />
     ユーザー登録時にご登録いただいたメールアドレスとパスワードにて、下記URLよりご利用いただけます。<br />

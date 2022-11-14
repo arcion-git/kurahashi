@@ -277,7 +277,7 @@ class RegisterController extends Controller
       // 登録メール送信
       $name = $data['last_name'].$data['first_name'];
       $email = $data['email'];
-      $admin_mail = 'info@setonagi.net';
+      $admin_mail = config('app.admin_mail');
       $url = url('');
       $text = 'この度はSETOnagiオーダーブックにご登録くださいまして、誠にありがとうございます。<br />
       <br />

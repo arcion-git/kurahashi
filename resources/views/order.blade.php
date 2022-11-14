@@ -54,16 +54,17 @@
 						<td class="head-quantity text-center">
 							<select name="quantity[]" class="quantity text-center form-control" value="{{$val->quantity}}" required>
 								@if(isset($deal))
-								<option value="{{$val->quantity}}">{{$val->quantity}}</option>
+									<option value="{{$val->quantity}}">{{$val->quantity}}</option>
 								@else
-								@if($val->quantity == 1)
-								@elseif($val->quantity)
-								<option value="{{$val->quantity}}">{{$val->quantity}}</option>
+									@if($val->quantity == 1)
+									<option value="{{$val->quantity}}">{{$val->quantity}}</option>
+									@elseif($val->quantity)
+									<option value="{{$val->quantity}}">{{$val->quantity}}</option>
+									@endif
 								@endif
-								@for ($i = 1; $i <= $cart->item->zaikosuu; $i++)
-								<option value="{{$i}}">{{$i}}</option>
-								@endfor
-								@endif
+									@for ($i = 1; $i <= $cart->item->zaikosuu; $i++)
+									<option value="{{$i}}">{{$i}}</option>
+									@endfor
 							</select>
 						</td>
 						<td class="head-tani text-center">
@@ -88,8 +89,8 @@
 							@if(!$user->setonagi)
 							<button style="margin-top:10px;" type="button" id="{{$cart->item->id}}" class="cloneid_{{$cart->item->id}} clonecart btn btn-success">配送先を追加</button>
 							@endif
-						<input name="order_id[]" class="order_id" type="hidden" value="{{$val->id}}" />
 						</td>
+						<input name="order_id[]" class="order_id" type="hidden" value="{{$val->id}}" />
 					</tr>
 				@endforeach
 				</table>
@@ -137,7 +138,7 @@
 				<option value="" selected>選択してください</option>
 				@endif
 				<!-- <option value="福山魚市引き取り">福山魚市引き取り</option> -->
-				<option value="引取り（マリンネクスト）">三原引き取り<（マリンネクスト）/option>
+				<option value="引取り（マリンネクスト）">三原引き取り（マリンネクスト）</option>
 				<option value="引取り（尾道ケンスイ）">尾道引取り（ケンスイ）</option>
 				</select>
 			</div>
@@ -591,22 +592,26 @@ label,
   pointer-events: none;
 }
 </style>
+
+
 <!-- 発注済、キャンセルの場合操作ができないようにする -->
-@if(isset($deal))
-	@if($deal->status == '発注済' or $deal->status == 'キャンセル')
-<script>
-  $(function(){
-		$('input').attr('readonly',true);
-		$('select').attr('readonly',true);
-		$('select').addClass('arrow_hidden');
-		$("select[readonly] > option:not(:selected)").attr('disabled', 'disabled');
-		$('textarea').attr('readonly',true);
-		$('select').attr("disabled", true);
-		$('.datepicker').attr("disabled", true);
-		$('.head-sousa').remove();
-		$('.addniniorder').remove();
-  });
-</script>
+@if ( Auth::guard('user')->check() )
+	@if(isset($deal))
+		@if($deal->status == '発注済' or $deal->status == 'キャンセル')
+	<script>
+	  $(function(){
+			$('input').attr('readonly',true);
+			$('select').attr('readonly',true);
+			$('select').addClass('arrow_hidden');
+			$("select[readonly] > option:not(:selected)").attr('disabled', 'disabled');
+			$('textarea').attr('readonly',true);
+			$('select').attr("disabled", true);
+			$('.datepicker').attr("disabled", true);
+			$('.head-sousa').remove();
+			$('.addniniorder').remove();
+	  });
+	</script>
+		@endif
 	@endif
 @endif
 

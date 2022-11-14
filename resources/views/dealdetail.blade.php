@@ -132,26 +132,23 @@
 
                 <div class="float-right">
 
-
                 @if ( Auth::guard('user')->check() )
-
-                @if($deal->status == 'キャンセル')
-                @else
-                  @if($deal_cancel_button)
-                    {{ csrf_field() }}
-                      <div id="deal_cancel_button" class="btn btn-danger">キャンセル</div>
+                  @if($deal->status == 'キャンセル')
+                  @else
+                    @if($deal_cancel_button)
+                      {{ csrf_field() }}
+                        <div id="deal_cancel_button" class="btn btn-danger">キャンセル</div>
+                    @endif
                   @endif
-                @endif
-
-                @if($deal->status == '発注済' or $deal->status == 'キャンセル')
-                @else
+                  @if($deal->status == '発注済' or $deal->status == 'キャンセル')
+                  @else
                     <button type="submit" name="deal_id" value="{{ $deal->id }}" class="btn btn-warning">この内容で発注する</button>
-                @endif
+                  @endif
                 @endif
                 <!-- <div class="float-right">
                     <button type="submit" name="deal_id" value="{{ $deal->id }}" class="btn btn-warning">キャンセルする</button>
                 </div> -->
-                @if($deal->status == '発注済' or $deal->status == 'キャンセル')
+                @if($deal->status == 'キャンセル')
                 @else
                 @if ( Auth::guard('admin')->check() )
                     <button type="submit" name="deal_id" value="{{ $deal->id }}" class="btn btn-warning">更新を通知する</button>

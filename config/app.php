@@ -124,6 +124,9 @@ return [
     'cipher' => 'AES-256-CBC',
 
 
+    'admin_mail' => env('ADMIN_MAIL'),
+    'envi' => env('ENVI'),
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers
@@ -141,12 +144,14 @@ return [
     'kakebarai_passWord' => env('KAKEBARAI_PASSWORD'),
     'kakebarai_sinsa' => env('KAKEBARAI_SINSA'),
     'kakebarai_riyoukingaku' => env('KAKEBARAI_RIYOUKINGAKU'),
+    'kakebarai_torikesi' => env('KAKEBARAI_TORIKESI'),
 
     'collect_tradercode' => env('COLLECT_TRADERCODE'),
     'collect_password' => env('COLLECT_PASSWORD'),
     'collect_token' => env('COLLECT_TOKEN'),
     'collect_touroku' => env('COLLECT_TOUROKU'),
     'collect_cancel' => env('COLLECT_CANCEL'),
+    'collect_pricechange' => env('COLLECT_PRICECHANGE'),
 
     /*
     |--------------------------------------------------------------------------

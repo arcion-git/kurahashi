@@ -90,6 +90,17 @@ class BothController extends Controller
     return redirect()->route('setonagi',$data);
   }
 
+  // 価格を変更
+  public function change_price(Request $request){
+    $order_id = $request->order_id;
+    $price = $request->price;
+
+    $order=Order::where(['id'=> $order_id])->update(['price'=> $price]);
+
+    $data = "sucsess";
+    return redirect()->route('setonagi',$data);
+  }
+
   // 納品予定日を変更
   public function change_nouhin_yoteibi(Request $request){
     $order_id = $request->order_id;
@@ -131,6 +142,15 @@ class BothController extends Controller
     $nini_item_name = $request->nini_item_name;
     $cart_nini_id = $request->cart_nini_id;
     $cart_nini_item_name= CartNini::where(['id'=> $cart_nini_id])->update(['item_name'=> $nini_item_name]);
+    $data = "success";
+    return redirect()->route('setonagi',$data);
+  }
+
+  // 任意の価格を保存
+  public function nini_change_price(Request $request){
+    $nini_price = $request->nini_price;
+    $order_nini_id = $request->order_nini_id;
+    $order_nini_price = OrderNini::where(['id'=> $order_nini_id])->update(['price'=> $nini_price]);
     $data = "success";
     return redirect()->route('setonagi',$data);
   }
