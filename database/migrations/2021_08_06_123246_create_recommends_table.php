@@ -11,7 +11,6 @@ class CreateRecommendsTable extends Migration
      *
      * @return void
      */
-    protected $table = 'recommends';
 
     public function up()
     {

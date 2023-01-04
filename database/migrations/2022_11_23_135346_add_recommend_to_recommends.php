@@ -13,7 +13,7 @@ class AddRecommendToRecommends extends Migration
      */
     public function up()
     {
-        Schema::table('Recommends', function (Blueprint $table) {
+        Schema::table('recommends', function (Blueprint $table) {
             $table->date('start')->nullable()->comment('掲載開始');
             $table->integer('order_no')->nullable()->comment('並び順');
         });
@@ -26,7 +26,7 @@ class AddRecommendToRecommends extends Migration
      */
     public function down()
     {
-        Schema::table('Recommends', function (Blueprint $table) {
+        Schema::table('recommends', function (Blueprint $table) {
           $table->dropColumn('start');
           $table->dropColumn('order_no');
         });

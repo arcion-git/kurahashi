@@ -13,7 +13,7 @@ class AddRepeatorders extends Migration
      */
     public function up()
     {
-        Schema::table('Repeatorders', function (Blueprint $table) {
+        Schema::table('repeatorders', function (Blueprint $table) {
             $table->boolean('stop_flg')->nullable();
         });
     }
@@ -25,7 +25,7 @@ class AddRepeatorders extends Migration
      */
     public function down()
     {
-        Schema::table('Repeatorders', function (Blueprint $table) {
+        Schema::table('repeatorders', function (Blueprint $table) {
             $table->dropColumn('stop_flg');
         });
     }
