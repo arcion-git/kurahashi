@@ -29,6 +29,7 @@ class SpecialPriceImport implements OnEachRow, WithHeadingRow
            [
              'start'=>$row['掲載開始日'],
              'end'=>$row['掲載期限'],
+             'nouhin_end'=>$row['納品期限'],
              'teika'=>$row['定価'],
              'price'=>$row['単価'],
            ]

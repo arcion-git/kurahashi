@@ -69,4 +69,24 @@ class User extends Authenticatable
       }
     }
 
+    public function stop_repeatorder()
+    {
+      $kaiin_number = $this->kaiin_number;
+      $repeatcarts = Repeatcart::where('kaiin_number',$kaiin_number)->get();
+      // dd($repeatcarts);
+      foreach ($repeatcarts as $repeatcart) {
+        $cart_id = $repeatcart->id;
+        $repeatorders = Repeatorder::where('id',$cart_id)->get();
+              // dd($repeatorders);
+        foreach ($repeatorders as $repeatorder) {
+          if($repeatorder->stop_flg == 1){
+            $stop_flg = $repeatorder->stop_flg;
+            dd($stop_flg);
+            return $stop_flg;
+          }
+        }
+      }
+      $repeatorder->stop_flg == 0 ;
+      $stop_flg;
+    }
 }

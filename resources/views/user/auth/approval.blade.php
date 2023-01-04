@@ -51,7 +51,14 @@
             </div>
             <div class="float-right">
                 <input type="hidden" name="token_api" id="token_api" value="{{app('request')->input('token_api')}}"/>
-                <!-- <button type="submit" name="adddeal_btn" class="btn btn-warning">この内容で問い合わせる</button> -->
+
+                @if($user->setonagi == 1)
+                @else
+                  @if($user->koushou == 1)
+                  <button type="submit" name="adddeal_btn" class="btn btn-warning">この内容で問い合わせる</button>
+                  @endif
+                @endif
+
                 <button type="submit" name="addsuscess_btn" id="addsuscess_btn" class="btn btn-success">この内容で注文する</button>
             </div>
           </form>

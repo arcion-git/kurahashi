@@ -14,6 +14,7 @@ use App\Holiday;
 use App\Store;
 use App\StoreUser;
 use App\Recommend;
+use App\BuyerRecommend;
 use App\FavoriteCategory;
 use App\Repeatcart;
 use App\Repeatorder;
@@ -33,7 +34,9 @@ use App\ItemImage;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Shared\File;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Writer\Csv;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
+
 
 // API通信
 use GuzzleHttp\Client;
@@ -467,14 +470,38 @@ class AdminPageController extends Controller
     $tokuisaki = StoreUser::where('user_id',$kaiin_number)->first();
     $tokuisaki_name = Store::where(['tokuisaki_id' => $tokuisaki->tokuisaki_id ,'store_id' => $tokuisaki->store_id])->first()->tokuisaki_name;
 
-
-
     $setonagi_users = Setonagi::get();
     $now = Carbon::now();
 
     return view('admin.auth.user', ['users' => $users]);
   }
 
+  public function buyer(){
+
+    // 得意先コードがユニークなものだけを取得
+    // $stores = Store::paginate(30);
+    // $stores = Store::groupBy('tokuisaki_id')->get(['tokuisaki_id']);
+    // $stores = Store::get();
+    // dd($stores);
+    // $storeusers = StoreUser::get();
+    $stores = StoreUser::get()->unique('tokuisaki_id');
+    // dd($stores);
+    // $stores = Store::get()->unique('tokuisaki_id');
+    // StoreUserに値があるものだけを取得
+
+
+
+    // dd($stores);
+
+    // $kaiin_number = User::first()->kaiin_number;
+    // $tokuisaki = StoreUser::where('user_id',$kaiin_number)->first();
+    // $tokuisaki_name = Store::where(['tokuisaki_id' => $tokuisaki->tokuisaki_id ,'store_id' => $tokuisaki->store_id])->first()->tokuisaki_name;
+
+    // $setonagi_users = Setonagi::get();
+    // $now = Carbon::now();
+
+    return view('admin.auth.buyer', ['stores' => $stores]);
+  }
 
   public function setonagiuser(){
 
@@ -750,16 +777,15 @@ class AdminPageController extends Controller
 
 // 担当のおすすめ商品処理
   public function userrecommend($id){
-
     $user = User::where('id',$id)->first();
     // 水産の前方コード
     $code = 1103;
+    // 本番用
     $items = Item::where("busho_code", "LIKE", $code.'%')->get();
-
-
+    // 処理が重いので一時的に在庫数のある商品だけを表示
+    $items = Item::where("busho_code", "LIKE", $code.'%')->where('zaikosuu', '>=', '0.01')->get();
     // dd($items);
-
-    $recommends = Recommend::where('user_id',$user->id)->get();
+    $recommends = Recommend::where('user_id',$user->id)->orderBy('order_no')->get();
     // dd($recommends);
     $data=[
       'id'=>$id,
@@ -780,7 +806,9 @@ class AdminPageController extends Controller
     $item = Item::where('id',$item_id)->first();
     // dd($user);
 
-    $recommend = Recommend::firstOrNew(['user_id'=> $user->id , 'item_id'=> $item->item_id , 'sku_code'=> $item->sku_code ]);
+    // 同じ商品の掲載を禁止する場合
+    // $recommend = Recommend::firstOrNew(['user_id'=> $user->id , 'item_id'=> $item->item_id , 'sku_code'=> $item->sku_code ]);
+    $recommend = Recommend::create(['user_id'=> $user->id , 'item_id'=> $item->item_id , 'sku_code'=> $item->sku_code ]);
     $recommend -> save();
 
     $id = $user_id;
@@ -796,7 +824,9 @@ class AdminPageController extends Controller
     foreach($recommends as  $key => $value) {
       $recommend = Recommend::firstOrNew(['id'=> $key]);
       $recommend->price = $value['price'];
+      $recommend->start = $value['start'];
       $recommend->end = $value['end'];
+      $recommend->order_no = $value['order_no'];
       $recommend->save();
     }
 
@@ -811,6 +841,118 @@ class AdminPageController extends Controller
     return redirect()->route('recommend', $id);
   }
 
+
+
+
+
+  // 企業ごとの担当のおすすめ商品処理
+    public function buyerrecommend(Request $request , $id){
+      $item_search = $request->item_search;
+
+      $order_no = $request->ordernosave;
+
+      $tokuisaki_id = $id;
+      // 水産の前方コード
+      $code = 1103;
+      // 本番用
+      // $items = Item::where("busho_code", "LIKE", $code.'%')->get();
+      // 処理が重いので一時的に在庫数のある商品だけを表示
+      // $items = Item::where("busho_code", "LIKE", $code.'%')->where('zaikosuu', '>=', '0.01')->get();
+      // $search = 'いか';
+      $store = Store::where('tokuisaki_id',$tokuisaki_id)->first();
+
+      if(isset($item_search)){
+        $items = Item::where("busho_code", "LIKE", $code.'%')->Where('zaikosuu', '>=', '0.01')->where(function($items) use($item_search){
+          $items->where('item_name','like', "%$item_search%")->orWhere('item_id','like', "%$item_search%");
+        })->orWhere('item_name_kana','like', "%$item_search%")->paginate(30);
+      }else{
+        $items = [];
+      }
+
+      // dd($tokuisaki_name->tokuisaki_name);
+      $buyerrecommends = BuyerRecommend::where('tokuisaki_id',$tokuisaki_id)->orderBy('order_no')->get();
+      // dd($buyerrecommends);
+      $data=[
+        'id'=>$id,
+        'items'=>$items,
+        'store'=>$store,
+        'buyerrecommends'=>$buyerrecommends,
+        'item_search'=>$item_search,
+        'order_no'=>$order_no,
+      ];
+      return view('buyerrecommend', $data);
+    }
+
+
+
+
+
+    public function buyeraddrecommend(Request $request){
+
+
+      $order_no = $request->ordernosave;
+      // dd($order_no);
+      $tokuisaki_id = $request->tokuisaki_id;
+      $item_id = $request->item_id;
+      $item = Item::where('id',$item_id)->first();
+      // dd($user);
+
+      // 同じ商品の掲載を禁止する場合
+      // $recommend = Recommend::firstOrNew(['user_id'=> $user->id , 'item_id'=> $item->item_id , 'sku_code'=> $item->sku_code ]);
+
+      // dd($tokuisaki_id);
+
+      if($order_no){
+        $order_no = $order_no +0.1;
+      }else{
+        $order_no = 99999;
+      }
+      $recommend = BuyerRecommend::create(['item_id'=> $item->item_id , 'sku_code'=> $item->sku_code ,'tokuisaki_id'=> $request->tokuisaki_id ,'order_no'=> $order_no]);
+      $recommend -> save();
+
+      $buyerrecommends = BuyerRecommend::where('tokuisaki_id',$tokuisaki_id)->orderBy('order_no')->get();
+      $n=1;
+      foreach ($buyerrecommends as $buyerrecommend) {
+        $buyerrecommend->order_no = $n;
+        $buyerrecommend->save();
+        $n++;
+      }
+
+      $id = $tokuisaki_id;
+
+      return redirect()->route('buyerrecommend', $id);
+    }
+
+    public function buyersaverecommend(Request $request){
+
+      $tokuisaki_id = $request->tokuisaki_id;
+      $buyerrecommends = $request->buyerrecommend;
+      // dd($tokuisaki_id);
+
+      // 価格が保存されないので修正
+      foreach($buyerrecommends as  $key => $value) {
+        $buyerrecommend = BuyerRecommend::firstOrNew(['id'=> $key]);
+        $buyerrecommend->price = $value['price'];
+        $buyerrecommend->start = $value['start'];
+        $buyerrecommend->end = $value['end'];
+        $buyerrecommend->nouhin_end = $value['nouhin_end'];
+        $buyerrecommend->order_no = $value['order_no'];
+        $buyerrecommend->save();
+      }
+
+      $id = $request->tokuisaki_id;
+      return redirect()->route('buyerrecommend', $id);
+    }
+
+    public function buyerremovercommend(Request $request){
+      $delete_id = $request->delete;
+      $delete = BuyerRecommend::where('id',$delete_id)->first();
+      if(isset($delete)){
+        $delete->delete();
+      };
+      $id = $request->tokuisaki_id;
+      return redirect()->route('buyerrecommend', $id);
+    }
 
 
 
@@ -909,6 +1051,7 @@ class AdminPageController extends Controller
 
       $repeatorder->tokuisaki_name = $store[0];
       $repeatorder->store_name = $store[1];
+      $repeatorder->stop_flg = 0;
 
       $repeatorder->startdate = $value['startdate'];
       // $repeatorder->end = $value['end'];
@@ -2161,10 +2304,11 @@ class AdminPageController extends Controller
     // アップロードディレクトリを指定
     File::setUseUploadTempDirectory(public_path());
 
-    $writer = new Xlsx($spreadsheet);
-    $writer->save(public_path() . '/storage/excel/export.xlsx');
+    $writer = new Csv($spreadsheet);
+    $writer->save(public_path() . '/storage/excel/export.csv');
     $now = Carbon::now();
-    return response()->download(public_path() . '/storage/excel/export.xlsx', 'orderbook'.$now.'.csv')->deleteFileAfterSend(true);
+    return response()->download(public_path() . '/storage/excel/export.csv', 'orderbook'.$now.'.csv')->deleteFileAfterSend(true);
+
   }
 
 }

@@ -3208,6 +3208,10 @@ a:not(.btn-social-icon):not(.btn-social):not(.page-link) .ion, a:not(.btn-social
   min-width: 210px !important;
   width: 210px !important;
 }
+.head-tyuusi{
+  min-width: 150px !important;
+  width: 150px !important;
+}
 
 .swal2-popup.swal2-toast .swal2-title{
     margin: 1em 0.5em !important;
@@ -3932,6 +3936,15 @@ footer .external_link ul{
 }
 .welcome_btn .col-6{
   padding: 5px;
+}
+.stop_sinsei{
+  display: inline-block;
+  border: 2px solid #EAA53F;
+  color: #EAA53F;
+  font-weight: bold;
+  border-radius: 5px;
+  padding: 5px;
+  margin-bottom: 10px;
 }
 
 

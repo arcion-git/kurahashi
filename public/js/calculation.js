@@ -562,49 +562,51 @@ if(document.URL.match("/admin/deal")) {
     });
 
 
-    // 価格変更を保存
-    $(document).on("change", ".price", function() {
-      var order_id = $(this).parent().parent().get(0).id;
-      var price = $(this).val();
-      console.log(price);
-      console.log(order_id);
-      $.ajax({
-          headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-          }, //Headersを書き忘れるとエラーになる
-          url: location.origin + '/change_price',
-          type: 'POST', //リクエストタイプ
-          data: {
-            'order_id': order_id,
-            'price': price,
-          } //Laravelに渡すデータ
-        })
-        // Ajaxリクエスト成功時の処理
-        .done(function(data) {
-          // console.log(data);
-          // setTimeout(doReload);
-          setTimeout(order_update);
-          setTimeout(dealorder_update);
-          Swal.fire({
-            type:"success",
-            title: "金額を変更しました",
-            position: 'bottom-end',
-            toast: true,
-            icon: 'success',
-            showConfirmButton: false,
-            timer: 1500
+    // 価格変更を保存（管理側担当のおすすめ商品編集ページは除く）
+    if(document.URL.match("/admin/user/recommend") || document.URL.match("/admin/user/repeatorder")) {
+    }else{
+      $(document).on("change", ".price", function() {
+        var order_id = $(this).parent().parent().get(0).id;
+        var price = $(this).val();
+        console.log(price);
+        console.log(order_id);
+        $.ajax({
+            headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }, //Headersを書き忘れるとエラーになる
+            url: location.origin + '/change_price',
+            type: 'POST', //リクエストタイプ
+            data: {
+              'order_id': order_id,
+              'price': price,
+            } //Laravelに渡すデータ
+          })
+          // Ajaxリクエスト成功時の処理
+          .done(function(data) {
+            // console.log(data);
+            // setTimeout(doReload);
+            setTimeout(order_update);
+            setTimeout(dealorder_update);
+            Swal.fire({
+              type:"success",
+              title: "金額を変更しました",
+              position: 'bottom-end',
+              toast: true,
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 1500
+            });
+          })
+          // Ajaxリクエスト失敗時の処理
+          .fail(function(jqXHR, textStatus, errorThrown) {
+            alert('金額を変更できませんでした。');
+            console.log("ajax通信に失敗しました");
+            console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+            console.log("textStatus     : " + textStatus);
+            console.log("errorThrown    : " + errorThrown.message);
           });
-        })
-        // Ajaxリクエスト失敗時の処理
-        .fail(function(jqXHR, textStatus, errorThrown) {
-          alert('金額を変更できませんでした。');
-          console.log("ajax通信に失敗しました");
-          console.log("XMLHttpRequest : " + XMLHttpRequest.status);
-          console.log("textStatus     : " + textStatus);
-          console.log("errorThrown    : " + errorThrown.message);
-        });
-    });
-
+      });
+    }
 
   // 個数変更を保存
   $(document).on("change", ".quantity", function() {
@@ -1191,10 +1193,20 @@ if(document.URL.match("/user/deal")) {
 
 
 
-
-
 // 担当のおすすめ商品削除（formタグ回避）
 if(document.URL.match("/admin/user/recommend")) {
+  $(function(){
+    $(".delete_button").on("click",function(){
+      var remove_id = $(this).data('id');
+      console.log(remove_id);
+      $("#remove_id").val(remove_id);
+      $('#remove_form').submit();
+    });
+  });
+}
+
+// 担当のおすすめ商品削除（formタグ回避）
+if(document.URL.match("/admin/buyer/recommend")) {
   $(function(){
     $(".delete_button").on("click",function(){
       var remove_id = $(this).data('id');
@@ -1228,6 +1240,40 @@ if(document.URL.match("/admin/user/repeatorder")) {
       $("#remove_id").val(remove_id);
       $("#cart_id").val(cart_id);
       $('#remove_form').submit();
+    });
+  });
+}
+
+
+
+// リピートオーダー停止申請（formタグ回避）
+if(document.URL.match("/repeatorder")) {
+  $(function(){
+    $(".stoprepeatorder").on("click",function(){
+      var stop_id = $(this).val();
+      console.log(stop_id);
+      $("#stop_id").val(stop_id);
+      Swal.fire({
+        title: '停止申請',
+        html : 'このリピートオーダーを本当に停止しますか？<br>※営業担当が状況確認後に停止をいたします。',
+        icon : 'warning',
+        showCancelButton: true,
+    	  cancelButtonText: '前の画面に戻る',
+        confirmButtonText: '停止申請する'
+      }).then(function(result){
+        if (result.value) {
+          // Swal.fire({
+          //   type:"success",
+          //   title: "キャンセル処理を行いました。",
+          //   position: 'bottom-end',
+          //   toast: true,
+          //   icon: 'success',
+          //   showConfirmButton: false,
+          //   timer: 1500
+          // });
+          $('#stop_repeatorder').submit();
+        }
+      });
     });
   });
 }

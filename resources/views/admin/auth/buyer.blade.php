@@ -5,7 +5,7 @@
 
 <section class="section">
   <div class="section-header">
-    <h1>顧客一覧</h1>
+    <h1>バイヤー一覧</h1>
     <div class="section-header-breadcrumb">
     </div>
   </div>
@@ -31,38 +31,25 @@
             <div class="table-responsive">
               <table class="table table-striped">
                 <tr>
-                  <th class="text-center">バイヤー</th>
-                  <th class="text-center">お名前</th>
+                  <th class="text-center">得意先ID</th>
+                  <th class="text-center">会社名</th>
                   <!-- <th class="text-center">会社名</th>
-                  <th class="text-center">住所</th> -->
+                  <th class="text-center">住所</th>
                   <th class="text-center">電話番号</th>
-                  <th class="text-center">メールアドレス</th>
+                  <th class="text-center">メールアドレス</th> -->
                   <th class="text-center">操作</th>
                 </tr>
 
-                @foreach($users as $user)
+                @foreach($stores as $store)
                 <tr>
                   <td class="text-center">
-                    @if($user->setonagi == 1)
-                    @else
-                    {{$user->tokuisaki_name()}}
-                    @endif
+                    {{$store->store()->tokuisaki_id}}
                   </td>
                   <td class="text-center">
-                    {{$user->name}}
+                    {{$store->store()->tokuisaki_name}}
                   </td>
                   <td class="text-center">
-                    {{$user->tel}}
-                  </td>
-                  <td class="text-center">
-                    {{$user->email}}
-                  </td>
-                  <td class="text-center">
-                    <a href="{{ url('/admin/user/deal/'.$user->id) }}"><button class="btn btn-primary">取引一覧</button></a>
-                    <!-- <a href="{{ url('/admin/user/recommend/'.$user->id) }}"><button class="btn btn-success">おすすめ商品登録</button></a> -->
-                    @if(!$user->setonagi == 1)
-                    <a href="{{ url('/admin/user/repeatorder/'.$user->id) }}"><button class="btn btn-warning">リピートオーダー登録</button></a>
-                    @endif
+                    <a href="{{ url('/admin/buyer/recommend/'.$store->tokuisaki_id) }}"><button class="btn btn-success">おすすめ商品登録</button></a>
                   </td>
                 </tr>
                 @endforeach
@@ -72,7 +59,6 @@
             <div class="float-right">
               <nav>
                 <ul class="pagination">
-                  {{ $users->links() }}
                 </ul>
               </nav>
             </div>

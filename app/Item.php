@@ -37,6 +37,7 @@ class Item extends Model
       'haisou_nissuu',
       'shoudan_umu',
       'nebiki_umu',
+      'item_name_kana',
   ];
 
   /**

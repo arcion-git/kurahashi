@@ -80,38 +80,7 @@
 						</td>
 						@if(!$user->setonagi)
 						<td class="head-yoteibi text-center">
-								<input type="text" name="nouhin_yoteibi[]" class="nouhin_yoteibi nouhin_yoteibi_{{$cart->id}} text-center form-control daterange-cus datepicker" value="{{$val->nouhin_yoteibi}}"  autocomplete="off" required>
-
-
-								@if($user->kyuujitu_haisou == 1)
-								<script>
-								$('.nouhin_yoteibi_{{$cart->id}}').datepicker({
-									format: 'yyyy-mm-dd',
-									autoclose: true,
-									assumeNearbyYear: true,
-									language: 'ja',
-									startDate: '{{$sano_nissuu}}',
-									endDate: '{{$cart->nouhin_end()}}',
-								});
-								</script>
-								@else
-								<script>
-								$('.nouhin_yoteibi_{{$cart->id}}').datepicker({
-									format: 'yyyy-mm-dd',
-									autoclose: true,
-									assumeNearbyYear: true,
-									language: 'ja',
-									startDate: '{{$sano_nissuu}}',
-									endDate: '{{$cart->nouhin_end()}}',
-									defaultViewDate: Date(),
-									datesDisabled: [
-									@foreach($holidays as $holiday)
-									'{{$holiday}}',
-									@endforeach
-									]
-								});
-								</script>
-								@endif
+								<input type="text" name="nouhin_yoteibi[]" class="nouhin_yoteibi text-center form-control daterange-cus datepicker" value="{{$val->nouhin_yoteibi}}" max="{{$val->nouhin_end}}" autocomplete="off" required>
 						</td>
 						@endif
 						<td class="head-shoukei total text-center"></td>
@@ -582,8 +551,35 @@ $(document).ready( function(){
 
 
 
-
-
+@if($user->kyuujitu_haisou == 1)
+<script>
+$('.datepicker').datepicker({
+	format: 'yyyy-mm-dd',
+	autoclose: true,
+	assumeNearbyYear: true,
+	language: 'ja',
+	startDate: '{{$sano_nissuu}}',
+	endDate: '+31d'
+});
+</script>
+@else
+<script>
+$('.datepicker').datepicker({
+	format: 'yyyy-mm-dd',
+	autoclose: true,
+	assumeNearbyYear: true,
+	language: 'ja',
+	startDate: '{{$sano_nissuu}}',
+	endDate: '+31d',
+	defaultViewDate: Date(),
+	datesDisabled: [
+	@foreach($holidays as $holiday)
+	'{{$holiday}}',
+	@endforeach
+	]
+});
+</script>
+@endif
 
 
 

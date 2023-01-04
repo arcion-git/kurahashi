@@ -17,6 +17,7 @@ use App\Price;
 use App\PriceGroupe;
 use App\SpecialPrice;
 use App\Recommend;
+use App\BuyerRecommend;
 use App\RecommendCategory;
 use App\CartNini;
 use App\OrderNini;
@@ -241,6 +242,14 @@ class BothController extends Controller
       $order->price = $setonagi_item->price;
     }
 
+    // 得意先商品価格上書き
+    // $kaiin_number = Auth::guard('user')->user()->kaiin_number;
+    // $store = StoreUser::where('user_id',$kaiin_number)->first();
+    $buyerrecommend_item = BuyerRecommend::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'tokuisaki_id'=>$store->tokuisaki_id])->first();
+    if(isset($buyerrecommend_item->price)){
+    $order->price = $buyerrecommend_item->price;
+    }
+
     // 担当のおすすめ商品価格上書き
     $recommend_item = Recommend::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'user_id'=>$kaiin_number])->first();
     if(isset($recommend_item->price)){
@@ -291,6 +300,14 @@ class BothController extends Controller
       $setonagi_item = SetonagiItem::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])->first();
       if(isset($setonagi_item->price)){
         $price = $setonagi_item->price;
+      }
+
+      // 得意先商品価格上書き
+      // $kaiin_number = Auth::guard('user')->user()->kaiin_number;
+      // $store = StoreUser::where('user_id',$kaiin_number)->first();
+      $buyerrecommend_item = BuyerRecommend::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'tokuisaki_id'=>$store->tokuisaki_id])->first();
+      if(isset($buyerrecommend_item->price)){
+        $price = $buyerrecommend_item->price;
       }
 
       // 担当のおすすめ商品価格上書き

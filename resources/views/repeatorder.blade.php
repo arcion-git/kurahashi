@@ -61,6 +61,9 @@
                     @if ( Auth::guard('admin')->check() )
                     <th class="text-center head-yuukou">有効/無効</th>
                     <th class="text-center head-sousa">操作</th>
+                    @else
+                    <th class="text-center head-yuukou">有効/無効</th>
+                    <th class="text-center head-tyuusi">操作</th>
                     @endif
                   </tr>
   		            @foreach($repeatcarts as $repeatcart)
@@ -151,7 +154,22 @@
                           <td class="text-center head-startdate" width="150">
         										<input type="text" name="repeatorder[{{$val->id}}][startdate]" class="startdate text-center form-control daterange-cus datepicker" value="{{$val->startdate}}" autocomplete="off" required>
                           </td>
+                          @if ( Auth::guard('user')->check() )
+                          <td class="text-center head-yuukou">
+        										{{$val->status}}
+                          </td>
                           <!-- <td class="text-center head-shoukei"></td> -->
+                          <!-- リピートオーダー停止申請 -->
+                          <td class="head-tyuusi text-center">
+                              @if($val->stop_flg == 1)
+                              <spna class="stop_sinsei" style="margin-bottom:0px !important">停止申請中</spna>
+                              @else
+                              @if ( $val->status == "有効" )
+                							<button type="button" name="repeatorder_id" id="{{$val->id}}" class="stoprepeatorder btn btn-success" value="{{$val->id}}">停止申請</button>
+                              @endif
+                              @endif
+              						</td>
+                          @endif
                           @if ( Auth::guard('admin')->check() )
                           <td class="text-center head-yuukou">
                             <div class="form-group">
@@ -184,6 +202,9 @@
                             </div>
                           </td>
               						<td class="head-sousa text-center">
+                            @if($val->stop_flg == 1)
+                            <spna class="stop_sinsei">停止申請あり</spna>
+                            @endif
               							<button type="button" id="{{$val->id}}" data-id="{{$val->id}}" class="removeid_{{$val->id}} delete_button btn btn-info">削除</button>
               							<button style="margin-top:10px;" type="button" id="{{$repeatcart->item()->id}}" class="cloneid_{{$val->id}} clonerepeatorder btn btn-success">配送先を追加</button>
               						<input name="order_id[]" class="order_id" type="hidden" value="{{$val->id}}" />
@@ -223,7 +244,10 @@
 </form>
 
 
-
+<form id="stop_repeatorder" action="{{ url('/stoprepeatorder') }}" enctype="multipart/form-data" method="POST" class="form-horizontal">
+  @csrf
+  <input id="stop_id" name="stop_id" type="hidden" value="">
+</form>
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

@@ -17,6 +17,7 @@ use App\Price;
 use App\PriceGroupe;
 use App\SpecialPrice;
 use App\Recommend;
+use App\BuyerRecommend;
 use App\RecommendCategory;
 use App\CartNini;
 use App\OrderNini;
@@ -178,11 +179,32 @@ class LoginPageController extends Controller
 
       $kaiin_number = Auth::guard('user')->user()->kaiin_number;
 
-      $now = Carbon::now()->addDay(3)->format('Y-m-d');
+      // $now = Carbon::now()->addDay(3)->format('Y-m-d');
+      $now = Carbon::now();
 
       // dd($user_id);
 
-      $recommends = Recommend::where('user_id', $user_id)->whereDate('end', '>=', $now)->get();
+      $kaiin_number = Auth::guard('user')->user()->kaiin_number;
+      // dd($kaiin_number);
+      $store = StoreUser::where('user_id',$kaiin_number)->first();
+      // dd($store->tokuisaki_id);
+
+      $buyer_recommends = BuyerRecommend::where('tokuisaki_id', $store->tokuisaki_id)
+      ->where('price', '>=', '1')
+      ->whereDate('start', '<=' , $now)
+      ->whereDate('end', '>=', $now)
+      ->orderBy('order_no', 'asc')->get();
+      // dd($buyer_recommends);
+
+      $recommends = Recommend::where('user_id', $user_id)
+      ->where('price', '>=', '1')
+      ->whereDate('start', '<=' , $now)
+      ->whereDate('end', '>=', $now)
+      ->orderBy('order_no', 'asc')->get();
+
+      $recommends = $recommends->merge($buyer_recommends);
+
+
       // dd($recommends);
 
       $now = Carbon::now()->toDateTimeString();
@@ -488,7 +510,6 @@ class LoginPageController extends Controller
 
         $search = $request->search;
 
-
         $user_id = Auth::guard('user')->user()->id;
         $favorite_categories = FavoriteCategory::where('user_id', $user_id)->first();
 
@@ -711,7 +732,6 @@ class LoginPageController extends Controller
     $cart->save();
 
 
-
     // 直近の納品予定日を取得
     $today = date("Y-m-d");
     $holidays = Holiday::pluck('date');
@@ -779,6 +799,8 @@ class LoginPageController extends Controller
     }else{
       $order=Order::firstOrNew(['cart_id'=> $cart->id , 'quantity'=> 1 , 'nouhin_yoteibi'=> $nouhin_yoteibi]);
     }
+
+
     // ユーザーの会員番号を取得
     if(!$setonagi_user){
       $kaiin_number = Auth::guard('user')->user()->kaiin_number;
@@ -786,6 +808,7 @@ class LoginPageController extends Controller
     $item = Item::where('id',$item_id)->first();
 
 
+    // return Response::json($item);
 
     // 市況商品価格上書き
     $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])->first();
@@ -797,6 +820,14 @@ class LoginPageController extends Controller
     $setonagi_item = SetonagiItem::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])->first();
     if(isset($setonagi_item->price)){
     $order->price = $setonagi_item->price;
+    }
+
+    // 得意先商品価格上書き
+    // $kaiin_number = Auth::guard('user')->user()->kaiin_number;
+    // $store = StoreUser::where('user_id',$kaiin_number)->first();
+    $buyerrecommend_item = BuyerRecommend::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'tokuisaki_id'=>$store->tokuisaki_id])->first();
+    if(isset($buyerrecommend_item->price)){
+    $order->price = $buyerrecommend_item->price;
     }
 
     // 担当のおすすめ商品価格上書き
@@ -1019,12 +1050,14 @@ class LoginPageController extends Controller
     $today = date("Y-m-d");
     $holidays = Holiday::pluck('date');
     $approval = 1;
+    $user = Auth::guard('user')->user();
 
     // $memo = $request->memo;
     // dd($memo);
 
     $data =
-    ['carts' => $carts,
+    ['user' => $user,
+     'carts' => $carts,
      'categories' => $categories,
      'favorite_categories' => $favorite_categories,
      // 'stores' => $stores,
@@ -1533,9 +1566,41 @@ class LoginPageController extends Controller
       // dd($result);
       if($result->returnCode == 1){
         $delete_deal = Deal::where(['id'=> $deal_id])->first()->delete();
-        if($result->errorCode == 123456){
+        if($result->errorCode == 'G55'){
           // 後で処理を作る
+
+          // ヤマトAPI連携利用金額確認
+          $client = new Client();
+          $url = config('app.kakebarai_riyoukingaku');
+          $option = [
+            'headers' => [
+              'Accept' => '*/*',
+              'Content-Type' => 'application/x-www-form-urlencoded',
+              'charset' => 'UTF-8',
+            ],
+            'form_params' => [
+              'traderCode' => $kakebarai_traderCode,
+              // バイヤーid
+              'buyerId' => $user_id,
+              'buyerTelNo' => '',
+              'passWord' => $kakebarai_passWord
+            ]
+          ];
+          // dd($option);
+          $response = $client->request('POST', $url, $option);
+          $result = simplexml_load_string($response->getBody()->getContents());
+          // dd($result);
           $message = '掛け払い金額オーバー';
+          if($result->returnCode == 0){
+            $usePayment = $result->usePayment;
+            $useOverLimit = $result->useOverLimit;
+          }
+          // %2Cになっているのをカンマを直す
+          $limitprice = $useOverLimit - $usePayment;
+          // $limitprice = number_format($limitprice);
+          // $limitprice = mb_convert_encoding($limitprice,"utf-8","sjis");
+          // dd($limitprice);
+          $message = 'かけ払い利用限度額オーバーです。<br />'.$limitprice.'円以内での購入をお願いします。';
           $data=[
             'message' => $message,
           ];
@@ -2194,6 +2259,18 @@ class LoginPageController extends Controller
     ];
     return view('repeatorder', $data);
   }
+
+
+  public function stoprepeatorder(Request $request){
+
+    $stop_id = $request->stop_id;
+    $repeatorder = Repeatorder::where('id',$stop_id)->first();
+    $repeatorder->stop_flg = 1;
+    $repeatorder->save();
+
+    return redirect('repeatorder');
+  }
+
 
 
   public function getzipcode(){

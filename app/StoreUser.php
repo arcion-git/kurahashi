@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Store;
+
 use Illuminate\Database\Eloquent\Model;
 
 class StoreUser extends Model
@@ -11,4 +13,11 @@ class StoreUser extends Model
   'store_id',
   'user_id',
   ];
+
+  public function store() {
+    // dd($this->tokuisaki_id);
+    $store = Store::where(['tokuisaki_id' => $this->tokuisaki_id])->first();
+    return $store;
+  }
+
 }

@@ -120,6 +120,9 @@
   Route::post('/user/post/favoritecategory','LoginPageController@PostFavoriteCategory');
   Route::post('/user/edit/favoritecategory','LoginPageController@EditFavoriteCategory');
 
+  Route::post('/stoprepeatorder', 'LoginPageController@stoprepeatorder');
+
+
   // アンケート画面
   Route::get('/user/questionnaire', 'LoginPageController@questionnaire')->name('questionnaire');;
 
@@ -128,6 +131,7 @@
   Route::get('/admin/home', 'AdminPageController@index')->name('admin.home');
   Route::get('/admin/deal/{id}', 'AdminPageController@dealdetail')->name('admin.dealdetail');
   Route::get('/admin/user', 'AdminPageController@user')->name('admin.user');
+  Route::get('/admin/buyer', 'AdminPageController@buyer')->name('admin.buyer');
   Route::get('/admin/setonagiuser', 'AdminPageController@setonagiuser')->name('admin.setonagiuser');
   Route::get('/admin/item', 'AdminPageController@item')->name('admin.item');
   Route::get('/admin/sales', 'AdminPageController@sales')->name('admin.sales');
@@ -162,6 +166,13 @@
   Route::post('/admin/user/addrecommend', 'AdminPageController@addrecommend');
   Route::post('/admin/user/saverecommend', 'AdminPageController@saverecommend');
   Route::post('/admin/user/removercommend', 'AdminPageController@removercommend');
+
+  // 得意先ごとの担当のおすすめポスト
+  Route::get('/admin/buyer/recommend/{id}', 'AdminPageController@buyerrecommend')->name('buyerrecommend');
+  Route::get('/admin/buyer/recommend/{id}/add', 'AdminPageController@buyerrecommendadd');
+  Route::post('/admin/buyer/addrecommend', 'AdminPageController@buyeraddrecommend');
+  Route::post('/admin/buyer/saverecommend', 'AdminPageController@buyersaverecommend');
+  Route::post('/admin/buyer/removercommend', 'AdminPageController@buyerremovercommend');
 
   // リピートオーダーポスト
   Route::get('/admin/user/repeatorder/{id}', 'AdminPageController@userrepeatorder')->name('repeatorder');

@@ -27,7 +27,7 @@ class ItemImport implements OnEachRow, WithHeadingRow
            // 上書き内容
            [
              'item_name'=>$row['商品名'],
-             // 'item_name_kana'=>$row['商品名ひらがな'],
+             'item_name_kana'=>$row['商品名ひらがな'],
              'keiyaku'=>$row['契約区分'],
              'kikaku'=>$row['規格１名'],
              'ninushi_code'=>$row['荷主コード'],

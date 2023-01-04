@@ -17,7 +17,8 @@
 
     <!-- jQUERY -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-
+    <!-- jquery-ui -->
+    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
     <!-- datepicker -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css">
     <!-- <script src="{{ asset('js/daterangepicker.js') }}"></script> -->
@@ -311,6 +312,9 @@
               </li>
               <li class="nav-item">
                 <a href="/admin/user" class="nav-link"><i class="fa fa-users"></i><span>顧客担当者一覧</span></a>
+              </li>
+              <li class="nav-item">
+                <a href="/admin/buyer" class="nav-link"><i class="fa fa-users"></i><span>バイヤー一覧</span></a>
               </li>
               <li class="nav-item">
                 <a href="/admin/setonagiuser" class="nav-link"><i class="fa fa-users"></i><span>セトナギユーザー審査</span></a>
