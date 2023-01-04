@@ -11,6 +11,8 @@ class CreateRecommendsTable extends Migration
      *
      * @return void
      */
+    protected $table = 'recommend';
+
     public function up()
     {
         Schema::create('recommends', function (Blueprint $table) {
