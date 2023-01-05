@@ -5,7 +5,7 @@
 
 <section class="section">
   <div class="section-header">
-    <h1>バイヤー一覧</h1>
+    <h1>得意先一覧</h1>
     <div class="section-header-breadcrumb">
     </div>
   </div>
