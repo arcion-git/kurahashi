@@ -890,7 +890,7 @@ class AdminPageController extends Controller
 
     public function buyeraddrecommend(Request $request){
 
-
+      $item_search = $request->item_search;
       $order_no = $request->ordernosave;
       // dd($order_no);
       $tokuisaki_id = $request->tokuisaki_id;
@@ -921,7 +921,13 @@ class AdminPageController extends Controller
 
       $id = $tokuisaki_id;
 
-      return redirect()->route('buyerrecommend', $id);
+      $data=[
+        'id'=>$id,
+        // 'item_search'=>$item_search,
+        // 'order_no'=>$order_no,
+      ];
+
+      return redirect()->route('buyerrecommend', $data);
     }
 
     public function buyersaverecommend(Request $request){

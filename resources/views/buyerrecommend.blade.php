@@ -160,6 +160,7 @@
         <form id="buyerrecommend" action="{{ url('/admin/buyer/addrecommend') }}" method="POST" class="form-horizontal">
           {{ csrf_field() }}
           <div class="table-responsive">
+            <input type="hidden" class="item_search" value="{{$item_search}}" name="item_search" class="form-control">
             <table id="search-result__list" class="table table-striped">
 
             </table>
