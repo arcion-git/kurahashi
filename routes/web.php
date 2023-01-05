@@ -169,6 +169,7 @@
 
   // 得意先ごとの担当のおすすめポスト
   Route::get('/admin/buyer/recommend/{id}', 'AdminPageController@buyerrecommend')->name('buyerrecommend');
+  Route::post('/admin/buyer/recommend/{id}', 'AdminPageController@buyerrecommend');
   Route::get('/admin/buyer/recommend/{id}/add', 'AdminPageController@buyerrecommendadd');
   Route::post('/admin/buyer/addrecommend', 'AdminPageController@buyeraddrecommend');
   Route::post('/admin/buyer/saverecommend', 'AdminPageController@buyersaverecommend');

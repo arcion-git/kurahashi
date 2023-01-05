@@ -228,15 +228,18 @@
 
 
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script> -->
-@if(isset($item_search))
 <script>
-$(function () {
-  $(window).on('load',function(){
+// URLを取得
+var url = new URL(window.location.href);
+// URLSearchParamsオブジェクトを取得
+var params = url.searchParams;
+if( params.has('item_search') ) {
+  console.log(params.get('item_search'));
+  $(function() {
     $('#exampleModal').modal('show');
   });
-});
+}
 </script>
-@endif
 <script>
 $('.datepicker').datepicker({
 	format: 'yyyy-mm-dd',
