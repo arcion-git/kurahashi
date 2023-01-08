@@ -245,7 +245,8 @@ class BothController extends Controller
     // 得意先商品価格上書き
     // $kaiin_number = Auth::guard('user')->user()->kaiin_number;
     // $store = StoreUser::where('user_id',$kaiin_number)->first();
-    $buyerrecommend_item = BuyerRecommend::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'tokuisaki_id'=>$store->tokuisaki_id])->first();
+    $now = Carbon::now();
+    $buyerrecommend_item = BuyerRecommend::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'tokuisaki_id'=>$store->tokuisaki_id])->whereDate('start', '<=' , $now)->whereDate('end', '>=', $now)->first();
     if(isset($buyerrecommend_item->price)){
     $order->price = $buyerrecommend_item->price;
     }
@@ -305,7 +306,8 @@ class BothController extends Controller
       // 得意先商品価格上書き
       // $kaiin_number = Auth::guard('user')->user()->kaiin_number;
       // $store = StoreUser::where('user_id',$kaiin_number)->first();
-      $buyerrecommend_item = BuyerRecommend::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'tokuisaki_id'=>$store->tokuisaki_id])->first();
+      $now = Carbon::now();
+      $buyerrecommend_item = BuyerRecommend::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'tokuisaki_id'=>$store->tokuisaki_id])->whereDate('start', '<=' , $now)->whereDate('end', '>=', $now)->first();
       if(isset($buyerrecommend_item->price)){
         $price = $buyerrecommend_item->price;
       }

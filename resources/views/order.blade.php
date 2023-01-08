@@ -80,7 +80,7 @@
 						</td>
 						@if(!$user->setonagi)
 						<td class="head-yoteibi text-center">
-								<input type="text" name="nouhin_yoteibi[]" class="nouhin_yoteibi nouhin_yoteibi_{{$cart->id}} text-center form-control daterange-cus datepicker" value="{{$val->nouhin_yoteibi}}"  autocomplete="off" required>
+								<input type="text" name="nouhin_yoteibi[]" class="nouhin_yoteibi nouhin_yoteibi_{{$cart->id}} text-center form-control daterange-cus datepicker" value="{{$val->nouhin_yoteibi}}" readonly=”readonly” autocomplete="off" required>
 
 
 								@if($user->kyuujitu_haisou == 1)
@@ -452,7 +452,7 @@
 										<input name="nini_quantity[]" class="nini_quantity text-center form-control" value="{{$val->quantity}}" required>
 									</td>
 									<td class="head-yoteibi text-center">
-											<input type="text" name="nini_nouhin_yoteibi[]" class="nini_nouhin_yoteibi text-center form-control daterange-cus datepicker" value="{{$val->nouhin_yoteibi}}" autocomplete="off" required>
+											<input type="text" name="nini_nouhin_yoteibi[]" class="nini_nouhin_yoteibi text-center form-control daterange-cus datepicker" value="{{$val->nouhin_yoteibi}}" readonly="readonly" autocomplete="off" required>
 									</td>
 									<td class="head-sousa text-center">
 										<button type="button" id="{{$val->id}}" class="removeid_{{$val->id}} removeordernini btn btn-info">削除</button><br />
@@ -473,6 +473,35 @@
 @endif
 
 
+@if($user->kyuujitu_haisou == 1)
+<script>
+$('.nini_nouhin_yoteibi').datepicker({
+	format: 'yyyy-mm-dd',
+	autoclose: true,
+	assumeNearbyYear: true,
+	language: 'ja',
+	startDate: '{{$sano_nissuu}}',
+	endDate: '+31d',
+});
+</script>
+@else
+<script>
+$('.nini_nouhin_yoteibi').datepicker({
+	format: 'yyyy-mm-dd',
+	autoclose: true,
+	assumeNearbyYear: true,
+	language: 'ja',
+	startDate: '{{$sano_nissuu}}',
+	endDate: '+31d',
+	defaultViewDate: Date(),
+	datesDisabled: [
+	@foreach($holidays as $holiday)
+	'{{$holiday}}',
+	@endforeach
+	]
+});
+</script>
+@endif
 
 <!-- <div id="item_total" class="total_price"></div>
 <div id="tax" class="total_price">税：</div>
@@ -671,13 +700,15 @@ $(function(){
 </script>
 
 
-
 @if(isset($user->setonagi))
 	@if(Auth::guard('user')->check() )
 <script>
 if(document.URL.match("/confirm")) {
 
 $(function() {
+
+$('.nouhin_yoteibi').css({'cssText': 'border: 1px solid #c7e2fe !important; background-color: #fdfdff !important;'});
+$('.nini_nouhin_yoteibi').css({'cssText': 'border: 1px solid #c7e2fe !important; background-color: #fdfdff !important;'});
 
 if ($("[id=クロネコかけ払い]").prop("checked") == true) {
 $('#pay_card').hide();

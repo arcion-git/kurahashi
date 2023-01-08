@@ -563,7 +563,7 @@ if(document.URL.match("/admin/deal")) {
 
 
     // 価格変更を保存（管理側担当のおすすめ商品編集ページは除く）
-    if(document.URL.match("/admin/user/recommend") || document.URL.match("/admin/user/repeatorder")) {
+    if(document.URL.match("/admin/user/recommend") || document.URL.match("/admin/user/repeatorder") || document.URL.match("/admin/buyer/recommend")) {
     }else{
       $(document).on("change", ".price", function() {
         var order_id = $(this).parent().parent().get(0).id;
@@ -1225,6 +1225,18 @@ if(document.URL.match("/admin/recommendcategory")) {
       console.log(remove_id);
       $("#remove_id").val(remove_id);
       $('#remove_form').submit();
+    });
+  });
+}
+
+// 担当のおすすめ商品複製（formタグ回避）
+if(document.URL.match("/admin/buyer/recommend")) {
+  $(function(){
+    $(".buyerduplicatercommend_button").on("click",function(){
+      var remove_id = $(this).data('id');
+      console.log(remove_id);
+      $("#buyerduplicatercommend_id").val(remove_id);
+      $('#buyerduplicatercommend_form').submit();
     });
   });
 }

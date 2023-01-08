@@ -570,13 +570,25 @@
     }
     $(function() {
         var message = getUrlParam('message');
+        var icon = getUrlParam('icon');
         console.log(message);
+        console.log(icon);
         if (message) {
           Swal.fire({
             html: message,
             // position: 'top-end',
             // toast: true,
             icon: 'warning',
+            showConfirmButton: false,
+            // timer: 1500
+          });
+        }
+        if (icon) {
+          Swal.fire({
+            html: message,
+            // position: 'top-end',
+            // toast: true,
+            icon: 'success',
             showConfirmButton: false,
             // timer: 1500
           });

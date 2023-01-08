@@ -89,17 +89,18 @@
                       <input name="buyerrecommend[{{$buyerrecommend->id}}][price]" class="price text-center form-control" value="{{$buyerrecommend->price}}">
                     </td>
                     <td class="text-center" width="150">
-                      <input type="text" name="buyerrecommend[{{$buyerrecommend->id}}][start]" class="start text-center form-control daterange-cus datepicker" value="{{$buyerrecommend->start}}">
+                      <input type="text" name="buyerrecommend[{{$buyerrecommend->id}}][start]" class="start text-center form-control daterange-cus datepicker" value="{{$buyerrecommend->start}}" readonly="readonly">
                     </td>
                     <td class="text-center" width="150">
-                      <input type="text" name="buyerrecommend[{{$buyerrecommend->id}}][end]" class="end text-center form-control daterange-cus datepicker" value="{{$buyerrecommend->end}}">
+                      <input type="text" name="buyerrecommend[{{$buyerrecommend->id}}][end]" class="end text-center form-control daterange-cus datepicker" value="{{$buyerrecommend->end}}" readonly="readonly">
                     </td>
                     <td class="text-center" width="150">
-                      <input type="text" name="buyerrecommend[{{$buyerrecommend->id}}][nouhin_end]" class="nouhin_end text-center form-control daterange-cus datepicker" value="{{$buyerrecommend->nouhin_end}}">
+                      <input type="text" name="buyerrecommend[{{$buyerrecommend->id}}][nouhin_end]" class="nouhin_end text-center form-control daterange-cus datepicker" value="{{$buyerrecommend->nouhin_end}}" readonly="readonly">
                     </td>
                     <td class="text-center">
                       <div class="btn btn-primary delete_button" data-id="{{$buyerrecommend->id}}"/>削除</div>
-                      <div class="addrecommend btn btn-success" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus"></i> 追加</div>
+                      <!-- <div class="addrecommend btn btn-success" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus"></i> 追加</div> -->
+                      <div class="btn btn-success buyerduplicatercommend_button" data-id="{{$buyerrecommend->id}}"><i class="fas fa-plus"></i> 複製</div>
                     </td>
                   </tr>
                   @endforeach
@@ -107,7 +108,6 @@
                 </table>
               </div>
               <input name="tokuisaki_id" type="hidden" value="{{$id}}">
-              <input type="hidden" class="ordernosave" name="ordernosave" value="{{$order_no}}"/>
               <button type="submit" class="save_btn btn btn-warning float-right">内容を保存</button>
             </form>
             <!-- <a href="{{ url('/admin/buyer/recommend/') }}/{{$store->tokuisaki_id}}/add" class="addrecommend btn btn-success"><i class="fas fa-plus"></i> 商品を追加</a> -->
@@ -120,7 +120,11 @@
   </div>
 </section>
 
-
+<form id="buyerduplicatercommend_form" action="{{ url('/admin/buyer/duplicatercommend') }}" method="POST">
+  @csrf
+  <input type="hidden" name="tokuisaki_id" type="hidden" value="{{$id}}">
+  <input id="buyerduplicatercommend_id" name="duplicate" type="hidden" value="">
+</form>
 
 <form id="remove_form" action="{{ url('/admin/buyer/removercommend') }}" method="POST">
   @csrf
@@ -225,7 +229,12 @@
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> -->
 
 
-
+<style>
+.datepicker{
+  background-color: #fff !important;
+  border: 1px solid #c7e2fe !important;
+}
+</style>
 
 
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script> -->
@@ -256,7 +265,7 @@ $('.datepicker').datepicker({
 $(window).on('load',function(){
   $('#sortdata').find('.order_no').each(function(idx){
     // タグ内に通し番号を設定（idxは0始まりなので+1する）
-    $(this).val(idx+1);
+    // $(this).val(idx+1);
   });
 });
 $('#sortdata').sortable( {
@@ -271,11 +280,11 @@ $('#sortdata').bind('sortstop',function(){
     $('.save_btn').click();
   });
 });
-$(".addrecommend").on("click",function(){
-  var order_no = $(this).parent().parent().find('.order_no').val();
-  console.log(order_no);
-  $(".ordernosave").val(order_no);
-});
+// $(".addrecommend").on("click",function(){
+//   var order_no = $(this).parent().parent().find('.order_no').val();
+//   console.log(order_no);
+//   $(".ordernosave").val(order_no);
+// });
 // $(".addendrecommend").on("click",function(){
 //   var order_no = 1000;
 //   console.log(order_no);

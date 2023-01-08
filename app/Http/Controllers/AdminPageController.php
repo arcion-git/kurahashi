@@ -604,85 +604,169 @@ class AdminPageController extends Controller
   public function userimport(){
   // User::truncate();
   Excel::import(new UserImport, request()->file('file'));
-  return back();
+  $message = '正常にインポートが完了しました。';
+  $icon = 'success';
+  $data=[
+    'message'=>$message,
+    'icon'=>$icon,
+  ];
+  return redirect()->route('admin.csv', $data);
   }
 
   public function adminimport(){
   // admin::truncate();
   Excel::import(new AdminImport, request()->file('file'));
-  return back();
+  $message = '正常にインポートが完了しました。';
+  $icon = 'success';
+  $data=[
+    'message'=>$message,
+    'icon'=>$icon,
+  ];
+  return redirect()->route('admin.csv', $data);
   }
 
   public function itemimport(){
   // Item::truncate();
   Excel::import(new ItemImport, request()->file('file'));
-  return back();
+  $message = '正常にインポートが完了しました。';
+  $icon = 'success';
+  $data=[
+    'message'=>$message,
+    'icon'=>$icon,
+  ];
+  return redirect()->route('admin.csv', $data);
   }
 
   public function CategoryItemimport(){
   CategoryItem::truncate();
   Excel::import(new CategoryItemImport, request()->file('file'));
-  return back();
+  $message = '正常にインポートが完了しました。';
+  $icon = 'success';
+  $data=[
+    'message'=>$message,
+    'icon'=>$icon,
+  ];
+  return redirect()->route('admin.csv', $data);
   }
 
   public function categoryimport(){
   Category::truncate();
   Excel::import(new CategoryImport, request()->file('file'));
-  return back();
+  $message = '正常にインポートが完了しました。';
+  $icon = 'success';
+  $data=[
+    'message'=>$message,
+    'icon'=>$icon,
+  ];
+  return redirect()->route('admin.csv', $data);
   }
 
   public function tagimport(){
   Tag::truncate();
   Excel::import(new TagImport, request()->file('file'));
-  return back();
+  $message = '正常にインポートが完了しました。';
+  $icon = 'success';
+  $data=[
+    'message'=>$message,
+    'icon'=>$icon,
+  ];
+  return redirect()->route('admin.csv', $data);
   }
 
   public function HolidayImport(){
   Holiday::truncate();
   Excel::import(new HolidayImport, request()->file('file'));
-  return back();
+  $message = '正常にインポートが完了しました。';
+  $icon = 'success';
+  $data=[
+    'message'=>$message,
+    'icon'=>$icon,
+  ];
+  return redirect()->route('admin.csv', $data);
   }
 
   public function StoreImport(){
   Store::truncate();
   Excel::import(new StoreImport, request()->file('file'));
-  return back();
+  $message = '正常にインポートが完了しました。';
+  $icon = 'success';
+  $data=[
+    'message'=>$message,
+    'icon'=>$icon,
+  ];
+  return redirect()->route('admin.csv', $data);
   }
 
   public function StoreUserImport(){
   StoreUser::truncate();
   Excel::import(new StoreUserImport, request()->file('file'));
-  return back();
+  $message = '正常にインポートが完了しました。';
+  $icon = 'success';
+  $data=[
+    'message'=>$message,
+    'icon'=>$icon,
+  ];
+  return redirect()->route('admin.csv', $data);
   }
 
   public function PriceGroupeImport(){
   PriceGroupe::truncate();
   Excel::import(new PriceGroupeImport, request()->file('file'));
-  return back();
+  $message = '正常にインポートが完了しました。';
+  $icon = 'success';
+  $data=[
+    'message'=>$message,
+    'icon'=>$icon,
+  ];
+  return redirect()->route('admin.csv', $data);
   }
 
   public function PriceImport(){
   Price::truncate();
   Excel::import(new PriceImport, request()->file('file'));
-  return back();
+  $message = '正常にインポートが完了しました。';
+  $icon = 'success';
+  $data=[
+    'message'=>$message,
+    'icon'=>$icon,
+  ];
+  return redirect()->route('admin.csv', $data);
   }
 
   public function SpecialPriceImport(){
   SpecialPrice::truncate();
   Excel::import(new SpecialPriceImport, request()->file('file'));
-  return back();
+  $message = '正常にインポートが完了しました。';
+  $icon = 'success';
+  $data=[
+    'message'=>$message,
+    'icon'=>$icon,
+  ];
+  return redirect()->route('admin.csv', $data);
   }
 
   public function SetonagiImport(){
   Setonagi::truncate();
   Excel::import(new SetonagiImport, request()->file('file'));
-  return back();
+  $message = '正常にインポートが完了しました。';
+  $icon = 'success';
+  $data=[
+    'message'=>$message,
+    'icon'=>$icon,
+  ];
+  return redirect()->route('admin.csv', $data);
   }
 
   public function SetonagiItemImport(){
   SetonagiItem::truncate();
   Excel::import(new SetonagiItemImport, request()->file('file'));
-  return back();
+  $message = '正常にインポートが完了しました。';
+  $icon = 'success';
+  $data=[
+    'message'=>$message,
+    'icon'=>$icon,
+  ];
+  return redirect()->route('admin.csv', $data);
   }
 
 
@@ -871,7 +955,8 @@ class AdminPageController extends Controller
       }
 
       // dd($tokuisaki_name->tokuisaki_name);
-      $buyerrecommends = BuyerRecommend::where('tokuisaki_id',$tokuisaki_id)->orderBy('order_no')->get();
+      // $buyerrecommends = BuyerRecommend::where('tokuisaki_id',$tokuisaki_id)->orderBy('order_no')->get();
+      $buyerrecommends = BuyerRecommend::where('tokuisaki_id',$tokuisaki_id)->orderByRaw('CAST(order_no as SIGNED) ASC')->get();
       // dd($buyerrecommends);
       $data=[
         'id'=>$id,
@@ -886,7 +971,39 @@ class AdminPageController extends Controller
 
 
 
+    public function buyerduplicaterecommend(Request $request){
 
+
+      $tokuisaki_id = $request->tokuisaki_id;
+
+      $buyerrecommend_item = BuyerRecommend::where('id',$request->duplicate)->first();
+      // dd($buyerrecommend_item);
+      $order_no = $buyerrecommend_item->order_no;
+
+
+      $recommend = BuyerRecommend::create(['item_id'=> $buyerrecommend_item->item_id , 'sku_code'=> $buyerrecommend_item->sku_code,'price'=> $buyerrecommend_item->price,'tokuisaki_id'=> $buyerrecommend_item->tokuisaki_id ,'order_no'=> $order_no]);
+      $recommend -> save();
+
+      // $buyerrecommends = BuyerRecommend::where('tokuisaki_id',$tokuisaki_id)->orderBy('order_no')->get();
+
+      $buyerrecommends = BuyerRecommend::where('tokuisaki_id',$tokuisaki_id)->orderByRaw('CAST(order_no as SIGNED) ASC')->get();
+      $n=1;
+      foreach ($buyerrecommends as $buyerrecommend) {
+        $buyerrecommend->order_no = $n;
+        $buyerrecommend->save();
+        $n++;
+      }
+
+      $id = $tokuisaki_id;
+
+      $data=[
+        'id'=>$id,
+        // 'item_search'=>$item_search,
+        // 'order_no'=>$order_no,
+      ];
+
+      return redirect()->route('buyerrecommend', $id);
+    }
 
     public function buyeraddrecommend(Request $request){
 
@@ -911,7 +1028,9 @@ class AdminPageController extends Controller
       $recommend = BuyerRecommend::create(['item_id'=> $item->item_id , 'sku_code'=> $item->sku_code ,'tokuisaki_id'=> $request->tokuisaki_id ,'order_no'=> $order_no]);
       $recommend -> save();
 
-      $buyerrecommends = BuyerRecommend::where('tokuisaki_id',$tokuisaki_id)->orderBy('order_no')->get();
+      // $buyerrecommends = BuyerRecommend::where('tokuisaki_id',$tokuisaki_id)->orderBy('order_no')->get();
+
+      $buyerrecommends = BuyerRecommend::where('tokuisaki_id',$tokuisaki_id)->orderByRaw('CAST(order_no as SIGNED) ASC')->get();
       $n=1;
       foreach ($buyerrecommends as $buyerrecommend) {
         $buyerrecommend->order_no = $n;
@@ -932,11 +1051,12 @@ class AdminPageController extends Controller
 
     public function buyersaverecommend(Request $request){
 
+      // dd($request->buyerrecommend);
       $tokuisaki_id = $request->tokuisaki_id;
       $buyerrecommends = $request->buyerrecommend;
-      // dd($tokuisaki_id);
+      // dd($buyerrecommends = $request->buyerrecommend);
 
-      // 価格が保存されないので修正
+      // オーダー順を取得して並び替える
       foreach($buyerrecommends as  $key => $value) {
         $buyerrecommend = BuyerRecommend::firstOrNew(['id'=> $key]);
         $buyerrecommend->price = $value['price'];
