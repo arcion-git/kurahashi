@@ -47,6 +47,7 @@
                     <th class="text-center">産地</th>
                     <th class="text-center">規格</th>
                     <th class="text-center">単位</th>
+                    <th class="text-center">在庫数</th>  
                     <th class="text-center">単価</th>
                     <th class="text-center">掲載開始</th>
                     <th class="text-center">掲載終了</th>
@@ -84,6 +85,9 @@
         							@elseif ($buyerrecommend->item()->tani == 4)
         							Kg
         							@endif
+                    </td>
+                    <td class="text-center">
+                      {{$buyerrecommend->item()->zaikosuu}}
                     </td>
                     <td class="text-center" width="150">
                       <input name="buyerrecommend[{{$buyerrecommend->id}}][price]" class="price text-center form-control" value="{{$buyerrecommend->price}}">
@@ -290,6 +294,16 @@ $('#sortdata').bind('sortstop',function(){
 //   console.log(order_no);
 //   $(".ordernosave").val(order_no);
 // });
+
+$(window).scroll(function() {
+  sessionStorage.scrollTop = $(this).scrollTop();
+});
+
+$(document).ready(function() {
+  if (sessionStorage.scrollTop != "undefined") {
+    $(window).scrollTop(sessionStorage.scrollTop);
+  }
+});
 </script>
 
 

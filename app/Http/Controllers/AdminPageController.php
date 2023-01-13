@@ -169,7 +169,7 @@ class AdminPageController extends Controller
     $data=[
       'nouhin_yoteibi'=>$nouhin_yoteibi,
       'carts'=>$carts,
-      'cart_ninis' => $cart_ninis,
+      'cart_ninis'=>$cart_ninis,
       'deal'=>$deal,
     ];
     return view('dealdetail', $data);
@@ -182,7 +182,6 @@ class AdminPageController extends Controller
     $deal_id = $request->deal_id;
 
     $deal = Deal::where(['id'=> $deal_id])->first();
-
 
     $user_id = $deal->user_id;
     // dd($user_id);
@@ -1051,7 +1050,7 @@ class AdminPageController extends Controller
 
     public function buyersaverecommend(Request $request){
 
-      // dd($request->buyerrecommend);
+      // dd($request);
       $tokuisaki_id = $request->tokuisaki_id;
       $buyerrecommends = $request->buyerrecommend;
       // dd($buyerrecommends = $request->buyerrecommend);
@@ -2432,6 +2431,9 @@ class AdminPageController extends Controller
     File::setUseUploadTempDirectory(public_path());
 
     $writer = new Csv($spreadsheet);
+    $writer->setDelimiter(',');
+    $writer->setUseBOM(true);
+    $writer->setEnclosure('"');
     $writer->save(public_path() . '/storage/excel/export.csv');
     $now = Carbon::now();
     return response()->download(public_path() . '/storage/excel/export.csv', 'orderbook'.$now.'.csv')->deleteFileAfterSend(true);

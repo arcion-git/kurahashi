@@ -82,6 +82,10 @@ class LoginPageController extends Controller
       // $search = $request->search;
       // dd($search);
 
+
+
+
+
       $user_id = Auth::guard('user')->user()->id;
       $favorite_categories = FavoriteCategory::where('user_id', $user_id)->first();
 
@@ -181,19 +185,21 @@ class LoginPageController extends Controller
 
       // $now = Carbon::now()->addDay(3)->format('Y-m-d');
       $now = Carbon::now();
-
       // dd($user_id);
 
       $kaiin_number = Auth::guard('user')->user()->kaiin_number;
-      // dd($kaiin_number);
-      $store = StoreUser::where('user_id',$kaiin_number)->first();
-      // dd($store->tokuisaki_id);
-
-      $buyer_recommends = BuyerRecommend::where('tokuisaki_id', $store->tokuisaki_id)
-      ->where('price', '>=', '1')
-      ->whereDate('start', '<=' , $now)
-      ->whereDate('end', '>=', $now)
-      ->orderBy('order_no', 'asc')->get();
+      $buyer_recommends = [];
+      $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get()->unique('tokuisaki_id');
+      foreach ($tokuisaki_ids as $key => $value) {
+        // dd($value->tokuisaki_id);
+        $buyer_recommend_loop = BuyerRecommend::where('tokuisaki_id', $value->tokuisaki_id)
+        ->where('price', '>=', '1')
+        ->whereDate('start', '<=' , $now)
+        ->whereDate('end', '>=', $now)
+        ->orderBy('order_no', 'asc')->get();
+        // array_push($buyer_recommends, $buyer_recommend_loop);
+        $buyer_recommends = collect($buyer_recommends)->merge($buyer_recommend_loop);
+      }
       // dd($buyer_recommends);
 
       $recommends = Recommend::where('user_id', $user_id)
@@ -203,6 +209,8 @@ class LoginPageController extends Controller
       ->orderBy('order_no', 'asc')->get();
 
       $recommends = $recommends->merge($buyer_recommends);
+      // $recommends = $buyer_recommends;
+
 
 
       // dd($recommends);
@@ -825,8 +833,8 @@ class LoginPageController extends Controller
     // 得意先商品価格上書き
     // $kaiin_number = Auth::guard('user')->user()->kaiin_number;
     // $store = StoreUser::where('user_id',$kaiin_number)->first();
-    $now = Carbon::now();
-    $buyerrecommend_item = BuyerRecommend::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'tokuisaki_id'=>$store->tokuisaki_id])->whereDate('start', '<=' , $now)->whereDate('end', '>=', $now)->first();
+    // $now = Carbon::now();
+    $buyerrecommend_item = BuyerRecommend::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'tokuisaki_id'=>$store->tokuisaki_id])->whereDate('start', '<=' , $nouhin_yoteibi)->whereDate('end', '>=', $nouhin_yoteibi)->first();
     // Log::debug($buyerrecommend_item);
     if(isset($buyerrecommend_item->price)){
     $order->price = $buyerrecommend_item->price;

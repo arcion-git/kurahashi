@@ -3,12 +3,15 @@
 namespace App;
 
 use App\Store;
+use App\User;
 use App\StoreUser;
 use App\BuyerRecommend;
 use App\SpecialPrice;
 use App\PriceGroupe;
 
+use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class Cart extends Model
@@ -31,8 +34,11 @@ class Cart extends Model
 
   public function nouhin_end() {
       //リレーション
+
       $item = $this->belongsTo('App\Item', 'item_id')->first();
-      $kaiin_number = Auth::guard('user')->user()->kaiin_number;
+      $user = $this->belongsTo('App\User', 'user_id')->first();
+
+      $kaiin_number = $user->kaiin_number;
       $store = StoreUser::where('user_id',$kaiin_number)->first();
       $tokuisaki_id = $store->tokuisaki_id;
 

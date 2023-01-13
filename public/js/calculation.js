@@ -568,6 +568,10 @@ if(document.URL.match("/admin/deal")) {
       $(document).on("change", ".price", function() {
         var order_id = $(this).parent().parent().get(0).id;
         var price = $(this).val();
+        if( price.match( /[^0-9]+/ ) ) {
+          alert("半角数字で入力して下さい。");
+          return false;
+        }
         console.log(price);
         console.log(order_id);
         $.ajax({

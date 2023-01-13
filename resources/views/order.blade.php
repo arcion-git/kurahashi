@@ -34,7 +34,7 @@
 				@foreach($cart->orders as $val)
 					<tr id="{{$val->id}}">
 						<td class="head-price text-center">
-							<input name="price[]" class="price text-center form-control" data-price="{{$val->price}}" value="{{$val->price}}"
+							<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="{{$val->price}}" value="{{$val->price}}"
 							@if ( Auth::guard('user')->check() ) readonly @endif>
 						</td>
 
@@ -80,9 +80,7 @@
 						</td>
 						@if(!$user->setonagi)
 						<td class="head-yoteibi text-center">
-								<input type="text" name="nouhin_yoteibi[]" class="nouhin_yoteibi nouhin_yoteibi_{{$cart->id}} text-center form-control daterange-cus datepicker" value="{{$val->nouhin_yoteibi}}" readonly=”readonly” autocomplete="off" required>
-
-
+								<input type="text" name="nouhin_yoteibi[]" class="nouhin_yoteibi nouhin_yoteibi_{{$cart->id}} text-center form-control daterange-cus datepicker" value="{{$val->nouhin_yoteibi}}" autocomplete="off" required>
 								@if($user->kyuujitu_haisou == 1)
 								<script>
 								$('.nouhin_yoteibi_{{$cart->id}}').datepicker({
@@ -108,7 +106,7 @@
 									@foreach($holidays as $holiday)
 									'{{$holiday}}',
 									@endforeach
-									]
+								],
 								});
 								</script>
 								@endif
@@ -452,7 +450,7 @@
 										<input name="nini_quantity[]" class="nini_quantity text-center form-control" value="{{$val->quantity}}" required>
 									</td>
 									<td class="head-yoteibi text-center">
-											<input type="text" name="nini_nouhin_yoteibi[]" class="nini_nouhin_yoteibi text-center form-control daterange-cus datepicker" value="{{$val->nouhin_yoteibi}}" readonly="readonly" autocomplete="off" required>
+											<input type="text" name="nini_nouhin_yoteibi[]" class="nini_nouhin_yoteibi text-center form-control daterange-cus datepicker" value="{{$val->nouhin_yoteibi}}" autocomplete="off" required>
 									</td>
 									<td class="head-sousa text-center">
 										<button type="button" id="{{$val->id}}" class="removeid_{{$val->id}} removeordernini btn btn-info">削除</button><br />
@@ -699,16 +697,30 @@ $(function(){
 });
 </script>
 
+<script>
+if(document.URL.match('confirm|deal')) {
+$(function() {
+	// inputにフォーカス時、readonlyに変更
+	$('.nouhin_yoteibi,.nini_nouhin_yoteibi')
+	.focusin(function(e) {
+		$(this).attr('readOnly', 'tlue');
+	})
+	.focusout(function(e) {
+		$(this).removeAttr('readOnly');
+	});
+	$('.nouhin_yoteibi').css({'cssText': 'border: 1px solid #c7e2fe !important; background-color: #fdfdff !important;'});
+	$('.nini_nouhin_yoteibi').css({'cssText': 'border: 1px solid #c7e2fe !important; background-color: #fdfdff !important;'});
+});
+}
+</script>
+
 
 @if(isset($user->setonagi))
 	@if(Auth::guard('user')->check() )
 <script>
-if(document.URL.match("/confirm")) {
+if(document.URL.match('confirm')) {
 
 $(function() {
-
-$('.nouhin_yoteibi').css({'cssText': 'border: 1px solid #c7e2fe !important; background-color: #fdfdff !important;'});
-$('.nini_nouhin_yoteibi').css({'cssText': 'border: 1px solid #c7e2fe !important; background-color: #fdfdff !important;'});
 
 if ($("[id=クロネコかけ払い]").prop("checked") == true) {
 $('#pay_card').hide();

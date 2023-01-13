@@ -3946,3 +3946,7 @@ footer .external_link ul{
   padding: 5px;
   margin-bottom: 10px;
 }
+.delete_button,
+.buyerduplicatercommend_button{
+  cursor: pointer;
+}
