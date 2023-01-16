@@ -111,18 +111,15 @@ class BothController extends Controller
 
 
     // 法人ユーザーのみ処理を分岐
+    $order=Order::where(['id'=> $order_id])->first();
+    $item_id=Cart::where(['id'=> $order->cart_id])->first()->item_id;
+    $item=Item::where('id',$item_id)->first();
 
-      $order=Order::where(['id'=> $order_id])->first();
-      $item_id=Cart::where(['id'=> $order->cart_id])->first()->item_id;
-      $item=Item::where('id',$item_id)->first();
+    $kaiin_number = Cart::where(['id'=> $order->cart_id])->first()->kaiin_number;
 
-      $kaiin_number = Cart::where(['id'=> $order->cart_id])->first()->kaiin_number;
-
-        // アドミンユーザーの処理を作る
-      // $kaiin_number = Auth::guard('user')->user()->kaiin_number;
-
-      $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get()->unique('tokuisaki_id');
-      // 得意先商品価格上書き
+    $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get()->unique('tokuisaki_id');
+    // 得意先商品価格上書き
+    if($tokuisaki_ids){
       foreach ($tokuisaki_ids as $key => $value) {
         // dd($value->tokuisaki_id);
         $buyerrecommend_item = BuyerRecommend::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'tokuisaki_id'=>$value->tokuisaki_id])->whereDate('start', '<=' , $nouhin_yoteibi)->whereDate('end', '>=', $nouhin_yoteibi)->first();
@@ -131,6 +128,7 @@ class BothController extends Controller
           $order->save();
         }
       }
+    }
 
     $data = "sucsess";
     return redirect()->route('setonagi',$data);

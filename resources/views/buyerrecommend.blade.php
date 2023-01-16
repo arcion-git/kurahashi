@@ -14,7 +14,7 @@
       @endif
       @if ( Auth::guard('admin')->check() )
       <div class="breadcrumb-item active"><a href="{{ url('/admin/home') }}">HOME</a></div>
-      <div class="breadcrumb-item"><a href="{{ url('/admin/user') }}">顧客一覧</a></div>
+      <div class="breadcrumb-item"><a href="{{ url('/admin/buyer') }}">得意先一覧</a></div>
       <div class="breadcrumb-item">得意先ごとのおすすめ商品登録（{{$store->tokuisaki_name}} 様）</a></div>
       @endif
     </div>
@@ -47,7 +47,7 @@
                     <th class="text-center">産地</th>
                     <th class="text-center">規格</th>
                     <th class="text-center">単位</th>
-                    <th class="text-center">在庫数</th>  
+                    <th class="text-center">在庫数</th>
                     <th class="text-center">単価</th>
                     <th class="text-center">掲載開始</th>
                     <th class="text-center">掲載終了</th>
@@ -93,13 +93,13 @@
                       <input name="buyerrecommend[{{$buyerrecommend->id}}][price]" class="price text-center form-control" value="{{$buyerrecommend->price}}">
                     </td>
                     <td class="text-center" width="150">
-                      <input type="text" name="buyerrecommend[{{$buyerrecommend->id}}][start]" class="start text-center form-control daterange-cus datepicker" value="{{$buyerrecommend->start}}" readonly="readonly">
+                      <input type="text" name="buyerrecommend[{{$buyerrecommend->id}}][start]" class="start text-center form-control daterange-cus datepicker" value="{{$buyerrecommend->start}}" required>
                     </td>
                     <td class="text-center" width="150">
-                      <input type="text" name="buyerrecommend[{{$buyerrecommend->id}}][end]" class="end text-center form-control daterange-cus datepicker" value="{{$buyerrecommend->end}}" readonly="readonly">
+                      <input type="text" name="buyerrecommend[{{$buyerrecommend->id}}][end]" class="end text-center form-control daterange-cus datepicker" value="{{$buyerrecommend->end}}" required>
                     </td>
                     <td class="text-center" width="150">
-                      <input type="text" name="buyerrecommend[{{$buyerrecommend->id}}][nouhin_end]" class="nouhin_end text-center form-control daterange-cus datepicker" value="{{$buyerrecommend->nouhin_end}}" readonly="readonly">
+                      <input type="text" name="buyerrecommend[{{$buyerrecommend->id}}][nouhin_end]" class="nouhin_end text-center form-control daterange-cus datepicker" value="{{$buyerrecommend->nouhin_end}}" required>
                     </td>
                     <td class="text-center">
                       <div class="btn btn-primary delete_button" data-id="{{$buyerrecommend->id}}"/>削除</div>
@@ -264,6 +264,20 @@ $('.datepicker').datepicker({
 	// endDate: '+31d',
 	defaultViewDate: Date()
 });
+</script>
+<script>
+
+$(function() {
+	// inputにフォーカス時、readonlyに変更
+	$('.datepicker')
+	.focusin(function(e) {
+		$(this).attr('readOnly', 'tlue');
+	})
+	.focusout(function(e) {
+		$(this).removeAttr('readOnly');
+	});
+});
+
 </script>
 <script>
 $(window).on('load',function(){
