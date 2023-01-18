@@ -2,6 +2,13 @@
 
 namespace App\Http\Controllers\UserAuth;
 
+use App\User;
+use App\Cart;
+use App\Order;
+
+// 時間に関する処理
+use Carbon\Carbon;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
@@ -37,6 +44,7 @@ class LoginController extends Controller
      * @var string
      */
     // public $redirectTo = '/user/home';
+
     public $redirectTo = '/';
 
     /**
@@ -128,6 +136,24 @@ class LoginController extends Controller
     public function redirectPath()
     {
         return 'setonagi';
+    }
+
+    protected function authenticated(\Illuminate\Http\Request $request)
+    {
+        // 先日以降にカートに追加された商品を削除
+        // dd($request->email);
+        $user = User::where(['email'=> $request->email])->first();
+        $yesterday = Carbon::yesterday();
+        $carts = Cart::where(['user_id'=> $user->id,'deal_id'=> null])
+        ->whereDate('created_at', '<=' , $yesterday)->get();
+        if($carts){
+          foreach ($carts as $key => $value) {
+            $orders=Order::where(['cart_id'=> $value->id])->get()->delete();
+          }
+        }
+        $carts = Cart::where(['user_id'=> $user->id,'deal_id'=> null])
+        ->whereDate('created_at', '<=' , $yesterday)->delete();
+        return redirect()->route('setonagi');
     }
 
 

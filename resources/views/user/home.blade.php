@@ -178,9 +178,9 @@
 
                             <td class="text-center">
                               @if($special_price->favoriteitem())
-                              <button name="item_id" value="{{$special_price->item()->id}}" id="{{$special_price->item()->id}}" class="removefavoriteitem"><i class="fa fa-heart"></i></button>
+                              <!-- <button name="item_id" value="{{$special_price->item()->id}}" id="{{$special_price->item()->id}}" class="removefavoriteitem"><i class="fa fa-heart"></i></button> -->
                               @else
-                              <button name="item_id" value="{{$special_price->item()->id}}" id="{{$special_price->item()->id}}" class="addfavoriteitem"><i class="far fa-heart"></i></button>
+                              <!-- <button name="item_id" value="{{$special_price->item()->id}}" id="{{$special_price->item()->id}}" class="addfavoriteitem"><i class="far fa-heart"></i></button> -->
                               @endif
 
                               @if ( Auth::guard('user')->user()->setonagi == 1 )

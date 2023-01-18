@@ -109,16 +109,19 @@ class BothController extends Controller
 
     $order=Order::where(['id'=> $order_id])->update(['nouhin_yoteibi'=> $nouhin_yoteibi]);
 
-
     // 法人ユーザーのみ処理を分岐
     $order=Order::where(['id'=> $order_id])->first();
     $item_id=Cart::where(['id'=> $order->cart_id])->first()->item_id;
     $item=Item::where('id',$item_id)->first();
 
-    $kaiin_number = Cart::where(['id'=> $order->cart_id])->first()->kaiin_number;
+    $user_id = Cart::where(['id'=> $order->cart_id])->first()->user_id;
+    $kaiin_number = User::where(['id'=> $user_id])->first()->kaiin_number;
 
     $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get()->unique('tokuisaki_id');
+
+    // Log::debug($tokuisaki_ids);
     // 得意先商品価格上書き
+
     if($tokuisaki_ids){
       foreach ($tokuisaki_ids as $key => $value) {
         // dd($value->tokuisaki_id);
@@ -225,8 +228,6 @@ class BothController extends Controller
     $tokuisaki_name = $request->tokuisaki_name;
     $kaiin_number = $request->kaiin_number;
 
-
-
     $store = Store::where(['tokuisaki_name'=>$tokuisaki_name,'store_name'=> $store_name])->first();
 
     $price_groupe = PriceGroupe::where([ 'tokuisaki_id'=> $store->tokuisaki_id,'store_id'=> $store->store_id ])->first();
@@ -252,7 +253,7 @@ class BothController extends Controller
     // Log::debug($request);
 
     // 市況商品価格上書き
-    $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])->first();
+    $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'price_groupe'=>$price_groupe->$price_groupe])->first();
     if(isset($special_price_item->price)){
     $order->price = $special_price_item->price;
     }
@@ -263,13 +264,32 @@ class BothController extends Controller
       $order->price = $setonagi_item->price;
     }
 
-    // 得意先商品価格上書き
-    // $kaiin_number = Auth::guard('user')->user()->kaiin_number;
-    // $store = StoreUser::where('user_id',$kaiin_number)->first();
+    $setonagi_user = User::where(['kaiin_number'=>$kaiin_number])->first()->setonagi;
     $now = Carbon::now();
-    $buyerrecommend_item = BuyerRecommend::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'tokuisaki_id'=>$store->tokuisaki_id])->whereDate('start', '<=' , $now)->whereDate('end', '>=', $now)->first();
-    if(isset($buyerrecommend_item->price)){
-    $order->price = $buyerrecommend_item->price;
+    if(!$setonagi_user){
+      $buyer_recommends = [];
+      $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get()->unique('tokuisaki_id');
+      foreach ($tokuisaki_ids as $key => $value){
+        // 担当のおすすめ商品の価格を探す
+        $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $value->tokuisaki_id)
+        ->where('price', '>=', '1')
+        ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
+        ->whereDate('start', '<=' , $now)
+        ->whereDate('end', '>=', $now)
+        ->orderBy('order_no', 'asc')->first();
+        // dd($buyer_recommend_item);
+        if(isset($buyer_recommend_item)){
+          $order->price = $buyer_recommend_item->price;
+        }
+        // 市況商品の価格を探す
+        $price_groupe = PriceGroupe::where(['tokuisaki_id'=>$value->tokuisaki_id,'store_id'=>$value->store_id])->first();
+        $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'price_groupe'=>$price_groupe->price_groupe])
+        ->whereDate('start', '<=' , $now)
+        ->whereDate('end', '>=', $now)->first();
+        if(isset($special_price_item)){
+          $order->price = $special_price_item->price;
+        }
+      }
     }
 
     // 担当のおすすめ商品価格上書き

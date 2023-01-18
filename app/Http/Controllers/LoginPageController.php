@@ -806,6 +806,8 @@ class LoginPageController extends Controller
 
 
 
+
+
     // hiddenで値を持たせる
     // $setonagi_item_id = $request->setonagi_item_id;
     // if(isset($setonagi_item_id)){
@@ -828,7 +830,8 @@ class LoginPageController extends Controller
 
     // セトナギユーザーの場合は得意先を取得しない
     if(!$setonagi_user){
-      $order=Order::firstOrNew(['cart_id'=> $cart->id , 'tokuisaki_name'=> $store->tokuisaki_name , 'store_name'=> $store->store_name , 'quantity'=> 1 , 'nouhin_yoteibi'=> $nouhin_yoteibi]);
+      // $order=Order::firstOrNew(['cart_id'=> $cart->id , 'tokuisaki_name'=> $store->tokuisaki_name , 'store_name'=> $store->store_name , 'quantity'=> 1 , 'nouhin_yoteibi'=> $nouhin_yoteibi]);
+      $order=Order::firstOrNew(['cart_id'=> $cart->id , 'quantity'=> 1 , 'nouhin_yoteibi'=> $nouhin_yoteibi]);
       if(isset($price->price)){
       $order->price = $price->price;
       }
@@ -877,15 +880,10 @@ class LoginPageController extends Controller
         ->whereDate('start', '<=' , $now)
         ->whereDate('end', '>=', $now)->first();
         if(isset($special_price_item)){
-          $order->price = $buyer_recommend_item->price;
-          return $special_price_item->nouhin_end;
+          $order->price = $special_price_item->price;
         }
       }
     }
-
-
-
-
 
 
 
