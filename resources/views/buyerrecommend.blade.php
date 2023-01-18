@@ -10,7 +10,7 @@
     <div class="section-header-breadcrumb">
       @if ( Auth::guard('user')->check() )
       <div class="breadcrumb-item"><a href="{{ url('/') }}">HOME</a></div>
-      <div class="breadcrumb-item">担当のおすすめ商品</div>
+      <div class="breadcrumb-item">得意先ごとのおすすめ商品</div>
       @endif
       @if ( Auth::guard('admin')->check() )
       <div class="breadcrumb-item active"><a href="{{ url('/admin/home') }}">HOME</a></div>
@@ -90,16 +90,16 @@
                       {{$buyerrecommend->item()->zaikosuu}}
                     </td>
                     <td class="text-center" width="150">
-                      <input name="buyerrecommend[{{$buyerrecommend->id}}][price]" class="price text-center form-control" value="{{$buyerrecommend->price}}">
+                      <input pattern="^[0-9]+$" name="buyerrecommend[{{$buyerrecommend->id}}][price]" class="price text-center form-control" value="{{$buyerrecommend->price}}">
                     </td>
                     <td class="text-center" width="150">
-                      <input type="text" name="buyerrecommend[{{$buyerrecommend->id}}][start]" class="start text-center form-control daterange-cus datepicker" value="{{$buyerrecommend->start}}" required>
+                      <input type="text" name="buyerrecommend[{{$buyerrecommend->id}}][start]" class="start text-center form-control daterange-cus datepicker" value="{{$buyerrecommend->start}}">
                     </td>
                     <td class="text-center" width="150">
-                      <input type="text" name="buyerrecommend[{{$buyerrecommend->id}}][end]" class="end text-center form-control daterange-cus datepicker" value="{{$buyerrecommend->end}}" required>
+                      <input type="text" name="buyerrecommend[{{$buyerrecommend->id}}][end]" class="end text-center form-control daterange-cus datepicker" value="{{$buyerrecommend->end}}">
                     </td>
                     <td class="text-center" width="150">
-                      <input type="text" name="buyerrecommend[{{$buyerrecommend->id}}][nouhin_end]" class="nouhin_end text-center form-control daterange-cus datepicker" value="{{$buyerrecommend->nouhin_end}}" required>
+                      <input type="text" name="buyerrecommend[{{$buyerrecommend->id}}][nouhin_end]" class="nouhin_end text-center form-control daterange-cus datepicker" value="{{$buyerrecommend->nouhin_end}}">
                     </td>
                     <td class="text-center">
                       <div class="btn btn-primary delete_button" data-id="{{$buyerrecommend->id}}"/>削除</div>
@@ -297,6 +297,9 @@ $('#sortdata').bind('sortstop',function(){
     $(this).val(idx+1);
     $('.save_btn').click();
   });
+});
+$('.price,.start,.end,nouhin_end').change(function() {
+    $('.save_btn').click();
 });
 // $(".addrecommend").on("click",function(){
 //   var order_no = $(this).parent().parent().find('.order_no').val();
