@@ -1262,7 +1262,7 @@ class AdminPageController extends Controller
     Mail::send('emails.register', [
         'name' => $name,
         'text' => $text,
-    ], function ($message) use ($email , $admin_mail) {
+    ], function ($message) use ($email ,$admin_mail) {
         $message->to($email)->bcc($admin_mail)->subject('SETOnagiオーダーブック利用停止のお知らせ');
     });
     return redirect()->route('admin.setonagiuser');

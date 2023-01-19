@@ -148,7 +148,8 @@ class LoginController extends Controller
         ->whereDate('created_at', '<=' , $yesterday)->get();
         if($carts){
           foreach ($carts as $key => $value) {
-            $orders=Order::where(['cart_id'=> $value->id])->get()->delete();
+
+            $orders=Order::where(['cart_id'=> $value->id])->delete();
           }
         }
         $carts = Cart::where(['user_id'=> $user->id,'deal_id'=> null])
