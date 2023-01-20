@@ -1661,7 +1661,7 @@ class AdminPageController extends Controller
               // 得意先名
               $tokuisaki_name = $store->tokuisaki_name;
               // 得意先店舗名
-              $store_name = $store->tokuisaki_name;
+              $store_name = $store->store_name;
             }else{
               // 会社名
               $company = $setonagi_user->company;
@@ -1712,6 +1712,8 @@ class AdminPageController extends Controller
               $deal_status = 1;
             }elseif($deal->status == 'キャンセル'){
               $deal_status = 0;
+            }else{
+              $deal_status = $deal->status;
             }
             $array = [
               // 取引番号
@@ -1885,6 +1887,8 @@ class AdminPageController extends Controller
               $deal_status = 1;
             }elseif($deal->status == 'キャンセル'){
               $deal_status = 0;
+            }else{
+              $deal_status = $deal->status;
             }
             // $item = Item::where(['id'=> $cart->item_id])->first();
             // dd($store);
@@ -2079,7 +2083,7 @@ class AdminPageController extends Controller
                   // 得意先名
                   $tokuisaki_name = $store->tokuisaki_name;
                   // 得意先店舗名
-                  $store_name = $store->tokuisaki_name;
+                  $store_name = $store->store_name;
                 }
                 $array = [
                   // 取引番号
@@ -2278,7 +2282,7 @@ class AdminPageController extends Controller
               }
               $array = [
                 // 取引番号
-                'r'.$repeatcart->id,
+                'r'.$repeatcart->id.$date,
                 // カート番号
                 'r'.$repeatcart->id,
                 // 注文日時
@@ -2374,11 +2378,11 @@ class AdminPageController extends Controller
                 // 引渡場所
                 '',
                 // 発注先企業
-                '',
-                // 発注先部署コード
                 $item->kigyou_code,
+                // 発注先部署コード
+                $item->busho_code,
                 // 発注先部署名
-                $item->bucho_code,
+                $item->busho_name,
                 // 発注先当者者コード
                 $item->tantou_code,
                 // 発注先当者名

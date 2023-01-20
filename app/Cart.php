@@ -76,7 +76,7 @@ class Cart extends Model
     $now = Carbon::now();
 
     $stores = [];
-    $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get()->unique('tokuisaki_id');
+    $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get();
     foreach ($tokuisaki_ids as $key => $value) {
       $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $value->tokuisaki_id)
       ->where('price', '>=', '1')
@@ -90,9 +90,27 @@ class Cart extends Model
       }
     }
     foreach ($tokuisaki_ids as $key => $value) {
-      $stores_loop = Store::where('tokuisaki_id', $value->tokuisaki_id)->get();
+      $stores_loop = Store::where(['tokuisaki_id'=>$value->tokuisaki_id,'store_id'=>$value->store_id])->get();
       $stores = collect($stores)->merge($stores_loop);
     }
+
+    // $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get()->unique('tokuisaki_id');
+    // foreach ($tokuisaki_ids as $key => $value) {
+    //   $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $value->tokuisaki_id)
+    //   ->where('price', '>=', '1')
+    //   ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
+    //   ->whereDate('start', '<=' , $now)
+    //   ->whereDate('end', '>=', $now)
+    //   ->orderBy('order_no', 'asc')->first();
+    //   if(isset($buyer_recommend_item)){
+    //     $stores = Store::where('tokuisaki_id',$buyer_recommend_item->tokuisaki_id)->get();
+    //     return $stores;
+    //   }
+    // }
+    // foreach ($tokuisaki_ids as $key => $value) {
+    //   $stores_loop = Store::where('tokuisaki_id', $value->tokuisaki_id)->get();
+    //   $stores = collect($stores)->merge($stores_loop);
+    // }
     return $stores;
   }
 }
