@@ -2085,6 +2085,8 @@ class AdminPageController extends Controller
                   // 得意先店舗名
                   $store_name = $store->store_name;
                 }
+                $now = Carbon::now();
+                $torihiki_date = $now->format('yymd');
                 $array = [
                   // 取引番号
                   'r'.$repeatcart->id.'-'.$torihiki_date,
@@ -2235,7 +2237,6 @@ class AdminPageController extends Controller
             // dd($weekday);
             // 曜日が含まれているか確認
             $date = $date->format('yy-m-d');
-            $torihiki_date = $date->format('yymd');
             // dd($repeatorder->cart);
             $repeatcart = $repeatorder->cart;
             $zei = '8%';
@@ -2281,6 +2282,8 @@ class AdminPageController extends Controller
                 // 得意先店舗名
                 $store_name = $store->tokuisaki_name;
               }
+              $now = Carbon::now();
+              $torihiki_date = $now->format('yymd');
               $array = [
                 // 取引番号
                 'r'.$repeatcart->id.'-'.$torihiki_date,
