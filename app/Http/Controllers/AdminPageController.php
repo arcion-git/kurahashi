@@ -2087,7 +2087,7 @@ class AdminPageController extends Controller
                 }
                 $array = [
                   // 取引番号
-                  'r'.$repeatcart->id,
+                  'r'.$repeatcart->id.'-'.$torihiki_date,
                   // カート番号
                   'r'.$repeatcart->id,
                   // 注文日時
