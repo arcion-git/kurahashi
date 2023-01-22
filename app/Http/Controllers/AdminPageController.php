@@ -2030,7 +2030,7 @@ class AdminPageController extends Controller
           foreach ($repeatorders as $repeatorder) {
             if($repeatorder->startdate <= $nouhin_yoteibi){
               $date = new Carbon($nouhin_yoteibi);
-              $date('Y-m-d', strtotime($date));
+              // $date('Y-m-d', strtotime($date));
               $weekday = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
               $weekday = $weekday[$date->dayOfWeek];
               // dd($weekday);
@@ -2235,6 +2235,7 @@ class AdminPageController extends Controller
             // dd($weekday);
             // 曜日が含まれているか確認
             $date = $date->format('yy-m-d');
+            $torihiki_date = $date->format('yymd');
             // dd($repeatorder->cart);
             $repeatcart = $repeatorder->cart;
             $zei = '8%';
@@ -2282,7 +2283,7 @@ class AdminPageController extends Controller
               }
               $array = [
                 // 取引番号
-                'r'.$repeatcart->id.$date,
+                'r'.$repeatcart->id.'-'.$torihiki_date,
                 // カート番号
                 'r'.$repeatcart->id,
                 // 注文日時
