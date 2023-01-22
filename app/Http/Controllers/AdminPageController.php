@@ -2040,8 +2040,8 @@ class AdminPageController extends Controller
               // 曜日が含まれているか確認
 
               // dd($repeatorder->cart);
-              $date = $date->format('yy-m-d');
               $torihiki_date = $date->format('yymd');
+              $date = $date->format('yy-m-d');
               $repeatcart = $repeatorder->cart;
               $zei = '8%';
               $key = in_array($weekday, $nouhin_youbi);
@@ -2235,8 +2235,8 @@ class AdminPageController extends Controller
             // dd($nouhin_youbi);
             // dd($weekday);
             // 曜日が含まれているか確認
-            $date = $date->format('yy-m-d');
             $torihiki_date = $date->format('yymd');
+            $date = $date->format('yy-m-d');
             // dd($repeatorder->cart);
             $repeatcart = $repeatorder->cart;
             $zei = '8%';
