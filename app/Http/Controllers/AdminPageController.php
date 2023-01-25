@@ -1971,7 +1971,7 @@ class AdminPageController extends Controller
               // 備考
               $deal->memo,
               // 注文行番号
-              "n".$order->id,
+              $order_nini->id,
               // 商品コード
               $item_code,
               // SKUコード
