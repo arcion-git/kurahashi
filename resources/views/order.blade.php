@@ -42,7 +42,7 @@
 
 						@if(!$user->setonagi)
 						<td class="head-store text-center">
-
+			
 
 							<select name="store[]" class="store text-center form-control" value="{{$val->tokuisaki_name}} {{$val->store_name}}" required>
 								<option id="{{$val->tokuisaki_name}}" value="{{$val->store_name}}">{{$val->tokuisaki_name}} {{$val->store_name}}</option>
@@ -54,12 +54,9 @@
 										@foreach($stores as $store)
 										<option id="{{$store->tokuisaki_name}}" value="{{$store->store_name}}">{{$store->tokuisaki_name}} {{$store->store_name}}</option>
 										@endforeach
-									@else
-									@foreach($stores as $store)
-									<option id="{{$store->tokuisaki_name}}" value="{{$store->store_name}}">{{$store->tokuisaki_name}} {{$store->store_name}}</option>
-									@endforeach
-									<option value="all_store">全店舗に追加</option>
 									@endif
+
+
 							</select>
 						</td>
 						@endif

@@ -1578,6 +1578,58 @@ class LoginPageController extends Controller
     }
     $deal_id = $deal->id;
 
+
+    // 掲載期限を過ぎた市況商品、担当のおすすめ商品がカートに含まれていないかチェック
+    $kaiin_number = $user->kaiin_number;
+    $now = Carbon::now();
+
+    $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get()->unique('tokuisaki_id');
+    $carts = Cart::where(['user_id'=> $user_id,'deal_id'=> null])->get();
+
+    foreach ($tokuisaki_ids as $key => $value) {
+      foreach ($carts as $cart) {
+        $item = Item::where('id', $cart->item_id)->first();
+        // dd($item);
+        // 担当のおすすめ商品の納品期日を探す
+        // $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $value->tokuisaki_id)
+        // ->where('price', '>=', '1')
+        // ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
+        // ->whereDate('start', '>=' , $now)
+        // ->whereDate('end', '<=', $now)
+        // ->orderBy('order_no', 'asc')->first();
+        // dd($buyer_recommend_item);
+        // if(isset($buyer_recommend_item)){
+        //   $message = $item->item_name.'は掲載期限を過ぎているので注文できません。';
+        //   $data=[
+        //     'message' => $message,
+        //   ];
+        // }
+        // 市況商品を探す
+        $price_groupe = PriceGroupe::where(['tokuisaki_id'=>$value->tokuisaki_id,'store_id'=>$value->store_id])->first();
+        $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'price_groupe'=>$price_groupe->price_groupe])
+        ->whereDate('start', '>=' , $now)->first();
+        if(isset($special_price_item)){
+          $message = $item->item_name.'は掲載期限を過ぎているので注文できません。';
+          $data=[
+            'message' => $message,
+          ];
+          return redirect()->route('confirm',$data);
+        }
+        $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'price_groupe'=>$price_groupe->price_groupe])
+        ->whereDate('end', '<=', $now)->first();
+        if(isset($special_price_item)){
+          $message = $item->item_name.'は掲載期限を過ぎているので注文できません。';
+          $data=[
+            'message' => $message,
+          ];
+          return redirect()->route('confirm',$data);
+        }
+            // dd($special_price_item);
+      }
+    }
+
+
+
     // 納品日が今の日付より前に設定されていないかチェック
     $nouhin_youbi_list = [];
     $carts = Cart::where(['user_id'=> $user_id,'deal_id'=> null])->get();

@@ -1566,7 +1566,7 @@ class AdminPageController extends Controller
     $kikan = $request->kikan;
     $start = $request->start;
     $end = $request->end;
-
+    $zei = '8%';
 
     // 次の営業日を取得
     $today = date("Y-m-d");
@@ -1596,6 +1596,7 @@ class AdminPageController extends Controller
 		// $sheet = $spreadsheet->getSheetByName("原本");
 
     $deals =  Deal::where('status','発注済')->orwhere('status','キャンセル')->get();
+
     // dd($deals);
 
     if($deals){
@@ -2040,10 +2041,9 @@ class AdminPageController extends Controller
               // 曜日が含まれているか確認
 
               // dd($repeatorder->cart);
-              $torihiki_date = $date->format('yymd');
-              $date = $date->format('yy-m-d');
+              $torihiki_date = $date->format('Ymd');
+              $date = $date->format('Y-m-d');
               $repeatcart = $repeatorder->cart;
-              $zei = '8%';
               $key = in_array($weekday, $nouhin_youbi);
               if($key == true){
                 // 会員IDを取得して、ユーザー情報を取得するところから
@@ -2235,11 +2235,10 @@ class AdminPageController extends Controller
             // dd($nouhin_youbi);
             // dd($weekday);
             // 曜日が含まれているか確認
-            $torihiki_date = $date->format('yymd');
-            $date = $date->format('yy-m-d');
+            $torihiki_date = $date->format('Ymd');
+            $date = $date->format('Y-m-d');
             // dd($repeatorder->cart);
             $repeatcart = $repeatorder->cart;
-            $zei = '8%';
             $key = in_array($weekday, $nouhin_youbi);
             if($key == true){
               // 会員IDを取得して、ユーザー情報を取得するところから
