@@ -1888,6 +1888,8 @@ class AdminPageController extends Controller
             $pay = 'クラハシ払い';
             if($deal->status == '受注済'){
               $deal_status = 1;
+            }elseif($deal->status == '発注済'){
+              $deal_status = 1;
             }elseif($deal->status == 'キャンセル'){
               $deal_status = '0';
             }else{
