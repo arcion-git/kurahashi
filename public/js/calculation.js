@@ -647,7 +647,7 @@ if(document.URL.match("/admin/deal")) {
       })
       // Ajaxリクエスト失敗時の処理
       .fail(function(jqXHR, textStatus, errorThrown) {
-        alert('個数を変更できませんでした。');
+        alert('個数を変更できませんでした。半角数字で入力してください。');
         console.log("ajax通信に失敗しました");
         console.log("XMLHttpRequest : " + XMLHttpRequest.status);
         console.log("textStatus     : " + textStatus);
@@ -974,7 +974,7 @@ if(document.URL.match("/admin/deal")) {
       })
       // Ajaxリクエスト失敗時の処理
       .fail(function(jqXHR, textStatus, errorThrown) {
-        alert('個数を変更できませんでした。');
+        alert('個数を変更できませんでした。半角数字で入力してください。');
         console.log("ajax通信に失敗しました");
         console.log("XMLHttpRequest : " + XMLHttpRequest.status);
         console.log("textStatus     : " + textStatus);

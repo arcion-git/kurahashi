@@ -42,7 +42,7 @@
 
 						@if(!$user->setonagi)
 						<td class="head-store text-center">
-			
+
 
 							<select name="store[]" class="store text-center form-control" value="{{$val->tokuisaki_name}} {{$val->store_name}}" required>
 								<option id="{{$val->tokuisaki_name}}" value="{{$val->store_name}}">{{$val->tokuisaki_name}} {{$val->store_name}}</option>
@@ -451,10 +451,13 @@
 									<td class="head-store text-center">
 										<select name="nini_store[]" class="nini_store text-center form-control" value="{{$val->tokuisaki_name}} {{$val->store_name}}" required>
 											<option id="{{$val->tokuisaki_name}}" value="{{$val->store_name}}">{{$val->tokuisaki_name}} {{$val->store_name}}</option>
-											@foreach($stores as $store)
-											<option id="{{$store->tokuisaki_name}}" value="{{$store->store_name}}">{{$store->tokuisaki_name}} {{$store->store_name}}</option>
-											@endforeach
-											<option value="all_store_nini">全店舗に追加</option>
+											@if($cart->stores())
+												<?php $stores = $cart->stores()?>
+												@foreach($stores as $store)
+												<option id="{{$store->tokuisaki_name}}" value="{{$store->store_name}}">{{$store->tokuisaki_name}} {{$store->store_name}}</option>
+												@endforeach
+											@endif
+											<!-- <option value="all_store_nini">全店舗に追加</option> -->
 										</select>
 									</td>
 									<td class="head-quantity text-center">
