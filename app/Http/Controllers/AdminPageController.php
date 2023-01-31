@@ -1880,6 +1880,8 @@ class AdminPageController extends Controller
               $item_code = 101916009;
             }elseif($cart_nini->tantou_name == '水産'){
               $item_code = 101945009;
+            }elseif($cart_nini->tantou_name == '特殊'){
+              $item_code = 101916009;
             }else{
               $item_code = '';
             }
@@ -2014,7 +2016,15 @@ class AdminPageController extends Controller
               // 倉庫コード
               '',
               // 値引率
-              ''
+              '',
+              // 得意先コード
+              $store->$tokuisaki_id,
+              // 得意先店舗コード
+              $store->$store_id,
+              // 得意先名
+              $store->$tokuisaki_name,
+              // 得意先店舗名
+              $store->$store_name,
             ];
       			array_push($order_list, $array);
           }
