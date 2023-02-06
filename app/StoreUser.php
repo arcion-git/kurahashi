@@ -15,14 +15,10 @@ class StoreUser extends Model
   ];
 
   public function store() {
-    // dd($this->tokuisaki_id);
-    $store = Store::where(['tokuisaki_id' => $this->tokuisaki_id])->first();
-    if($store){
-      return $store;
-    }else{
-      $store = null;
-      return $store;
-    }
+    // dd($this);
+    // $store = Store::where(['tokuisaki_id' => $this->tokuisaki_id,'store_id' => $this->store_id])->first();
+    $store = Store::where(['tokuisaki_id' => $this->tokuisaki_id , 'store_id' => $this->store_id])->first();
+    return $store;
   }
 
 }
