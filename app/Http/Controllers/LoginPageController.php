@@ -1163,11 +1163,18 @@ class LoginPageController extends Controller
     $kaiin_number = Auth::guard('user')->user()->kaiin_number;
 
     $stores = [];
-    $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get()->unique('tokuisaki_id');
+    $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get();
+
     foreach ($tokuisaki_ids as $key => $value) {
-      $stores_loop = Store::where('tokuisaki_id',$value->tokuisaki_id)->get();
+      $stores_loop = Store::where(['tokuisaki_id'=>$value->tokuisaki_id,'store_id'=>$value->store_id])->get();
       $stores = collect($stores)->merge($stores_loop);
     }
+
+    // $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get()->unique('tokuisaki_id');
+    // foreach ($tokuisaki_ids as $key => $value) {
+    //   $stores_loop = Store::where('tokuisaki_id',$value->tokuisaki_id)->get();
+    //   $stores = collect($stores)->merge($stores_loop);
+    // }
     // dd($stores);
 
 
