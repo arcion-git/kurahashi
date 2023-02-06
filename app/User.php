@@ -66,7 +66,7 @@ class User extends Authenticatable
 
       $tokuisaki = StoreUser::where('user_id',$kaiin_number)->first();
       if ($tokuisaki) {
-        $tokuisaki_name = Store::where(['tokuisaki_id' => $tokuisaki->tokuisaki_id ,'store_id' => $tokuisaki->store_id])->first()->tokuisaki_name;
+        $tokuisaki_name = Store::where(['tokuisaki_id' => $tokuisaki->tokuisaki_id])->first()->tokuisaki_name;
       }else{
         $tokuisaki_name = null;
       }
