@@ -61,12 +61,15 @@ class User extends Authenticatable
 
     public function tokuisaki_name()
     {
+      // dd($this);
       $kaiin_number = $this->kaiin_number;
       $tokuisaki = StoreUser::where('user_id',$kaiin_number)->first();
       if ($tokuisaki) {
-      $tokuisaki_name = Store::where(['tokuisaki_id' => $tokuisaki->tokuisaki_id ,'store_id' => $tokuisaki->store_id])->first()->tokuisaki_name;
-        return $tokuisaki_name;
+        $tokuisaki_name = Store::where(['tokuisaki_id' => $tokuisaki->tokuisaki_id ,'store_id' => $tokuisaki->store_id])->first()->tokuisaki_name;
+      }else{
+        $tokuisaki_name = null;
       }
+      return $tokuisaki_name;
     }
 
     public function stop_repeatorder()
