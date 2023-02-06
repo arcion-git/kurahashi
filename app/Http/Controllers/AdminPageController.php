@@ -932,6 +932,8 @@ class AdminPageController extends Controller
     public function buyerrecommend(Request $request , $id){
       $item_search = $request->item_search;
 
+      // dd($item_search);
+
 
       $order_no = $request->ordernosave;
 
@@ -946,7 +948,7 @@ class AdminPageController extends Controller
       $store = Store::where('tokuisaki_id',$tokuisaki_id)->first();
 
       if(isset($item_search)){
-        $items = Item::where("busho_code", "LIKE", $code.'%')->Where('zaikosuu', '>=', '0.01')->where(function($items) use($item_search){
+        $items = Item::where("busho_code", "LIKE", $code.'%')->where(function($items) use($item_search){
           $items->where('item_name','like', "%$item_search%")->orWhere('item_id','like', "%$item_search%");
         })->orWhere('item_name_kana','like', "%$item_search%")->paginate(30);
       }else{
