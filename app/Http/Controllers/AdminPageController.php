@@ -950,10 +950,11 @@ class AdminPageController extends Controller
       if(isset($item_search)){
         $items = Item::where("busho_code", "LIKE", $code.'%')->where(function($items) use($item_search){
           $items->where('item_name','like', "%$item_search%")->orWhere('item_id','like', "%$item_search%");
-        })->orWhere('item_name_kana','like', "%$item_search%")->paginate(30);
+        })->orWhere('item_name_kana','like', "%$item_search%")->get();
       }else{
         $items = [];
       }
+      // dd($items);
 
       // dd($tokuisaki_name->tokuisaki_name);
       // $buyerrecommends = BuyerRecommend::where('tokuisaki_id',$tokuisaki_id)->orderBy('order_no')->get();
