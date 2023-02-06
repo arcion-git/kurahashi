@@ -21,6 +21,7 @@ class StoreUser extends Model
       return $store;
     }else{
       $store = null;
+      return $store;
     }
   }
 
