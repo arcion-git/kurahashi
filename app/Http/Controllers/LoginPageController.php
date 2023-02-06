@@ -1164,7 +1164,6 @@ class LoginPageController extends Controller
 
     $stores = [];
     $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get();
-
     foreach ($tokuisaki_ids as $key => $value) {
       $stores_loop = Store::where(['tokuisaki_id'=>$value->tokuisaki_id,'store_id'=>$value->store_id])->get();
       $stores = collect($stores)->merge($stores_loop);
