@@ -86,7 +86,9 @@ class Cart extends Model
       ->orderBy('order_no', 'asc')->first();
       if(isset($buyer_recommend_item)){
         $stores_loop = Store::where(['tokuisaki_id'=>$buyer_recommend_item->tokuisaki_id,'store_id'=>$value->store_id])->first();
+        if(isset($stores_loop)){
         $stores = collect($stores)->merge($stores_loop);
+        }
       }
     }
     if(isset($buyer_recommend_item)){
@@ -94,7 +96,9 @@ class Cart extends Model
     }
     foreach ($tokuisaki_ids as $key => $value) {
       $stores_loop = Store::where(['tokuisaki_id'=>$value->tokuisaki_id,'store_id'=>$value->store_id])->first();
-      $stores = collect($stores)->merge($stores_loop);
+      if(isset($stores_loop)){
+        $stores = collect($stores)->merge($stores_loop);
+      }
     }
 
     return $stores;
