@@ -5,6 +5,8 @@ namespace App\Http\Controllers\UserAuth;
 use App\User;
 use App\Cart;
 use App\Order;
+use App\CartNini;
+use App\OrderNini;
 
 // 時間に関する処理
 use Carbon\Carbon;
@@ -144,16 +146,29 @@ class LoginController extends Controller
         // dd($request->email);
         $user = User::where(['email'=> $request->email])->first();
         $yesterday = Carbon::yesterday();
+
+        // 取引IDのないカートの商品を削除
         $carts = Cart::where(['user_id'=> $user->id,'deal_id'=> null])
         ->whereDate('created_at', '<=' , $yesterday)->get();
         if($carts){
           foreach ($carts as $key => $value) {
-
             $orders=Order::where(['cart_id'=> $value->id])->delete();
           }
         }
         $carts = Cart::where(['user_id'=> $user->id,'deal_id'=> null])
         ->whereDate('created_at', '<=' , $yesterday)->delete();
+
+        // 取引IDのない任意の商品を削除
+        $carts = CartNini::where(['user_id'=> $user->id,'deal_id'=> null])
+        ->whereDate('created_at', '<=' , $yesterday)->get();
+        if($carts){
+          foreach ($carts as $key => $value) {
+            $orders=OrderNini::where(['cart_nini_id'=> $value->id])->delete();
+          }
+        }
+        $carts = CartNini::where(['user_id'=> $user->id,'deal_id'=> null])
+        ->whereDate('created_at', '<=' , $yesterday)->delete();
+
         return redirect()->route('setonagi');
     }
 

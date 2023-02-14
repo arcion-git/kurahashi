@@ -1234,6 +1234,18 @@ if(document.URL.match("/admin/recommendcategory")) {
 }
 
 // 担当のおすすめ商品複製（formタグ回避）
+if(document.URL.match("/admin/user/recommend")) {
+  $(function(){
+    $(".userduplicatercommend_button").on("click",function(){
+      var remove_id = $(this).data('id');
+      console.log(remove_id);
+      $("#userduplicatercommend_id").val(remove_id);
+      $('#userduplicatercommend_form').submit();
+    });
+  });
+}
+
+// 担当のおすすめ商品複製（formタグ回避）
 if(document.URL.match("/admin/buyer/recommend")) {
   $(function(){
     $(".buyerduplicatercommend_button").on("click",function(){

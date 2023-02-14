@@ -1164,10 +1164,18 @@ class LoginPageController extends Controller
 
     $stores = [];
     $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get();
+    // foreach ($tokuisaki_ids as $key => $value) {
+    //   $stores_loop = Store::where(['tokuisaki_id'=>$value->tokuisaki_id,'store_id'=>$value->store_id])->get();
+    //   $stores = collect($stores)->merge($stores_loop);
+    // }
+
+
     foreach ($tokuisaki_ids as $key => $value) {
-      $stores_loop = Store::where(['tokuisaki_id'=>$value->tokuisaki_id,'store_id'=>$value->store_id])->get();
-      $stores = collect($stores)->merge($stores_loop);
+      $stores_loop = Store::where(['tokuisaki_id'=>$value->tokuisaki_id,'store_id'=>$value->store_id])->first();
+      array_push($stores, $stores_loop);
+      // $stores = collect($stores);
     }
+
 
     // $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get()->unique('tokuisaki_id');
     // foreach ($tokuisaki_ids as $key => $value) {
@@ -1635,17 +1643,64 @@ class LoginPageController extends Controller
     }
 
 
+    // 次の営業日を取得
+    $today = date("Y-m-d");
+    $holidays = Holiday::pluck('date');
+    $currentTime = date('H:i:s');
 
-    // 納品日が今の日付より前に設定されていないかチェック
+    // 17時より前の処理
+    if (strtotime($currentTime) < strtotime('17:00:00')) {
+      $holidays = Holiday::pluck('date')->toArray();
+      for($i = 1; $i < 10; $i++){
+        $today_plus = date('Y-m-d', strtotime($today.'+'.$i.'day'));
+        // dd($today_plus2);
+        $key = array_search($today_plus,(array)$holidays,true);
+        if($key){
+            // 休みなので次の日付を探す
+        }else{
+            // 休みでないので納品日を格納
+            $nouhin_kanoubi = $today_plus;
+            break;
+        }
+      }
+    }else{
+    // 17時より後の処理
+      $holidays = Holiday::pluck('date')->toArray();
+      for($i = 2; $i < 10; $i++){
+        $today_plus = date('Y-m-d', strtotime($today.'+'.$i.'day'));
+        // dd($today_plus2);
+        $key = array_search($today_plus,(array)$holidays,true);
+        if($key){
+            // 休みなので次の日付を探す
+        }else{
+          // さらに1営業日をプラスして翌日が営業日か確認
+          for($i = 1; $i < 10; $i++){
+            $yoku_eigyoubi = date('Y-m-d', strtotime($today_plus.'+'.$i.'day'));
+            $key = array_search($yoku_eigyoubi,(array)$holidays,true);
+            if($key){
+                // 休みなので次の日付を探す
+            }else{
+                // 休みでないので納品日を格納
+                $nouhin_kanoubi = $yoku_eigyoubi;
+                break;
+            }
+          }
+          break;
+        }
+      }
+    }
+
+
+    // 納品日が納品可能日より前に設定されていないかチェック
     $nouhin_youbi_list = [];
     $carts = Cart::where(['user_id'=> $user_id,'deal_id'=> null])->get();
     // dd($carts);
-    $today = date("Y-m-d");
+    // $today = date("Y-m-d");
     foreach ($carts as $cart) {
       $orders = Order::where(['cart_id'=> $cart->id])->get();
       foreach ($orders as $order) {
         // $array = $order->nouhin_yoteibi;
-        $sano_nissuu = ((strtotime($order->nouhin_yoteibi) - strtotime($today)) / 86400);
+        $sano_nissuu = ((strtotime($order->nouhin_yoteibi) - strtotime($nouhin_kanoubi)) / 86400);
         $nouhin_yoteibi = date('Y年m月d日', strtotime($order->nouhin_yoteibi));
         // dd($nouhin_yoteibi);
         if($sano_nissuu < 0){
@@ -1654,6 +1709,7 @@ class LoginPageController extends Controller
             'id' => $deal_id,
             'order_id' => $order->id,
             'nouhin_yoteibi' => $nouhin_yoteibi,
+            'message' => '納品予定日'.$nouhin_yoteibi.'は指定できません。他の日付を設定してください。',
           ];
           return redirect()->route('confirm',$data);
         }

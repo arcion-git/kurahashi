@@ -3947,6 +3947,7 @@ footer .external_link ul{
   margin-bottom: 10px;
 }
 .delete_button,
+.userduplicatercommend_button,
 .buyerduplicatercommend_button{
   cursor: pointer;
 }

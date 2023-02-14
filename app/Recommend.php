@@ -15,6 +15,7 @@ class Recommend extends Model
     'sku_code',
     'price',
     'end',
+    'order_no',
   ];
 
   /**

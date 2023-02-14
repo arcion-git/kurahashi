@@ -70,37 +70,55 @@ class Cart extends Model
   }
   public function stores() {
     $item = $this->belongsTo('App\Item', 'item_id')->first();
+    // dd($item);
     $user = $this->belongsTo('App\User', 'user_id')->first();
 
     $kaiin_number = $user->kaiin_number;
     $now = Carbon::now();
 
-    $stores = [];
+    $stores=[];
+
+    // ユーザーが持っている店舗を全て取得
     $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get();
-    foreach ($tokuisaki_ids as $key => $value) {
-      $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $value->tokuisaki_id)
-      ->where('price', '>=', '1')
-      ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
-      ->whereDate('start', '<=' , $now)
-      ->whereDate('end', '>=', $now)
-      ->orderBy('order_no', 'asc')->first();
-      if(isset($buyer_recommend_item)){
-        $stores_loop = Store::where(['tokuisaki_id'=>$buyer_recommend_item->tokuisaki_id,'store_id'=>$value->store_id])->get();
-        if(isset($stores_loop)){
-        $stores = collect($stores)->merge($stores_loop);
+    // dd($tokuisaki_ids);
+
+
+    // 通常注文の場合のみ
+    // if(isset($item)){
+      // ユーザーが持っている店舗の中で、得意先おすすめ商品が登録されている得意先店舗のみを抽出
+      foreach ($tokuisaki_ids as $key => $value) {
+        $store = Store::where(['tokuisaki_id'=>$value->tokuisaki_id,'store_id'=>$value->store_id])->first();
+        // dd($store);
+        if(isset($store)){
+          // dd($store);
+          $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $store->tokuisaki_id)
+          ->where('price', '>=', '1')
+          ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
+          ->whereDate('start', '<=' , $now)
+          ->whereDate('end', '>=', $now)->first();
+          // dd($buyer_recommend_item);
+          if(isset($buyer_recommend_item)){
+            // $stores = collect($stores)->merge($store);
+            array_push($stores, $store);
+            // $stores = $stores->array_push($store);
+          }
         }
       }
-    }
-    if(isset($buyer_recommend_item)){
-      return $stores;
-    }
-    foreach ($tokuisaki_ids as $key => $value) {
-      $stores_loop = Store::where(['tokuisaki_id'=>$value->tokuisaki_id,'store_id'=>$value->store_id])->get();
-      if(isset($stores_loop)){
-        $stores = collect($stores)->merge($stores_loop);
-      }
+    // }
+    if($stores){
+    // dd(collect($stores));
+    return collect($stores);
     }
 
-    return $stores;
+
+    foreach ($tokuisaki_ids as $key => $value) {
+      $stores_loop = Store::where(['tokuisaki_id'=>$value->tokuisaki_id,'store_id'=>$value->store_id])->first();
+      if(isset($stores_loop)){
+        array_push($stores, $store);
+        // $stores = collect($stores)->merge($stores_loop);
+      }
+    }
+    // dd($stores);
+    return collect($stores);
   }
 }

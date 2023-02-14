@@ -163,6 +163,10 @@
 
   // 担当のおすすめポスト
   Route::get('/admin/user/recommend/{id}', 'AdminPageController@userrecommend')->name('recommend');
+
+  Route::post('/admin/user/recommend/{id}', 'AdminPageController@userrecommend');
+  Route::post('/admin/user/duplicatercommend', 'AdminPageController@userduplicaterecommend');
+
   Route::post('/admin/user/addrecommend', 'AdminPageController@addrecommend');
   Route::post('/admin/user/saverecommend', 'AdminPageController@saverecommend');
   Route::post('/admin/user/removercommend', 'AdminPageController@removercommend');

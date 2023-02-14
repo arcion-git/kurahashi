@@ -50,11 +50,11 @@
 								<!-- 該当する得意先店舗のみが選べるように -->
 
 									@if($cart->stores())
-										<?php $stores = $cart->stores()?>
-										@foreach($stores as $store)
+										<?php $store_lists = $cart->stores()?>
+										@foreach($store_lists as $store)
 										<option id="{{$store->tokuisaki_name}}" value="{{$store->store_name}}">{{$store->tokuisaki_name}} {{$store->store_name}}</option>
 										@endforeach
-										<option value="all_store">全店舗に追加</option>
+										<!-- <option value="all_store">全店舗に追加</option> -->
 									@endif
 
 
@@ -454,7 +454,7 @@
 											<option id="{{$val->tokuisaki_name}}" value="{{$val->store_name}}">{{$val->tokuisaki_name}} {{$val->store_name}}</option>
 
 											@foreach($stores as $store)
-											<option id="{{$store->tokuisaki_name}}" value="{{$store->store_name}}">{{$store->tokuisaki_name}} {{$store->store_name}}</option>
+												<option id="{{$store->tokuisaki_name}}" value="{{$store->store_name}}">{{$store->tokuisaki_name}} {{$store->store_name}}</option>
 											@endforeach
 											<option value="all_store_nini">全店舗に追加</option>
 										</select>
@@ -553,7 +553,7 @@ $(document).ready( function(){
 	<div class="col-lg-8">
 	  <div class="section-title">通信欄</div>
 	    <textarea id="memo" style="height:250px; width:500px;" name="memo" rows="10" value="@if(isset($deal)){{$deal->memo}}@elseif(isset($user->memo)){{$user->memo}}@endif" class="form-control selectric">@if(isset($deal)){{$deal->memo}}@elseif(isset($user->memo)){{$user->memo}}@endif</textarea>
-			<p class="memo_note">※通信欄は「内容確認画面に進む」を押すと保存されます。</p>
+			<p class="memo_note">※通信欄は「内容確認画面に進む」を押すと保存されます。<br />確認画面に進む直前に通信欄の入力をしてください。</p>
 	</div>
   <div class="col-lg-4 text-right">
     <div class="invoice-detail-item">

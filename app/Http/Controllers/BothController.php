@@ -244,13 +244,13 @@ class BothController extends Controller
     // $price = Price::where(['price_groupe'=>$price_groupe->price_groupe, 'item_id'=> $item->item_id, 'sku_code'=> $item->sku_code])->first();
 
     // 価格の上書きを行う
-    // $order = Order::where(['id'=> $order_id])->update(['store_name'=> $store_name,'tokuisaki_name'=> $tokuisaki_name,'price'=> $price->price]);
-
-    $order = Order::where(['id'=> $order_id])->update(['store_name'=> $store_name,'tokuisaki_name'=> $tokuisaki_name]);
-
     $order = Order::where(['id'=> $order_id])->first();
+    // Log::debug($order->store_name);
+    $order->store_name = $store_name;
+    $order->tokuisaki_name = $tokuisaki_name;
+    $order->save();
 
-    // Log::debug($request);
+
 
     // 市況商品価格上書き
     $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'price_groupe'=>$price_groupe->$price_groupe])->first();

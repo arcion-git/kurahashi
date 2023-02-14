@@ -857,22 +857,34 @@ class AdminPageController extends Controller
 
 
 // 担当のおすすめ商品処理
-  public function userrecommend($id){
+  public function userrecommend(Request $request , $id){
+    $item_search = $request->item_search;
+    $order_no = $request->ordernosave;
     $user = User::where('id',$id)->first();
     // 水産の前方コード
     $code = 1103;
     // 本番用
-    $items = Item::where("busho_code", "LIKE", $code.'%')->get();
+
+    // $items = Item::where("busho_code", "LIKE", $code.'%')->get();
     // 処理が重いので一時的に在庫数のある商品だけを表示
-    $items = Item::where("busho_code", "LIKE", $code.'%')->where('zaikosuu', '>=', '0.01')->get();
+    if(isset($item_search)){
+    $items = Item::where("busho_code", "LIKE", $code.'%')
+    ->where(function($items) use ($item_search){
+    $items->where('item_name','like', "%$item_search%")->orWhere('item_id','like', "%$item_search%");
+    })->orWhere('item_name_kana','like', "%$item_search%")->get();
+    }else{
+    $items = [];
+    }
     // dd($items);
-    $recommends = Recommend::where('user_id',$user->id)->orderBy('order_no')->get();
+    $recommends = Recommend::where('user_id',$user->id)->orderByRaw('CAST(order_no as SIGNED) ASC')->get();
     // dd($recommends);
     $data=[
       'id'=>$id,
       'items'=>$items,
       'user'=>$user,
       'recommends'=>$recommends,
+      'item_search'=>$item_search,
+      'order_no'=>$order_no,
     ];
     return view('recommend', $data);
   }
@@ -881,11 +893,11 @@ class AdminPageController extends Controller
   public function addrecommend(Request $request){
 
     $item_id = $request->item_id;
-    $user_id = $request->user_id;
+    $user_id = $request->tokuisaki_id;
 
     $user = User::where('id',$user_id)->first();
     $item = Item::where('id',$item_id)->first();
-    // dd($user);
+    // dd($request);
 
     // 同じ商品の掲載を禁止する場合
     // $recommend = Recommend::firstOrNew(['user_id'=> $user->id , 'item_id'=> $item->item_id , 'sku_code'=> $item->sku_code ]);
@@ -897,9 +909,46 @@ class AdminPageController extends Controller
     return redirect()->route('recommend', $id);
   }
 
+  public function userduplicaterecommend(Request $request){
+
+    $user_id = $request->tokuisaki_id;
+    // $tokuisaki_id = $request->tokuisaki_id;
+
+
+    $recommend_item = Recommend::where('id',$request->duplicate)->first();
+    // dd($buyerrecommend_item);
+    $order_no = $recommend_item->order_no;
+
+
+    $recommend = Recommend::create(['user_id'=> $user_id,'item_id'=> $recommend_item->item_id , 'sku_code'=> $recommend_item->sku_code,'price'=> $recommend_item->price,'order_no'=> $order_no]);
+    $recommend -> save();
+
+    // dd($recommend);
+
+    // $buyerrecommends = BuyerRecommend::where('tokuisaki_id',$tokuisaki_id)->orderBy('order_no')->get();
+    $recommends = Recommend::where('user_id',$user_id)->orderByRaw('CAST(order_no as SIGNED) ASC')->get();
+    // dd($recommends);
+    $n=1;
+    foreach ($recommends as $recommend) {
+      $recommend->order_no = $n;
+      $recommend->save();
+      $n++;
+    }
+
+    $id = $user_id;
+
+    $data=[
+      'id'=>$id,
+      // 'item_search'=>$item_search,
+      // 'order_no'=>$order_no,
+    ];
+
+    return redirect()->route('recommend', $id);
+  }
+
   public function saverecommend(Request $request){
 
-    $user_id = $request->user_id;
+    $user_id = $request->tokuisaki_id;
     $recommends = $request->recommend;
 
     foreach($recommends as  $key => $value) {
@@ -911,14 +960,14 @@ class AdminPageController extends Controller
       $recommend->save();
     }
 
-    $id = $request->user_id;
+    $id = $request->tokuisaki_id;
     return redirect()->route('recommend', $id);
   }
 
   public function removercommend(Request $request){
     $delete_id = $request->delete;
     $delete = Recommend::where('id',$delete_id)->first()->delete();
-    $id = $request->user_id;
+    $id = $request->tokuisaki_id;
     return redirect()->route('recommend', $id);
   }
 
@@ -2296,7 +2345,7 @@ class AdminPageController extends Controller
                 // 得意先名
                 $tokuisaki_name = $store->tokuisaki_name;
                 // 得意先店舗名
-                $store_name = $store->tokuisaki_name;
+                $store_name = $store->store_name;
               }
               $array = [
                 // 取引番号
