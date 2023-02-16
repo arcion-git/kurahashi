@@ -1920,7 +1920,7 @@ class AdminPageController extends Controller
             $user = User::where('id',$deal->user_id)->first();
             // dd($user);
             $store = Store::where(['tokuisaki_name'=> $order_nini->tokuisaki_name , 'store_name'=> $order_nini->store_name])->first();
-
+            // dd($store->tokuisaki_id);
             // 商品コード
             if($cart_nini->tantou_name == '青物'){
               $item_code = 101911009;
@@ -2074,13 +2074,13 @@ class AdminPageController extends Controller
               // 値引率
               '',
               // 得意先コード
-              $store->$tokuisaki_id,
+              $store->tokuisaki_id,
               // 得意先店舗コード
-              $store->$store_id,
+              $store->store_id,
               // 得意先名
-              $store->$tokuisaki_name,
+              $store->tokuisaki_name,
               // 得意先店舗名
-              $store->$store_name,
+              $store->store_name,
             ];
       			array_push($order_list, $array);
           }
