@@ -105,7 +105,7 @@ class Cart extends Model
         }
       }
     // }
-    if($buyer_recommend_item){
+    if($stores){
     // dd(collect($stores));
     return collect($stores);
     }
