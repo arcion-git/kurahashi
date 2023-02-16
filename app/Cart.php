@@ -105,8 +105,9 @@ class Cart extends Model
         }
       }
     // }
-    if($stores){
+    if($buyer_recommend_item){
     // dd(collect($stores));
+    $stores = array_unique($stores);
     return collect($stores);
     }
 
@@ -115,10 +116,11 @@ class Cart extends Model
       $stores_loop = Store::where(['tokuisaki_id'=>$value->tokuisaki_id,'store_id'=>$value->store_id])->first();
       if(isset($stores_loop)){
         array_push($stores, $store);
+
         // $stores = collect($stores)->merge($stores_loop);
       }
     }
-    // dd($stores);
+    $stores = array_unique($stores);
     return collect($stores);
   }
 }
