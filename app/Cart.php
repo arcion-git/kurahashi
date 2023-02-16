@@ -105,19 +105,20 @@ class Cart extends Model
         }
       }
     // }
-    if(isset($buyer_recommend_item)){
-    // dd(collect($stores));
+
+    // dd($buyer_recommend_item);
+    if(!count($stores) == 0){
     $stores = array_unique($stores);
+
     return collect($stores);
     }
 
-
+    $stores=[];
+    $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get();
     foreach ($tokuisaki_ids as $key => $value) {
       $stores_loop = Store::where(['tokuisaki_id'=>$value->tokuisaki_id,'store_id'=>$value->store_id])->first();
       if(isset($stores_loop)){
-        array_push($stores, $store);
-
-        // $stores = collect($stores)->merge($stores_loop);
+        array_push($stores, $stores_loop);
       }
     }
     $stores = array_unique($stores);
