@@ -1673,23 +1673,32 @@ class LoginPageController extends Controller
         if($key){
             // 休みなので次の日付を探す
         }else{
-          // さらに1営業日をプラスして翌日が営業日か確認
-          for($i = 1; $i < 10; $i++){
-            $yoku_eigyoubi = date('Y-m-d', strtotime($today_plus.'+'.$i.'day'));
-            $key = array_search($yoku_eigyoubi,(array)$holidays,true);
-            if($key){
-                // 休みなので次の日付を探す
-            }else{
-                // 休みでないので納品日を格納
-                $nouhin_kanoubi = $yoku_eigyoubi;
-                break;
+          //
+          // その前日が休みかどうか確認、休みの場合さらに1営業日をプラスして翌日が営業日か確認
+          $zenjitu = date('Y-m-d', strtotime($today_plus.'-1'.'day'));
+          $zenjitu_yasumi = array_search($zenjitu,(array)$holidays,true);
+
+          if($zenjitu_yasumi){
+            for($n = 1; $n < 10; $n++){
+              $yoku_eigyoubi = date('Y-m-d', strtotime($today_plus.'+'.$n.'day'));
+              $key = array_search($yoku_eigyoubi,(array)$holidays,true);
+              if($key){
+                  // 休みなので次の日付を探す
+              }else{
+                  // 休みでないので納品日を格納
+                  $nouhin_kanoubi = $yoku_eigyoubi;
+                  break;
+              }
             }
+          }else{
+            $nouhin_kanoubi = $today_plus;
+            break;
           }
           break;
         }
       }
     }
-
+          // dd($nouhin_kanoubi);
 
     // 納品日が納品可能日より前に設定されていないかチェック
     $nouhin_youbi_list = [];
