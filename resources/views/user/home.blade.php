@@ -282,6 +282,10 @@
             商品が売り切れました。
           </p>
           @else
+          <?php
+          header('Location: /setonagi/');
+          exit();
+          ?>
           <div class="section-body">
             <div class="row">
               <div class="col-12">

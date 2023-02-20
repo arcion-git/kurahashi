@@ -1698,7 +1698,7 @@ class LoginPageController extends Controller
         }
       }
     }
-          // dd($nouhin_kanoubi);
+
 
     // 納品日が納品可能日より前に設定されていないかチェック
     $nouhin_youbi_list = [];
@@ -1725,6 +1725,7 @@ class LoginPageController extends Controller
         array_push($nouhin_youbi_list, $sano_nissuu);
       }
     }
+    // dd($sano_nissuu);
 
     // 「担当のおすす商品」が存在しているかチェック
     // $nouhin_youbi_list = [];
