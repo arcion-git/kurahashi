@@ -768,11 +768,11 @@ class LoginPageController extends Controller
     $cart->save();
 
 
-    // 直近の納品予定日を取得
+    // 次の営業日を取得
     $today = date("Y-m-d");
     $holidays = Holiday::pluck('date');
     $currentTime = date('H:i:s');
-    // 19時より前の処理
+    // 17時より前の処理
     if (strtotime($currentTime) < strtotime('17:00:00')) {
       $holidays = Holiday::pluck('date')->toArray();
       for($i = 1; $i < 10; $i++){
@@ -780,29 +780,56 @@ class LoginPageController extends Controller
         // dd($today_plus2);
         $key = array_search($today_plus,(array)$holidays,true);
         if($key){
-            // 休みでないので納品日を格納
-        }else{
             // 休みなので次の日付を探す
+        }else{
+            // 休みでないので納品日を格納
             $nouhin_yoteibi = $today_plus;
             break;
         }
       }
     }else{
-    // 19時より後の処理
+      // 17時より後の処理
       $holidays = Holiday::pluck('date')->toArray();
       for($i = 2; $i < 10; $i++){
         $today_plus = date('Y-m-d', strtotime($today.'+'.$i.'day'));
         // dd($today_plus2);
         $key = array_search($today_plus,(array)$holidays,true);
         if($key){
-            // 休みでないので納品日を格納
-        }else{
             // 休みなので次の日付を探す
+        }else{
+          //
+          // その前日が休みかどうか確認、
+          $zenjitu = date('Y-m-d', strtotime($today_plus.'-1'.'day'));
+          $zenjitu_yasumi = array_search($zenjitu,(array)$holidays,true);
+
+          // 休みの場合さらに1営業日をプラスして翌日が営業日か確認
+          if($zenjitu_yasumi){
+            for($n = 1; $n < 10; $n++){
+              $yoku_eigyoubi = date('Y-m-d', strtotime($today_plus.'+'.$n.'day'));
+              $key = array_search($yoku_eigyoubi,(array)$holidays,true);
+              if($key){
+                  // 休みなので次の日付を探す
+              }else{
+                  // 休みでないので納品日を格納
+                  $nouhin_yoteibi = $yoku_eigyoubi;
+                  break;
+              }
+            }
+          }else{
+            // 休みでなければそのまま納品日を格納
             $nouhin_yoteibi = $today_plus;
             break;
+          }
+          break;
         }
       }
     }
+
+
+
+
+
+
 
 
 
@@ -1556,7 +1583,6 @@ class LoginPageController extends Controller
     $data = $request->all();
     $item_ids = $data['item_id'];
 
-
     // dd($data);
     // 在庫チェック
     foreach($item_ids as $key => $input) {
@@ -1674,10 +1700,11 @@ class LoginPageController extends Controller
             // 休みなので次の日付を探す
         }else{
           //
-          // その前日が休みかどうか確認、休みの場合さらに1営業日をプラスして翌日が営業日か確認
+          // その前日が休みかどうか確認、
           $zenjitu = date('Y-m-d', strtotime($today_plus.'-1'.'day'));
           $zenjitu_yasumi = array_search($zenjitu,(array)$holidays,true);
 
+          // 休みの場合さらに1営業日をプラスして翌日が営業日か確認
           if($zenjitu_yasumi){
             for($n = 1; $n < 10; $n++){
               $yoku_eigyoubi = date('Y-m-d', strtotime($today_plus.'+'.$n.'day'));
@@ -1691,6 +1718,7 @@ class LoginPageController extends Controller
               }
             }
           }else{
+            // 休みでなければそのまま納品日を格納
             $nouhin_kanoubi = $today_plus;
             break;
           }
