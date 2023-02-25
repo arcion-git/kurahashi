@@ -59,7 +59,7 @@
                   @endif
                 @endif
 
-                <button type="submit" name="addsuscess_btn" id="addsuscess_btn" class="btn btn-success">この内容で注文する</button>
+                <button type="submit" name="addsuscess_btn" value="1" id="addsuscess_btn" class="btn btn-success">この内容で注文する</button>
             </div>
           </form>
           <div class="float-right" style="margin-right:5px;">

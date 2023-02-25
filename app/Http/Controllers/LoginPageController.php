@@ -221,6 +221,7 @@ class LoginPageController extends Controller
       foreach ($tokuisaki_ids as $key => $value) {
         // dd($value->tokuisaki_id);
         $buyer_recommend_loop = BuyerRecommend::where('tokuisaki_id', $value->tokuisaki_id)
+        ->whereNotNull('nouhin_end')
         ->where('price', '>=', '1')
         ->whereDate('start', '<=' , $now)
         ->whereDate('end', '>=', $now)
@@ -228,7 +229,7 @@ class LoginPageController extends Controller
         // array_push($buyer_recommends, $buyer_recommend_loop);
         $buyer_recommends = collect($buyer_recommends)->merge($buyer_recommend_loop);
       }
-      // dd($buyer_recommends);
+      dd($buyer_recommends);
 
       $recommends = Recommend::where('user_id', $user_id)
       ->where('price', '>=', '1')
@@ -1100,6 +1101,16 @@ class LoginPageController extends Controller
 
     // dd($request->memo);
 
+    $data = $request->all();
+
+    // dd($data);
+
+    if(!$request->has('item_id') and !$request->has('cart_nini_id')){
+      $data=[
+        'message' => 'カートが空です。',
+      ];
+      return redirect()->route('confirm',$data);
+    }
 
 
     if($request->setonagi_id){
@@ -1582,6 +1593,8 @@ class LoginPageController extends Controller
     $user_id = $user->id;
     $data = $request->all();
     $item_ids = $data['item_id'];
+
+
 
     // dd($data);
     // 在庫チェック
@@ -2182,96 +2195,96 @@ class LoginPageController extends Controller
 
 
 // 現在は使っていない
-  public function addsuscess(Request $request){
-    $user_id = Auth::guard('user')->user()->id;
-
-    // $data = $request->all();
-    // $item_ids = $data['item_id'];
-    // $quantitys = $data['quantity'];
-
-    $deal_id = $request->deal_id;
-    // 直近の納品予定日に問題がないかチェックする
-    $today = date("Y-m-d");
-    $holidays = Holiday::pluck('date');
-    $currentTime = date('H:i:s');
-    // 19時より前の処理
-    if (strtotime($currentTime) < strtotime('17:00:00')) {
-      $holidays = Holiday::pluck('date')->toArray();
-      for($i = 1; $i < 10; $i++){
-        $today_plus = date('Y-m-d', strtotime($today.'+'.$i.'day'));
-        // dd($today_plus2);
-        $key = array_search($today_plus,(array)$holidays,true);
-        if($key){
-            // 休みでないので納品日を格納
-        }else{
-            // 休みなので次の日付を探す
-            $nouhin_yoteibi = $today_plus;
-            break;
-        }
-      }
-    }else{
-    // 19時より後の処理
-      $holidays = Holiday::pluck('date')->toArray();
-      for($i = 2; $i < 10; $i++){
-        $today_plus = date('Y-m-d', strtotime($today.'+'.$i.'day'));
-        // dd($today_plus2);
-        $key = array_search($today_plus,(array)$holidays,true);
-        if($key){
-            // 休みでないので納品日を格納
-        }else{
-            // 休みなので次の日付を探す
-            $nouhin_yoteibi = $today_plus;
-            break;
-        }
-      }
-    }
-
-    // 納品日が今の日付より前に設定されていないかチェック
-    $nouhin_youbi_list = [];
-    $carts = Cart::where(['deal_id'=> $deal_id])->get();
-    foreach ($carts as $cart) {
-      $orders = Order::where(['cart_id'=> $cart->id])->get();
-      foreach ($orders as $order) {
-        $array = $order->nouhin_yoteibi;
-        $sano_nissuu = ((strtotime($order->nouhin_yoteibi) - strtotime($today)) / 86400);
-        $nouhin_yoteibi = date('Y年m月d日', strtotime($order->nouhin_yoteibi));
-        if($sano_nissuu < 0){
-          // 納品日エラーの場合カート画面に戻す
-          $data=[
-            'id' => $deal_id,
-            'order_id' => $order->id,
-            'nouhin_yoteibi' => $nouhin_yoteibi,
-          ];
-          return redirect()->route('dealdetail',$data);
-        }
-        array_push($nouhin_youbi_list, $sano_nissuu);
-      }
-    }
-
-    $deal=Deal::firstOrNew(['id'=> $deal_id]);
-    $deal->status = '発注済';
-    $deal->success_time = Carbon::now();
-    // セトナギユーザーのみ「受け取り場所」「時間帯」「支払い方法を保存」
-    if($request->uketori_siharai){
-      $deal->uketori_siharai = $request->uketori_siharai;
-      $deal->uketori_place = $request->uketori_place;
-      $deal->uketori_time = $request->uketori_time;
-    }
-    $deal->memo = $request->memo;
-    $deal->save();
-
-
-
-    // foreach($item_ids as $key => $input) {
-    //   $cart = Cart::firstOrNew(['user_id'=> $user_id , 'item_id'=> $item_ids[$key], 'deal_id'=> $deal_id]);
-    //   $cart->user_id = $user_id;
-    //   $cart->deal_id = $deal_id;
-    //   $cart->quantity = isset($quantitys[$key]) ? $quantitys[$key] : null;
-    //   $cart->save();
-    // }
-
-    return redirect('deal');
-  }
+  // public function addsuscess(Request $request){
+  //   $user_id = Auth::guard('user')->user()->id;
+  //
+  //   // $data = $request->all();
+  //   // $item_ids = $data['item_id'];
+  //   // $quantitys = $data['quantity'];
+  //
+  //   $deal_id = $request->deal_id;
+  //   // 直近の納品予定日に問題がないかチェックする
+  //   $today = date("Y-m-d");
+  //   $holidays = Holiday::pluck('date');
+  //   $currentTime = date('H:i:s');
+  //   // 19時より前の処理
+  //   if (strtotime($currentTime) < strtotime('17:00:00')) {
+  //     $holidays = Holiday::pluck('date')->toArray();
+  //     for($i = 1; $i < 10; $i++){
+  //       $today_plus = date('Y-m-d', strtotime($today.'+'.$i.'day'));
+  //       // dd($today_plus2);
+  //       $key = array_search($today_plus,(array)$holidays,true);
+  //       if($key){
+  //           // 休みでないので納品日を格納
+  //       }else{
+  //           // 休みなので次の日付を探す
+  //           $nouhin_yoteibi = $today_plus;
+  //           break;
+  //       }
+  //     }
+  //   }else{
+  //   // 19時より後の処理
+  //     $holidays = Holiday::pluck('date')->toArray();
+  //     for($i = 2; $i < 10; $i++){
+  //       $today_plus = date('Y-m-d', strtotime($today.'+'.$i.'day'));
+  //       // dd($today_plus2);
+  //       $key = array_search($today_plus,(array)$holidays,true);
+  //       if($key){
+  //           // 休みでないので納品日を格納
+  //       }else{
+  //           // 休みなので次の日付を探す
+  //           $nouhin_yoteibi = $today_plus;
+  //           break;
+  //       }
+  //     }
+  //   }
+  //
+  //   // 納品日が今の日付より前に設定されていないかチェック
+  //   $nouhin_youbi_list = [];
+  //   $carts = Cart::where(['deal_id'=> $deal_id])->get();
+  //   foreach ($carts as $cart) {
+  //     $orders = Order::where(['cart_id'=> $cart->id])->get();
+  //     foreach ($orders as $order) {
+  //       $array = $order->nouhin_yoteibi;
+  //       $sano_nissuu = ((strtotime($order->nouhin_yoteibi) - strtotime($today)) / 86400);
+  //       $nouhin_yoteibi = date('Y年m月d日', strtotime($order->nouhin_yoteibi));
+  //       if($sano_nissuu < 0){
+  //         // 納品日エラーの場合カート画面に戻す
+  //         $data=[
+  //           'id' => $deal_id,
+  //           'order_id' => $order->id,
+  //           'nouhin_yoteibi' => $nouhin_yoteibi,
+  //         ];
+  //         return redirect()->route('dealdetail',$data);
+  //       }
+  //       array_push($nouhin_youbi_list, $sano_nissuu);
+  //     }
+  //   }
+  //
+  //   $deal=Deal::firstOrNew(['id'=> $deal_id]);
+  //   $deal->status = '発注済';
+  //   $deal->success_time = Carbon::now();
+  //   // セトナギユーザーのみ「受け取り場所」「時間帯」「支払い方法を保存」
+  //   if($request->uketori_siharai){
+  //     $deal->uketori_siharai = $request->uketori_siharai;
+  //     $deal->uketori_place = $request->uketori_place;
+  //     $deal->uketori_time = $request->uketori_time;
+  //   }
+  //   $deal->memo = $request->memo;
+  //   $deal->save();
+  //
+  //
+  //
+  //   // foreach($item_ids as $key => $input) {
+  //   //   $cart = Cart::firstOrNew(['user_id'=> $user_id , 'item_id'=> $item_ids[$key], 'deal_id'=> $deal_id]);
+  //   //   $cart->user_id = $user_id;
+  //   //   $cart->deal_id = $deal_id;
+  //   //   $cart->quantity = isset($quantitys[$key]) ? $quantitys[$key] : null;
+  //   //   $cart->save();
+  //   // }
+  //
+  //   return redirect('deal');
+  // }
 
   public function dealcancel(Request $request){
     $user_id = Auth::guard('user')->user()->id;

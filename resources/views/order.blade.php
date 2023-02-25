@@ -102,6 +102,7 @@
 									language: 'ja',
 									startDate: '{{$sano_nissuu}}',
 									endDate: '{{$cart->nouhin_end()}}',
+									// endDate: '@if($cart->nouhin_end()){{$cart->nouhin_end()}}@else +31d @endif',
 								});
 								</script>
 								@else
@@ -113,6 +114,7 @@
 									language: 'ja',
 									startDate: '{{$sano_nissuu}}',
 									endDate: '{{$cart->nouhin_end()}}',
+									// endDate: '@if($cart->nouhin_end()){{$cart->nouhin_end()}}@else +31d @endif',
 									defaultViewDate: Date(),
 									datesDisabled: [
 									@foreach($holidays as $holiday)
