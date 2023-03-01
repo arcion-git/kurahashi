@@ -1768,6 +1768,32 @@ class LoginPageController extends Controller
         array_push($nouhin_youbi_list, $sano_nissuu);
       }
     }
+
+    $nouhin_youbi_list = [];
+    $carts = CartNini::where(['user_id'=> $user_id,'deal_id'=> null])->get();
+
+    // $today = date("Y-m-d");
+    foreach ($carts as $cart) {
+      $orders = OrderNini::where(['cart_nini_id'=> $cart->id])->get();
+
+      foreach ($orders as $order) {
+        // $array = $order->nouhin_yoteibi;
+        $sano_nissuu = ((strtotime($order->nouhin_yoteibi) - strtotime($nouhin_kanoubi)) / 86400);
+        $nouhin_yoteibi = date('Y年m月d日', strtotime($order->nouhin_yoteibi));
+        // dd($nouhin_yoteibi);
+        if($sano_nissuu < 0){
+          // 納品日エラーの場合カート画面に戻す
+          $data=[
+            'id' => $deal_id,
+            'order_id' => $order->id,
+            'nouhin_yoteibi' => $nouhin_yoteibi,
+            'message' => '納品予定日'.$nouhin_yoteibi.'は指定できません。他の日付を設定してください。',
+          ];
+          return redirect()->route('confirm',$data);
+        }
+        array_push($nouhin_youbi_list, $sano_nissuu);
+      }
+    }
     // dd($sano_nissuu);
 
     // 「担当のおすす商品」が存在しているかチェック
