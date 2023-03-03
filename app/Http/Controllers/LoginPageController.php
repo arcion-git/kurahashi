@@ -781,11 +781,11 @@ class LoginPageController extends Controller
         // dd($today_plus2);
         $key = array_search($today_plus,(array)$holidays,true);
         if($key){
-            // 休みなので次の日付を探す
+          // 休みなので次の日付を探す
         }else{
-            // 休みでないので納品日を格納
-            $nouhin_kanoubi = $today_plus;
-            break;
+          // 休みでないので納品日を格納
+          $nouhin_yoteibi = $today_plus;
+          break;
         }
       }
     }else{
@@ -796,45 +796,14 @@ class LoginPageController extends Controller
         // dd($today_plus2);
         $key = array_search($today_plus,(array)$holidays,true);
         if($key){
-            // 休みなので次の日付を探す
+          // 休みなので次の日付を探す
         }else{
-          //
-          // その前日が休みかどうか確認、
-          // $zenjitu = date('Y-m-d', strtotime($today_plus.'-1'.'day'));
-          // $zenjitu_yasumi = array_search($zenjitu,(array)$holidays,true);
-          //
-          // // 休みの場合さらに1営業日をプラスして翌日が営業日か確認
-          // if($zenjitu_yasumi){
-          //   for($n = 1; $n < 10; $n++){
-          //     $yoku_eigyoubi = date('Y-m-d', strtotime($today_plus.'+'.$n.'day'));
-          //     $key = array_search($yoku_eigyoubi,(array)$holidays,true);
-          //     if($key){
-          //         // 休みなので次の日付を探す
-          //     }else{
-          //         // 休みでないので納品日を格納
-          //         $nouhin_kanoubi = $yoku_eigyoubi;
-          //         break;
-          //     }
-          //   }
-          // }else{
-          //   // 休みでなければそのまま納品日を格納
-          //   $nouhin_kanoubi = $today_plus;
-          //   break;
-          // }
-          //break;
-          $nouhin_kanoubi = $today_plus;
+          // 休みでないので納品日を格納
+          $nouhin_yoteibi = $today_plus;
           break;
         }
       }
     }
-
-
-
-
-
-
-
-
 
 
 
@@ -1698,7 +1667,7 @@ class LoginPageController extends Controller
             // 休みなので次の日付を探す
         }else{
             // 休みでないので納品日を格納
-            $nouhin_yoteibi = $today_plus;
+            $nouhin_kanoubi = $today_plus;
             break;
         }
       }
@@ -1736,7 +1705,7 @@ class LoginPageController extends Controller
           //   break;
           // }
           //break;
-          $nouhin_yoteibi = $today_plus;
+          $nouhin_kanoubi = $today_plus;
           break;
         }
       }
