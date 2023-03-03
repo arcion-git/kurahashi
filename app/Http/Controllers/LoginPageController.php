@@ -1698,7 +1698,7 @@ class LoginPageController extends Controller
             // 休みなので次の日付を探す
         }else{
             // 休みでないので納品日を格納
-            $nouhin_kanoubi = $today_plus;
+            $nouhin_yoteibi = $today_plus;
             break;
         }
       }
@@ -1736,7 +1736,7 @@ class LoginPageController extends Controller
           //   break;
           // }
           //break;
-          $nouhin_kanoubi = $today_plus;
+          $nouhin_yoteibi = $today_plus;
           break;
         }
       }
