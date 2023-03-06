@@ -1593,12 +1593,7 @@ class LoginPageController extends Controller
     // dd($item_nini_ids);
     // $quantitys = $data['quantity'];
 
-    if(isset($request->memo)){
-      $deal = Deal::create(['user_id'=> $user_id, 'memo'=> $request->memo]);
-    }else{
-      $deal = Deal::create(['user_id'=> $user_id]);
-    }
-    $deal_id = $deal->id;
+
 
 
     // 掲載期限を過ぎた市況商品、担当のおすすめ商品がカートに含まれていないかチェック
@@ -1732,18 +1727,18 @@ class LoginPageController extends Controller
               $order->save();
             }
             $data=[
-              'id' => $deal_id,
-              'order_id' => $order->id,
-              'nouhin_yoteibi' => $nouhin_yoteibi,
+              // 'id' => $deal_id,
+              // 'order_id' => $order->id,
+              // 'nouhin_yoteibi' => $nouhin_yoteibi,
               'message' => '締め時間の17時を過ぎたため引き取り予定日が'.$nouhin_kanoubi.'に変更されました。よろしければこのまま注文に進んでください。',
             ];
             return redirect()->route('confirm',$data);
           }
           // 納品日エラーの場合カート画面に戻す
           $data=[
-            'id' => $deal_id,
-            'order_id' => $order->id,
-            'nouhin_yoteibi' => $nouhin_yoteibi,
+            // 'id' => $deal_id,
+            // 'order_id' => $order->id,
+            // 'nouhin_yoteibi' => $nouhin_yoteibi,
             'message' => '納品予定日'.$nouhin_yoteibi.'は指定できません。他の日付を設定してください。',
           ];
           return redirect()->route('confirm',$data);
@@ -1767,9 +1762,9 @@ class LoginPageController extends Controller
         if($sano_nissuu < 0){
           // 納品日エラーの場合カート画面に戻す
           $data=[
-            'id' => $deal_id,
-            'order_id' => $order->id,
-            'nouhin_yoteibi' => $nouhin_yoteibi,
+            // 'id' => $deal_id,
+            // 'order_id' => $order->id,
+            // 'nouhin_yoteibi' => $nouhin_yoteibi,
             'message' => '納品予定日'.$nouhin_yoteibi.'は指定できません。他の日付を設定してください。',
           ];
           return redirect()->route('confirm',$data);
@@ -1797,7 +1792,12 @@ class LoginPageController extends Controller
     //   }
     // }
 
-
+    if(isset($request->memo)){
+      $deal = Deal::create(['user_id'=> $user_id, 'memo'=> $request->memo]);
+    }else{
+      $deal = Deal::create(['user_id'=> $user_id]);
+    }
+    $deal_id = $deal->id;
 
 
 
