@@ -1613,19 +1613,19 @@ class LoginPageController extends Controller
         $item = Item::where('id', $cart->item_id)->first();
         // dd($item);
         // 担当のおすすめ商品の納品期日を探す
-        // $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $value->tokuisaki_id)
-        // ->where('price', '>=', '1')
-        // ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
-        // ->whereDate('start', '>=' , $now)
-        // ->whereDate('end', '<=', $now)
-        // ->orderBy('order_no', 'asc')->first();
+        $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $value->tokuisaki_id)
+        ->where('price', '>=', '1')
+        ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
+        ->whereDate('start', '>=' , $now)
+        ->whereDate('end', '<=', $now)
+        ->orderBy('order_no', 'asc')->first();
         // dd($buyer_recommend_item);
-        // if(isset($buyer_recommend_item)){
-        //   $message = $item->item_name.'は掲載期限を過ぎているので注文できません。';
-        //   $data=[
-        //     'message' => $message,
-        //   ];
-        // }
+        if(isset($buyer_recommend_item)){
+          $message = $item->item_name.'は掲載期限を過ぎているので注文できません。';
+          $data=[
+            'message' => $message,
+          ];
+        }
         // 市況商品を探す
         $price_groupe = PriceGroupe::where(['tokuisaki_id'=>$value->tokuisaki_id,'store_id'=>$value->store_id])->first();
         $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'price_groupe'=>$price_groupe->price_groupe])
@@ -1637,16 +1637,16 @@ class LoginPageController extends Controller
           ];
           return redirect()->route('confirm',$data);
         }
-        $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'price_groupe'=>$price_groupe->price_groupe])
-        ->whereDate('end', '<=', $now)->first();
-        if(isset($special_price_item)){
-          $message = $item->item_name.'は掲載期限を過ぎているので注文できません。';
-          $data=[
-            'message' => $message,
-          ];
-          return redirect()->route('confirm',$data);
-        }
-            // dd($special_price_item);
+        // $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'price_groupe'=>$price_groupe->price_groupe])
+        // ->whereDate('end', '<=', $now)->first();
+        // if(isset($special_price_item)){
+        //   $message = $item->item_name.'は掲載期限を過ぎているので注文できません。';
+        //   $data=[
+        //     'message' => $message,
+        //   ];
+        //   return redirect()->route('confirm',$data);
+        // }
+        // dd($special_price_item);
       }
     }
 
@@ -1725,6 +1725,20 @@ class LoginPageController extends Controller
         $nouhin_yoteibi = date('Y年m月d日', strtotime($order->nouhin_yoteibi));
         // dd($nouhin_yoteibi);
         if($sano_nissuu < 0){
+          if($user->setonagi == 1){
+            $orders = Order::where(['cart_id'=> $cart->id])->get();
+            foreach ($orders as $order) {
+              $order->nouhin_yoteibi = $nouhin_kanoubi;
+              $order->save();
+            }
+            $data=[
+              'id' => $deal_id,
+              'order_id' => $order->id,
+              'nouhin_yoteibi' => $nouhin_yoteibi,
+              'message' => '締め時間の17時を過ぎたため引き取り予定日が'.$nouhin_kanoubi.'に変更されました。よろしければこのまま注文に進んでください。',
+            ];
+            return redirect()->route('confirm',$data);
+          }
           // 納品日エラーの場合カート画面に戻す
           $data=[
             'id' => $deal_id,
