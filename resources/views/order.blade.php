@@ -554,7 +554,7 @@ $(document).ready( function(){
 <div class="row mt-4">
 	<div class="col-lg-8">
 	  <div class="section-title">通信欄</div>
-	    <textarea id="memo" style="height:250px; width:500px;" name="memo" rows="10" value="@if(isset($deal)){{$deal->memo}}@elseif(isset($user->memo)){{$user->memo}}@endif" class="form-control selectric" maxlength="150">@if(isset($deal)){{$deal->memo}}@elseif(isset($user->memo)){{$user->memo}}@endif</textarea>
+	    <textarea id="memo" style="height:250px; width:500px;" name="memo" rows="10" value="@if(isset($deal)){{$deal->memo}}@elseif(isset($user->memo)){{$user->memo}}@endif" class="form-control selectric" maxlength="374" onchange="Limit(event)" onkeyup="Limit(event)">@if(isset($deal)){{$deal->memo}}@elseif(isset($user->memo)){{$user->memo}}@endif</textarea>
 			<p class="memo_note">※通信欄は「内容確認画面に進む」を押すと保存されます。<br />確認画面に進む直前に通信欄の入力をしてください。</p>
 	</div>
   <div class="col-lg-4 text-right">
@@ -681,6 +681,26 @@ label,
 
 
 <script>
+		// メモに最大13行の入力制限を追加
+    function lineCheck(e) {
+        var ta = document.getElementById("memo");
+        var row = ta.getAttribute("rows");
+        var r = (ta.value.split("\n")).length;
+        if (document.all) {
+            if (r >= row && window.event.keyCode === 13) { //keyCode for IE
+                return false; //入力キーを無視
+            }
+        } else {
+            if (r >= row && e.which === 13) { //which for NN
+                return false;
+            }
+        }
+    }
+    window.document.onkeypress = lineCheck;
+</script>
+
+<script>
+
 $(function(){
 	//ＵＲＬのパラメータを取得するための関数
 	function getUrlParam(param){
@@ -863,6 +883,9 @@ $(function(){
 		$('#pay_card').hide();
 	});
 }
+
+
+
 
 </script>
 	@endif

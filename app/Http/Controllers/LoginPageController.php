@@ -1101,7 +1101,7 @@ class LoginPageController extends Controller
 
     $memo = $request->memo; //チェックしたい本文
     if($memo){
-      $ng_words = array('"',','); //禁止ワード
+      $ng_words = array('"',',','#','!','$','%','&','=','@',';',':','?','/','+'); //禁止ワード
       $flg = 0;
       foreach( $ng_words as $word ){
           if(strpos($memo, $word) !== false){
@@ -1111,7 +1111,7 @@ class LoginPageController extends Controller
       }
       if($flg){
         $data=[
-          'message' => '「"」「半角カンマ」の入力はできません。',
+          'message' => '半角記号の入力はできません。',
         ];
         return redirect()->route('confirm',$data);
       }
