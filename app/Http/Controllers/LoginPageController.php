@@ -1722,16 +1722,18 @@ class LoginPageController extends Controller
         // dd($nouhin_yoteibi);
         if($sano_nissuu < 0){
           if($user->setonagi == 1){
-            $orders = Order::where(['cart_id'=> $cart->id])->get();
-            foreach ($orders as $order) {
-              $order->nouhin_yoteibi = $nouhin_kanoubi;
-              $order->save();
+            foreach ($carts as $cart) {
+              $orders = Order::where(['cart_id'=> $cart->id])->get();
+              foreach ($orders as $order) {
+                $order->nouhin_yoteibi = $nouhin_kanoubi;
+                $order->save();
+              }
             }
             $data=[
               // 'id' => $deal_id,
               // 'order_id' => $order->id,
               // 'nouhin_yoteibi' => $nouhin_yoteibi,
-              'message' => '締め時間の17時を過ぎたため引き取り予定日が'.$nouhin_kanoubi.'に変更されました。よろしければこのまま注文に進んでください。',
+              'message' => '締め時間の17時を過ぎたため全ての商品の引き取り予定日が'.$nouhin_kanoubi.'に変更されました。よろしければこのまま注文に進んでください。',
             ];
             return redirect()->route('confirm',$data);
           }
