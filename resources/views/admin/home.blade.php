@@ -16,6 +16,7 @@
   </div>
 
 
+
   @if(!empty($deals))
   <div class="section-body">
     @if(isset($user))
@@ -48,26 +49,27 @@
     @endif
         <div class="row mt-4">
           <div class="col-12">
-            <!-- <div class="float-right">
-              <form>
+            <div class="float-right">
+              @if ( Auth::guard('admin')->check() )
+              <form id="saveform" action="{{ url('/admin/search') }}" enctype="multipart/form-data" method="POST" class="form-inline mr-auto">
+                @csrf
                 <div class="input-group">
-                  <input type="text" class="form-control" placeholder="検索">
-                  <div class="input-group-append">
-                    <button class="btn btn-primary"><i class="fas fa-search"></i></button>
+                  <div class="search-element">
+                    <select name="cat" id="cat" class="postform">
+                      <option value="-1">すべての取引</option>
+                      <option class="level-0" value="交渉中">交渉中</option>
+                      <option class="level-0" value="受注済">受注済</option>
+                      <option class="level-0" value="キャンセル">キャンセル</option>
+                    </select>
+                    <input class="form-control" type="text" name="search" placeholder="検索" aria-label="Search" data-width="250" style="width: 250px;" value="@if(isset($search)){{$search}}@endif">
+                    <div class="input-group-append">
+                      <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
+                    </div>
                   </div>
                 </div>
               </form>
+              @endif
             </div>
-            <ul class="navbar-nav float-right">
-              <div class="form-group">
-                <select class="custom-select">
-                  <option selected="">全ての取引</option>
-                  <option value="1">交渉中</option>
-                  <option value="2">受注済み</option>
-                  <option value="3">キャンセル</option>
-                </select>
-              </div>
-            </ul> -->
             <div class="clearfix mb-3"></div>
             <div class="table-responsive">
               <table class="table table-striped">

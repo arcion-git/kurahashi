@@ -1328,6 +1328,8 @@ class LoginPageController extends Controller
     $favorite_categories = FavoriteCategory::where('user_id', $user_id)->get();
     $deals =  Deal::where('user_id',$user_id)->latest('created_at')->paginate(30);
 
+    // 全ての取引を取得→自分の持っている店舗の情報を取得→一致する取引は全て表示→ダブりを消してユニークにする。
+
     return view('deal', ['deals' => $deals, 'categories' => $categories, 'favorite_categories' => $favorite_categories]);
   }
 
@@ -1367,7 +1369,6 @@ class LoginPageController extends Controller
 
     $deal = Deal::where('id',$id)->first();
     $carts = Cart::where(['user_id'=>$user_id, 'deal_id'=> $id])->get();
-
 
 
     // キャンセルができるか判定

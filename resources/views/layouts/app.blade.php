@@ -156,7 +156,7 @@
             <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg"><i class="fas fa-bars"></i></a></li>
             <li><a href="#" data-toggle="search" class="nav-link nav-link-lg d-sm-none"><i class="fas fa-search"></i></a></li>
           </ul>
-          <div class="search-element">
+          <!-- <div class="search-element">
 			      <select name="cat" id="cat" class="postform">
             	<option value="-1">すべての取引</option>
               <option class="level-0" value="交渉中">交渉中</option>
@@ -165,7 +165,7 @@
             </select>
             <input class="form-control" type="text" name="search" placeholder="検索" aria-label="Search" data-width="250" style="width: 250px;" value="@if(isset($search)){{$search}}@endif">
             <button class="btn" type="submit"><i class="fas fa-search"></i></button>
-          </div>
+          </div> -->
         </form>
         @endif
 

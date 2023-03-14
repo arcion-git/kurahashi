@@ -140,6 +140,16 @@ class LoginController extends Controller
         return 'setonagi';
     }
 
+
+    /**
+     *
+     * ログアウト後のリダイレクト先を「/admin/login」に設定する
+     *
+     */
+    public function logoutToPath() {
+        return 'user/login';
+    }
+
     protected function authenticated(\Illuminate\Http\Request $request)
     {
         // 先日以降にカートに追加された商品を削除

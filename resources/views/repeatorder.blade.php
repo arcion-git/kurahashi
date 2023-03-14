@@ -86,7 +86,7 @@
               				@foreach($repeatcart->orders as $val)
               					<tr id="{{$val->id}}">
                           <td class="text-center head-price">
-                            <input name="repeatorder[{{$val->id}}][price]" class="price text-center form-control" value="{{$val->price}}" required>
+                            <input name="repeatorder[{{$val->id}}][price]" class="price text-center form-control" value="{{$val->price}}" pattern="^[0-9]+$" title="0から9の半角数字" required>
                           </td>
                           <td class="text-center head-quantity">
                             <input name="repeatorder[{{$val->id}}][quantity]" class="repeatorder_quantity text-center form-control" value="{{$val->quantity}}" required>
