@@ -92,13 +92,13 @@
                     <td class="text-center" width="150">
                       <input pattern="^[0-9]+$" name="buyerrecommend[{{$buyerrecommend->id}}][price]" class="price text-center form-control" value="{{$buyerrecommend->price}}" title="0から9の半角数字" required>
                     </td>
-                    <td class="text-center head-startdate" width="150">
+                    <td class="text-center" width="150">
                       <input type="text" name="buyerrecommend[{{$buyerrecommend->id}}][start]" class="start text-center form-control daterange-cus datepicker" value="{{$buyerrecommend->start}}" autocomplete="off" required>
                     </td>
-                    <td class="text-center head-startdate" width="150">
+                    <td class="text-center" width="150">
                       <input type="text" name="buyerrecommend[{{$buyerrecommend->id}}][end]" class="end text-center form-control daterange-cus datepicker" value="{{$buyerrecommend->end}}" autocomplete="off" required>
                     </td>
-                    <td class="text-center head-startdate" width="150">
+                    <td class="text-center" width="150">
                       <input type="text" name="buyerrecommend[{{$buyerrecommend->id}}][nouhin_end]" class="nouhin_end text-center form-control daterange-cus datepicker" value="{{$buyerrecommend->nouhin_end}}" autocomplete="off" required>
                     </td>
                     <td class="text-center">

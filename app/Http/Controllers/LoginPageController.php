@@ -1591,58 +1591,104 @@ class LoginPageController extends Controller
       }
     }
 
+    // if($user->setonagi == 1){
+    //   $cart_id = Cart::where(['user_id'=>$deal->user_id, 'deal_id'=> $id])->first()->id;
+    //   $nouhin_yoteibi = Order::where(['cart_id'=>$cart_id])->first()->nouhin_yoteibi;
+    // }
+
     // dd($item_nini_ids);
     // $quantitys = $data['quantity'];
 
 
 
+    if(!$user->setonagi == 1){
+      // BtoBユーザーの掲載期限を過ぎた市況商品、担当のおすすめ商品がカートに含まれていないかチェック
+      $kaiin_number = $user->kaiin_number;
+      $now = Carbon::now();
 
-    // 掲載期限を過ぎた市況商品、担当のおすすめ商品がカートに含まれていないかチェック
-    $kaiin_number = $user->kaiin_number;
-    $now = Carbon::now();
+      $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get()->unique('tokuisaki_id');
+      $carts = Cart::where(['user_id'=> $user_id,'deal_id'=> null])->get();
 
-    $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get()->unique('tokuisaki_id');
-    $carts = Cart::where(['user_id'=> $user_id,'deal_id'=> null])->get();
+      foreach ($tokuisaki_ids as $key => $value) {
+        foreach ($carts as $cart) {
+          $item = Item::where('id', $cart->item_id)->first();
+          // dd($item);
+          // 担当のおすすめ商品の納品期日を探す
+          $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $value->tokuisaki_id)
+          ->where('price', '>=', '1')
+          ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
+          // ->whereDate('start', '>=' , $now)
+          ->whereDate('end', '<=', $now)
+          ->orderBy('order_no', 'asc')->first();
+          // dd($buyer_recommend_item);
+          if(isset($buyer_recommend_item)){
+            $message = $item->item_name.'は掲載期限を過ぎているので注文できません。';
+            $data=[
+              'message' => $message,
+            ];
+          }
+          // 市況商品を探す
+          $price_groupe = PriceGroupe::where(['tokuisaki_id'=>$value->tokuisaki_id,'store_id'=>$value->store_id])->first();
+          $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'price_groupe'=>$price_groupe->price_groupe])
+          // ->whereDate('start', '>=' , $now)
+          ->whereDate('end', '<=', $now)->first();
+          if(isset($special_price_item)){
+            $message = $item->item_name.'は掲載期限を過ぎているので注文できません。';
+            $data=[
+              'message' => $message,
+            ];
+            return redirect()->route('confirm',$data);
+          }
+          // $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'price_groupe'=>$price_groupe->price_groupe])
+          // ->whereDate('end', '<=', $now)->first();
+          // if(isset($special_price_item)){
+          //   $message = $item->item_name.'は掲載期限を過ぎているので注文できません。';
+          //   $data=[
+          //     'message' => $message,
+          //   ];
+          //   return redirect()->route('confirm',$data);
+          // }
+          // dd($special_price_item);
+        }
+      }
+    }
 
-    foreach ($tokuisaki_ids as $key => $value) {
+
+    if($user->setonagi == 1){
+      // BtoSmallBユーザーの掲載期限を過ぎた市況商品、担当のおすすめ商品がカートに含まれていないかチェック
+      $now = Carbon::now();
+      $carts = Cart::where(['user_id'=> $user_id,'deal_id'=> null])->get();
       foreach ($carts as $cart) {
         $item = Item::where('id', $cart->item_id)->first();
         // dd($item);
         // 担当のおすすめ商品の納品期日を探す
-        $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $value->tokuisaki_id)
+        $recommend_item = Recommend::where('user_id', $user->id)
         ->where('price', '>=', '1')
         ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
-        ->whereDate('start', '>=' , $now)
-        ->whereDate('end', '<=', $now)
-        ->orderBy('order_no', 'asc')->first();
+        ->whereDate('end', '<=', $now)->first();
         // dd($buyer_recommend_item);
-        if(isset($buyer_recommend_item)){
-          $message = $item->item_name.'は掲載期限を過ぎているので注文できません。';
-          $data=[
-            'message' => $message,
-          ];
-        }
-        // 市況商品を探す
-        $price_groupe = PriceGroupe::where(['tokuisaki_id'=>$value->tokuisaki_id,'store_id'=>$value->store_id])->first();
-        $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'price_groupe'=>$price_groupe->price_groupe])
-        ->whereDate('start', '>=' , $now)->first();
-        if(isset($special_price_item)){
-          $message = $item->item_name.'は掲載期限を過ぎているので注文できません。';
+        if(isset($recommend_item)){
+          $order = Order::where(['cart_id'=> $cart->id])->delete();
+          $cart = Cart::where(['id'=> $cart->id])->delete();
+          $message = $item->item_name.'は掲載期限を過ぎているため削除されました。';
           $data=[
             'message' => $message,
           ];
           return redirect()->route('confirm',$data);
         }
-        // $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'price_groupe'=>$price_groupe->price_groupe])
-        // ->whereDate('end', '<=', $now)->first();
-        // if(isset($special_price_item)){
-        //   $message = $item->item_name.'は掲載期限を過ぎているので注文できません。';
-        //   $data=[
-        //     'message' => $message,
-        //   ];
-        //   return redirect()->route('confirm',$data);
-        // }
-        // dd($special_price_item);
+        // 市況商品を探す
+        $price_groupe = '10000000005';
+        $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'price_groupe'=>$price_groupe])
+        ->whereDate('end', '<=', $now)->first();
+        if(isset($special_price_item)){
+          $order = Order::where(['cart_id'=> $cart->id])->delete();
+          $cart = Cart::where(['id'=> $cart->id])->delete();
+          $message = $item->item_name.'は掲載期限を過ぎているため削除されました。';
+          $data=[
+            'message' => $message,
+          ];
+          return redirect()->route('confirm',$data);
+        }
       }
     }
 
