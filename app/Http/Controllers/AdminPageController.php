@@ -997,8 +997,9 @@ class AdminPageController extends Controller
       if(isset($item_search)){
           // 在庫数が0のものは非表示
           // $items = Item::where("busho_code", "LIKE", $code.'%')->Where('zaikosuu', '>', '1')
-          $items = Item::where("busho_code", "LIKE", $code.'%')
-          ->where(function($items) use ($item_search){
+          // 水産の前方コードは関係なしにする
+          // $items = Item::where("busho_code", "LIKE", $code.'%')
+          $items = Item::where(function($items) use ($item_search){
           $items->where('item_name','like', "%$item_search%")->orWhere('item_id','like', "%$item_search%");
         })->orWhere('item_name_kana','like', "%$item_search%")->get();
       }else{
