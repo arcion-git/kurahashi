@@ -1002,6 +1002,18 @@ class AdminPageController extends Controller
           $items = Item::where(function($items) use ($item_search){
           $items->where('item_name','like', "%$item_search%")->orWhere('item_id','like', "%$item_search%");
         })->orWhere('item_name_kana','like', "%$item_search%")->get();
+          // dd($items);
+          $special_price_items = SpecialPrice::get();
+          // dd($special_price_items);
+
+          // 市況の商品を取り除く
+          $items = $items->reject(function ($items) use ($special_price_items) {
+                   $special_price_items->contains(function ($special_price_items) use ($items) {
+                     $items['item_id'] === $special_price_items['item_id'] && $items['sku_code'] === $special_price_items['sku_code'];
+              });
+          });
+          // dd($items);
+
       }else{
         $items = [];
       }
