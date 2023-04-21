@@ -2158,7 +2158,7 @@ class LoginPageController extends Controller
                 // 単位
                 $tani.' '.
                 // 単価
-                $order->price.'円 '.$store.' '.$nouhin_yoteibi
+                number_format($order->price).'円 '.$store.' '.$nouhin_yoteibi
                 // 配送希望日
                 // $order->nouhin_yoteibi.
                 // 受け取り
@@ -2184,7 +2184,7 @@ class LoginPageController extends Controller
                 // 単位
                 $tani.' '.
                 // 単価
-                $order->price.'円'
+                number_format($order->price).'円'
                 // 配送希望日
                 // $order->nouhin_yoteibi.
                 // 受け取り

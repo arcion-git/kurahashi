@@ -36,8 +36,7 @@
 				@foreach($cart->orders as $val)
 					<tr id="{{$val->id}}">
 						<td class="head-price text-center">
-							<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="{{$val->price}}" value="{{$val->price}}"
-							@if ( Auth::guard('user')->check() ) readonly @endif>
+							<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="{{$val->price}}" value="{{$val->price}}" @if ( Auth::guard('user')->check() ) readonly @endif>
 						</td>
 
 						@if(!$user->setonagi)
@@ -629,8 +628,6 @@ $(document).ready( function(){
 
 
 
-
-
 <!-- 取引確認画面で操作ができないようにする -->
 <script>
 if(document.URL.match("/approval")) {
@@ -884,9 +881,7 @@ $(function(){
 	});
 }
 
-
-
-
 </script>
+
 	@endif
 @endif

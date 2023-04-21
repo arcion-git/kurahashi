@@ -84,7 +84,7 @@
                             </td>
                             <td class="text-center">{{$recommend->item()->zaikosuu}}</td>
                             <td class="text-center">{{$recommend->item()->tokkijikou}}</td>
-                            <td class="text-center">{{$recommend->price}}</td>
+                            <td class="text-center">{{number_format($recommend->price)}}</td>
                             <td class="text-center">
                               @if($recommend->favoriteitem())
                               <!-- <button name="item_id" value="{{$recommend->item()->id}}" id="{{$recommend->item()->id}}" class="removefavoriteitem"><i class="fa fa-heart"></i></button> -->
@@ -174,7 +174,7 @@
                             </td>
                             <td class="text-center">{{$special_price->item()->zaikosuu}}</td>
                             <td class="text-center">{{$special_price->item()->tokkijikou}}</td>
-                            <td class="text-center">{{$special_price->price}}</td>
+                            <td class="text-center">{{number_format($special_price->price)}}</td>
 
                             <td class="text-center">
                               @if($special_price->favoriteitem())
