@@ -298,7 +298,7 @@ class LoginPageController extends Controller
       $shubetu = $request->shubetu;
       $naiyou = $request->naiyou;
       $contact = Contact::create(['name'=> $name, 'address'=> $address ,'email'=> $email, 'tel'=> $tel, 'shubetu'=> $shubetu, 'naiyou'=> $naiyou ]);
-      $admin_mail = 'info@arcion.jp';
+      $admin_mail = config('app.admin_mail');
       $text = 'この度はお問い合わせいただきありがとうございます。<br />下記の内容でお問い合わせを受け付けました。<br />
       <br />
       お名前：'.$name.'<br />
@@ -2097,7 +2097,12 @@ class LoginPageController extends Controller
         $orders = Order::where(['cart_id'=> $cart->id])->get();
         foreach ($orders as $order) {
           // dd($store);
-          $array = $order->price * $order->quantity;
+          // 金額未定に対応
+          if($order->price == '未定'){
+            $array = 0;
+          }else{
+            $array = $order->price * $order->quantity;
+          }
           array_push($total_price, $array);
         }
       }
@@ -2105,6 +2110,10 @@ class LoginPageController extends Controller
       $total_price = $total_price * 108 / 100;
       $total_price = number_format($total_price);
       $total_price = '【合計金額】<br />'.$total_price.'円（税込）';
+      // 合計金額表示をなしに設定
+      if(!($user->setonagi == 1)){
+        $total_price = null;
+      }
 
       // オーダーリストの作成
       $order_list=[];
@@ -2145,6 +2154,12 @@ class LoginPageController extends Controller
               // BtoBの場合は配送先の店舗を追加する
               $store = $order->tokuisaki_name.$order->store_name;
               $nouhin_yoteibi = $order->nouhin_yoteibi;
+              // 未定の金額表示に対応
+              if($order->price == '未定'){
+                $item_price = '金額未定 ' ;
+              }else{
+                $item_price = number_format($order->price).'円 ';
+              }
               $array =
                 '・'.
                 // 商品コード
@@ -2158,7 +2173,7 @@ class LoginPageController extends Controller
                 // 単位
                 $tani.' '.
                 // 単価
-                number_format($order->price).'円 '.$store.' '.$nouhin_yoteibi
+                $item_price.$store.' '.$nouhin_yoteibi
                 // 配送希望日
                 // $order->nouhin_yoteibi.
                 // 受け取り
@@ -2171,6 +2186,12 @@ class LoginPageController extends Controller
               $store = null;
               // 受け取り予定日
               $nouhin_yoteibi = '【受け取り予定日】<br />'.$order->nouhin_yoteibi;
+              // 金額未定に対応
+              if($order->price == '未定'){
+                $item_price = 0 ;
+              }else{
+                $item_price = $order->price;
+              }
               $array =
                 '・'.
                 // 商品コード
@@ -2184,7 +2205,7 @@ class LoginPageController extends Controller
                 // 単位
                 $tani.' '.
                 // 単価
-                number_format($order->price).'円'
+                number_format($item_price).'円'
                 // 配送希望日
                 // $order->nouhin_yoteibi.
                 // 受け取り
@@ -2228,7 +2249,7 @@ class LoginPageController extends Controller
         }
       $order_list = implode('<br>', $order_list);
       // dd($order_list);
-      $admin_mail = 'info@arcion.jp';
+      $admin_mail = config('app.admin_mail');
       Mail::send('emails.register', [
           'name' => $name,
           'user' => $user,

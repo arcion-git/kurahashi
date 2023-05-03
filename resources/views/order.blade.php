@@ -36,7 +36,7 @@
 				@foreach($cart->orders as $val)
 					<tr id="{{$val->id}}">
 						<td class="head-price text-center">
-							<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="{{$val->price}}" value="{{$val->price}}" @if ( Auth::guard('user')->check() ) readonly @endif>
+							<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="@if($val->price=='未定'){{(0)}}@else{{($val->price)}}@endif" value="@if($val->price=='未定'){{($val->price)}}@else{{($val->price)}}@endif" @if ( Auth::guard('user')->check() ) readonly @endif>
 						</td>
 
 						@if(!$user->setonagi)
@@ -522,7 +522,7 @@ $('.nini_nouhin_yoteibi').datepicker({
 $(document).ready( function(){
     // update_field();
       var target = $('.total').map(function (index, el) {
-			var total = $(this).closest('tr').find('input.price').val() * $(this).closest('tr').find('select.quantity').val();
+			var total = $(this).closest('tr').find('input.price').data('price') * $(this).closest('tr').find('select.quantity').val();
       $(this).closest('tr').find('.total').text(total);
 			});
       // console.log(target);
@@ -556,6 +556,7 @@ $(document).ready( function(){
 	    <textarea id="memo" style="height:250px; width:500px;" name="memo" rows="10" value="@if(isset($deal)){{$deal->memo}}@elseif(isset($user->memo)){{$user->memo}}@endif" class="form-control selectric" maxlength="374" onchange="Limit(event)" onkeyup="Limit(event)">@if(isset($deal)){{$deal->memo}}@elseif(isset($user->memo)){{$user->memo}}@endif</textarea>
 			<p class="memo_note">※通信欄は「内容確認画面に進む」を押すと保存されます。<br />確認画面に進む直前に通信欄の入力をしてください。</p>
 	</div>
+	@if($user->setonagi)
   <div class="col-lg-4 text-right">
     <div class="invoice-detail-item">
       <div class="invoice-detail-name">合計</div>
@@ -573,6 +574,7 @@ $(document).ready( function(){
 			<input id="all_total_val" type="hidden" name="all_total_val" value="" />
     </div>
   </div>
+	@endif
 </div>
 
 

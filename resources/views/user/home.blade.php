@@ -174,8 +174,13 @@
                             </td>
                             <td class="text-center">{{$special_price->item()->zaikosuu}}</td>
                             <td class="text-center">{{$special_price->item()->tokkijikou}}</td>
-                            <td class="text-center">{{number_format($special_price->price)}}</td>
-
+                            <td class="text-center">
+                              @if ($special_price->price == "未定")
+                              {{($special_price->price)}}
+                              @else
+                              {{number_format($special_price->price)}}
+                              @endif
+                            </td>
                             <td class="text-center">
                               @if($special_price->favoriteitem())
                               <!-- <button name="item_id" value="{{$special_price->item()->id}}" id="{{$special_price->item()->id}}" class="removefavoriteitem"><i class="fa fa-heart"></i></button> -->
