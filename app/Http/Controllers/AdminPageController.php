@@ -1000,19 +1000,33 @@ class AdminPageController extends Controller
           // 水産の前方コードは関係なしにする
           // $items = Item::where("busho_code", "LIKE", $code.'%')
           $items = Item::where(function($items) use ($item_search){
-          $items->where('item_name','like', "%$item_search%")->orWhere('item_id','like', "%$item_search%");
-        })->orWhere('item_name_kana','like', "%$item_search%")->get();
+            $items->where('item_name','like', "%$item_search%")->orWhere('item_id','like', "%$item_search%");
+          })->orWhere('item_name_kana','like', "%$item_search%")->get();
           // dd($items);
           $special_price_items = SpecialPrice::get();
           // dd($special_price_items);
 
+
+          // $items = $items->reject(function ($special_price_items) use ($items) {
+          //     return $items->where('item_id', $special_price_items['sku_code'])->isNotEmpty();
+          // });
+
+          // $newitems = $items->whereNotIn('item_id', $special_price_items->pluck('sku_code'))->merge($special_price_items->whereNotIn('sku_code', $items->pluck('item_id')));
+          // $items = $items->diff($special_price_items);
+
+          // // 市況の商品を取り除く（うまく動いていない）
+          // $items = $items->reject(function ($items) use ($special_price_items) {
+          //          $special_price_items->contains(function ($special_price_items) use ($items) {
+          //          $items['item_id'] === $special_price_items['item_id'] && $items['sku_code'] === $special_price_items['sku_code'];
+          //     });
+          // });
+
           // 市況の商品を取り除く
           $items = $items->reject(function ($items) use ($special_price_items) {
-                   $special_price_items->contains(function ($special_price_items) use ($items) {
-                     $items['item_id'] === $special_price_items['item_id'] && $items['sku_code'] === $special_price_items['sku_code'];
+                  return $special_price_items->contains(function ($special_price_items) use ($items) {
+                  return $items->item_id === $special_price_items->item_id && $items->sku_code === $special_price_items->sku_code;
               });
           });
-          // dd($items);
 
       }else{
         $items = [];
