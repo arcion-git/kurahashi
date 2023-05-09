@@ -68,6 +68,8 @@ use App\Imports\PriceGroupeImport;
 use App\Imports\PriceImport;
 use App\Imports\SpecialPriceImport;
 
+use App\Imports\BuyerRecommendImport;
+
 // ページネーション
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -731,8 +733,20 @@ class AdminPageController extends Controller
   }
 
   public function SpecialPriceImport(){
-  SpecialPrice::truncate();
+  // SpecialPrice::truncate();
   Excel::import(new SpecialPriceImport, request()->file('file'));
+  $message = '正常にインポートが完了しました。';
+  $icon = 'success';
+  $data=[
+    'message'=>$message,
+    'icon'=>$icon,
+  ];
+  return redirect()->route('admin.csv', $data);
+  }
+
+  public function BuyerRecommendImport(){
+  // BuyerRecommend::truncate();
+  Excel::import(new BuyerRecommendImport, request()->file('file'));
   $message = '正常にインポートが完了しました。';
   $icon = 'success';
   $data=[

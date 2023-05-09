@@ -200,8 +200,10 @@
   Route::post('/admin/PriceGroupeImport', 'AdminPageController@PriceGroupeImport');
   Route::post('/admin/PriceImport', 'AdminPageController@PriceImport');
   Route::post('/admin/SpecialPriceImport', 'AdminPageController@SpecialPriceImport');
+  Route::post('/admin/BuyerRecommendImport', 'AdminPageController@BuyerRecommendImport');
   Route::post('/admin/SetonagiImport', 'AdminPageController@SetonagiImport');
   Route::post('/admin/SetonagiItemImport', 'AdminPageController@SetonagiItemImport');
+
 
   // CSVエクスポート
   Route::post('/admin/export', 'AdminPageController@Export');

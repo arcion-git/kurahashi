@@ -95,7 +95,7 @@
               </div>
               <div class="col-6">
                 <div class="form-group">
-                  <label>商品特別価格（SpecialPriceInfo）</label>
+                  <label>市況商品（SpecialPriceInfo）</label>
                   @if ($errors->any())
                   <div class="alert alert-danger">
                   	<ul>
@@ -106,6 +106,28 @@
                   </div>
                   @endif
                   <form action="SpecialPriceImport" method="POST" enctype="multipart/form-data">
+                  	@csrf
+                  	<div class="form-group">
+                  		<input type="file" class="form-control" name="file" style="padding-bottom:37px;">
+                  		<br>
+                  		<button class="btn btn-success">インポート</button>
+                  	</div>
+                  </form>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="form-group">
+                  <label>得意先ごとのおすすめ商品（BuyerRecommend）</label>
+                  @if ($errors->any())
+                  <div class="alert alert-danger">
+                  	<ul>
+                  		@foreach ($errors->all() as $error)
+                  			<li>{{ $error }}</li>
+                  		@endforeach
+                  	</ul>
+                  </div>
+                  @endif
+                  <form action="BuyerRecommendImport" method="POST" enctype="multipart/form-data">
                   	@csrf
                   	<div class="form-group">
                   		<input type="file" class="form-control" name="file" style="padding-bottom:37px;">
