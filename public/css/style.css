@@ -3978,7 +3978,7 @@ footer .external_link ul{
 .cart-wrap .head-yoteibi,
 .cart-wrap .head-shoukei,
 .cart-wrap .head-sousa{
-	/* display: none; */
+	display: none;
 }
 
 .head-item-name{
