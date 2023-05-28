@@ -26,8 +26,8 @@ class ChangeDealsTable extends Migration
      */
     public function down()
     {
-        Schema::table('deals', function (Blueprint $table) {
-          $table->string('memo')->change();
-        });
+        // Schema::table('deals', function (Blueprint $table) {
+        //   $table->string('memo')->change();
+        // });
     }
 }

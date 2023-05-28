@@ -41,7 +41,7 @@
             {{ csrf_field() }}
             <div class="row mt-4 order">
               <div class="col-md-12">
-                <div class="section-title">オーダー内容</div>
+                <!-- <div class="section-title">オーダー内容</div> -->
                 <div id="order"></div>
 
                 @if(app('request')->input('uketori_siharai') == 'クレジットカード払い')
@@ -51,19 +51,22 @@
             </div>
             <div class="float-right">
                 <input type="hidden" name="token_api" id="token_api" value="{{app('request')->input('token_api')}}"/>
-
                 @if($user->setonagi == 1)
                 @else
                   @if($user->koushou == 1)
-                  <button type="submit" name="adddeal_btn" class="btn btn-warning">この内容で問い合わせる</button>
+                  <!-- <button type="submit" name="adddeal_btn" class="btn btn-warning">この内容で問い合わせる</button> -->
                   @endif
                 @endif
-
                 <button type="submit" name="addsuscess_btn" value="1" id="addsuscess_btn" class="btn btn-success">この内容で注文する</button>
             </div>
           </form>
           <div class="float-right" style="margin-right:5px;">
-              <a href="{{ url('/confirm') }}"><button class="btn btn-info">戻って編集する</button></a>
+            <form id="cart_form" action="{{ url('/confirm') }}" method="GET" name="cart_id" value="" class="form-horizontal">
+              {{ csrf_field() }}
+              <input type="hidden" name="addtype" value="{{$addtype}}" />
+              <input type="hidden" name="show_favorite" value="{{$show_favorite}}" @if($show_favorite) checked @endif/>
+              <button type="submit" name="" class="btn btn-info">戻って編集する</button>
+            </div>
           </div>
           <br style="clear:both;" />
         </div>

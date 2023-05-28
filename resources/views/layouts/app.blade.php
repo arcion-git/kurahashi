@@ -217,7 +217,7 @@
               <div class="d-sm-none d-lg-inline-block">{{ Auth::guard('admin')->user()->name }}</div>
               @endif
               @if ( Auth::guard('user')->check() )
-              <div class="d-sm-none d-lg-inline-block">{{ Auth::guard('user')->user()->name }}  様</div>
+              <div class="d-sm-none d-lg-inline-block">{{ Auth::guard('user')->user()->name }} 様</div>
               @endif
             </a>
             <div class="dropdown-menu dropdown-menu-right">
@@ -283,7 +283,7 @@
         <aside id="sidebar-wrapper">
           <div class="sidebar-brand">
             @if ( Auth::guard('user')->check() )
-            <a href="{{ url('/setonagi') }}">
+            <a href="{{ url('/bulk') }}">
             @endif
             @if ( Auth::guard('admin')->check() )
             <a href="{{ url('/admin/home') }}">

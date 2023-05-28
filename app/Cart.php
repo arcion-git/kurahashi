@@ -34,6 +34,41 @@ class Cart extends Model
       return $this->hasMany('App\Order');
   }
 
+  public function favoriteitem() {
+    $user_id = Auth::guard('user')->user()->id;
+    // dd($this);
+    // $item = Item::where(['id' => $this->item_id])->first();
+    $favorite_item = favorite::where(['item_id' => $this->item_id , 'user_id' => $user_id])->first();
+    // dd($favorite_item);
+    return $favorite_item;
+  }
+
+  public function hidden_price() {
+    $item = $this->belongsTo('App\Item', 'item_id')->first();
+    $user = $this->belongsTo('App\User', 'user_id')->first();
+
+    $kaiin_number = $user->kaiin_number;
+    $now = Carbon::now();
+
+    $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get()->unique('tokuisaki_id');
+
+    foreach ($tokuisaki_ids as $key => $value) {
+      // 担当のおすすめ商品の納品期日を探す
+      $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $value->tokuisaki_id)
+      ->where('price', '>=', '1')
+      ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
+      ->whereDate('start', '<=' , $now)
+      ->whereDate('end', '>=', $now)
+      ->first();
+      if(isset($buyer_recommend_item)){
+        return $buyer_recommend_item->hidden_price;
+      }
+    }
+    $buyer_recommend_item = null;
+    return $buyer_recommend_item;
+
+  }
+
   public function nouhin_end() {
     $item = $this->belongsTo('App\Item', 'item_id')->first();
     $user = $this->belongsTo('App\User', 'user_id')->first();

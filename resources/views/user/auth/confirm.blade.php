@@ -7,7 +7,16 @@
 
   <section class="section">
     <div class="section-header">
-      <h1>オーダー内容確認</h1>
+      <h1>オーダー内容確認
+        @if ($addtype == 'addsetonagi')
+        （限定お買い得商品）
+        @elseif ($addtype == 'addbuyerrecommend')
+        （担当のおすすめ商品）
+        @elseif ($addtype == 'addspecialprice')
+        （市況商品）
+        @else
+        @endif
+      </h1>
       <div class="section-header-breadcrumb">
         <div class="breadcrumb-item active"><a href="/">HOME</a></div>
         <div class="breadcrumb-item">オーダー内容確認</div>
@@ -33,15 +42,17 @@
 
             <div class="row mt-4 order">
               <div class="col-md-12">
-                <div class="section-title">オーダー内容</div>
+
+
+
                 <div id="order"></div>
               </div>
             </div>
 
 
             <div class="float-right">
+                <input type="hidden" name="addtype" value="{{$addtype}}" />
                 <button id="approval_btn" type="submit" class="btn btn-warning">内容確認画面に進む</button>
-
                 @if($user->setonagi == 1)
                 <div id="card_approval_btn" class="btn btn-warning" onclick="executePay">内容確認画面に進む</div>
                 @endif
@@ -102,6 +113,29 @@ $(function(){
 });
 
 </script>
+
+<!--
+<script>
+// hideElementsByAddtype() 関数を定義
+function hideElementsByAddtype() {
+  var dataAttrName = "data-addtype"; // 取得する data 属性名
+  var dataAttrValue = "addsetonagi"; // Blade の変数から値を取得
+  var elements = document.querySelectorAll('[' + dataAttrName + '="' + dataAttrValue + '"]');
+  for (var i = 0; i < elements.length; i++) {
+    elements[i].style.display = 'none';
+  }
+}
+
+// ページが読み込まれたら hideElementsByAddtype() 関数を実行する
+window.addEventListener('load', function() {
+  hideElementsByAddtype();
+});
+
+// 外部の JavaScript ファイルが読み込まれたら hideElementsByAddtype() 関数を実行する
+$(document).ready(function() {
+  hideElementsByAddtype();
+});
+</script> -->
 <style>
 label,
 .uketori_siharai_radio{

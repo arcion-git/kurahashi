@@ -30,7 +30,6 @@ class BuyerRecommend extends Model
 
   public function favoriteitem()
   {
-
     $user_id = Auth::guard('user')->user()->id;
     // dd($this);
     $item = Item::where(['item_id' => $this->item_id , 'sku_code' => $this->sku_code])->first();

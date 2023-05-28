@@ -93,64 +93,91 @@ class AdminPageController extends Controller
     }
     $deals =  Deal::latest('created_at')->paginate(30);
 
-    return view('admin/home', ['deals' => $deals]);
+    $store_users = StoreUser::select('tokuisaki_id')->distinct()->get();
+    // dd($store_users);
+    // foreach ($store_users as $key => $value) {
+    //   dd($value);
+    // }
+    $data=[
+      'deals'=>$deals,
+      'store_users'=>$store_users,
+    ];
+    return view('admin/home',$data);
   }
 
 
-  public function search(Request $request)
-  {
-      $search = $request->search;
-      $cat = $request->cat;
-      if($cat == -1){
-        $all_deals = Deal::get();
-        $deals = [];
-        $n=1;
-        foreach ($all_deals as $all_deal) {
+// 以下の処理で、「change_tokuisaki_name」が実行された場合、そのまま「$tokuisaki_name 」で取得した値を「search」に値を渡して実行したい。
+
+  public function change_tokuisaki_name(Request $request){
+      $tokuisaki_name = $request->tokuisaki_name;
+      $data=[
+        'tokuisaki_name'=>$tokuisaki_name,
+      ];
+      // return redirect()->route('/admin/home',$data);
+      return redirect()->route('admin.search')->with($data);
+      // return view('admin/home',$data);
+  }
+
+  public function search(Request $request){
+
+    $store_users = StoreUser::select('tokuisaki_id')->distinct()->get();
+
+    $search = $request->search;
+    $tokuisaki_name = $request->tokuisaki_name;
+
+    if($tokuisaki_name != 'すべてバイヤー'){
+      $store = Store::where('tokuisaki_name',$tokuisaki_name)->first();
+      $store->tokuisaki_id;
+      $stores = store::where('tokuisaki_id',$store->tokuisaki_id)->get();
+      // dd($stores);
+    }else{
+      $stores = null;
+    }
+
+    // dd($tokuisaki_name);
+    $store_name = $request->store_name;
+    $cat = $request->cat;
+
+    if($cat == 'すべての取引'){
+      $all_deals = Deal::get();
+    }else{
+      $all_deals = Deal::where('status',$cat)->get();
+    }
+
+    $deals = [];
+    $n=1;
+    foreach ($all_deals as $all_deal) {
+      if($tokuisaki_name == 'すべてバイヤー'){
         $user_name = User::where('id',$all_deal->user_id)->where('name','like', "%$search%")->first();
         if($user_name){
           array_push($deals, $all_deal);
         }
         $n++;
+      }else{
+        $carts = Cart::where('deal_id',$all_deal->id)->get();
+        foreach ($carts as $cart) {
+          if($store_name == 'すべての店舗' || $store_name == null){
+            $order = Order::where(['cart_id' => $cart->id, 'tokuisaki_name' => $tokuisaki_name])->first();
+          }else{
+            $order = Order::where(['cart_id' => $cart->id, 'tokuisaki_name' => $tokuisaki_name, 'store_name' => $store_name])->first();
+          }
+          if($order){
+            array_push($deals, $all_deal);
+            break;
+          }
         }
-        $deals = new LengthAwarePaginator($deals, count($deals), 10, 1);
-      }elseif($cat == '交渉中'){
-        $all_deals = Deal::where('status','交渉中')->get();
-        $deals = [];
-        $n=1;
-        foreach ($all_deals as $all_deal) {
-        $user_name = User::where('id',$all_deal->user_id)->where('name','like', "%$search%")->first();
-        if($user_name){
-          array_push($deals, $all_deal);
-        }
-        $n++;
-        }
-        $deals = new LengthAwarePaginator($deals, count($deals), 10, 1);
-      }elseif($cat == '受注済'){
-        $all_deals = Deal::where('status','発注済')->get();
-        $deals = [];
-        $n=1;
-        foreach ($all_deals as $all_deal) {
-        $user_name = User::where('id',$all_deal->user_id)->where('name','like', "%$search%")->first();
-        if($user_name){
-          array_push($deals, $all_deal);
-        }
-        $n++;
-        }
-        $deals = new LengthAwarePaginator($deals, count($deals), 10, 1);
-      }elseif($cat == 'キャンセル'){
-        $all_deals = Deal::where('status','キャンセル')->get();
-        $deals = [];
-        $n=1;
-        foreach ($all_deals as $all_deal) {
-        $user_name = User::where('id',$all_deal->user_id)->where('name','like', "%$search%")->first();
-        if($user_name){
-          array_push($deals, $all_deal);
-        }
-        $n++;
-        }
-        $deals = new LengthAwarePaginator($deals, count($deals), 10, 1);
       }
-    return view('admin/home', ['deals' => $deals]);
+    }
+    $deals = new LengthAwarePaginator($deals, count($deals), 10, 1);
+    $data=[
+      'cat'=>$cat,
+      'tokuisaki_name'=>$tokuisaki_name,
+      'store_name'=>$store_name,
+      'deals'=>$deals,
+      'store_users'=>$store_users,
+      'stores'=>$stores,
+    ];
+    return view('admin/home',$data);
   }
 
 
@@ -1049,6 +1076,11 @@ class AdminPageController extends Controller
       // dd($tokuisaki_name->tokuisaki_name);
       // $buyerrecommends = BuyerRecommend::where('tokuisaki_id',$tokuisaki_id)->orderBy('order_no')->get();
       $buyerrecommends = BuyerRecommend::where('tokuisaki_id',$tokuisaki_id)->orderByRaw('CAST(order_no as SIGNED) ASC')->get();
+
+
+      $groupedItems = $buyerrecommends->groupBy('groupe');
+      // dd($groupedItems);
+
       // dd($buyerrecommends);
       $data=[
         'id'=>$id,
@@ -1057,6 +1089,7 @@ class AdminPageController extends Controller
         'buyerrecommends'=>$buyerrecommends,
         'item_search'=>$item_search,
         'order_no'=>$order_no,
+        'groupedItems'=>$groupedItems,
       ];
       return view('buyerrecommend', $data);
     }
@@ -1072,8 +1105,8 @@ class AdminPageController extends Controller
       // dd($buyerrecommend_item);
       $order_no = $buyerrecommend_item->order_no;
 
-
       $recommend = BuyerRecommend::create(['item_id'=> $buyerrecommend_item->item_id , 'sku_code'=> $buyerrecommend_item->sku_code,'price'=> $buyerrecommend_item->price,'tokuisaki_id'=> $buyerrecommend_item->tokuisaki_id ,'order_no'=> $order_no]);
+      $recommend->groupe = $buyerrecommend_item->groupe;
       $recommend -> save();
 
       // $buyerrecommends = BuyerRecommend::where('tokuisaki_id',$tokuisaki_id)->orderBy('order_no')->get();
@@ -1146,17 +1179,135 @@ class AdminPageController extends Controller
       // dd($request);
       $tokuisaki_id = $request->tokuisaki_id;
       $buyerrecommends = $request->buyerrecommend;
-      // dd($buyerrecommends = $request->buyerrecommend);
+      // dd($buyerrecommends);
+      //
+      //
+      // 以下のソースで、「オーダー順を取得して並び替える」というソースの部分で、「$buyerrecommend->order_no = $value['groupe'];」を加え、グループ名を保存したい。保存を行うアイテムは、「$buyerrecommends」の「order_no」に値のあるもののみに限定する。
+      // グループ名は、「$buyerrecommends」のなかにある、「order_no」に値がないもので、$buyerrecommendsで読み込まれた順番の中で、該当の要素に対して、最も値が近く、若いのものを保存するものとする。
+      //
+      //
+      // 以下のソースで、「グループ名」を保存したい、以下のように取得できるようにソースを教えて。キーが整数という条件は使えないものとする。
+      // 「194」の「グループ名」は、「カメラ」
+      // 「192」の「グループ名」は、「」※nullとなる。
+      // 「191」の「グループ名」は、「カメラ」
+      // 「1」の「グループ名」は、「グループ4444fsdsfadk」
+      // 「153」の「グループ名」は、「グループ4444fsdsfadk」
+      //
+      // $buyerrecommends1 = [
+      //     192 => [
+      //         "order_no" => "1",
+      //         "price" => "222",
+      //         "start" => "2023-05-31 00:00:00",
+      //         "end" => "2023-05-23 00:00:00",
+      //         "nouhin_end" => "2023-05-24 00:00:00",
+      //     ],
+      //     "カメラ" => [
+      //         "order_no" => "2",
+      //     ],
+      //     194 => [
+      //         "order_no" => "3",
+      //         "price" => "12222",
+      //         "start" => "2023-05-23 00:00:00",
+      //         "end" => "2023-05-31 00:00:00",
+      //         "nouhin_end" => "2023-05-24 00:00:00",
+      //     ],
+      //     191 => [
+      //         "order_no" => "4",
+      //         "price" => "1000",
+      //         "start" => "2023-06-01 00:00:00",
+      //         "end" => "2023-05-24 00:00:00",
+      //         "nouhin_end" => "2023-05-30 00:00:00",
+      //     ],
+      //     "グループ4444fsdsfadk" => [
+      //         "order_no" => "5",
+      //     ],
+      //     1 => [
+      //         "order_no" => "6",
+      //         "price" => "2000",
+      //         "start" => "2023-01-01 00:00:00",
+      //         "end" => "2023-05-31 00:00:00",
+      //         "nouhin_end" => "2023-02-28 00:00:00",
+      //     ],
+      //     153 => [
+      //         "order_no" => "7",
+      //         "price" => "50",
+      //         "start" => "2023-03-14 00:00:00",
+      //         "end" => "2023-05-31 00:00:00",
+      //         "nouhin_end" => "2023-03-14 00:00:00",
+      //     ],
+      // ];
+      //
+      // $buyerrecommends2 = [
+      //     192 => [
+      //         "order_no" => "1",
+      //         "price" => "222",
+      //         "start" => "2023-05-31 00:00:00",
+      //         "end" => "2023-05-23 00:00:00",
+      //         "nouhin_end" => "2023-05-24 00:00:00",
+      //     ],
+      //     194 => [
+      //         "order_no" => "3",
+      //         "price" => "12222",
+      //         "start" => "2023-05-23 00:00:00",
+      //         "end" => "2023-05-31 00:00:00",
+      //         "nouhin_end" => "2023-05-24 00:00:00",
+      //     ],
+      //     191 => [
+      //         "order_no" => "4",
+      //         "price" => "1000",
+      //         "start" => "2023-06-01 00:00:00",
+      //         "end" => "2023-05-24 00:00:00",
+      //         "nouhin_end" => "2023-05-30 00:00:00",
+      //     ],
+      //     1 => [
+      //         "order_no" => "6",
+      //         "price" => "2000",
+      //         "start" => "2023-01-01 00:00:00",
+      //         "end" => "2023-05-31 00:00:00",
+      //         "nouhin_end" => "2023-02-28 00:00:00",
+      //     ],
+      //     153 => [
+      //         "order_no" => "7",
+      //         "price" => "50",
+      //         "start" => "2023-03-14 00:00:00",
+      //         "end" => "2023-05-31 00:00:00",
+      //         "nouhin_end" => "2023-03-14 00:00:00",
+      //     ],
+      // ];
+
 
       // オーダー順を取得して並び替える
       foreach($buyerrecommends as  $key => $value) {
-        $buyerrecommend = BuyerRecommend::firstOrNew(['id'=> $key]);
-        $buyerrecommend->price = $value['price'];
-        $buyerrecommend->start = $value['start'];
-        $buyerrecommend->end = $value['end'];
-        $buyerrecommend->nouhin_end = $value['nouhin_end'];
-        $buyerrecommend->order_no = $value['order_no'];
-        $buyerrecommend->save();
+        if(isset($value['price'])){
+            $buyerrecommend = BuyerRecommend::firstOrNew(['id'=> $key]);
+            $buyerrecommend->price = $value['price'];
+            $buyerrecommend->start = $value['start'];
+            $buyerrecommend->end = $value['end'];
+            $buyerrecommend->nouhin_end = $value['nouhin_end'];
+            $buyerrecommend->order_no = $value['order_no'];
+            if(isset($value['hidden_price'])){
+            $buyerrecommend->hidden_price = $value['hidden_price'];
+            }else{
+            $buyerrecommend->hidden_price = null;
+            }
+            $group = null; // グループ名を初期化
+            $currentOrderNo = $value['order_no']; // 現在のorder_noを取得
+            $minDifference = PHP_INT_MAX; // 最小の差分を初期化
+            $closestOrderNo = null; // 最も近いorder_noを初期化
+
+            foreach ($buyerrecommends as $innerKey => $innerValue) {
+                if (!isset($innerValue['price']) && $innerValue['order_no'] < $currentOrderNo) {
+                    $difference = $currentOrderNo - $innerValue['order_no'];
+                    if ($difference < $minDifference) {
+                        $minDifference = $difference;
+                        $closestOrderNo = $innerValue['order_no'];
+                        $group = $innerKey;
+                    }
+                }
+            }
+            $buyerrecommend->groupe = $group;
+            $buyerrecommend->save();
+        }
       }
 
       $id = $request->tokuisaki_id;
@@ -1170,6 +1321,27 @@ class AdminPageController extends Controller
         $delete->delete();
       };
       $id = $request->tokuisaki_id;
+      return redirect()->route('buyerrecommend', $id);
+    }
+
+    public function buyerrecommend_change_groupe_name(Request $request){
+
+      $tokuisaki_id = $request->tokuisaki_id;
+      $old_groupe_name = $request->old_groupe_name;
+      $groupe_name = $request->groupe_name;
+
+      $buyerrecommends = BuyerRecommend::where(['tokuisaki_id'=> $tokuisaki_id , 'groupe'=> $old_groupe_name])->get();
+
+      foreach ($buyerrecommends as $buyerrecommend) {
+        $buyerrecommend->groupe = $groupe_name;
+        $buyerrecommend->save();
+      }
+
+      $id = $tokuisaki_id;
+
+      $data=[
+        'id'=>$id,
+      ];
       return redirect()->route('buyerrecommend', $id);
     }
 

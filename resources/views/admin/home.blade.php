@@ -51,16 +51,45 @@
           <div class="col-12">
             <div class="float-right">
               @if ( Auth::guard('admin')->check() )
-              <form id="saveform" action="{{ url('/admin/search') }}" enctype="multipart/form-data" method="POST" class="form-inline mr-auto">
+              <form id="admin_deal_search" action="{{ url('/admin/search') }}" enctype="multipart/form-data" method="POST" class="form-inline mr-auto">
                 @csrf
                 <div class="input-group">
                   <div class="search-element">
+
+                    <select name="tokuisaki_name" id="tokuisaki_name" class="postform">
+                      @if(isset($tokuisaki_name))
+                        <option class="level-0" value="{{$tokuisaki_name}}">{{$tokuisaki_name}}</option>
+                      @endif
+                      <option value="すべてバイヤー">すべてバイヤー</option>
+                      @foreach($store_users as $store_user)
+                        <option class="level-0" value="{{$store_user->tokuisaki_name()}}">{{$store_user->tokuisaki_name()}}</option>
+                      @endforeach
+                    </select>
+
+                    @if(isset($tokuisaki_name))
+                      @if($tokuisaki_name != 'すべてバイヤー')
+                      <select name="store_name" id="store_name" class="postform">
+                        @if(isset($store_name))
+                          <option class="level-0" value="{{$store_name}}">{{$store_name}}</option>
+                        @endif
+                        <option value="すべての店舗">すべての店舗</option>
+                        @foreach($stores as $store)
+                          <option class="level-0" value="{{$store->store_name}}">{{$store->store_name}}</option>
+                        @endforeach
+                      </select>
+                      @endif
+                    @endif
+
                     <select name="cat" id="cat" class="postform">
-                      <option value="-1">すべての取引</option>
+                      @if(isset($cat))
+                        <option class="level-0" value="{{$cat}}">{{$cat}}</option>
+                      @endif
+                      <option value="すべての取引">すべての取引</option>
                       <option class="level-0" value="交渉中">交渉中</option>
-                      <option class="level-0" value="受注済">受注済</option>
+                      <option class="level-0" value="発注済">受注済</option>
                       <option class="level-0" value="キャンセル">キャンセル</option>
                     </select>
+
                     <input class="form-control" type="text" name="search" placeholder="検索" aria-label="Search" data-width="250" style="width: 250px;" value="@if(isset($search)){{$search}}@endif">
                     <div class="input-group-append">
                       <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
@@ -70,6 +99,8 @@
               </form>
               @endif
             </div>
+
+
             <div class="clearfix mb-3"></div>
             <div class="table-responsive">
               <table class="table table-striped">

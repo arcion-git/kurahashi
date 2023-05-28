@@ -218,8 +218,124 @@ class BothController extends Controller
 
 
 
+  // 全ての配送先店舗を変更
+  public function change_all_store(Request $request){
+    $user_id = $request->user_id;
+    $addtype = $request->addtype;
+    $store_name = $request->store_name;
+    $tokuisaki_name = $request->tokuisaki_name;
+
+    $kaiin_number = User::where(['id'=>$user_id])->first()->kaiin_number;
+
+    $store = Store::where(['tokuisaki_name'=>$tokuisaki_name,'store_name'=> $store_name])->first();
+
+    $price_groupe = PriceGroupe::where([ 'tokuisaki_id'=> $store->tokuisaki_id,'store_id'=> $store->store_id ])->first();
+
+    $carts = Cart::where(['user_id' => $user_id , 'addtype' => $addtype , 'deal_id' => null])->get();
+
+    foreach ($carts as $cart) {
+
+      // オーダー内容を保存
+      $order = Order::where(['cart_id'=> $cart->id])->first();
+      $order->store_name = $store_name;
+      $order->tokuisaki_name = $tokuisaki_name;
+      $order->save();
+
+      // 商品情報を取得
+      $item = Item::where('id',$cart->item_id)->first();
+
+      // 市況商品価格上書き
+      $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'price_groupe'=>$price_groupe->$price_groupe])->first();
+      if(isset($special_price_item->price)){
+      $order->price = $special_price_item->price;
+      }
+
+      // セトナギ商品上書き
+      $setonagi_item = SetonagiItem::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])->first();
+      if(isset($setonagi_item->price)){
+        $order->price = $setonagi_item->price;
+      }
+
+      $setonagi_user = User::where(['kaiin_number'=>$kaiin_number])->first()->setonagi;
+      $now = Carbon::now();
+      if(!$setonagi_user){
+        $buyer_recommends = [];
+        $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get()->unique('tokuisaki_id');
+        foreach ($tokuisaki_ids as $key => $value){
+          // 得意先おすすめ商品の価格を探す
+          $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $value->tokuisaki_id)
+          ->where('price', '>=', '1')
+          ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
+          ->whereDate('start', '<=' , $now)
+          ->whereDate('end', '>=', $now)
+          ->orderBy('order_no', 'asc')->first();
+          // dd($buyer_recommend_item);
+          if(isset($buyer_recommend_item)){
+            $order->price = $buyer_recommend_item->price;
+          }
+          // 市況商品の価格を探す
+          $price_groupe = PriceGroupe::where(['tokuisaki_id'=>$value->tokuisaki_id,'store_id'=>$value->store_id])->first();
+          $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'price_groupe'=>$price_groupe->price_groupe])
+          ->whereDate('start', '<=' , $now)
+          ->whereDate('end', '>=', $now)->first();
+          if(isset($special_price_item)){
+            $order->price = $special_price_item->price;
+          }
+        }
+      }
+      // 担当のおすすめ商品価格上書き
+      $recommend_item = Recommend::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'user_id'=>$kaiin_number])->first();
+      if(isset($recommend_item->price)){
+      $order->price = $recommend_item->price;
+      }
+      $order->save();
+    }
+
+    $cart_ninis = CartNini::where(['user_id' => $user_id , 'deal_id' => null])->get();
+    foreach ($cart_ninis as $cart_nini) {
+      // オーダー内容を保存
+      $ordernini = OrderNini::where(['cart_nini_id'=> $cart_nini->id])->first();
+      $ordernini->store_name = $store_name;
+      $ordernini->tokuisaki_name = $tokuisaki_name;
+      $ordernini->save();
+    }
 
 
+    $data = "success";
+
+    return redirect()->route('setonagi',$data);
+  }
+
+
+  // 配送先店舗を変更
+  public function change_all_nouhin_yoteibi(Request $request){
+    $user_id = $request->user_id;
+    $addtype = $request->addtype;
+    $nouhin_yoteibi = $request->nouhin_yoteibi;
+
+    $kaiin_number = User::where(['id'=>$user_id])->first()->kaiin_number;
+
+    $carts = Cart::where(['user_id' => $user_id , 'addtype' => $addtype , 'deal_id' => null])->get();
+
+    foreach ($carts as $cart) {
+      // オーダー内容を保存
+      $order = Order::where(['cart_id'=> $cart->id])->first();
+      $order->nouhin_yoteibi = $nouhin_yoteibi;
+      $order->save();
+    }
+
+    $cart_ninis = CartNini::where(['user_id' => $user_id , 'deal_id' => null])->get();
+    foreach ($cart_ninis as $cart_nini) {
+      // オーダー内容を保存
+      $ordernini = OrderNini::where(['cart_nini_id'=> $cart_nini->id])->first();
+      $ordernini->nouhin_yoteibi = $nouhin_yoteibi;
+      $ordernini->save();
+    }
+
+    $data = "success";
+
+    return redirect()->route('setonagi',$data);
+  }
 
   // 配送先店舗を変更
   public function change_store(Request $request){

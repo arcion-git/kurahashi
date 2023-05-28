@@ -37,13 +37,28 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!-- 添付のソースを、以下のように変更したい。
 ・「buyerrecommends」は、グループごとにまとめられた配列に変更、配列名は、「groupedItems」とする。
 ・グループ名を出力するソースは、「$buyerrecommend->groupe」とする。
 ・テーブルレコードごとに、グループ名でまとめ、各グループの上にグループ名のテーブル行を作成するものとする。 -->
 
 
-            <form id="buyerrecommend" action="{{ url('/admin/buyer/saverecommend') }}" enctype="multipart/form-data" method="POST" class="form-horizontal">
+            <form id="saveform" action="{{ url('/admin/buyer/saverecommend') }}" enctype="multipart/form-data" method="POST" class="form-horizontal">
               @csrf
               <div class="table-responsive">
                 <table class="table table-striped">
@@ -62,14 +77,12 @@
                     <th class="text-center">掲載終了</th>
                     <th class="text-center">納品期限</th>
                     <th class="text-center">操作</th>
-                    <th class="text-center">価格非表示</th>
                   </tr>
                 </thead>
                 <tbody id="sortdata">
                   @foreach($groupedItems as $group => $buyerrecommends)
                       <tr class="groupeditems">
-                          <input type="hidden" name="buyerrecommend[{{$group}}][order_no]" class="order_no text-center form-control" value="">
-                          <th colspan="12" class=""><input id="{{ $group }}" type="text" name="buyerrecommend_change_groupe_name" class="buyerrecommend_change_groupe_name form-control" value="{{ $group }}"></th>
+                          <th colspan="11" class=""><input id="{{ $group }}" type="text" name="buyerrecommend_change_groupe_name" class="buyerrecommend_change_groupe_name form-control" value="{{ $group }}"></th>
                       </tr>
         	            @foreach($buyerrecommends as $buyerrecommend)
                       <tr>
@@ -121,9 +134,6 @@
                           <!-- <div class="addrecommend btn btn-success" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus"></i> 追加</div> -->
                           <div class="btn btn-success buyerduplicatercommend_button" data-id="{{$buyerrecommend->id}}"><i class="fas fa-plus"></i> 複製</div>
                         </td>
-                        <td class="text-center">
-                          <input type="checkbox" id="hidden_price" name="buyerrecommend[{{$buyerrecommend->id}}][hidden_price]" @if($buyerrecommend->hidden_price == 'on') checked @endif>
-                        </td>
                       </tr>
                       @endforeach
                   @endforeach
@@ -135,7 +145,7 @@
             </form>
             <!-- <a href="{{ url('/admin/buyer/recommend/') }}/{{$store->tokuisaki_id}}/add" class="addrecommend btn btn-success"><i class="fas fa-plus"></i> 商品を追加</a> -->
             <button class="addendrecommend btn btn-success" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus"></i> 商品を追加</button>
-            <!-- <button class="addendrecommend btn btn-success" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus"></i> カテゴリを追加</button> -->
+            <button class="addendrecommend btn btn-success" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus"></i> カテゴリを追加</button>
           </div>
         </div>
       </div>
@@ -315,10 +325,10 @@ $(window).on('load',function(){
     // $(this).val(idx+1);
   });
 });
-$('#sortdata').sortable({
+$('#sortdata').sortable( {
     // handle: 'span',
-});
-// ソート完了時に発火
+} );
+// sortstopイベントをバインド
 $('#sortdata').bind('sortstop',function(){
   // 番号を設定している要素に対しループ処理
   $(this).find('.order_no').each(function(idx){

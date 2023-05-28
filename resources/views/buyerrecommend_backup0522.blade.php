@@ -37,13 +37,88 @@
 
 
 
+
+            @foreach($groupedItems as $text => $buyerrecommends)
+				    <div class="accordion cartAccordion" id="cartAccordion{{ $loop->index }}">
+				        <!-- <div class="card"> -->
+				        <div class="">
+				            <div class="card-header groupe_button" id="heading{{ $loop->index }}" data-toggle="collapse" data-target="#collapse{{ $loop->index }}" aria-expanded="true" aria-controls="collapse{{ $loop->index }}">
+				                <h2 class="mb-0">
+				                    <button class="btn btn-link" type="button" onclick="toggleAccordion(this)">
+				                        <span id="collapse-icon-{{ $text }}">-</span> {{ $text }}
+				                    </button>
+				                </h2>
+				            </div>
+				            <div id="collapse{{ $loop->index }}" class="collapse show" aria-labelledby="heading{{ $loop->index }}" data-parent="#cartAccordion{{ $loop->index }}">
+				                <div class="">
+				                    <table id="sortdata" class="table table-striped table-hover table-md cart-wrap">
+															@foreach($buyerrecommends as $buyerrecommend)
+                                  <!-- オーダー番号を記録 -->
+                                  <input type="hidden" name="buyerrecommend[{{$buyerrecommend->id}}][order_no]" class="order_no text-center form-control" value="{{$buyerrecommend->order_no}}">
+                                  <!-- <td class="text-center">
+                                    <span class="ui-icon ui-icon-arrowthick-2-n-s ui-corner-all ui-state-hover">↑↓</span>
+                                  </td> -->
+                                  <td class="text-center">
+                                    {{$buyerrecommend->item()->item_id}}
+                                  </td>
+                                  <td class="text-center">
+                                    {{$buyerrecommend->item()->item_name}}
+                                  </td>
+                                  <td class="text-center">
+                                    {{$buyerrecommend->item()->sanchi_name}}
+                                  </td>
+                                  <td class="text-center">
+                                    {{$buyerrecommend->item()->kikaku}}
+                                  </td>
+                                  <td class="text-center">
+                                    @if ($buyerrecommend->item()->tani == 1)
+                      							ｹｰｽ
+                      							@elseif ($buyerrecommend->item()->tani == 2)
+                      							ﾎﾞｰﾙ
+                      							@elseif ($buyerrecommend->item()->tani == 3)
+                      							ﾊﾞﾗ
+                      							@elseif ($buyerrecommend->item()->tani == 4)
+                      							Kg
+                      							@endif
+                                  </td>
+                                  <td class="text-center">
+                                    {{$buyerrecommend->item()->zaikosuu}}
+                                  </td>
+                                  <td class="text-center" width="150">
+                                    <input pattern="^[0-9]+$" name="buyerrecommend[{{$buyerrecommend->id}}][price]" class="price text-center form-control" value="{{$buyerrecommend->price}}" title="0から9の半角数字" required>
+                                  </td>
+                                  <td class="text-center" width="150">
+                                    <input type="text" name="buyerrecommend[{{$buyerrecommend->id}}][start]" class="start text-center form-control daterange-cus datepicker" value="{{$buyerrecommend->start}}" autocomplete="off" required>
+                                  </td>
+                                  <td class="text-center" width="150">
+                                    <input type="text" name="buyerrecommend[{{$buyerrecommend->id}}][end]" class="end text-center form-control daterange-cus datepicker" value="{{$buyerrecommend->end}}" autocomplete="off" required>
+                                  </td>
+                                  <td class="text-center" width="150">
+                                    <input type="text" name="buyerrecommend[{{$buyerrecommend->id}}][nouhin_end]" class="nouhin_end text-center form-control daterange-cus datepicker" value="{{$buyerrecommend->nouhin_end}}" autocomplete="off" required>
+                                  </td>
+                                  <td class="text-center">
+                                    <div class="btn btn-primary delete_button" data-id="{{$buyerrecommend->id}}"/>削除</div>
+                                    <!-- <div class="addrecommend btn btn-success" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus"></i> 追加</div> -->
+                                    <div class="btn btn-success buyerduplicatercommend_button" data-id="{{$buyerrecommend->id}}"><i class="fas fa-plus"></i> 複製</div>
+                                  </td>
+                                </tr>
+                              @endforeach
+                            </table>
+                        </div>
+                    </div>
+                  </div>
+              </div>
+              @endforeach
+
+
+
+
 <!-- 添付のソースを、以下のように変更したい。
 ・「buyerrecommends」は、グループごとにまとめられた配列に変更、配列名は、「groupedItems」とする。
-・グループ名を出力するソースは、「$buyerrecommend->groupe」とする。
-・テーブルレコードごとに、グループ名でまとめ、各グループの上にグループ名のテーブル行を作成するものとする。 -->
+・全てのテーブルはソートが可能で、グループごと、また、テーブルレコードごとに順番を変更可能とする。 -->
 
 
-            <form id="buyerrecommend" action="{{ url('/admin/buyer/saverecommend') }}" enctype="multipart/form-data" method="POST" class="form-horizontal">
+            <form id="saveform" action="{{ url('/admin/buyer/saverecommend') }}" enctype="multipart/form-data" method="POST" class="form-horizontal">
               @csrf
               <div class="table-responsive">
                 <table class="table table-striped">
@@ -62,70 +137,60 @@
                     <th class="text-center">掲載終了</th>
                     <th class="text-center">納品期限</th>
                     <th class="text-center">操作</th>
-                    <th class="text-center">価格非表示</th>
                   </tr>
                 </thead>
                 <tbody id="sortdata">
-                  @foreach($groupedItems as $group => $buyerrecommends)
-                      <tr class="groupeditems">
-                          <input type="hidden" name="buyerrecommend[{{$group}}][order_no]" class="order_no text-center form-control" value="">
-                          <th colspan="12" class=""><input id="{{ $group }}" type="text" name="buyerrecommend_change_groupe_name" class="buyerrecommend_change_groupe_name form-control" value="{{ $group }}"></th>
-                      </tr>
-        	            @foreach($buyerrecommends as $buyerrecommend)
-                      <tr>
-                        <!-- オーダー番号を記録 -->
-                        <input type="hidden" name="buyerrecommend[{{$buyerrecommend->id}}][order_no]" class="order_no text-center form-control" value="{{$buyerrecommend->order_no}}">
-                        <!-- <td class="text-center">
-                          <span class="ui-icon ui-icon-arrowthick-2-n-s ui-corner-all ui-state-hover">↑↓</span>
-                        </td> -->
-                        <td class="text-center">
-                          {{$buyerrecommend->item()->item_id}}
-                        </td>
-                        <td class="text-center">
-                          {{$buyerrecommend->item()->item_name}}
-                        </td>
-                        <td class="text-center">
-                          {{$buyerrecommend->item()->sanchi_name}}
-                        </td>
-                        <td class="text-center">
-                          {{$buyerrecommend->item()->kikaku}}
-                        </td>
-                        <td class="text-center">
-                          @if ($buyerrecommend->item()->tani == 1)
-            							ｹｰｽ
-            							@elseif ($buyerrecommend->item()->tani == 2)
-            							ﾎﾞｰﾙ
-            							@elseif ($buyerrecommend->item()->tani == 3)
-            							ﾊﾞﾗ
-            							@elseif ($buyerrecommend->item()->tani == 4)
-            							Kg
-            							@endif
-                        </td>
-                        <td class="text-center">
-                          {{$buyerrecommend->item()->zaikosuu}}
-                        </td>
-                        <td class="text-center" width="150">
-                          <input pattern="^[0-9]+$" name="buyerrecommend[{{$buyerrecommend->id}}][price]" class="price text-center form-control" value="{{$buyerrecommend->price}}" title="0から9の半角数字" required>
-                        </td>
-                        <td class="text-center" width="150">
-                          <input type="text" name="buyerrecommend[{{$buyerrecommend->id}}][start]" class="start text-center form-control daterange-cus datepicker" value="{{$buyerrecommend->start}}" autocomplete="off" required>
-                        </td>
-                        <td class="text-center" width="150">
-                          <input type="text" name="buyerrecommend[{{$buyerrecommend->id}}][end]" class="end text-center form-control daterange-cus datepicker" value="{{$buyerrecommend->end}}" autocomplete="off" required>
-                        </td>
-                        <td class="text-center" width="150">
-                          <input type="text" name="buyerrecommend[{{$buyerrecommend->id}}][nouhin_end]" class="nouhin_end text-center form-control daterange-cus datepicker" value="{{$buyerrecommend->nouhin_end}}" autocomplete="off" required>
-                        </td>
-                        <td class="text-center">
-                          <div class="btn btn-primary delete_button" data-id="{{$buyerrecommend->id}}"/>削除</div>
-                          <!-- <div class="addrecommend btn btn-success" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus"></i> 追加</div> -->
-                          <div class="btn btn-success buyerduplicatercommend_button" data-id="{{$buyerrecommend->id}}"><i class="fas fa-plus"></i> 複製</div>
-                        </td>
-                        <td class="text-center">
-                          <input type="checkbox" id="hidden_price" name="buyerrecommend[{{$buyerrecommend->id}}][hidden_price]" @if($buyerrecommend->hidden_price == 'on') checked @endif>
-                        </td>
-                      </tr>
-                      @endforeach
+    	            @foreach($buyerrecommends as $buyerrecommend)
+                  <tr>
+                      <!-- オーダー番号を記録 -->
+                      <input type="hidden" name="buyerrecommend[{{$buyerrecommend->id}}][order_no]" class="order_no text-center form-control" value="{{$buyerrecommend->order_no}}">
+                    <!-- <td class="text-center">
+                      <span class="ui-icon ui-icon-arrowthick-2-n-s ui-corner-all ui-state-hover">↑↓</span>
+                    </td> -->
+                    <td class="text-center">
+                      {{$buyerrecommend->item()->item_id}}
+                    </td>
+                    <td class="text-center">
+                      {{$buyerrecommend->item()->item_name}}
+                    </td>
+                    <td class="text-center">
+                      {{$buyerrecommend->item()->sanchi_name}}
+                    </td>
+                    <td class="text-center">
+                      {{$buyerrecommend->item()->kikaku}}
+                    </td>
+                    <td class="text-center">
+                      @if ($buyerrecommend->item()->tani == 1)
+        							ｹｰｽ
+        							@elseif ($buyerrecommend->item()->tani == 2)
+        							ﾎﾞｰﾙ
+        							@elseif ($buyerrecommend->item()->tani == 3)
+        							ﾊﾞﾗ
+        							@elseif ($buyerrecommend->item()->tani == 4)
+        							Kg
+        							@endif
+                    </td>
+                    <td class="text-center">
+                      {{$buyerrecommend->item()->zaikosuu}}
+                    </td>
+                    <td class="text-center" width="150">
+                      <input pattern="^[0-9]+$" name="buyerrecommend[{{$buyerrecommend->id}}][price]" class="price text-center form-control" value="{{$buyerrecommend->price}}" title="0から9の半角数字" required>
+                    </td>
+                    <td class="text-center" width="150">
+                      <input type="text" name="buyerrecommend[{{$buyerrecommend->id}}][start]" class="start text-center form-control daterange-cus datepicker" value="{{$buyerrecommend->start}}" autocomplete="off" required>
+                    </td>
+                    <td class="text-center" width="150">
+                      <input type="text" name="buyerrecommend[{{$buyerrecommend->id}}][end]" class="end text-center form-control daterange-cus datepicker" value="{{$buyerrecommend->end}}" autocomplete="off" required>
+                    </td>
+                    <td class="text-center" width="150">
+                      <input type="text" name="buyerrecommend[{{$buyerrecommend->id}}][nouhin_end]" class="nouhin_end text-center form-control daterange-cus datepicker" value="{{$buyerrecommend->nouhin_end}}" autocomplete="off" required>
+                    </td>
+                    <td class="text-center">
+                      <div class="btn btn-primary delete_button" data-id="{{$buyerrecommend->id}}"/>削除</div>
+                      <!-- <div class="addrecommend btn btn-success" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus"></i> 追加</div> -->
+                      <div class="btn btn-success buyerduplicatercommend_button" data-id="{{$buyerrecommend->id}}"><i class="fas fa-plus"></i> 複製</div>
+                    </td>
+                  </tr>
                   @endforeach
                 </tbody>
                 </table>
@@ -135,7 +200,7 @@
             </form>
             <!-- <a href="{{ url('/admin/buyer/recommend/') }}/{{$store->tokuisaki_id}}/add" class="addrecommend btn btn-success"><i class="fas fa-plus"></i> 商品を追加</a> -->
             <button class="addendrecommend btn btn-success" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus"></i> 商品を追加</button>
-            <!-- <button class="addendrecommend btn btn-success" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus"></i> カテゴリを追加</button> -->
+            <button class="addendrecommend btn btn-success" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus"></i> カテゴリを追加</button>
           </div>
         </div>
       </div>
@@ -143,13 +208,6 @@
     </div>
   </div>
 </section>
-
-<form id="buyerrecommend_change_groupe_name_form" action="{{ url('/admin/buyer/buyerrecommend_change_groupe_name') }}" method="POST">
-  @csrf
-  <input type="hidden" name="tokuisaki_id" type="hidden" value="{{$id}}">
-  <input id="buyerrecommend_change_old_groupe_name" name="old_groupe_name" type="hidden" value="">
-  <input id="buyerrecommend_change_groupe_name" name="groupe_name" type="hidden" value="">
-</form>
 
 <form id="buyerduplicatercommend_form" action="{{ url('/admin/buyer/duplicatercommend') }}" method="POST">
   @csrf
@@ -315,10 +373,10 @@ $(window).on('load',function(){
     // $(this).val(idx+1);
   });
 });
-$('#sortdata').sortable({
+$('#sortdata').sortable( {
     // handle: 'span',
-});
-// ソート完了時に発火
+} );
+// sortstopイベントをバインド
 $('#sortdata').bind('sortstop',function(){
   // 番号を設定している要素に対しループ処理
   $(this).find('.order_no').each(function(idx){
@@ -330,6 +388,16 @@ $('#sortdata').bind('sortstop',function(){
 $('.price,.start,.end,nouhin_end').change(function() {
     $('.save_btn').click();
 });
+// $(".addrecommend").on("click",function(){
+//   var order_no = $(this).parent().parent().find('.order_no').val();
+//   console.log(order_no);
+//   $(".ordernosave").val(order_no);
+// });
+// $(".addendrecommend").on("click",function(){
+//   var order_no = 1000;
+//   console.log(order_no);
+//   $(".ordernosave").val(order_no);
+// });
 
 $(window).scroll(function() {
   sessionStorage.scrollTop = $(this).scrollTop();

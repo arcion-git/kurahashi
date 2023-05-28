@@ -1457,7 +1457,7 @@ h6 .badge {
 .accordion {
   display: inline-block;
   width: 100%;
-  margin-bottom: 10px; }
+  /* margin-bottom: 10px;*/ }
   .accordion .accordion-header, .accordion .accordion-body {
     padding: 10px 15px; }
   .accordion .accordion-header {
@@ -3154,7 +3154,7 @@ a:not(.btn-social-icon):not(.btn-social):not(.page-link) .ion, a:not(.btn-social
     margin: auto 0;
 }
 
-
+@media (min-width: 768px) {
 .head-nini_item_name{
   min-width: 130px !important;
   width: 130px !important;
@@ -3212,10 +3212,13 @@ a:not(.btn-social-icon):not(.btn-social):not(.page-link) .ion, a:not(.btn-social
   min-width: 150px !important;
   width: 150px !important;
 }
+}
+
 
 .swal2-popup.swal2-toast .swal2-title{
     margin: 1em 0.5em !important;
 }
+
 
 
 #overlayajax{
@@ -3323,6 +3326,8 @@ table {
 /* table td{
   display: inline-block;
 } */
+
+@media (min-width: 768px) {
 .table-striped tbody tr{
   border: 1px solid #bfc1c3 !important;
 }
@@ -3333,6 +3338,7 @@ table {
 }
 .table-striped tbody .order-table tr:last-child{
   border-bottom:  0px solid #6c757d !important;
+}
 }
 #cart-container .table-striped tbody tr{
   border-left: 0px !important;
@@ -3726,7 +3732,7 @@ table td{
   /* font-size: 0.5em; */
 }
 .table-responsive table {
-    min-width: 500px;
+    /* min-width: 500px; */
 }
 .table.table-md th, .table.table-md td {
     /* padding: 3px 3px; */
@@ -3951,3 +3957,256 @@ footer .external_link ul{
 .buyerduplicatercommend_button{
   cursor: pointer;
 }
+
+#cartAccordion .card-header {
+  border-bottom: 0px;
+}
+
+/* ここからV1.1 */
+.groupe_button{
+  border-left: 1px solid #bfc1c3;
+  border-right: 1px solid #bfc1c3;
+  border-bottom: 1px solid #bfc1c3;
+  border-radius: 0 !important;
+}
+
+/* カートの調整 */
+.cart-wrap .head-zaikosuu,
+.cart-wrap .head-item-id,
+.cart-wrap .head-store,
+.cart-wrap .head-store,
+.cart-wrap .head-yoteibi,
+.cart-wrap .head-shoukei,
+.cart-wrap .head-sousa{
+	/* display: none; */
+}
+
+.head-item-name{
+  width: 20%;
+}
+.head-sanchi{
+  width: 20%;
+}
+
+.accordion .card-header:hover button {
+    cursor: pointer;
+}
+#cartAccordion table{
+  margin-bottom: 0px;
+}
+
+#bulk button{
+  width: 100%;
+  font-size: 1em;
+  padding: 1em;
+  margin-bottom: 1em;
+}
+
+#nouhin_store_nouhin_yoteibi th{
+  width: 50%;
+  text-align: center;
+}
+
+
+
+@media (max-width: 767px) {
+  /* table th, table td{
+    border: 0px !important;
+    background-color: #fff;
+  } */
+  .groupe_button{
+    /* border-left: 1px solid #bfc1c3;
+    border-right: 1px solid #bfc1c3; */
+    border: 1px solid #bfc1c3;
+    border-radius: 0 !important;
+  }
+  .order_item,
+  .cart_item,
+  #order_header{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+  }
+
+  .order_item td,
+  .cart_item td,
+  #order_header tr{
+    display: block;
+    flex-grow: 1;
+    margin: 0;
+    /* height: 100vh; */
+    height: 100%;
+    /* border: 0px !important; */
+  }
+  .order_item td,
+  .cart_item td{
+    /* border: 0px !important; */
+  }
+  .head-item-id,
+  .head-item-name,
+  .head-sanchi,
+  .head-zaikosuu,
+  .head-price,
+  .head-kikaku,
+  .head-quantity,
+  .head-tani{
+    /* display: block; */
+    /* float: left; */
+    /* min-height: 43px; */
+  }
+
+  #cartAccordion .card-header {
+    /* border-bottom: 1px solid #bfc1c3 !important; */
+  }
+
+  .cart_item{
+    border: 1px solid #bfc1c3 !important;
+  }
+  .cart_item .head-item-name{
+    border-top: 0px !important;
+    border-left: 0px !important;
+    border-bottom: 0px !important;
+  }
+  #cartAccordion .head-item-id{
+    width: 0% !important;
+    min-width:  0% !important;
+  }
+  #cartAccordion .head-item-name{
+    width: 80% !important;
+    min-width:  80% !important;
+  }
+  #cartAccordion .head-sanchi{
+    width: 20% !important;
+    min-width: 20% !important;
+  }
+  #cartAccordion .head-price{
+    width: 20%;
+    border-top: 0px !important;
+    border-bottom: 0px !important;
+    border-left: 0px !important;
+  }
+  #cartAccordion .head-kikaku{
+    width: 35%;
+    border: 0px !important;
+  }
+  #cartAccordion .head-quantity{
+    width: 20%;
+    border-top: 0px !important;
+    border-bottom: 0px !important;
+  }
+  #cartAccordion .head-tani{
+    width: 25%;
+    border: 0px !important;
+  }
+  #order_header .head-item-name{
+    border-right: 0px !important;
+  }
+  #order_header .head-price{
+    border-left: 1px solid #bfc1c3 !important;
+  }
+  #order_header .head-tani{
+    border-right: 1px solid #bfc1c3 !important;
+  }
+  .order-table{
+    border-top: 1px solid #bfc1c3 !important;
+    border-right: 0px !important;
+    border-bottom: 0px !important;
+    border-left: 0px !important;
+  }
+  .order_item{
+    border: 0px !important;
+  }
+  .cart_item{
+    border-bottom: 0px !important;
+  }
+
+  .cartAccordion:last-of-type{
+    border-bottom: 1px solid #bfc1c3 !important;
+  }
+  .cart_item .head-sanchi{
+    border: 0px !important;
+  }
+  .order-item .head-price{
+    border-left: 0px !important;
+    border-bottom: 0px !important;
+  }
+
+
+
+  /* 任意の商品調整 */
+  #nini_header .head-nini_item_name{
+      border-bottom: 0px !important;
+  }
+  #nini_header .head-nini_tantou{
+      border-right: 0px !important;
+  }
+  #nini-wrap tbody{
+    display: block;
+  }
+  .cart_nini_item,
+  #nini_header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+  }
+  #nini_header th,
+  .cart_nini_item th{
+    display: block;
+    flex-grow: 1;
+    margin: 0;
+    /* height: 100vh; */
+    height: 100%;
+  }
+  .head-nini_item_name{
+    width: 100%;
+    flex-grow: 1;
+    border-bottom: 0px !important;
+  }
+  #nini_header .head-nini_tantou{
+    width: 40%;
+    border-bottom: 0px !important;
+  }
+  #nini_header .head-quantity{
+    width: 60%;
+    border-bottom: 0px !important;
+  }
+  .cart_nini_item .head-nini_tantou{
+    width: 40%;
+    flex-grow: 1;
+    border-right: 0px !important;
+    border-bottom: 0px !important;
+  }
+  .cart_nini_item .head-quantity{
+    width: 60%;
+    flex-grow: 1;
+    border-bottom: 0px !important;
+  }
+  .cart_nini_item .order-table{
+    width: 60%;
+    display: block;
+    border: 0px !important;
+  }
+  .cart_nini_item:last-of-type{
+    border-bottom: 1px solid #bfc1c3 !important;
+  }
+}
+
+#nini-wrap .table-striped tbody .order-table tr{
+  border: 0px !important;
+}
+/* ここから任意の商品 */
+#nini-wrap .head-store,
+#nini-wrap .head-yoteibi,
+#nini-wrap .head-sousa {
+  display: none;
+}
+
+
+/* .groupeditems[draggable="false"] {
+  pointer-events: none;
+  cursor: default;
+} */

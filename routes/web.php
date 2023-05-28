@@ -31,6 +31,9 @@
 
 
   Route::get('/user/home', 'LoginPageController@setonagi');
+  Route::get('/bulk', 'LoginPageController@bulk');
+
+  Route::post('/addall', 'LoginPageController@addall')->name('addall');
 
   Route::get('/setonagi', 'LoginPageController@setonagi')->name('setonagi');
   Route::get('/special_price', 'LoginPageController@index')->name('home');
@@ -63,7 +66,7 @@
 
   // Ajax GET
   Route::get('/cart', 'LoginPageController@cart');
-  Route::get('/order', 'LoginPageController@order');
+  Route::post('/order', 'LoginPageController@order');
 
   // Ajax POST&GET（ユーザー側）
   Route::post('/dealorder', 'LoginPageController@dealorder');
@@ -89,8 +92,10 @@
   Route::post('/nini_change_price', 'BothController@nini_change_price');
   Route::post('/nini_change_quantity', 'BothController@nini_change_quantity');
   Route::post('/change_nouhin_yoteibi', 'BothController@change_nouhin_yoteibi');
+  Route::post('/change_all_nouhin_yoteibi', 'BothController@change_all_nouhin_yoteibi');
   Route::post('/nini_change_nouhin_yoteibi', 'BothController@nini_change_nouhin_yoteibi');
   Route::post('/change_store', 'BothController@change_store');
+  Route::post('/change_all_store', 'BothController@change_all_store');
   Route::post('/add_all_store', 'BothController@add_all_store');
   Route::post('/nini_change_store', 'BothController@nini_change_store');
   Route::post('/nini_add_all_store', 'BothController@nini_add_all_store');
@@ -145,7 +150,9 @@
 
   // 取引検索
   Route::get('/admin/search', 'AdminPageController@search');
-  Route::post('/admin/search', 'AdminPageController@search');
+  Route::post('/admin/search', 'AdminPageController@search')->name('admin.search');
+  Route::post('/admin/search/change_tokuisaki_name', 'AdminPageController@change_tokuisaki_name');
+
 
   // 商品画像アップロード
   Route::get('/admin/imgupload', 'AdminPageController@imgupload')->name('imgupload');
@@ -179,6 +186,9 @@
   Route::post('/admin/buyer/addrecommend', 'AdminPageController@buyeraddrecommend');
   Route::post('/admin/buyer/saverecommend', 'AdminPageController@buyersaverecommend');
   Route::post('/admin/buyer/removercommend', 'AdminPageController@buyerremovercommend');
+  Route::post('/admin/buyer/buyerrecommend_change_groupe_name', 'AdminPageController@buyerrecommend_change_groupe_name');
+
+
 
   // リピートオーダーポスト
   Route::get('/admin/user/repeatorder/{id}', 'AdminPageController@userrepeatorder')->name('repeatorder');
