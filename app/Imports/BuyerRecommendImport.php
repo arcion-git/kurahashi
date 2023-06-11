@@ -33,7 +33,13 @@ class BuyerRecommendImport implements OnEachRow, WithHeadingRow
               'start'=>$row['掲載開始'],
               'end'=>$row['掲載期限'],
               'nouhin_end'=>$row['納品期限'],
-              'order_no'=>$row['並び順']
+              'order_no'=>$row['並び順'],
+              'groupe'=>$row['グループ'],
+              'hidden_price'=>$row['価格非表示'],
+              'zaikokanri'=>$row['在庫管理'],
+              'zaikosuu'=>$row['在庫数'],
+              'uwagaki_item_name'=>$row['上書き商品名'],
+              'uwagaki_kikaku'=>$row['上書き規格'],
            ]
        );
        // dd($item);
