@@ -14,10 +14,10 @@ class AddBuyerRecommendsTable extends Migration
      public function up()
      {
          Schema::table('buyer_recommends', function (Blueprint $table) {
-             $table->string('groupe')->nullable()->comment('グループ');
-             $table->string('hidden_price')->nullable()->comment('価格非表示');
-             $table->boolean('zaikokanri')->nullable()->comment('在庫管理');
-             $table->string('zaikosuu')->nullable()->comment('在庫数');
+             // $table->string('groupe')->nullable()->comment('グループ');
+             // $table->string('hidden_price')->nullable()->comment('価格非表示');
+             // $table->boolean('zaikokanri')->nullable()->comment('在庫管理');
+             // $table->string('zaikosuu')->nullable()->comment('在庫数');
              $table->string('uwagaki_item_name')->nullable()->comment('上書き商品名');
              $table->string('uwagaki_kikaku')->nullable()->comment('上書き規格');
          });

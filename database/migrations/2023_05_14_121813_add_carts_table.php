@@ -14,8 +14,8 @@ class AddCartsTable extends Migration
     public function up()
     {
         Schema::table('carts', function (Blueprint $table) {
-            $table->string('addtype')->nullable()->comment('追加種別');
-            $table->string('groupe')->nullable()->comment('グループ');
+            // $table->string('addtype')->nullable()->comment('追加種別');
+            // $table->string('groupe')->nullable()->comment('グループ');
             $table->string('uwagaki_item_name')->nullable()->comment('上書き商品名');
             $table->string('uwagaki_kikaku')->nullable()->comment('上書き規格');
         });
