@@ -1,12 +1,18 @@
 
-
+@if(request()->input('addtype') == 'addbuyerrecommend' && $user->setonagi)
+@else
 <div class="table-responsive" id="nouhin_store_nouhin_yoteibi">
+	@if(!$user->setonagi)
 	<div class="section-title">納品先・納品日</div>
+	@elseif(request()->input('addtype') === 'addbuyerrecommend')
+	<div class="section-title">お気に入り表示</div>
+	@endif
 	<table id="{{$user->id}}" class="user_id table table-striped table-hover table-md cart-wrap">
+		@if(!$user->setonagi)
 		<tr>
 			<th class="">納入先店舗</th>
 			<th class="">
-				<select name="change_all_store[]" class="change_all_store text-center form-control" value="" required>
+				<select id="change_all_store" name="change_all_store[]" class="change_all_store text-center form-control" value="" required>
 					<option id="{{$set_order->tokuisaki_name}}" value="{{$set_order->store_name}}">{{$set_order->tokuisaki_name}} {{$set_order->store_name}}</option>
 					@foreach($stores as $store)
 						<option id="{{$store->tokuisaki_name}}" value="{{$store->store_name}}">{{$store->tokuisaki_name}} {{$store->store_name}}</option>
@@ -16,9 +22,8 @@
 		</tr>
 		<tr>
 			<th class="">納品予定日</th>
-			@if(!$user->setonagi)
 			<td class="text-center">
-					<input type="text" name="change_all_nouhin_yoteibi[]" class="change_all_nouhin_yoteibi text-center form-control daterange-cus datepicker" value="{{$set_order->nouhin_yoteibi}}" autocomplete="off" required>
+					<input id="change_all_nouhin_yoteibi" type="text" name="change_all_nouhin_yoteibi[]" class="change_all_nouhin_yoteibi text-center form-control daterange-cus datepicker" value="{{$set_order->nouhin_yoteibi}}" autocomplete="off" required>
 					@if($user->kyuujitu_haisou == 1)
 					<script>
 					$('.change_all_nouhin_yoteibi').datepicker({
@@ -49,26 +54,27 @@
 					</script>
 					@endif
 			</td>
-			@endif
 			</th>
 		</tr>
+		@endif
+
+		@if(request()->input('addtype') === 'addbuyerrecommend')
 		<tr>
 			<th class="">お気に入り商品のみを表示</th>
 			<td class="text-center">
-				<div>
 					@if(request()->input('show_favorite') == true)
 		      <input type="checkbox" id="show_favorite" name="show_favorite" value="1" checked>
 					@else
 		      <input type="checkbox" id="show_favorite" name="show_favorite" value="1">
 					@endif
-		      <label for="show_favorite">お気に入り商品のみを表示</label>
-		    </div>
+		      <label class="show_favorite_label" for="show_favorite">お気に入り商品のみを表示</label>
 			</td>
 		</tr>
+		@endif
+
 	</table>
 </div>
-
-
+@endif
 
 
 
@@ -111,20 +117,42 @@
 				            <div id="collapse{{ $loop->index }}" class="collapse show" aria-labelledby="heading{{ $loop->index }}" data-parent="#cartAccordion{{ $loop->index }}">
 				                <div class="">
 				                    <table id="{{$user->kaiin_number}}" class="table table-striped table-hover table-md cart-wrap">
+
+
+
 															@foreach($carts as $cart)
+
+															<!-- お気に入り商品表示非表示 -->
 															@if(!isset($show_favorite) && ($cart->addtype == 'addbuyerrecommend' || $cart->addtype == 'addsetonagi' || $cart->addtype == 'addspecialprice') || (isset($show_favorite) && ($cart->favoriteitem())))
+
+															<!-- 確認画面で在庫がある商品のみ -->
+															@if($url == 'approval' && $cart->order_this())
+															@else
+
+															<!-- 納品先の得意先IDと、担当のおすすめ商品の得意先IDが一致するか確認 -->
+
+															@if(!isset($set_order) && !$user->setonagi)
+															@else
+
+
+															@if(!$cart->order_store())
+															@else
 
 															<tr id="{{$cart->id}}" class="cart_item" data-addtype="{{$cart->addtype}}">
 																<input name="item_id[]" type="hidden" value="{{$cart->item->id}}" />
 																<td class="head-item-id cartid_{{$cart->id}} text-center">{{$cart->item->item_id}}</td>
 																<td class="head-item-name cartid_{{$cart->id}}">
-																	{{$cart->item->item_name}}
+																	@if($cart->addtype == 'addbuyerrecommend' && !$user->setonagi)
+																		{{$cart->uwagaki_item_name}}
+																		@else
+																		{{$cart->item->item_name}}
+																	@endif
 
 																	@if($cart->addtype == 'addbuyerrecommend')
 																		@if($cart->favoriteitem())
-			                              <button name="item_id" value="{{$cart->item->id}}" id="{{$cart->item->id}}" class="removefavoriteitem"><i class="fa fa-heart"></i></button>
+			                              <span name="item_id" value="{{$cart->item->id}}" id="{{$cart->item->id}}" class="removefavoriteitem"><i class="fa fa-heart"></i></span>
 			                              @else
-			                              <button name="item_id" value="{{$cart->item->id}}" id="{{$cart->item->id}}" class="addfavoriteitem"><i class="far fa-heart"></i></button>
+			                              <span name="item_id" value="{{$cart->item->id}}" id="{{$cart->item->id}}" class="addfavoriteitem"><i class="far fa-heart"></i></span>
 			                              @endif
 																	@endif
 
@@ -132,7 +160,8 @@
 																<td class="head-sanchi cartid_{{$cart->id}} text-center">
 																	@if(isset($cart->item->sanchi_name))
 																		{{$cart->item->sanchi_name}}
-																	@else　@endif
+																	@else
+																	@endif
 																</td>
 																<td class="head-zaikosuu cartid_{{$cart->id}} text-center">{{$cart->item->zaikosuu}}</td>
 																<!-- <td class="cartid_{$cart->id}} text-center">{{$cart->item->tokkijikou}}</td> -->
@@ -141,13 +170,21 @@
 																	@foreach($cart->orders as $val)
 																		<tr id="{{$val->id}}" class="order_item">
 																			<td class="head-price text-center">
+
+																				<!-- BtoB金額表示 -->
 																				@if(!$user->setonagi)
-																					@if($cart->hidden_price() == 'on')
+																					@if($cart->hidden_price() == '1')
 																					<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="未定" value="未定" @if( Auth::guard('user')->check() ) readonly @endif>
 																					@else
 																					<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="@if($val->price=='未定'){{(0)}}@else{{($val->price)}}@endif" value="@if($val->price=='未定'){{($val->price)}}@else{{($val->price)}}@endif" @if ( Auth::guard('user')->check() ) readonly @endif>
 																					@endif
 																				@endif
+
+																				<!-- BtoSB金額表示 -->
+																				@if($user->setonagi)
+																				<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="{{($val->price)}}" value="{{($val->price)}}" @if ( Auth::guard('user')->check() ) readonly @endif>
+																				@endif
+
 																			</td>
 
 																			@if(!$user->setonagi)
@@ -172,7 +209,13 @@
 																			</td>
 																			@endif
 
-																			<td class="head-kikaku text-center">{{$cart->item->kikaku}}</td>
+																			<td class="head-kikaku text-center">
+																				@if($cart->addtype == 'addbuyerrecommend' && !$user->setonagi)
+																					{{$cart->uwagaki_kikaku}}
+																					@else
+																					{{$cart->item->kikaku}}
+																				@endif
+																			</td>
 																			<td class="head-quantity text-center">
 																				<select name="quantity[]" class="quantity text-center form-control" value="{{$val->quantity}}" required>
 																					@if(isset($deal))
@@ -185,6 +228,8 @@
 																						@endif
 																					@endif
 																						@for ($i = 0; $i <= $cart->item->zaikosuu; $i++)
+																						@endfor
+																						@for ($i = 0; $i <= $cart->zaikosuu(); $i++)
 																						<option value="{{$i}}">{{$i}}</option>
 																						@endfor
 																				</select>
@@ -249,6 +294,9 @@
 																	</table>
 																</td>
 															</tr>
+															@endif
+															@endif
+															@endif
 															@endif
 															@endforeach
 				                    </table>
@@ -746,7 +794,16 @@ $(document).ready( function(){
 
 
 
-
+<script>
+$(document).ready(function() {
+  $('.cartAccordion').each(function() {
+    var hasCartItem = $(this).find('.cart_item').length > 0;
+    if (!hasCartItem) {
+      $(this).hide();
+    }
+  });
+});
+</script>
 
 
 

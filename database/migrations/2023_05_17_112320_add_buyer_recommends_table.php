@@ -18,6 +18,8 @@ class AddBuyerRecommendsTable extends Migration
              $table->string('hidden_price')->nullable()->comment('価格非表示');
              $table->boolean('zaikokanri')->nullable()->comment('在庫管理');
              $table->string('zaikosuu')->nullable()->comment('在庫数');
+             $table->string('uwagaki_item_name')->nullable()->comment('上書き商品名');
+             $table->string('uwagaki_kikaku')->nullable()->comment('上書き規格');
          });
      }
 
@@ -30,9 +32,11 @@ class AddBuyerRecommendsTable extends Migration
      {
          Schema::table('buyer_recommends', function (Blueprint $table) {
              $table->dropColumn('groupe');
-             $table->dropColumn('price_show');
+             $table->dropColumn('hidden_price');
              $table->dropColumn('zaikokanri');
              $table->dropColumn('zaikosuu');
+             $table->dropColumn('uwagaki_item_name');
+             $table->dropColumn('uwagaki_kikaku');
          });
      }
 }

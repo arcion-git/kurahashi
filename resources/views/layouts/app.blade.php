@@ -204,8 +204,12 @@
                 </a>
               </div>
               <div class="dropdown-footer text-center">
-                <a href="{{ url('/confirm') }}" class="btn btn-warning">注文個数入力に進む <i class="fas fa-chevron-right"></i></a>　
-                <!-- <a href="" class="btn btn-success">このまま商品を発注する <i class="fas fa-chevron-right"></i></a>　 -->
+                <!-- <a href="{{ url('/confirm') }}" class="btn btn-warning">注文個数入力に進む <i class="fas fa-chevron-right"></i></a> -->
+                <form action="{{ url('/addall') }}" method="POST" class="form-horizontal">
+                  {{ csrf_field() }}
+                  <input type="hidden" name="addtype" value="addsetonagi" />
+                  <button type="submit" class="btn btn-warning"><span>注文個数入力に進む</span></button>
+                </form>
               </div>
             </div>
           </li>
@@ -355,13 +359,43 @@
           <ul class="sidebar-menu">
 
             <li class="menu-header">メニュー</li>
+
+
+
             <li class="nav-item">
+               <a href="{{ url('/setonagi') }}" class="nav-link"><i class="fas fa-check"></i><span>限定お買い得商品</span></a>
+             </li>
+            <!-- <li class="nav-item">
+              <form action="{{ url('/addall') }}" method="POST" class="form-horizontal">
+                {{ csrf_field() }}
+                <input type="hidden" name="addtype" value="addsetonagi" />
+                <button type="submit" class="nav-link nav_alladd"><i class="fas fa-check"></i><span>限定お買い得商品</span></button>
+              </form>
+            </li> -->
+            <li class="nav-item">
+              <form action="{{ url('/addall') }}" method="POST" class="form-horizontal">
+                {{ csrf_field() }}
+                <input type="hidden" name="addtype" value="addbuyerrecommend" />
+                <button type="submit" class="nav-link nav_alladd"><i class="far fa-user"></i><span>担当のおすすめ商品</span></button>
+              </form>
+            </li>
+            <li class="nav-item">
+              <form action="{{ url('/addall') }}" method="POST" class="form-horizontal">
+                {{ csrf_field() }}
+                <input type="hidden" name="addtype" value="addspecialprice" />
+                <button type="submit" class="nav-link nav_alladd"><i class="fas fa-fire"></i><span>市況商品（時価）</span></button>
+              </form>
+            </li>
+
+
+
+<!--             <li class="nav-item">
               <a href="{{ url('/setonagi') }}" class="nav-link"><i class="fas fa-check"></i><span>限定お買い得商品</span></a>
             </li>
 
-            <!-- <li class="nav-item">
+            <li class="nav-item">
               <a href="{{ url('/') }}" class="nav-link"><i class="fas fa-list"></i><span>すべての商品</span></a>
-            </li> -->
+            </li>
             <li class="nav-item">
               <a href="{{ url('/recommend') }}" class="nav-link"><i class="far fa-user"></i><span>担当のおすすめ商品</span></a>
             </li>
@@ -370,7 +404,7 @@
             </li>
             <li class="nav-item">
               <a href="{{ url('/favoriteitem') }}" class="nav-link"><i class="far fa-heart"></i><span>お気に入り商品</span></a>
-            </li>
+            </li> -->
             <li class="nav-item">
               <a href="{{ url('/firstguide') }}" class="nav-link" style="font-weight:bold;"><i class="far fa-flag"></i><span>はじめてのお客様へ</span></a>
             </li>

@@ -63,13 +63,15 @@
                     <th class="text-center">納品期限</th>
                     <th class="text-center">操作</th>
                     <th class="text-center">価格非表示</th>
+                    <th class="text-center">在庫管理なし</th>
+                    <th class="text-center">在庫数</th>
                   </tr>
                 </thead>
                 <tbody id="sortdata">
                   @foreach($groupedItems as $group => $buyerrecommends)
                       <tr class="groupeditems">
                           <input type="hidden" name="buyerrecommend[{{$group}}][order_no]" class="order_no text-center form-control" value="">
-                          <th colspan="12" class=""><input id="{{ $group }}" type="text" name="buyerrecommend_change_groupe_name" class="buyerrecommend_change_groupe_name form-control" value="{{ $group }}"></th>
+                          <th colspan="14" class=""><input id="{{ $group }}" type="text" name="buyerrecommend_change_groupe_name" class="buyerrecommend_change_groupe_name form-control" value="{{ $group }}"></th>
                       </tr>
         	            @foreach($buyerrecommends as $buyerrecommend)
                       <tr>
@@ -82,13 +84,13 @@
                           {{$buyerrecommend->item()->item_id}}
                         </td>
                         <td class="text-center">
-                          {{$buyerrecommend->item()->item_name}}
+                          <input type="text" id="uwagaki_item_name" class="form-control text-center" name="buyerrecommend[{{$buyerrecommend->id}}][uwagaki_item_name]" value="{{$buyerrecommend->uwagaki_item_name()}}">
                         </td>
                         <td class="text-center">
                           {{$buyerrecommend->item()->sanchi_name}}
                         </td>
                         <td class="text-center">
-                          {{$buyerrecommend->item()->kikaku}}
+                          <input type="text" id="uwagaki_kikaku" class="form-control text-center" name="buyerrecommend[{{$buyerrecommend->id}}][uwagaki_kikaku]" value="{{$buyerrecommend->uwagaki_kikaku()}}">
                         </td>
                         <td class="text-center">
                           @if ($buyerrecommend->item()->tani == 1)
@@ -122,7 +124,16 @@
                           <div class="btn btn-success buyerduplicatercommend_button" data-id="{{$buyerrecommend->id}}"><i class="fas fa-plus"></i> 複製</div>
                         </td>
                         <td class="text-center">
-                          <input type="checkbox" id="hidden_price" name="buyerrecommend[{{$buyerrecommend->id}}][hidden_price]" @if($buyerrecommend->hidden_price == 'on') checked @endif>
+                          <input type="checkbox" id="hidden_price" name="buyerrecommend[{{$buyerrecommend->id}}][hidden_price]" @if($buyerrecommend->hidden_price == '1') checked @endif>
+                        </td>
+                        <td class="text-center">
+                          <input type="checkbox" id="zaikokanri" name="buyerrecommend[{{$buyerrecommend->id}}][zaikokanri]" @if($buyerrecommend->zaikokanri == '1') checked @endif>
+                        </td>
+                        <td class="text-center">
+                          @if($buyerrecommend->zaikokanri == '1')
+                          @else
+                          <input type="text" id="zaikosuu" class="form-control text-center" name="buyerrecommend[{{$buyerrecommend->id}}][zaikosuu]" value="{{$buyerrecommend->zaikosuu}}">
+                          @endif
                         </td>
                       </tr>
                       @endforeach

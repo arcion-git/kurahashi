@@ -51,6 +51,7 @@
           <div class="col-12">
             <div class="float-right">
               @if ( Auth::guard('admin')->check() )
+              @if(isset($store_users))
               <form id="admin_deal_search" action="{{ url('/admin/search') }}" enctype="multipart/form-data" method="POST" class="form-inline mr-auto">
                 @csrf
                 <div class="input-group">
@@ -97,6 +98,7 @@
                   </div>
                 </div>
               </form>
+              @endif
               @endif
             </div>
 

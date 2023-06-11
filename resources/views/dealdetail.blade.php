@@ -80,12 +80,15 @@
                 </div>
                 <div class="col-md-6">
                   <address>
-                    <strong>お問い合わせ日時:</strong><br>
-                    {{ $deal->created_at }}<br>
+                    <!-- <strong>お問い合わせ日時:</strong><br>
+                    {{ $deal->created_at }}<br> -->
                     @if($deal->status == '発注済')
-                    <br><strong>発注日時:</strong><br>
+                    <strong>発注日時:</strong><br>
                     {{ $deal->success_time }}<br>
-                    @else
+                    @endif
+                    @if($deal->status == 'キャンセル')
+                    <strong>キャンセル日時:</strong><br>
+                    {{ $deal->cancel_time }}<br>
                     @endif
                   </address>
                 </div>
@@ -115,19 +118,17 @@
           @endif
             {{ csrf_field() }}
 
-
-            @if(isset($nouhin_yoteibi))
-            <div class="row mt-4 order">
-              <div class="col-md-12">
-                <div class="section-title">商品受け渡し予定日：{{$nouhin_yoteibi}}</div>
+            @if($nouhin_yoteibi)
+              <div class="row mt-4 order">
+                <div class="col-md-12">
+                  <div class="section-title">商品受け渡し予定日：{{$nouhin_yoteibi}}</div>
+                </div>
               </div>
-            </div>
             @endif
 
             <div class="row mt-4 order">
               <div class="col-md-12">
-                <div class="section-title">オーダー内容</div>
-                  <div id="dealorder"></div>
+                <div id="dealorder"></div>
                 <input name="deal_id" type="hidden" value="{{$deal->id}}" id="deal_id"/>
 
                 <div class="float-right">
@@ -151,7 +152,9 @@
                 @if($deal->status == 'キャンセル')
                 @else
                 @if ( Auth::guard('admin')->check() )
-                    <button type="submit" name="deal_id" value="{{ $deal->id }}" class="btn btn-warning">更新を通知する</button>
+                  @if ( $setonagi )
+                    <button type="submit" name="deal_id" value="{{ $deal->id }}" class="btn btn-warning">金額を変更する</button>
+                  @endif
                 @endif
                 @endif
                 </div>

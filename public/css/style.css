@@ -3164,20 +3164,20 @@ a:not(.btn-social-icon):not(.btn-social):not(.page-link) .ion, a:not(.btn-social
   width: 80px !important;
 }
 .head-price{
-  min-width: 100px !important;
-  width: 100px !important;
+  min-width: 60px !important;
+  width: 60px !important;
 }
 .head-store{
   min-width: 130px !important;
   width: 130px !important;
 }
 .head-kikaku{
-  min-width: 70px !important;
-  width: 70px !important;
+  min-width: 60px !important;
+  width: 60px !important;
 }
 .head-quantity{
-  min-width: 80px !important;
-  width: 80px !important;
+  min-width: 100px !important;
+  width: 100px !important;
 }
 .head-tani{
   min-width: 70px !important;
@@ -3982,10 +3982,10 @@ footer .external_link ul{
 }
 
 .head-item-name{
-  width: 20%;
+  width: 30%;
 }
 .head-sanchi{
-  width: 20%;
+  width: 10%;
 }
 
 .accordion .card-header:hover button {
@@ -4007,7 +4007,12 @@ footer .external_link ul{
   text-align: center;
 }
 
-
+@media (min-width: 768px) {
+  #nini-wrap .head-sousa{
+    max-width: 45px !important;
+    min-width: 45px !important;
+  }
+}
 
 @media (max-width: 767px) {
   /* table th, table td{
@@ -4171,8 +4176,13 @@ footer .external_link ul{
     border-bottom: 0px !important;
   }
   #nini_header .head-quantity{
-    width: 60%;
+    width: 40%;
     border-bottom: 0px !important;
+  }
+  #nini-wrap .head-sousa{
+    width: 20%;
+    border-bottom: 0px !important;
+    border-left: 0px !important;
   }
   .cart_nini_item .head-nini_tantou{
     width: 40%;
@@ -4181,7 +4191,17 @@ footer .external_link ul{
     border-bottom: 0px !important;
   }
   .cart_nini_item .head-quantity{
-    width: 60%;
+    width: 40%;
+    flex-grow: 1;
+    border-bottom: 0px !important;
+  }
+  .cart_nini_item .head-sousa{
+    width: 20%;
+    flex-grow: 1;
+    border-bottom: 0px !important;
+  }
+  .cart_nini_item .head-sousa{
+    width: 20%;
     flex-grow: 1;
     border-bottom: 0px !important;
   }
@@ -4201,12 +4221,61 @@ footer .external_link ul{
 /* ここから任意の商品 */
 #nini-wrap .head-store,
 #nini-wrap .head-yoteibi,
-#nini-wrap .head-sousa {
+#nini-wrap .head-sousa .addordernini{
   display: none;
 }
+
+
 
 
 /* .groupeditems[draggable="false"] {
   pointer-events: none;
   cursor: default;
 } */
+
+
+.nav_alladd{
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  padding: 0;
+  appearance: none;
+
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: auto;
+  padding: 0 20px;
+  width: 100%;
+  letter-spacing: .3px;
+  text-decoration: none;
+}
+.nav_alladd i {
+  width: 28px;
+  margin-right: 20px;
+  text-align: center;
+}
+
+.show_favorite_label{
+  height: auto !important;
+  margin-bottom: 0px !important;
+}
+
+.addfavoriteitem,
+.removefavoriteitem{
+  float:right;
+}
+
+@media (min-width: 768px) {
+  #cartAccordion .accordion table tr{
+      border-bottom: 0px !important;
+  }
+  #cartAccordion .cartAccordion{
+      border-bottom: 1px solid #bfc1c3 !important;
+  }
+}
+
+.hide-parent {
+  display: none;
+}

@@ -18,11 +18,12 @@
         <div class="card">
           <div class="card-body">
             <div class="">
-              <form action="{{ url('/addall') }}" method="POST" class="form-horizontal">
+               <a href="{{ url('/setonagi') }}" class="btn btn-warning"><span>限定お買い得商品</span></a>
+              <!-- <form action="{{ url('/addall') }}" method="POST" class="form-horizontal">
                 {{ csrf_field() }}
                 <input type="hidden" name="addtype" value="addsetonagi" />
                 <button id="" type="submit" class="btn btn-warning">限定お買い得商品</button>
-              </form>
+              </form> -->
             </div>
             <div class="">
               <form action="{{ url('/addall') }}" method="POST" class="form-horizontal">

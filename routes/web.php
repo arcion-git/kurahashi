@@ -31,7 +31,7 @@
 
 
   Route::get('/user/home', 'LoginPageController@setonagi');
-  Route::get('/bulk', 'LoginPageController@bulk');
+  Route::get('/bulk', 'LoginPageController@bulk')->name('bulk');
 
   Route::post('/addall', 'LoginPageController@addall')->name('addall');
 
@@ -47,7 +47,7 @@
   Route::get('/line', 'LoginPageController@line')->name('line');
   Route::get('/favorite', 'LoginPageController@favorite')->name('favorite');
   Route::get('/favoriteitem', 'LoginPageController@favoriteitem')->name('favoriteitem');
-  Route::get('/user/deal/{id}', 'LoginPageController@dealdetail')->name('dealdetail');
+  Route::get('/user/deal/{id}', 'BothController@dealdetail')->name('dealdetail');
   Route::get('/repeatorder', 'LoginPageController@repeatorder')->name('repeatorder');
   Route::get('/contact', 'LoginPageController@contact')->name('contact');
   Route::post('/postcontact', 'LoginPageController@postcontact');
@@ -69,12 +69,12 @@
   Route::post('/order', 'LoginPageController@order');
 
   // Ajax POST&GET（ユーザー側）
-  Route::post('/dealorder', 'LoginPageController@dealorder');
+  Route::post('/dealorder', 'BothController@dealorder');
   Route::get('/search', 'LoginPageController@search');
   Route::post('/search', 'LoginPageController@search');
 
   // Ajax POST&GET（管理者側）
-  Route::post('/admin/dealorder', 'AdminPageController@dealorder');
+  Route::post('/admin/dealorder', 'BothController@dealorder');
 
   // Ajax POST
   Route::post('/addcart', 'LoginPageController@addcart');
@@ -134,7 +134,7 @@
 
   // 管理側ページ
   Route::get('/admin/home', 'AdminPageController@index')->name('admin.home');
-  Route::get('/admin/deal/{id}', 'AdminPageController@dealdetail')->name('admin.dealdetail');
+  Route::get('/admin/deal/{id}', 'BothController@dealdetail')->name('admin.dealdetail');
   Route::get('/admin/user', 'AdminPageController@user')->name('admin.user');
   Route::get('/admin/buyer', 'AdminPageController@buyer')->name('admin.buyer');
   Route::get('/admin/setonagiuser', 'AdminPageController@setonagiuser')->name('admin.setonagiuser');

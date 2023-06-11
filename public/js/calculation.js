@@ -30,7 +30,8 @@ $(function() {
 
   // 得意先ごとのおすすめ商品登録
   if(document.URL.match("/admin/buyer/recommend/")) {
-    $(document).on("change", "#hidden_price", function() {
+    $(document).on("change", "#hidden_price, #zaikosuu, #zaikokanri, #uwagaki_item_name, #uwagaki_kikaku",
+    function() {
       $('#buyerrecommend').submit();
     });
   }
@@ -147,8 +148,8 @@ $(function() {
       // Ajaxリクエスト成功時の処理
       .done(function(data) {
         // console.log(data);
-        setTimeout(order_update);
-        setTimeout(dealorder_update);
+        // setTimeout(order_update);
+        // setTimeout(dealorder_update);
         Swal.fire({
           type:"success",
           title: "商品を削除しました",
@@ -183,7 +184,7 @@ $(function() {
 
 
 // 取引詳細画面でオーダー内容を取得する関数（ユーザー側）
-if(document.URL.match("/user")) {
+if (document.URL.includes("user") && !document.URL.includes("admin/user")) {
   function dealorder_update() {
     var deal_id = $('#deal_id').val();
     console.log(deal_id);
@@ -296,17 +297,26 @@ if(document.URL.match("/approval")) {
   function order_update() {
     var params = new URLSearchParams(window.location.search);
     var addtype = params.get('addtype');
+    var url = window.location.href;
+    var path = url.split('?')[0];
+    var url = path.substr(path.lastIndexOf('/') + 1);
 
-      // チェックボックスの状態を取得
-      var isChecked = $('#show_favorite').prop('checked');
-      // チェックが入っているかどうかを確認
-      if (isChecked) {
-        var show_favorite = 1;
-      } else {
-        var show_favorite = null;
-      }
+    var store = $('#change_all_store').val();
+    var nouhin_yoteibi = $('#change_all_nouhin_yoteibi').val();
 
-    console.log(show_favorite);
+    // チェックボックスの状態を取得
+    var isChecked = $('#show_favorite').prop('checked');
+    // チェックが入っているかどうかを確認
+    if (isChecked) {
+      var show_favorite = 1;
+    } else {
+      var show_favorite = null;
+    }
+
+    // console.log(url);
+    // console.log(store);
+    // console.log(nouhin_yoteibi);
+    // console.log(show_favorite);
     $.ajax({
         headers: {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -316,6 +326,9 @@ if(document.URL.match("/approval")) {
         data: {
           'addtype': addtype,
           'show_favorite': show_favorite,
+          'url': url,
+          'store': store,
+          'nouhin_yoteibi': nouhin_yoteibi,
         },
         cache: false, // キャッシュしないで読み込み
         // 通信成功時に呼び出されるコールバック
@@ -448,6 +461,8 @@ if(document.URL.match("/approval")) {
   // 任意の配送先を追加
   $(document).on("click", ".addordernini", function() {
     var cart_nini_id = $(this).get(0).id;
+    var store_name = $(".change_all_store").val();
+    var nouhin_yoteibi = $(".change_all_nouhin_yoteibi").val();
     console.log(cart_nini_id);
     // $(this).parent().parent().clone(true).insertAfter($(this).parent().parent());
 
@@ -459,6 +474,8 @@ if(document.URL.match("/approval")) {
         type: 'POST', //リクエストタイプ
         data: {
           'cart_nini_id': cart_nini_id,
+          'store_name': store_name,
+          'nouhin_yoteibi': nouhin_yoteibi,
         } //Laravelに渡すデータ
       })
       // Ajaxリクエスト成功時の処理
@@ -492,6 +509,8 @@ if(document.URL.match("/approval")) {
   $(document).on("click", ".addniniorder", function() {
     var deal_id = $(this).get(0).id;
     var kaiin_number = $(this).prev().get(0).id;
+    var params = new URLSearchParams(window.location.search);
+    var addtype = params.get('addtype');
     console.log(deal_id);
     console.log(kaiin_number);
     // $(this).parent().parent().clone(true).insertAfter($(this).parent().parent());
@@ -505,6 +524,7 @@ if(document.URL.match("/approval")) {
         data: {
           'deal_id': deal_id,
           'kaiin_number': kaiin_number,
+          'addtype': addtype,
         } //Laravelに渡すデータ
       })
       // Ajaxリクエスト成功時の処理

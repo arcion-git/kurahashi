@@ -2,6 +2,7 @@
 
 namespace App;
 use App\Favorite;
+use App\BuyerRecommend;
 use App\Item;
 
 use Illuminate\Database\Eloquent\Model;
@@ -26,6 +27,26 @@ class BuyerRecommend extends Model
     return $this->belongsTo('App\Item', 'item_id','item_id')
     ->where('sku_code', $this->sku_code)
     ->first();
+  }
+
+  public function uwagaki_item_name()
+  {
+    if(isset($this->uwagaki_item_name)){
+      return $this->uwagaki_item_name;
+    }else{
+      $item_name = Item::where(['item_id' => $this->item_id , 'sku_code' => $this->sku_code])->first()->item_name;
+      return $item_name;
+    }
+  }
+
+  public function uwagaki_kikaku()
+  {
+    if(isset($this->uwagaki_kikaku)){
+      return $this->uwagaki_kikaku;
+    }else{
+      $kikaku = Item::where(['item_id' => $this->item_id , 'sku_code' => $this->sku_code])->first()->kikaku;
+      return $kikaku;
+    }
   }
 
   public function favoriteitem()

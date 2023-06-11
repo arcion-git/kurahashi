@@ -179,7 +179,7 @@ class LoginController extends Controller
         $carts = CartNini::where(['user_id'=> $user->id,'deal_id'=> null])
         ->whereDate('created_at', '<=' , $yesterday)->delete();
 
-        return redirect()->route('setonagi');
+        return redirect()->route('bulk');
     }
 
 

@@ -300,6 +300,7 @@ class AdminPageController extends Controller
   public function discount(Request $request){
 
     $id = $request->deal_id;
+    // dd($id);
 
     $order_ids = $request->order_id;
     $prices = $request['price'];
@@ -457,8 +458,8 @@ class AdminPageController extends Controller
       // 法人ユーザーのみ確認待ちに変更
       $deal->status = '確認待';
     }
-    $deal->kakunin_time = Carbon::now();
-    $deal->save();
+    // $deal->kakunin_time = Carbon::now();
+    // $deal->save();
 
     // foreach (array_map(null, $order_ids, $prices) as [$val1, $val2]) {
     //   $order = Order::where(['id'=> $val1 , 'price'=> $val2])->first();
@@ -818,10 +819,12 @@ class AdminPageController extends Controller
 
     $deals = Deal::where('user_id',$id)->paginate(30);
     $user = User::where('id',$id)->first();
+    // $store_users = StoreUser::select('tokuisaki_id')->distinct()->get();
     $data=[
       'id'=>$id,
       'deals' => $deals,
       'user'=>$user,
+      // 'store_users'=>$store_users,  
     ];
     return view('admin.home', $data);
   }
@@ -1285,10 +1288,22 @@ class AdminPageController extends Controller
             $buyerrecommend->end = $value['end'];
             $buyerrecommend->nouhin_end = $value['nouhin_end'];
             $buyerrecommend->order_no = $value['order_no'];
+            $buyerrecommend->uwagaki_item_name = $value['uwagaki_item_name'];
+            $buyerrecommend->uwagaki_kikaku = $value['uwagaki_kikaku'];
             if(isset($value['hidden_price'])){
-            $buyerrecommend->hidden_price = $value['hidden_price'];
+              $buyerrecommend->hidden_price = 1;
             }else{
-            $buyerrecommend->hidden_price = null;
+              $buyerrecommend->hidden_price = null;
+            }
+            if(isset($value['zaikokanri'])){
+              $buyerrecommend->zaikokanri = 1;
+            }else{
+              $buyerrecommend->zaikokanri = null;
+            }
+            if(isset($value['zaikosuu'])){
+              $buyerrecommend->zaikosuu = $value['zaikosuu'];
+            }else{
+              $buyerrecommend->zaikosuu = null;
             }
             $group = null; // グループ名を初期化
             $currentOrderNo = $value['order_no']; // 現在のorder_noを取得
