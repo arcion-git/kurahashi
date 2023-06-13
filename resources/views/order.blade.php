@@ -115,7 +115,37 @@
 				                </h2>
 				            </div>
 				            <div id="collapse{{ $loop->index }}" class="collapse show" aria-labelledby="heading{{ $loop->index }}" data-parent="#cartAccordion{{ $loop->index }}">
-				 
+				                <div class="">
+				                    <table id="{{$user->kaiin_number}}" class="table table-striped table-hover table-md cart-wrap">
+
+
+
+															@foreach($carts as $cart)
+
+															<!-- お気に入り商品表示非表示 -->
+															@if(!isset($show_favorite) && ($cart->addtype == 'addbuyerrecommend' || $cart->addtype == 'addsetonagi' || $cart->addtype == 'addspecialprice') || (isset($show_favorite) && ($cart->favoriteitem())))
+
+															<!-- 確認画面で在庫がある商品のみ -->
+															@if($url == 'approval' && $cart->order_this())
+															@else
+
+															<!-- 納品先の得意先IDと、担当のおすすめ商品の得意先IDが一致するか確認 -->
+
+															@if(!isset($set_order) && !$user->setonagi)
+															@else
+
+
+															@if(!$cart->order_store())
+															@else
+
+				
+															@endif
+															@endif
+															@endif
+															@endif
+															@endforeach
+				                    </table>
+				        				</div>
 				    				</div>
 								</div>
 						</div>
