@@ -142,8 +142,19 @@
 																<input name="item_id[]" type="hidden" value="{{$cart->item->id}}" />
 																<td class="head-item-id cartid_{{$cart->id}} text-center">{{$cart->item->item_id}}</td>
 																<td class="head-item-name cartid_{{$cart->id}}">
+																	@if($cart->uwagaki_item_name)
+																		{{$cart->uwagaki_item_name}}
+																		@else
+																		{{$cart->item->item_name}}
+																	@endif
 
-	
+																	@if($cart->addtype == 'addbuyerrecommend')
+																		@if($cart->favoriteitem())
+			                              <span name="item_id" value="{{$cart->item->id}}" id="{{$cart->item->id}}" class="removefavoriteitem"><i class="fa fa-heart"></i></span>
+			                              @else
+			                              <span name="item_id" value="{{$cart->item->id}}" id="{{$cart->item->id}}" class="addfavoriteitem"><i class="far fa-heart"></i></span>
+			                              @endif
+																	@endif
 
 																</td>
 																<td class="head-sanchi cartid_{{$cart->id}} text-center">
@@ -199,7 +210,11 @@
 																			@endif
 
 																			<td class="head-kikaku text-center">
-
+																				@if($cart->uwagaki_kikaku)
+																					{{$cart->uwagaki_kikaku}}
+																					@else
+																					{{$cart->item->kikaku}}
+																				@endif
 																			</td>
 																			<td class="head-quantity text-center">
 																				<select name="quantity[]" class="quantity text-center form-control" value="{{$val->quantity}}" required>
