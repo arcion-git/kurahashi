@@ -134,14 +134,26 @@
 															@if(!isset($set_order) && !$user->setonagi)
 															@else
 
-
+															@if(!$cart->order_store())
+															@else
 
 															<tr id="{{$cart->id}}" class="cart_item" data-addtype="{{$cart->addtype}}">
 																<input name="item_id[]" type="hidden" value="{{$cart->item->id}}" />
 																<td class="head-item-id cartid_{{$cart->id}} text-center">{{$cart->item->item_id}}</td>
 																<td class="head-item-name cartid_{{$cart->id}}">
+																	@if($cart->addtype == 'addbuyerrecommend' && !$user->setonagi)
+																		{{$cart->uwagaki_item_name}}
+																		@else
+																		{{$cart->item->item_name}}
+																	@endif
 
-
+																	@if($cart->addtype == 'addbuyerrecommend')
+																		@if($cart->favoriteitem())
+			                              <span name="item_id" value="{{$cart->item->id}}" id="{{$cart->item->id}}" class="removefavoriteitem"><i class="fa fa-heart"></i></span>
+			                              @else
+			                              <span name="item_id" value="{{$cart->item->id}}" id="{{$cart->item->id}}" class="addfavoriteitem"><i class="far fa-heart"></i></span>
+			                              @endif
+																	@endif
 
 																</td>
 																<td class="head-sanchi cartid_{{$cart->id}} text-center">
@@ -158,7 +170,19 @@
 																		<tr id="{{$val->id}}" class="order_item">
 																			<td class="head-price text-center">
 
+																				<!-- BtoB金額表示 -->
+																				@if(!$user->setonagi)
+																					@if($cart->hidden_price() == '1')
+																					<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="未定" value="未定" @if( Auth::guard('user')->check() ) readonly @endif>
+																					@else
+																					<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="@if($val->price=='未定'){{(0)}}@else{{($val->price)}}@endif" value="@if($val->price=='未定'){{($val->price)}}@else{{($val->price)}}@endif" @if ( Auth::guard('user')->check() ) readonly @endif>
+																					@endif
+																				@endif
 
+																				<!-- BtoSB金額表示 -->
+																				@if($user->setonagi)
+																				<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="{{($val->price)}}" value="{{($val->price)}}" @if ( Auth::guard('user')->check() ) readonly @endif>
+																				@endif
 
 																			</td>
 
@@ -185,7 +209,11 @@
 																			@endif
 
 																			<td class="head-kikaku text-center">
-
+																				@if($cart->addtype == 'addbuyerrecommend' && !$user->setonagi)
+																					{{$cart->uwagaki_kikaku}}
+																					@else
+																					{{$cart->item->kikaku}}
+																				@endif
 																			</td>
 																			<td class="head-quantity text-center">
 																				<select name="quantity[]" class="quantity text-center form-control" value="{{$val->quantity}}" required>
@@ -265,7 +293,7 @@
 																	</table>
 																</td>
 															</tr>
-
+															@endif
 															@endif
 															@endif
 															@endif
