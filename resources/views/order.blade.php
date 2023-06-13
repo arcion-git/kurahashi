@@ -126,8 +126,7 @@
 															@if(!isset($show_favorite) && ($cart->addtype == 'addbuyerrecommend' || $cart->addtype == 'addsetonagi' || $cart->addtype == 'addspecialprice') || (isset($show_favorite) && ($cart->favoriteitem())))
 
 															<!-- 確認画面で在庫がある商品のみ -->
-															@if($url == 'approval' && $cart->order_this())
-															@else
+
 
 															<!-- 納品先の得意先IDと、担当のおすすめ商品の得意先IDが一致するか確認 -->
 
@@ -292,8 +291,8 @@
 																</td>
 															</tr>
 
-						
-															@endif
+
+
 															@endif
 															@endforeach
 				                    </table>
