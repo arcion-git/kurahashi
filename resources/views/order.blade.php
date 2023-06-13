@@ -135,7 +135,7 @@
 															@else
 
 
-															@if($cart())
+															@if(isset($cart())
 															@else
 
 															<tr id="{{$cart->id}}" class="cart_item" data-addtype="{{$cart->addtype}}">
