@@ -131,8 +131,7 @@
 
 															<!-- 納品先の得意先IDと、担当のおすすめ商品の得意先IDが一致するか確認 -->
 
-															@if(!isset($set_order) && !$user->setonagi)
-															@else
+
 
 
 
@@ -292,8 +291,8 @@
 																	</table>
 																</td>
 															</tr>
+
 						
-															@endif
 															@endif
 															@endif
 															@endforeach
