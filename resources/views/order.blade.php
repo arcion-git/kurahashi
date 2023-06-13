@@ -171,12 +171,6 @@
 																		<tr id="{{$val->id}}" class="order_item">
 																			<td class="head-price text-center">
 
-		
-
-																				<!-- BtoSB金額表示 -->
-																				@if($user->setonagi)
-																				<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="{{($val->price)}}" value="{{($val->price)}}" @if ( Auth::guard('user')->check() ) readonly @endif>
-																				@endif
 
 																			</td>
 
