@@ -122,23 +122,7 @@
 
 															@foreach($carts as $cart)
 
-															<!-- お気に入り商品表示非表示 -->
-															@if(!isset($show_favorite) && ($cart->addtype == 'addbuyerrecommend' || $cart->addtype == 'addsetonagi' || $cart->addtype == 'addspecialprice') || (isset($show_favorite) && ($cart->favoriteitem())))
 
-															<!-- 確認画面で在庫がある商品のみ -->
-															@if($url == 'approval' && $cart->order_this())
-															@else
-
-															<!-- 納品先の得意先IDと、担当のおすすめ商品の得意先IDが一致するか確認 -->
-
-															@if(!isset($set_order) && !$user->setonagi)
-															@else
-
-
-
-															@endif
-															@endif
-															@endif
 															@endforeach
 				                    </table>
 				        				</div>
