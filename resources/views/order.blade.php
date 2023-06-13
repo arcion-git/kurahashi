@@ -135,11 +135,7 @@
 															@else
 
 
-															@if(!$cart->order_store())
-															@else
 
-						
-															@endif
 															@endif
 															@endif
 															@endif
