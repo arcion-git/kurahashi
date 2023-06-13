@@ -157,19 +157,7 @@
 																		<tr id="{{$val->id}}" class="order_item">
 																			<td class="head-price text-center">
 
-																				<!-- BtoB金額表示 -->
-																				@if(!$user->setonagi)
-																					@if($cart->hidden_price() == '1')
-																					<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="未定" value="未定" @if( Auth::guard('user')->check() ) readonly @endif>
-																					@else
-																					<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="@if($val->price=='未定'){{(0)}}@else{{($val->price)}}@endif" value="@if($val->price=='未定'){{($val->price)}}@else{{($val->price)}}@endif" @if ( Auth::guard('user')->check() ) readonly @endif>
-																					@endif
-																				@endif
-
-																				<!-- BtoSB金額表示 -->
-																				@if($user->setonagi)
-																				<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="{{($val->price)}}" value="{{($val->price)}}" @if ( Auth::guard('user')->check() ) readonly @endif>
-																				@endif
+													
 
 																			</td>
 
