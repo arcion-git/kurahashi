@@ -157,7 +157,7 @@
 																		<tr id="{{$val->id}}" class="order_item">
 																			<td class="head-price text-center">
 
-													
+
 
 																			</td>
 
@@ -184,11 +184,8 @@
 																			@endif
 
 																			<td class="head-kikaku text-center">
-																				@if($cart->uwagaki_kikaku)
-																					{{$cart->uwagaki_kikaku}}
-																					@else
-																					{{$cart->item->kikaku}}
-																				@endif
+
+					
 																			</td>
 																			<td class="head-quantity text-center">
 																				<select name="quantity[]" class="quantity text-center form-control" value="{{$val->quantity}}" required>
