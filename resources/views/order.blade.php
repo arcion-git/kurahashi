@@ -134,8 +134,7 @@
 															@if(!isset($set_order) && !$user->setonagi)
 															@else
 
-															@if(!$cart->order_store())
-															@else
+
 
 															<tr id="{{$cart->id}}" class="cart_item" data-addtype="{{$cart->addtype}}">
 																<input name="item_id[]" type="hidden" value="{{$cart->item->id}}" />
@@ -147,13 +146,7 @@
 																		{{$cart->item->item_name}}
 																	@endif
 
-																	@if($cart->addtype == 'addbuyerrecommend')
-																		@if($cart->favoriteitem())
-			                              <span name="item_id" value="{{$cart->item->id}}" id="{{$cart->item->id}}" class="removefavoriteitem"><i class="fa fa-heart"></i></span>
-			                              @else
-			                              <span name="item_id" value="{{$cart->item->id}}" id="{{$cart->item->id}}" class="addfavoriteitem"><i class="far fa-heart"></i></span>
-			                              @endif
-																	@endif
+
 
 																</td>
 																<td class="head-sanchi cartid_{{$cart->id}} text-center">
@@ -293,7 +286,7 @@
 																	</table>
 																</td>
 															</tr>
-															@endif
+
 															@endif
 															@endif
 															@endif
