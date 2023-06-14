@@ -147,7 +147,13 @@
 																		{{$cart->item->item_name}}
 																	@endif
 
-
+																	@if($cart->addtype == 'addbuyerrecommend')
+																		@if($cart->favoriteitem())
+			                              <span name="item_id" value="{{$cart->item->id}}" id="{{$cart->item->id}}" class="removefavoriteitem"><i class="fa fa-heart"></i></span>
+			                              @else
+			                              <span name="item_id" value="{{$cart->item->id}}" id="{{$cart->item->id}}" class="addfavoriteitem"><i class="far fa-heart"></i></span>
+			                              @endif
+																	@endif
 
 																</td>
 																<td class="head-sanchi cartid_{{$cart->id}} text-center">

@@ -38,10 +38,9 @@ class Cart extends Model
   }
 
   public function favoriteitem() {
-    $user_id = Auth::guard('user')->user()->id;
     // dd($this);
     // $item = Item::where(['id' => $this->item_id])->first();
-    $favorite_item = favorite::where(['item_id' => $this->item_id , 'user_id' => $user_id])->first();
+    $favorite_item = favorite::where(['item_id' => $this->item_id , 'user_id' => $this->user_id])->first();
     // dd($favorite_item);
     return $favorite_item;
   }
