@@ -134,7 +134,8 @@
 															@if(!isset($set_order) && !$user->setonagi)
 															@else
 
-
+															@if(!$cart->order_store())
+															@else
 
 															<tr id="{{$cart->id}}" class="cart_item" data-addtype="{{$cart->addtype}}">
 																<input name="item_id[]" type="hidden" value="{{$cart->item->id}}" />
@@ -286,7 +287,7 @@
 																	</table>
 																</td>
 															</tr>
-
+															@endif
 															@endif
 															@endif
 															@endif
