@@ -149,6 +149,10 @@
 
 																	@if($cart->addtype == 'addbuyerrecommend')
 
+			                              <span name="item_id" value="{{$cart->item->id}}" id="{{$cart->item->id}}" class="removefavoriteitem"><i class="fa fa-heart"></i></span>
+			    
+			                              <span name="item_id" value="{{$cart->item->id}}" id="{{$cart->item->id}}" class="addfavoriteitem"><i class="far fa-heart"></i></span>
+
 																	@endif
 
 																</td>
