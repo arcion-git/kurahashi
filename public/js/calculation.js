@@ -1336,7 +1336,7 @@ if(document.URL.match("/user/deal")) {
 
 
     var prices = $(".price").map(function (index, el) {
-      var prices = $(this).val();
+      var prices = $(this).data('price');
       return (prices);
     }).get();
 
