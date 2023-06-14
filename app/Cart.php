@@ -39,8 +39,7 @@ class Cart extends Model
 
   public function favoriteitem() {
 
-    $favorite_item = favorite::where(['item_id' => $this->item_id , 'user_id' => $this->user_id])->first();
-    dd($favorite_item);
+    $favorite_item = Favorite::where(['item_id' => $this->item_id , 'user_id' => $this->user_id])->first();
     return $favorite_item;
   }
 
