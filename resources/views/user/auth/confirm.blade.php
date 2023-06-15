@@ -4,7 +4,6 @@
 
 
 
-
   <section class="section">
     <div class="section-header">
       <h1>オーダー内容確認
@@ -42,9 +41,6 @@
 
             <div class="row mt-4 order">
               <div class="col-md-12">
-
-
-
                 <div id="order"></div>
               </div>
             </div>

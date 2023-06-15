@@ -206,32 +206,64 @@ class Cart extends Model
     return $order_this;
   }
 
+  public function special_price_nouhin(){
+    $cart = Cart::where(['id'=>$this->id])->first();
+    if($cart->addtype == 'addspecialprice'){
+      $item = $this->belongsTo('App\Item', 'item_id')->first();
+      $user = $this->belongsTo('App\User', 'user_id')->first();
+      $kaiin_number = $user->kaiin_number;
+      $now = Carbon::now();
+      $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get()->unique('tokuisaki_id');
+      foreach ($tokuisaki_ids as $key => $value) {
+        // 市況商品の納品期日を探す
+        $price_groupe = PriceGroupe::where(['tokuisaki_id'=>$value->tokuisaki_id,'store_id'=>$value->store_id])->first();
+        $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'price_groupe'=>$price_groupe->price_groupe])
+        ->whereDate('start', '<=' , $now)
+        ->whereDate('end', '>=', $now)->first();
+        if(isset($special_price_item)){
+          return true;
+          break;
+        }
+      }
+      if(!$buyerrecommend){
+        return false;
+      }
+    }
+  }
+
+
   public function order_store() {
 
     $cart = Cart::where(['id'=>$this->id])->first();
+    // 納品する店舗
+    $order = Order::where(['cart_id'=>$this->id])->first();
 
+    // 商品
+    $item = Item::where(['id'=>$this->item_id])->first();
+    $kaiin_number = User::where(['id'=>$this->user_id])->first()->kaiin_number;
+    $now = Carbon::now();
+    $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get()->unique('tokuisaki_id');
+
+    // 担当のおすすめ商品の得意先コードを取得
     if($cart->addtype == 'addbuyerrecommend'){
-      // 商品
-      $item = Item::where(['id'=>$this->item_id])->first();
-      $kaiin_number = User::where(['id'=>$this->user_id])->first()->kaiin_number;
-      $now = Carbon::now();
-      // 担当のおすすめ商品の得意先コードを取得
-      $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get()->unique('tokuisaki_id');
       foreach ($tokuisaki_ids as $key => $value) {
         $buyerrecommend = BuyerRecommend::where('tokuisaki_id', $value->tokuisaki_id)
-        ->where('item_id' , $item->item_id)
+        ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
         ->where('sku_code' , $item->sku_code)
         ->where('price', '>=', '1')
         ->whereDate('start', '<=' , $now)
-        ->whereDate('end', '>=', $now)->first();
+        ->whereDate('end', '>=', $now)
+        ->whereDate('nouhin_end', '>=', $order->nouhin_yoteibi)->first();
         if(isset($buyerrecommend)){
           break;
         }
       }
+      if(!$buyerrecommend){
+        return false;
+      }
+
       $tokuisaki_id = $buyerrecommend->tokuisaki_id;
 
-      // 納品する店舗
-      $order = Order::where(['cart_id'=>$this->id])->first();
       $tokuisaki_name = $order->tokuisaki_name;
       $store_name = $order->store_name;
 
@@ -242,7 +274,24 @@ class Cart extends Model
 
       if($store_tokuisaki_id == $tokuisaki_id){
         return true;
-      }else{
+        }else{
+        return false;
+      }
+      
+      }elseif($cart->addtype == 'addspecialprice'){
+      $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get()->unique('tokuisaki_id');
+      foreach ($tokuisaki_ids as $key => $value) {
+        // 市況商品の納品期日を探す
+        $price_groupe = PriceGroupe::where(['tokuisaki_id'=>$value->tokuisaki_id,'store_id'=>$value->store_id])->first();
+        $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'price_groupe'=>$price_groupe->price_groupe])
+        ->whereDate('start', '<=' , $now)
+        ->whereDate('end', '>=', $now)->first();
+        if(isset($special_price_item)){
+          return true;
+          break;
+        }
+      }
+      if(!$special_price_item){
         return false;
       }
     }else{

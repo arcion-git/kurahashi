@@ -57,7 +57,6 @@
 			</th>
 		</tr>
 		@endif
-
 		@if(request()->input('addtype') === 'addbuyerrecommend')
 		<tr>
 			<th class="">お気に入り商品のみを表示</th>
@@ -71,7 +70,6 @@
 			</td>
 		</tr>
 		@endif
-
 	</table>
 </div>
 @endif
@@ -129,11 +127,16 @@
 															@if($url == 'approval' && $cart->order_this())
 															@else
 
-															<!-- 納品先の得意先IDと、担当のおすすめ商品の得意先IDが一致するか確認 -->
-
+															<!-- カートに1つでも商品があり、BtoBユーザーか確認 -->
 															@if(!isset($set_order) && !$user->setonagi)
 															@else
 
+															<!-- BtoB担当のおすすめ商品 -->
+															<!-- 在庫管理のある商品を表示 -->
+															@if($cart->zaikosuu() == 0)
+															@else
+
+															<!-- 納品先の得意先IDと、担当のおすすめ商品の得意先IDが一致するか確認 -->
 															@if(!$cart->order_store())
 															@else
 
@@ -295,6 +298,8 @@
 																	</table>
 																</td>
 															</tr>
+	
+															@endif
 															@endif
 															@endif
 															@endif

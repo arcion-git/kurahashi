@@ -991,8 +991,12 @@ class LoginPageController extends Controller
       foreach ($get_items as $get_item) {
       $item = $get_item->item();
       if($item){
-        if($item->zaikosuu >= 0.01){
-          array_push($items, $get_item);
+        if($addtype == 'addbuyerrecommend'){
+            array_push($items, $get_item);
+        }else{
+          if($item->zaikosuu >= 0.01){
+            array_push($items, $get_item);
+          }
         }
       }
       $n++;
@@ -1028,7 +1032,9 @@ class LoginPageController extends Controller
       // ここからカートへの追加処理を商品ごとに行う
 
 
-      foreach ($items as $item) {
+      if($addtype == 'addsetonagi'){
+        }else{
+        foreach ($items as $item) {
 
           $item = Item::where([ 'item_id'=>$item->item_id,'sku_code'=> $item->sku_code ])->first();
 
@@ -1090,8 +1096,10 @@ class LoginPageController extends Controller
           }
 
           if(!$addtype == 'addsetonagi'){
+            // その他の商品の処理
             $cart=Cart::where(['user_id'=> $user_id , 'item_id'=> $item->id , 'deal_id'=> null])->first();
           }else{
+            // 限定お買い得商品の処理
             $cart=Cart::firstOrNew(['user_id'=> $user_id , 'item_id'=> $item->id , 'deal_id'=> null]);
           }
 
@@ -1171,6 +1179,8 @@ class LoginPageController extends Controller
             $order=Order::firstOrNew(['cart_id'=> $cart->id]);
           }
 
+          $set_order = $order;
+
           // ユーザーの会員番号を取得
           if(!$setonagi_user){
             $kaiin_number = Auth::guard('user')->user()->kaiin_number;
@@ -1228,6 +1238,7 @@ class LoginPageController extends Controller
           }
 
           $order->save();
+        }
       }
 
 
@@ -1248,8 +1259,10 @@ class LoginPageController extends Controller
         }
       }
 
-
       $data=[
+        // 'nouhin_yoteibi'=>$order->nouhin_yoteibi,
+        // 'tokuisaki_name'=>$order->tokuisaki_name,
+        // 'store_name'=>$order->store_name,
         'addtype'=>$addtype,
       ];
 
@@ -1372,6 +1385,60 @@ class LoginPageController extends Controller
       return redirect()->route('setonagi',$data);
     }
 
+    //
+    // if(!$setonagi){
+    // $kaiin_number = $user->kaiin_number;
+    // $stores = [];
+    // $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get();
+    // foreach ($tokuisaki_ids as $key => $value) {
+    //   $stores_loop = Store::where(['tokuisaki_id'=>$value->tokuisaki_id,'store_id'=>$value->store_id])->first();
+    //   array_push($stores, $stores_loop);
+    //   // $stores = collect($stores);
+    // }
+    // }else{
+    //   $stores=null;
+    // }
+    //
+    // // 直近の納品予定日を取得
+    // $today = date("Y-m-d");
+    // $holidays = Holiday::pluck('date');
+    // $currentTime = date('H:i:s');
+    // // 19時より前の処理
+    // if (strtotime($currentTime) < strtotime('17:00:00')) {
+    //   $holidays = Holiday::pluck('date')->toArray();
+    //   for($i = 1; $i < 10; $i++){
+    //     $today_plus = date('Y-m-d', strtotime($today.'+'.$i.'day'));
+    //     // dd($today_plus2);
+    //     $key = array_search($today_plus,(array)$holidays,true);
+    //     if($key){
+    //         // 休みでないので納品日を格納
+    //     }else{
+    //         // 休みなので次の日付を探す
+    //         $nouhin_yoteibi = $today_plus;
+    //         break;
+    //     }
+    //   }
+    // }else{
+    // // 19時より後の処理
+    //   $holidays = Holiday::pluck('date')->toArray();
+    //   for($i = 2; $i < 10; $i++){
+    //     $today_plus = date('Y-m-d', strtotime($today.'+'.$i.'day'));
+    //     // dd($today_plus2);
+    //     $key = array_search($today_plus,(array)$holidays,true);
+    //     if($key){
+    //         // 休みでないので納品日を格納
+    //     }else{
+    //         // 休みなので次の日付を探す
+    //         $nouhin_yoteibi = $today_plus;
+    //         break;
+    //     }
+    //   }
+    // }
+    // $sano_nissuu = $nouhin_yoteibi;
+    //
+    // $all_nouhin_end = null;
+
+
     // 直近の納品予定日を取得
     $today = date("Y-m-d");
     $holidays = Holiday::pluck('date');
@@ -1421,7 +1488,9 @@ class LoginPageController extends Controller
     ['carts' => $carts,
      'categories' => $categories,
      'favorite_categories' => $favorite_categories,
+     // 'all_nouhin_end' => $all_nouhin_end,
      // 'stores' => $stores,
+     // 'sano_nissuu' => $sano_nissuu,
      'holidays' => $holidays,
      'user_id' => $user_id,
      'user' => $user,
@@ -1533,6 +1602,7 @@ class LoginPageController extends Controller
 
     $user_id = Auth::guard('user')->user()->id;
 
+
     if(isset($request->addtype)){
       $addtype = $request->addtype;
     }
@@ -1546,6 +1616,7 @@ class LoginPageController extends Controller
     }else{
       $nouhin_yoteibi = null;
     }
+
 
     $show_favorite = $request->show_favorite;
 
@@ -1589,8 +1660,6 @@ class LoginPageController extends Controller
     }
 
 
-
-
     // 表示可能な得意先のおすすめ商品を取得
     $now = Carbon::now();
     $kaiin_number = Auth::guard('user')->user()->kaiin_number;
@@ -1607,6 +1676,9 @@ class LoginPageController extends Controller
       // array_push($buyer_recommends, $buyer_recommend_loop);
       $buyer_recommends = collect($buyer_recommends)->merge($buyer_recommend_loop);
     }
+
+
+
     // dd($buyer_recommends);
 
     // 表示可能な担当のおすすめ商品を取得
