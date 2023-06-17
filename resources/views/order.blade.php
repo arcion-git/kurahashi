@@ -134,8 +134,7 @@
 
 															<!-- BtoB担当のおすすめ商品 -->
 															<!-- 在庫管理のある商品を表示 -->
-															@if($cart->zaikosuu() == 0)
-															@else
+
 
 
 															<!-- 納品先の得意先IDと、担当のおすすめ商品の得意先IDが一致するか確認 -->
@@ -230,11 +229,15 @@
 																						<option value="{{$val->quantity}}">{{$val->quantity}}</option>
 																						@endif
 																					@endif
-																						@for ($i = 0; $i <= $cart->item->zaikosuu; $i++)
-																						@endfor
+																					@if(request()->input('addtype') === 'addbuyerrecommend')
 																						@for ($i = 0; $i <= $cart->zaikosuu(); $i++)
 																						<option value="{{$i}}">{{$i}}</option>
 																						@endfor
+																					@else
+																						@for ($i = 0; $i <= $cart->item->zaikosuu; $i++)
+																						<option value="{{$i}}">{{$i}}</option>
+																						@endfor
+																					@endif
 																				</select>
 																			</td>
 																			<td class="head-tani text-center">
@@ -298,7 +301,6 @@
 																</td>
 															</tr>
 
-															@endif
 															@endif
 															@endif
 															@endif

@@ -1649,6 +1649,13 @@ class LoginPageController extends Controller
           ->whereDate('start', '<=' , $now)
           ->whereDate('end', '>=', $now)
           ->whereDate('nouhin_end', '>=', $nouhin_yoteibi)
+          ->where(function ($query) {
+              $query->where('zaikokanri', 1)
+                  ->orWhere(function ($query) {
+                      $query->whereNull('zaikokanri')
+                          ->where('zaikosuu', '>=', 1);
+                  });
+          })
           ->orderBy('order_no', 'asc')->get();
           $addtype_items = $buyer_recommends;
         }elseif($addtype == 'addspecialprice'){
