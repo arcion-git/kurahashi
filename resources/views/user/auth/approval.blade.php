@@ -75,5 +75,34 @@
   </section>
 
 
-
+<script>
+var addtype = '{{ $addtype }}';
+var show_favorite = '{{ $show_favorite }}';
+var store_name = '{{ $change_all_store }}';
+var tokuisaki_name = '{{ $set_tokuisaki_name }}';
+var nouhin_yoteibi = '{{ $change_all_nouhin_yoteibi }}';
+$.ajax({
+  headers: {
+    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+  }, //Headersを書き忘れるとエラーになる
+  url: location.origin + '/order',
+  type: "POST", // GETメソッドで通信
+  data: {
+    'addtype': addtype,
+    'show_favorite': show_favorite,
+    'store_name': store_name,
+    'tokuisaki_name': tokuisaki_name,
+    'nouhin_yoteibi': nouhin_yoteibi,
+  },
+  cache: false, // キャッシュしないで読み込み
+  // 通信成功時に呼び出されるコールバック
+  success: function (data) {
+        $('#order').html(data);
+  },
+  // 通信エラー時に呼び出されるコールバック
+  error: function () {
+      alert("オーダー内容をアップデートできません。");
+  }
+});
+</script>
 @endsection

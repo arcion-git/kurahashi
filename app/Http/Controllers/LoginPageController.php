@@ -924,7 +924,6 @@ class LoginPageController extends Controller
 
   public function addall(Request $request){
 
-
       $user = Auth::guard('user')->user();
       $user_id = $user->id;
       $setonagi_user = $user->setonagi;
@@ -1015,7 +1014,6 @@ class LoginPageController extends Controller
       $favorite_items = Favorite::where('user_id', $user_id)->get();
 
 
-      $kaiin_number = Auth::guard('user')->user()->kaiin_number;
       $now = Carbon::now()->addDay(3)->format('Y-m-d');
 
       // ユーザーごとのおすすめ商品取得
@@ -1369,9 +1367,9 @@ class LoginPageController extends Controller
     }
 
     if($carts->isNotEmpty()) {
-      foreach ($carts as $cart) {
-        $set_order = Order::where(['cart_id'=>$cart->id])->first();
-      }
+      // foreach ($carts as $cart) {
+      //   $set_order = Order::where(['cart_id'=>$cart->id])->first();
+      // }
     }else{
       $data=[
         'message' => 'カートが空です。',
@@ -1478,6 +1476,8 @@ class LoginPageController extends Controller
       }
     }
 
+
+
     return view('user/auth/confirm',
     ['carts' => $carts,
      'categories' => $categories,
@@ -1498,10 +1498,14 @@ class LoginPageController extends Controller
 
   public function approval(Request $request){
 
-    // dd($request->memo);
+    // dd($request);
 
     $data = $request->all();
 
+    $addtype = $request->addtype;
+    $change_all_store = $request->change_all_store;
+    $change_all_nouhin_yoteibi = $request->change_all_nouhin_yoteibi;
+    $set_tokuisaki_name = $request->set_tokuisaki_name;
 
     $show_favorite = $request->show_favorite;
     $addtype = $request->addtype;
@@ -1512,8 +1516,6 @@ class LoginPageController extends Controller
       ];
       return redirect()->route('confirm',$data);
     }
-
-
 
     if($request->setonagi_id){
       $setonagi = Setonagi::where('id',$request->setonagi_id)->first();
@@ -1572,6 +1574,9 @@ class LoginPageController extends Controller
      'approval' => $approval,
      'addtype' => $addtype,
      'show_favorite' => $show_favorite,
+     'change_all_nouhin_yoteibi' => $change_all_nouhin_yoteibi,
+     'change_all_store' => $change_all_store,
+     'set_tokuisaki_name' => $set_tokuisaki_name,
      // 'memo' => $memo,
     ];
 
@@ -1593,6 +1598,8 @@ class LoginPageController extends Controller
 
 // カート画面からの遷移先
   public function order(Request $request){
+
+    // dd($request);
 
     // 会員情報を取得
     $user = Auth::guard('user')->user();
@@ -1649,13 +1656,13 @@ class LoginPageController extends Controller
           ->whereDate('start', '<=' , $now)
           ->whereDate('end', '>=', $now)
           ->whereDate('nouhin_end', '>=', $nouhin_yoteibi)
-          ->where(function ($query) {
-              $query->where('zaikokanri', 1)
-                  ->orWhere(function ($query) {
-                      $query->whereNull('zaikokanri')
-                          ->where('zaikosuu', '>=', 1);
-                  });
-          })
+          // ->where(function ($query) {
+          //     $query->where('zaikokanri', 1)
+          //         ->orWhere(function ($query) {
+          //             $query->whereNull('zaikokanri')
+          //                 ->where('zaikosuu', '>=', 1);
+          //         });
+          // })
           ->orderBy('order_no', 'asc')->get();
           $addtype_items = $buyer_recommends;
         }elseif($addtype == 'addspecialprice'){
@@ -1854,6 +1861,7 @@ class LoginPageController extends Controller
      'seted_store' => $store,
      'nouhin_yoteibi' => $nouhin_yoteibi,
     ];
+
     return view('order', $data);
 
   }

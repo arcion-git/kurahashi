@@ -28,8 +28,8 @@
         <div class="invoice-print">
 
           <!-- <form action="{{ url('/adddeal') }}" method="POST" class="form-horizontal"> -->
-          <form action="{{ url('/approval') }}" method="GET" class="form-horizontal">
-            {{ csrf_field() }}
+          <form action="{{ url('/approval') }}" method="POST" class="form-horizontal">
+            @csrf
 
             @if(isset($setonagi))
             <div class="row mt-4 order">
@@ -49,6 +49,8 @@
             <div class="float-right">
                 <input type="hidden" name="addtype" value="{{$addtype}}" />
                 <button id="approval_btn" type="submit" class="btn btn-warning">内容確認画面に進む</button>
+                <a href="{{ url('/approval') }}">確認画面に進む</a>
+
                 @if($user->setonagi == 1)
                 <div id="card_approval_btn" class="btn btn-warning" onclick="executePay">内容確認画面に進む</div>
                 @endif
@@ -78,7 +80,7 @@ $(function(){
           }
       }
   }
-  $(function() {
+  $(function(){
       var nokori_zaiko = getUrlParam('nokori_zaiko');
       var nokori_zaiko = -(nokori_zaiko);
       var item_name = getUrlParam('item_name');

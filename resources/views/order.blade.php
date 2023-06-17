@@ -12,18 +12,19 @@
 		<tr>
 			<th class="">納入先店舗</th>
 			<th class="">
-				<select id="change_all_store" name="change_all_store[]" class="change_all_store text-center form-control" value="" required>
+				<select id="change_all_store" name="change_all_store" class="change_all_store text-center form-control" value="" required>
 					<option id="{{$set_order->tokuisaki_name}}" value="{{$set_order->store_name}}">{{$set_order->tokuisaki_name}} {{$set_order->store_name}}</option>
 					@foreach($stores as $store)
 						<option id="{{$store->tokuisaki_name}}" value="{{$store->store_name}}">{{$store->tokuisaki_name}} {{$store->store_name}}</option>
 					@endforeach
+					<input type="hidden" name="set_tokuisaki_name" value="{{$set_order->tokuisaki_name}}" id="set_tokuisaki_name" />
 				</select>
 			</th>
 		</tr>
 		<tr>
 			<th class="">納品予定日</th>
 			<td class="text-center">
-					<input id="change_all_nouhin_yoteibi" type="text" name="change_all_nouhin_yoteibi[]" class="change_all_nouhin_yoteibi text-center form-control daterange-cus datepicker" value="{{$set_order->nouhin_yoteibi}}" autocomplete="off" required>
+					<input id="change_all_nouhin_yoteibi" type="text" name="change_all_nouhin_yoteibi" class="change_all_nouhin_yoteibi text-center form-control daterange-cus datepicker" value="{{$set_order->nouhin_yoteibi}}" autocomplete="off" required>
 					@if($user->kyuujitu_haisou == 1)
 					<script>
 					$('.change_all_nouhin_yoteibi').datepicker({

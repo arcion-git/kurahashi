@@ -267,29 +267,31 @@ if(document.URL.match("/admin/deal")) {
 }
 
 if(document.URL.match("/approval")) {
-    var params = new URLSearchParams(window.location.search);
-    var addtype = params.get('addtype');
-    var show_favorite = params.get('show_favorite');
-    $.ajax({
-      headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-      }, //Headersを書き忘れるとエラーになる
-      url: location.origin + '/order',
-      type: "POST", // GETメソッドで通信
-      data: {
-        'addtype': addtype,
-        'show_favorite': show_favorite,
-      },
-      cache: false, // キャッシュしないで読み込み
-      // 通信成功時に呼び出されるコールバック
-      success: function (data) {
-            $('#order').html(data);
-      },
-      // 通信エラー時に呼び出されるコールバック
-      error: function () {
-          alert("オーダー内容をアップデートできません。");
-      }
-    });
+    // var params = new URLSearchParams(window.location.search);
+    // var addtype = params.get('addtype');
+    // var show_favorite = params.get('show_favorite');
+    // var change_all_store = '{{ $request->input('change_all_store') }}';
+    // $.ajax({
+    //   headers: {
+    //     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //   }, //Headersを書き忘れるとエラーになる
+    //   url: location.origin + '/order',
+    //   type: "POST", // GETメソッドで通信
+    //   data: {
+    //     'addtype': addtype,
+    //     'show_favorite': show_favorite,
+    //     'change_all_store': change_all_store,
+    //   },
+    //   cache: false, // キャッシュしないで読み込み
+    //   // 通信成功時に呼び出されるコールバック
+    //   success: function (data) {
+    //         $('#order').html(data);
+    //   },
+    //   // 通信エラー時に呼び出されるコールバック
+    //   error: function () {
+    //       alert("オーダー内容をアップデートできません。");
+    //   }
+    // });
 }
 
 
@@ -356,7 +358,7 @@ if(document.URL.match("/approval")) {
 
 
   // 個数入力画面を開いたらオーダー内容を取得
-  if(document.URL.match("/confirm") || document.URL.match("/approval")) {
+  if(document.URL.match("/confirm")) {
     $(document).ready( function(){
     setTimeout(order_update);
     });
