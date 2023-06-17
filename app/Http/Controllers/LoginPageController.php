@@ -1560,6 +1560,7 @@ class LoginPageController extends Controller
     $approval = 1;
     $user = Auth::guard('user')->user();
 
+    $url = 'approval';
     // $memo = $request->memo;
     // dd($memo);
 
@@ -1573,6 +1574,7 @@ class LoginPageController extends Controller
      'user_id' => $user_id,
      'approval' => $approval,
      'addtype' => $addtype,
+     'url' => $url,
      'show_favorite' => $show_favorite,
      'change_all_nouhin_yoteibi' => $change_all_nouhin_yoteibi,
      'change_all_store' => $change_all_store,
@@ -1632,6 +1634,13 @@ class LoginPageController extends Controller
     }else{
       $nouhin_yoteibi = null;
     }
+
+    if(isset($request->url)){
+      $url = $request->url;
+    }else{
+      $url = null;
+    }
+
     $show_favorite = $request->show_favorite;
 
     // 時間を取得
@@ -1835,8 +1844,6 @@ class LoginPageController extends Controller
     $collect_password = config('app.collect_password').'2';
     $collect_touroku = config('app.collect_touroku');
     $collect_token = config('app.collect_token');
-
-    $url = $request->url;
 
     $data=
     ['carts' => $carts,

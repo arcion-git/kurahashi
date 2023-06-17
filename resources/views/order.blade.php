@@ -125,7 +125,10 @@
 															<!-- お気に入り商品表示非表示 -->
 															@if(!isset($show_favorite) && ($cart->addtype == 'addbuyerrecommend' || $cart->addtype == 'addsetonagi' || $cart->addtype == 'addspecialprice') || (isset($show_favorite) && ($cart->favoriteitem())))
 
+
 															<!-- 最終確認画面で在庫がある商品のみ -->
+
+
 															@if($url == 'approval' && $cart->order_this())
 															@else
 
