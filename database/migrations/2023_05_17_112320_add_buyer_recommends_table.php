@@ -20,6 +20,7 @@ class AddBuyerRecommendsTable extends Migration
              $table->string('zaikosuu')->nullable()->comment('在庫数');
              $table->string('uwagaki_item_name')->nullable()->comment('上書き商品名');
              $table->string('uwagaki_kikaku')->nullable()->comment('上書き規格');
+             $table->string('gentei_store')->nullable()->comment('限定店舗');
          });
      }
 
@@ -37,6 +38,7 @@ class AddBuyerRecommendsTable extends Migration
              $table->dropColumn('zaikosuu');
              $table->dropColumn('uwagaki_item_name');
              $table->dropColumn('uwagaki_kikaku');
+             $table->dropColumn('gentei_store');
          });
      }
 }

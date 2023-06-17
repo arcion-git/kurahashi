@@ -101,7 +101,6 @@
 				            <th class="head-sousa head text-center">操作</th>
 				        </tr>
 				    </table>
-						@if(isset($groupedItems))
 				    @foreach($groupedItems as $text => $carts)
 				    <div class="accordion cartAccordion" id="cartAccordion{{ $loop->index }}">
 				        <!-- <div class="card"> -->
@@ -124,7 +123,7 @@
 															<!-- お気に入り商品表示非表示 -->
 															@if(!isset($show_favorite) && ($cart->addtype == 'addbuyerrecommend' || $cart->addtype == 'addsetonagi' || $cart->addtype == 'addspecialprice') || (isset($show_favorite) && ($cart->favoriteitem())))
 
-															<!-- 最終確認画面で在庫がある商品のみ -->
+															<!-- 確認画面で在庫がある商品のみ -->
 															@if($url == 'approval' && $cart->order_this())
 															@else
 
@@ -137,8 +136,10 @@
 															@if($cart->zaikosuu() == 0)
 															@else
 
-
 															<!-- 納品先の得意先IDと、担当のおすすめ商品の得意先IDが一致するか確認 -->
+															@if(!$cart->order_store())
+															@else
+
 															<tr id="{{$cart->id}}" class="cart_item" data-addtype="{{$cart->addtype}}">
 																<input name="item_id[]" type="hidden" value="{{$cart->item->id}}" />
 																<td class="head-item-id cartid_{{$cart->id}} text-center">{{$cart->item->item_id}}</td>
@@ -302,6 +303,7 @@
 															@endif
 															@endif
 															@endif
+															@endif
 															@endforeach
 				                    </table>
 				        				</div>
@@ -309,7 +311,6 @@
 								</div>
 						</div>
 						@endforeach
-						@endif
 				</div>
 	</div>
 </div>

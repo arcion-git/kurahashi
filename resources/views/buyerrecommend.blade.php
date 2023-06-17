@@ -4,6 +4,11 @@
 @section('content')
 
 
+
+
+
+
+
 <section class="section">
   <div class="section-header">
     <h1>得意先ごとのおすすめ商品登録</h1>
@@ -57,10 +62,11 @@
                     <th class="text-center">規格</th>
                     <th class="text-center">単位</th>
                     <th class="text-center">在庫数</th>
-                    <th class="text-center">単価</th>
-                    <th class="text-center">掲載開始</th>
-                    <th class="text-center">掲載終了</th>
-                    <th class="text-center">納品期限</th>
+                    <th class="text-center price">単価</th>
+                    <th class="text-center start">掲載開始</th>
+                    <th class="text-center end">掲載終了</th>
+                    <th class="text-center nouhin_end">納品期限</th>
+                    <th class="text-center">限定店舗</th>
                     <th class="text-center">操作</th>
                     <th class="text-center">価格非表示</th>
                     <th class="text-center">在庫管理なし</th>
@@ -71,7 +77,7 @@
                   @foreach($groupedItems as $group => $buyerrecommends)
                       <tr class="groupeditems">
                           <input type="hidden" name="buyerrecommend[{{$group}}][order_no]" class="order_no text-center form-control" value="">
-                          <th colspan="14" class=""><input id="{{ $group }}" type="text" name="buyerrecommend_change_groupe_name" class="buyerrecommend_change_groupe_name form-control" value="{{ $group }}"></th>
+                          <th colspan="15" class=""><input id="{{ $group }}" type="text" name="buyerrecommend_change_groupe_name" class="buyerrecommend_change_groupe_name form-control" value="{{ $group }}"></th>
                       </tr>
         	            @foreach($buyerrecommends as $buyerrecommend)
                       <tr>
@@ -106,17 +112,26 @@
                         <td class="text-center">
                           {{$buyerrecommend->item()->zaikosuu}}
                         </td>
-                        <td class="text-center" width="150">
+                        <td class="text-center">
                           <input pattern="^[0-9]+$" name="buyerrecommend[{{$buyerrecommend->id}}][price]" class="price text-center form-control" value="{{$buyerrecommend->price}}" title="0から9の半角数字" required>
                         </td>
-                        <td class="text-center" width="150">
+                        <td class="text-center">
                           <input type="text" name="buyerrecommend[{{$buyerrecommend->id}}][start]" class="start text-center form-control daterange-cus datepicker" value="{{$buyerrecommend->start}}" autocomplete="off" required>
                         </td>
-                        <td class="text-center" width="150">
+                        <td class="text-center">
                           <input type="text" name="buyerrecommend[{{$buyerrecommend->id}}][end]" class="end text-center form-control daterange-cus datepicker" value="{{$buyerrecommend->end}}" autocomplete="off" required>
                         </td>
-                        <td class="text-center" width="150">
+                        <td class="text-center">
                           <input type="text" name="buyerrecommend[{{$buyerrecommend->id}}][nouhin_end]" class="nouhin_end text-center form-control daterange-cus datepicker" value="{{$buyerrecommend->nouhin_end}}" autocomplete="off" required>
+                        </td>
+                        <td class="text-center">
+                          <select name="buyerrecommend[{{$buyerrecommend->id}}][gentei_store]" class="gentei_store text-center form-control" value="{{$buyerrecommend->store}}">
+                            <option id="{{$buyerrecommend->gentei_store}}" value="{{$buyerrecommend->gentei_store}}">{{$buyerrecommend->gentei_store}}</option>
+                              <option value="">全ての店舗</option>
+                            @foreach($stores as $store)
+                  						<option value="{{$store->store_name}}">{{$store->store_name}}</option>
+                  					@endforeach
+                          </select>
                         </td>
                         <td class="text-center">
                           <div class="btn btn-primary delete_button" data-id="{{$buyerrecommend->id}}"/>削除</div>
@@ -267,6 +282,10 @@
 </div>
 
 
+
+
+
+
  <!-- <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> -->
 
@@ -352,6 +371,7 @@ $(document).ready(function() {
   }
 });
 </script>
+
 
 
 

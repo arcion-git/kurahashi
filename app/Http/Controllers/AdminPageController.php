@@ -824,7 +824,7 @@ class AdminPageController extends Controller
       'id'=>$id,
       'deals' => $deals,
       'user'=>$user,
-      // 'store_users'=>$store_users,  
+      // 'store_users'=>$store_users,
     ];
     return view('admin.home', $data);
   }
@@ -1025,7 +1025,6 @@ class AdminPageController extends Controller
 
       // dd($item_search);
 
-
       $order_no = $request->ordernosave;
 
       $tokuisaki_id = $id;
@@ -1036,6 +1035,19 @@ class AdminPageController extends Controller
       // 処理が重いので一時的に在庫数のある商品だけを表示
       // $items = Item::where("busho_code", "LIKE", $code.'%')->where('zaikosuu', '>=', '0.01')->get();
       // $search = 'いか';
+
+      // 店舗一覧取得
+      $store_users = StoreUser::where('tokuisaki_id',$tokuisaki_id)->get(['store_id','tokuisaki_id']);
+
+      $stores = [];
+      $n=1;
+      foreach ($store_users as $store_user) {
+      $store = Store::where([ 'tokuisaki_id'=> $store_user->tokuisaki_id,'store_id'=> $store_user->store_id ])->first();
+        array_push($stores, $store);
+      $n++;
+      }
+
+      // dd($stores);
       $store = Store::where('tokuisaki_id',$tokuisaki_id)->first();
 
       if(isset($item_search)){
@@ -1089,6 +1101,7 @@ class AdminPageController extends Controller
         'id'=>$id,
         'items'=>$items,
         'store'=>$store,
+        'stores'=>$stores,
         'buyerrecommends'=>$buyerrecommends,
         'item_search'=>$item_search,
         'order_no'=>$order_no,
@@ -1290,6 +1303,7 @@ class AdminPageController extends Controller
             $buyerrecommend->order_no = $value['order_no'];
             $buyerrecommend->uwagaki_item_name = $value['uwagaki_item_name'];
             $buyerrecommend->uwagaki_kikaku = $value['uwagaki_kikaku'];
+            $buyerrecommend->gentei_store = $value['gentei_store'];
             if(isset($value['hidden_price'])){
               $buyerrecommend->hidden_price = 1;
             }else{

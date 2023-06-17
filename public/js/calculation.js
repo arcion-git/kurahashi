@@ -30,7 +30,7 @@ $(function() {
 
   // 得意先ごとのおすすめ商品登録
   if(document.URL.match("/admin/buyer/recommend/")) {
-    $(document).on("change", "#hidden_price, #zaikosuu, #zaikokanri, #uwagaki_item_name, #uwagaki_kikaku",
+    $(document).on("change", "#hidden_price, #zaikosuu, #zaikokanri, #uwagaki_item_name, #uwagaki_kikaku, .gentei_store",
     function() {
       $('#buyerrecommend').submit();
     });
@@ -301,8 +301,10 @@ if(document.URL.match("/approval")) {
     var path = url.split('?')[0];
     var url = path.substr(path.lastIndexOf('/') + 1);
 
-    var store = $('#change_all_store').val();
+    var tokuisaki_name = $('#change_all_store option:selected').attr('id');
+    var store_name = $('#change_all_store').val();
     var nouhin_yoteibi = $('#change_all_nouhin_yoteibi').val();
+
 
     // チェックボックスの状態を取得
     var isChecked = $('#show_favorite').prop('checked');
@@ -327,7 +329,8 @@ if(document.URL.match("/approval")) {
           'addtype': addtype,
           'show_favorite': show_favorite,
           'url': url,
-          'store': store,
+          'tokuisaki_name': tokuisaki_name,
+          'store_name': store_name,
           'nouhin_yoteibi': nouhin_yoteibi,
         },
         cache: false, // キャッシュしないで読み込み
@@ -720,8 +723,8 @@ if(document.URL.match("/approval")) {
       .done(function(data) {
         // console.log(data);
         // setTimeout(doReload);
-        setTimeout(order_update);
-        setTimeout(dealorder_update);
+        // setTimeout(order_update);
+        // setTimeout(dealorder_update);
         Swal.fire({
           type:"success",
           title: "個数を変更しました",

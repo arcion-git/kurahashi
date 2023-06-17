@@ -4279,3 +4279,13 @@ footer .external_link ul{
 .hide-parent {
   display: none;
 }
+
+#buyerrecommend .price{
+    width: 60px;
+}
+#buyerrecommend #uwagaki_item_name{
+  width: 150px;
+}
+#buyerrecommend #uwagaki_kikaku{
+  width: 50px;
+}
