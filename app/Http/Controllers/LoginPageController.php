@@ -1688,8 +1688,6 @@ class LoginPageController extends Controller
           ->whereDate('start', '<=' , $now)
           ->whereDate('end', '>=', $now)
           ->whereDate('nouhin_end', '>=', $nouhin_yoteibi)->get();
-
-          dd($special_price_items);
           $addtype_items = $special_price_items;
         }else{
           $carts = Cart::where(['user_id'=>$user_id, 'deal_id'=> null, 'addtype'=>$addtype])->get();
