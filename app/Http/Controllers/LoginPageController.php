@@ -2307,7 +2307,6 @@ class LoginPageController extends Controller
           $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $value->tokuisaki_id)
           ->where('price', '>=', '1')
           ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
-          // ->whereDate('start', '>=' , $now)
           ->whereDate('end', '<=', $now)
           ->orderBy('order_no', 'asc')->first();
           // dd($buyer_recommend_item);
@@ -2320,7 +2319,6 @@ class LoginPageController extends Controller
           // 市況商品を探す
           $price_groupe = PriceGroupe::where(['tokuisaki_id'=>$value->tokuisaki_id,'store_id'=>$value->store_id])->first();
           $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'price_groupe'=>$price_groupe->price_groupe])
-          // ->whereDate('start', '>=' , $now)
           ->whereDate('end', '<=', $now)->first();
           if(isset($special_price_item)){
             dd($special_price_item);
