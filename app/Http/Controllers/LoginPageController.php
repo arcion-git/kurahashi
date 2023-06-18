@@ -1345,6 +1345,12 @@ class LoginPageController extends Controller
 
   public function confirm(Request $request){
 
+    // dd($request);
+
+    $change_all_store = $request->change_all_store;
+    $set_tokuisaki_name = $request->set_tokuisaki_name;
+    $change_all_nouhin_yoteibi = $request->change_all_nouhin_yoteibi;
+
 
     $addtype = $request->addtype;
 
@@ -1357,6 +1363,7 @@ class LoginPageController extends Controller
     $setonagi = $user->setonagi;
     // $setonagi_uketori_place = $setonagi->uketori_place;
     // dd($setonagi_uketori_place);
+
 
     $favorite_categories = FavoriteCategory::where('user_id', $user_id)->get();
 
@@ -1492,6 +1499,11 @@ class LoginPageController extends Controller
      'nouhin_yoteibi' => $nouhin_yoteibi,
      'addtype' => $addtype,
      'show_favorite' => $show_favorite,
+
+     'change_all_store' => $change_all_store,
+     'set_tokuisaki_name' => $set_tokuisaki_name,
+     'change_all_nouhin_yoteibi' => $change_all_nouhin_yoteibi,
+
     ]);
 
   }

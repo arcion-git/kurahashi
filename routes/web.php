@@ -41,6 +41,7 @@
 
   Route::get('/category/{id}', 'LoginPageController@category');
   Route::get('/confirm', 'LoginPageController@confirm')->name('confirm');
+  Route::post('/confirm', 'LoginPageController@confirm')->name('confirm');
   // Route::get('/approval', 'LoginPageController@approval')->name('approval');
   Route::post('/approval', 'LoginPageController@approval')->name('approval');
   Route::get('/cart', 'LoginPageController@cart');

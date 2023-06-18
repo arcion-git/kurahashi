@@ -110,6 +110,7 @@ $(function(){
   });
 });
 
+
 </script>
 
 <!--
@@ -143,4 +144,171 @@ label,
   display: block;
 }
 </style>
+
+
+
+
+<script>
+$(document).ready(function () {
+
+  function order_update_ready() {
+    var addtype = '{{ $addtype }}';
+    var show_favorite = '{{ $show_favorite }}';
+    var store_name = '{{ $change_all_store }}';
+    var tokuisaki_name = '{{ $set_tokuisaki_name }}';
+    var nouhin_yoteibi = '{{ $change_all_nouhin_yoteibi }}';
+    var url = 'confirm';
+    $.ajax({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      },
+      url: location.origin + '/order',
+      type: "POST",
+      data: {
+        'addtype': addtype,
+        'show_favorite': show_favorite,
+        'url': url,
+        'tokuisaki_name': tokuisaki_name,
+        'store_name': store_name,
+        'nouhin_yoteibi': nouhin_yoteibi,
+      },
+      cache: false,
+      success: function (data) {
+        $('#order').html(data);
+      },
+      error: function () {
+        alert("オーダー内容をアップデートできません。");
+      }
+    });
+  }
+
+  setTimeout(order_update_ready);
+
+  function order_update() {
+    var params = new URLSearchParams(window.location.search);
+    var addtype = '{{ $addtype }}';
+    var url = window.location.href;
+    var path = url.split('?')[0];
+    var url = path.substr(path.lastIndexOf('/') + 1);
+
+    var tokuisaki_name = $('#change_all_store option:selected').attr('id');
+    var store_name = $('#change_all_store').val();
+    var nouhin_yoteibi = $('#change_all_nouhin_yoteibi').val();
+
+    // チェックボックスの状態を取得
+    var isChecked = $('#show_favorite').prop('checked');
+    // チェックが入っているかどうかを確認
+    if (isChecked) {
+      var show_favorite = 1;
+    } else {
+      var show_favorite = null;
+    }
+
+    $.ajax({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }, //Headersを書き忘れるとエラーになる
+        url: location.origin + '/order',
+        type: "POST", // GETメソッドで通信
+        data: {
+          'addtype': addtype,
+          'show_favorite': show_favorite,
+          'url': url,
+          'tokuisaki_name': tokuisaki_name,
+          'store_name': store_name,
+          'nouhin_yoteibi': nouhin_yoteibi,
+        },
+        cache: false, // キャッシュしないで読み込み
+        // 通信成功時に呼び出されるコールバック
+        success: function (data) {
+              $('#order').html(data);
+        },
+        // 通信エラー時に呼び出されるコールバック
+        error: function () {
+            alert("オーダー内容をアップデートできません。");
+        }
+    });
+  }
+
+  $(document).on("change", ".change_all_store", function () {
+    var element = $(".user_id:first");
+    var user_id = element.attr("id");
+    var addtype = '{{ $addtype }}';
+    var store_name = $(this).val();
+    var tokuisaki_name = $(this).find('option:selected').attr("id");
+
+    $.ajax({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      },
+      url: location.origin + '/change_all_store',
+      type: 'POST',
+      data: {
+        'user_id': user_id,
+        'addtype': addtype,
+        'store_name': store_name,
+        'tokuisaki_name': tokuisaki_name,
+      },
+      success: function (data) {
+
+        setTimeout(order_update, 0);
+        Swal.fire({
+          type: "success",
+          title: "配送先店舗を変更しました",
+          position: 'bottom-end',
+          toast: true,
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 1500
+        });
+      },
+      error: function () {
+        alert("配送先店舗を保存できません。");
+      }
+    });
+  });
+
+  $(document).on("change", ".change_all_nouhin_yoteibi", function () {
+    var element = $(".user_id:first");
+    var user_id = element.attr("id");
+    var addtype = '{{ $addtype }}';
+    var nouhin_yoteibi = $(this).val();
+
+    $.ajax({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      },
+      url: location.origin + '/change_all_nouhin_yoteibi',
+      type: 'POST',
+      data: {
+        'user_id': user_id,
+        'addtype': addtype,
+        'nouhin_yoteibi': nouhin_yoteibi,
+      },
+      success: function (data) {
+
+        setTimeout(order_update, 0);
+        Swal.fire({
+          type: "success",
+          title: "納品予定日を変更しました。",
+          position: 'bottom-end',
+          toast: true,
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 1500
+        });
+      },
+      error: function () {
+        alert("納品予定日を変更できませんでした。");
+      }
+    });
+  });
+
+  $(document).on("click", "#show_favorite", function() {
+      order_update();
+  });
+
+});
+</script>
+
 @endsection

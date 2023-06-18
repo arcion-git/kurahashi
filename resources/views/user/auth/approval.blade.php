@@ -61,10 +61,13 @@
             </div>
           </form>
           <div class="float-right" style="margin-right:5px;">
-            <form id="cart_form" action="{{ url('/confirm') }}" method="GET" name="cart_id" value="" class="form-horizontal">
+            <form id="cart_form" action="{{ url('/confirm') }}" method="POST" name="cart_id" value="" class="form-horizontal">
               {{ csrf_field() }}
               <input type="hidden" name="addtype" value="{{$addtype}}" />
               <input type="hidden" name="show_favorite" value="{{$show_favorite}}" @if($show_favorite) checked @endif/>
+              <input type="hidden" name="change_all_store" value="{{$change_all_store}}" />
+              <input type="hidden" name="set_tokuisaki_name" value="{{$set_tokuisaki_name}}" />
+              <input type="hidden" name="change_all_nouhin_yoteibi" value="{{$change_all_nouhin_yoteibi}}" />
               <button type="submit" name="" class="btn btn-info">戻って編集する</button>
             </div>
           </div>
@@ -76,35 +79,37 @@
 
 
 <script>
-var addtype = '{{ $addtype }}';
-var show_favorite = '{{ $show_favorite }}';
-var store_name = '{{ $change_all_store }}';
-var tokuisaki_name = '{{ $set_tokuisaki_name }}';
-var nouhin_yoteibi = '{{ $change_all_nouhin_yoteibi }}'
-var url = 'approval';
-$.ajax({
-  headers: {
-    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-  }, //Headersを書き忘れるとエラーになる
-  url: location.origin + '/order',
-  type: "POST", // GETメソッドで通信
-  data: {
-    'addtype': addtype,
-    'show_favorite': show_favorite,
-    'store_name': store_name,
-    'tokuisaki_name': tokuisaki_name,
-    'nouhin_yoteibi': nouhin_yoteibi,
-    'url': url,
-  },
-  cache: false, // キャッシュしないで読み込み
-  // 通信成功時に呼び出されるコールバック
-  success: function (data) {
-        $('#order').html(data);
-  },
-  // 通信エラー時に呼び出されるコールバック
-  error: function () {
-      alert("オーダー内容をアップデートできません。");
-  }
+$(document).ready( function(){
+  var addtype = '{{ $addtype }}';
+  var show_favorite = '{{ $show_favorite }}';
+  var store_name = '{{ $change_all_store }}';
+  var tokuisaki_name = '{{ $set_tokuisaki_name }}';
+  var nouhin_yoteibi = '{{ $change_all_nouhin_yoteibi }}'
+  var url = 'approval';
+  $.ajax({
+    headers: {
+      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }, //Headersを書き忘れるとエラーになる
+    url: location.origin + '/order',
+    type: "POST", // GETメソッドで通信
+    data: {
+      'addtype': addtype,
+      'show_favorite': show_favorite,
+      'store_name': store_name,
+      'tokuisaki_name': tokuisaki_name,
+      'nouhin_yoteibi': nouhin_yoteibi,
+      'url': url,
+    },
+    cache: false, // キャッシュしないで読み込み
+    // 通信成功時に呼び出されるコールバック
+    success: function (data) {
+          $('#order').html(data);
+    },
+    // 通信エラー時に呼び出されるコールバック
+    error: function () {
+        alert("オーダー内容をアップデートできません。");
+    }
+  });
 });
 </script>
 @endsection

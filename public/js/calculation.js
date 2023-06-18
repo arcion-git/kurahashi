@@ -307,7 +307,6 @@ if(document.URL.match("/approval")) {
     var store_name = $('#change_all_store').val();
     var nouhin_yoteibi = $('#change_all_nouhin_yoteibi').val();
 
-
     // チェックボックスの状態を取得
     var isChecked = $('#show_favorite').prop('checked');
     // チェックが入っているかどうかを確認
@@ -317,10 +316,6 @@ if(document.URL.match("/approval")) {
       var show_favorite = null;
     }
 
-    // console.log(url);
-    // console.log(store);
-    // console.log(nouhin_yoteibi);
-    // console.log(show_favorite);
     $.ajax({
         headers: {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -351,19 +346,14 @@ if(document.URL.match("/approval")) {
 
 
 
-    // チェックボックスの状態が変化した場合の処理
-    $(document).on("click", "#show_favorite", function() {
-        order_update();
-    });
 
 
   // 個数入力画面を開いたらオーダー内容を取得
-  if(document.URL.match("/confirm")) {
-    $(document).ready( function(){
-    setTimeout(order_update);
-    });
-  }
-
+  // if(document.URL.match("/confirm")) {
+  //   $(document).ready( function(){
+  //   setTimeout(order_update);
+  //   });
+  // }
 
   // 配送先を追加
   $(document).on("click", ".clonecart", function() {
@@ -793,107 +783,7 @@ if(document.URL.match("/approval")) {
 
 
 
-  // カートにある全ての商品の納品先店舗を一括で変更
-  $(document).on("change", ".change_all_store", function() {
-    var element = $(".user_id:first"); // 最初の要素を取得
-    var user_id = element.attr("id");
-    var params = new URLSearchParams(window.location.search);
-    var addtype = params.get('addtype');
-    var store_name = $(this).val();
-    var tokuisaki_name = $(this).find('option:selected').get(0).id;
 
-    console.log(user_id);
-    console.log(addtype);
-    console.log(store_name);
-    console.log(tokuisaki_name);
-      $.ajax({
-        headers: {
-          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }, //Headersを書き忘れるとエラーになる
-        url: location.origin + '/change_all_store',
-        type: 'POST', //リクエストタイプ
-        data: {
-          'user_id': user_id,
-          'addtype': addtype,
-          'store_name': store_name,
-          'tokuisaki_name': tokuisaki_name,
-        } //Laravelに渡すデータ
-      })
-      // Ajaxリクエスト成功時の処理
-      .done(function(data) {
-        // console.log(data);
-        // setTimeout(doReload);
-        setTimeout(order_update);
-        setTimeout(dealorder_update);
-        Swal.fire({
-          type:"success",
-          title: "配送先店舗を変更しました",
-          position: 'bottom-end',
-          toast: true,
-          icon: 'success',
-          showConfirmButton: false,
-          timer: 1500
-        });
-      })
-      // Ajaxリクエスト失敗時の処理
-      .fail(function(jqXHR, textStatus, errorThrown) {
-        alert('配送先店舗を保存できません。');
-        console.log("ajax通信に失敗しました");
-        console.log("XMLHttpRequest : " + XMLHttpRequest.status);
-        console.log("textStatus     : " + textStatus);
-        console.log("errorThrown    : " + errorThrown.message);
-      });
-  });
-
-
-  // カートにある全ての商品の納品予定日を一括で変更
-  $(document).on("change", ".change_all_nouhin_yoteibi", function() {
-    var element = $(".user_id:first"); // 最初の要素を取得
-    var user_id = element.attr("id");
-    var params = new URLSearchParams(window.location.search);
-    var addtype = params.get('addtype');
-    var nouhin_yoteibi = $(this).val();
-
-    console.log(user_id);
-    console.log(addtype);
-    console.log(nouhin_yoteibi);
-      $.ajax({
-        headers: {
-          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }, //Headersを書き忘れるとエラーになる
-        url: location.origin + '/change_all_nouhin_yoteibi',
-        type: 'POST', //リクエストタイプ
-        data: {
-          'user_id': user_id,
-          'addtype': addtype,
-          'nouhin_yoteibi': nouhin_yoteibi,
-        } //Laravelに渡すデータ
-      })
-      // Ajaxリクエスト成功時の処理
-      .done(function(data) {
-        // console.log(data);
-        // setTimeout(doReload);
-        setTimeout(order_update);
-        setTimeout(dealorder_update);
-        Swal.fire({
-          type:"success",
-          title: "納品予定日を変更しました。",
-          position: 'bottom-end',
-          toast: true,
-          icon: 'success',
-          showConfirmButton: false,
-          timer: 1500
-        });
-      })
-      // Ajaxリクエスト失敗時の処理
-      .fail(function(jqXHR, textStatus, errorThrown) {
-        alert('納品予定日を変更できませんでした。');
-        console.log("ajax通信に失敗しました");
-        console.log("XMLHttpRequest : " + XMLHttpRequest.status);
-        console.log("textStatus     : " + textStatus);
-        console.log("errorThrown    : " + errorThrown.message);
-      });
-  });
 
 
   // 配送先店舗を保存
