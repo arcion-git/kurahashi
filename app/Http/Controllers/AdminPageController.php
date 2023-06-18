@@ -1324,9 +1324,13 @@ class AdminPageController extends Controller
             $minDifference = PHP_INT_MAX; // 最小の差分を初期化
             $closestOrderNo = null; // 最も近いorder_noを初期化
 
+
             foreach ($buyerrecommends as $innerKey => $innerValue) {
+                // priceが設定されていない場合かつ現在のorder_noより小さい場合に処理を実行
+                // dd($innerValue['order_no']);
                 if (!isset($innerValue['price']) && $innerValue['order_no'] < $currentOrderNo) {
                     $difference = $currentOrderNo - $innerValue['order_no'];
+                    // 最小の差分を更新する場合、最も近いorder_noとグループ名を更新
                     if ($difference < $minDifference) {
                         $minDifference = $difference;
                         $closestOrderNo = $innerValue['order_no'];
@@ -1334,6 +1338,7 @@ class AdminPageController extends Controller
                     }
                 }
             }
+
             $buyerrecommend->groupe = $group;
             $buyerrecommend->save();
         }

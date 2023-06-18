@@ -143,7 +143,7 @@
 
 															<!-- 納品先の得意先IDと、担当のおすすめ商品の得意先IDが一致するか確認 -->
 															<tr id="{{$cart->id}}" class="cart_item" data-addtype="{{$cart->addtype}}">
-																<input name="item_id[]" type="hidden" value="{{$cart->item->id}}" />
+																<input name="cart_id[]" type="hidden" value="{{$cart->id}}" />
 																<td class="head-item-id cartid_{{$cart->id}} text-center">{{$cart->item->item_id}}</td>
 																<td class="head-item-name cartid_{{$cart->id}}">
 																	@if($cart->addtype == 'addbuyerrecommend' && !$user->setonagi)
@@ -151,7 +151,6 @@
 																		@else
 																		{{$cart->item->item_name}}
 																	@endif
-
 																	@if($cart->addtype == 'addbuyerrecommend')
 																		@if($cart->favoriteitem())
 			                              <span name="item_id" value="{{$cart->item->id}}" id="{{$cart->item->id}}" class="removefavoriteitem"><i class="fa fa-heart"></i></span>
@@ -159,7 +158,6 @@
 			                              <span name="item_id" value="{{$cart->item->id}}" id="{{$cart->item->id}}" class="addfavoriteitem"><i class="far fa-heart"></i></span>
 			                              @endif
 																	@endif
-
 																</td>
 																<td class="head-sanchi cartid_{{$cart->id}} text-center">
 																	@if(isset($cart->item->sanchi_name))

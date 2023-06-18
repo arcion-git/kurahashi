@@ -342,7 +342,7 @@ $(function() {
 $(window).on('load',function(){
   $('#sortdata').find('.order_no').each(function(idx){
     // タグ内に通し番号を設定（idxは0始まりなので+1する）
-    // $(this).val(idx+1);
+    $(this).val(idx+1);
   });
 });
 $('#sortdata').sortable({

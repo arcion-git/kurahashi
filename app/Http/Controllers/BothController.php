@@ -125,7 +125,7 @@ class BothController extends Controller
     if($tokuisaki_ids){
       foreach ($tokuisaki_ids as $key => $value) {
         // dd($value->tokuisaki_id);
-        $buyerrecommend_item = BuyerRecommend::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'tokuisaki_id'=>$value->tokuisaki_id])->whereDate('start', '<=' , $nouhin_yoteibi)->whereDate('end', '>=', $nouhin_yoteibi)->first();
+        $buyerrecommend_item = BuyerRecommend::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'tokuisaki_id'=>$value->tokuisaki_id])->where('start', '<=' , $nouhin_yoteibi)->where('end', '>=', $nouhin_yoteibi)->first();
         if(isset($buyerrecommend_item)){
           $order->price = $buyerrecommend_item->price;
           $order->save();
@@ -264,8 +264,8 @@ class BothController extends Controller
           $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $value->tokuisaki_id)
           ->where('price', '>=', '1')
           ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
-          ->whereDate('start', '<=' , $now)
-          ->whereDate('end', '>=', $now)
+          ->where('start', '<=' , $now)
+          ->where('end', '>=', $now)
           ->orderBy('order_no', 'asc')->first();
           // dd($buyer_recommend_item);
           if(isset($buyer_recommend_item)){
@@ -274,8 +274,8 @@ class BothController extends Controller
           // 市況商品の価格を探す
           $price_groupe = PriceGroupe::where(['tokuisaki_id'=>$value->tokuisaki_id,'store_id'=>$value->store_id])->first();
           $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'price_groupe'=>$price_groupe->price_groupe])
-          ->whereDate('start', '<=' , $now)
-          ->whereDate('end', '>=', $now)->first();
+          ->where('start', '<=' , $now)
+          ->where('end', '>=', $now)->first();
           if(isset($special_price_item)){
             $order->price = $special_price_item->price;
           }
@@ -388,8 +388,8 @@ class BothController extends Controller
         $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $value->tokuisaki_id)
         ->where('price', '>=', '1')
         ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
-        ->whereDate('start', '<=' , $now)
-        ->whereDate('end', '>=', $now)
+        ->where('start', '<=' , $now)
+        ->where('end', '>=', $now)
         ->orderBy('order_no', 'asc')->first();
         // dd($buyer_recommend_item);
         if(isset($buyer_recommend_item)){
@@ -398,8 +398,8 @@ class BothController extends Controller
         // 市況商品の価格を探す
         $price_groupe = PriceGroupe::where(['tokuisaki_id'=>$value->tokuisaki_id,'store_id'=>$value->store_id])->first();
         $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'price_groupe'=>$price_groupe->price_groupe])
-        ->whereDate('start', '<=' , $now)
-        ->whereDate('end', '>=', $now)->first();
+        ->where('start', '<=' , $now)
+        ->where('end', '>=', $now)->first();
         if(isset($special_price_item)){
           $order->price = $special_price_item->price;
         }
@@ -470,7 +470,7 @@ class BothController extends Controller
       if($tokuisaki_ids){
         foreach ($tokuisaki_ids as $key => $value) {
           // dd($value->tokuisaki_id);
-          $buyerrecommend_item = BuyerRecommend::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'tokuisaki_id'=>$value->tokuisaki_id])->whereDate('start', '<=' , $now)->whereDate('end', '>=', $now)->first();
+          $buyerrecommend_item = BuyerRecommend::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'tokuisaki_id'=>$value->tokuisaki_id])->where('start', '<=' , $now)->where('end', '>=', $now)->first();
           if(isset($buyerrecommend_item)){
             $price = $buyerrecommend_item->price;
           }
@@ -478,7 +478,7 @@ class BothController extends Controller
       }
 
       // $now = Carbon::now();
-      // $buyerrecommend_item = BuyerRecommend::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'tokuisaki_id'=>$store->tokuisaki_id])->whereDate('start', '<=' , $now)->whereDate('end', '>=', $now)->first();
+      // $buyerrecommend_item = BuyerRecommend::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'tokuisaki_id'=>$store->tokuisaki_id])->where('start', '<=' , $now)->where('end', '>=', $now)->first();
       // if(isset($buyerrecommend_item->price)){
       //   $price = $buyerrecommend_item->price;
       // }

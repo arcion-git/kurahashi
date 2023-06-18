@@ -138,8 +138,8 @@ class LoginPageController extends Controller
           // 担当のおすすめ商品の納品期日を探す
           $price_groupe = PriceGroupe::where(['tokuisaki_id'=>$value->tokuisaki_id,'store_id'=>$value->store_id])->first();
           $special_prices_loop = SpecialPrice::where(['price_groupe'=>$price_groupe->price_groupe])
-          ->whereDate('start', '<=' , $now)
-          ->whereDate('end', '>=', $now)->get();
+          ->where('start', '<=' , $now)
+          ->where('end', '>=', $now)->get();
           // dd($buyer_recommend_item);
           $special_prices = collect($special_prices)->merge($special_prices_loop);
         }
@@ -240,8 +240,8 @@ class LoginPageController extends Controller
         $buyer_recommend_loop = BuyerRecommend::where('tokuisaki_id', $value->tokuisaki_id)
         ->whereNotNull('nouhin_end')
         ->where('price', '>=', '1')
-        ->whereDate('start', '<=' , $now)
-        ->whereDate('end', '>=', $now)
+        ->where('start', '<=' , $now)
+        ->where('end', '>=', $now)
         ->orderBy('order_no', 'asc')->get();
         // array_push($buyer_recommends, $buyer_recommend_loop);
         $buyer_recommends = collect($buyer_recommends)->merge($buyer_recommend_loop);
@@ -250,8 +250,8 @@ class LoginPageController extends Controller
 
       $recommends = Recommend::where('user_id', $user_id)
       ->where('price', '>=', '1')
-      ->whereDate('start', '<=' , $now)
-      ->whereDate('end', '>=', $now)
+      ->where('start', '<=' , $now)
+      ->where('end', '>=', $now)
       ->orderBy('order_no', 'asc')->get();
 
       $recommends = $recommends->merge($buyer_recommends);
@@ -296,7 +296,7 @@ class LoginPageController extends Controller
       $carts =  Cart::where('user_id',$user_id)->get();
       $kaiin_number = Auth::guard('user')->user()->kaiin_number;
       $now = Carbon::now()->addDay(3)->format('Y-m-d');
-      $recommends = Recommend::where('user_id', $kaiin_number)->whereDate('end', '>=', $now)->orWhere('end',null)->where('user_id', $kaiin_number)->get();
+      $recommends = Recommend::where('user_id', $kaiin_number)->where('end', '>=', $now)->orWhere('end',null)->where('user_id', $kaiin_number)->get();
       $special_prices = SpecialPrice::get();
       return view('user/contact',
       ['carts' => $carts ,
@@ -366,7 +366,7 @@ class LoginPageController extends Controller
 
       $now = Carbon::now()->addDay(3)->format('Y-m-d');
 
-      $recommends = Recommend::where('user_id', $kaiin_number)->whereDate('end', '>=', $now)->orWhere('end',null)->where('user_id', $kaiin_number)->get();
+      $recommends = Recommend::where('user_id', $kaiin_number)->where('end', '>=', $now)->orWhere('end',null)->where('user_id', $kaiin_number)->get();
 
       $special_prices = SpecialPrice::get();
 
@@ -396,7 +396,7 @@ class LoginPageController extends Controller
       $carts =  Cart::where('user_id',$user_id)->get();
       $kaiin_number = Auth::guard('user')->user()->kaiin_number;
       $now = Carbon::now()->addDay(3)->format('Y-m-d');
-      $recommends = Recommend::where('user_id', $kaiin_number)->whereDate('end', '>=', $now)->orWhere('end',null)->where('user_id', $kaiin_number)->get();
+      $recommends = Recommend::where('user_id', $kaiin_number)->where('end', '>=', $now)->orWhere('end',null)->where('user_id', $kaiin_number)->get();
       $special_prices = SpecialPrice::get();
       return view('user/firstguide',
       ['carts' => $carts ,
@@ -422,7 +422,7 @@ class LoginPageController extends Controller
       $carts =  Cart::where('user_id',$user_id)->get();
       $kaiin_number = Auth::guard('user')->user()->kaiin_number;
       $now = Carbon::now()->addDay(3)->format('Y-m-d');
-      $recommends = Recommend::where('user_id', $kaiin_number)->whereDate('end', '>=', $now)->orWhere('end',null)->where('user_id', $kaiin_number)->get();
+      $recommends = Recommend::where('user_id', $kaiin_number)->where('end', '>=', $now)->orWhere('end',null)->where('user_id', $kaiin_number)->get();
       $special_prices = SpecialPrice::get();
       return view('user/guide',
       ['carts' => $carts ,
@@ -448,7 +448,7 @@ class LoginPageController extends Controller
       $carts =  Cart::where('user_id',$user_id)->get();
       $kaiin_number = Auth::guard('user')->user()->kaiin_number;
       $now = Carbon::now()->addDay(3)->format('Y-m-d');
-      $recommends = Recommend::where('user_id', $kaiin_number)->whereDate('end', '>=', $now)->orWhere('end',null)->where('user_id', $kaiin_number)->get();
+      $recommends = Recommend::where('user_id', $kaiin_number)->where('end', '>=', $now)->orWhere('end',null)->where('user_id', $kaiin_number)->get();
       $special_prices = SpecialPrice::get();
       return view('user/law',
       ['carts' => $carts ,
@@ -474,7 +474,7 @@ class LoginPageController extends Controller
       $carts =  Cart::where('user_id',$user_id)->get();
       $kaiin_number = Auth::guard('user')->user()->kaiin_number;
       $now = Carbon::now()->addDay(3)->format('Y-m-d');
-      $recommends = Recommend::where('user_id', $kaiin_number)->whereDate('end', '>=', $now)->orWhere('end',null)->where('user_id', $kaiin_number)->get();
+      $recommends = Recommend::where('user_id', $kaiin_number)->where('end', '>=', $now)->orWhere('end',null)->where('user_id', $kaiin_number)->get();
       $special_prices = SpecialPrice::get();
       return view('user/privacypolicy',
       ['carts' => $carts ,
@@ -541,7 +541,7 @@ class LoginPageController extends Controller
 
       $now = Carbon::now()->addDay(3)->format('Y-m-d');
 
-      $recommends = Recommend::where('user_id', $kaiin_number)->whereDate('end', '>=', $now)->orWhere('end',null)->where('user_id', $kaiin_number)->get();
+      $recommends = Recommend::where('user_id', $kaiin_number)->where('end', '>=', $now)->orWhere('end',null)->where('user_id', $kaiin_number)->get();
 
       $special_prices = SpecialPrice::get();
       $now = Carbon::now()->toDateTimeString();
@@ -609,7 +609,7 @@ class LoginPageController extends Controller
         $carts =  Cart::where('user_id',$user_id)->get();
         $kaiin_number = Auth::guard('user')->user()->kaiin_number;
         $now = Carbon::now()->addDay(3)->format('Y-m-d');
-        $recommends = Recommend::where('user_id', $kaiin_number)->whereDate('end', '>=', $now)->orWhere('end',null)->get();
+        $recommends = Recommend::where('user_id', $kaiin_number)->where('end', '>=', $now)->orWhere('end',null)->get();
         // dd($categories);
 
         return view('user/auth/search',
@@ -689,7 +689,7 @@ class LoginPageController extends Controller
       $carts =  Cart::where('user_id',$user_id)->get();
 
       $now = Carbon::now()->addDay(3)->format('Y-m-d');
-      $recommendcategories = RecommendCategory::where('category_id', $category->category_id)->whereDate('end', '>=', $now)->orWhere('end',null)->get();
+      $recommendcategories = RecommendCategory::where('category_id', $category->category_id)->where('end', '>=', $now)->orWhere('end',null)->get();
       // dd($recommendcategories);
 
 
@@ -885,8 +885,8 @@ class LoginPageController extends Controller
         $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $value->tokuisaki_id)
         ->where('price', '>=', '1')
         ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
-        ->whereDate('start', '<=' , $now)
-        ->whereDate('end', '>=', $now)
+        ->where('start', '<=' , $now)
+        ->where('end', '>=', $now)
         ->orderBy('order_no', 'asc')->first();
         // dd($buyer_recommend_item);
         if(isset($buyer_recommend_item)){
@@ -895,8 +895,8 @@ class LoginPageController extends Controller
         // 市況商品の価格を探す
         $price_groupe = PriceGroupe::where(['tokuisaki_id'=>$value->tokuisaki_id,'store_id'=>$value->store_id])->first();
         $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'price_groupe'=>$price_groupe->price_groupe])
-        ->whereDate('start', '<=' , $now)
-        ->whereDate('end', '>=', $now)->first();
+        ->where('start', '<=' , $now)
+        ->where('end', '>=', $now)->first();
         if(isset($special_price_item)){
           $order->price = $special_price_item->price;
         }
@@ -933,7 +933,7 @@ class LoginPageController extends Controller
 
       if($addtype == 'addsetonagi'){
         // セトナギ商品を取得
-        $setonagi_items = SetonagiItem::whereDate('start_date', '<=' , $now)->whereDate('end_date', '>=', $now)->get();
+        $setonagi_items = SetonagiItem::where('start_date', '<=' , $now)->where('end_date', '>=', $now)->get();
         $get_items = $setonagi_items;
       }elseif($addtype == 'addbuyerrecommend'){
         // 得意先のおすすめ商品を取得
@@ -946,8 +946,8 @@ class LoginPageController extends Controller
             $buyer_recommend_loop = BuyerRecommend::where('tokuisaki_id', $value->tokuisaki_id)
             ->whereNotNull('nouhin_end')
             ->where('price', '>=', '1')
-            ->whereDate('start', '<=' , $now)
-            ->whereDate('end', '>=', $now)
+            ->where('start', '<=' , $now)
+            ->where('end', '>=', $now)
             ->orderBy('order_no', 'asc')->get();
             $buyer_recommends = collect($buyer_recommends)->merge($buyer_recommend_loop);
           }
@@ -956,8 +956,8 @@ class LoginPageController extends Controller
         }else{
           // セトナギ会員
           $recommends = Recommend::where('user_id', $user_id)
-          ->whereDate('start', '<=' , $now)
-          ->whereDate('end', '>=', $now)
+          ->where('start', '<=' , $now)
+          ->where('end', '>=', $now)
           ->orderBy('order_no', 'asc')->get();
           $get_items = $recommends;
           // dd($get_items);
@@ -972,8 +972,8 @@ class LoginPageController extends Controller
           foreach ($tokuisaki_ids as $key => $value) {
             $price_groupe = PriceGroupe::where(['tokuisaki_id'=>$value->tokuisaki_id,'store_id'=>$value->store_id])->first();
             $special_prices_loop = SpecialPrice::where(['price_groupe'=>$price_groupe->price_groupe])
-            ->whereDate('start', '<=' , $now)
-            ->whereDate('end', '>=', $now)->get();
+            ->where('start', '<=' , $now)
+            ->where('end', '>=', $now)->get();
             $special_prices = collect($special_prices)->merge($special_prices_loop);
           }
           $get_items = $special_prices;
@@ -1018,8 +1018,8 @@ class LoginPageController extends Controller
 
       // ユーザーごとのおすすめ商品取得
       $recommends = Recommend::where('user_id', $user_id)
-      ->whereDate('start', '<=' , $now)
-      ->whereDate('end', '>=', $now)->get();
+      ->where('start', '<=' , $now)
+      ->where('end', '>=', $now)->get();
 
       // 市況商品取得
       $special_prices = SpecialPrice::get();
@@ -1075,8 +1075,8 @@ class LoginPageController extends Controller
                 ->where('item_id' , $item->item_id)
                 ->where('sku_code' , $item->sku_code)
                 ->where('price', '>=', '1')
-                ->whereDate('start', '<=' , $now)
-                ->whereDate('end', '>=', $now)->first();
+                ->where('start', '<=' , $now)
+                ->where('end', '>=', $now)->first();
                 if(isset($buyerrecommend)){
                   break;
                 }
@@ -1194,8 +1194,8 @@ class LoginPageController extends Controller
               $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $value->tokuisaki_id)
               ->where('price', '>=', '1')
               ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
-              ->whereDate('start', '<=' , $now)
-              ->whereDate('end', '>=', $now)
+              ->where('start', '<=' , $now)
+              ->where('end', '>=', $now)
               ->orderBy('order_no', 'asc')->first();
               // dd($buyer_recommend_item);
               if(isset($buyer_recommend_item)){
@@ -1204,8 +1204,8 @@ class LoginPageController extends Controller
               // 市況商品の価格上書き
               $price_groupe = PriceGroupe::where(['tokuisaki_id'=>$value->tokuisaki_id,'store_id'=>$value->store_id])->first();
               $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'price_groupe'=>$price_groupe->price_groupe])
-              ->whereDate('start', '<=' , $now)
-              ->whereDate('end', '>=', $now)->first();
+              ->where('start', '<=' , $now)
+              ->where('end', '>=', $now)->first();
               if(isset($special_price_item)){
                 $order->price = $special_price_item->price;
               }
@@ -1522,7 +1522,7 @@ class LoginPageController extends Controller
     $show_favorite = $request->show_favorite;
     $addtype = $request->addtype;
 
-    if(!$request->has('item_id') and !$request->has('cart_nini_id')){
+    if(!$request->has('cart_id') and !$request->has('cart_nini_id')){
       $data=[
         'message' => 'カートが空です。',
       ];
@@ -1674,9 +1674,9 @@ class LoginPageController extends Controller
               $query->whereNull('gentei_store')
                     ->orWhere('gentei_store', $store_name);
           })
-          ->whereDate('start', '<=' , $now)
-          ->whereDate('end', '>=', $now)
-          ->whereDate('nouhin_end', '>=', $nouhin_yoteibi)
+          ->where('start', '<=' , $now)
+          ->where('end', '>=', $now)
+          ->where('nouhin_end', '>=', $nouhin_yoteibi)
           // ->where(function ($query) {
           //     $query->where('zaikokanri', 1)
           //         ->orWhere(function ($query) {
@@ -1684,7 +1684,9 @@ class LoginPageController extends Controller
           //                 ->where('zaikosuu', '>=', 1);
           //         });
           // })
-          ->orderBy('order_no', 'asc')->get();
+          ->orderByRaw('CAST(order_no AS UNSIGNED)', 'asc')->get();
+
+          // dd($buyer_recommends);
           $addtype_items = $buyer_recommends;
         }elseif($addtype == 'addspecialprice'){
           // 市況商品を取得
@@ -1697,15 +1699,15 @@ class LoginPageController extends Controller
           }
           // 市況商品を取得
           $special_price_items = SpecialPrice::where('price_groupe',$price_groupe)
-          ->whereDate('start', '<=' , $now)
-          ->whereDate('end', '>=', $now)
-          ->whereDate('nouhin_end', '>=', $nouhin_yoteibi)->get();
+          ->where('start', '<=' , $now)
+          ->where('end', '>=', $now)
+          ->where('nouhin_end', '>=', $nouhin_yoteibi)->get();
           $addtype_items = $special_price_items;
         }else{
           $carts = Cart::where(['user_id'=>$user_id, 'deal_id'=> null, 'addtype'=>$addtype])->get();
           $groupedItems = $carts->groupBy('groupe');
         }
-        if($addtype_items){
+        if(isset($addtype_items)){
         $carts = collect();
           foreach ($addtype_items as $addtype_item) {
             $item = Item::where(['item_id'=>$addtype_item->item_id, 'sku_code'=> $addtype_item->sku_code])->first();
@@ -1781,8 +1783,8 @@ class LoginPageController extends Controller
       $buyer_recommend_loop = BuyerRecommend::where('tokuisaki_id', $value->tokuisaki_id)
       ->whereNotNull('nouhin_end')
       ->where('price', '>=', '1')
-      ->whereDate('start', '<=' , $now)
-      ->whereDate('end', '>=', $now)
+      ->where('start', '<=' , $now)
+      ->where('end', '>=', $now)
       ->orderBy('order_no', 'asc')->get();
       // array_push($buyer_recommends, $buyer_recommend_loop);
       $buyer_recommends = collect($buyer_recommends)->merge($buyer_recommend_loop);
@@ -1795,8 +1797,8 @@ class LoginPageController extends Controller
     // 表示可能な担当のおすすめ商品を取得
     $recommends = Recommend::where('user_id', $user_id)
     ->where('price', '>=', '1')
-    ->whereDate('start', '<=' , $now)
-    ->whereDate('end', '>=', $now)
+    ->where('start', '<=' , $now)
+    ->where('end', '>=', $now)
     ->orderBy('order_no', 'asc')->get();
 
     // 得意先のおすすめ商品、担当のおすすめ商品をマージ処理
@@ -2180,8 +2182,13 @@ class LoginPageController extends Controller
     $user_id = $user->id;
     $data = $request->all();
 
-    // dd($data);
-
+    if(!$user->setonagi == 1){
+      $store_name =  $request->change_all_store;
+      $tokuisaki_name = $request->set_tokuisaki_name;
+      $store = Store::where(['tokuisaki_name'=> $tokuisaki_name,'store_name'=> $store_name])->first();
+      $tokuisaki_id = $store->tokuisaki_id;
+      $store_id = $store->store_id;
+    }
 
     // 個数が0の商品を配列から消す
     $keysToDelete = [];
@@ -2199,7 +2206,7 @@ class LoginPageController extends Controller
     }
     // $data = array_map('array_values', $data);
     // dd($data);
-    $item_ids = $data['item_id'];
+    $cart_ids = $data['cart_id'];
 
     if(isset($data['cart_nini_id'])){
       $cart_nini_ids = $data['cart_nini_id'];
@@ -2208,12 +2215,13 @@ class LoginPageController extends Controller
 
     // dd($data);
     // 在庫チェック
-    foreach($item_ids as $key => $input) {
+    foreach($cart_ids as $cart_id) {
       // カート内の該当アイテムを検索
-      $cart = Cart::where(['user_id'=> $user_id , 'item_id'=> $item_ids[$key], 'deal_id'=> null])->first();
+      $cart = Cart::where(['id'=> $cart_id])->first();
 
       // アイテム情報を取得
-      $item = item::where(['id'=> $item_ids[$key]])->first();
+      $item = item::where(['id'=> $cart->item_id])->first();
+      // dd($item);
       $item_name = $item->item_name;
 
       // カートに関連する注文情報を取得
@@ -2229,33 +2237,34 @@ class LoginPageController extends Controller
       if(!$user->setonagi == 1){
         $kaiin_number = $user->kaiin_number;
         $now = Carbon::now();
-        $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get()->unique('tokuisaki_id');
-        foreach ($tokuisaki_ids as $key => $value) {
+        // $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get()->unique('tokuisaki_id');
+        // foreach ($tokuisaki_ids as $key => $value) {
           // 担当のおすすめ商品の在庫管理をしない場合
-          $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $value->tokuisaki_id)
+          $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $tokuisaki_id)
           ->where('price', '>=', 1)
           ->where('zaikokanri', 1)
           ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
-          ->whereDate('start', '<=' , $now)
-          ->whereDate('end', '>=', $now)
+          ->where('start', '<=' , $now)
+          ->where('end', '>=', $now)
           ->orderBy('order_no', 'asc')->first();
           if(isset($buyer_recommend_item)){
             $zaikosuu = 99;
-            break;
+            // break;
+          }else{
+            // 担当のおすすめ商品の在庫数を取得
+            $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $tokuisaki_id)
+            ->where('price', '>=', '1')
+            ->whereNull('zaikokanri')
+            ->where('zaikosuu', '>=', 1)
+            ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
+            ->where('start', '<=' , $now)
+            ->where('end', '>=', $now)
+            ->orderBy('order_no', 'asc')->first();
+            if(isset($buyer_recommend_item)){
+              $zaikosuu = $buyer_recommend_item->zaikosuu;
+            }
           }
-          // 担当のおすすめ商品の在庫数を取得
-          $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $value->tokuisaki_id)
-          ->where('price', '>=', '1')
-          ->whereNull('zaikokanri')
-          ->where('zaikosuu', '>=', 1)
-          ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
-          ->whereDate('start', '<=' , $now)
-          ->whereDate('end', '>=', $now)
-          ->orderBy('order_no', 'asc')->first();
-          if(isset($buyer_recommend_item)){
-            $zaikosuu = $buyer_recommend_item->zaikosuu;
-          }
-        }
+        // }
       }
 
       // 担当のおすすめ商品から在庫数が取得できた場合はその在庫数を使う。
@@ -2295,43 +2304,49 @@ class LoginPageController extends Controller
       $kaiin_number = $user->kaiin_number;
       $now = Carbon::now();
 
-      $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get()->unique('tokuisaki_id');
-      $carts = Cart::where(['user_id'=> $user_id,'deal_id'=> null])->get();
+      // $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get()->unique('tokuisaki_id');
+      // $carts = Cart::where(['user_id'=> $user_id,'deal_id'=> null])->get();
 
-      foreach ($tokuisaki_ids as $key => $value) {
+      // foreach ($tokuisaki_ids as $key => $value) {
         $iteration = 0;
-        foreach ($carts as $cart) {
+          foreach($cart_ids as $cart_id) {
+          $cart = Cart::where(['id'=> $cart_id])->first();
           $item = Item::where('id', $cart->item_id)->first();
           // dd($item);
           // 担当のおすすめ商品の納品期日を探す
-          $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $value->tokuisaki_id)
+          $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $tokuisaki_id)
           ->where('price', '>=', '1')
           ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
-          // ->whereDate('start', '>=' , $now)
-          ->whereDate('end', '<=', $now)
+          // ->where('start', '>=' , $now)
+          ->where('end', '<=', $now)
           ->orderBy('order_no', 'asc')->first();
           // dd($buyer_recommend_item);
           if(isset($buyer_recommend_item)){
-            $message = $item->item_name.'は掲載期限を過ぎているので注文できません。';
+            $order = Order::where(['cart_id'=> $cart->id])->delete();
+            $cart = Cart::where(['id'=> $cart->id])->delete();
+            $message = $item->item_name.'は掲載期限を過ぎているため削除されました。';
             $data=[
               'message' => $message,
             ];
           }
           // 市況商品を探す
-          $price_groupe = PriceGroupe::where(['tokuisaki_id'=>$value->tokuisaki_id,'store_id'=>$value->store_id])->first();
+          $price_groupe = PriceGroupe::where(['tokuisaki_id'=>$tokuisaki_id,'store_id'=>$store_id])->first();
           $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'price_groupe'=>$price_groupe->price_groupe])
-          // ->whereDate('start', '>=' , $now)
-          ->where('end', '>=', $now)->first();
+          // ->where('start', '>=' , $now)
+          ->where('end', '<=', $now)->first();
           if(isset($special_price_item)){
-            dd($special_price_item);
-            $message = $item->item_name.'は掲載期限を過ぎているので注文できません。';
+            // dd($special_price_item);
+            // dd($now);
+            $order = Order::where(['cart_id'=> $cart->id])->delete();
+            $cart = Cart::where(['id'=> $cart->id])->delete();
+            $message = $item->item_name.'は掲載期限を過ぎているため削除されました。';
             $data=[
               'message' => $message,
             ];
             return redirect()->route('confirm',$data);
           }
           // $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'price_groupe'=>$price_groupe->price_groupe])
-          // ->whereDate('end', '<=', $now)->first();
+          // ->where('end', '<=', $now)->first();
           // if(isset($special_price_item)){
           //   $message = $item->item_name.'は掲載期限を過ぎているので注文できません。';
           //   $data=[
@@ -2341,7 +2356,7 @@ class LoginPageController extends Controller
           // }
           // dd($special_price_item);
         }
-      }
+      // }
     }
 
 
@@ -2349,15 +2364,15 @@ class LoginPageController extends Controller
       // BtoSmallBユーザーの掲載期限を過ぎた市況商品、担当のおすすめ商品がカートに含まれていないかチェック
       $now = Carbon::now();
 
-      foreach($item_ids as $key => $input) {
-        $cart = Cart::where(['user_id'=> $user_id , 'item_id'=> $item_ids[$key], 'deal_id'=> null])->first();
+      foreach($cart_ids as $cart_id) {
+        $cart = Cart::where(['id'=> $cart_id])->first();
         $item = Item::where('id', $cart->item_id)->first();
         // dd($item);
         // 担当のおすすめ商品の納品期日を探す
         $recommend_item = Recommend::where('user_id', $user->id)
         ->where('price', '>=', '1')
         ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
-        ->whereDate('end', '<=', $now)->first();
+        ->where('end', '<=', $now)->first();
         // dd($buyer_recommend_item);
         if(isset($recommend_item)){
           $order = Order::where(['cart_id'=> $cart->id])->delete();
@@ -2371,7 +2386,7 @@ class LoginPageController extends Controller
         // 市況商品を探す
         $price_groupe = '10000000005';
         $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'price_groupe'=>$price_groupe])
-        ->whereDate('end', '<=', $now)->first();
+        ->where('end', '<=', $now)->first();
         if(isset($special_price_item)){
           $order = Order::where(['cart_id'=> $cart->id])->delete();
           $cart = Cart::where(['id'=> $cart->id])->delete();
@@ -2450,8 +2465,8 @@ class LoginPageController extends Controller
     $nouhin_youbi_list = [];
 
 
-    foreach($item_ids as $key => $input) {
-      $cart = Cart::where(['user_id'=> $user_id , 'item_id'=> $item_ids[$key], 'deal_id'=> null])->first();
+    foreach($cart_ids as $cart_id) {
+      $cart = Cart::where(['id'=> $cart_id])->first();
       $orders = Order::where(['cart_id'=> $cart->id])->get();
       foreach ($orders as $order) {
         // $array = $order->nouhin_yoteibi;
@@ -2460,9 +2475,8 @@ class LoginPageController extends Controller
         // dd($nouhin_yoteibi);
         if($sano_nissuu < 0){
           if($user->setonagi == 1){
-            foreach($item_ids as $key => $input) {
-              // カート内の該当アイテムを検索
-              $cart = Cart::where(['user_id'=> $user_id , 'item_id'=> $item_ids[$key], 'deal_id'=> null])->first();
+            foreach($cart_ids as $cart_id) {
+              $cart = Cart::where(['id'=> $cart_id])->first();
               $orders = Order::where(['cart_id'=> $cart->id])->get();
               foreach ($orders as $order) {
                 $order->nouhin_yoteibi = $nouhin_kanoubi;
@@ -2528,7 +2542,7 @@ class LoginPageController extends Controller
     // if($tokuisaki_ids){
     //   foreach ($tokuisaki_ids as $key => $value) {
     //     // dd($value->tokuisaki_id);
-    //     $buyerrecommend_item = BuyerRecommend::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'tokuisaki_id'=>$value->tokuisaki_id])->whereDate('start', '<=' , $order->nouhin_yoteibi)->whereDate('end', '>=', $order->nouhin_yoteibi)->first();
+    //     $buyerrecommend_item = BuyerRecommend::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'tokuisaki_id'=>$value->tokuisaki_id])->where('start', '<=' , $order->nouhin_yoteibi)->where('end', '>=', $order->nouhin_yoteibi)->first();
     //     if(isset($buyerrecommend_item)){
     //         dd($buyerrecommend_item);
     //     }
@@ -2694,9 +2708,9 @@ class LoginPageController extends Controller
 
     if($request->has('addsuscess_btn')){
     // 在庫がある場合商品の在庫数を減らす
-      foreach($item_ids as $key => $input) {
-        $cart = Cart::where(['user_id'=> $user_id , 'item_id'=> $item_ids[$key], 'deal_id'=> null])->first();
-        $item = item::where(['id'=> $item_ids[$key]])->first();
+      foreach($cart_ids as $cart_id) {
+        $cart = Cart::where(['id'=> $cart_id])->first();
+        $item = item::where(['id'=> $cart->item_id])->first();
         $item_name = $item->item_name;
         // dd($item);
         $orders = Order::where(['cart_id'=> $cart->id])->get();
@@ -2710,38 +2724,37 @@ class LoginPageController extends Controller
         if(!$user->setonagi == 1){
           $kaiin_number = $user->kaiin_number;
           $now = Carbon::now();
-          $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get()->unique('tokuisaki_id');
+          // $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get()->unique('tokuisaki_id');
 
           $buyer_recommend_item_zaikokanri = null;
           $buyer_recommend_item_zaikosuu = null;
 
-          foreach ($tokuisaki_ids as $key => $value) {
+          // foreach ($tokuisaki_ids as $key => $value) {
             // 担当のおすすめ商品の在庫管理をしない場合
-            $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $value->tokuisaki_id)
+            $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $tokuisaki_id)
             ->where('price', '>=', 1)
             ->where('zaikokanri', 1)
             ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
-            ->whereDate('start', '<=' , $now)
-            ->whereDate('end', '>=', $now)
+            ->where('start', '<=' , $now)
+            ->where('end', '>=', $now)
             ->orderBy('order_no', 'asc')->first();
             if(isset($buyer_recommend_item)){
               $buyer_recommend_item_zaikokanri = $buyer_recommend_item;
-              break;
+            }else{
+              // 担当のおすすめ商品の在庫数を取得
+              $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $tokuisaki_id)
+              ->where('price', '>=', '1')
+              ->whereNull('zaikokanri')
+              ->where('zaikosuu', '>=', 1)
+              ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
+              ->where('start', '<=' , $now)
+              ->where('end', '>=', $now)
+              ->orderBy('order_no', 'asc')->first();
+              if(isset($buyer_recommend_item)){
+                $buyer_recommend_item_zaikosuu = $buyer_recommend_item;
+              }
             }
-            // 担当のおすすめ商品の在庫数を取得
-            $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $value->tokuisaki_id)
-            ->where('price', '>=', '1')
-            ->whereNull('zaikokanri')
-            ->where('zaikosuu', '>=', 1)
-            ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
-            ->whereDate('start', '<=' , $now)
-            ->whereDate('end', '>=', $now)
-            ->orderBy('order_no', 'asc')->first();
-            if(isset($buyer_recommend_item)){
-              $buyer_recommend_item_zaikosuu = $buyer_recommend_item;
-              break;
-            }
-          }
+          // }
         }
         if(isset($buyer_recommend_item_zaikokanri)){
         }else{
@@ -2765,8 +2778,8 @@ class LoginPageController extends Controller
 
 
     // カートにオーダーIDを保存
-    foreach($item_ids as $key => $input) {
-      $cart = Cart::firstOrNew(['user_id'=> $user_id , 'item_id'=> $item_ids[$key], 'deal_id'=> null]);
+    foreach($cart_ids as $cart_id) {
+      $cart = Cart::where(['id'=> $cart_id])->first();
       $cart->deal_id = $deal_id;
       $cart->save();
     }

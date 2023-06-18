@@ -296,51 +296,51 @@ if(document.URL.match("/approval")) {
 
 
   // オーダー内容を取得する関数
-  function order_update() {
-    var params = new URLSearchParams(window.location.search);
-    var addtype = params.get('addtype');
-    var url = window.location.href;
-    var path = url.split('?')[0];
-    var url = path.substr(path.lastIndexOf('/') + 1);
-
-    var tokuisaki_name = $('#change_all_store option:selected').attr('id');
-    var store_name = $('#change_all_store').val();
-    var nouhin_yoteibi = $('#change_all_nouhin_yoteibi').val();
-
-    // チェックボックスの状態を取得
-    var isChecked = $('#show_favorite').prop('checked');
-    // チェックが入っているかどうかを確認
-    if (isChecked) {
-      var show_favorite = 1;
-    } else {
-      var show_favorite = null;
-    }
-
-    $.ajax({
-        headers: {
-          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }, //Headersを書き忘れるとエラーになる
-        url: location.origin + '/order',
-        type: "POST", // GETメソッドで通信
-        data: {
-          'addtype': addtype,
-          'show_favorite': show_favorite,
-          'url': url,
-          'tokuisaki_name': tokuisaki_name,
-          'store_name': store_name,
-          'nouhin_yoteibi': nouhin_yoteibi,
-        },
-        cache: false, // キャッシュしないで読み込み
-        // 通信成功時に呼び出されるコールバック
-        success: function (data) {
-              $('#order').html(data);
-        },
-        // 通信エラー時に呼び出されるコールバック
-        error: function () {
-            alert("オーダー内容をアップデートできません。");
-        }
-    });
-  }
+  // function order_update() {
+  //   var params = new URLSearchParams(window.location.search);
+  //   var addtype = params.get('addtype');
+  //   var url = window.location.href;
+  //   var path = url.split('?')[0];
+  //   var url = path.substr(path.lastIndexOf('/') + 1);
+  //
+  //   var tokuisaki_name = $('#change_all_store option:selected').attr('id');
+  //   var store_name = $('#change_all_store').val();
+  //   var nouhin_yoteibi = $('#change_all_nouhin_yoteibi').val();
+  //
+  //   // チェックボックスの状態を取得
+  //   var isChecked = $('#show_favorite').prop('checked');
+  //   // チェックが入っているかどうかを確認
+  //   if (isChecked) {
+  //     var show_favorite = 1;
+  //   } else {
+  //     var show_favorite = null;
+  //   }
+  //
+  //   $.ajax({
+  //       headers: {
+  //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+  //       }, //Headersを書き忘れるとエラーになる
+  //       url: location.origin + '/order',
+  //       type: "POST", // GETメソッドで通信
+  //       data: {
+  //         'addtype': addtype,
+  //         'show_favorite': show_favorite,
+  //         'url': url,
+  //         'tokuisaki_name': tokuisaki_name,
+  //         'store_name': store_name,
+  //         'nouhin_yoteibi': nouhin_yoteibi,
+  //       },
+  //       cache: false, // キャッシュしないで読み込み
+  //       // 通信成功時に呼び出されるコールバック
+  //       success: function (data) {
+  //             $('#order').html(data);
+  //       },
+  //       // 通信エラー時に呼び出されるコールバック
+  //       error: function () {
+  //           alert("商品が見つかりませんでした。");
+  //       }
+  //   });
+  // }
 
   // お気に入り商品チェックがされたら、アップデート
 
@@ -1224,63 +1224,63 @@ if(document.URL.match("/approval")) {
 
 
 // 顧客側オーダー内容を随時取得
-
-if(document.URL.match("/user/deal")) {
-  $(function(){
-    setInterval(function(){
-
-
-    var prices = $(".price").map(function (index, el) {
-      var prices = $(this).data('price');
-      return (prices);
-    }).get();
-
-    var ids = $(".order_id").map(function (index, el) {
-      var ids = $(this).val();
-      return (ids);
-    }).get();
-
-    console.log(prices);
-    console.log(ids);
-
-    var array = [];
-    for (var i = 0, l = ids.length, obj = Object.create(null); i < l; ++i) {
-      if (prices.hasOwnProperty(i)) {
-        obj[ids[i]] = prices[i];
-      }
-    }
-    array = obj;
-    console.log(array);
-
-    $.ajax({
-        headers: {
-          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }, //Headersを書き忘れるとエラーになる
-        url: location.origin + '/updateorder',
-        type: 'POST', //リクエストタイプ
-        global: false,
-        data: {
-          'array': array,
-        } //Laravelに渡すデータ
-      })
-      // Ajaxリクエスト成功時の処理
-      .done(function(data) {
-        console.log(data);
-        if (data == 0) {
-          location.reload(true);
-      	}
-      })
-      // Ajaxリクエスト失敗時の処理
-      .fail(function(jqXHR, textStatus, errorThrown) {
-        // alert('Ajaxリクエスト失敗');
-        console.log("オーダー内容を取得できません。");
-        console.log("XMLHttpRequest : " + XMLHttpRequest.status);
-        console.log("textStatus     : " + textStatus);
-        console.log("errorThrown    : " + errorThrown.message);
-      });
-    },1000);
-});
-}
+//
+// if(document.URL.match("/user/deal")) {
+//   $(function(){
+//     setInterval(function(){
+//
+//
+//     var prices = $(".price").map(function (index, el) {
+//       var prices = $(this).data('price');
+//       return (prices);
+//     }).get();
+//
+//     var ids = $(".order_id").map(function (index, el) {
+//       var ids = $(this).val();
+//       return (ids);
+//     }).get();
+//
+//     console.log(prices);
+//     console.log(ids);
+//
+//     var array = [];
+//     for (var i = 0, l = ids.length, obj = Object.create(null); i < l; ++i) {
+//       if (prices.hasOwnProperty(i)) {
+//         obj[ids[i]] = prices[i];
+//       }
+//     }
+//     array = obj;
+//     console.log(array);
+//
+//     $.ajax({
+//         headers: {
+//           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+//         }, //Headersを書き忘れるとエラーになる
+//         url: location.origin + '/updateorder',
+//         type: 'POST', //リクエストタイプ
+//         global: false,
+//         data: {
+//           'array': array,
+//         } //Laravelに渡すデータ
+//       })
+//       // Ajaxリクエスト成功時の処理
+//       .done(function(data) {
+//         console.log(data);
+//         if (data == 0) {
+//           location.reload(true);
+//       	}
+//       })
+//       // Ajaxリクエスト失敗時の処理
+//       .fail(function(jqXHR, textStatus, errorThrown) {
+//         // alert('Ajaxリクエスト失敗');
+//         console.log("オーダー内容を取得できません。");
+//         console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+//         console.log("textStatus     : " + textStatus);
+//         console.log("errorThrown    : " + errorThrown.message);
+//       });
+//     },1000);
+// });
+// }
 
 
 
@@ -1469,107 +1469,7 @@ $(".riyoukyoka_btn").click(function(e){
 // });
 
 
-// お気に入りの商品に追加
-$(document).on("click", ".addfavoriteitem", function() {
-  var item_id = $(this).get(0).id;
-  // var setonagi_item_id = $(this).parent().find('.setonagi_item_id').val();
-  // console.log(item_id);
-  // console.log(quantity);
-  // console.log(setonagi_item_id);
-  $.ajax({
-      headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-      }, //Headersを書き忘れるとエラーになる
-      url: location.origin + '/addfavoriteitem',
-      type: 'POST', //リクエストタイプ
-      data: {
-        'item_id': item_id,
-        // 'setonagi_item_id' : setonagi_item_id,
-      }
-    })
-    .done(function(json) {
-      // 既にカートにあるときの分岐
-      console.log(json['message']);
-      if(json['message']=='favorite_in'){
-        // $('#toggle').addClass('beep');
-        // $('#toggle').trigger('click');
-        Swal.fire({
-          title: "既にお気に入りに追加されています",
-          position: 'bottom-end',
-          toast: true,
-          icon: 'info',
-          showConfirmButton: false,
-          timer: 3000
-        });
-      }else{
-        // $('#toggle').addClass('beep');
-        // $('#toggle').trigger('click');
-        location.reload();
-        // Swal.fire({
-        //   type:"success",
-        //   title: "お気に入りに追加しました",
-        //   position: 'bottom-end',
-        //   toast: true,
-        //   iconColor: "rgba(241,73,41,1)",
-        //   icon: 'success',
-        //   showConfirmButton: false,
-        //   timer: 1500
-        // });
-      }
-    })
-    .fail(function(jqXHR, textStatus, errorThrown) {
-      alert('追加できませんでした。しばらくして再度お試しください。');
-      console.log("ajax通信に失敗しました");
-      console.log("XMLHttpRequest : " + XMLHttpRequest.status);
-      console.log("textStatus     : " + textStatus);
-      console.log("errorThrown    : " + errorThrown.message);
-    });
-});
 
-
-// HOME画面でカートから削除
-$(document).on("click", ".removefavoriteitem", function() {
-  // var cart_id = $(this).get(0).id;
-  // $(this).parent().parent().remove();
-  // console.log(cart_id);
-  var item_id = $(this).get(0).id;
-
-
-  $.ajax({
-      headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-      }, //Headersを書き忘れるとエラーになる
-      url: location.origin + '/removefavoriteitem',
-      type: 'POST', //リクエストタイプ
-      data: {
-        'item_id': item_id,
-      } //Laravelに渡すデータ
-    })
-    // Ajaxリクエスト成功時の処理
-    .done(function(data) {
-      // console.log(data);
-      // setTimeout(order_update);
-      // setTimeout(dealorder_update);
-      location.reload();
-      // Swal.fire({
-      //   type:"success",
-      //   title: "お気に入り商品を削除しました",
-      //   position: 'bottom-end',
-      //   toast: true,
-      //   icon: 'success',
-      //   showConfirmButton: false,
-      //   timer: 1500
-      // });
-    })
-    // Ajaxリクエスト失敗時の処理
-    .fail(function(jqXHR, textStatus, errorThrown) {
-      alert('お気に入り商品を削除できませんでした。');
-      console.log("ajax通信に失敗しました");
-      console.log("XMLHttpRequest : " + XMLHttpRequest.status);
-      console.log("textStatus     : " + textStatus);
-      console.log("errorThrown    : " + errorThrown.message);
-    });
-});
 
     $(document).on("change", "#houjin_kojin", function() {
       var selected = $(this).val();

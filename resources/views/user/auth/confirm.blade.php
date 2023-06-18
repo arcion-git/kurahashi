@@ -49,8 +49,6 @@
             <div class="float-right">
                 <input type="hidden" name="addtype" value="{{$addtype}}" />
                 <button id="approval_btn" type="submit" class="btn btn-warning">内容確認画面に進む</button>
-                <a href="{{ url('/approval') }}">確認画面に進む</a>
-
                 @if($user->setonagi == 1)
                 <div id="card_approval_btn" class="btn btn-warning" onclick="executePay">内容確認画面に進む</div>
                 @endif
@@ -225,7 +223,15 @@ $(document).ready(function () {
         },
         // 通信エラー時に呼び出されるコールバック
         error: function () {
-            alert("オーダー内容をアップデートできません。");
+          Swal.fire({
+            title: "商品が見つかりませんでした。",
+            position: 'center',
+            toast: true,
+            icon: 'info',
+            showConfirmButton: false,
+            timer: 3000
+          });
+          // alert("オーダー内容をアップデートできません。");
         }
     });
   }
@@ -306,6 +312,108 @@ $(document).ready(function () {
 
   $(document).on("click", "#show_favorite", function() {
       order_update();
+  });
+
+  // お気に入りの商品に追加
+  $(document).on("click", ".addfavoriteitem", function() {
+    var item_id = $(this).get(0).id;
+    // var setonagi_item_id = $(this).parent().find('.setonagi_item_id').val();
+    // console.log(item_id);
+    // console.log(quantity);
+    // console.log(setonagi_item_id);
+    $.ajax({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }, //Headersを書き忘れるとエラーになる
+        url: location.origin + '/addfavoriteitem',
+        type: 'POST', //リクエストタイプ
+        data: {
+          'item_id': item_id,
+          // 'setonagi_item_id' : setonagi_item_id,
+        }
+      })
+      .done(function(json) {
+        // 既にカートにあるときの分岐
+        console.log(json['message']);
+        if(json['message']=='favorite_in'){
+          // $('#toggle').addClass('beep');
+          // $('#toggle').trigger('click');
+          Swal.fire({
+            title: "既にお気に入りに追加されています",
+            position: 'bottom-end',
+            toast: true,
+            icon: 'info',
+            showConfirmButton: false,
+            timer: 3000
+          });
+        }else{
+          // $('#toggle').addClass('beep');
+          // $('#toggle').trigger('click');
+          setTimeout(order_update);
+          // location.reload();
+          // Swal.fire({
+          //   type:"success",
+          //   title: "お気に入りに追加しました",
+          //   position: 'bottom-end',
+          //   toast: true,
+          //   iconColor: "rgba(241,73,41,1)",
+          //   icon: 'success',
+          //   showConfirmButton: false,
+          //   timer: 1500
+          // });
+        }
+      })
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        alert('追加できませんでした。しばらくして再度お試しください。');
+        console.log("ajax通信に失敗しました");
+        console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+        console.log("textStatus     : " + textStatus);
+        console.log("errorThrown    : " + errorThrown.message);
+      });
+  });
+
+
+  // HOME画面でお気に入り商品をカートから削除
+  $(document).on("click", ".removefavoriteitem", function() {
+    // var cart_id = $(this).get(0).id;
+    // $(this).parent().parent().remove();
+    // console.log(cart_id);
+    var item_id = $(this).get(0).id;
+
+    $.ajax({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }, //Headersを書き忘れるとエラーになる
+        url: location.origin + '/removefavoriteitem',
+        type: 'POST', //リクエストタイプ
+        data: {
+          'item_id': item_id,
+        } //Laravelに渡すデータ
+      })
+      // Ajaxリクエスト成功時の処理
+      .done(function(data) {
+        // console.log(data);
+        setTimeout(order_update);
+        // setTimeout(dealorder_update);
+        // location.reload();
+        // Swal.fire({
+        //   type:"success",
+        //   title: "お気に入り商品を削除しました",
+        //   position: 'bottom-end',
+        //   toast: true,
+        //   icon: 'success',
+        //   showConfirmButton: false,
+        //   timer: 1500
+        // });
+      })
+      // Ajaxリクエスト失敗時の処理
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        alert('お気に入り商品を削除できませんでした。');
+        console.log("ajax通信に失敗しました");
+        console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+        console.log("textStatus     : " + textStatus);
+        console.log("errorThrown    : " + errorThrown.message);
+      });
   });
 
 });
