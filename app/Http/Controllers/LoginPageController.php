@@ -2181,7 +2181,8 @@ class LoginPageController extends Controller
     $data = $request->all();
 
     // dd($data);
-
+    $now = Carbon::now();
+    dd($now);
 
 
     // 個数が0の商品を配列から消す
@@ -2230,7 +2231,6 @@ class LoginPageController extends Controller
       if(!$user->setonagi == 1){
         $kaiin_number = $user->kaiin_number;
         $now = Carbon::now();
-        dd($now);
         $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get()->unique('tokuisaki_id');
         foreach ($tokuisaki_ids as $key => $value) {
           // 担当のおすすめ商品の在庫管理をしない場合
