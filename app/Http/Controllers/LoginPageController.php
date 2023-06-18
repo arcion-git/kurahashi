@@ -2230,6 +2230,7 @@ class LoginPageController extends Controller
       if(!$user->setonagi == 1){
         $kaiin_number = $user->kaiin_number;
         $now = Carbon::now();
+        dd($now);
         $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get()->unique('tokuisaki_id');
         foreach ($tokuisaki_ids as $key => $value) {
           // 担当のおすすめ商品の在庫管理をしない場合
@@ -2272,6 +2273,7 @@ class LoginPageController extends Controller
       if($nokori_zaiko < 0){
         // 在庫不足の場合、カート画面に戻す
         $data=[
+          'addtype' => $addtype,
           'nokori_zaiko' => $nokori_zaiko,
           'item_name' => $item_name,
         ];
