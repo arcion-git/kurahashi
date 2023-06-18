@@ -761,7 +761,7 @@ class AdminPageController extends Controller
   }
 
   public function SpecialPriceImport(){
-  // SpecialPrice::truncate();
+  SpecialPrice::truncate();
   Excel::import(new SpecialPriceImport, request()->file('file'));
   $message = '正常にインポートが完了しました。';
   $icon = 'success';
@@ -773,7 +773,7 @@ class AdminPageController extends Controller
   }
 
   public function BuyerRecommendImport(){
-  // BuyerRecommend::truncate();
+  BuyerRecommend::truncate();
   Excel::import(new BuyerRecommendImport, request()->file('file'));
   $message = '正常にインポートが完了しました。';
   $icon = 'success';
