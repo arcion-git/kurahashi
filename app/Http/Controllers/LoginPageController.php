@@ -2299,6 +2299,7 @@ class LoginPageController extends Controller
       $carts = Cart::where(['user_id'=> $user_id,'deal_id'=> null])->get();
 
       foreach ($tokuisaki_ids as $key => $value) {
+        $iteration = 0;
         foreach ($carts as $cart) {
           $item = Item::where('id', $cart->item_id)->first();
           // dd($item);
@@ -2321,7 +2322,9 @@ class LoginPageController extends Controller
           $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'price_groupe'=>$price_groupe->price_groupe])
           // ->whereDate('start', '>=' , $now)
           ->whereDate('end', '<=', $now)->first();
-          if ($loop->iteration > 1){
+
+          $iteration++;
+          if ($iteration === 2) {
               dd($special_price_item);
           }
           if(isset($special_price_item)){
