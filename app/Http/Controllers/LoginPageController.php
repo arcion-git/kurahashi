@@ -2321,7 +2321,6 @@ class LoginPageController extends Controller
           $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'price_groupe'=>$price_groupe->price_groupe])
           // ->whereDate('start', '>=' , $now)
           ->whereDate('end', '<=', $now)->first();
-          dd($special_price_item);
           if(isset($special_price_item)){
             $message = $item->item_name.'は掲載期限を過ぎているので注文できません。';
             $data=[
