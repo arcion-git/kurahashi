@@ -2323,7 +2323,7 @@ class LoginPageController extends Controller
           // ->whereDate('start', '>=' , $now)
           ->whereDate('end', '<=', $now)->first();
           if(isset($special_price_item)){
-            dd($special_price_item)
+            dd($special_price_item);
             $message = $item->item_name.'は掲載期限を過ぎているので注文できません。';
             $data=[
               'message' => $message,
