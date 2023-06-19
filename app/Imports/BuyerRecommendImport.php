@@ -40,7 +40,7 @@ class BuyerRecommendImport implements OnEachRow, WithHeadingRow
               'zaikosuu'=>$row['在庫数'],
               'uwagaki_item_name'=>$row['上書き商品名'],
               'uwagaki_kikaku'=>$row['上書き規格'],
-              'store'=>$row['限定店舗'],
+              'gentei_store'=>$row['限定店舗'],
            ]
        );
        // dd($item);
