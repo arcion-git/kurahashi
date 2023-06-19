@@ -219,7 +219,19 @@ $(document).ready(function () {
         cache: false, // キャッシュしないで読み込み
         // 通信成功時に呼び出されるコールバック
         success: function (data) {
-              $('#order').html(data);
+          $('#order').html(data);
+          // console.log(message.hasOwnProperty('message'));
+          // if(message.hasOwnProperty('message')){
+          //   var message = message.message;
+          //   Swal.fire({
+          //     title: message,
+          //     position: 'center',
+          //     toast: true,
+          //     icon: 'info',
+          //     showConfirmButton: false,
+          //     timer: 3000
+          //   });
+          // }
         },
         // 通信エラー時に呼び出されるコールバック
         error: function () {

@@ -948,7 +948,7 @@ class LoginPageController extends Controller
             ->where('price', '>=', '1')
             ->where('start', '<=' , $now)
             ->where('end', '>=', $now)
-            ->orderBy('order_no', 'asc')->get();
+            ->orderByRaw('CAST(order_no AS UNSIGNED)', 'asc')->get();
             $buyer_recommends = collect($buyer_recommends)->merge($buyer_recommend_loop);
           }
           $get_items = $buyer_recommends;
@@ -1513,11 +1513,23 @@ class LoginPageController extends Controller
     // dd($request);
 
     $data = $request->all();
+    // dd($data);
 
     $addtype = $request->addtype;
     $change_all_store = $request->change_all_store;
     $change_all_nouhin_yoteibi = $request->change_all_nouhin_yoteibi;
     $set_tokuisaki_name = $request->set_tokuisaki_name;
+
+    if(count(array_filter($request->quantity)) == 0){
+      $data=[
+        'addtype' => $addtype,
+        'change_all_store' => $change_all_store,
+        'change_all_nouhin_yoteibi' => $change_all_nouhin_yoteibi,
+        'set_tokuisaki_name' => $set_tokuisaki_name,
+        'message' => 'カートが空です。',
+      ];
+      return redirect()->route('confirm',$data);
+    }
 
     $show_favorite = $request->show_favorite;
     $addtype = $request->addtype;
@@ -1677,16 +1689,18 @@ class LoginPageController extends Controller
           ->where('start', '<=' , $now)
           ->where('end', '>=', $now)
           ->where('nouhin_end', '>=', $nouhin_yoteibi)
-          // ->where(function ($query) {
-          //     $query->where('zaikokanri', 1)
-          //         ->orWhere(function ($query) {
-          //             $query->whereNull('zaikokanri')
-          //                 ->where('zaikosuu', '>=', 1);
-          //         });
-          // })
+          ->where(function ($query) {
+              $query->where('zaikokanri', 1)
+                ->orWhere(function ($query) {
+              $query->whereNull('zaikokanri')
+                ->where('zaikosuu', '>=', 1);
+                })
+                ->orWhere(function ($query) {
+              $query->whereNull('zaikokanri')
+                ->whereNull('zaikosuu');
+              });
+          })
           ->orderByRaw('CAST(order_no AS UNSIGNED)', 'asc')->get();
-
-          // dd($buyer_recommends);
           $addtype_items = $buyer_recommends;
         }elseif($addtype == 'addspecialprice'){
           // 市況商品を取得
@@ -1729,13 +1743,16 @@ class LoginPageController extends Controller
           // dd($carts);
           $groupedItems = $carts->groupBy('groupe');
         }else{
-          $carts = Cart::where(['user_id'=>$user_id, 'deal_id'=> null])->get();          $groupedItems = null;
+          $carts = Cart::where(['user_id'=>$user_id, 'deal_id'=> null , 'addtype'=> $addtype])->get();
+          $groupedItems = null;
         }
       }else{
-        $carts = Cart::where(['user_id'=>$user_id, 'deal_id'=> null])->get();          $groupedItems = null;
+        $carts = Cart::where(['user_id'=>$user_id, 'deal_id'=> null , 'addtype'=> $addtype])->get();
+        $groupedItems = null;
       }
     }else{
-      $carts = Cart::where(['user_id'=>$user_id, 'deal_id'=> null])->get();          $groupedItems = null;
+      $carts = Cart::where(['user_id'=>$user_id, 'deal_id'=> null , 'addtype'=> $addtype])->get();
+      $groupedItems = null;
     }
 
     // Log::debug($carts);
@@ -1743,26 +1760,41 @@ class LoginPageController extends Controller
     if($carts->isNotEmpty()) {
       foreach ($carts as $cart) {
         $set_order = Order::where(['cart_id'=>$cart->id])->first();
+        $message = null;
         if($set_order){
           break;
         }
       }
     }else{
-      $set_order = null;
+      $carts = Cart::where(['user_id'=>$user_id, 'deal_id'=> null , 'addtype'=> $addtype])->get();
+      foreach ($carts as $cart) {
+        $set_order = Order::where(['cart_id'=>$cart->id])->first();
+        $message = null;
+        if($set_order){
+          break;
+        }
+      }
+      // $set_order = null;
+      $message = '商品が取得できませんでした。';
     }
 
-    $cart_ninis =  CartNini::where(['user_id'=>$user_id, 'deal_id'=> null])->get();
+
+
+
+    $cart_ninis = CartNini::where(['user_id'=>$user_id, 'deal_id'=> null])->get();
 
     $today = date("Y-m-d");
     $holidays = Holiday::pluck('date');
 
 
 
-
-
-
     // 納品予定日を取得
-    $all_nouhin_end = null;
+    $currentDate = Carbon::now();
+    $oneMonthLater = $currentDate->addMonth();
+
+    // フォーマットの指定例
+    $oneMonthLaterFormatted = $oneMonthLater->format('Y-m-d');
+    $all_nouhin_end = $oneMonthLaterFormatted;
 
     $stores = [];
 
@@ -1859,6 +1891,8 @@ class LoginPageController extends Controller
     $collect_touroku = config('app.collect_touroku');
     $collect_token = config('app.collect_token');
 
+    $message=['message' => $message];
+
     $data=
     ['carts' => $carts,
      'cart_ninis' => $cart_ninis,
@@ -1881,10 +1915,10 @@ class LoginPageController extends Controller
      'url' => $url,
      'seted_store' => $store,
      'nouhin_yoteibi' => $nouhin_yoteibi,
+     'message' => $message,
     ];
-
+    // return view('order', $data)->with($message);
     return view('order', $data);
-
   }
 
 

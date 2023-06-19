@@ -12,19 +12,22 @@
 		<tr>
 			<th class="">納入先店舗</th>
 			<th class="">
+
 				<select id="change_all_store" name="change_all_store" class="change_all_store text-center form-control" value="" required>
-					<option id="{{$set_order->tokuisaki_name}}" value="{{$set_order->store_name}}">{{$set_order->tokuisaki_name}} {{$set_order->store_name}}</option>
+					<option id="@if(isset($set_order)){{$set_order->tokuisaki_name}}@endif" value="@if(isset($set_order)){{$set_order->store_name}}@endif">@if(isset($set_order)){{$set_order->tokuisaki_name}} {{$set_order->store_name}}@endif</option>
 					@foreach($stores as $store)
-						<option id="{{$store->tokuisaki_name}}" value="{{$store->store_name}}">{{$store->tokuisaki_name}} {{$store->store_name}}</option>
+						<option id="@if(isset($set_order)){{$store->tokuisaki_name}}@endif" value="{{$store->store_name}}">{{$store->tokuisaki_name}} {{$store->store_name}}</option>
 					@endforeach
-					<input type="hidden" name="set_tokuisaki_name" value="{{$set_order->tokuisaki_name}}" id="set_tokuisaki_name" />
+					<input type="hidden" name="set_tokuisaki_name" value="@if(isset($set_order)){{$set_order->tokuisaki_name}}@endif" id="set_tokuisaki_name" />
 				</select>
+
 			</th>
 		</tr>
 		<tr>
 			<th class="">納品予定日</th>
 			<td class="text-center">
-					<input id="change_all_nouhin_yoteibi" type="text" name="change_all_nouhin_yoteibi" class="change_all_nouhin_yoteibi text-center form-control daterange-cus datepicker" value="{{$set_order->nouhin_yoteibi}}" autocomplete="off" required>
+
+					<input id="change_all_nouhin_yoteibi" type="text" name="change_all_nouhin_yoteibi" class="change_all_nouhin_yoteibi text-center form-control daterange-cus datepicker" value="@if(isset($set_order)){{$set_order->nouhin_yoteibi}}@endif" autocomplete="off" required>
 					@if($user->kyuujitu_haisou == 1)
 					<script>
 					$('.change_all_nouhin_yoteibi').datepicker({
@@ -140,13 +143,12 @@
 															<!-- 在庫管理のある商品を表示 -->
 
 
-
 															<!-- 納品先の得意先IDと、担当のおすすめ商品の得意先IDが一致するか確認 -->
 															<tr id="{{$cart->id}}" class="cart_item" data-addtype="{{$cart->addtype}}">
 																<input name="cart_id[]" type="hidden" value="{{$cart->id}}" />
 																<td class="head-item-id cartid_{{$cart->id}} text-center">{{$cart->item->item_id}}</td>
 																<td class="head-item-name cartid_{{$cart->id}}">
-																	@if($cart->addtype == 'addbuyerrecommend' && !$user->setonagi)
+																	@if($cart->uwagaki_item_name)
 																		{{$cart->uwagaki_item_name}}
 																		@else
 																		{{$cart->item->item_name}}
@@ -214,13 +216,14 @@
 																			@endif
 
 																			<td class="head-kikaku text-center">
-																				@if($cart->addtype == 'addbuyerrecommend' && !$user->setonagi)
+																				@if($cart->uwagaki_kikaku)
 																					{{$cart->uwagaki_kikaku}}
 																					@else
 																					{{$cart->item->kikaku}}
 																				@endif
 																			</td>
 																			<td class="head-quantity text-center">
+																				{{$cart->zaikosuu()}}
 																				<select name="quantity[]" class="quantity text-center form-control" value="{{$val->quantity}}" required>
 																					@if(isset($deal))
 																						<option value="{{$val->quantity}}">{{$val->quantity}}</option>

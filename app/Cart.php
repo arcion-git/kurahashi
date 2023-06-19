@@ -163,34 +163,33 @@ class Cart extends Model
   public function zaikosuu() {
     $item = $this->belongsTo('App\Item', 'item_id')->first();
     $user = $this->belongsTo('App\User', 'user_id')->first();
+    $kaiin_number = $user->kaiin_number;
+    $cart = $this->belongsTo('App\Cart', 'id')->first();
+    $order = Order::where(['cart_id' => $this->id])->first();
+    $store = Store::where(['store_name' => $order->store_name , 'tokuisaki_name' => $order->tokuisaki_name])->first();
+    $now = Carbon::now();
     if(!$user->setonagi == 1){
-      $kaiin_number = $user->kaiin_number;
-      $now = Carbon::now();
-      $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get()->unique('tokuisaki_id');
-      foreach ($tokuisaki_ids as $key => $value) {
-        // 担当のおすすめ商品の在庫管理をしない場合を探す
-        $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $value->tokuisaki_id)
-        ->where('price', '>=', 1)
-        ->where('zaikokanri', 1)
-        ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
-        ->whereDate('start', '<=' , $now)
-        ->whereDate('end', '>=', $now)
-        ->orderBy('order_no', 'asc')->first();
-        if(isset($buyer_recommend_item)){
-          return 99;
-        }
-        // 担当のおすすめ商品の在庫数を探す
-        $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $value->tokuisaki_id)
-        ->where('price', '>=', 1)
-        ->whereNull('zaikokanri')
-        ->where('zaikosuu', '>=', 1)
-        ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
-        ->whereDate('start', '<=' , $now)
-        ->whereDate('end', '>=', $now)
-        ->orderBy('order_no', 'asc')->first();
-        if(isset($buyer_recommend_item)){
-          return $buyer_recommend_item->zaikosuu;
-        }
+      // 担当のおすすめ商品の在庫管理をしない場合を探す
+      $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $store->tokuisaki_id)
+      ->where('price', '>=', 1)
+      ->where('zaikokanri', 1)
+      ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
+      ->whereDate('start', '<=' , $now)
+      ->whereDate('end', '>=', $now)->first();
+      if(isset($buyer_recommend_item)){
+        return 99;
+      }
+      // 担当のおすすめ商品の在庫数を探す
+      $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $store->tokuisaki_id)
+      ->where('price', '>=', 1)
+      ->whereNull('zaikokanri')
+      ->where('zaikosuu', '>=', 1)
+      ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
+      ->whereDate('start', '<=' , $now)
+      ->whereDate('end', '>=', $now)
+      ->orderBy('order_no', 'asc')->first();
+      if(isset($buyer_recommend_item)){
+        return $buyer_recommend_item->zaikosuu;
       }
     }
     $zaikosuu = $item->zaikosuu;
