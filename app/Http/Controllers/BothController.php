@@ -239,6 +239,13 @@ class BothController extends Controller
       $order->tokuisaki_name = $tokuisaki_name;
       $order->save();
 
+      // オーダー内容を保存（ボツ）
+      // $order = Order::where(['cart_id'=> $cart->id])
+      // ->update([
+      //     'store_name' => $store_name,
+      //     'tokuisaki_name' => $tokuisaki_name
+      // ]);
+
       // // 商品情報を取得
       // $item = Item::where('id',$cart->item_id)->first();
       //

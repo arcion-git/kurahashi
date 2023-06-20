@@ -361,7 +361,7 @@ $(document).ready(function () {
         }else{
           // $('#toggle').addClass('beep');
           // $('#toggle').trigger('click');
-          setTimeout(order_update);
+          // setTimeout(order_update);
           // location.reload();
           // Swal.fire({
           //   type:"success",
@@ -405,7 +405,7 @@ $(document).ready(function () {
       // Ajaxリクエスト成功時の処理
       .done(function(data) {
         // console.log(data);
-        setTimeout(order_update);
+        // setTimeout(order_update);
         // setTimeout(dealorder_update);
         // location.reload();
         // Swal.fire({
@@ -426,6 +426,22 @@ $(document).ready(function () {
         console.log("textStatus     : " + textStatus);
         console.log("errorThrown    : " + errorThrown.message);
       });
+  });
+
+  $(document).ready(function() {
+    $(document).on('click', '.favoritebutton', function() {
+      if ($(this).hasClass('removefavoriteitem')) {
+        $(this).removeClass('removefavoriteitem');
+        $(this).addClass('addfavoriteitem');
+        $(this).find('i').removeClass('fa fa-heart');
+        $(this).find('i').addClass('far fa-heart');
+      } else if ($(this).hasClass('addfavoriteitem')) {
+        $(this).removeClass('addfavoriteitem');
+        $(this).addClass('removefavoriteitem');
+        $(this).find('i').removeClass('far fa-heart');
+        $(this).find('i').addClass('fa fa-heart');
+      }
+    });
   });
 
 });

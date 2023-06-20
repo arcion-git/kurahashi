@@ -1010,12 +1010,6 @@ class LoginPageController extends Controller
       // カートに1つでも商品があるか判定
       $carts =  Cart::where('user_id',$user_id)->get();
 
-
-
-      $favorite_categories = FavoriteCategory::where('user_id', $user_id)->get();
-      $favorite_items = Favorite::where('user_id', $user_id)->get();
-
-
       $now = Carbon::now()->addDay(3)->format('Y-m-d');
 
       // ユーザーごとのおすすめ商品取得
@@ -1028,6 +1022,42 @@ class LoginPageController extends Controller
 
       // 日時
       $now = Carbon::now()->toDateTimeString();
+
+      // 次の営業日を取得
+      $today = date("Y-m-d");
+      $holidays = Holiday::pluck('date');
+      $currentTime = date('H:i:s');
+      // 17時より前の処理
+      if (strtotime($currentTime) < strtotime('17:00:00')) {
+        $holidays = Holiday::pluck('date')->toArray();
+        for($i = 1; $i < 10; $i++){
+          $today_plus = date('Y-m-d', strtotime($today.'+'.$i.'day'));
+          // dd($today_plus2);
+          $key = array_search($today_plus,(array)$holidays,true);
+          if($key){
+            // 休みなので次の日付を探す
+          }else{
+            // 休みでないので納品日を格納
+            $nouhin_yoteibi = $today_plus;
+            break;
+          }
+        }
+      }else{
+      // 17時より後の処理
+        $holidays = Holiday::pluck('date')->toArray();
+        for($i = 2; $i < 10; $i++){
+          $today_plus = date('Y-m-d', strtotime($today.'+'.$i.'day'));
+          // dd($today_plus2);
+          $key = array_search($today_plus,(array)$holidays,true);
+          if($key){
+            // 休みなので次の日付を探す
+          }else{
+            // 休みでないので納品日を格納
+            $nouhin_yoteibi = $today_plus;
+            break;
+          }
+        }
+      }
 
       // ここからカートへの追加処理を商品ごとに行う
 
@@ -1116,44 +1146,6 @@ class LoginPageController extends Controller
           }
           $cart->save();
 
-          // Log::debug($items);
-
-
-          // 次の営業日を取得
-          $today = date("Y-m-d");
-          $holidays = Holiday::pluck('date');
-          $currentTime = date('H:i:s');
-          // 17時より前の処理
-          if (strtotime($currentTime) < strtotime('17:00:00')) {
-            $holidays = Holiday::pluck('date')->toArray();
-            for($i = 1; $i < 10; $i++){
-              $today_plus = date('Y-m-d', strtotime($today.'+'.$i.'day'));
-              // dd($today_plus2);
-              $key = array_search($today_plus,(array)$holidays,true);
-              if($key){
-                // 休みなので次の日付を探す
-              }else{
-                // 休みでないので納品日を格納
-                $nouhin_yoteibi = $today_plus;
-                break;
-              }
-            }
-          }else{
-          // 17時より後の処理
-            $holidays = Holiday::pluck('date')->toArray();
-            for($i = 2; $i < 10; $i++){
-              $today_plus = date('Y-m-d', strtotime($today.'+'.$i.'day'));
-              // dd($today_plus2);
-              $key = array_search($today_plus,(array)$holidays,true);
-              if($key){
-                // 休みなので次の日付を探す
-              }else{
-                // 休みでないので納品日を格納
-                $nouhin_yoteibi = $today_plus;
-                break;
-              }
-            }
-          }
 
           // BtoBユーザーの場合は、オーダーに納品予定日と得意先名を保存
           if(!$setonagi_user){
@@ -1193,37 +1185,45 @@ class LoginPageController extends Controller
             $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get()->unique('tokuisaki_id');
             foreach ($tokuisaki_ids as $key => $value) {
               // 担当のおすすめ商品の価格上書き
-              $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $value->tokuisaki_id)
-              ->where('price', '>=', '1')
-              ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
-              ->where('start', '<=' , $now)
-              ->where('end', '>=', $now)
-              ->orderBy('order_no', 'asc')->first();
-              // dd($buyer_recommend_item);
-              if(isset($buyer_recommend_item)){
-                $order->price = $buyer_recommend_item->price;
+              if($addtype == 'addbuyerrecommend'){
+                $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $value->tokuisaki_id)
+                ->where('price', '>=', '1')
+                ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
+                ->where('start', '<=' , $now)
+                ->where('end', '>=', $now)
+                ->orderBy('order_no', 'asc')->first();
+                // dd($buyer_recommend_item);
+                if(isset($buyer_recommend_item)){
+                  $order->price = $buyer_recommend_item->price;
+                }
               }
               // 市況商品の価格上書き
-              $price_groupe = PriceGroupe::where(['tokuisaki_id'=>$value->tokuisaki_id,'store_id'=>$value->store_id])->first();
-              $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'price_groupe'=>$price_groupe->price_groupe])
-              ->where('start', '<=' , $now)
-              ->where('end', '>=', $now)->first();
-              if(isset($special_price_item)){
-                $order->price = $special_price_item->price;
+              if($addtype == 'addspecialprice'){
+                $price_groupe = PriceGroupe::where(['tokuisaki_id'=>$value->tokuisaki_id,'store_id'=>$value->store_id])->first();
+                $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'price_groupe'=>$price_groupe->price_groupe])
+                ->where('start', '<=' , $now)
+                ->where('end', '>=', $now)->first();
+                if(isset($special_price_item)){
+                  $order->price = $special_price_item->price;
+                }
               }
             }
           }
 
           // セトナギ商品価格上書き
-          $setonagi_item = SetonagiItem::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])->first();
-          if(isset($setonagi_item->price)){
-          $order->price = $setonagi_item->price;
-          }
+          // $setonagi_item = SetonagiItem::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])->first();
+          // if(isset($setonagi_item->price)){
+          // $order->price = $setonagi_item->price;
+          // }
 
-          // 担当のおすすめ商品価格上書き
-          $recommend_item = Recommend::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'user_id'=>$user_id])->first();
-          if(isset($recommend_item->price)){
-          $order->price = $recommend_item->price;
+          if($setonagi_user){
+            if($addtype == 'addbuyerrecommend'){
+              // 担当のおすすめ商品価格上書き
+              $recommend_item = Recommend::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'user_id'=>$user_id])->first();
+              if(isset($recommend_item->price)){
+              $order->price = $recommend_item->price;
+              }
+            }
           }
 
           // BtoSBは納品予定日を格納

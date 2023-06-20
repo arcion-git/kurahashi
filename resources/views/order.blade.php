@@ -61,7 +61,7 @@
 			</th>
 		</tr>
 		@endif
-		@if(request()->input('addtype') === 'addbuyerrecommend')
+		@if(request()->input('addtype') === 'addbuyerrecommend' && $url == 'confirm')
 		<tr>
 			<th class="">お気に入り商品のみを表示</th>
 			<td class="text-center">
@@ -158,9 +158,9 @@
 																	@endif
 																	@if($cart->addtype == 'addbuyerrecommend')
 																		@if($cart->favoriteitem())
-			                              <span name="item_id" value="{{$cart->item->id}}" id="{{$cart->item->id}}" class="removefavoriteitem"><i class="fa fa-heart"></i></span>
+			                              <span name="item_id" value="{{$cart->item->id}}" id="{{$cart->item->id}}" class="favoritebutton removefavoriteitem"><i class="fa fa-heart"></i></span>
 			                              @else
-			                              <span name="item_id" value="{{$cart->item->id}}" id="{{$cart->item->id}}" class="addfavoriteitem"><i class="far fa-heart"></i></span>
+			                              <span name="item_id" value="{{$cart->item->id}}" id="{{$cart->item->id}}" class="favoritebutton addfavoriteitem"><i class="far fa-heart"></i></span>
 			                              @endif
 																	@endif
 																</td>
