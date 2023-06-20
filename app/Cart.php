@@ -206,7 +206,6 @@ class Cart extends Model
         }
     }
     $zaikosuu = $item->zaikosuu;
-    // dd($zaikosuu);
     return $zaikosuu;
   }
 

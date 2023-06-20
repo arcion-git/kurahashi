@@ -1518,7 +1518,19 @@ class LoginPageController extends Controller
     $change_all_nouhin_yoteibi = $request->change_all_nouhin_yoteibi;
     $set_tokuisaki_name = $request->set_tokuisaki_name;
 
-    if(count(array_filter($request->quantity)) == 0){
+
+    if(!$request->has('cart_id') and !$request->has('cart_nini_id')){
+      $data=[
+          'addtype' => $addtype,
+          // 'change_all_store' => $change_all_store,
+          // 'change_all_nouhin_yoteibi' => $change_all_nouhin_yoteibi,
+          // 'set_tokuisaki_name' => $set_tokuisaki_name,
+          'message' => 'カートが空です。',
+      ];
+      return redirect()->route('confirm',$data);
+    }
+
+    if(count(array_filter($request->quantity)) == 0 ){
       $data=[
         'addtype' => $addtype,
         'change_all_store' => $change_all_store,
@@ -1690,6 +1702,9 @@ class LoginPageController extends Controller
           // dd($groupedItems);
         }elseif($addtype == 'addbuyerrecommend'){
           // 担当のおすすめ商品を取得
+
+          // 下記の処理に、最後に取得される「get(['carts.*'])」がある、その中のcart一つ一つに、カート紐づく在庫数を入れたい。在庫数の入る条件は、「buyer_recommends.zaikokanri」が「null」でかつ「buyer_recommends.zaikosuu」が「1」より多い場合、「buyer_recommends.zaikosuu」の数をカート紐づく在庫数とする。それ以外の場合は、「items.zaikosuu'」を在庫数とする。
+
           $carts = Cart::join('items', 'carts.item_id', '=', 'items.id')
           ->join('buyer_recommends', function ($join) {
               $join->on('buyer_recommends.item_id', '=', 'items.item_id')
@@ -1718,7 +1733,15 @@ class LoginPageController extends Controller
                   });
           })
           ->orderByRaw('CAST(buyer_recommends.order_no AS UNSIGNED)', 'asc')
-          ->get(['carts.*']);
+          ->select('carts.*', DB::raw('IF(buyer_recommends.zaikokanri IS NULL AND buyer_recommends.zaikosuu > 1, buyer_recommends.zaikosuu, items.zaikosuu) AS zaikosuu'))
+          ->get();
+          foreach ($carts as $cart) {
+              $cart->zaikosuu = floatval($cart->zaikosuu);
+          }
+
+          // ->get(['carts.*']);
+
+
           $groupedItems = $carts->groupBy('groupe');
           // dd($carts);
           // dd($groupedItems);
@@ -1759,6 +1782,8 @@ class LoginPageController extends Controller
       $groupedItems = null;
     }
 
+
+    // 納品先を変更
     if(isset($store) && isset($nouhin_yoteibi)){
       foreach ($carts as $cart) {
         // オーダー内容を保存
@@ -1768,7 +1793,18 @@ class LoginPageController extends Controller
         $order->nouhin_yoteibi = $nouhin_yoteibi;
         $order->save();
       }
+      $cart_ninis = CartNini::where(['user_id' => $user_id , 'deal_id' => null])->get();
+      if($cart_ninis){
+        foreach ($cart_ninis as $cart_nini) {
+          // オーダー内容を保存
+          $ordernini = OrderNini::where(['cart_nini_id'=> $cart_nini->id])->first();
+          $ordernini->nouhin_yoteibi = $nouhin_yoteibi;
+          $ordernini->save();
+        }
+      }
     }
+
+
 
 
     // Log::debug($carts);

@@ -248,7 +248,7 @@ $(document).ready(function () {
     });
   }
 
-  $(document).on("change", ".change_all_store", function () {
+  $(document).on("change", ".change_all_store,.change_all_nouhin_yoteibi", function () {
     order_update();
   });
 
@@ -290,41 +290,41 @@ $(document).ready(function () {
   //   });
   // });
 
-  $(document).on("change", ".change_all_nouhin_yoteibi", function () {
-    var element = $(".user_id:first");
-    var user_id = element.attr("id");
-    var addtype = '{{ $addtype }}';
-    var nouhin_yoteibi = $(this).val();
-
-    $.ajax({
-      headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-      },
-      url: location.origin + '/change_all_nouhin_yoteibi',
-      type: 'POST',
-      data: {
-        'user_id': user_id,
-        'addtype': addtype,
-        'nouhin_yoteibi': nouhin_yoteibi,
-      },
-      success: function (data) {
-
-        setTimeout(order_update, 0);
-        // Swal.fire({
-        //   type: "success",
-        //   title: "納品予定日を変更しました。",
-        //   position: 'bottom-end',
-        //   toast: true,
-        //   icon: 'success',
-        //   showConfirmButton: false,
-        //   timer: 1500
-        // });
-      },
-      error: function () {
-        alert("納品予定日を変更できませんでした。");
-      }
-    });
-  });
+  // $(document).on("change", ".change_all_nouhin_yoteibi", function () {
+  //   var element = $(".user_id:first");
+  //   var user_id = element.attr("id");
+  //   var addtype = '{{ $addtype }}';
+  //   var nouhin_yoteibi = $(this).val();
+  //
+  //   $.ajax({
+  //     headers: {
+  //       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+  //     },
+  //     url: location.origin + '/change_all_nouhin_yoteibi',
+  //     type: 'POST',
+  //     data: {
+  //       'user_id': user_id,
+  //       'addtype': addtype,
+  //       'nouhin_yoteibi': nouhin_yoteibi,
+  //     },
+  //     success: function (data) {
+  //
+  //       setTimeout(order_update, 0);
+  //       // Swal.fire({
+  //       //   type: "success",
+  //       //   title: "納品予定日を変更しました。",
+  //       //   position: 'bottom-end',
+  //       //   toast: true,
+  //       //   icon: 'success',
+  //       //   showConfirmButton: false,
+  //       //   timer: 1500
+  //       // });
+  //     },
+  //     error: function () {
+  //       alert("納品予定日を変更できませんでした。");
+  //     }
+  //   });
+  // });
 
   $(document).on("click", "#show_favorite", function() {
       order_update();
@@ -432,6 +432,7 @@ $(document).ready(function () {
       });
   });
 
+  // お気に入りボタン
   $(document).ready(function() {
     $(document).on('click', '.favoritebutton', function() {
       if ($(this).hasClass('removefavoriteitem')) {

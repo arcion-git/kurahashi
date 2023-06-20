@@ -224,6 +224,7 @@
 																				@endif
 																			</td>
 																			<td class="head-quantity text-center">
+																				{{$cart->zaikosuu()}}
 																				<select name="quantity[]" class="quantity text-center form-control" value="{{$val->quantity}}" required>
 																					@if(isset($deal))
 																						<option value="{{$val->quantity}}">{{$val->quantity}}</option>
@@ -235,7 +236,7 @@
 																						@endif
 																					@endif
 																					@if($cart->addtype == 'addbuyerrecommend')
-																						@for ($i = 0; $i <= $cart->zaikosuu(); $i++)
+																						@for ($i = 0; $i <= $cart->zaikosuu; $i++)
 																						<option value="{{$i}}">{{$i}}</option>
 																						@endfor
 																					@else
