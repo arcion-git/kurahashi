@@ -301,7 +301,7 @@ class BothController extends Controller
 
     $data = "success";
 
-    return redirect()->route('setonagi',$data);
+    return;
   }
 
 

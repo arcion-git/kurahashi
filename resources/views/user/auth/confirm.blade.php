@@ -270,15 +270,15 @@ $(document).ready(function () {
       success: function (data) {
 
         setTimeout(order_update, 0);
-        Swal.fire({
-          type: "success",
-          title: "配送先店舗を変更しました",
-          position: 'bottom-end',
-          toast: true,
-          icon: 'success',
-          showConfirmButton: false,
-          timer: 1500
-        });
+        // Swal.fire({
+        //   type: "success",
+        //   title: "配送先店舗を変更しました",
+        //   position: 'bottom-end',
+        //   toast: true,
+        //   icon: 'success',
+        //   showConfirmButton: false,
+        //   timer: 1500
+        // });
       },
       error: function () {
         alert("配送先店舗を保存できません。");
