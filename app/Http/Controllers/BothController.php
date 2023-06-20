@@ -88,7 +88,7 @@ class BothController extends Controller
     $order=Order::where(['id'=> $order_id])->update(['quantity'=> $quantity]);
 
     $data = "sucsess";
-    return redirect()->route('setonagi',$data);
+    return $data;
   }
 
   // 価格を変更
