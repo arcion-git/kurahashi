@@ -176,34 +176,34 @@ class Cart extends Model
     $store = Store::where(['store_name' => $order->store_name , 'tokuisaki_name' => $order->tokuisaki_name])->first();
     $now = Carbon::now();
     if (!$user->setonagi == 1) {
-        // $buyer_recommend_item = DB::table('buyer_recommends')
-        //     ->where([
-        //         'item_id' => $item->item_id,
-        //         'sku_code' => $item->sku_code,
-        //         'tokuisaki_id' => $store->tokuisaki_id,
-        //         ['price', '>=', 1],
-        //         ['start', '<=', $now],
-        //         ['end', '>=', $now]
-        //     ])
-        //     ->where(function ($query) use ($store) {
-        //         $query->whereNull('gentei_store')
-        //               ->orWhere('gentei_store', $store->store_name);
-        //     })
-        //     ->where(function ($query) {
-        //         $query->where('zaikokanri', 1)
-        //             ->orWhere(function ($query) {
-        //                 $query->whereNull('zaikokanri')
-        //                     ->where('zaikosuu', '>=', 1);
-        //             });
-        //     })
-        //     ->first();
-        // if ($buyer_recommend_item) {
-        //     if ($buyer_recommend_item->zaikokanri == 1) {
-        //         return 99;
-        //     } else {
-        //         return $buyer_recommend_item->zaikosuu;
-        //     }
-        // }
+        $buyer_recommend_item = DB::table('buyer_recommends')
+            ->where([
+                'item_id' => $item->item_id,
+                'sku_code' => $item->sku_code,
+                'tokuisaki_id' => $store->tokuisaki_id,
+                ['price', '>=', 1],
+                ['start', '<=', $now],
+                ['end', '>=', $now]
+            ])
+            ->where(function ($query) use ($store) {
+                $query->whereNull('gentei_store')
+                      ->orWhere('gentei_store', $store->store_name);
+            })
+            ->where(function ($query) {
+                $query->where('zaikokanri', 1)
+                    ->orWhere(function ($query) {
+                        $query->whereNull('zaikokanri')
+                            ->where('zaikosuu', '>=', 1);
+                    });
+            })
+            ->first();
+        if ($buyer_recommend_item) {
+            if ($buyer_recommend_item->zaikokanri == 1) {
+                return 99;
+            } else {
+                return $buyer_recommend_item->zaikosuu;
+            }
+        }
     }
     $zaikosuu = $item->zaikosuu;
     // dd($zaikosuu);
