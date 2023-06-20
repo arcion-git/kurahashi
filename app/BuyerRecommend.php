@@ -57,4 +57,5 @@ class BuyerRecommend extends Model
     $favorite_item = favorite::where(['item_id' => $item->id , 'user_id' => $user_id])->first();
     return $favorite_item;
   }
+
 }

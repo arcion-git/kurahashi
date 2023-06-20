@@ -70,6 +70,7 @@ class LoginController extends Controller
     }
 
     public function showWelcome(){
+
         return view('user.auth.welcome');
     }
 
@@ -137,7 +138,7 @@ class LoginController extends Controller
     // ログイン後のリダイレクト先を変更
     public function redirectPath()
     {
-        return 'setonagi';
+        return 'bulk';
     }
 
 

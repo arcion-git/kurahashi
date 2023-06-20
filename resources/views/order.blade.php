@@ -105,6 +105,9 @@
 				            <th class="head-sousa head text-center">操作</th>
 				        </tr>
 				    </table>
+
+
+
 						@if(isset($groupedItems))
 				    @foreach($groupedItems as $text => $carts)
 				    <div class="accordion cartAccordion" id="cartAccordion{{ $loop->index }}">
@@ -223,7 +226,6 @@
 																				@endif
 																			</td>
 																			<td class="head-quantity text-center">
-																				{{$cart->zaikosuu()}}
 																				<select name="quantity[]" class="quantity text-center form-control" value="{{$val->quantity}}" required>
 																					@if(isset($deal))
 																						<option value="{{$val->quantity}}">{{$val->quantity}}</option>

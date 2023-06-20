@@ -4289,3 +4289,19 @@ footer .external_link ul{
 #buyerrecommend #uwagaki_kikaku{
   width: 50px;
 }
+
+.addsetonagi_btn{
+  display: block;
+}
+
+.addspecialprice_button,
+.addbuyerrecommend_button{
+  cursor: pointer;
+}
+
+.addsetonagi_link {
+    width: 100%;
+    font-size: 1em;
+    padding: 1em;
+    margin-bottom: 1em;
+}

@@ -30,7 +30,8 @@
   Route::post('/welcomepostcontact', 'UserAuth\LoginController@welcomepostcontact');
 
 
-  Route::get('/user/home', 'LoginPageController@setonagi');
+  Route::get('/user/home', 'LoginPageController@bulk');
+
   Route::get('/bulk', 'LoginPageController@bulk')->name('bulk');
 
   Route::post('/addall', 'LoginPageController@addall')->name('addall');

@@ -365,6 +365,12 @@
             <li class="nav-item">
                <a href="{{ url('/setonagi') }}" class="nav-link"><i class="fas fa-check"></i><span>限定お買い得商品</span></a>
              </li>
+             <li class="nav-item addbuyerrecommend_button">
+               <a class="nav-link"><i class="far fa-user"></i><span>担当のおすすめ商品</span></a>
+             </li>
+             <li class="nav-item addspecialprice_button">
+               <a class="nav-link"><i class="fas fa-fire"></i><span>市況商品（時価）</span></a>
+             </li>
             <!-- <li class="nav-item">
               <form action="{{ url('/addall') }}" method="POST" class="form-horizontal">
                 {{ csrf_field() }}
@@ -372,20 +378,18 @@
                 <button type="submit" class="nav-link nav_alladd"><i class="fas fa-check"></i><span>限定お買い得商品</span></button>
               </form>
             </li> -->
-            <li class="nav-item">
-              <form action="{{ url('/addall') }}" method="POST" class="form-horizontal">
+
+              <form id="addbuyerrecommend_form" style="display:none;" action="{{ url('/addall') }}" method="POST" class="form-horizontal">
                 {{ csrf_field() }}
                 <input type="hidden" name="addtype" value="addbuyerrecommend" />
                 <button type="submit" class="nav-link nav_alladd"><i class="far fa-user"></i><span>担当のおすすめ商品</span></button>
               </form>
-            </li>
-            <li class="nav-item">
-              <form action="{{ url('/addall') }}" method="POST" class="form-horizontal">
+              <form id="addspecialprice_form" style="display:none;" action="{{ url('/addall') }}" method="POST" class="form-horizontal">
                 {{ csrf_field() }}
                 <input type="hidden" name="addtype" value="addspecialprice" />
                 <button type="submit" class="nav-link nav_alladd"><i class="fas fa-fire"></i><span>市況商品（時価）</span></button>
               </form>
-            </li>
+
 
 
 
@@ -627,6 +631,14 @@
             // timer: 1500
           });
         }
+    });
+    $(document).ready(function() {
+      $(".addbuyerrecommend_button").click(function() {
+        $("#addbuyerrecommend_form").submit();
+      });
+      $(".addspecialprice_button").click(function() {
+        $("#addspecialprice_form").submit();
+      });
     });
     </script>
     <!-- <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.3.1/jquery.cookie.min.js"></script>

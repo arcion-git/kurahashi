@@ -848,8 +848,8 @@ class LoginPageController extends Controller
 
     // セトナギユーザーの場合は得意先を取得しない
     if(!$setonagi_user){
-      // $order=Order::firstOrNew(['cart_id'=> $cart->id , 'tokuisaki_name'=> $store->tokuisaki_name , 'store_name'=> $store->store_name , 'quantity'=> 1 , 'nouhin_yoteibi'=> $nouhin_yoteibi]);
-      $order=Order::firstOrNew(['cart_id'=> $cart->id , 'quantity'=> 1 , 'nouhin_yoteibi'=> $nouhin_yoteibi]);
+      $order=Order::firstOrNew(['cart_id'=> $cart->id , 'tokuisaki_name'=> $store->tokuisaki_name , 'store_name'=> $store->store_name , 'quantity'=> 1 , 'nouhin_yoteibi'=> $nouhin_yoteibi]);
+      // $order=Order::firstOrNew(['cart_id'=> $cart->id , 'quantity'=> 1 , 'nouhin_yoteibi'=> $nouhin_yoteibi]);
       if(isset($price->price)){
       $order->price = $price->price;
       }
@@ -1002,6 +1002,8 @@ class LoginPageController extends Controller
       $n++;
       }
       $get_items = $items;
+
+      // dd($items);
 
 
 
@@ -1625,12 +1627,13 @@ class LoginPageController extends Controller
 // カート画面からの遷移先
   public function order(Request $request){
 
-    // dd($request);
 
     // 会員情報を取得
     $user = Auth::guard('user')->user();
     $user_id = $user->id;
     $setonagi = $user->setonagi;
+
+    // BtoBユーザーの会員情報を取得
     if(!$setonagi){
       $kaiin_number = $user->kaiin_number;
       $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get()->unique('tokuisaki_id');
@@ -1676,32 +1679,53 @@ class LoginPageController extends Controller
         $store = Store::where(['store_name'=>$store, 'tokuisaki_name'=> $tokuisaki_name])->first();
         $tokuisaki_id = $store->tokuisaki_id;
         $store_name = $store->store_name;
-        if($addtype == 'addsetonagi'){
 
+        // セトナギ商品を使う場合
+        if($addtype == 'addsetonagi'){
+          $carts = Cart::join('items', 'carts.item_id', '=', 'items.id')
+          ->join('setonagi_items', function ($join) {
+              $join->on('setonagi_items.item_id', '=', 'items.item_id')
+                   ->on('setonagi_items.sku_code', '=', 'items.sku_code');
+          })
+          ->where(['carts.user_id'=>$user_id, 'deal_id'=> null, 'addtype'=>$addtype])
+          ->where('items.zaikosuu', '>=', 0.1)
+          ->get(['carts.*']);
+          $groupedItems = $carts->groupBy('groupe');
+          // dd($groupedItems);
         }elseif($addtype == 'addbuyerrecommend'){
           // 担当のおすすめ商品を取得
-          $buyer_recommends = BuyerRecommend::where('tokuisaki_id', $tokuisaki_id)
-          ->where('price', '>=', 1)
+          $carts = Cart::join('items', 'carts.item_id', '=', 'items.id')
+          ->join('buyer_recommends', function ($join) {
+              $join->on('buyer_recommends.item_id', '=', 'items.item_id')
+                   ->on('buyer_recommends.sku_code', '=', 'items.sku_code');
+          })
+          ->where(['carts.user_id'=>$user_id, 'deal_id'=> null, 'addtype'=>$addtype])
+          ->where('buyer_recommends.tokuisaki_id', $tokuisaki_id)
+          ->where('buyer_recommends.price', '>=', 1)
           ->where(function ($query) use ($store_name) {
-              $query->whereNull('gentei_store')
-                    ->orWhere('gentei_store', $store_name);
+              $query->whereNull('buyer_recommends.gentei_store')
+                    ->orWhere('buyer_recommends.gentei_store', $store_name);
           })
-          ->where('start', '<=' , $now)
-          ->where('end', '>=', $now)
-          ->where('nouhin_end', '>=', $nouhin_yoteibi)
+          ->where('buyer_recommends.start', '<=', $now)
+          ->where('buyer_recommends.end', '>=', $now)
+          ->where('buyer_recommends.nouhin_end', '>=', $nouhin_yoteibi)
           ->where(function ($query) {
-              $query->where('zaikokanri', 1)
-                ->orWhere(function ($query) {
-              $query->whereNull('zaikokanri')
-                ->where('zaikosuu', '>=', 1);
-                })
-                ->orWhere(function ($query) {
-              $query->whereNull('zaikokanri')
-                ->whereNull('zaikosuu');
-              });
+              $query->where('buyer_recommends.zaikokanri', 1)
+                  ->orWhere(function ($query) {
+                      $query->whereNull('buyer_recommends.zaikokanri')
+                            ->where('buyer_recommends.zaikosuu', '>=', 1);
+                  })
+                  ->orWhere(function ($query) {
+                      $query->whereNull('buyer_recommends.zaikokanri')
+                            ->whereNull('buyer_recommends.zaikosuu')
+                            ->where('items.zaikosuu', '>=', 0.1);
+                  });
           })
-          ->orderByRaw('CAST(order_no AS UNSIGNED)', 'asc')->get();
-          $addtype_items = $buyer_recommends;
+          ->orderByRaw('CAST(buyer_recommends.order_no AS UNSIGNED)', 'asc')
+          ->get(['carts.*']);
+          $groupedItems = $carts->groupBy('groupe');
+          // dd($carts);
+          // dd($groupedItems);
         }elseif($addtype == 'addspecialprice'){
           // 市況商品を取得
           if($setonagi){
@@ -1710,41 +1734,46 @@ class LoginPageController extends Controller
           }else{
             // BtoBの価格グループを取得
             $price_groupe = PriceGroupe::where(['tokuisaki_id'=>$store->tokuisaki_id,'store_id'=>$store->store_id])->first()->price_groupe;
+            // dd($price_groupe);
           }
-          // 市況商品を取得
-          $special_price_items = SpecialPrice::where('price_groupe',$price_groupe)
-          ->where('start', '<=' , $now)
-          ->where('end', '>=', $now)
-          ->where('nouhin_end', '>=', $nouhin_yoteibi)->get();
-          $addtype_items = $special_price_items;
+          $carts = Cart::join('items', 'carts.item_id', '=', 'items.id')
+          ->join('special_prices', function ($join) {
+              $join->on('special_prices.item_id', '=', 'items.item_id')
+                   ->on('special_prices.sku_code', '=', 'items.sku_code');
+          })
+          ->where(['carts.user_id'=>$user_id, 'deal_id'=> null, 'addtype'=>$addtype])
+          ->where('special_prices.price_groupe',$price_groupe)
+          ->where('special_prices.start', '<=' , $now)
+          ->where('special_prices.end', '>=', $now)
+          ->where('special_prices.nouhin_end', '>=', $nouhin_yoteibi)
+          ->where('items.zaikosuu', '>=', 0.1)
+          ->get(['carts.*']);
+          $addtype_items = $carts;
+          $groupedItems = $carts->groupBy('groupe');
         }else{
           $carts = Cart::where(['user_id'=>$user_id, 'deal_id'=> null, 'addtype'=>$addtype])->get();
           $groupedItems = $carts->groupBy('groupe');
         }
-        if(isset($addtype_items)){
-        $carts = collect();
-          foreach ($addtype_items as $addtype_item) {
-            $item = Item::where(['item_id'=>$addtype_item->item_id, 'sku_code'=> $addtype_item->sku_code])->first();
-            $item_id = $item->id;
-            $price = $addtype_item->price;
-            $cart_loop = Cart::whereHas('orders', function ($query) use ($price, $item_id, $user_id, $addtype) {
-                $query->where('price', $price);
-            })
-            ->whereNull('deal_id')
-            ->where('item_id', $item_id)
-            ->where('user_id', $user_id)
-            ->where('addtype', $addtype)
-            ->first();
-            $carts->push($cart_loop); // カートをコレクションに追加
-          }
-          // 商品の重複を避けるためユニークする得意先の商品は
-          // $uniqueCarts = $carts->unique('id');
-          // $carts = collect($uniqueCarts->values());
-          // dd($carts);
-          $groupedItems = $carts->groupBy('groupe');
+        if(isset($addtype_items) && $addtype == 'addspecialprice'){
+          // $carts = collect();
+          // foreach ($addtype_items as $addtype_item) {
+          //   $item = Item::where(['item_id'=>$addtype_item->item_id, 'sku_code'=> $addtype_item->sku_code])->first();
+          //   $item_id = $item->id;
+          //   $price = $addtype_item->price;
+          //   $cart_loop = Cart::whereHas('orders', function ($query) use ($price, $item_id, $user_id, $addtype) {
+          //       $query->where('price', $price);
+          //   })
+          //   ->whereNull('deal_id')
+          //   ->where('item_id', $item_id)
+          //   ->where('user_id', $user_id)
+          //   ->where('addtype', $addtype)
+          //   ->first();
+          //   $carts->push($cart_loop); // カートをコレクションに追加
+          // }
+          // $groupedItems = $carts->groupBy('groupe');
         }else{
-          $carts = Cart::where(['user_id'=>$user_id, 'deal_id'=> null , 'addtype'=> $addtype])->get();
-          $groupedItems = null;
+          // $carts = Cart::where(['user_id'=>$user_id, 'deal_id'=> null , 'addtype'=> $addtype])->get();
+          // $groupedItems = null;
         }
       }else{
         $carts = Cart::where(['user_id'=>$user_id, 'deal_id'=> null , 'addtype'=> $addtype])->get();
@@ -1755,11 +1784,16 @@ class LoginPageController extends Controller
       $groupedItems = null;
     }
 
+    // if($carts){
+    // dd($carts);
+    // }
+
     // Log::debug($carts);
 
     if($carts->isNotEmpty()) {
       foreach ($carts as $cart) {
         $set_order = Order::where(['cart_id'=>$cart->id])->first();
+        // dd($set_order);
         $message = null;
         if($set_order){
           break;
@@ -1806,35 +1840,35 @@ class LoginPageController extends Controller
 
 
     // 表示可能な得意先のおすすめ商品を取得
-    $now = Carbon::now();
-    $kaiin_number = Auth::guard('user')->user()->kaiin_number;
-    $buyer_recommends = [];
-    $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get()->unique('tokuisaki_id');
-    foreach ($tokuisaki_ids as $key => $value) {
-      // dd($value->tokuisaki_id);
-      $buyer_recommend_loop = BuyerRecommend::where('tokuisaki_id', $value->tokuisaki_id)
-      ->whereNotNull('nouhin_end')
-      ->where('price', '>=', '1')
-      ->where('start', '<=' , $now)
-      ->where('end', '>=', $now)
-      ->orderBy('order_no', 'asc')->get();
-      // array_push($buyer_recommends, $buyer_recommend_loop);
-      $buyer_recommends = collect($buyer_recommends)->merge($buyer_recommend_loop);
-    }
+    // $now = Carbon::now();
+    // $kaiin_number = Auth::guard('user')->user()->kaiin_number;
+    // $buyer_recommends = [];
+    // $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get()->unique('tokuisaki_id');
+    // foreach ($tokuisaki_ids as $key => $value) {
+    //   // dd($value->tokuisaki_id);
+    //   $buyer_recommend_loop = BuyerRecommend::where('tokuisaki_id', $value->tokuisaki_id)
+    //   ->whereNotNull('nouhin_end')
+    //   ->where('price', '>=', '1')
+    //   ->where('start', '<=' , $now)
+    //   ->where('end', '>=', $now)
+    //   ->orderBy('order_no', 'asc')->get();
+    //   // array_push($buyer_recommends, $buyer_recommend_loop);
+    //   $buyer_recommends = collect($buyer_recommends)->merge($buyer_recommend_loop);
+    // }
 
 
 
     // dd($buyer_recommends);
 
     // 表示可能な担当のおすすめ商品を取得
-    $recommends = Recommend::where('user_id', $user_id)
-    ->where('price', '>=', '1')
-    ->where('start', '<=' , $now)
-    ->where('end', '>=', $now)
-    ->orderBy('order_no', 'asc')->get();
-
-    // 得意先のおすすめ商品、担当のおすすめ商品をマージ処理
-    $recommends = $recommends->merge($buyer_recommends);
+    // $recommends = Recommend::where('user_id', $user_id)
+    // ->where('price', '>=', '1')
+    // ->where('start', '<=' , $now)
+    // ->where('end', '>=', $now)
+    // ->orderBy('order_no', 'asc')->get();
+    //
+    // // 得意先のおすすめ商品、担当のおすすめ商品をマージ処理
+    // $recommends = $recommends->merge($buyer_recommends);
 
 
 
@@ -1910,7 +1944,7 @@ class LoginPageController extends Controller
      'set_order' => $set_order,
      'all_nouhin_end' => $all_nouhin_end,
      'groupedItems' => $groupedItems,
-     'recommends' => $recommends,
+     // 'recommends' => $recommends,
      'show_favorite' => $show_favorite,
      'url' => $url,
      'seted_store' => $store,

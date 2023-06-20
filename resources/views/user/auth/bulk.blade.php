@@ -17,13 +17,17 @@
       <div class="col-12">
         <div class="card">
           <div class="card-body">
-            <div class="">
-               <a href="{{ url('/setonagi') }}" class="btn btn-warning"><span>限定お買い得商品</span></a>
+            <div class="addsetonagi_btn">
               <!-- <form action="{{ url('/addall') }}" method="POST" class="form-horizontal">
                 {{ csrf_field() }}
                 <input type="hidden" name="addtype" value="addsetonagi" />
                 <button id="" type="submit" class="btn btn-warning">限定お買い得商品</button>
               </form> -->
+
+                <!-- <input type="hidden" name="addtype" value="addsetonagi" />
+                <button id="" type="submit" class="btn btn-warning">限定お買い得商品</button> -->
+                <a href="{{ url('/setonagi') }}" class="btn btn-warning addsetonagi_link"><span>限定お買い得商品</span></a>
+
             </div>
             <div class="">
               <form action="{{ url('/addall') }}" method="POST" class="form-horizontal">
