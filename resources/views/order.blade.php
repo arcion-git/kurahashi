@@ -224,7 +224,6 @@
 																				@endif
 																			</td>
 																			<td class="head-quantity text-center">
-																				{{$cart->zaikosuu()}}
 																				<select name="quantity[]" class="quantity text-center form-control" value="{{$val->quantity}}" required>
 																					@if(isset($deal))
 																						<option value="{{$val->quantity}}">{{$val->quantity}}</option>
