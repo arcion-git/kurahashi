@@ -269,7 +269,7 @@ $(document).ready(function () {
       },
       success: function (data) {
 
-        order_update();
+        setTimeout(order_update, 0);
         // Swal.fire({
         //   type: "success",
         //   title: "配送先店舗を変更しました",
@@ -305,7 +305,7 @@ $(document).ready(function () {
       },
       success: function (data) {
 
-        order_update();
+        setTimeout(order_update, 0);
         // Swal.fire({
         //   type: "success",
         //   title: "納品予定日を変更しました。",
