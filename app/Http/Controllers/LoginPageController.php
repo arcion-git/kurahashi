@@ -1216,14 +1216,10 @@ class LoginPageController extends Controller
           // $order->price = $setonagi_item->price;
           // }
 
-          if($setonagi_user){
-            if($addtype == 'addbuyerrecommend'){
-              // 担当のおすすめ商品価格上書き
-              $recommend_item = Recommend::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'user_id'=>$user_id])->first();
-              if(isset($recommend_item->price)){
-              $order->price = $recommend_item->price;
-              }
-            }
+          // 担当のおすすめ商品価格上書き
+          $recommend_item = Recommend::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'user_id'=>$user_id])->first();
+          if(isset($recommend_item->price)){
+          $order->price = $recommend_item->price;
           }
 
           // BtoSBは納品予定日を格納
@@ -1763,9 +1759,17 @@ class LoginPageController extends Controller
       $groupedItems = null;
     }
 
-    // if($carts){
-    // dd($carts);
-    // }
+    if(isset($store) && isset($nouhin_yoteibi)){
+      foreach ($carts as $cart) {
+        // オーダー内容を保存
+        $order = Order::where(['cart_id'=> $cart->id])->first();
+        $order->store_name = $store_name;
+        $order->tokuisaki_name = $tokuisaki_name;
+        $order->nouhin_yoteibi = $nouhin_yoteibi;
+        $order->save();
+      }
+    }
+
 
     // Log::debug($carts);
 

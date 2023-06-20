@@ -249,42 +249,46 @@ $(document).ready(function () {
   }
 
   $(document).on("change", ".change_all_store", function () {
-    var element = $(".user_id:first");
-    var user_id = element.attr("id");
-    var addtype = '{{ $addtype }}';
-    var store_name = $(this).val();
-    var tokuisaki_name = $(this).find('option:selected').attr("id");
-
-    $.ajax({
-      headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-      },
-      url: location.origin + '/change_all_store',
-      type: 'POST',
-      data: {
-        'user_id': user_id,
-        'addtype': addtype,
-        'store_name': store_name,
-        'tokuisaki_name': tokuisaki_name,
-      },
-      success: function (data) {
-
-        setTimeout(order_update, 0);
-        // Swal.fire({
-        //   type: "success",
-        //   title: "配送先店舗を変更しました",
-        //   position: 'bottom-end',
-        //   toast: true,
-        //   icon: 'success',
-        //   showConfirmButton: false,
-        //   timer: 1500
-        // });
-      },
-      error: function () {
-        alert("配送先店舗を保存できません。");
-      }
-    });
+    order_update();
   });
+
+  // $(document).on("change", ".change_all_store", function () {
+  //   var element = $(".user_id:first");
+  //   var user_id = element.attr("id");
+  //   var addtype = '{{ $addtype }}';
+  //   var store_name = $(this).val();
+  //   var tokuisaki_name = $(this).find('option:selected').attr("id");
+  //
+  //   $.ajax({
+  //     headers: {
+  //       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+  //     },
+  //     url: location.origin + '/change_all_store',
+  //     type: 'POST',
+  //     data: {
+  //       'user_id': user_id,
+  //       'addtype': addtype,
+  //       'store_name': store_name,
+  //       'tokuisaki_name': tokuisaki_name,
+  //     },
+  //     success: function (data) {
+  //
+  //       setTimeout(order_update, 0);
+  //       // Swal.fire({
+  //       //   type: "success",
+  //       //   title: "配送先店舗を変更しました",
+  //       //   position: 'bottom-end',
+  //       //   toast: true,
+  //       //   icon: 'success',
+  //       //   showConfirmButton: false,
+  //       //   timer: 1500
+  //       // });
+  //     },
+  //     error: function () {
+  //       alert("配送先店舗を保存できません。");
+  //     }
+  //   });
+  // });
 
   $(document).on("change", ".change_all_nouhin_yoteibi", function () {
     var element = $(".user_id:first");
