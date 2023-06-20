@@ -181,17 +181,21 @@ class Cart extends Model
                 'item_id' => $item->item_id,
                 'sku_code' => $item->sku_code,
                 'tokuisaki_id' => $store->tokuisaki_id,
+                ['price', '>=', 1],
+                ['start', '<=', $now],
+                ['end', '>=', $now]
             ])
-            ->where('price', '>=', 1)
-            ->where(function ($query) use ($now) {
+            ->where(function ($query) use ($store) {
+                $query->whereNull('gentei_store')
+                      ->orWhere('gentei_store', $store->store_name);
+            })
+            ->where(function ($query) {
                 $query->where('zaikokanri', 1)
                     ->orWhere(function ($query) {
                         $query->whereNull('zaikokanri')
                             ->where('zaikosuu', '>=', 1);
                     });
             })
-            ->where('start', '<=', $now)
-            ->where('end', '>=', $now)
             ->first();
         if ($buyer_recommend_item) {
             if ($buyer_recommend_item->zaikokanri == 1) {
