@@ -269,7 +269,7 @@ $(document).ready(function () {
       },
       success: function (data) {
 
-        setTimeout(order_update, 0);
+        order_update();
         // Swal.fire({
         //   type: "success",
         //   title: "配送先店舗を変更しました",
@@ -305,16 +305,16 @@ $(document).ready(function () {
       },
       success: function (data) {
 
-        setTimeout(order_update, 0);
-        Swal.fire({
-          type: "success",
-          title: "納品予定日を変更しました。",
-          position: 'bottom-end',
-          toast: true,
-          icon: 'success',
-          showConfirmButton: false,
-          timer: 1500
-        });
+        order_update();
+        // Swal.fire({
+        //   type: "success",
+        //   title: "納品予定日を変更しました。",
+        //   position: 'bottom-end',
+        //   toast: true,
+        //   icon: 'success',
+        //   showConfirmButton: false,
+        //   timer: 1500
+        // });
       },
       error: function () {
         alert("納品予定日を変更できませんでした。");
