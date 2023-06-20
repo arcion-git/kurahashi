@@ -236,7 +236,7 @@
 																						<option value="{{$val->quantity}}">{{$val->quantity}}</option>
 																						@endif
 																					@endif
-																					@if(request()->input('addtype') === 'addbuyerrecommend')
+																					@if($cart->addtype == 'addbuyerrecommend')
 																						@for ($i = 0; $i <= $cart->zaikosuu(); $i++)
 																						<option value="{{$i}}">{{$i}}</option>
 																						@endfor
