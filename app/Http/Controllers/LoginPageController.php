@@ -1754,27 +1754,6 @@ class LoginPageController extends Controller
           $carts = Cart::where(['user_id'=>$user_id, 'deal_id'=> null, 'addtype'=>$addtype])->get();
           $groupedItems = $carts->groupBy('groupe');
         }
-        if(isset($addtype_items) && $addtype == 'addspecialprice'){
-          // $carts = collect();
-          // foreach ($addtype_items as $addtype_item) {
-          //   $item = Item::where(['item_id'=>$addtype_item->item_id, 'sku_code'=> $addtype_item->sku_code])->first();
-          //   $item_id = $item->id;
-          //   $price = $addtype_item->price;
-          //   $cart_loop = Cart::whereHas('orders', function ($query) use ($price, $item_id, $user_id, $addtype) {
-          //       $query->where('price', $price);
-          //   })
-          //   ->whereNull('deal_id')
-          //   ->where('item_id', $item_id)
-          //   ->where('user_id', $user_id)
-          //   ->where('addtype', $addtype)
-          //   ->first();
-          //   $carts->push($cart_loop); // カートをコレクションに追加
-          // }
-          // $groupedItems = $carts->groupBy('groupe');
-        }else{
-          // $carts = Cart::where(['user_id'=>$user_id, 'deal_id'=> null , 'addtype'=> $addtype])->get();
-          // $groupedItems = null;
-        }
       }else{
         $carts = Cart::where(['user_id'=>$user_id, 'deal_id'=> null , 'addtype'=> $addtype])->get();
         $groupedItems = null;
