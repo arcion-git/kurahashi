@@ -39,35 +39,40 @@ class Cart extends Model
 
   public function favoriteitem() {
 
-    $favorite_item = Favorite::where(['item_id' => $this->item_id , 'user_id' => $this->user_id])->first();
+    $favorite_item = DB::table('favorites')
+        ->where('item_id', $this->item_id)
+        ->where('user_id', $this->user_id)
+        ->first();
+    // $favorite_item = Favorite::where(['item_id' => $this->item_id , 'user_id' => $this->user_id])->first();
     return $favorite_item;
   }
 
+
   public function hidden_price() {
     $item = $this->belongsTo('App\Item', 'item_id')->first();
-    $user = $this->belongsTo('App\User', 'user_id')->first();
+    // $order = $this->belongsTo('App\Order', 'id')->first();
+    $order = Order::where(['cart_id' => $this->id])->first();
 
-    $kaiin_number = $user->kaiin_number;
     $now = Carbon::now();
+    $store = Store::where(['tokuisaki_name'=>$order->tokuisaki_name,'store_name'=>$order->store_name])->first();
 
-    $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get()->unique('tokuisaki_id');
+    // 担当のおすすめ商品の納品期日を探す
+    $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $store->tokuisaki_id)
+    ->where('price', '>=', '1')
+    ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
+    ->where('start', '<=' , $now)
+    ->where('end', '>=', $now)
+    ->first();
 
-    foreach ($tokuisaki_ids as $key => $value) {
-      // 担当のおすすめ商品の納品期日を探す
-      $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $value->tokuisaki_id)
-      ->where('price', '>=', '1')
-      ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
-      ->whereDate('start', '<=' , $now)
-      ->whereDate('end', '>=', $now)
-      ->first();
-      if(isset($buyer_recommend_item)){
-        return $buyer_recommend_item->hidden_price;
-      }
+    if(isset($buyer_recommend_item)){
+      return $buyer_recommend_item->hidden_price;
+    }else{
+      $buyer_recommend_item = null;
+      return $buyer_recommend_item;
     }
-    $buyer_recommend_item = null;
-    return $buyer_recommend_item;
 
   }
+
 
   public function nouhin_end() {
     $item = $this->belongsTo('App\Item', 'item_id')->first();
@@ -83,8 +88,8 @@ class Cart extends Model
       $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $value->tokuisaki_id)
       ->where('price', '>=', '1')
       ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
-      ->whereDate('start', '<=' , $now)
-      ->whereDate('end', '>=', $now)
+      ->where('start', '<=' , $now)
+      ->where('end', '>=', $now)
       ->orderBy('order_no', 'asc')->first();
       // dd($buyer_recommend_item);
       if(isset($buyer_recommend_item)){
@@ -93,8 +98,8 @@ class Cart extends Model
       // 市況商品の納品期日を探す
       $price_groupe = PriceGroupe::where(['tokuisaki_id'=>$value->tokuisaki_id,'store_id'=>$value->store_id])->first();
       $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'price_groupe'=>$price_groupe->price_groupe])
-      ->whereDate('start', '<=' , $now)
-      ->whereDate('end', '>=', $now)->first();
+      ->where('start', '<=' , $now)
+      ->where('end', '>=', $now)->first();
       if(isset($special_price_item)){
         return $special_price_item->nouhin_end;
       }else{
@@ -129,8 +134,8 @@ class Cart extends Model
           $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $store->tokuisaki_id)
           ->where('price', '>=', '1')
           ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
-          ->whereDate('start', '<=' , $now)
-          ->whereDate('end', '>=', $now)->first();
+          ->where('start', '<=' , $now)
+          ->where('end', '>=', $now)->first();
           // dd($buyer_recommend_item);
           if(isset($buyer_recommend_item)){
             // $stores = collect($stores)->merge($store);
@@ -160,6 +165,8 @@ class Cart extends Model
     return collect($stores);
   }
 
+
+
   public function zaikosuu() {
     $item = $this->belongsTo('App\Item', 'item_id')->first();
     $user = $this->belongsTo('App\User', 'user_id')->first();
@@ -168,29 +175,31 @@ class Cart extends Model
     $order = Order::where(['cart_id' => $this->id])->first();
     $store = Store::where(['store_name' => $order->store_name , 'tokuisaki_name' => $order->tokuisaki_name])->first();
     $now = Carbon::now();
-    if(!$user->setonagi == 1){
-      // 担当のおすすめ商品の在庫管理をしない場合を探す
-      $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $store->tokuisaki_id)
-      ->where('price', '>=', 1)
-      ->where('zaikokanri', 1)
-      ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
-      ->whereDate('start', '<=' , $now)
-      ->whereDate('end', '>=', $now)->first();
-      if(isset($buyer_recommend_item)){
-        return 99;
-      }
-      // 担当のおすすめ商品の在庫数を探す
-      $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $store->tokuisaki_id)
-      ->where('price', '>=', 1)
-      ->whereNull('zaikokanri')
-      ->where('zaikosuu', '>=', 1)
-      ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
-      ->whereDate('start', '<=' , $now)
-      ->whereDate('end', '>=', $now)
-      ->orderBy('order_no', 'asc')->first();
-      if(isset($buyer_recommend_item)){
-        return $buyer_recommend_item->zaikosuu;
-      }
+    if (!$user->setonagi == 1) {
+        $buyer_recommend_item = DB::table('buyer_recommends')
+            ->where([
+                'item_id' => $item->item_id,
+                'sku_code' => $item->sku_code,
+                'tokuisaki_id' => $store->tokuisaki_id,
+            ])
+            ->where('price', '>=', 1)
+            ->where(function ($query) use ($now) {
+                $query->where('zaikokanri', 1)
+                    ->orWhere(function ($query) {
+                        $query->whereNull('zaikokanri')
+                            ->where('zaikosuu', '>=', 1);
+                    });
+            })
+            ->where('start', '<=', $now)
+            ->where('end', '>=', $now)
+            ->first();
+        if ($buyer_recommend_item) {
+            if ($buyer_recommend_item->zaikokanri == 1) {
+                return 99;
+            } else {
+                return $buyer_recommend_item->zaikosuu;
+            }
+        }
     }
     $zaikosuu = $item->zaikosuu;
     // dd($zaikosuu);
@@ -217,8 +226,8 @@ class Cart extends Model
         // 市況商品の納品期日を探す
         $price_groupe = PriceGroupe::where(['tokuisaki_id'=>$value->tokuisaki_id,'store_id'=>$value->store_id])->first();
         $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'price_groupe'=>$price_groupe->price_groupe])
-        ->whereDate('start', '<=' , $now)
-        ->whereDate('end', '>=', $now)->first();
+        ->where('start', '<=' , $now)
+        ->where('end', '>=', $now)->first();
         if(isset($special_price_item)){
           return true;
           break;
@@ -251,9 +260,9 @@ class Cart extends Model
         ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
         ->where('sku_code' , $item->sku_code)
         ->where('price', '>=', '1')
-        ->whereDate('start', '<=' , $now)
-        ->whereDate('end', '>=', $now)
-        ->whereDate('nouhin_end', '>=', $order->nouhin_yoteibi)->first();
+        ->where('start', '<=' , $now)
+        ->where('end', '>=', $now)
+        ->where('nouhin_end', '>=', $order->nouhin_yoteibi)->first();
         if(isset($buyerrecommend)){
           break;
         }
@@ -293,8 +302,8 @@ class Cart extends Model
           $price_groupe = PriceGroupe::where(['tokuisaki_id'=>$value->tokuisaki_id,'store_id'=>$value->store_id])->first();
         }
         $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'price_groupe'=>$price_groupe->price_groupe])
-        ->whereDate('start', '<=' , $now)
-        ->whereDate('end', '>=', $now)->first();
+        ->where('start', '<=' , $now)
+        ->where('end', '>=', $now)->first();
         if(isset($special_price_item)){
           return true;
           break;

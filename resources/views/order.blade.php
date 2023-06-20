@@ -138,7 +138,7 @@
 															@if($url == 'approval' && $cart->order_this())
 															@else
 
-															<!-- カートに1つでも商品があり、BtoBユーザーか確認 -->
+															<!-- カートに1つでも商品があるか、BtoBユーザーか確認 -->
 															@if(!isset($set_order) && !$user->setonagi)
 															@else
 
@@ -177,7 +177,6 @@
 																	@foreach($cart->orders as $val)
 																		<tr id="{{$val->id}}" class="order_item">
 																			<td class="head-price text-center">
-
 																				<!-- BtoB金額表示 -->
 																				@if(!$user->setonagi)
 																					@if($cart->hidden_price() == '1')
@@ -188,7 +187,6 @@
 																					<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="@if($val->price=='未定'){{(0)}}@else{{ $val->price }}@endif" value="@if($val->price=='未定')未定@else{{ number_format($val->price)}}@endif" readonly>
 																					@endif
 																				@endif
-
 																				<!-- BtoSB金額表示 -->
 																				@if($user->setonagi)
 																				<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="{{$val->price}}" value="{{number_format($val->price)}}" readonly>
