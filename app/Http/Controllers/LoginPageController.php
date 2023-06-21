@@ -968,7 +968,8 @@ class LoginPageController extends Controller
             ->whereNotNull('nouhin_end')
             ->where('price', '>=', '1')
             ->where('start', '<=' , $now)
-            ->where('end', '>=', $now)->get();
+            ->where('end', '>=', $now)
+            ->orderByRaw('CAST(order_no AS UNSIGNED) asc')->get();
             $buyer_recommends = collect($buyer_recommends)->merge($buyer_recommend_loop);
           }
           $get_items = $buyer_recommends;
