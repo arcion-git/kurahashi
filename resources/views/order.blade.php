@@ -209,9 +209,9 @@
 
 																					<!-- 該当する得意先店舗のみが選べるように -->
 
-																						@if($cart->stores())
-																							<?php $store_lists = $cart->stores()?>
-																							@foreach($store_lists as $store)
+																						@if($stores)
+
+																							@foreach($stores as $store)
 																								<option id="{{$store->tokuisaki_name}}" value="{{$store->store_name}}">{{$store->tokuisaki_name}} {{$store->store_name}}</option>
 																							@endforeach
 																							<!-- <option value="all_store">全店舗に追加</option> -->
@@ -263,7 +263,7 @@
 																				Kg
 																				@endif
 																			</td>
-																			@if(!$user->setonagi)
+																		{{--	@if(!$user->setonagi)
 																			<td class="head-yoteibi text-center">
 																					<input type="text" name="nouhin_yoteibi[]" class="nouhin_yoteibi nouhin_yoteibi_{{$cart->id}} text-center form-control daterange-cus datepicker" value="{{$val->nouhin_yoteibi}}" autocomplete="off" required>
 																					@if($user->kyuujitu_haisou == 1)
@@ -307,7 +307,7 @@
 																				@endif
 																			</td>
 																			<input name="order_id[]" class="order_id" type="hidden" value="{{$val->id}}" />
-																		</tr>
+																		</tr> --}}
 																	@endforeach
 																	</table>
 																</td>
@@ -646,7 +646,7 @@
 											@foreach($stores as $store)
 												<option id="{{$store->tokuisaki_name}}" value="{{$store->store_name}}">{{$store->tokuisaki_name}} {{$store->store_name}}</option>
 											@endforeach
-											<option value="all_store_nini">全店舗に追加</option>
+											<!-- <option value="all_store_nini">全店舗に追加</option> -->
 										</select>
 									</td>
 									<td class="head-quantity text-center">
