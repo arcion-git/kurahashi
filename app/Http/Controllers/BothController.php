@@ -77,7 +77,7 @@ class BothController extends Controller
     }
 
     $data = "sucsess";
-    return redirect()->route('setonagi',$data);
+    return $data;
   }
 
   // 個数を変更
@@ -159,7 +159,7 @@ class BothController extends Controller
     $cart_nini_id = $request->cart_nini_id;
     $cart_nini_tantou= CartNini::where(['id'=> $cart_nini_id])->update(['tantou_name'=> $nini_tantou]);
     $data = "success";
-    return redirect()->route('setonagi',$data);
+    return $data;
   }
 
   // 任意の商品名を保存
@@ -168,7 +168,7 @@ class BothController extends Controller
     $cart_nini_id = $request->cart_nini_id;
     $cart_nini_item_name= CartNini::where(['id'=> $cart_nini_id])->update(['item_name'=> $nini_item_name]);
     $data = "success";
-    return redirect()->route('setonagi',$data);
+    return $data;
   }
 
   // 任意の価格を保存
@@ -177,7 +177,7 @@ class BothController extends Controller
     $order_nini_id = $request->order_nini_id;
     $order_nini_price = OrderNini::where(['id'=> $order_nini_id])->update(['price'=> $nini_price]);
     $data = "success";
-    return redirect()->route('setonagi',$data);
+    return $data;
   }
 
   // 任意の数量を保存
@@ -186,7 +186,7 @@ class BothController extends Controller
     $order_nini_id = $request->order_nini_id;
     $order_nini_quantity = OrderNini::where(['id'=> $order_nini_id])->update(['quantity'=> $nini_quantity]);
     $data = "success";
-    return redirect()->route('setonagi',$data);
+    return $data;
   }
 
   // 任意の納品予定日を保存

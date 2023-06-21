@@ -918,8 +918,8 @@ if(document.URL.match("/approval")) {
       .done(function(data) {
         // console.log(data);
         // setTimeout(doReload);
-        setTimeout(order_update);
-        setTimeout(dealorder_update);
+        // setTimeout(order_update);
+        // setTimeout(dealorder_update);
         Swal.fire({
           type:"success",
           title: "任意の商品名を保存しました",
@@ -961,8 +961,8 @@ if(document.URL.match("/approval")) {
       .done(function(data) {
         // console.log(data);
         // setTimeout(doReload);
-        setTimeout(order_update);
-        setTimeout(dealorder_update);
+        // setTimeout(order_update);
+        // setTimeout(dealorder_update);
         Swal.fire({
           type:"success",
           title: "担当を変更しました",
@@ -1047,8 +1047,8 @@ if(document.URL.match("/approval")) {
       .done(function(data) {
         // console.log(data);
         // setTimeout(doReload);
-        setTimeout(order_update);
-        setTimeout(dealorder_update);
+        // setTimeout(order_update);
+        // setTimeout(dealorder_update);
         Swal.fire({
           type:"success",
           title: "数量（単位）を変更しました",

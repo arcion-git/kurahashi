@@ -616,7 +616,7 @@
 					@foreach($cart_ninis as $cart_nini)
 					<tr width="" id="{{$cart_nini->id}}" class="cart_nini_item">
 						<input name="cart_nini_id[]" type="hidden" value="{{$cart_nini->id}}" />
-						<td class="cart_nini_id_{$cart_nini->id}} head-nini_item_name">
+						<td class="cart_nini_id_{{$cart_nini->id}} head-nini_item_name">
 							<input name="nini_item_name[]" class="nini_item_name form-control" value="{{$cart_nini->item_name}}" required>
 						</td>
 						<td class="head-nini_tantou text-center">
