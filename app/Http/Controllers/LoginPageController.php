@@ -1736,7 +1736,7 @@ class LoginPageController extends Controller
                             ->where('items.zaikosuu', '>=', 0.1);
                   });
           })
-          // ->orderByRaw('CAST(buyer_recommends.order_no AS UNSIGNED)', 'asc')
+          ->orderByRaw('CAST(buyer_recommends.order_no AS UNSIGNED) asc')
           ->select('carts.*', DB::raw('IF(buyer_recommends.zaikokanri IS NULL AND buyer_recommends.zaikosuu > 1, buyer_recommends.zaikosuu, items.zaikosuu) AS zaikosuu'))
           ->get();
           foreach ($carts as $cart) {
