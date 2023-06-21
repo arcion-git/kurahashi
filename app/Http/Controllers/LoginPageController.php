@@ -749,32 +749,31 @@ class LoginPageController extends Controller
 
   public function addcart(Request $request){
 
+    $user = Auth::guard('user')->user();
     $user_id = Auth::guard('user')->user()->id;
     $item_id = $request->item_id;
     $item = Item::where('id',$item_id)->first();
 
-    $setonagi_user = Auth::guard('user')->user()->setonagi;
+    $setonagi_user = $user->setonagi;
     // dd($setonagi_user);
 
-    // セトナギユーザーの場合は取得しない
+    // BtoB納品店舗取得
     if(!$setonagi_user){
-      $kaiin_number = Auth::guard('user')->user()->kaiin_number;
-      // dd($kaiin_number);
+
+      $kaiin_number = $user->kaiin_number;
+
       $store_user = StoreUser::where('user_id',$kaiin_number)->first(['store_id','tokuisaki_id']);
-      // dd($store_user);
+
       $store = Store::where([ 'tokuisaki_id'=> $store_user->tokuisaki_id,'store_id'=> $store_user->store_id ])->first();
-      // dd($store);
 
-      $price_groupe = PriceGroupe::where([ 'tokuisaki_id'=> $store_user->tokuisaki_id,'store_id'=> $store_user->store_id ])->first();
-      // dd($price_groupe->price_groupe);
-      // $price_groupe = $store->price_groupe();
+      // $price_groupe = PriceGroupe::where([ 'tokuisaki_id'=> $store_user->tokuisaki_id,'store_id'=> $store_user->store_id ])->first();
+      //
+      // $price = Price::where(['price_groupe'=>$price_groupe->price_groupe, 'item_id'=> $item->item_id , 'sku_code'=> $item->sku_code])->first();
 
-      // dd($item);
-      // dd($item->sku_code);
-      $price = Price::where(['price_groupe'=>$price_groupe->price_groupe, 'item_id'=> $item->item_id , 'sku_code'=> $item->sku_code])->first();
-      // dd($price);
     }
 
+
+    // 既にカートに入っていないか確認
     $cart_in=Cart::where(['user_id'=> $user_id , 'item_id'=> $item->id , 'deal_id'=> null , 'addtype'=> 'addsetonagi'])->first();
     if($cart_in){
       return response()->json([
@@ -782,11 +781,11 @@ class LoginPageController extends Controller
       ]);
     }
 
-    // HOMEから追加されるのは限定お買い得商品（セトナギ商品だけ）なのでaddtypeをaddsetonagiに変更
-    $cart=Cart::firstOrNew(['user_id'=> $user_id , 'item_id'=> $item->id , 'deal_id'=> null]);
-    $cart->addtype = 'addsetonagi';
-    $cart->save();
 
+
+    // HOMEから追加されるのは限定お買い得商品（セトナギ商品だけ）なのでaddtypeをaddsetonagiに変更
+    $cart=Cart::firstOrNew(['user_id' => $user_id , 'item_id' => $item->id , 'deal_id' => null , 'addtype' => 'addsetonagi']);
+    $cart->save();
 
     // 次の営業日を取得
     $today = date("Y-m-d");
@@ -850,58 +849,52 @@ class LoginPageController extends Controller
     if(!$setonagi_user){
       $order=Order::firstOrNew(['cart_id'=> $cart->id , 'tokuisaki_name'=> $store->tokuisaki_name , 'store_name'=> $store->store_name , 'quantity'=> 1 , 'nouhin_yoteibi'=> $nouhin_yoteibi]);
       // $order=Order::firstOrNew(['cart_id'=> $cart->id , 'quantity'=> 1 , 'nouhin_yoteibi'=> $nouhin_yoteibi]);
-      if(isset($price->price)){
-      $order->price = $price->price;
-      }
+      // if(isset($price->price)){
+      // $order->price = $price->price;
+      // }
     }else{
       $order=Order::firstOrNew(['cart_id'=> $cart->id , 'quantity'=> 1 , 'nouhin_yoteibi'=> $nouhin_yoteibi]);
     }
 
 
-    // ユーザーの会員番号を取得
-    if(!$setonagi_user){
-      $kaiin_number = Auth::guard('user')->user()->kaiin_number;
-    }
-    $item = Item::where('id',$item_id)->first();
-
 
     // return Response::json($item);
 
-    // 市況商品価格上書き
-    $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])->first();
-    if(isset($special_price_item->price)){
-    $order->price = $special_price_item->price;
-    }
+    // // 市況商品価格上書き
+    // $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])->first();
+    // if(isset($special_price_item->price)){
+    // $order->price = $special_price_item->price;
+    // }
 
 
 
-    $user = Auth::guard('user')->user();
-    $now = Carbon::now();
-    if(!$setonagi_user){
-      $buyer_recommends = [];
-      $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get()->unique('tokuisaki_id');
-      foreach ($tokuisaki_ids as $key => $value) {
-        // 担当のおすすめ商品の価格を探す
-        $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $value->tokuisaki_id)
-        ->where('price', '>=', '1')
-        ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
-        ->where('start', '<=' , $now)
-        ->where('end', '>=', $now)
-        ->orderBy('order_no', 'asc')->first();
-        // dd($buyer_recommend_item);
-        if(isset($buyer_recommend_item)){
-          $order->price = $buyer_recommend_item->price;
-        }
-        // 市況商品の価格を探す
-        $price_groupe = PriceGroupe::where(['tokuisaki_id'=>$value->tokuisaki_id,'store_id'=>$value->store_id])->first();
-        $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'price_groupe'=>$price_groupe->price_groupe])
-        ->where('start', '<=' , $now)
-        ->where('end', '>=', $now)->first();
-        if(isset($special_price_item)){
-          $order->price = $special_price_item->price;
-        }
-      }
-    }
+    // $user = Auth::guard('user')->user();
+    // $now = Carbon::now();
+    // if(!$setonagi_user){
+    //   $buyer_recommends = [];
+    //   $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get()->unique('tokuisaki_id');
+    //   foreach ($tokuisaki_ids as $key => $value) {
+    //     // 担当のおすすめ商品の価格を探す
+    //     $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $value->tokuisaki_id)
+    //     ->where('price', '>=', '1')
+    //     ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
+    //     ->where('start', '<=' , $now)
+    //     ->where('end', '>=', $now)
+    //     ->orderBy('order_no', 'asc')->first();
+    //     // dd($buyer_recommend_item);
+    //     if(isset($buyer_recommend_item)){
+    //       $order->price = $buyer_recommend_item->price;
+    //     }
+    //     // 市況商品の価格を探す
+    //     $price_groupe = PriceGroupe::where(['tokuisaki_id'=>$value->tokuisaki_id,'store_id'=>$value->store_id])->first();
+    //     $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'price_groupe'=>$price_groupe->price_groupe])
+    //     ->where('start', '<=' , $now)
+    //     ->where('end', '>=', $now)->first();
+    //     if(isset($special_price_item)){
+    //       $order->price = $special_price_item->price;
+    //     }
+    //   }
+    // }
 
     // セトナギ商品上書き
     $setonagi_item = SetonagiItem::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])->first();
@@ -910,15 +903,15 @@ class LoginPageController extends Controller
     }
 
     // 担当のおすすめ商品価格上書き
-    $recommend_item = Recommend::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'user_id'=>$user_id])->first();
-    if(isset($recommend_item->price)){
-    $order->price = $recommend_item->price;
-    }
+    // $recommend_item = Recommend::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'user_id'=>$user_id])->first();
+    // if(isset($recommend_item->price)){
+    // $order->price = $recommend_item->price;
+    // }
 
     $order->save();
 
     $data = "sucsess";
-    return redirect()->route('setonagi',$data);
+    return $data;
   }
 
 
@@ -927,12 +920,38 @@ class LoginPageController extends Controller
       $user = Auth::guard('user')->user();
       $user_id = $user->id;
       $setonagi_user = $user->setonagi;
-      $now = Carbon::now();
-
       $addtype = $request->addtype;
 
+      // 日時
+      $now = Carbon::now()->toDateTimeString();
+
+      // BtoBの会員情報を取得
+      if(!$setonagi_user){
+
+        // 会員番号
+        $kaiin_number = $user->kaiin_number;
+
+        // デフォルトでセットを行う店舗を取得
+        $store_user = StoreUser::where('user_id',$kaiin_number)->first(['store_id','tokuisaki_id']);
+        $store = Store::where([ 'tokuisaki_id'=> $store_user->tokuisaki_id,'store_id'=> $store_user->store_id ])->first();
+
+        // 得意先IDを取得
+        $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get()->unique('tokuisaki_id');
+
+        // 価格グループを取得
+        $price_groupe = PriceGroupe::where([ 'tokuisaki_id'=> $store_user->tokuisaki_id,'store_id'=> $store_user->store_id ])->first();
+      }
+
+      // BtoSBユーザーごとのおすすめ商品取得
+      if($setonagi_user){
+      $recommends = Recommend::where('user_id', $user_id)
+        ->where('start', '<=' , $now)
+        ->where('end', '>=', $now)->get();
+      }
+
+      // カートに追加する商品をaddtypeごとに取得
       if($addtype == 'addsetonagi'){
-        // セトナギ商品を取得
+        // 限定お買い得商品を取得
         $setonagi_items = SetonagiItem::where('start_date', '<=' , $now)->where('end_date', '>=', $now)->get();
         $get_items = $setonagi_items;
       }elseif($addtype == 'addbuyerrecommend'){
@@ -952,7 +971,6 @@ class LoginPageController extends Controller
             $buyer_recommends = collect($buyer_recommends)->merge($buyer_recommend_loop);
           }
           $get_items = $buyer_recommends;
-          // dd($get_items);
         }else{
           // セトナギ会員
           $recommends = Recommend::where('user_id', $user_id)
@@ -983,9 +1001,7 @@ class LoginPageController extends Controller
         }
       }
 
-      // 市況商品のテストから
-
-      // 在庫がある商品だけを取得
+      // 在庫がある商品だけを取得（addbuyerrecommendば全て入れる）
       $items = [];
       $n=1;
       foreach ($get_items as $get_item) {
@@ -1003,25 +1019,8 @@ class LoginPageController extends Controller
       }
       $get_items = $items;
 
-      // dd($items);
-
-
-
       // カートに1つでも商品があるか判定
-      $carts =  Cart::where('user_id',$user_id)->get();
-
-      $now = Carbon::now()->addDay(3)->format('Y-m-d');
-
-      // ユーザーごとのおすすめ商品取得
-      $recommends = Recommend::where('user_id', $user_id)
-      ->where('start', '<=' , $now)
-      ->where('end', '>=', $now)->get();
-
-      // 市況商品取得
-      $special_prices = SpecialPrice::get();
-
-      // 日時
-      $now = Carbon::now()->toDateTimeString();
+      // $carts =  Cart::where('user_id',$user_id)->get();
 
       // 次の営業日を取得
       $today = date("Y-m-d");
@@ -1059,49 +1058,25 @@ class LoginPageController extends Controller
         }
       }
 
-      // ここからカートへの追加処理を商品ごとに行う
-
+      // ここからカートへの追加処理を商品ごとに行う（限定お買い得商品は追加しない）
       if($addtype == 'addsetonagi'){
         }else{
         foreach ($items as $item) {
 
+          // アイテム情報を取得
           $item = Item::where([ 'item_id'=>$item->item_id,'sku_code'=> $item->sku_code ])->first();
 
-          $setonagi_user = Auth::guard('user')->user()->setonagi;
-          // dd($setonagi_user);
-
-          // 法人のみ
           if(!$setonagi_user){
-            $kaiin_number = Auth::guard('user')->user()->kaiin_number;
-            // dd($kaiin_number);
-            $store_user = StoreUser::where('user_id',$kaiin_number)->first(['store_id','tokuisaki_id']);
-            // dd($store_user);
-            $store = Store::where([ 'tokuisaki_id'=> $store_user->tokuisaki_id,'store_id'=> $store_user->store_id ])->first();
-            // dd($store);
-
-            $price_groupe = PriceGroupe::where([ 'tokuisaki_id'=> $store_user->tokuisaki_id,'store_id'=> $store_user->store_id ])->first();
-            // dd($price_groupe);
-            // dd($price_groupe->price_groupe);
-            // $price_groupe = $store->price_groupe();
-
-            // dd($item);
-            // dd($item->sku_code);
+            // 価格グループから取得ができる商品価格を取得
             $price = Price::where(['price_groupe'=>$price_groupe->price_groupe, 'item_id'=> $item->item_id , 'sku_code'=> $item->sku_code])->first();
-            // dd($price);
           }
 
-          $cart_in=Cart::where(['user_id'=> $user_id , 'item_id'=> $item->id , 'deal_id'=> null])->first();
-          // if($cart_in){
-          //   return response()->json([
-          //   'message' => 'cart_in',
-          //   ]);
-          // }
+          // 商品ごとに商品価格の上書きを始める
 
-          // dd($addtype);
-
-          if($addtype == 'addbuyerrecommend'){
-            if(!$setonagi_user){
-              $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get()->unique('tokuisaki_id');
+          // 法人会員
+          if(!$setonagi_user){
+            // 担当のおすすめ商品の場合の上書き項目を取得
+            if($addtype == 'addbuyerrecommend'){
               foreach ($tokuisaki_ids as $key => $value) {
                 $buyerrecommend = BuyerRecommend::where('tokuisaki_id', $value->tokuisaki_id)
                 ->where('item_id' , $item->item_id)
@@ -1119,20 +1094,13 @@ class LoginPageController extends Controller
             }
           }
 
+          // 市況商品の場合は、部署名をグループ名とする
           if($addtype == 'addspecialprice'){
             $groupe = $item->busho_name;
-            // $groupe = $item->groupe;
           }
 
-          if(!$addtype == 'addsetonagi'){
-            // その他の商品の処理
-            $cart=Cart::where(['user_id'=> $user_id , 'item_id'=> $item->id , 'deal_id'=> null])->first();
-          }else{
-            // 限定お買い得商品の処理
-            $cart=Cart::firstOrNew(['user_id'=> $user_id , 'item_id'=> $item->id , 'deal_id'=> null]);
-          }
-
-
+          // カート情報を保存
+          $cart=Cart::firstOrNew(['user_id'=> $user_id , 'item_id'=> $item->id , 'deal_id'=> null]);
           $cart->addtype = $addtype;
 
           if(isset($groupe)){
@@ -1147,10 +1115,10 @@ class LoginPageController extends Controller
           $cart->save();
 
 
+          // オーダー情報を保存
           // BtoBユーザーの場合は、オーダーに納品予定日と得意先名を保存
           if(!$setonagi_user){
-            // $order=Order::firstOrNew(['cart_id'=> $cart->id , 'quantity'=> 1 , 'nouhin_yoteibi'=> $nouhin_yoteibi]);
-            $order=Order::firstOrNew(['cart_id'=> $cart->id]);
+            $order=Order::firstOrNew(['cart_id'=> $cart->id , 'nouhin_yoteibi'=> $nouhin_yoteibi]);
             $order->tokuisaki_name = $store->tokuisaki_name;
             $order->store_name = $store->store_name;
             $order->nouhin_yoteibi = $nouhin_yoteibi;
@@ -1158,31 +1126,14 @@ class LoginPageController extends Controller
               $order->price = $price->price;
             }
           }else{
-            // $order=Order::firstOrNew(['cart_id'=> $cart->id , 'quantity'=> 1 , 'nouhin_yoteibi'=> $nouhin_yoteibi]);
-            $order=Order::firstOrNew(['cart_id'=> $cart->id]);
+            $order=Order::firstOrNew(['cart_id'=> $cart->id , 'nouhin_yoteibi' => $nouhin_yoteibi]);
           }
 
           $set_order = $order;
 
-          // ユーザーの会員番号を取得
-          if(!$setonagi_user){
-            $kaiin_number = Auth::guard('user')->user()->kaiin_number;
-          }
-
-          // 市況商品価格上書き
-          $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])->first();
-          if(isset($special_price_item->price)){
-          $order->price = $special_price_item->price;
-          }
-
-          // カートに入った商品価格の上書きを行う
-          $user = Auth::guard('user')->user();
-          $now = Carbon::now();
-
           // BtoB
           if(!$setonagi_user){
             $buyer_recommends = [];
-            $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get()->unique('tokuisaki_id');
             foreach ($tokuisaki_ids as $key => $value) {
               // 担当のおすすめ商品の価格上書き
               if($addtype == 'addbuyerrecommend'){
@@ -1195,6 +1146,7 @@ class LoginPageController extends Controller
                 // dd($buyer_recommend_item);
                 if(isset($buyer_recommend_item)){
                   $order->price = $buyer_recommend_item->price;
+                  break;
                 }
               }
               // 市況商品の価格上書き
@@ -1205,6 +1157,7 @@ class LoginPageController extends Controller
                 ->where('end', '>=', $now)->first();
                 if(isset($special_price_item)){
                   $order->price = $special_price_item->price;
+                  break;
                 }
               }
             }
@@ -1213,14 +1166,14 @@ class LoginPageController extends Controller
           // セトナギ商品価格上書き
           // $setonagi_item = SetonagiItem::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])->first();
           // if(isset($setonagi_item->price)){
-          // $order->price = $setonagi_item->price;
+          //   $order->price = $setonagi_item->price;
           // }
 
           // 担当のおすすめ商品価格上書き
-          $recommend_item = Recommend::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'user_id'=>$user_id])->first();
-          if(isset($recommend_item->price)){
-          $order->price = $recommend_item->price;
-          }
+          // $recommend_item = Recommend::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'user_id'=>$user_id])->first();
+          // if(isset($recommend_item->price)){
+          // $order->price = $recommend_item->price;
+          // }
 
           // BtoSBは納品予定日を格納
           if($setonagi_user){
@@ -1233,7 +1186,6 @@ class LoginPageController extends Controller
 
 
       // 任意の商品の納品先店舗と予定日を変更
-
       if(!$setonagi_user){
         if(isset($order)){
           $cart_ninis =  CartNini::where(['user_id'=>$user_id, 'deal_id'=> null])->get();
@@ -1255,7 +1207,6 @@ class LoginPageController extends Controller
         // 'store_name'=>$order->store_name,
         'addtype'=>$addtype,
       ];
-
       return redirect()->route('confirm',$data);
   }
 
@@ -1845,7 +1796,7 @@ class LoginPageController extends Controller
     $currentDate = Carbon::now();
     $oneMonthLater = $currentDate->addMonth();
 
-    // フォーマットの指定例
+    // 1ヶ月後をフォーマット指定
     $oneMonthLaterFormatted = $oneMonthLater->format('Y-m-d');
     $all_nouhin_end = $oneMonthLaterFormatted;
 

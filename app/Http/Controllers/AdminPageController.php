@@ -216,8 +216,11 @@ class AdminPageController extends Controller
     // dd($user_id);
 
     // 取引IDが一致しているものを取得
-    $carts =  Cart::where(['user_id'=>$user_id, 'deal_id'=> $deal_id])->get();
+    $carts = Cart::where(['user_id'=>$user_id, 'deal_id'=> $deal_id])->get();
     $cart_ninis = CartNini::where(['user_id'=>$user_id, 'deal_id'=> $deal_id])->get();
+
+
+
 
     // 休日についての処理
     $today = date("Y-m-d");
@@ -287,6 +290,7 @@ class AdminPageController extends Controller
      'user' => $user,
      'setonagi' => $setonagi,
      'sano_nissuu' => $sano_nissuu,
+     'set_order' => $set_order,
      'collect' => $collect,
     ];
     return view('order', $data);

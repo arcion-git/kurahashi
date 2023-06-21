@@ -26,6 +26,7 @@ class Cart extends Model
     'deal_id',
     'item_id',
     'quantity',
+    'addtype',
   ];
   public function item() {
       //リレーション

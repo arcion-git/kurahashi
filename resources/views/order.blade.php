@@ -12,7 +12,6 @@
 		<tr>
 			<th class="">納入先店舗</th>
 			<th class="">
-
 				<select id="change_all_store" name="change_all_store" class="change_all_store text-center form-control" value="" required>
 					<option id="@if(isset($set_order)){{$set_order->tokuisaki_name}}@endif" value="@if(isset($set_order)){{$set_order->store_name}}@endif">@if(isset($set_order)){{$set_order->tokuisaki_name}} {{$set_order->store_name}}@endif</option>
 					@foreach($stores as $store)
@@ -156,12 +155,14 @@
 																		@else
 																		{{$cart->item->item_name}}
 																	@endif
-																	@if($cart->addtype == 'addbuyerrecommend')
-																		@if($cart->favoriteitem())
-			                              <span name="item_id" value="{{$cart->item->id}}" id="{{$cart->item->id}}" class="favoritebutton removefavoriteitem"><i class="fa fa-heart"></i></span>
-			                              @else
-			                              <span name="item_id" value="{{$cart->item->id}}" id="{{$cart->item->id}}" class="favoritebutton addfavoriteitem"><i class="far fa-heart"></i></span>
-			                              @endif
+																	@if(!isset($deal))
+																		@if($cart->addtype == 'addbuyerrecommend')
+																			@if($cart->favoriteitem())
+				                              <span name="item_id" value="{{$cart->item->id}}" id="{{$cart->item->id}}" class="favoritebutton removefavoriteitem"><i class="fa fa-heart"></i></span>
+				                              @else
+				                              <span name="item_id" value="{{$cart->item->id}}" id="{{$cart->item->id}}" class="favoritebutton addfavoriteitem"><i class="far fa-heart"></i></span>
+				                              @endif
+																		@endif
 																	@endif
 																</td>
 																<td class="head-sanchi cartid_{{$cart->id}} text-center">
@@ -225,13 +226,14 @@
 																			</td>
 																			<td class="head-quantity text-center">
 																				<select name="quantity[]" class="quantity text-center form-control" value="{{$val->quantity}}" required>
+
 																					@if(isset($deal))
 																						<option value="{{$val->quantity}}">{{$val->quantity}}</option>
 																					@else
 																						@if($val->quantity == 1)
-																						<option value="{{$val->quantity}}">{{$val->quantity}}</option>
+																							<option value="{{$val->quantity}}">{{$val->quantity}}</option>
 																						@elseif($val->quantity)
-																						<option value="{{$val->quantity}}">{{$val->quantity}}</option>
+																							<option value="{{$val->quantity}}">{{$val->quantity}}</option>
 																						@endif
 																					@endif
 																					@if($cart->addtype == 'addbuyerrecommend')

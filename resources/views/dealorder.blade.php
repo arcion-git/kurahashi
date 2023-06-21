@@ -1,6 +1,60 @@
 
 
-
+@if(!$user->setonagi)
+<div class="table-responsive" id="nouhin_store_nouhin_yoteibi">
+	<div class="section-title">納品先・納品日</div>
+	<table id="{{$user->id}}" class="user_id table table-striped table-hover table-md cart-wrap">
+		<tr>
+			<th class="">納入先店舗</th>
+			<th class="">
+				<select id="change_all_store" name="change_all_store" class="change_all_store text-center form-control" value="" readonly>
+					<option id="@if(isset($set_order)){{$set_order->tokuisaki_name}}@endif" value="@if(isset($set_order)){{$set_order->store_name}}@endif">@if(isset($set_order)){{$set_order->tokuisaki_name}} {{$set_order->store_name}}@endif</option>
+					@foreach($stores as $store)
+						<option id="@if(isset($set_order)){{$store->tokuisaki_name}}@endif" value="{{$store->store_name}}">{{$store->tokuisaki_name}} {{$store->store_name}}</option>
+					@endforeach
+					<input type="hidden" name="set_tokuisaki_name" value="@if(isset($set_order)){{$set_order->tokuisaki_name}}@endif" id="set_tokuisaki_name" />
+				</select>
+			</th>
+		</tr>
+		<tr>
+			<th class="">納品予定日</th>
+			<td class="text-center">
+					<input id="change_all_nouhin_yoteibi" type="text" name="change_all_nouhin_yoteibi" class="change_all_nouhin_yoteibi text-center form-control daterange-cus datepicker" value="@if(isset($set_order)){{$set_order->nouhin_yoteibi}}@endif" autocomplete="off" required readonly>
+					@if($user->kyuujitu_haisou == 1)
+					<script>
+					$('.change_all_nouhin_yoteibi').datepicker({
+						format: 'yyyy-mm-dd',
+						autoclose: true,
+						assumeNearbyYear: true,
+						language: 'ja',
+						startDate: '{{$sano_nissuu}}',
+						endDate: '{{$all_nouhin_end}}',
+					});
+					</script>
+					@else
+					<script>
+					$('.change_all_nouhin_yoteibi').datepicker({
+						format: 'yyyy-mm-dd',
+						autoclose: true,
+						assumeNearbyYear: true,
+						language: 'ja',
+						startDate: '{{$sano_nissuu}}',
+						endDate: '{{$all_nouhin_end}}',
+						defaultViewDate: Date(),
+						datesDisabled: [
+						@foreach($holidays as $holiday)
+						'{{$holiday}}',
+						@endforeach
+					],
+					});
+					</script>
+					@endif
+			</td>
+			</th>
+		</tr>
+	</table>
+</div>
+@endif
 
 <div class="table-responsive mt-4">
 	<div class="section-title">オーダー内容</div>
