@@ -70,7 +70,7 @@ class LoginPageController extends Controller
 
       return view('user/auth/questionnaire', ['categories' => $categories]);
   }
-  
+
 
 
 
@@ -969,7 +969,7 @@ class LoginPageController extends Controller
             ->where('price', '>=', '1')
             ->where('start', '<=' , $now)
             ->where('end', '>=', $now)
-            ->orderByRaw('CAST(order_no AS UNSIGNED)', 'asc')->get();
+            ->orderByRaw('CAST(order_no AS UNSIGNED) asc')->get();
             $buyer_recommends = collect($buyer_recommends)->merge($buyer_recommend_loop);
           }
           $get_items = $buyer_recommends;
