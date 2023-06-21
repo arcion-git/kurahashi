@@ -732,6 +732,7 @@ class BothController extends Controller
 
       $carts = Cart::where(['user_id'=>$user_id, 'deal_id'=> $deal_id])->get();
 
+
       foreach ($carts as $cart) {
         $set_order = Order::where(['cart_id'=>$cart->id])->first();
         if($set_order){
@@ -740,9 +741,15 @@ class BothController extends Controller
       }
       $groupedItems = $carts->groupBy('groupe');
 
+
+
       // 取引IDが一致しているものを取得
-      $cart_ninis =  CartNini::where(['user_id'=>$user_id, 'deal_id'=> $deal_id])->get();
+      if(!$setonagi){
+        $cart_ninis =  CartNini::where(['user_id'=>$user_id, 'deal_id'=> $deal_id])->get();
       // dd($cart_ninis);
+      }else{
+        $cart_ninis = null;
+      }
 
       // 休日についての処理
       $today = date("Y-m-d");
@@ -830,8 +837,11 @@ class BothController extends Controller
       $collect_token = config('app.collect_token');
 
 
+
+
       $data=
       ['deal' => $deal,
+       'setonagi' => $setonagi,
        'carts' => $carts,
        'cart_ninis' => $cart_ninis,
        'stores' => $stores,
@@ -850,6 +860,7 @@ class BothController extends Controller
        'collect_touroku' => $collect_touroku,
        'collect_token' => $collect_token,
       ];
+
       // return view('order', $data)->with($message);
       return view('order', $data);
     }

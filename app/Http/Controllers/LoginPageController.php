@@ -1161,6 +1161,16 @@ class LoginPageController extends Controller
                 }
               }
             }
+          }else{
+            if($addtype == 'addspecialprice'){
+              $price_groupe = '10000000005';
+              $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'price_groupe'=>$price_groupe])
+              ->where('start', '<=' , $now)
+              ->where('end', '>=', $now)->first();
+              if(isset($special_price_item)){
+                $order->price = $special_price_item->price;
+              }
+            }
           }
 
           // セトナギ商品価格上書き
@@ -1590,14 +1600,13 @@ class LoginPageController extends Controller
     // 会員情報を取得
     $user = Auth::guard('user')->user();
     $user_id = $user->id;
-    $setonagi = $user->setonagi;
+    $setonagi = Setonagi::where('user_id',$user->id)->first();
 
     // BtoBユーザーの会員情報を取得
     if(!$setonagi){
       $kaiin_number = $user->kaiin_number;
       $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get()->unique('tokuisaki_id');
     }
-
     // オーダー画面の変数を格納
     if(isset($request->addtype)){
       $addtype = $request->addtype;
@@ -1633,13 +1642,54 @@ class LoginPageController extends Controller
     $now = Carbon::now();
 
 
-    if(isset($addtype)){
-      if(isset($store) && isset($nouhin_yoteibi)){
-        $store = Store::where(['store_name'=>$store, 'tokuisaki_name'=> $tokuisaki_name])->first();
-        $tokuisaki_id = $store->tokuisaki_id;
-        $store_name = $store->store_name;
+    if($setonagi){
+      // 直近の納品予定日を取得
+      $today = date("Y-m-d");
+      $holidays = Holiday::pluck('date');
+      $currentTime = date('H:i:s');
+      // 19時より前の処理
+      if (strtotime($currentTime) < strtotime('17:00:00')) {
+        $holidays = Holiday::pluck('date')->toArray();
+        for($i = 1; $i < 10; $i++){
+          $today_plus = date('Y-m-d', strtotime($today.'+'.$i.'day'));
+          // dd($today_plus2);
+          $key = array_search($today_plus,(array)$holidays,true);
+          if($key){
+              // 休みでないので納品日を格納
+          }else{
+              // 休みなので次の日付を探す
+              $nouhin_yoteibi = $today_plus;
+              break;
+          }
+        }
+      }else{
+      // 19時より後の処理
+        $holidays = Holiday::pluck('date')->toArray();
+        for($i = 2; $i < 10; $i++){
+          $today_plus = date('Y-m-d', strtotime($today.'+'.$i.'day'));
+          // dd($today_plus2);
+          $key = array_search($today_plus,(array)$holidays,true);
+          if($key){
+              // 休みでないので納品日を格納
+          }else{
+              // 休みなので次の日付を探す
+              $nouhin_yoteibi = $today_plus;
+              break;
+          }
+        }
+      }
+      $sano_nissuu = $nouhin_yoteibi;
+    }
 
-        // セトナギ商品を使う場合
+
+    if(isset($addtype)){
+      if(isset($store) && isset($nouhin_yoteibi) && !isset($setonagi) || isset($setonagi)){
+        if(!$setonagi){
+          $store = Store::where(['store_name'=>$store, 'tokuisaki_name'=> $tokuisaki_name])->first();
+          $tokuisaki_id = $store->tokuisaki_id;
+          $store_name = $store->store_name;
+        }
+        // 限定お買い得商品を利用する場合
         if($addtype == 'addsetonagi'){
           $carts = Cart::join('items', 'carts.item_id', '=', 'items.id')
           ->join('setonagi_items', function ($join) {
@@ -1689,10 +1739,6 @@ class LoginPageController extends Controller
           foreach ($carts as $cart) {
               $cart->zaikosuu = floatval($cart->zaikosuu);
           }
-
-          // ->get(['carts.*']);
-
-
           $groupedItems = $carts->groupBy('groupe');
           // dd($carts);
           // dd($groupedItems);
@@ -1735,26 +1781,27 @@ class LoginPageController extends Controller
 
 
     // 納品先を変更
-    if(isset($store) && isset($nouhin_yoteibi)){
-      foreach ($carts as $cart) {
-        // オーダー内容を保存
-        $order = Order::where(['cart_id'=> $cart->id])->first();
-        $order->store_name = $store_name;
-        $order->tokuisaki_name = $tokuisaki_name;
-        $order->nouhin_yoteibi = $nouhin_yoteibi;
-        $order->save();
-      }
-      $cart_ninis = CartNini::where(['user_id' => $user_id , 'deal_id' => null])->get();
-      if($cart_ninis){
-        foreach ($cart_ninis as $cart_nini) {
+    if(!$setonagi){
+      if(isset($store) && isset($nouhin_yoteibi)){
+        foreach ($carts as $cart) {
           // オーダー内容を保存
-          $ordernini = OrderNini::where(['cart_nini_id'=> $cart_nini->id])->first();
-          $ordernini->nouhin_yoteibi = $nouhin_yoteibi;
-          $ordernini->save();
+          $order = Order::where(['cart_id'=> $cart->id])->first();
+          $order->store_name = $store_name;
+          $order->tokuisaki_name = $tokuisaki_name;
+          $order->nouhin_yoteibi = $nouhin_yoteibi;
+          $order->save();
+        }
+        $cart_ninis = CartNini::where(['user_id' => $user_id , 'deal_id' => null])->get();
+        if($cart_ninis){
+          foreach ($cart_ninis as $cart_nini) {
+            // オーダー内容を保存
+            $ordernini = OrderNini::where(['cart_nini_id'=> $cart_nini->id])->first();
+            $ordernini->nouhin_yoteibi = $nouhin_yoteibi;
+            $ordernini->save();
+          }
         }
       }
     }
-
 
 
 
@@ -1785,7 +1832,12 @@ class LoginPageController extends Controller
 
 
 
-    $cart_ninis = CartNini::where(['user_id'=>$user_id, 'deal_id'=> null])->get();
+
+    if(!$setonagi){
+      $cart_ninis = CartNini::where(['user_id'=>$user_id, 'deal_id'=> null])->get();
+    }else{
+      $cart_ninis = null;
+    }
 
     $today = date("Y-m-d");
     $holidays = Holiday::pluck('date');
@@ -1800,12 +1852,16 @@ class LoginPageController extends Controller
     $oneMonthLaterFormatted = $oneMonthLater->format('Y-m-d');
     $all_nouhin_end = $oneMonthLaterFormatted;
 
-    $stores = [];
 
-    foreach ($tokuisaki_ids as $key => $value) {
-      $stores_loop = Store::where(['tokuisaki_id'=>$value->tokuisaki_id,'store_id'=>$value->store_id])->first();
-      array_push($stores, $stores_loop);
-      // $stores = collect($stores);
+    if(!$setonagi){
+      $stores = [];
+      foreach ($tokuisaki_ids as $key => $value) {
+        $stores_loop = Store::where(['tokuisaki_id'=>$value->tokuisaki_id,'store_id'=>$value->store_id])->first();
+        array_push($stores, $stores_loop);
+        // $stores = collect($stores);
+      }
+    }else{
+      $stores = null;
     }
 
 
@@ -1842,9 +1898,6 @@ class LoginPageController extends Controller
 
 
 
-    $user = Auth::guard('user')->user();
-    $setonagi = Setonagi::where('user_id',$user_id)->first();
-    // dd($user->setonagi);
 
     // 直近の納品予定日を取得
     $today = date("Y-m-d");
@@ -1881,9 +1934,8 @@ class LoginPageController extends Controller
         }
       }
     }
-    // $sano_nissuu = '+'.((strtotime($nouhin_yoteibi) - strtotime($today)) / 86400).'d';
-    // dd($sano_nissuu);
     $sano_nissuu = $nouhin_yoteibi;
+
 
     if(isset($data->memo)){
     $memo -> $request->memo;

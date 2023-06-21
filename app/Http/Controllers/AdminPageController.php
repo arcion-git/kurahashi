@@ -322,6 +322,7 @@ class AdminPageController extends Controller
     $user = User::where('id',$deal->user_id)->first();
     $user_id = $deal->user_id;
 
+
     if($user->setonagi == 1){
       // SETOnagiユーザーはクレジットカード、もしくは、ヤマトかけばらいの金額を変更する
       // クロネコかけ払い決済取消
@@ -394,7 +395,6 @@ class AdminPageController extends Controller
         $result = simplexml_load_string($response->getBody()->getContents());
         // dd($result);
         if($result->returnCode == 1){
-          $delete_deal = Deal::where(['id'=> $deal_id])->first()->delete();
           if($result->errorCode == 123456){
             // 後で処理を作る
             $message = '掛け払い金額オーバー';
@@ -441,7 +441,6 @@ class AdminPageController extends Controller
         $response = $client->request('POST', $url, $option);
         $result = simplexml_load_string($response->getBody()->getContents());
         if($result->returnCode == 1){
-          $delete_deal = Deal::where(['id'=> $deal_id])->first()->delete();
           if($result->errorCode == 123456){
             // 後で処理を作る
             $message = '掛け払い金額オーバー';
@@ -458,10 +457,11 @@ class AdminPageController extends Controller
         }
       }
 
-    }else{
-      // 法人ユーザーのみ確認待ちに変更
-      $deal->status = '確認待';
     }
+    // else{
+    //   // 法人ユーザーのみ確認待ちに変更
+    //   $deal->status = '確認待';
+    // }
     // $deal->kakunin_time = Carbon::now();
     // $deal->save();
 
@@ -545,9 +545,8 @@ class AdminPageController extends Controller
 
     foreach ($setonagi_users as $setonagi_user) {
       $user_id = $setonagi_user->user_id;
-      $user =  User::where('id',$user_id)->first();
-
-
+      $user = User::where('id',$user_id)->first();
+      // dd($user_id);
       // ヤマトAPI連携利用金額確認
       $client = new Client();
       $url = config('app.kakebarai_riyoukingaku');
@@ -590,7 +589,7 @@ class AdminPageController extends Controller
         'form_params' => [
           'traderCode' => $kakebarai_traderCode,
           // バイヤーid
-          'buyerId' => $user->id,
+          'buyerId' => $user_id,
           'buyerTelNo' => '',
           'passWord' => $kakebarai_passWord
         ]

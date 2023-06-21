@@ -1,4 +1,6 @@
 
+
+
 @if(request()->input('addtype') == 'addbuyerrecommend' && $user->setonagi)
 @else
 <div class="table-responsive" id="nouhin_store_nouhin_yoteibi">
@@ -170,6 +172,7 @@
 																		{{$cart->item->sanchi_name}}
 																	@else
 																	@endif
+
 																</td>
 																<td class="head-zaikosuu cartid_{{$cart->id}} text-center">{{$cart->item->zaikosuu}}</td>
 																<!-- <td class="cartid_{$cart->id}} text-center">{{$cart->item->tokkijikou}}</td> -->
@@ -185,14 +188,16 @@
 																					<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="未定" value="未定" readonly>
 																					@else
 																					<!-- BtoB通常金額表示 -->
-																					<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="@if($val->price=='未定'){{(0)}}@else{{ $val->price }}@endif" value="@if($val->price=='未定')未定@else{{ number_format($val->price)}}@endif" readonly>
+																					<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="@if($val->price=='未定'){{(0)}}@else{{ $val->price }}@endif" value="@if($val->price=='未定')未定@else{{number_format($val->price)}}@endif" readonly>
+																					@endif
+																				@else
+																					@if(isset($deal))
+																						<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="{{$val->price}}" value="@if( Auth::guard('admin')->check() ){{ $val->price }}@else{{number_format($val->price)}}@endif">
+																					@else
+																					<!-- BtoSB金額表示 -->
+																						<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="{{ $val->price }}" value="{{number_format($val->price)}}" readonly>
 																					@endif
 																				@endif
-																				<!-- BtoSB金額表示 -->
-																				@if($user->setonagi)
-																				<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="{{$val->price}}" value="{{number_format($val->price)}}" readonly>
-																				@endif
-
 																			</td>
 
 																			@if(!$user->setonagi)
@@ -609,7 +614,7 @@
 	          <th class="head-nini_item_name text-center">商品名</th>
 	          <th class="head-nini_tantou text-center">担当</th>
 	          <th class="head-store text-center">納品先店舗</th>
-	          <th class="head-quantity text-center">数量（単位）</th>
+	          <th class="head-quantity text-center">数量</th>
 	          <th class="head-yoteibi text-center">納品予定日</th>
 	          <th class="head-sousa text-center">操作</th>
 	        </tr>
@@ -703,34 +708,38 @@ $('.nini_nouhin_yoteibi').datepicker({
 <div id="tax" class="total_price">税：</div>
 <div id="all_total" class="total_price">税込金額：</div> -->
 <script>
-$(document).ready( function(){
-    // update_field();
-      var target = $('.total').map(function (index, el) {
-			var total = $(this).closest('tr').find('input.price').data('price') * $(this).closest('tr').find('select.quantity').val();
-      $(this).closest('tr').find('.total').text(total);
-			});
-      // console.log(target);
-      var sum = 0;
-      $('.total').each(function () {
-          sum += parseInt(this.innerText);
-          var item_total = $('#item_total').map(function (index, el) {
-          $(this).text("¥ "+ sum.toLocaleString() );});
+$(document).ready(function () {
+  updateFields();
 
-          var all_total = $('#all_total').map(function (index, el) {
-          var all_total = sum * 108 / 100;
-          var all_total = Math.round(all_total);
-					$("#all_total_val").val(all_total);
-          $(this).text("¥ "+ all_total.toLocaleString());});
+  $('select.quantity').on('change', function () {
+    updateFields();
+  });
 
-          var tax = $('#tax').map(function (index, el) {
-          var tax = sum * 108 / 100 - sum;
-          var tax = Math.round(tax);
-					$("#tax_val").val(tax);
-          $(this).text("¥ "+ tax.toLocaleString());});
-      });
+  function updateFields() {
+    var sum = 0;
 
+    $('.total').each(function () {
+      var price = $(this).closest('tr').find('input.price').data('price');
+      var quantity = $(this).closest('tr').find('select.quantity').val();
+      var total = price * quantity;
+      $(this).text(total);
 
+      sum += total;
+    });
+
+    var itemTotal = sum.toLocaleString();
+    $('#item_total').text('¥ ' + itemTotal);
+
+    var allTotal = Math.round(sum * 108 / 100);
+    $('#all_total').text('¥ ' + allTotal.toLocaleString());
+    $('#all_total_val').val(allTotal);
+
+    var tax = Math.round(allTotal - sum);
+    $('#tax').text('¥ ' + tax.toLocaleString());
+    $('#tax_val').val(tax);
+  }
 });
+
 </script>
 
 

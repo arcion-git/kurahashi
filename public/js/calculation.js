@@ -184,7 +184,7 @@ $(function() {
 
 
 // 取引詳細画面でオーダー内容を取得する関数（ユーザー側）
-if (document.URL.includes("user") && !document.URL.includes("admin/user")) {
+if (document.URL.includes("user") && !document.URL.includes("admin/user") &&  !document.URL.includes("admin/setonagiuser")) {
   function dealorder_update() {
     var deal_id = $('#deal_id').val();
     console.log(deal_id);
