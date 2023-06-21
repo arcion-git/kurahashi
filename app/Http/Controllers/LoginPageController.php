@@ -84,7 +84,7 @@ class LoginPageController extends Controller
         // dd($categories);
 
         $user_id = Auth::guard('user')->user()->id;
-        $carts =  Cart::where('user_id',$user_id)->get();
+        $carts = Cart::where('user_id',$user_id)->get();
 
         return view('user/auth/bulk', ['categories' => $categories]);
     }
