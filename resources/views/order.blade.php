@@ -773,6 +773,7 @@ $(document).ready(function () {
 
 
 
+
 <!-- <tr>
 		<td class="teika">
 			<input name="nini_item_name[]" class="text-center form-control" value=" ハマグリ 4kg 天然"></td>
