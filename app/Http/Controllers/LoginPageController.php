@@ -78,6 +78,7 @@ class LoginPageController extends Controller
         if ( Auth::guard('admin')->check() ){
             Auth::guard('admin')->logout();
         }
+        
 
         $categories = Category::get();
         $categories = $categories->groupBy('bu_ka_name');
