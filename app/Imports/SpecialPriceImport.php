@@ -24,7 +24,8 @@ class SpecialPriceImport implements OnEachRow, WithHeadingRow
            [
               'price_groupe'=>$row['価格グループコード'],
               'item_id'=>$row['商品コード'],
-              'sku_code'=>$row['SKUコード']],
+              'sku_code'=>$row['SKUコード']
+           ],
            // 上書き内容
            [
              'start'=>$row['掲載開始日'],
