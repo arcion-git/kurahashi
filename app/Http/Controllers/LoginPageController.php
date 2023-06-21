@@ -969,7 +969,7 @@ class LoginPageController extends Controller
             ->where('price', '>=', '1')
             ->where('start', '<=' , $now)
             ->where('end', '>=', $now)
-            // ->orderByRaw('CAST(order_no AS UNSIGNED)', 'asc')
+            ->orderByRaw('CAST(buyer_recommends.order_no AS UNSIGNED) asc')
             ->get();
             $buyer_recommends = collect($buyer_recommends)->merge($buyer_recommend_loop);
           }
