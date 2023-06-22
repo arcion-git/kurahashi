@@ -50,26 +50,29 @@ class Cart extends Model
 
 
   public function hidden_price() {
-    $item = $this->belongsTo('App\Item', 'item_id')->first();
-    // $order = $this->belongsTo('App\Order', 'id')->first();
-    $order = Order::where(['cart_id' => $this->id])->first();
+    $cart = Cart::where(['id'=>$this->id])->first();
+    if($cart->addtype == 'addbuyerrecommend'){
+      $item = $this->belongsTo('App\Item', 'item_id')->first();
+      // $order = $this->belongsTo('App\Order', 'id')->first();
+      $order = Order::where(['cart_id' => $this->id])->first();
 
-    $now = Carbon::now();
-    $store = Store::where(['tokuisaki_name'=>$order->tokuisaki_name,'store_name'=>$order->store_name])->first();
+      $now = Carbon::now();
+      $store = Store::where(['tokuisaki_name'=>$order->tokuisaki_name,'store_name'=>$order->store_name])->first();
 
-    // 担当のおすすめ商品の納品期日を探す
-    $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $store->tokuisaki_id)
-    ->where('price', '>=', '1')
-    ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
-    ->where('start', '<=' , $now)
-    ->where('end', '>=', $now)
-    ->first();
+      // 担当のおすすめ商品の納品期日を探す
+      $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $store->tokuisaki_id)
+      ->where('price', '>=', '1')
+      ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
+      ->where('start', '<=' , $now)
+      ->where('end', '>=', $now)
+      ->first();
 
-    if(isset($buyer_recommend_item)){
-      return $buyer_recommend_item->hidden_price;
-    }else{
-      $buyer_recommend_item = null;
-      return $buyer_recommend_item;
+      if(isset($buyer_recommend_item)){
+        return $buyer_recommend_item->hidden_price;
+      }else{
+        $buyer_recommend_item = null;
+        return $buyer_recommend_item;
+      }
     }
 
   }
