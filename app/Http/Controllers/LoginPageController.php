@@ -785,6 +785,8 @@ class LoginPageController extends Controller
 
 
 
+
+
     // HOMEから追加されるのは限定お買い得商品（セトナギ商品だけ）なのでaddtypeをaddsetonagiに変更
     $cart=Cart::firstOrNew(['user_id' => $user_id , 'item_id' => $item->id , 'deal_id' => null , 'addtype' => 'addsetonagi']);
     $cart->save();
