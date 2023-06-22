@@ -121,7 +121,7 @@
 				                    </button>
 				                </h2>
 				            </div>
-				            <div id="collapse{{ $loop->index }}" class="collapse show" aria-labelledby="heading{{ $loop->index }}" data-parent="#cartAccordion{{ $loop->index }}">
+				            <div id="collapse{{ $loop->index }}" class="collapse" aria-labelledby="heading{{ $loop->index }}" data-parent="#cartAccordion{{ $loop->index }}">
 				                <div class="">
 				                    <table id="{{$user->kaiin_number}}" class="table table-striped table-hover table-md cart-wrap">
 
