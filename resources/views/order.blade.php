@@ -121,10 +121,9 @@
 				                    </button>
 				                </h2>
 				            </div>
-				            <div id="collapse{{ $loop->index }}" class="collapse" aria-labelledby="heading{{ $loop->index }}" data-parent="#cartAccordion{{ $loop->index }}">
+				            <div id="collapse{{ $loop->index }}" class="collapse @if($url == 'approval' || isset($deal)) show @endif" aria-labelledby="heading{{ $loop->index }}" data-parent="#cartAccordion{{ $loop->index }}">
 				                <div class="">
 				                    <table id="{{$user->kaiin_number}}" class="table table-striped table-hover table-md cart-wrap">
-
 
 
 															@foreach($carts as $cart)
@@ -182,20 +181,23 @@
 																		<tr id="{{$val->id}}" class="order_item">
 																			<td class="head-price text-center">
 																				<!-- BtoB金額表示 -->
-																				@if(!$user->setonagi)
-																					@if($cart->hidden_price() == '1')
-																					<!-- 担当のおすすめ商品の価格非表示が選択されている場合 -->
-																					<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="未定" value="未定" readonly>
+
+																				@if(isset($deal))
+																					@if( Auth::guard('admin')->check() )
+																					<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="{{$val->price}}" value="@if( Auth::guard('admin')->check() ){{ $val->price }}@else{{number_format($val->price)}}@endif">
 																					@else
-																					<!-- BtoB通常金額表示 -->
-																					<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="@if($val->price=='未定'){{(0)}}@else{{ $val->price }}@endif" value="@if($val->price=='未定')未定@else{{number_format($val->price)}}@endif" readonly>
+																				<!-- BtoSB金額表示 -->
+																					<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="{{ $val->price }}" value="{{number_format($val->price)}}" readonly>
 																					@endif
 																				@else
-																					@if(isset($deal))
-																						<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="{{$val->price}}" value="@if( Auth::guard('admin')->check() ){{ $val->price }}@else{{number_format($val->price)}}@endif">
-																					@else
-																					<!-- BtoSB金額表示 -->
-																						<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="{{ $val->price }}" value="{{number_format($val->price)}}" readonly>
+																					@if(!$user->setonagi)
+																						@if($cart->hidden_price() == '1')
+																							<!-- 担当のおすすめ商品の価格非表示が選択されている場合 -->
+																							<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="未定" value="未定" readonly>
+																						@else
+																							<!-- BtoB通常金額表示 -->
+																							<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="@if($val->price=='未定'){{(0)}}@else{{ $val->price }}@endif" value="@if($val->price=='未定')未定@else{{number_format($val->price)}}@endif" readonly>
+																						@endif
 																					@endif
 																				@endif
 																			</td>
