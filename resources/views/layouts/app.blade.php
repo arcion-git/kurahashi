@@ -234,9 +234,9 @@
               <a href="{{ url('/deal') }}" class="dropdown-item has-icon">
                 <i class="fa fa-clipboard-list"></i> 取引一覧
               </a>
-              <a href="{{ url('/favoriteitem') }}" class="dropdown-item has-icon">
+              <!-- <a href="{{ url('/favoriteitem') }}" class="dropdown-item has-icon">
                 <i class="far fa-heart"></i> お気に入り商品一覧
-              </a>
+              </a> -->
               <a href="{{ url('/repeatorder') }}" class="dropdown-item has-icon">
                 <i class="fa fa-redo-alt"></i> リピートオーダー
               </a>
