@@ -581,7 +581,7 @@ class BothController extends Controller
       $order_nini=OrderNini::Create(['cart_nini_id'=> $cart_nini->id ,'quantity'=> 1 , 'tokuisaki_name'=> $order->tokuisaki_name ,'store_name'=> $order->store_name ,'nouhin_yoteibi'=> $order->nouhin_yoteibi]);
     }
     $data = "sucsess";
-    return redirect()->route('setonagi',$data);
+    return $data;
   }
 
 
