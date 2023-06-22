@@ -1866,13 +1866,26 @@ class LoginPageController extends Controller
     if(!$setonagi){
       $stores = [];
       foreach ($tokuisaki_ids as $key => $value) {
-        $stores_loop = Store::where(['tokuisaki_id'=>$value->tokuisaki_id,'store_id'=>$value->store_id])->first();
+        $stores_loop = Store::where(['tokuisaki_id'=>$value->tokuisaki_id,'store_id'=>$value->store_id])->get();
         array_push($stores, $stores_loop);
         // $stores = collect($stores);
       }
     }else{
       $stores = null;
     }
+
+    if(!$setonagi){
+      $store_users = StoreUser::where('user_id',$kaiin_number)->get(['store_id','tokuisaki_id']);
+      $stores = [];
+      foreach ($store_users as $store_user) {
+      $store = Store::where([ 'tokuisaki_id'=> $store_user->tokuisaki_id,'store_id'=> $store_user->store_id ])->first();
+        array_push($stores, $store);
+      }
+    }else{
+      $stores = null;
+    }
+
+    // dd($stores);
 
 
     // 表示可能な得意先のおすすめ商品を取得
@@ -1958,6 +1971,8 @@ class LoginPageController extends Controller
     $collect_token = config('app.collect_token');
 
     $message=['message' => $message];
+
+
 
     $data=
     ['carts' => $carts,
