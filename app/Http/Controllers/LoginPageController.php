@@ -1122,7 +1122,7 @@ class LoginPageController extends Controller
           // BtoBユーザーの場合は、オーダーに納品予定日と得意先名を保存
           if(!$setonagi_user){
             $order=Order::join('carts', 'carts.id', '=', 'orders.cart_id')
-            ->firstOrNew(['orders.cart_id'=> $cart->id , 'carts.item_id'=> $item->id]);
+            ->firstOrNew(['orders.cart_id'=> $cart->id , 'carts.item_id'=> $item->id , 'carts.user_id'=> $user_id]);
             $order->cart_id = $cart->id;
             $order->tokuisaki_name = $store->tokuisaki_name;
             $order->store_name = $store->store_name;
@@ -1132,7 +1132,7 @@ class LoginPageController extends Controller
             }
           }else{
             $order=Order::join('carts', 'carts.id', '=', 'orders.cart_id')
-            ->firstOrNew(['orders.cart_id'=> $cart->id , 'carts.item_id'=> $item->id]);
+            ->firstOrNew(['orders.cart_id'=> $cart->id , 'carts.item_id'=> $item->id , 'carts.user_id'=> $user_id]);
             $order->cart_id = $cart->id;
             $order->nouhin_yoteibi = $nouhin_yoteibi;
           }
