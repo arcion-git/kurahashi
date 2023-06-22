@@ -1863,16 +1863,7 @@ class LoginPageController extends Controller
     $all_nouhin_end = $oneMonthLaterFormatted;
 
 
-    if(!$setonagi){
-      $stores = [];
-      foreach ($tokuisaki_ids as $key => $value) {
-        $stores_loop = Store::where(['tokuisaki_id'=>$value->tokuisaki_id,'store_id'=>$value->store_id])->get();
-        array_push($stores, $stores_loop);
-        // $stores = collect($stores);
-      }
-    }else{
-      $stores = null;
-    }
+
 
     if(!$setonagi){
       $store_users = StoreUser::where('user_id',$kaiin_number)->get(['store_id','tokuisaki_id']);
