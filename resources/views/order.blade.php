@@ -14,7 +14,7 @@
 		<tr>
 			<th class="">納入先店舗</th>
 			<th class="">
-				<select id="change_all_store" name="change_all_store" class="change_all_store text-center form-control" value="" required>
+				<select id="change_all_store" name="change_all_store" class="change_all_store text-center form-control" value="" required @if(isset($deal)) readonly disabled @endif>
 					<option id="@if(isset($set_order)){{$set_order->tokuisaki_name}}@endif" value="@if(isset($set_order)){{$set_order->store_name}}@endif">@if(isset($set_order)){{$set_order->tokuisaki_name}} {{$set_order->store_name}}@endif</option>
 					@foreach($stores as $store)
 						<option id="@if(isset($set_order)){{$store->tokuisaki_name}}@endif" value="{{$store->store_name}}">{{$store->tokuisaki_name}} {{$store->store_name}}</option>
@@ -28,7 +28,7 @@
 			<th class="">納品予定日</th>
 			<td class="text-center">
 
-					<input id="change_all_nouhin_yoteibi" type="text" name="change_all_nouhin_yoteibi" class="change_all_nouhin_yoteibi text-center form-control daterange-cus datepicker" value="@if(isset($set_order)){{$set_order->nouhin_yoteibi}}@endif" autocomplete="off" required>
+					<input id="change_all_nouhin_yoteibi" type="text" name="change_all_nouhin_yoteibi" class="change_all_nouhin_yoteibi text-center form-control daterange-cus datepicker" value="@if(isset($set_order)){{$set_order->nouhin_yoteibi}}@endif" autocomplete="off" required @if(isset($deal)) readonly disabled @endif>
 					@if($user->kyuujitu_haisou == 1)
 					<script>
 					$('.change_all_nouhin_yoteibi').datepicker({
@@ -667,7 +667,10 @@
 					@endforeach
       	</tbody>
 			</table>
+		@if(isset($deal))
+		@else
     <button style="min-width:200px;" type="button" name="" id="@if(isset($deal)){{$deal->id}}@endif" class="addniniorder btn btn-success"><i class="fas fa-plus"></i> 任意の商品を追加</button>
+		@endif
     </div>
   </div>
 </div>
