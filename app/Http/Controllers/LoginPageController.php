@@ -1528,16 +1528,16 @@ class LoginPageController extends Controller
       return redirect()->route('confirm',$data);
     }
 
-    // if(count(array_filter($request->quantity)) == 0 ){
-    //   $data=[
-    //     'addtype' => $addtype,
-    //     'change_all_store' => $change_all_store,
-    //     'change_all_nouhin_yoteibi' => $change_all_nouhin_yoteibi,
-    //     'set_tokuisaki_name' => $set_tokuisaki_name,
-    //     'message' => 'カートが空です。',
-    //   ];
-    //   return redirect()->route('confirm',$data);
-    // }
+    if(count(array_filter($request->quantity)) == 0 ){
+      $data=[
+        'addtype' => $addtype,
+        'change_all_store' => $change_all_store,
+        'change_all_nouhin_yoteibi' => $change_all_nouhin_yoteibi,
+        'set_tokuisaki_name' => $set_tokuisaki_name,
+        'message' => 'カートが空です。',
+      ];
+      return redirect()->route('confirm',$data);
+    }
 
     $show_favorite = $request->show_favorite;
     $addtype = $request->addtype;
