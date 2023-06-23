@@ -62,7 +62,7 @@
 			</th>
 		</tr>
 		@endif
-		@if(request()->input('addtype') === 'addbuyerrecommend' && $url == 'confirm')
+		@if(request()->input('addtype') === 'addbuyerrecommend' && $url == 'confirm' || request()->input('addtype') === 'addbuyerrecommend' && $url == 'approval')
 		<tr>
 			<th class="">お気に入り商品のみを表示</th>
 			<td class="text-center">
@@ -107,7 +107,13 @@
 				        </tr>
 				    </table>
 
-
+@if(request()->input('addtype') === 'addsetonagi')
+<style>
+.card-header{
+	display: none;
+}
+</style>
+@endif
 
 						@if(isset($groupedItems))
 				    @foreach($groupedItems as $text => $carts)
@@ -121,7 +127,7 @@
 				                    </button>
 				                </h2>
 				            </div>
-				            <div id="collapse{{ $loop->index }}" class="collapse @if($url == 'approval' || isset($deal)) show @endif" aria-labelledby="heading{{ $loop->index }}" data-parent="#cartAccordion{{ $loop->index }}">
+				            <div id="collapse{{ $loop->index }}" class="collapse @if($url == 'approval' || isset($deal) || request()->input('addtype') === 'addsetonagi') show @endif" aria-labelledby="heading{{ $loop->index }}" data-parent="#cartAccordion{{ $loop->index }}">
 				                <div class="">
 				                    <table id="{{$user->kaiin_number}}" class="table table-striped table-hover table-md cart-wrap">
 

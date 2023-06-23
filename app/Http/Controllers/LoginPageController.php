@@ -1221,12 +1221,32 @@ class LoginPageController extends Controller
         }
       }
 
-      $data=[
-        // 'nouhin_yoteibi'=>$order->nouhin_yoteibi,
-        // 'tokuisaki_name'=>$order->tokuisaki_name,
-        // 'store_name'=>$order->store_name,
-        'addtype'=>$addtype,
-      ];
+      if($addtype == 'addsetonagi'){
+          $cart = Cart::where(['user_id'=>$user_id, 'deal_id'=> null])->first();
+          $order = Order::where(['cart_id'=>$cart->id])->first();
+      }
+
+      if($addtype == 'addbuyerrecommend' || $addtype == 'addspecialprice'){
+        if(!isset($order)){
+          $data=[
+            'message'=>'商品が見つかりませんでした。',
+          ];
+          return redirect()->route('bulk',$data);
+        }
+      }
+
+      if(!$setonagi_user){
+        $data=[
+          'change_all_nouhin_yoteibi'=>$order->nouhin_yoteibi,
+          'set_tokuisaki_name'=>$order->tokuisaki_name,
+          'change_all_store'=>$order->store_name,
+          'addtype'=>$addtype,
+        ];
+      }else{
+        $data=[
+          'addtype'=>$addtype,
+        ];
+      }
       return redirect()->route('confirm',$data);
   }
 
@@ -1454,6 +1474,13 @@ class LoginPageController extends Controller
 
 
 
+    // dd($nouhin_yoteibi);
+    // 'url': url,
+    // 'nouhin_yoteibi': nouhin_yoteibi,
+    // 'tokuisaki_name': tokuisaki_name,
+    // 'store_name': store_name,
+
+
     return view('user/auth/confirm',
     ['carts' => $carts,
      'categories' => $categories,
@@ -1492,17 +1519,6 @@ class LoginPageController extends Controller
 
     if(!$request->has('cart_id') and !$request->has('cart_nini_id')){
       $data=[
-          'addtype' => $addtype,
-          // 'change_all_store' => $change_all_store,
-          // 'change_all_nouhin_yoteibi' => $change_all_nouhin_yoteibi,
-          // 'set_tokuisaki_name' => $set_tokuisaki_name,
-          'message' => 'カートが空です。',
-      ];
-      return redirect()->route('confirm',$data);
-    }
-
-    if(count(array_filter($request->quantity)) == 0 ){
-      $data=[
         'addtype' => $addtype,
         'change_all_store' => $change_all_store,
         'change_all_nouhin_yoteibi' => $change_all_nouhin_yoteibi,
@@ -1511,6 +1527,17 @@ class LoginPageController extends Controller
       ];
       return redirect()->route('confirm',$data);
     }
+
+    // if(count(array_filter($request->quantity)) == 0 ){
+    //   $data=[
+    //     'addtype' => $addtype,
+    //     'change_all_store' => $change_all_store,
+    //     'change_all_nouhin_yoteibi' => $change_all_nouhin_yoteibi,
+    //     'set_tokuisaki_name' => $set_tokuisaki_name,
+    //     'message' => 'カートが空です。',
+    //   ];
+    //   return redirect()->route('confirm',$data);
+    // }
 
     $show_favorite = $request->show_favorite;
     $addtype = $request->addtype;
@@ -1616,6 +1643,7 @@ class LoginPageController extends Controller
     if(!$setonagi){
       $kaiin_number = $user->kaiin_number;
       $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get()->unique('tokuisaki_id');
+      $store_users = StoreUser::where('user_id',$kaiin_number)->get(['store_id','tokuisaki_id']);
     }
     // オーダー画面の変数を格納
     if(isset($request->addtype)){
@@ -1866,7 +1894,6 @@ class LoginPageController extends Controller
 
 
     if(!$setonagi){
-      $store_users = StoreUser::where('user_id',$kaiin_number)->get(['store_id','tokuisaki_id']);
       $stores = [];
       foreach ($store_users as $store_user) {
       $store = Store::where([ 'tokuisaki_id'=> $store_user->tokuisaki_id,'store_id'=> $store_user->store_id ])->first();
