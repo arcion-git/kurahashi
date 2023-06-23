@@ -764,7 +764,7 @@ class AdminPageController extends Controller
   }
 
   public function SpecialPriceImport(){
-  SpecialPrice::truncate();
+  // SpecialPrice::truncate();
   Excel::import(new SpecialPriceImport, request()->file('file'));
   $message = '正常にインポートが完了しました。';
   $icon = 'success';

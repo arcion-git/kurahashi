@@ -2071,7 +2071,8 @@ class LoginPageController extends Controller
     $categories = Category::get()->groupBy('bu_ka_name');
 
     $favorite_categories = FavoriteCategory::where('user_id', $user_id)->get();
-    $deals =  Deal::where('user_id',$user_id)->latest('created_at')->paginate(30);
+    $deals = Deal::where('user_id',$user_id)->latest('created_at')->paginate(30);
+    // dd($deals);
 
     // 全ての取引を取得→自分の持っている店舗の情報を取得→一致する取引は全て表示→ダブりを消してユニークにする。
 

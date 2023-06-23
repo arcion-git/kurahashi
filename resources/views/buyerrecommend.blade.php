@@ -119,7 +119,7 @@
                           <input type="text" name="buyerrecommend[{{$buyerrecommend->id}}][start]" class="start text-center form-control daterange-cus datepicker" value="{{$buyerrecommend->start}}" autocomplete="off" required>
                         </td>
                         <td class="text-center">
-                          <input type="text" name="buyerrecommend[{{$buyerrecommend->id}}][end]" class="end text-center form-control daterange-cus datepicker" value="{{$buyerrecommend->end}}" autocomplete="off" required>
+                          <input type="text" name="buyerrecommend[{{$buyerrecommend->id}}][end]" class="end text-center form-control daterange-cus datepicker_end" value="{{$buyerrecommend->end}}" autocomplete="off" required>
                         </td>
                         <td class="text-center">
                           <input type="text" name="buyerrecommend[{{$buyerrecommend->id}}][nouhin_end]" class="nouhin_end text-center form-control daterange-cus datepicker" value="{{$buyerrecommend->nouhin_end}}" autocomplete="off" required>
@@ -317,11 +317,26 @@ if( params.has('item_search') ) {
 $('.datepicker').datepicker({
 	format: 'yyyy-mm-dd',
 	autoclose: true,
-	assumeNearbyYear: true,
+	// assumeNearbyYear: true,
 	language: 'ja',
 	// startDate: '+1d',
 	// endDate: '+31d',
-	defaultViewDate: Date()
+	// defaultViewDate: Date()
+});
+$('.datepicker_end').datepicker({
+	format: 'yyyy-mm-dd',
+	autoclose: true,
+	// assumeNearbyYear: true,
+	language: 'ja',
+  }).on('changeDate', function(e) {
+      var selectedDate = e.date;
+      selectedDate.setHours(17);
+      selectedDate.setMinutes(0);
+      selectedDate.setSeconds(0);
+      $(this).val(selectedDate.toISOString().slice(0, 10) + ' 17:00:00');
+	// startDate: '+1d',
+	// endDate: '+31d',
+	// defaultViewDate: Date()
 });
 </script>
 <script>
@@ -357,7 +372,7 @@ $('#sortdata').bind('sortstop',function(){
     $('.save_btn').click();
   });
 });
-$('.price,.start,.end,nouhin_end').change(function() {
+$('.price,.start,.end,.nouhin_end').change(function() {
     $('.save_btn').click();
 });
 
