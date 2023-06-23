@@ -1517,7 +1517,7 @@ class LoginPageController extends Controller
     $set_tokuisaki_name = $request->set_tokuisaki_name;
 
 
-    if(!$request->has('cart_id') and !$request->has('cart_nini_id')){
+    if(!$request->has('cart_id') && !$request->has('cart_nini_id')){
       $data=[
         'addtype' => $addtype,
         'change_all_store' => $change_all_store,
