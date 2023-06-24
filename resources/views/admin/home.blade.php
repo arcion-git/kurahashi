@@ -87,7 +87,7 @@
                       @endif
                       <option value="すべての取引">すべての取引</option>
                       <option class="level-0" value="交渉中">交渉中</option>
-                      <option class="level-0" value="発注済">受注済</option>
+                      <option class="level-0" value="受注済">受注済</option>
                       <option class="level-0" value="キャンセル">キャンセル</option>
                     </select>
 

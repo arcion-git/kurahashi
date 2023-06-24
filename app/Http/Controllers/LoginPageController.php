@@ -2317,6 +2317,8 @@ class LoginPageController extends Controller
     $user_id = $user->id;
     $data = $request->all();
 
+    // dd($data);
+
     if(!$user->setonagi == 1){
       $store_name =  $request->change_all_store;
       $tokuisaki_name = $request->set_tokuisaki_name;
@@ -2343,16 +2345,18 @@ class LoginPageController extends Controller
     // dd($data);
     $cart_ids = $data['cart_id'];
 
+
+
     if(isset($data['cart_nini_id'])){
       $cart_nini_ids = $data['cart_nini_id'];
     }
 
 
-    // dd($data);
     // 在庫チェック
     foreach($cart_ids as $cart_id) {
       // カート内の該当アイテムを検索
       $cart = Cart::where(['id'=> $cart_id])->first();
+      // dd($cart->item_id);
 
       // アイテム情報を取得
       $item = item::where(['id'=> $cart->item_id])->first();
@@ -2442,6 +2446,8 @@ class LoginPageController extends Controller
       // $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get()->unique('tokuisaki_id');
       // $carts = Cart::where(['user_id'=> $user_id,'deal_id'=> null])->get();
 
+      // 価格情報が一致しなかったらスルーする
+
       // foreach ($tokuisaki_ids as $key => $value) {
         $iteration = 0;
           foreach($cart_ids as $cart_id) {
@@ -2463,6 +2469,7 @@ class LoginPageController extends Controller
             $data=[
               'message' => $message,
             ];
+            return redirect()->route('confirm',$data);
           }
           // 市況商品を探す
           $price_groupe = PriceGroupe::where(['tokuisaki_id'=>$tokuisaki_id,'store_id'=>$store_id])->first();
@@ -2598,6 +2605,7 @@ class LoginPageController extends Controller
 
     // 納品日が納品可能日より前に設定されていないかチェック
     $nouhin_youbi_list = [];
+
 
 
     foreach($cart_ids as $cart_id) {

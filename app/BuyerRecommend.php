@@ -17,8 +17,9 @@ class BuyerRecommend extends Model
     'price',
     'end',
     'order_no',
+    'zaikokanri',
+    'zaikosuu'
   ];
-
   /**
    * カテゴリに所属する商品を取得
    */

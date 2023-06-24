@@ -1216,9 +1216,23 @@ class AdminPageController extends Controller
 
     public function buyersaverecommend(Request $request){
 
-      // dd($request);
+      $id = $request->tokuisaki_id;
+      $all_zaikokanri = $request->all_zaikokanri;
       $tokuisaki_id = $request->tokuisaki_id;
       $buyerrecommends = $request->buyerrecommend;
+
+      if(isset($all_zaikokanri)){
+        $buyer_recommends = BuyerRecommend::where(['tokuisaki_id'=> $tokuisaki_id])->update(['zaikokanri'=> 1 , 'zaikosuu'=> null]);
+        return redirect()->route('buyerrecommend', $id);
+        // dd($buyer_recommends);
+        // $buyer_recommends = BuyerRecommend::where(['tokuisaki_id'=> $tokuisaki_id])->get();
+        // foreach ($buyer_recommends as $buyer_recommend) {
+        //   $buyer_recommend->zaikokanri = 1;
+        //   $buyer_recommend->zaikosuu = null;
+        //   $buyer_recommend->save();
+        // }
+      }
+
       // dd($buyerrecommends);
       //
       //
@@ -1367,8 +1381,6 @@ class AdminPageController extends Controller
             $buyerrecommend->save();
         }
       }
-
-      $id = $request->tokuisaki_id;
       return redirect()->route('buyerrecommend', $id);
     }
 
