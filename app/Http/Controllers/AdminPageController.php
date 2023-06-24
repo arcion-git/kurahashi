@@ -91,7 +91,7 @@ class AdminPageController extends Controller
     if ( Auth::guard('user')->check() ){
         Auth::guard('user')->logout();
     }
-    $deals =  Deal::latest('created_at')->paginate(30);
+    $deals = Deal::latest('created_at')->paginate(3);
 
     $store_users = StoreUser::select('tokuisaki_id')->distinct()->get();
     // dd($store_users);
