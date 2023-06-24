@@ -51,7 +51,7 @@
           <div class="col-12">
             <div class="float-right">
               @if ( Auth::guard('admin')->check() )
-              @if(isset($store_users))
+              @if(isset($tokuisakis))
               <form id="admin_deal_search" action="{{ url('/admin/search') }}" enctype="multipart/form-data" method="GET" class="form-inline mr-auto">
                 @csrf
                 <div class="input-group">
@@ -62,8 +62,8 @@
                         <option class="level-0" value="{{$tokuisaki_name}}">{{$tokuisaki_name}}</option>
                       @endif
                       <option value="すべてバイヤー">すべてバイヤー</option>
-                      @foreach($store_users as $store_user)
-                        <option class="level-0" value="{{$store_user->tokuisaki_name()}}">{{$store_user->tokuisaki_name()}}</option>
+                      @foreach($tokuisakis as $tokuisaki)
+                        <option class="level-0" value="{{$tokuisaki->tokuisaki_name}}">{{$tokuisaki->tokuisaki_name}}</option>
                       @endforeach
                     </select>
 

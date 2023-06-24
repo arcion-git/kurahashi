@@ -93,14 +93,17 @@ class AdminPageController extends Controller
     }
     $deals = Deal::latest('created_at')->paginate(30);
 
-    $store_users = StoreUser::select('tokuisaki_id')->distinct()->get();
+
+
+    $tokuisakis = Store::select('tokuisaki_name')->distinct()->get();
+
     // dd($store_users);
     // foreach ($store_users as $key => $value) {
     //   dd($value);
     // }
     $data=[
       'deals'=>$deals,
-      'store_users'=>$store_users,
+      'tokuisakis'=>$tokuisakis,
     ];
     return view('admin/home',$data);
   }
@@ -120,7 +123,9 @@ class AdminPageController extends Controller
 
   public function search(Request $request){
 
-    $store_users = StoreUser::select('tokuisaki_id')->distinct()->get();
+    $tokuisakis = Store::select('tokuisaki_name')->distinct()->get();
+
+    // dd($store_users);
 
     $search = $request->search;
     $tokuisaki_name = $request->tokuisaki_name;
@@ -190,7 +195,7 @@ class AdminPageController extends Controller
       'tokuisaki_name'=>$tokuisaki_name,
       'store_name'=>$store_name,
       'deals'=>$deals,
-      'store_users'=>$store_users,
+      'tokuisakis'=>$tokuisakis,
       'stores'=>$stores,
     ];
     return view('admin/home',$data);
