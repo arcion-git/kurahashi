@@ -52,7 +52,7 @@
             <div class="float-right">
               @if ( Auth::guard('admin')->check() )
               @if(isset($store_users))
-              <form id="admin_deal_search" action="{{ url('/admin/search') }}" enctype="multipart/form-data" method="POST" class="form-inline mr-auto">
+              <form id="admin_deal_search" action="{{ url('/admin/search') }}" enctype="multipart/form-data" method="GET" class="form-inline mr-auto">
                 @csrf
                 <div class="input-group">
                   <div class="search-element">
@@ -157,7 +157,7 @@
             <div class="float-right">
               <nav>
                 <ul class="pagination">
-                  {{ $deals->links() }}
+                  {{ $deals->appends(Request::query())->links() }}
                 </ul>
               </nav>
             </div>

@@ -152,8 +152,12 @@
   Route::post('/admin/riyouteisi', 'AdminPageController@riyouteisi');
 
   // 取引検索
-  Route::get('/admin/search', 'AdminPageController@search');
-  Route::post('/admin/search', 'AdminPageController@search')->name('admin.search');
+  // Route::get('/admin/search', 'AdminPageController@search');
+  // Route::post('/admin/search', 'AdminPageController@search')->name('admin.search');
+  // Route::post('/admin/search/change_tokuisaki_name', 'AdminPageController@change_tokuisaki_name');
+
+  Route::get('/admin/search', 'AdminPageController@search')->name('admin.search');
+  // Route::post('/admin/search', 'AdminPageController@search');
   Route::post('/admin/search/change_tokuisaki_name', 'AdminPageController@change_tokuisaki_name');
 
 

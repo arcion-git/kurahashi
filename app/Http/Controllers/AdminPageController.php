@@ -72,7 +72,7 @@ use App\Imports\BuyerRecommendImport;
 
 // ページネーション
 use Illuminate\Pagination\LengthAwarePaginator;
-
+use Illuminate\Support\Collection;
 
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -145,30 +145,46 @@ class AdminPageController extends Controller
     }
 
     $deals = [];
-    $n=1;
     foreach ($all_deals as $all_deal) {
-      if($tokuisaki_name == 'すべてバイヤー'){
-        $user_name = User::where('id',$all_deal->user_id)->where('name','like', "%$search%")->first();
-        if($user_name){
-          array_push($deals, $all_deal);
+        // バイヤーが「すべてバイヤー」の場合
+        if ($tokuisaki_name == 'すべてバイヤー') {
+            $user_name = User::where('id', $all_deal->user_id)->where('name', 'like', "%$search%")->first();
+            if ($user_name) {
+                array_push($deals, $all_deal);
+            }
+        } else {
+            $carts = Cart::where('deal_id', $all_deal->id)->get();
+            foreach ($carts as $cart) {
+                if ($store_name == 'すべての店舗' || $store_name == null) {
+                    $order = Order::where(['cart_id' => $cart->id, 'tokuisaki_name' => $tokuisaki_name])->first();
+                } else {
+                    $order = Order::where(['cart_id' => $cart->id, 'tokuisaki_name' => $tokuisaki_name, 'store_name' => $store_name])->first();
+                }
+                if ($order) {
+                    array_push($deals, $all_deal);
+                    break;
+                }
+            }
         }
-        $n++;
-      }else{
-        $carts = Cart::where('deal_id',$all_deal->id)->get();
-        foreach ($carts as $cart) {
-          if($store_name == 'すべての店舗' || $store_name == null){
-            $order = Order::where(['cart_id' => $cart->id, 'tokuisaki_name' => $tokuisaki_name])->first();
-          }else{
-            $order = Order::where(['cart_id' => $cart->id, 'tokuisaki_name' => $tokuisaki_name, 'store_name' => $store_name])->first();
-          }
-          if($order){
-            array_push($deals, $all_deal);
-            break;
-          }
-        }
-      }
     }
-    $deals = new LengthAwarePaginator($deals, count($deals), 10, 1);
+
+
+    // $dealsをCollectionインスタンスに変換
+    $dealsCollection = new Collection($deals);
+
+    // LengthAwarePaginatorインスタンスを作成
+    $perPage = 30; // 1ページあたりのデータ数
+    $page = LengthAwarePaginator::resolveCurrentPage(); // 現在のページ数を取得
+    $path = url()->current(); // 現在のURLを取得
+    $deals = new LengthAwarePaginator(
+        $dealsCollection->forPage($page, $perPage),
+        $dealsCollection->count(),
+        $perPage,
+        $page,
+        ['path' => $path, 'query' => request()->query()]
+    );
+
+    // $deals = new LengthAwarePaginator($deals, count($deals), 3, 1);
     $data=[
       'cat'=>$cat,
       'tokuisaki_name'=>$tokuisaki_name,
