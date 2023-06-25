@@ -57,6 +57,11 @@
                   <!-- <button type="submit" name="adddeal_btn" class="btn btn-warning">この内容で問い合わせる</button> -->
                   @endif
                 @endif
+                <input type="hidden" name="addtype" value="{{$addtype}}" />
+                <input type="hidden" name="show_favorite" value="{{$show_favorite}}" @if($show_favorite) checked @endif/>
+                <input type="hidden" name="change_all_store" value="{{$change_all_store}}" />
+                <input type="hidden" name="set_tokuisaki_name" value="{{$set_tokuisaki_name}}" />
+                <input type="hidden" name="change_all_nouhin_yoteibi" value="{{$change_all_nouhin_yoteibi}}" />
                 <button type="submit" name="addsuscess_btn" value="1" id="addsuscess_btn" class="btn btn-success">この内容で注文する</button>
             </div>
           </form>

@@ -614,6 +614,7 @@
     }
     $(function() {
         var message = getUrlParam('message');
+        message = decodeURIComponent(message.replace(/%2F/g, '/'));
         var icon = getUrlParam('icon');
         console.log(message);
         console.log(icon);
