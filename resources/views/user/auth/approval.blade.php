@@ -62,6 +62,7 @@
                 <input type="hidden" name="change_all_store" value="{{$change_all_store}}" />
                 <input type="hidden" name="set_tokuisaki_name" value="{{$set_tokuisaki_name}}" />
                 <input type="hidden" name="change_all_nouhin_yoteibi" value="{{$change_all_nouhin_yoteibi}}" />
+                <input type="hidden" name="current_time" value="{{$current_time}}" />
                 <button type="submit" name="addsuscess_btn" value="1" id="addsuscess_btn" class="btn btn-success">この内容で注文する</button>
             </div>
           </form>
