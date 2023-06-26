@@ -19,6 +19,7 @@ class BuyerRecommendImport implements OnEachRow, WithHeadingRow
     public function OnRow(Row $row)
     {
       $row=$row->toArray();
+      // dd($row);
 
       $item=BuyerRecommend::updateOrCreate(
            // キーカラム
@@ -30,7 +31,7 @@ class BuyerRecommendImport implements OnEachRow, WithHeadingRow
            // 上書き内容
            [
               'price'=>$row['価格'],
-              'start'=>$row['掲載開始'],
+              'start'=>$row['start'],
               'end'=>$row['掲載期限'],
               'nouhin_end'=>$row['納品期限'],
               'order_no'=>$row['並び順'],
