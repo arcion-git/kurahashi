@@ -31,7 +31,7 @@ class BuyerRecommendImport implements OnEachRow, WithHeadingRow
            // 上書き内容
            [
               'price'=>$row['価格'],
-              'start'=>$row['start'],
+              'start'=>$row['掲載開始'],
               'end'=>$row['掲載期限'],
               'nouhin_end'=>$row['納品期限'],
               'order_no'=>$row['並び順'],
