@@ -15,7 +15,9 @@ class BuyerRecommend extends Model
     'item_id',
     'sku_code',
     'price',
+    'srart',
     'end',
+    'nouhin_end',
     'order_no',
     'zaikokanri',
     'zaikosuu'
