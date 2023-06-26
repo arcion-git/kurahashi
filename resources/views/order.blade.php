@@ -7,7 +7,9 @@
 	@if(!$user->setonagi)
 	<div class="section-title">納品先・納品日</div>
 	@elseif(request()->input('addtype') === 'addbuyerrecommend')
-	<div class="section-title">お気に入り表示</div>
+		@if($url == 'confirm')
+			<div class="section-title">お気に入り表示</div>
+		@endif
 	@endif
 	<table id="{{$user->id}}" class="user_id table table-striped table-hover table-md cart-wrap">
 		@if(!$user->setonagi)
@@ -62,7 +64,7 @@
 			</th>
 		</tr>
 		@endif
-		@if(request()->input('addtype') === 'addbuyerrecommend' && $url == 'confirm' || request()->input('addtype') === 'addbuyerrecommend' && $url == 'approval')
+		@if(request()->input('addtype') === 'addbuyerrecommend' && $url == 'confirm')
 		<tr>
 			<th class="">お気に入り商品のみを表示</th>
 			<td class="text-center">

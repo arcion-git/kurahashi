@@ -1336,7 +1336,7 @@ class AdminPageController extends Controller
             $buyerrecommend = BuyerRecommend::firstOrNew(['id'=> $key]);
             $buyerrecommend->price = $value['price'];
             $buyerrecommend->start = $value['start'];
-            $buyerrecommend->end = $value['end'];
+            $buyerrecommend->end = Carbon::parse($value['end'])->setTime(17, 0, 0);
             $buyerrecommend->nouhin_end = $value['nouhin_end'];
             $buyerrecommend->order_no = $value['order_no'];
             $buyerrecommend->uwagaki_item_name = $value['uwagaki_item_name'];
@@ -2395,7 +2395,6 @@ class AdminPageController extends Controller
               $repeatcart = $repeatorder->cart;
               $key = in_array($weekday, $nouhin_youbi);
               if($key == true){
-                // 会員IDを取得して、ユーザー情報を取得するところから
                 $user = User::where('kaiin_number',$repeatcart->kaiin_number)->first();
                 $item = Item::where(['item_id'=> $repeatcart->item_id, 'sku_code'=> $repeatcart->sku_code])->first();
                 $store = Store::where(['tokuisaki_name'=> $repeatorder->tokuisaki_name , 'store_name'=> $repeatorder->store_name])->first();

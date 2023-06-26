@@ -1542,7 +1542,8 @@ class LoginPageController extends Controller
       return redirect()->route('confirm',$data);
     }
 
-    $show_favorite = $request->show_favorite;
+    // $show_favorite = $request->show_favorite;
+    $show_favorite = null;
     $addtype = $request->addtype;
 
     if(!$request->has('cart_id') and !$request->has('cart_nini_id')){
