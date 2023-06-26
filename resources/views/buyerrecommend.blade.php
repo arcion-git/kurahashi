@@ -69,7 +69,7 @@
                     <th class="text-center">限定店舗</th>
                     <th class="text-center">操作</th>
                     <th class="text-center">価格非表示</th>
-                    <th class="text-center"><input type="checkbox" id="all_zaikokanri" name="all_zaikokanri"></th>
+                    <th class="text-center">在庫管理しない<input type="checkbox" id="all_zaikokanri" name="all_zaikokanri"></th>
                     <th class="text-center">在庫数</th>
                   </tr>
                 </thead>
