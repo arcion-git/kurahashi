@@ -19,8 +19,13 @@ class BuyerRecommend extends Model
     'end',
     'nouhin_end',
     'order_no',
+    'groupe',
+    'hidden_price',
     'zaikokanri',
-    'zaikosuu'
+    'zaikosuu',
+    'uwagaki_item_name',
+    'uwagaki_kikaku',
+    'gentei_store',
   ];
   /**
    * カテゴリに所属する商品を取得
