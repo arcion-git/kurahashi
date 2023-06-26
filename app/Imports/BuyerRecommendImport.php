@@ -34,7 +34,7 @@ class BuyerRecommendImport implements OnEachRow, WithHeadingRow
               'end'=>$row['掲載期限'],
               'nouhin_end'=>$row['納品期限'],
               'order_no'=>$row['並び順'],
-              // 'groupe'=>$row['グループ'],
+              'groupe'=>$row['グループ'],
               'hidden_price'=>$row['価格非表示'],
               'zaikokanri'=>$row['在庫管理しない'],
               'zaikosuu'=>$row['在庫数'],
