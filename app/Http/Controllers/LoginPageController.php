@@ -1146,17 +1146,29 @@ class LoginPageController extends Controller
             $buyer_recommends = [];
             foreach ($tokuisaki_ids as $key => $value) {
               // 担当のおすすめ商品の価格上書き
+              $buyer_recommend_item = null;
               if($addtype == 'addbuyerrecommend'){
                 $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $value->tokuisaki_id)
-                ->where('price', '>=', '1')
-                ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
+                ->where('hidden_price', 1)
+                ->where('item_id' , $item->item_id)
+                ->where('sku_code' , $item->sku_code)
                 ->where('start', '<=' , $now)
-                ->where('end', '>=', $now)
-                ->orderBy('order_no', 'asc')->first();
+                ->where('end', '>=', $now)->first();
                 // dd($buyer_recommend_item);
                 if(isset($buyer_recommend_item)){
-                  $order->price = $buyer_recommend_item->price;
+                  $order->price = '未定';
                   break;
+                }else{
+                  $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $value->tokuisaki_id)
+                  ->where('price', '>=', '1')
+                  ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
+                  ->where('start', '<=' , $now)
+                  ->where('end', '>=', $now)
+                  ->orderBy('order_no', 'asc')->first();
+                  if(isset($buyer_recommend_item)){
+                    $order->price = $buyer_recommend_item->price;
+                    break;
+                  }
                 }
               }
               // 市況商品の価格上書き
