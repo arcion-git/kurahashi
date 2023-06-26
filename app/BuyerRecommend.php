@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 class BuyerRecommend extends Model
 {
   protected $fillable = [
-    'srart',
+    'start',
     'tokuisaki_id',
     'item_id',
     'sku_code',
