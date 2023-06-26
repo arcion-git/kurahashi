@@ -2330,10 +2330,6 @@ class LoginPageController extends Controller
 
   public function adddeal(Request $request){
 
-
-
-
-
     $user = Auth::guard('user')->user();
     $user_id = $user->id;
     $data = $request->all();
@@ -2353,6 +2349,43 @@ class LoginPageController extends Controller
       $kaiin_number = $user->kaiin_number;
     }
 
+
+    // 次の営業日を取得
+    $today = date("Y-m-d");
+    $holidays = Holiday::pluck('date');
+    $currentTime = date('H:i:s');
+
+    // 17時より前の処理
+    if (strtotime($currentTime) < strtotime('17:00:00')) {
+      $holidays = Holiday::pluck('date')->toArray();
+      for($i = 1; $i < 10; $i++){
+        $today_plus = date('Y-m-d', strtotime($today.'+'.$i.'day'));
+        // dd($today_plus2);
+        $key = array_search($today_plus,(array)$holidays,true);
+        if($key){
+            // 休みなので次の日付を探す
+        }else{
+            // 休みでないので納品日を格納
+            $nouhin_kanoubi = $today_plus;
+            break;
+        }
+      }
+    }else{
+    // 17時より後の処理
+      $holidays = Holiday::pluck('date')->toArray();
+      for($i = 2; $i < 10; $i++){
+        $today_plus = date('Y-m-d', strtotime($today.'+'.$i.'day'));
+        // dd($today_plus2);
+        $key = array_search($today_plus,(array)$holidays,true);
+        if($key){
+            // 休みなので次の日付を探す
+        }else{
+          $nouhin_kanoubi = $today_plus;
+          break;
+        }
+      }
+    }
+
     $current_time = $request->current_time;
     // dd($current_time);
     $cutoff_time = date('Y-m-d 17:00:00');
@@ -2362,7 +2395,7 @@ class LoginPageController extends Controller
         $message = '締め時間を過ぎたため一度注文確認画面に戻ります。';
         $data=[
           'addtype' => $addtype,
-          'change_all_nouhin_yoteibi' => $change_all_nouhin_yoteibi,
+          'change_all_nouhin_yoteibi' => $nouhin_kanoubi,
           'change_all_store' => $store_name,
           'set_tokuisaki_name' => $tokuisaki_name,
           'message' => $message,
