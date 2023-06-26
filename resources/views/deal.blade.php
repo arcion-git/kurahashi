@@ -68,6 +68,8 @@
                         @endif
                         @elseif($deal->status == 'キャンセル')
                         <div class="badge badge-danger">キャンセル</div>
+                        @elseif($deal->status == 'リピートオーダー')
+                        <div class="badge badge-info">リピートオーダー</div>
                         @endif
                       </td>
                       <td class="text-center">

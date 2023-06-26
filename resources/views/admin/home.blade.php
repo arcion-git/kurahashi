@@ -86,9 +86,10 @@
                         <option class="level-0" value="{{$cat}}">{{$cat}}</option>
                       @endif
                       <option value="すべての取引">すべての取引</option>
-                      <option class="level-0" value="交渉中">交渉中</option>
+                      <!-- <option class="level-0" value="交渉中">交渉中</option> -->
                       <option class="level-0" value="受注済">受注済</option>
                       <option class="level-0" value="キャンセル">キャンセル</option>
+                      <option class="level-0" value="リピートオーダー">リピートオーダー</option>
                     </select>
 
                     <input class="form-control" type="text" name="search" placeholder="検索" aria-label="Search" data-width="250" style="width: 250px;" value="@if(isset($search)){{$search}}@endif">
@@ -142,6 +143,8 @@
                     <div class="badge badge-warning">交渉中</div>
                     @elseif($deal->status == '確認待')
                     <div class="badge badge-info">確認待</div>
+                    @elseif($deal->status == 'リピートオーダー')
+                    <div class="badge badge-info">リピートオーダー</div>
                     @elseif($deal->status == 'キャンセル')
                     <div class="badge badge-danger">キャンセル</div>
                     @endif

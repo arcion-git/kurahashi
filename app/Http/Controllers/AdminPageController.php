@@ -123,6 +123,8 @@ class AdminPageController extends Controller
 
   public function search(Request $request){
 
+
+
     $tokuisakis = Store::select('tokuisaki_name')->distinct()->get();
 
     // dd($store_users);
@@ -145,8 +147,10 @@ class AdminPageController extends Controller
 
     if($cat == 'すべての取引'){
       $all_deals = Deal::get();
+    }elseif($cat == '受注済'){
+      $all_deals = Deal::where('status','発注済')->get();
     }else{
-      $all_deals = Deal::where('status',$cat)->get();
+      $all_deals = Deal::where('status', $cat)->get();
     }
 
     $deals = [];
@@ -175,7 +179,8 @@ class AdminPageController extends Controller
 
 
     // $dealsをCollectionインスタンスに変換
-    $dealsCollection = new Collection($deals);
+    // $dealsCollection = new Collection($deals);
+    $dealsCollection = collect($deals)->sortByDesc('created_at');
 
     // LengthAwarePaginatorインスタンスを作成
     $perPage = 30; // 1ページあたりのデータ数

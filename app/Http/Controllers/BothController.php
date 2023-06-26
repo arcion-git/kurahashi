@@ -619,8 +619,6 @@ class BothController extends Controller
 
     $carts = Cart::where(['user_id'=>$user_id, 'deal_id'=> $id])->get();
 
-    // キャンセルができるか判定
-    $user = User::where(['id'=> $user_id])->first();
 
     // セトナギユーザーの場合
     // 注文完了時間
@@ -674,6 +672,7 @@ class BothController extends Controller
     $now = date("Y-m-d H:i:s");
     // 次の営業日の前日19時以降はキャンセル不可
 
+
     // 翌営業日締め時間より前
     if (strtotime($now) < strtotime($zenjitu19ji)) {
       // dd('キャンセル可');
@@ -683,12 +682,15 @@ class BothController extends Controller
       $deal_cancel_button = null;
     }
 
+
+    // キャンセルができるか判定
     $user = User::where(['id'=>$deal->user_id])->first();
     $nouhin_yoteibi = null;
     if($user->setonagi == 1){
       $cart_id = Cart::where(['user_id'=>$deal->user_id, 'deal_id'=> $id])->first()->id;
       $nouhin_yoteibi = Order::where(['cart_id'=>$cart_id])->first()->nouhin_yoteibi;
     }
+
 
 
     $collect_tradercode = config('app.collect_tradercode');

@@ -53,7 +53,18 @@
                   @endif
                   @elseif($deal->status == 'キャンセル')
                   <div class="badge badge-danger">キャンセル</div>
+                  @elseif($deal->status == 'リピートオーダー')
+                    @if ( Auth::guard('admin')->check() )
+                      <a href="{{url('/admin/user/repeatorder/')}}/{{$user_id}}">
+                        <div class="badge badge-info">リピートオーダー</div>
+                      </a>
+                    @else
+                      <a href="{{url('/repeatorder/')}}">
+                        <div class="badge badge-info">リピートオーダー</div>
+                      </a>
+                    @endif
                   @endif
+
                   オーダー番号 #{{$deal->id}}
                 </div>
               </div>
@@ -137,11 +148,14 @@
                   @if($deal->status == 'キャンセル')
                   @else
                     @if($deal_cancel_button)
-                      {{ csrf_field() }}
-                        <div id="deal_cancel_button" class="btn btn-danger">キャンセル</div>
+                      @if($deal->status == 'リピートオーダー')
+                      @else
+                        {{ csrf_field() }}
+                          <div id="deal_cancel_button" class="btn btn-danger">キャンセル</div>
+                      @endif
                     @endif
                   @endif
-                  @if($deal->status == '発注済' or $deal->status == 'キャンセル')
+                  @if($deal->status == '発注済' or $deal->status == 'キャンセル' or $deal->status == 'リピートオーダー')
                   @else
                     <button type="submit" name="deal_id" value="{{ $deal->id }}" class="btn btn-warning">この内容で発注する</button>
                   @endif

@@ -116,7 +116,7 @@
 				    <div class="accordion cartAccordion" id="cartAccordion{{ $loop->index }}">
 				        <!-- <div class="card"> -->
 								@foreach($carts as $cart)
-									@if($cart->addtype == 'addsetonagi')
+									@if($cart->addtype == 'addsetonagi' || $cart->addtype == 'addrepeatorder')
 									<style>
 									.card-header{
 										display: none;
@@ -139,9 +139,8 @@
 
 
 															@foreach($carts as $cart)
-
 															<!-- お気に入り商品表示非表示 -->
-															@if(!isset($show_favorite) && ($cart->addtype == 'addbuyerrecommend' || $cart->addtype == 'addsetonagi' || $cart->addtype == 'addspecialprice') || (isset($show_favorite) && ($cart->favoriteitem())))
+															@if(!isset($show_favorite) && ($cart->addtype == 'addbuyerrecommend' || $cart->addtype == 'addsetonagi' || $cart->addtype == 'addrepeatorder' || $cart->addtype == 'addspecialprice') || (isset($show_favorite) && ($cart->favoriteitem())))
 
 
 															<!-- 最終確認画面で在庫がある商品のみ -->
@@ -870,7 +869,7 @@ label,
 <!-- 発注済、キャンセルの場合操作ができないようにする -->
 @if ( Auth::guard('user')->check() )
 	@if(isset($deal))
-		@if($deal->status == '発注済' or $deal->status == 'キャンセル')
+		@if($deal->status == '発注済' or $deal->status == 'キャンセル' or $deal->status == 'リピートオーダー')
 	<script>
 	  $(function(){
 			$('input').attr('readonly',true);

@@ -4358,8 +4358,17 @@ footer .external_link ul{
   #repeatorder_form .head-tyuusi{
     width: 33.33%;
   }
+  #repeatorder_form .head-sousa{
+    width: 33.33%;
+  }
+  #repeatorder_form .repeatorder_item{
+    border: 1px solid #bfc1c3;
+  }
   #repeatorder_form .repeatorder_item td{
     border: 0px !important;
+  }
+  #repeatorder_form .repeatorder_order{
+    border-top: 1px solid #bfc1c3;
   }
 
 }
