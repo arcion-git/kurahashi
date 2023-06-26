@@ -109,18 +109,22 @@
 				        </tr>
 				    </table>
 
-@if(request()->input('addtype') === 'addsetonagi')
-<style>
-.card-header{
-	display: none;
-}
-</style>
-@endif
+
 
 						@if(isset($groupedItems))
 				    @foreach($groupedItems as $text => $carts)
 				    <div class="accordion cartAccordion" id="cartAccordion{{ $loop->index }}">
 				        <!-- <div class="card"> -->
+								@foreach($carts as $cart)
+									@if($cart->addtype == 'addsetonagi')
+									<style>
+									.card-header{
+										display: none;
+									}
+									</style>
+									@break
+									@endif
+								@endforeach
 				        <div class="">
 				            <div class="card-header groupe_button" id="heading{{ $loop->index }}" data-toggle="collapse" data-target="#collapse{{ $loop->index }}" aria-expanded="true" aria-controls="collapse{{ $loop->index }}">
 				                <h2 class="mb-0">

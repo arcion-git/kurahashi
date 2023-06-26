@@ -38,7 +38,7 @@
             </div>
           </div>
         </div>
-        <div class="row mt-4">
+        <div id="repeatorder_form" class="row mt-4">
           <div class="col-12">
             <div class="section-title">リピートオーダー</div>
             <div class="clearfix mb-3"></div>
@@ -46,11 +46,11 @@
               @csrf
               <div class="table-responsive">
                 <table class="table table-striped table-md" style="table-layout: auto;">
-                  <tr>
-                    <th class="text-center">商品番号</th>
-                    <th class="text-center">商品名</th>
-                    <th class="text-center">産地</th>
-                    <th class="text-center">規格</th>
+                  <tr class="repeatorder_header">
+                    <!-- <th class="text-center">商品番号</th> -->
+                    <th class="text-center head-item_name">商品名</th>
+                    <th class="text-center head-sanchi">産地</th>
+                    <th class="text-center head-kikaku">規格</th>
                     <th class="text-center head-price">単価</th>
                     <th class="text-center head-quantity">数量</th>
                     <th class="text-center head-tani">単位</th>
@@ -67,24 +67,24 @@
                     @endif
                   </tr>
   		            @foreach($repeatcarts as $repeatcart)
-                  <tr id="{{$repeatcart->id}}">
-                    <td class="text-center">
+                  <tr class="repeatorder_item" id="{{$repeatcart->id}}">
+                    <!-- <td class="text-center">
                       {{$repeatcart->item()->item_id}}
-                    </td>
-                    <td class="text-center">
+                    </td> -->
+                    <td class="text-center head-item_name">
                       {{$repeatcart->item()->item_name}}
                     </td>
-                    <td class="text-center">
+                    <td class="text-center head-sanchi">
                       {{$repeatcart->item()->sanchi_name}}
                     </td>
-                    <td class="text-center">
+                    <td class="text-center head-kikaku">
                       {{$repeatcart->item()->kikaku}}
                     </td>
 
                     <td colspan="8" class="order-table repeat_order_table">
-              				<table class="table table-striped table-hover table-md" style="table-layout: fixed;">
+              				<table class="repeatorder_order_table table table-striped table-hover table-md" style="table-layout: fixed;">
               				@foreach($repeatcart->orders as $val)
-              					<tr id="{{$val->id}}">
+              					<tr class="repeatorder_order" id="{{$val->id}}">
                           <td class="text-center head-price">
                             <input name="repeatorder[{{$val->id}}][price]" class="price text-center form-control" value="{{$val->price}}" pattern="^[0-9]+$" title="0から9の半角数字" required>
                           </td>
@@ -205,7 +205,7 @@
                             @if($val->stop_flg == 1)
                             <spna class="stop_sinsei">停止申請あり</spna>
                             @endif
-              							<button type="button" id="{{$val->id}}" data-id="{{$val->id}}" class="removeid_{{$val->id}} delete_button btn btn-info">削除</button>
+              							<button type="button" id="{{$val->id}}" data-id="{{$val->id}}" class="delete_button removeid_{{$val->id}} btn btn-info">削除</button>
               							<button style="margin-top:10px;" type="button" id="{{$repeatcart->item()->id}}" class="cloneid_{{$val->id}} clonerepeatorder btn btn-success">配送先を追加</button>
               						<input name="order_id[]" class="order_id" type="hidden" value="{{$val->id}}" />
               						</td>
@@ -236,7 +236,7 @@
 </section>
 
 
-<form id="remove_form" action="{{ url('/admin/user/removerepeatorder') }}" method="POST">
+<form id="remove_form" action="{{ url('/admin/user/removerepeatorder') }}" enctype="multipart/form-data" method="POST" class="form-horizontal">
   @csrf
   <input name="kaiin_number" type="hidden" value="{{$id}}">
   <input id="remove_id" name="delete" type="hidden" value="">
@@ -499,5 +499,20 @@ $(function () {
   // searchWordの実行
   $('#search-text').on('input', searchWord);
 });
+
+
+// リピートオーダー商品削除（formタグ回避）
+$(function(){
+  $(".delete_button").on("click",function(){
+    var cart_id = $(this).parent().parent().parent().parent().parent().parent().get(0).id;
+    var remove_id = $(this).data('id');
+    console.log(cart_id);
+    console.log(remove_id);
+    $("#remove_id").val(remove_id);
+    $("#cart_id").val(cart_id);
+    $('#remove_form').submit();
+  });
+});
+
 </script>
 @endsection

@@ -1358,19 +1358,19 @@ if(document.URL.match("/admin/buyer/recommend")) {
 }
 
 // リピートオーダー商品削除（formタグ回避）
-if(document.URL.match("/admin/user/repeatorder")) {
-  $(function(){
-    $(".delete_button").on("click",function(){
-      var cart_id = $(this).parent().parent().parent().parent().parent().parent().get(0).id;
-      var remove_id = $(this).data('id');
-      console.log(cart_id);
-      console.log(remove_id);
-      $("#remove_id").val(remove_id);
-      $("#cart_id").val(cart_id);
-      $('#remove_form').submit();
-    });
-  });
-}
+// if(document.URL.match("/admin/user/repeatorder")) {
+//   $(function(){
+//     $(".delete_button").on("click",function(){
+//       var cart_id = $(this).parent().parent().parent().parent().parent().parent().get(0).id;
+//       var remove_id = $(this).data('id');
+//       console.log(cart_id);
+//       console.log(remove_id);
+//       $("#remove_id").val(remove_id);
+//       $("#cart_id").val(cart_id);
+//       $('#remove_form').submit();
+//     });
+//   });
+// }
 
 
 

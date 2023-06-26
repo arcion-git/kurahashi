@@ -4306,3 +4306,57 @@ footer .external_link ul{
     padding: 1em;
     margin-bottom: 1em;
 }
+
+@media (max-width: 767px) {
+  .repeatorder_header,
+  .repeatorder_item,
+  .repeatorder_order {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      height: 100%;
+  }
+  .repeat_order_table,
+  .repeatorder_order_table{
+    width: 100% !important;
+  }
+  #repeatorder_form .head-item_name,
+  #repeatorder_form .head-sanchi,
+  #repeatorder_form .head-kikaku,
+  #repeatorder_form .head-price,
+  #repeatorder_form .head-quantity,
+  #repeatorder_form .head-tani,
+  #repeatorder_form .head-nouhin_youbi,
+  #repeatorder_form .head-store,
+  #repeatorder_form .head-startdate,
+  #repeatorder_form .head-yuukou{
+    height: 100% !important;
+  }
+
+  #repeatorder_form .head-item_name{
+    width: 100%;
+  }
+  #repeatorder_form .head-sanchi,
+  #repeatorder_form .head-kikaku{
+    width: 50%;
+  }
+  #repeatorder_form .head-price,
+  #repeatorder_form .head-quantity,
+  #repeatorder_form .head-tani{
+    width: 33.33%;
+  }
+
+  #repeatorder_form .head-nouhin_youbi{
+    width: 60%;
+  }
+  #repeatorder_form .head-store{
+    width: 40%;
+  }
+  #repeatorder_form .head-startdate,
+  #repeatorder_form .head-yuukou,
+  #repeatorder_form .head-tyuusi{
+    width: 33.33%;
+  }
+
+}
