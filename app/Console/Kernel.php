@@ -98,7 +98,11 @@ class Kernel extends ConsoleKernel
             }
           }
         }
-      });
+        // 下記からメールを作成して送信
+        // $repeatcarts = Repeatcart::where('status','有効')->get();
+        // dd($repeatcarts);
+
+      })->withoutOverlapping();
     }
 
     /**
