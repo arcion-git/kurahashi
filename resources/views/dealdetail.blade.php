@@ -28,7 +28,10 @@
           <div class="row">
             <div class="col-lg-12">
               <div class="invoice-title">
+                @if ( Auth::guard('admin')->check() )
                 <h3>{{$deal->user->name}} <span class="small">様</span></h3>
+                @endif
+              </div>
                 <div class="invoice-number">
                   @if($deal->status == '発注済')
                   @if ( Auth::guard('user')->check() )
@@ -64,10 +67,8 @@
                       </a>
                     @endif
                   @endif
-
-                  オーダー番号 #{{$deal->id}}
+                  取引ID #{{$deal->id}}
                 </div>
-              </div>
               <hr>
               <div class="row">
                 <!-- <div class="col-md-6">
@@ -82,6 +83,7 @@
                     〒{{ $deal->user->address01 }}<br>{{ $deal->user->address02 }}{{ $deal->user->address03 }}{{ $deal->user->address04 }}
                     </address>
                 </div> -->
+                @if ( Auth::guard('admin')->check() )
                 <div class="col-md-6">
                   <address>
                     <strong>ご連絡先:</strong><br>
@@ -89,6 +91,7 @@
                     {{ $deal->user->email }}
                   </address>
                 </div>
+                @endif
                 <div class="col-md-6">
                   <address>
                     <!-- <strong>お問い合わせ日時:</strong><br>

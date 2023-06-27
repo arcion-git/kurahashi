@@ -193,13 +193,10 @@
 																			<td class="head-price text-center">
 																				<!-- BtoB金額表示 -->
 																					@if(!$user->setonagi)
-																						@if($cart->hidden_price() == '1')
-																							<!-- 担当のおすすめ商品の価格非表示が選択されている場合 -->
-																							<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="未定" value="未定" @if(isset($deal) && Auth::guard('admin')->check()) @else readonly @endif>
-																						@else
-																							<!-- BtoB通常金額表示 -->
-																							<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="@if($val->price=='未定'){{(0)}}@else{{ $val->price }}@endif" value="@if($val->price=='未定')未定@else{{number_format($val->price)}}@endif" @if(isset($deal) && Auth::guard('admin')->check()) @else readonly @endif>
-																						@endif
+
+																						<!-- BtoB通常金額表示 -->
+																						<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="@if($val->price=='未定'){{(0)}}@else{{ $val->price }}@endif" value="@if($val->price=='未定')未定@elseif($val->price=='-')-@else{{number_format($val->price)}}@endif" @if(isset($deal) && Auth::guard('admin')->check()) @else readonly @endif>
+
 																					@else
 																						<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="@if($val->price=='未定'){{(0)}}@else{{ $val->price }}@endif" value="@if($val->price=='未定')未定@else{{number_format($val->price)}}@endif" @if(isset($deal) && Auth::guard('admin')->check()) @else readonly @endif>
 																					@endif

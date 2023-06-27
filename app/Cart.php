@@ -27,6 +27,9 @@ class Cart extends Model
     'item_id',
     'quantity',
     'addtype',
+    'groupe',
+    'uwagaki_item_name',
+    'uwagaki_kikaku',
   ];
   public function item() {
       //リレーション

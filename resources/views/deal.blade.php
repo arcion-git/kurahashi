@@ -22,9 +22,9 @@
                 <div class="table-responsive">
                   <table class="table table-striped">
                     <tr>
-                      <th class="text-center">オーダーID</th>
-                      <th class="text-center">お名前</th>
-                      <th class="text-center">お問い合わせ日時</th>
+                      <th class="text-center">取引ID</th>
+                      <!-- <th class="text-center">お名前</th> -->
+                      <!-- <th class="text-center">お問い合わせ日時</th> -->
                       <th class="text-center">発注日時</th>
                       <th class="text-center">状態</th>
                       <th class="text-center">操作</th>
@@ -35,12 +35,12 @@
                       <td class="text-center" class="text-center">
                         {{$deal->id}}
                       </td>
-                      <td class="text-center">
+                      <!-- <td class="text-center">
                         {{$deal->user->name}}
-                      </td>
-                      <td class="text-center">
+                      </td> -->
+                      <!-- <td class="text-center">
                         {{$deal->created_at}}
-                      </td>
+                      </td> -->
                       <td class="text-center">
                         {{$deal->success_time}}
                       </td>
@@ -69,11 +69,11 @@
                         @elseif($deal->status == 'キャンセル')
                         <div class="badge badge-danger">キャンセル</div>
                         @elseif($deal->status == 'リピートオーダー')
-                        <div class="badge badge-info">リピートオーダー</div>
+                        <div class="badge badge-info">ﾘﾋﾟｰﾄｵｰﾀﾞｰ</div>
                         @endif
                       </td>
                       <td class="text-center">
-                        <a href="{{ url('/user/deal/'.$deal->id) }}"><button class="btn btn-primary">詳細を見る</button></a>
+                        <a href="{{ url('/user/deal/'.$deal->id) }}"><button class="btn btn-primary">詳細</button></a>
                       </td>
                     </tr>
                     @endforeach

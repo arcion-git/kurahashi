@@ -21,6 +21,7 @@
   <div class="section-body repeatorder">
     <div class="invoice">
       <div class="invoice-print">
+        @if ( Auth::guard('admin')->check() )
         <div class="row">
           <div class="col-lg-12">
             <div class="invoice-title">
@@ -38,6 +39,7 @@
             </div>
           </div>
         </div>
+        @endif
         <div id="repeatorder_form" class="row mt-4">
           <div class="col-12">
             <div class="section-title">リピートオーダー</div>
