@@ -3960,7 +3960,11 @@ footer .external_link ul{
 
 #cartAccordion .card-header {
   border-bottom: 0px;
-  background-color: aliceblue;
+  background-color: #1D2C6B;
+}
+
+#cartAccordion .card-header .btn-link{
+  color: #fff;
 }
 
 /* ここからV1.1 */
