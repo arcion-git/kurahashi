@@ -102,7 +102,7 @@ class Kernel extends ConsoleKernel
         // $repeatcarts = Repeatcart::where('status','有効')->get();
         // dd($repeatcarts);
 
-      })->withoutOverlapping();
+      });
     }
 
     /**
