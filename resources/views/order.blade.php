@@ -189,6 +189,7 @@
 																<td colspan="8" class="order-table">
 																	<table class="table table-striped table-hover table-md">
 																	@foreach($cart->orders as $val)
+																	 @if($val)
 																		<tr id="{{$val->id}}" class="order_item">
 																			<td class="head-price text-center">
 																				<!-- BtoB金額表示 -->
@@ -310,6 +311,8 @@
 																			</td>
 																			<input name="order_id[]" class="order_id" type="hidden" value="{{$val->id}}" />
 																		</tr> --}}
+																		@break
+																		@endif
 																	@endforeach
 																	</table>
 																</td>

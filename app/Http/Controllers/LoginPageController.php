@@ -1138,13 +1138,12 @@ class LoginPageController extends Controller
             $price = $get_item->price;
           }
 
-          $order=Order::join(['cart_id'=> $cart->id])
-          ->firstOrNew(['order.cart_id'=> $cart->id ,'order.price'=>$price]);
+
+          $order=Order::firstOrNew(['cart_id'=> $cart->id ,'price'=>$price]);
           if(!$setonagi_user){
             $order->tokuisaki_name = $store->tokuisaki_name;
             $order->store_name = $store->store_name;
           }
-
           $order->nouhin_yoteibi = $nouhin_yoteibi;
           $order->save();
           $set_order = $order;
