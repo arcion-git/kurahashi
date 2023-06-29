@@ -76,28 +76,28 @@ class Kernel extends ConsoleKernel
             // 配列に曜日が含まれているか確認
             $key = in_array($weekday, $nouhin_youbi);
             // 該当の曜日があれば出力
-            // if($key == true){
-            //   $user = User::where('kaiin_number',$repeatcart->kaiin_number)->first();
-            //   $item = Item::where(['item_id'=> $repeatcart->item_id, 'sku_code'=> $repeatcart->sku_code])->first();
-            //   $store = Store::where(['tokuisaki_name'=> $repeatorder->tokuisaki_name , 'store_name'=> $repeatorder->store_name])->first();
-            //
-            //   $deal = Deal::create(['user_id'=> $user->id]);
-            //   $deal->status = 'リピートオーダー';
-            //   $deal->success_time = Carbon::now();
-            //   $deal->save();
-            //
-            //   $cart = Cart::create(['user_id'=> $user->id , 'item_id'=> $item->id , 'deal_id'=> $deal->id]);
-            //   $cart->addtype = 'addrepeatorder';
-            //   $cart->save();
-            //
-            //   $order = Order::create(['cart_id'=> $cart->id]);
-            //   $order->tokuisaki_name = $store->tokuisaki_name;
-            //   $order->store_name = $store->store_name;
-            //   $order->nouhin_yoteibi = $nouhin_yoteibi;
-            //   $order->price = $repeatorder->price;
-            //   $order->quantity = $repeatorder->quantity;
-            //   $order->save();
-            // }
+            if($key == true){
+              $user = User::where('kaiin_number',$repeatcart->kaiin_number)->first();
+              $item = Item::where(['item_id'=> $repeatcart->item_id, 'sku_code'=> $repeatcart->sku_code])->first();
+              $store = Store::where(['tokuisaki_name'=> $repeatorder->tokuisaki_name , 'store_name'=> $repeatorder->store_name])->first();
+
+              $deal = Deal::create(['user_id'=> $user->id]);
+              $deal->status = 'リピートオーダー';
+              $deal->success_time = Carbon::now();
+              $deal->save();
+
+              $cart = Cart::create(['user_id'=> $user->id , 'item_id'=> $item->id , 'deal_id'=> $deal->id]);
+              $cart->addtype = 'addrepeatorder';
+              $cart->save();
+
+              $order = Order::create(['cart_id'=> $cart->id]);
+              $order->tokuisaki_name = $store->tokuisaki_name;
+              $order->store_name = $store->store_name;
+              $order->nouhin_yoteibi = $nouhin_yoteibi;
+              $order->price = $repeatorder->price;
+              $order->quantity = $repeatorder->quantity;
+              $order->save();
+            }
           }
         }
         // ユーザーごとにメールを作成
@@ -149,7 +149,6 @@ class Kernel extends ConsoleKernel
                   elseif ($item->tani == 4){
                   $tani = 'kg';
                   }
-
 
                   if($repeatorder->price == '未定'){
                     $item_price = '金額未定 ' ;
