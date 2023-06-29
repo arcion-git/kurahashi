@@ -172,7 +172,7 @@ class Kernel extends ConsoleKernel
                     // 単位
                     $tani.' '.
                     // 単価
-                    $item_price.' '.$repeatorder->store_name.' '.$nouhin_yoteibi
+                    $item_price.' '.$repeatorder->tokuisaki_name.' '.$repeatorder->store_name.' '.$nouhin_yoteibi
                     // 配送希望日
                     // $order->nouhin_yoteibi.
                     // 受け取りå
