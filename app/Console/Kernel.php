@@ -151,6 +151,14 @@ class Kernel extends ConsoleKernel
                   }
 
 
+                  if($repeatorder->price == '未定'){
+                    $item_price = '金額未定 ' ;
+                  }elseif($repeatorder->price == '-'){
+                    $item_price = '- ' ;
+                  }else{
+                    $item_price = number_format($order->price).'円 ';
+                  }
+
                   $array =
                     '・'.
                     // 商品コード
@@ -164,7 +172,7 @@ class Kernel extends ConsoleKernel
                     // 単位
                     $tani.' '.
                     // 単価
-                    $repeatorder->price.' '.$repeatorder->store_name.' '.$nouhin_yoteibi
+                    $item_price.' '.$repeatorder->store_name.' '.$nouhin_yoteibi
                     // 配送希望日
                     // $order->nouhin_yoteibi.
                     // 受け取りå
