@@ -3967,6 +3967,8 @@ footer .external_link ul{
   color: #fff;
 }
 
+
+
 /* ここからV1.1 */
 .groupe_button{
   border-left: 1px solid #bfc1c3;
@@ -4375,4 +4377,19 @@ footer .external_link ul{
     border-top: 1px solid #bfc1c3;
   }
 
+}
+
+#cartAccordion .card-header button.btn-link:hover{
+  pointer-events: none !important;
+  text-decoration: none !important;
+  background-color: #1D2C6B !important;
+}
+
+#cartAccordion .card-header:hover{
+  cursor: pointer;
+  cursor: hand;
+}
+
+.groupeditems{
+  background-color: #1D2C6B !important;
 }
