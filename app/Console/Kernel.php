@@ -155,7 +155,7 @@ class Kernel extends ConsoleKernel
                   }elseif($repeatorder->price == '-'){
                     $item_price = '- ' ;
                   }else{
-                    $item_price = number_format($order->price).'円 ';
+                    $item_price = number_format($repeatorder->price).'円 ';
                   }
 
                   $array =
