@@ -1223,8 +1223,14 @@ class AdminPageController extends Controller
 
       $id = $request->tokuisaki_id;
       $all_zaikokanri = $request->all_zaikokanri;
+      $all_hidden_price = $request->all_hidden_price;
       $tokuisaki_id = $request->tokuisaki_id;
       $buyerrecommends = $request->buyerrecommend;
+
+      if(isset($all_hidden_price)){
+        $buyer_recommends = BuyerRecommend::where(['tokuisaki_id'=> $tokuisaki_id])->update(['hidden_price'=> 1]);
+        return redirect()->route('buyerrecommend', $id);
+      }
 
       if(isset($all_zaikokanri)){
         $buyer_recommends = BuyerRecommend::where(['tokuisaki_id'=> $tokuisaki_id])->update(['zaikokanri'=> 1 , 'zaikosuu'=> null]);

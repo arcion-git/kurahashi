@@ -68,7 +68,7 @@
                     <th class="text-center nouhin_end">納品期限</th>
                     <th class="text-center">限定店舗</th>
                     <th class="text-center">操作</th>
-                    <th class="text-center">価格非表示</th>
+                    <th class="text-center">価格非表示<input type="checkbox" id="all_hidden_price" name="all_hidden_price"></th>
                     <th class="text-center">在庫管理しない<input type="checkbox" id="all_zaikokanri" name="all_zaikokanri"></th>
                     <th class="text-center">限定数</th>
                   </tr>
@@ -372,7 +372,7 @@ $('#sortdata').bind('sortstop',function(){
     $('.save_btn').click();
   });
 });
-$('.price,.start,.end,.nouhin_end,#all_zaikokanri').change(function() {
+$('.price,.start,.end,.nouhin_end,#all_zaikokanri,#all_hidden_price').change(function() {
     $('.save_btn').click();
 });
 
