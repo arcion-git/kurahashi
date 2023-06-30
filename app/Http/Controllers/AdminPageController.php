@@ -1150,7 +1150,7 @@ class AdminPageController extends Controller
       // dd($buyerrecommend_item);
       $order_no = $buyerrecommend_item->order_no;
 
-      $recommend = BuyerRecommend::create(['item_id'=> $buyerrecommend_item->item_id , 'sku_code'=> $buyerrecommend_item->sku_code,'price'=> $buyerrecommend_item->price,'tokuisaki_id'=> $buyerrecommend_item->tokuisaki_id ,'order_no'=> $order_no]);
+      $recommend = BuyerRecommend::create(['item_id'=> $buyerrecommend_item->item_id , 'sku_code'=> $buyerrecommend_item->sku_code,'price'=> $buyerrecommend_item->price,'tokuisaki_id'=> $buyerrecommend_item->tokuisaki_id ,'order_no'=> $order_no,'uwagaki_item_name'=> $buyerrecommend_item->uwagaki_item_name,'uwagaki_kikaku'=> $buyerrecommend_item->uwagaki_kikaku]);
       $recommend->groupe = $buyerrecommend_item->groupe;
       $recommend -> save();
 
