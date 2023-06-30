@@ -3556,6 +3556,41 @@ class LoginPageController extends Controller
     $repeatorder->stop_flg = 1;
     $repeatorder->save();
 
+    $repeatcart = Repeatcart::where('id',$repeatorder->cart_id)->first();
+    $user = User::where('kaiin_number' , $repeatcart->kaiin_number)->first();
+
+    $item = Item::where(['item_id'=> $repeatcart->item_id,'sku_code'=> $repeatcart->sku_code])->first();
+
+    $name = 'ご担当者';
+    $kaiin_number = $user->kaiin_number;
+    $email = $user->email;
+    $tel = $user->tel;
+    $admin_mail = config('app.admin_mail');
+    $text = '下記のユーザーからリピートオーダーの停止申請がありました。<br />
+    <br />
+    【会員情報】<br />
+    得意先名：'.$repeatorder->tokuisaki_name.'<br />
+    会員番号：'.$kaiin_number.'<br />
+    お名前：'.$name.'<br />
+    メールアドレス：'.$email.'<br />
+    電話番号：'.$tel.'<br />
+    <br />
+    【リピートオーダー詳細】<br />
+    商品名：'.$item->item_name.'<br />
+    価格：'.number_format($repeatorder->price).'円<br />
+    数量：'.$repeatorder->quantity.'<br />
+    納品先店舗：'.$repeatorder->store_name.'<br />
+    開始日：'.$repeatorder->startdate.'<br />
+    <br />
+    ご対応をお願いいたします。';
+    Mail::send('emails.register', [
+        'name' => $name,
+        'text' => $text,
+        'admin_mail' => $admin_mail,
+    ], function ($message) use ($email , $admin_mail) {
+        $message->to($email)->bcc($admin_mail)->subject('リピートオーダーの停止申請がありました。');
+    });
+
     return redirect('repeatorder');
   }
 
