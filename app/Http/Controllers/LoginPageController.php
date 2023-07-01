@@ -1693,20 +1693,29 @@ class LoginPageController extends Controller
           // dd($groupedItems);
         }elseif($addtype == 'addbuyerrecommend'){
           // 担当のおすすめ商品を取得
+          // $carts = Cart::where(['carts.user_id'=>$user_id, 'deal_id'=> null, 'addtype'=>$addtype])->get();
+                              // dd($carts);
           $carts = Cart::join('items', 'carts.item_id', '=', 'items.id')
+
           ->join('buyer_recommends', function ($join) {
               $join->on('buyer_recommends.item_id', '=', 'items.item_id')
                    ->on('buyer_recommends.sku_code', '=', 'items.sku_code')
                    ->on('buyer_recommends.uwagaki_item_name', '=', 'carts.uwagaki_item_name')
                    ->on('buyer_recommends.uwagaki_kikaku', '=', 'carts.uwagaki_kikaku');
           })
-          ->where(['carts.user_id'=>$user_id, 'deal_id'=> null, 'addtype'=>$addtype])
+
+
+
           ->where('buyer_recommends.tokuisaki_id', $tokuisaki_id)
+
           ->where('buyer_recommends.price', '>=', 1)
           ->where(function ($query) use ($store_name) {
               $query->Where('buyer_recommends.gentei_store', $store_name)
                     ->orWhereNull('buyer_recommends.gentei_store');
           })
+
+          ->where(['carts.user_id'=>$user_id, 'deal_id'=> null, 'addtype'=>$addtype])
+
           ->where('buyer_recommends.start', '<=', $now)
           ->where('buyer_recommends.end', '>=', $now)
           ->where('buyer_recommends.nouhin_end', '>=', $nouhin_yoteibi)
@@ -1719,7 +1728,7 @@ class LoginPageController extends Controller
           ->orderByRaw('CAST(buyer_recommends.order_no AS UNSIGNED) asc')
           ->select('carts.*', 'buyer_recommends.gentei_store', DB::raw('IF(buyer_recommends.zaikokanri IS NULL AND buyer_recommends.zaikosuu >= 1, buyer_recommends.zaikosuu, IF(buyer_recommends.zaikokanri = 1, 999, items.zaikosuu)) AS zaikosuu'))
           ->get();
-          // dd($carts);
+          // dd($store_name);
 
           $carts = $carts->filter(function ($cart) use ($carts) {
               $count = $carts->where('item_id', $cart->item_id)->count();
