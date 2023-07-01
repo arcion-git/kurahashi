@@ -2401,7 +2401,7 @@ class LoginPageController extends Controller
         ->where('start', '<=' , $now)
         ->where('end', '>=', $now)->first();
         if(isset($buyer_recommend_item)){
-          $zaikosuu = 99;
+          $zaikosuu = 999;
           // break;
         }else{
           // 担当のおすすめ商品の在庫数を取得
