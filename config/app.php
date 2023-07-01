@@ -125,6 +125,7 @@ return [
 
 
     'admin_mail' => env('ADMIN_MAIL'),
+    'sales_admin_mail' => env('SALES_ADMIN_MAIL'),
     'envi' => env('ENVI'),
 
     /*

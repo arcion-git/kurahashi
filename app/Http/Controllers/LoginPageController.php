@@ -3566,6 +3566,7 @@ class LoginPageController extends Controller
     $email = $user->email;
     $tel = $user->tel;
     $admin_mail = config('app.admin_mail');
+    $sales_admin_mail = config('app.sales_admin_mail');
     $text = '下記のユーザーからリピートオーダーの停止申請がありました。<br />
     <br />
     【会員情報】<br />
@@ -3587,7 +3588,7 @@ class LoginPageController extends Controller
         'name' => $name,
         'text' => $text,
         'admin_mail' => $admin_mail,
-    ], function ($message) use ($email , $admin_mail) {
+    ], function ($message) use ($sales_admin_mail) {
         $message->to($email)->bcc($admin_mail)->subject('リピートオーダーの停止申請がありました。');
     });
 
