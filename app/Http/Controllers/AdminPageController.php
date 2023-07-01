@@ -1405,27 +1405,138 @@ class AdminPageController extends Controller
       return redirect()->route('buyerrecommend', $id);
     }
 
-    public function buyerrecommend_change_groupe_name(Request $request){
 
+    public function buyerrecommend_change_groupe_name(Request $request){
       $tokuisaki_id = $request->tokuisaki_id;
       $old_groupe_name = $request->old_groupe_name;
       $groupe_name = $request->groupe_name;
 
-      $buyerrecommends = BuyerRecommend::where(['tokuisaki_id'=> $tokuisaki_id , 'groupe'=> $old_groupe_name])->get();
-
-      foreach ($buyerrecommends as $buyerrecommend) {
-        $buyerrecommend->groupe = $groupe_name;
-        $buyerrecommend->save();
-      }
+      $buyerrecommends = BuyerRecommend::where(['tokuisaki_id' => $tokuisaki_id, 'groupe' => $old_groupe_name])->update(['groupe' => $groupe_name]);
 
       $id = $tokuisaki_id;
 
       $data=[
         'id'=>$id,
       ];
-      return redirect()->route('buyerrecommend', $id);
+      return;
     }
 
+    public function buyerrecommend_change_uwagaki_kikaku(Request $request){
+      $tokuisaki_id = $request->tokuisaki_id;
+      $buyerrecommend_id = $request->buyerrecommend_id;
+      $uwagaki_kikaku = $request->uwagaki_kikaku;
+      $buyerrecommends = BuyerRecommend::where(['id' => $buyerrecommend_id])->update(['uwagaki_kikaku' => $uwagaki_kikaku]);
+      $id = $tokuisaki_id;
+      $data=[
+        'id'=>$id,
+      ];
+      return;
+    }
+
+    public function buyerrecommend_change_price(Request $request){
+      $tokuisaki_id = $request->tokuisaki_id;
+      $buyerrecommend_id = $request->buyerrecommend_id;
+      $price = $request->price;
+      $buyerrecommends = BuyerRecommend::where(['id' => $buyerrecommend_id])->update(['price' => $price]);
+      $id = $tokuisaki_id;
+      $data=[
+        'id'=>$id,
+      ];
+      return;
+    }
+
+    public function buyerrecommend_change_start(Request $request){
+      $tokuisaki_id = $request->tokuisaki_id;
+      $buyerrecommend_id = $request->buyerrecommend_id;
+      $start = $request->start;
+      $buyerrecommends = BuyerRecommend::where(['id' => $buyerrecommend_id])->update(['start' => $start]);
+      $id = $tokuisaki_id;
+      $data=[
+        'id'=>$id,
+      ];
+      return;
+    }
+
+    public function buyerrecommend_change_end(Request $request){
+      $tokuisaki_id = $request->tokuisaki_id;
+      $buyerrecommend_id = $request->buyerrecommend_id;
+      $end = $request->end;
+      $buyerrecommends = BuyerRecommend::where(['id' => $buyerrecommend_id])->update(['end' => $end]);
+      $id = $tokuisaki_id;
+      $data=[
+        'id'=>$id,
+      ];
+      return;
+    }
+
+    public function buyerrecommend_change_nouhin_end(Request $request){
+      $tokuisaki_id = $request->tokuisaki_id;
+      $buyerrecommend_id = $request->buyerrecommend_id;
+      $nouhin_end = $request->nouhin_end;
+      $buyerrecommends = BuyerRecommend::where(['id' => $buyerrecommend_id])->update(['nouhin_end' => $nouhin_end]);
+      $id = $tokuisaki_id;
+      $data=[
+        'id'=>$id,
+      ];
+      return;
+    }
+
+    public function buyerrecommend_change_gentei_store(Request $request){
+      $tokuisaki_id = $request->tokuisaki_id;
+      $buyerrecommend_id = $request->buyerrecommend_id;
+      $gentei_store = $request->gentei_store;
+      if($gentei_store == 'on') {
+        $gentei_store = 1;
+      }
+      $buyerrecommends = BuyerRecommend::where(['id' => $buyerrecommend_id])->update(['gentei_store' => $gentei_store]);
+      $id = $tokuisaki_id;
+      $data=[
+        'id'=>$id,
+      ];
+      return;
+    }
+
+    public function buyerrecommend_change_hidden_price(Request $request){
+      $tokuisaki_id = $request->tokuisaki_id;
+      $buyerrecommend_id = $request->buyerrecommend_id;
+      $hidden_price = $request->hidden_price;
+      if($hidden_price == 'on') {
+        $hidden_price = 1;
+      }
+      $buyerrecommends = BuyerRecommend::where(['id' => $buyerrecommend_id])->update(['hidden_price' => $hidden_price]);
+      $id = $tokuisaki_id;
+      $data=[
+        'id'=>$id,
+      ];
+      return;
+    }
+
+    public function buyerrecommend_change_zaikokanri(Request $request){
+      $tokuisaki_id = $request->tokuisaki_id;
+      $buyerrecommend_id = $request->buyerrecommend_id;
+      $zaikokanri = $request->zaikokanri;
+      if($zaikokanri == 'on') {
+        $zaikokanri = null;
+      }
+      $buyerrecommends = BuyerRecommend::where(['id' => $buyerrecommend_id])->update(['zaikokanri' => $zaikokanri]);
+      $id = $tokuisaki_id;
+      $data=[
+        'id'=>$id,
+      ];
+      return;
+    }
+
+    public function buyerrecommend_change_zaikosuu(Request $request){
+      $tokuisaki_id = $request->tokuisaki_id;
+      $buyerrecommend_id = $request->buyerrecommend_id;
+      $zaikosuu = $request->zaikosuu;
+      $buyerrecommends = BuyerRecommend::where(['id' => $buyerrecommend_id])->update(['zaikosuu' => $zaikosuu]);
+      $id = $tokuisaki_id;
+      $data=[
+        'id'=>$id,
+      ];
+      return;
+    }
 
 
 

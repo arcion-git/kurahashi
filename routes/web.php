@@ -194,8 +194,18 @@
   Route::post('/admin/buyer/saverecommend', 'AdminPageController@buyersaverecommend');
   Route::post('/admin/buyer/removercommend', 'AdminPageController@buyerremovercommend');
   Route::post('/admin/buyer/buyerrecommend_change_groupe_name', 'AdminPageController@buyerrecommend_change_groupe_name');
+  Route::post('/admin/buyer/buyerrecommend_change_uwagaki_item_name', 'AdminPageController@buyerrecommend_change_uwagaki_item_name');
+  Route::post('/admin/buyer/buyerrecommend_change_uwagaki_kikaku', 'AdminPageController@buyerrecommend_change_uwagaki_kikaku');
 
-
+  Route::post('/admin/buyer/buyerrecommend_change_price', 'AdminPageController@buyerrecommend_change_price');
+  Route::post('/admin/buyer/buyerrecommend_change_start', 'AdminPageController@buyerrecommend_change_start');
+  Route::post('/admin/buyer/buyerrecommend_change_end', 'AdminPageController@buyerrecommend_change_end');
+  Route::post('/admin/buyer/buyerrecommend_change_nouhin_end', 'AdminPageController@buyerrecommend_change_nouhin_end');
+  Route::post('/admin/buyer/buyerrecommend_change_gentei_store', 'AdminPageController@buyerrecommend_change_gentei_store');
+  Route::post('/admin/buyer/buyerrecommend_change_hidden_price', 'AdminPageController@buyerrecommend_change_hidden_price');
+  Route::post('/admin/buyer/buyerrecommend_change_zaikokanri', 'AdminPageController@buyerrecommend_change_zaikokanri');
+  Route::post('/admin/buyer/buyerrecommend_change_nouhin_end', 'AdminPageController@buyerrecommend_change_nouhin_end');
+  Route::post('/admin/buyer/buyerrecommend_change_zaikosuu', 'AdminPageController@buyerrecommend_change_zaikosuu');
 
   // リピートオーダーポスト
   Route::get('/admin/user/repeatorder/{id}', 'AdminPageController@userrepeatorder')->name('repeatorder');

@@ -2,9 +2,12 @@
 @extends('layouts.app')
 
 @section('content')
+<!--
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-datetimepicker/build/jquery.datetimepicker.min.css">
 
-
-
+<script src="https://cdn.jsdelivr.net/npm/jquery-datetimepicker/js/locales/jquery.datetimepicker.ja.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-datetimepicker/build/jquery.datetimepicker.full.min.js"></script> -->
 
 
 
@@ -80,7 +83,7 @@
                           <th colspan="15" class=""><input id="{{ $group }}" type="text" name="buyerrecommend_change_groupe_name" class="buyerrecommend_change_groupe_name form-control" value="{{ $group }}"></th>
                       </tr>
         	            @foreach($buyerrecommends as $buyerrecommend)
-                      <tr>
+                      <tr id="{{$buyerrecommend->id}}">
                         <!-- オーダー番号を記録 -->
                         <input type="hidden" name="buyerrecommend[{{$buyerrecommend->id}}][order_no]" class="order_no text-center form-control" value="{{$buyerrecommend->order_no}}">
                         <!-- <td class="text-center">
@@ -90,13 +93,13 @@
                           {{$buyerrecommend->item()->item_id}}
                         </td>
                         <td class="text-center">
-                          <input type="text" id="uwagaki_item_name" class="form-control text-center" name="buyerrecommend[{{$buyerrecommend->id}}][uwagaki_item_name]" value="{{$buyerrecommend->uwagaki_item_name()}}">
+                          <input type="text" id="uwagaki_item_name" class="uwagaki_item_name form-control text-center" name="buyerrecommend[{{$buyerrecommend->id}}][uwagaki_item_name]" value="{{$buyerrecommend->uwagaki_item_name()}}">
                         </td>
                         <td class="text-center">
                           {{$buyerrecommend->item()->sanchi_name}}
                         </td>
                         <td class="text-center">
-                          <input type="text" id="uwagaki_kikaku" class="form-control text-center" name="buyerrecommend[{{$buyerrecommend->id}}][uwagaki_kikaku]" value="{{$buyerrecommend->uwagaki_kikaku()}}">
+                          <input type="text" id="uwagaki_kikaku" class="uwagaki_kikaku form-control text-center" name="buyerrecommend[{{$buyerrecommend->id}}][uwagaki_kikaku]" value="{{$buyerrecommend->uwagaki_kikaku()}}">
                         </td>
                         <td class="text-center">
                           @if ($buyerrecommend->item()->tani == 1)
@@ -116,13 +119,13 @@
                           <input pattern="^[0-9]+$" name="buyerrecommend[{{$buyerrecommend->id}}][price]" class="price text-center form-control" value="{{$buyerrecommend->price}}" title="0から9の半角数字" required>
                         </td>
                         <td class="text-center">
-                          <input type="text" name="buyerrecommend[{{$buyerrecommend->id}}][start]" class="start text-center form-control daterange-cus datepicker" value="{{$buyerrecommend->start}}" autocomplete="off" required>
+                          <input type="text" name="buyerrecommend[{{$buyerrecommend->id}}][start]" class="start text-center form-control daterange-cus start_datepicker" value="{{$buyerrecommend->start}}" autocomplete="off" required>
                         </td>
                         <td class="text-center">
-                          <input type="text" name="buyerrecommend[{{$buyerrecommend->id}}][end]" class="end text-center form-control daterange-cus datepicker" value="{{$buyerrecommend->end}}" autocomplete="off" required>
+                          <input type="text" name="buyerrecommend[{{$buyerrecommend->id}}][end]" class="end text-center form-control daterange-cus end_datepicker" value="{{$buyerrecommend->end}}" autocomplete="off" required>
                         </td>
                         <td class="text-center">
-                          <input type="text" name="buyerrecommend[{{$buyerrecommend->id}}][nouhin_end]" class="nouhin_end text-center form-control daterange-cus datepicker" value="{{$buyerrecommend->nouhin_end}}" autocomplete="off" required>
+                          <input type="text" name="buyerrecommend[{{$buyerrecommend->id}}][nouhin_end]" class="nouhin_end text-center form-control daterange-cus nouhin_end_datepicker" value="{{$buyerrecommend->nouhin_end}}" autocomplete="off" required>
                         </td>
                         <td class="text-center">
                           <select name="buyerrecommend[{{$buyerrecommend->id}}][gentei_store]" class="gentei_store text-center form-control" value="{{$buyerrecommend->store}}">
@@ -139,15 +142,15 @@
                           <div class="btn btn-success buyerduplicatercommend_button" data-id="{{$buyerrecommend->id}}"><i class="fas fa-plus"></i> 複製</div>
                         </td>
                         <td class="text-center">
-                          <input type="checkbox" id="hidden_price" name="buyerrecommend[{{$buyerrecommend->id}}][hidden_price]" @if($buyerrecommend->hidden_price == '1') checked @endif>
+                          <input type="checkbox" id="hidden_price" class="hidden_price" name="buyerrecommend[{{$buyerrecommend->id}}][hidden_price]" @if($buyerrecommend->hidden_price == '1') checked @endif>
                         </td>
                         <td class="text-center">
-                          <input type="checkbox" id="zaikokanri" name="buyerrecommend[{{$buyerrecommend->id}}][zaikokanri]" @if($buyerrecommend->zaikokanri == '1') checked @endif>
+                          <input type="checkbox" id="zaikokanri" class="zaikokanri" name="buyerrecommend[{{$buyerrecommend->id}}][zaikokanri]" @if($buyerrecommend->zaikokanri == '1') checked @endif>
                         </td>
                         <td class="text-center">
                           @if($buyerrecommend->zaikokanri == '1')
                           @else
-                          <input type="text" id="zaikosuu" class="form-control text-center" name="buyerrecommend[{{$buyerrecommend->id}}][zaikosuu]" value="{{$buyerrecommend->zaikosuu}}">
+                          <input type="text" id="zaikosuu" class="zaikosuu form-control text-center" name="buyerrecommend[{{$buyerrecommend->id}}][zaikosuu]" value="{{$buyerrecommend->zaikosuu}}">
                           @endif
                         </td>
                       </tr>
@@ -156,7 +159,7 @@
                 </tbody>
                 </table>
               </div>
-              <input name="tokuisaki_id" type="hidden" value="{{$id}}">
+              <input id="tokuisaki_id" name="tokuisaki_id" type="hidden" value="{{$id}}">
               <button type="submit" class="save_btn btn btn-warning float-right">内容を保存</button>
             </form>
             <!-- <a href="{{ url('/admin/buyer/recommend/') }}/{{$store->tokuisaki_id}}/add" class="addrecommend btn btn-success"><i class="fas fa-plus"></i> 商品を追加</a> -->
@@ -314,30 +317,142 @@ if( params.has('item_search') ) {
 }
 </script>
 <script>
-$('.datepicker').datepicker({
+
+
+  // $('.datepicker').datetimepicker({
+  //   format: 'Y-m-d H:i:s',
+  //   step: 60, // 15 minute intervals
+  //   timepickerScrollbar: false,
+  //   timepicker: false, // 時間の選択を無効化
+  //   language: 'ja',
+  //   onSelectDate: function(ct, $i) {
+  //     var start = $i.val();
+  //     var tokuisaki_id = $("#tokuisaki_id").val();
+  //     var buyerrecommend_id = $i.attr('id');
+  //     console.log(tokuisaki_id);
+  //     console.log(buyerrecommend_id);
+  //     console.log(start);
+  //     $.ajax({
+  //       headers: {
+  //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+  //       },
+  //       url: location.origin + '/admin/buyer/buyerrecommend_change_start',
+  //       type: 'POST',
+  //       data: {
+  //         'tokuisaki_id': tokuisaki_id,
+  //         'buyerrecommend_id': buyerrecommend_id,
+  //         'start': start,
+  //       }
+  //     })
+  //     .done(function(data) {
+  //     })
+  //     .fail(function(jqXHR, textStatus, errorThrown) {
+  //       alert('保存できませんでした');
+  //     });
+  //   }
+  // });
+
+  $('.start_datepicker').datepicker({
+    format: 'yyyy-mm-dd',
+    autoclose: true,
+    language: 'ja',
+    }).on('changeDate', function(e) {
+    var selectedDate = e.format('yyyy-mm-dd');
+    var start = selectedDate + ' 00:00:00';
+    var tokuisaki_id = $("#tokuisaki_id").val();
+    var buyerrecommend_id = $(this).parent().parent().get(0).id;
+    console.log(start);
+    console.log(tokuisaki_id);
+    console.log(buyerrecommend_id);
+    $.ajax({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      },
+      url: location.origin + '/admin/buyer/buyerrecommend_change_start',
+      type: 'POST',
+      data: {
+        'tokuisaki_id': tokuisaki_id,
+        'buyerrecommend_id': buyerrecommend_id,
+        'start': start,
+      }
+    })
+    .done(function(data) {
+      // 成功時の処理
+    })
+    .fail(function(jqXHR, textStatus, errorThrown) {
+      alert('保存できませんでした');
+    });
+  });
+
+
+
+$('.end_datepicker').datepicker({
 	format: 'yyyy-mm-dd',
 	autoclose: true,
-	// assumeNearbyYear: true,
 	language: 'ja',
-	// startDate: '+1d',
-	// endDate: '+31d',
-	// defaultViewDate: Date()
+
+}).on('changeDate', function(e) {
+var selectedDate = e.format('yyyy-mm-dd');
+var end = selectedDate + ' 17:00:00';
+var tokuisaki_id = $("#tokuisaki_id").val();
+var buyerrecommend_id = $(this).parent().parent().get(0).id;
+console.log(end);
+console.log(tokuisaki_id);
+console.log(buyerrecommend_id);
+$.ajax({
+  headers: {
+    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+  },
+  url: location.origin + '/admin/buyer/buyerrecommend_change_end',
+  type: 'POST',
+  data: {
+    'tokuisaki_id': tokuisaki_id,
+    'buyerrecommend_id': buyerrecommend_id,
+    'end': end,
+  }
+})
+.done(function(data) {
+  // 成功時の処理
+})
+.fail(function(jqXHR, textStatus, errorThrown) {
+  alert('保存できませんでした');
 });
-// $('.datepicker_end').datepicker({
-// 	format: 'yyyy-mm-dd',
-// 	autoclose: true,
-// 	// assumeNearbyYear: true,
-// 	language: 'ja',
-//   }).on('changeDate', function(e) {
-//       var selectedDate = e.date;
-//       selectedDate.setHours(17);
-//       selectedDate.setMinutes(0);
-//       selectedDate.setSeconds(0);
-//       $(this).val(selectedDate.toISOString().slice(0, 10) + ' 17:00:00');
-// 	// startDate: '+1d',
-// 	// endDate: '+31d',
-// 	// defaultViewDate: Date()
-// });
+
+});
+
+
+$('.nouhin_end_datepicker').datepicker({
+  format: 'yyyy-mm-dd',
+  autoclose: true,
+  language: 'ja',
+}).on('changeDate', function(e) {
+  var selectedDate = e.format('yyyy-mm-dd');
+  var nouhin_end = selectedDate + ' 00:00:00';
+  var tokuisaki_id = $("#tokuisaki_id").val();
+  var buyerrecommend_id = $(this).parent().parent().get(0).id;
+  console.log(nouhin_end);
+  console.log(tokuisaki_id);
+  console.log(buyerrecommend_id);
+  $.ajax({
+    headers: {
+      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    },
+    url: location.origin + '/admin/buyer/buyerrecommend_change_nouhin_end',
+    type: 'POST',
+    data: {
+      'tokuisaki_id': tokuisaki_id,
+      'buyerrecommend_id': buyerrecommend_id,
+      'nouhin_end': nouhin_end,
+    }
+  })
+  .done(function(data) {
+    // 成功時の処理
+  })
+  .fail(function(jqXHR, textStatus, errorThrown) {
+    alert('保存できませんでした');
+  });
+});
+
 </script>
 <script>
 
@@ -372,9 +487,14 @@ $('#sortdata').bind('sortstop',function(){
     $('.save_btn').click();
   });
 });
-$('.price,.start,.end,.nouhin_end,#all_zaikokanri,#all_hidden_price').change(function() {
+$('#all_zaikokanri,#all_hidden_price').change(function() {
     $('.save_btn').click();
 });
+
+
+
+
+
 
 $(window).scroll(function() {
   sessionStorage.scrollTop = $(this).scrollTop();

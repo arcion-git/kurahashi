@@ -29,12 +29,12 @@ $(function() {
   }
 
   // 得意先ごとのおすすめ商品登録
-  if(document.URL.match("/admin/buyer/recommend/")) {
-    $(document).on("change", "#hidden_price, #zaikosuu, #zaikokanri, #uwagaki_item_name, #uwagaki_kikaku, .gentei_store",
-    function() {
-      $('#buyerrecommend').submit();
-    });
-  }
+  // if(document.URL.match("/admin/buyer/recommend/")) {
+  //   $(document).on("change", "#hidden_price, #zaikosuu, #zaikokanri, #uwagaki_item_name, #uwagaki_kikaku, .gentei_store",
+  //   function() {
+  //     $('#buyerrecommend').submit();
+  //   });
+  // }
 
   // カートに追加
   $(document).on("click", ".addcart", function() {
@@ -1287,13 +1287,381 @@ if(document.URL.match("/approval")) {
 // 担当のおすすめ商品グループ名変更（formタグ回避）
 if(document.URL.match("/admin/buyer/recommend")) {
   $(document).on("change", ".buyerrecommend_change_groupe_name", function() {
-      var buyerrecommend_change_groupe_name = $(this).val();
-      var buyerrecommend_change_old_groupe_name = $(this).get(0).id;
-      console.log(buyerrecommend_change_old_groupe_name);
-      $("#buyerrecommend_change_old_groupe_name").val(buyerrecommend_change_old_groupe_name);
-      $("#buyerrecommend_change_groupe_name").val(buyerrecommend_change_groupe_name);
-      $('#buyerrecommend_change_groupe_name_form').submit();
+    var tokuisaki_id = $("#tokuisaki_id").val();
+    var buyerrecommend_change_groupe_name = $(this).val();
+    var buyerrecommend_change_old_groupe_name = $(this).get(0).id;
+    console.log(tokuisaki_id);
+    console.log(buyerrecommend_change_groupe_name);
+    console.log(buyerrecommend_change_old_groupe_name);
+    $.ajax({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }, //Headersを書き忘れるとエラーになる
+      url: location.origin + '/admin/buyer/buyerrecommend_change_groupe_name',
+      type: 'POST', //リクエストタイプ
+      data: {
+        'tokuisaki_id': tokuisaki_id,
+        'groupe_name': buyerrecommend_change_groupe_name,
+        'old_groupe_name': buyerrecommend_change_old_groupe_name,
+      } //Laravelに渡すデータ
+    })
+    // Ajaxリクエスト成功時の処理
+    .done(function(data) {
+      // Swal.fire({
+      //   type:"success",
+      //   title: "変更しました",
+      //   position: 'bottom-end',
+      //   toast: true,
+      //   icon: 'success',
+      //   showConfirmButton: false,
+      //   timer: 1500
+      // });
+    })
+    // Ajaxリクエスト失敗時の処理
+    .fail(function(jqXHR, textStatus, errorThrown) {
+      alert('保存できませんでした');
+      console.log("ajax通信に失敗しました");
+      console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+      console.log("textStatus     : " + textStatus);
+      console.log("errorThrown    : " + errorThrown.message);
+    });
   });
+
+
+  $(document).on("change", ".uwagaki_item_name", function() {
+    var tokuisaki_id = $("#tokuisaki_id").val();
+    var buyerrecommend_id = $(this).parent().parent().get(0).id;
+    var uwagaki_item_name = $(this).val();
+    console.log(tokuisaki_id);
+    console.log(buyerrecommend_id);
+    console.log(uwagaki_item_name);
+    $.ajax({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }, //Headersを書き忘れるとエラーになる
+      url: location.origin + '/admin/buyer/buyerrecommend_change_uwagaki_item_name',
+      type: 'POST', //リクエストタイプ
+      data: {
+        'tokuisaki_id': tokuisaki_id,
+        'buyerrecommend_id': buyerrecommend_id,
+        'uwagaki_item_name': uwagaki_item_name,
+      }
+    })
+    // Ajaxリクエスト成功時の処理
+    .done(function(data) {
+    })
+    // Ajaxリクエスト失敗時の処理
+    .fail(function(jqXHR, textStatus, errorThrown) {
+      alert('保存できませんでした');
+      console.log("ajax通信に失敗しました");
+      console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+      console.log("textStatus     : " + textStatus);
+      console.log("errorThrown    : " + errorThrown.message);
+    });
+  });
+
+  $(document).on("change", ".uwagaki_kikaku", function() {
+    var tokuisaki_id = $("#tokuisaki_id").val();
+    var buyerrecommend_id = $(this).parent().parent().get(0).id;
+    var uwagaki_kikaku = $(this).val();
+    console.log(tokuisaki_id);
+    console.log(buyerrecommend_id);
+    console.log(uwagaki_kikaku);
+    $.ajax({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      },
+      url: location.origin + '/admin/buyer/buyerrecommend_change_uwagaki_kikaku',
+      type: 'POST',
+      data: {
+        'tokuisaki_id': tokuisaki_id,
+        'buyerrecommend_id': buyerrecommend_id,
+        'uwagaki_kikaku': uwagaki_kikaku,
+      }
+    })
+    // Ajaxリクエスト成功時の処理
+    .done(function(data) {
+    })
+    // Ajaxリクエスト失敗時の処理
+    .fail(function(jqXHR, textStatus, errorThrown) {
+      alert('保存できませんでした');
+      console.log("ajax通信に失敗しました");
+      console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+      console.log("textStatus     : " + textStatus);
+      console.log("errorThrown    : " + errorThrown.message);
+    });
+  });
+
+  // 価格
+  $(document).on("change", ".price", function() {
+    var tokuisaki_id = $("#tokuisaki_id").val();
+    var buyerrecommend_id = $(this).parent().parent().get(0).id;
+    var price = $(this).val();
+    console.log(tokuisaki_id);
+    console.log(buyerrecommend_id);
+    console.log(price);
+    $.ajax({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      },
+      url: location.origin + '/admin/buyer/buyerrecommend_change_price',
+      type: 'POST',
+      data: {
+        'tokuisaki_id': tokuisaki_id,
+        'buyerrecommend_id': buyerrecommend_id,
+        'price': price,
+      }
+    })
+    // Ajaxリクエスト成功時の処理
+    .done(function(data) {
+    })
+    // Ajaxリクエスト失敗時の処理
+    .fail(function(jqXHR, textStatus, errorThrown) {
+      alert('保存できませんでした');
+      console.log("ajax通信に失敗しました");
+      console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+      console.log("textStatus     : " + textStatus);
+      console.log("errorThrown    : " + errorThrown.message);
+    });
+  });
+
+  // 掲載開始
+  // $(document).on("change", ".start", function() {
+  //   var tokuisaki_id = $("#tokuisaki_id").val();
+  //   var buyerrecommend_id = $(this).parent().parent().get(0).id;
+  //   var start = $(this).val();
+  //   console.log(tokuisaki_id);
+  //   console.log(buyerrecommend_id);
+  //   console.log(start);
+  //   $.ajax({
+  //     headers: {
+  //       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+  //     },
+  //     url: location.origin + '/admin/buyer/buyerrecommend_change_start',
+  //     type: 'POST',
+  //     data: {
+  //       'tokuisaki_id': tokuisaki_id,
+  //       'buyerrecommend_id': buyerrecommend_id,
+  //       'start': start,
+  //     }
+  //   })
+  //   .done(function(data) {
+  //   })
+  //   .fail(function(jqXHR, textStatus, errorThrown) {
+  //     alert('保存できませんでした');
+  //   });
+  // });
+
+  // 掲載終了
+  // $(document).on("change", ".end", function() {
+  //   var tokuisaki_id = $("#tokuisaki_id").val();
+  //   var buyerrecommend_id = $(this).parent().parent().get(0).id;
+  //   var end = $(this).val();
+  //   console.log(tokuisaki_id);
+  //   console.log(buyerrecommend_id);
+  //   console.log(end);
+  //   $.ajax({
+  //     headers: {
+  //       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+  //     },
+  //     url: location.origin + '/admin/buyer/buyerrecommend_change_end',
+  //     type: 'POST',
+  //     data: {
+  //       'tokuisaki_id': tokuisaki_id,
+  //       'buyerrecommend_id': buyerrecommend_id,
+  //       'end': end,
+  //     }
+  //   })
+  //   .done(function(data) {
+  //   })
+  //   .fail(function(jqXHR, textStatus, errorThrown) {
+  //     alert('保存できませんでした');
+  //   });
+  // });
+
+  // 納品期限
+  // $(document).on("change", ".nouhin_end", function() {
+  //   var tokuisaki_id = $("#tokuisaki_id").val();
+  //   var buyerrecommend_id = $(this).parent().parent().get(0).id;
+  //   var nouhin_end = $(this).val();
+  //   console.log(tokuisaki_id);
+  //   console.log(buyerrecommend_id);
+  //   console.log(nouhin_end);
+  //   $.ajax({
+  //     headers: {
+  //       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+  //     },
+  //     url: location.origin + '/admin/buyer/buyerrecommend_change_nouhin_end',
+  //     type: 'POST',
+  //     data: {
+  //       'tokuisaki_id': tokuisaki_id,
+  //       'buyerrecommend_id': buyerrecommend_id,
+  //       'nouhin_end': nouhin_end,
+  //     }
+  //   })
+  //   .done(function(data) {
+  //   })
+  //   .fail(function(jqXHR, textStatus, errorThrown) {
+  //     alert('保存できませんでした');
+  //   });
+  // });
+
+  // 限定店舗
+  $(document).on("change", ".gentei_store", function() {
+    var tokuisaki_id = $("#tokuisaki_id").val();
+    var buyerrecommend_id = $(this).parent().parent().get(0).id;
+    var gentei_store = $(this).val();
+    console.log(tokuisaki_id);
+    console.log(buyerrecommend_id);
+    console.log(gentei_store);
+    $.ajax({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      },
+      url: location.origin + '/admin/buyer/buyerrecommend_change_gentei_store',
+      type: 'POST',
+      data: {
+        'tokuisaki_id': tokuisaki_id,
+        'buyerrecommend_id': buyerrecommend_id,
+        'gentei_store': gentei_store,
+      }
+    })
+    .done(function(data) {
+    })
+    .fail(function(jqXHR, textStatus, errorThrown) {
+      alert('保存できませんでした');
+    });
+  });
+
+  // 価格非表示
+  $(document).on("change", ".hidden_price", function() {
+    var tokuisaki_id = $("#tokuisaki_id").val();
+    var buyerrecommend_id = $(this).parent().parent().get(0).id;
+    if ($(this).is(':checked')) {
+      var hidden_price = 1;
+      console.log("チェックが入りました");
+    } else {
+      var hidden_price = null;
+      console.log("チェックが外れました");
+    }
+    console.log(tokuisaki_id);
+    console.log(buyerrecommend_id);
+    console.log(hidden_price);
+    $.ajax({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      },
+      url: location.origin + '/admin/buyer/buyerrecommend_change_hidden_price',
+      type: 'POST',
+      data: {
+        'tokuisaki_id': tokuisaki_id,
+        'buyerrecommend_id': buyerrecommend_id,
+        'hidden_price': hidden_price,
+      }
+    })
+    .done(function(data) {
+    })
+    .fail(function(jqXHR, textStatus, errorThrown) {
+      alert('保存できませんでした');
+    });
+  });
+
+  // 在庫管理しない
+  $(document).on("change", ".zaikokanri", function() {
+    var tokuisaki_id = $("#tokuisaki_id").val();
+    var buyerrecommend_id = $(this).parent().parent().get(0).id;
+    if ($(this).is(':checked')) {
+      var zaikokanri = 1;
+      console.log("チェックが入りました");
+    } else {
+      var zaikokanri = null;
+      console.log("チェックが外れました");
+    }
+    console.log(tokuisaki_id);
+    console.log(buyerrecommend_id);
+    console.log(zaikokanri);
+    $.ajax({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      },
+      url: location.origin + '/admin/buyer/buyerrecommend_change_zaikokanri',
+      type: 'POST',
+      data: {
+        'tokuisaki_id': tokuisaki_id,
+        'buyerrecommend_id': buyerrecommend_id,
+        'zaikokanri': zaikokanri,
+      }
+    })
+    .done(function(data) {
+      window.location.reload();
+    })
+    .fail(function(jqXHR, textStatus, errorThrown) {
+      alert('保存できませんでした');
+    });
+  });
+
+  // 在庫数
+  $(document).on("change", ".zaikosuu", function() {
+    var tokuisaki_id = $("#tokuisaki_id").val();
+    var buyerrecommend_id = $(this).parent().parent().get(0).id;
+    var zaikosuu = $(this).val();
+    console.log(tokuisaki_id);
+    console.log(buyerrecommend_id);
+    console.log(zaikosuu);
+    $.ajax({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      },
+      url: location.origin + '/admin/buyer/buyerrecommend_change_zaikosuu',
+      type: 'POST',
+      data: {
+        'tokuisaki_id': tokuisaki_id,
+        'buyerrecommend_id': buyerrecommend_id,
+        'zaikosuu': zaikosuu,
+      }
+    })
+    .done(function(data) {
+    })
+    .fail(function(jqXHR, textStatus, errorThrown) {
+      alert('保存できませんでした');
+    });
+  });
+
+  // 全ての在庫管理にチェックを入れる
+  $(document).on("change", ".zaikokanri", function() {
+    var tokuisaki_id = $("#tokuisaki_id").val();
+    var buyerrecommend_id = $(this).parent().parent().get(0).id;
+    if ($(this).is(':checked')) {
+      var zaikokanri = 1;
+      console.log("チェックが入りました");
+    } else {
+      var zaikokanri = null;
+      console.log("チェックが外れました");
+    }
+    console.log(tokuisaki_id);
+    console.log(buyerrecommend_id);
+    console.log(zaikokanri);
+    $.ajax({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      },
+      url: location.origin + '/admin/buyer/buyerrecommend_change_zaikokanri',
+      type: 'POST',
+      data: {
+        'tokuisaki_id': tokuisaki_id,
+        'buyerrecommend_id': buyerrecommend_id,
+        'zaikokanri': zaikokanri,
+      }
+    })
+    .done(function(data) {
+      window.location.reload();
+    })
+    .fail(function(jqXHR, textStatus, errorThrown) {
+      alert('保存できませんでした');
+    });
+  });
+
+
 }
 
 
