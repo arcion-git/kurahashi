@@ -1720,14 +1720,22 @@ class LoginPageController extends Controller
           ->where('buyer_recommends.end', '>=', $now)
           ->where('buyer_recommends.nouhin_end', '>=', $nouhin_yoteibi)
 
-
-// 下記の条件に直してくれ、 buyer_recommends.gentei_store が store_name と一致するレコードが取得しているものを取得。また、buyer_recommends.gentei_storeがnullのものも取得を行うが、取得をする際の条件として、既に同じitem_idのものがアイテム内に存在している場合は、取得をしない。
-
+          // 下記の条件に直してくれ、 buyer_recommends.gentei_store が store_name と一致するレコードが取得しているものを取得。また、buyer_recommends.gentei_storeがnullのものも取得を行うが、取得をする際の条件として、既に同じitem_idのものがアイテム内に存在している場合は、取得をしない。
 
           // ここに途中で、同じitem_idを持つアイテムがあるか確認して、もしある場合は、gentei_storeの値がnullの方を削除したい
+
+          // ->where('buyer_recommends.zaikokanri' , null)
+          // ->where('buyer_recommends.zaikosuu', '>=', 0.1)
+          // ->where('buyer_recommends.zaikokanri' , 1)
+          // ->orwhere(function ($query) use ($store_name) {
+          //     $query->Where('buyer_recommends.zaikokanri' , null)
+          //           ->Where('buyer_recommends.zaikosuu', '>=', 0.1);
+          // })
+
           ->orderByRaw('CAST(buyer_recommends.order_no AS UNSIGNED) asc')
-          ->select('carts.*', 'buyer_recommends.gentei_store', DB::raw('IF(buyer_recommends.zaikokanri IS NULL AND buyer_recommends.zaikosuu >= 1, buyer_recommends.zaikosuu, IF(buyer_recommends.zaikokanri = 1, 999, items.zaikosuu)) AS zaikosuu'))
+          ->select('carts.*', 'buyer_recommends.gentei_store', DB::raw('IF(buyer_recommends.zaikokanri IS NULL AND buyer_recommends.zaikosuu >= 0, buyer_recommends.zaikosuu, IF(buyer_recommends.zaikokanri = 1, 999, items.zaikosuu)) AS zaikosuu'))
           ->get();
+
           // dd($store_name);
 
           $carts = $carts->filter(function ($cart) use ($carts) {
