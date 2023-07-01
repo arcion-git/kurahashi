@@ -3589,7 +3589,7 @@ class LoginPageController extends Controller
         'text' => $text,
         'admin_mail' => $admin_mail,
     ], function ($message) use ($sales_admin_mail) {
-        $message->to($email)->bcc($admin_mail)->subject('リピートオーダーの停止申請がありました。');
+        $message->to($sales_admin_mail)->subject('リピートオーダーの停止申請がありました。');
     });
 
     return redirect('repeatorder');
