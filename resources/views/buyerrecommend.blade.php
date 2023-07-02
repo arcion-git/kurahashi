@@ -78,7 +78,7 @@
                 </thead>
                 <tbody id="sortdata">
                   @foreach($groupedItems as $group => $buyerrecommends)
-                      <tr class="groupeditems">
+                      <tr id="{{$group}}" class="groupeditems">
                           <input type="hidden" name="buyerrecommend[{{$group}}][order_no]" class="order_no text-center form-control" value="">
                           <th colspan="15" class=""><input id="{{ $group }}" type="text" name="buyerrecommend_change_groupe_name" class="buyerrecommend_change_groupe_name form-control" value="{{ $group }}"></th>
                       </tr>
@@ -478,15 +478,107 @@ $(window).on('load',function(){
 $('#sortdata').sortable({
     // handle: 'span',
 });
+
 // ソート完了時に発火
 $('#sortdata').bind('sortstop',function(){
   // 番号を設定している要素に対しループ処理
   $(this).find('.order_no').each(function(idx){
     // タグ内に通し番号を設定（idxは0始まりなので+1する）
     $(this).val(idx+1);
-    $('.save_btn').click();
   });
+  $('.save_btn').click();
 });
+
+
+// $('#sortdata').bind('sortstop',function(){
+//   // 番号を設定している要素に対しループ処理
+//   $(this).find('.order_no').each(function(idx){
+//     // タグ内に通し番号を設定（idxは0始まりなので+1する）
+//     $(this).val(idx+1);
+//     $('.save_btn').click();
+//   });
+// });
+
+document.getElementById('buyerrecommend').addEventListener('submit', function(event) {
+  event.preventDefault(); // フォームのデフォルトの送信をキャンセル
+
+  // フォームのデータを取得
+  var formData = new FormData(event.target);
+
+  // フォームのデータをオブジェクトに変換
+  var formDataObject = {};
+  for (var pair of formData.entries()) {
+    var key = pair[0];
+    var value = pair[1];
+
+    // buyerrecommend_change_groupe_name、tokuisaki_id、_tokenは残す
+    if (key === 'buyerrecommend_change_groupe_name' || key === 'tokuisaki_id' || key === '_token' || key === 'all_zaikokanri' || key === 'all_hidden_price') {
+      formDataObject[key] = value;
+    }
+
+    // [price]と[order_no]のみを残して送信する
+    if (key.includes('buyerrecommend') && (key.includes('[price]') || key.includes('[order_no]'))) {
+      formDataObject[key] = value;
+    }
+  }
+
+  console.log(formDataObject);
+
+  $.ajax({
+    headers: {
+      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    },
+    url: location.origin + '/admin/buyer/saverecommend',
+    type: 'POST',
+    data: formDataObject,
+  })
+  .done(function(data) {
+    if (data.status === 'reload') {
+      window.location.reload();
+    } else {
+
+    }
+    console.log(data);
+  })
+  .fail(function(jqXHR, textStatus, errorThrown) {
+    alert('保存できませんでした');
+  });
+
+  // 例：formDataObjectの中身を表示する
+  // console.log(formDataObject);
+
+});
+
+// $('#sortdata').bind('sortstop',function(){
+//   var data = {}; // データを格納するオブジェクト
+//   // 番号を設定している要素に対しループ処理
+//   $(this).find('.order_no').each(function(idx){
+//     var parentId = $(this).parent().attr('id'); // １つ上の親要素のIDを取得
+//     var number = idx + 1; // タグ内の番号
+//     data[parentId] = number; // 親要素のIDをキーとして、番号を格納
+//   });
+//   console.log(data); // データの確認（開発者ツールのコンソールに表示）
+//   $.ajax({
+//     headers: {
+//       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+//     },
+//     url: location.origin + '/admin/buyer/buyerrecommend_change_sort',
+//     type: 'POST',
+//     data: {
+//       'tokuisaki_id': tokuisaki_id,
+//       'data': data,
+//     }
+//   })
+//   .done(function(data) {
+//     // 成功時の処理
+//   })
+//   .fail(function(jqXHR, textStatus, errorThrown) {
+//     alert('保存できませんでした');
+//   });
+// });
+
+
+
 $('#all_zaikokanri,#all_hidden_price').change(function() {
     $('.save_btn').click();
 });
@@ -505,6 +597,48 @@ $(document).ready(function() {
     $(window).scrollTop(sessionStorage.scrollTop);
   }
 });
+
+
+
+// $(document).ready(function() {
+//   $('#buyerrecommend').submit(function(event) {
+//     event.preventDefault(); // フォームのデフォルトの送信を防止
+//
+//     var formData = new FormData(this);
+//
+//     // 特定の値（order_no）以外のデータを削除
+//     formData.delete('buyerrecommend_change_groupe_name');
+//     formData.delete('all_hidden_price');
+//     formData.delete('all_zaikokanri');
+//
+//     // 特定の値以外のデータを削除
+//     $('input.order_no').each(function() {
+//       var name = $(this).attr('name');
+//       if (name && name.indexOf('buyerrecommend') === 0) {
+//         formData.delete(name);
+//       }
+//     });
+//
+//     // フォームデータをサーバーサイドのスクリプトに送信
+//     $.ajax({
+//       type: 'POST',
+//       url: '{{ url('/admin/buyer/saverecommend') }}',
+//       data: formData,
+//       processData: false,
+//       contentType: false,
+//       success: function(response) {
+//         // 成功時の処理
+//         console.log(response);
+//       },
+//       error: function(xhr, status, error) {
+//         // エラー時の処理
+//         console.log(error);
+//       }
+//     });
+//   });
+// });
+
+
 </script>
 
 

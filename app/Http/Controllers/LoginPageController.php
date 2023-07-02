@@ -3112,7 +3112,9 @@ class LoginPageController extends Controller
             if(!($user->setonagi == 1)){
               // BtoBの場合は配送先の店舗を追加する
               $store = $order->tokuisaki_name.$order->store_name;
-              $nouhin_yoteibi = $order->nouhin_yoteibi;
+              // $nouhin_yoteibi = $order->nouhin_yoteibi;
+              $nouhin_yoteibi = '【納品予定日】<br />'.$order->nouhin_yoteibi;
+              $nouhin_store = '【納品店舗】<br />'.$store;
               // 未定の金額表示に対応
               if($order->price == '未定'){
                 $item_price = '金額未定 ' ;
@@ -3128,13 +3130,13 @@ class LoginPageController extends Controller
                 // SKUコード
                 // $item->sku_code.
                 // 商品名
-                $item_name.' × '.
+                $item_name.' '.
                 // 数量
                 $order->quantity.
                 // 単位
-                $tani.' '.
+                $tani.' '
                 // 単価
-                $item_price.' '.$store.' '.$nouhin_yoteibi
+                // $item_price.' '.$store.' '.$nouhin_yoteibi
                 // 配送希望日
                 // $order->nouhin_yoteibi.
                 // 受け取り
@@ -3160,7 +3162,7 @@ class LoginPageController extends Controller
                 // SKUコード
                 // $item->sku_code.
                 // 商品名
-                $item_name.' × '.
+                $item_name.' '.
                 // 数量
                 $order->quantity.
                 // 単位
@@ -3216,6 +3218,7 @@ class LoginPageController extends Controller
           'user' => $user,
           'text' => $text,
           'pay' => $pay,
+          'nouhin_store' => $nouhin_store,
           'uketori_place' => $uketori_place,
           'uketori_time' => $uketori_time,
           'order_list' => $order_list,

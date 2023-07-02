@@ -207,6 +207,8 @@
   Route::post('/admin/buyer/buyerrecommend_change_nouhin_end', 'AdminPageController@buyerrecommend_change_nouhin_end');
   Route::post('/admin/buyer/buyerrecommend_change_zaikosuu', 'AdminPageController@buyerrecommend_change_zaikosuu');
 
+  Route::post('/admin/buyer/buyerrecommend_change_sort', 'AdminPageController@buyerrecommend_change_sort');
+
   // リピートオーダーポスト
   Route::get('/admin/user/repeatorder/{id}', 'AdminPageController@userrepeatorder')->name('repeatorder');
   Route::post('/admin/user/addrepeatorder', 'AdminPageController@addrepeatorder');

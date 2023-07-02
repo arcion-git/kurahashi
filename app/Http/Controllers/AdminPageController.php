@@ -1221,153 +1221,74 @@ class AdminPageController extends Controller
 
     public function buyersaverecommend(Request $request){
 
-      $id = $request->tokuisaki_id;
+
+      // $formDataObject = $request->all();
+
+
+      // $buyerrecommends = [];
+      // foreach ($request->json()->all() as $key => $value) {
+      //     if (strpos($key, 'buyerrecommend') === 0) {
+      //         $buyerrecommends[$key] = $value;
+      //     }
+      // }
+
+      // Log::debug($formDataObject);
+
+
+      // return $formDataObject;
+
+      // dd($request);
+      $tokuisaki_id = $request->tokuisaki_id;
+
       $all_zaikokanri = $request->all_zaikokanri;
       $all_hidden_price = $request->all_hidden_price;
-      $tokuisaki_id = $request->tokuisaki_id;
+      // $tokuisaki_id = $request->tokuisaki_id;
       $buyerrecommends = $request->buyerrecommend;
 
       if(isset($all_hidden_price)){
         $buyer_recommends = BuyerRecommend::where(['tokuisaki_id'=> $tokuisaki_id])->update(['hidden_price'=> 1]);
-        return redirect()->route('buyerrecommend', $id);
+        return response()->json([
+            'status' => 'reload',
+        ]);
       }
 
       if(isset($all_zaikokanri)){
         $buyer_recommends = BuyerRecommend::where(['tokuisaki_id'=> $tokuisaki_id])->update(['zaikokanri'=> 1 , 'zaikosuu'=> null]);
-        return redirect()->route('buyerrecommend', $id);
-        // dd($buyer_recommends);
-        // $buyer_recommends = BuyerRecommend::where(['tokuisaki_id'=> $tokuisaki_id])->get();
-        // foreach ($buyer_recommends as $buyer_recommend) {
-        //   $buyer_recommend->zaikokanri = 1;
-        //   $buyer_recommend->zaikosuu = null;
-        //   $buyer_recommend->save();
-        // }
+        return response()->json([
+            'status' => 'reload',
+        ]);
       }
 
-      // dd($buyerrecommends);
-      //
-      //
-      // 以下のソースで、「オーダー順を取得して並び替える」というソースの部分で、「$buyerrecommend->order_no = $value['groupe'];」を加え、グループ名を保存したい。保存を行うアイテムは、「$buyerrecommends」の「order_no」に値のあるもののみに限定する。
-      // グループ名は、「$buyerrecommends」のなかにある、「order_no」に値がないもので、$buyerrecommendsで読み込まれた順番の中で、該当の要素に対して、最も値が近く、若いのものを保存するものとする。
-      //
-      //
-      // 以下のソースで、「グループ名」を保存したい、以下のように取得できるようにソースを教えて。キーが整数という条件は使えないものとする。
-      // 「194」の「グループ名」は、「カメラ」
-      // 「192」の「グループ名」は、「」※nullとなる。
-      // 「191」の「グループ名」は、「カメラ」
-      // 「1」の「グループ名」は、「グループ4444fsdsfadk」
-      // 「153」の「グループ名」は、「グループ4444fsdsfadk」
-      //
-      // $buyerrecommends1 = [
-      //     192 => [
-      //         "order_no" => "1",
-      //         "price" => "222",
-      //         "start" => "2023-05-31 00:00:00",
-      //         "end" => "2023-05-23 00:00:00",
-      //         "nouhin_end" => "2023-05-24 00:00:00",
-      //     ],
-      //     "カメラ" => [
-      //         "order_no" => "2",
-      //     ],
-      //     194 => [
-      //         "order_no" => "3",
-      //         "price" => "12222",
-      //         "start" => "2023-05-23 00:00:00",
-      //         "end" => "2023-05-31 00:00:00",
-      //         "nouhin_end" => "2023-05-24 00:00:00",
-      //     ],
-      //     191 => [
-      //         "order_no" => "4",
-      //         "price" => "1000",
-      //         "start" => "2023-06-01 00:00:00",
-      //         "end" => "2023-05-24 00:00:00",
-      //         "nouhin_end" => "2023-05-30 00:00:00",
-      //     ],
-      //     "グループ4444fsdsfadk" => [
-      //         "order_no" => "5",
-      //     ],
-      //     1 => [
-      //         "order_no" => "6",
-      //         "price" => "2000",
-      //         "start" => "2023-01-01 00:00:00",
-      //         "end" => "2023-05-31 00:00:00",
-      //         "nouhin_end" => "2023-02-28 00:00:00",
-      //     ],
-      //     153 => [
-      //         "order_no" => "7",
-      //         "price" => "50",
-      //         "start" => "2023-03-14 00:00:00",
-      //         "end" => "2023-05-31 00:00:00",
-      //         "nouhin_end" => "2023-03-14 00:00:00",
-      //     ],
-      // ];
-      //
-      // $buyerrecommends2 = [
-      //     192 => [
-      //         "order_no" => "1",
-      //         "price" => "222",
-      //         "start" => "2023-05-31 00:00:00",
-      //         "end" => "2023-05-23 00:00:00",
-      //         "nouhin_end" => "2023-05-24 00:00:00",
-      //     ],
-      //     194 => [
-      //         "order_no" => "3",
-      //         "price" => "12222",
-      //         "start" => "2023-05-23 00:00:00",
-      //         "end" => "2023-05-31 00:00:00",
-      //         "nouhin_end" => "2023-05-24 00:00:00",
-      //     ],
-      //     191 => [
-      //         "order_no" => "4",
-      //         "price" => "1000",
-      //         "start" => "2023-06-01 00:00:00",
-      //         "end" => "2023-05-24 00:00:00",
-      //         "nouhin_end" => "2023-05-30 00:00:00",
-      //     ],
-      //     1 => [
-      //         "order_no" => "6",
-      //         "price" => "2000",
-      //         "start" => "2023-01-01 00:00:00",
-      //         "end" => "2023-05-31 00:00:00",
-      //         "nouhin_end" => "2023-02-28 00:00:00",
-      //     ],
-      //     153 => [
-      //         "order_no" => "7",
-      //         "price" => "50",
-      //         "start" => "2023-03-14 00:00:00",
-      //         "end" => "2023-05-31 00:00:00",
-      //         "nouhin_end" => "2023-03-14 00:00:00",
-      //     ],
-      // ];
 
 
       // オーダー順を取得して並び替える
       foreach($buyerrecommends as  $key => $value) {
+
         if(isset($value['price'])){
             $buyerrecommend = BuyerRecommend::firstOrNew(['id'=> $key]);
-            $buyerrecommend->price = $value['price'];
-            $buyerrecommend->start = $value['start'];
-            $buyerrecommend->end = Carbon::parse($value['end'])->setTime(17, 0, 0);
-            $buyerrecommend->nouhin_end = $value['nouhin_end'];
+            // $buyerrecommend->price = $value['price'];
+            // $buyerrecommend->start = $value['start'];
+            // $buyerrecommend->end = Carbon::parse($value['end'])->setTime(17, 0, 0);
+            // $buyerrecommend->nouhin_end = $value['nouhin_end'];
             $buyerrecommend->order_no = $value['order_no'];
-            $buyerrecommend->uwagaki_item_name = $value['uwagaki_item_name'];
-            $buyerrecommend->uwagaki_kikaku = $value['uwagaki_kikaku'];
-            $buyerrecommend->gentei_store = $value['gentei_store'];
-            if(isset($value['hidden_price'])){
-              $buyerrecommend->hidden_price = 1;
-            }else{
-              $buyerrecommend->hidden_price = null;
-            }
-            if(isset($value['zaikokanri'])){
-              $buyerrecommend->zaikokanri = 1;
-            }else{
-              $buyerrecommend->zaikokanri = null;
-            }
-            if(isset($value['zaikosuu'])){
-              $buyerrecommend->zaikosuu = $value['zaikosuu'];
-            }else{
-              $buyerrecommend->zaikosuu = null;
-            }
+            // $buyerrecommend->uwagaki_item_name = $value['uwagaki_item_name'];
+            // $buyerrecommend->uwagaki_kikaku = $value['uwagaki_kikaku'];
+            // $buyerrecommend->gentei_store = $value['gentei_store'];
+            // if(isset($value['hidden_price'])){
+            //   $buyerrecommend->hidden_price = 1;
+            // }else{
+            //   $buyerrecommend->hidden_price = null;
+            // }
+            // if(isset($value['zaikokanri'])){
+            //   $buyerrecommend->zaikokanri = 1;
+            // }else{
+            //   $buyerrecommend->zaikokanri = null;
+            // }
+            // if(isset($value['zaikosuu'])){
+            //   $buyerrecommend->zaikosuu = $value['zaikosuu'];
+            // }else{
+            //   $buyerrecommend->zaikosuu = null;
+            // }
             $group = null; // グループ名を初期化
             $currentOrderNo = $value['order_no']; // 現在のorder_noを取得
             $minDifference = PHP_INT_MAX; // 最小の差分を初期化
@@ -1387,13 +1308,48 @@ class AdminPageController extends Controller
                     }
                 }
             }
-
             $buyerrecommend->groupe = $group;
             $buyerrecommend->save();
         }
       }
-      return redirect()->route('buyerrecommend', $id);
+      return;
+      // return redirect()->route('buyerrecommend', $id);
     }
+
+    public function buyerrecommend_change_sort(Request $request){
+      $tokuisaki_id = $request->tokuisaki_id;
+      $data = $request->data;
+
+
+      // Ajaxリクエストのデータを受け取る
+      $formData = $request->all();
+
+      // 受け取ったデータの処理
+      // 例えば、グループごとにデータを処理する場合:
+      foreach ($formData as $groupName => $data) {
+          $orderNoArray = $data['order_no'];
+          $priceArray = $data['price'];
+
+          // データの使用例
+          // ここで必要な処理を行います
+      }
+
+
+      // $sequentialNumbersMap = $request->input('sequentialNumbersMap');
+      Log::debug($formData);
+      return $data;
+
+
+      // $buyerrecommends = BuyerRecommend::where(['tokuisaki_id' => $tokuisaki_id, 'groupe' => $old_groupe_name])->update(['groupe' => $groupe_name]);
+
+      $id = $tokuisaki_id;
+
+      $data=[
+        'id'=>$id,
+      ];
+      return;
+    }
+
 
     public function buyerremovercommend(Request $request){
       $delete_id = $request->delete;
