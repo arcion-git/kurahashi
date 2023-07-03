@@ -215,10 +215,17 @@ class Cart extends Model
   // }
 
   public function order_this() {
-    // $order_this = Order::where(['cart_id'=>$this->id,'quantity'=>'0'])->first();
-    $order_this = Order::where(['cart_id' => $this->id])->where(function ($query) {
-    $query->where('quantity', '0')->orWhereNull('quantity');
-    })->first();
+    $order_this = Order::where(['cart_id'=>$this->id])->first();
+    if($order_this->quantity == 0 || $order_this->quantity == null){
+      return true;
+    }else{
+      return false;
+    }
+
+
+    // $order_this = Order::where(['cart_id' => $this->id])->where(function ($query) {
+    // $query->where('quantity', '0')->orWhereNull('quantity');
+    // })->first();
     return $order_this;
   }
 
