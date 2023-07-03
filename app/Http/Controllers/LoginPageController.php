@@ -3204,7 +3204,7 @@ class LoginPageController extends Controller
                 // $store = $order_nini->tokuisaki_name.$order_nini->store_name;
                 // $nouhin_yoteibi = $order_nini->nouhin_yoteibi;
                 $array =
-                  '・[任意の商品]'.
+                  '・[任意の商品] '.
                   $cart_nini->item_name.' × '.
                   // 数量
                   // $order_nini->quantity.' '.$store.' '.$nouhin_yoteibi
