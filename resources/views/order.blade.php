@@ -149,8 +149,6 @@
 															@if(!isset($deal) && $cart->addtype == 'addbuyerrecommend' && $cart->zaikosuu == 0)
 															@else
 
-															@if($url == 'approval' && $cart->order_this())
-															@else
 
 															<!-- カートに1つでも商品があるか、BtoBユーザーか確認 -->
 															@if(!isset($set_order) && !$user->setonagi)
@@ -321,7 +319,6 @@
 																</td>
 															</tr>
 
-															@endif
 															@endif
 															@endif
 															@endif

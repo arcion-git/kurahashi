@@ -1787,6 +1787,8 @@ class LoginPageController extends Controller
     }
 
 
+
+
     // 納品先を変更
     if(!$setonagi){
       if(isset($store) && isset($nouhin_yoteibi)){
@@ -1798,10 +1800,13 @@ class LoginPageController extends Controller
           $order->nouhin_yoteibi = $nouhin_yoteibi;
           $order->save();
         }
+
         $cart_ninis = CartNini::where(['user_id' => $user_id , 'deal_id' => null])->get();
-        if($cart_ninis){
+        if($cart_ninis->count() > 0) {
+
           foreach ($cart_ninis as $cart_nini) {
             // オーダー内容を保存
+
             $ordernini = OrderNini::where(['cart_nini_id'=> $cart_nini->id])->first();
             $ordernini->nouhin_yoteibi = $nouhin_yoteibi;
             $ordernini->save();
