@@ -146,7 +146,7 @@
 															<!-- 最終確認画面で在庫がある商品のみ -->
 
 
-															@if($cart->addtype == 'addbuyerrecommend' && $cart->zaikosuu == 0)
+															@if(!isset($deal) && $cart->addtype == 'addbuyerrecommend' && $cart->zaikosuu == 0)
 															@else
 
 															@if($url == 'approval' && $cart->order_this())

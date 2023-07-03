@@ -743,8 +743,7 @@ class BothController extends Controller
       }
       $groupedItems = $carts->groupBy('groupe');
 
-
-
+      // dd($groupedItems);
       // 取引IDが一致しているものを取得
       if(!$setonagi){
         $cart_ninis =  CartNini::where(['user_id'=>$user_id, 'deal_id'=> $deal_id])->get();
@@ -837,8 +836,6 @@ class BothController extends Controller
       $collect_password = config('app.collect_password').'2';
       $collect_touroku = config('app.collect_touroku');
       $collect_token = config('app.collect_token');
-
-
 
 
       $data=
