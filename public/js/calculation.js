@@ -505,9 +505,10 @@ if(document.URL.match("/approval")) {
     var deal_id = $(this).get(0).id;
     var kaiin_number = $(this).prev().get(0).id;
     var params = new URLSearchParams(window.location.search);
-    var addtype = params.get('addtype');
+    var addtype = $("#addtype").val();
     console.log(deal_id);
     console.log(kaiin_number);
+    console.log(addtype);
     // $(this).parent().parent().clone(true).insertAfter($(this).parent().parent());
 
       $.ajax({
@@ -529,7 +530,7 @@ if(document.URL.match("/approval")) {
         setTimeout(order_update);
         setTimeout(dealorder_update);
         Swal.fire({
-          type:"success",
+          // type:"success",
           title: "任意の商品を追加しました",
           position: 'bottom-end',
           toast: true,
@@ -540,7 +541,7 @@ if(document.URL.match("/approval")) {
       })
       // Ajaxリクエスト失敗時の処理
       .fail(function(jqXHR, textStatus, errorThrown) {
-        alert('配送先を追加できません。');
+        alert('任意の商品を追加できませんでした');
         console.log("ajax通信に失敗しました");
         console.log("XMLHttpRequest : " + XMLHttpRequest.status);
         console.log("textStatus     : " + textStatus);

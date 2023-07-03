@@ -67,7 +67,7 @@
             </div>
           </form>
           <div class="float-right" style="margin-right:5px;">
-            <form id="cart_form" action="{{ url('/confirm') }}" method="POST" name="cart_id" value="" class="form-horizontal">
+            <form id="cart_form" action="{{ url('/confirm') }}" method="GET" name="cart_id" value="" class="form-horizontal">
               {{ csrf_field() }}
               <input type="hidden" name="addtype" value="{{$addtype}}" />
               <input type="hidden" name="show_favorite" value="{{$show_favorite}}" @if($show_favorite) checked @endif/>

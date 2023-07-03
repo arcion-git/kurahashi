@@ -47,7 +47,7 @@
 
 
             <div class="float-right">
-                <input type="hidden" name="addtype" value="{{$addtype}}" />
+                <input id="addtype" type="hidden" name="addtype" value="{{$addtype}}" />
                 <button id="approval_btn" type="submit" class="btn btn-warning">内容確認画面に進む</button>
                 @if($user->setonagi == 1)
                 <div id="card_approval_btn" class="btn btn-warning" onclick="executePay">内容確認画面に進む</div>
