@@ -1377,6 +1377,18 @@ class AdminPageController extends Controller
       return;
     }
 
+    public function buyerrecommend_change_uwagaki_item_name(Request $request){
+      $tokuisaki_id = $request->tokuisaki_id;
+      $buyerrecommend_id = $request->buyerrecommend_id;
+      $uwagaki_item_name = $request->uwagaki_item_name;
+      $buyerrecommends = BuyerRecommend::where(['id' => $buyerrecommend_id])->update(['uwagaki_item_name' => $uwagaki_item_name]);
+      $id = $tokuisaki_id;
+      $data=[
+        'id'=>$id,
+      ];
+      return;
+    }
+
     public function buyerrecommend_change_uwagaki_kikaku(Request $request){
       $tokuisaki_id = $request->tokuisaki_id;
       $buyerrecommend_id = $request->buyerrecommend_id;
