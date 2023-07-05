@@ -2414,9 +2414,9 @@ class LoginPageController extends Controller
         ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
         ->where('start', '<=' , $now)
         ->where('end', '>=', $now)->first();
+        // dd($buyer_recommend_item);
         if(isset($buyer_recommend_item)){
           $zaikosuu = 999;
-          // break;
         }else{
           // 担当のおすすめ商品の在庫数を取得
           $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $tokuisaki_id)
@@ -2426,9 +2426,9 @@ class LoginPageController extends Controller
           ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
           ->where('start', '<=' , $now)
           ->where('end', '>=', $now)->first();
+          // dd($buyer_recommend_item);
           if(isset($buyer_recommend_item)){
             $zaikosuu = $buyer_recommend_item->zaikosuu;
-            // dd($zaikosuu);
           }
         }
       }
@@ -2440,8 +2440,11 @@ class LoginPageController extends Controller
         $zaikosuu = $item->zaikosuu;
       }
 
+
       // 在庫数から注文個数を差し引いた残りの在庫数を計算
       $nokori_zaiko = $zaikosuu - $total;
+
+      // dd($nokori_zaiko);
 
       // lost_itemという変数に、$nokori_zaikoの値が、0を下回った場合、「lost_item」に「$item_name」と「$nokori_zaiko」を格納し、さらに、「$lost_items」という変数に配列として追加する。
       $lost_item = null;
