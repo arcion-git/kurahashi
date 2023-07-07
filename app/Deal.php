@@ -23,6 +23,8 @@ class Deal extends Model
       $addtype = '限定お買い得';
     }elseif($first_cart_addtype == 'addspecialprice'){
       $addtype = '市況';
+    }else{
+      $addtype = null;
     }
     return $addtype;
   }
