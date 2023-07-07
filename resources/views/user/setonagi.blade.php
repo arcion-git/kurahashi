@@ -43,44 +43,7 @@
                           @if($now >= $setonagi_item->start_date && $now < $setonagi_item->end_date)
                           <div class="col-12 col-md-4 col-lg-3">
                             <article class="article article-style-c">
-                              <!-- <button class="addrecommendcategory btn btn-success" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus"></i> 商品を追加</button>
-                              <button class="btn btn-success" data-toggle="modal" data-target="#modal{{$setonagi_item->item()->item_id}}"><i class="fas fa-plus"></i> 商品を追加</button> -->
                               <div class="article-header">
-                                <!-- <div class="article-image" data-background="/storage/item/{{$setonagi_item->item()->item_id}}.jpg" style="background-image: url(&quot;/storage/item/{{$setonagi_item->item()->item_id}}.jpg&quot;);">
-                                </div> -->
-
-
-
-                                <!-- <div class="card-body">
-                                  <div id="carouselExampleIndicators{{$setonagi_item->item()->item_id}}" class="carousel slide" data-ride="carousel">
-                                    <ol class="carousel-indicators">
-                                      <li data-target="#carouselExampleIndicators{{$setonagi_item->item()->item_id}}" data-slide-to="0" class="active"></li>
-                                      <li data-target="#carouselExampleIndicators{{$setonagi_item->item()->item_id}}" data-slide-to="1"></li>
-                                      <li data-target="#carouselExampleIndicators{{$setonagi_item->item()->item_id}}" data-slide-to="2"></li>
-                                    </ol>
-                                    <div class="carousel-inner">
-                                      <div class="carousel-item active">
-                                        <img class="d-block w-100" src="/storage/item/{{$setonagi_item->item()->item_id}}_1.jpg" alt="First slide">
-                                      </div>
-                                      <div class="carousel-item">
-                                        <img class="d-block w-100" src="/storage/item/{{$setonagi_item->item()->item_id}}_2.jpg" alt="Second slide">
-                                      </div>
-                                      <div class="carousel-item">
-                                        <img class="d-block w-100" src="/storage/item/{{$setonagi_item->item()->item_id}}_3.jpg" alt="Third slide">
-                                      </div>
-                                    </div>
-                                    <a class="carousel-control-prev" href="#carouselExampleIndicators{{$setonagi_item->item()->item_id}}" role="button" data-slide="prev">
-                                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                      <span class="sr-only">Previous</span>
-                                    </a>
-                                    <a class="carousel-control-next" href="#carouselExampleIndicators{{$setonagi_item->item()->item_id}}" role="button" data-slide="next">
-                                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                      <span class="sr-only">Next</span>
-                                    </a>
-                                  </div>
-                                </div> -->
-
-
                                 <!-- 画像表示 -->
                                 <div id="carouselExampleIndicators{{$setonagi_item->item()->item_id}}" class="carousel slide" data-ride="">
                                   <ol class="carousel-indicators">
@@ -95,9 +58,8 @@
                                   </ol>
                                   <div class="carousel-inner">
                                     <div class="carousel-item active">
-                                      <a href="/storage/item/{{$setonagi_item->item()->item_id}}.jpg" data-fancybox="images-{{$setonagi_item->item()->item_id}}">
-                                        <img class="d-block w-100" src="/storage/item/{{$setonagi_item->item()->item_id}}.jpg" alt="First slide" onerror="this.src='{{ asset('img/no_image.jpg') }}'; this.removeAttribute('onerror'); this.removeAttribute('onload');"
-  onload="this.removeAttribute('onerror'); this.removeAttribute('onload');">
+                                      <a id="" href="/storage/item/{{$setonagi_item->item()->item_id}}.jpg" data-fancybox="images-{{$setonagi_item->item()->item_id}}">
+                                        <img class="d-block w-100" src="/storage/item/{{$setonagi_item->item()->item_id}}.jpg" alt="First slide" onerror="this.src='{{ asset('img/no_image.jpg') }}'; this.removeAttribute('onerror'); this.removeAttribute('onload');">
                                       </a>
                                     </div>
                                     @for($i = 1; $i < 5; $i++)
@@ -121,16 +83,10 @@
                                     <span class="sr-only">Next</span>
                                   </a>
                                 </div>
-
-
-
-
                               </div>
                               <div class="article-details">
-                                <div class="article-category"><a href="#">産地</a><div class="bullet"></div><a href="#">{{$setonagi_item->item()->sanchi_name}}</a></div>
-                                <div class="article-title">
-                                  <h2><a href="#">{{$setonagi_item->item()->item_name}}</a></h2>
-                                </div>
+                                <div class="article-category">産地<div class="bullet"></div>{{$setonagi_item->item()->sanchi_name}}</div>
+                                <div class="article-title">{{$setonagi_item->item()->item_name}}</div>
                                 <p class="setonagi_price">¥
                                 @if ( Auth::guard('user')->user()->setonagi == 1 )
                                   @if ( Auth::guard('user')->user()->setonagi()->kakebarai_riyou == 1 )

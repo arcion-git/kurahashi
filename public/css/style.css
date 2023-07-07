@@ -4393,3 +4393,16 @@ footer .external_link ul{
 .groupeditems{
   background-color: #1D2C6B !important;
 }
+
+.article-category{
+  font-weight: bold;
+}
+.article-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #34395e;
+}
+
+textarea.form-control{
+  border: 1px solid #bfc1c3 !important;
+}
