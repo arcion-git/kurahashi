@@ -58,8 +58,8 @@
                                   </ol>
                                   <div class="carousel-inner">
                                     <div class="carousel-item active">
-                                      <a id="" href="/storage/item/{{$setonagi_item->item()->item_id}}.jpg" data-fancybox="images-{{$setonagi_item->item()->item_id}}">
-                                        <img class="d-block w-100" src="/storage/item/{{$setonagi_item->item()->item_id}}.jpg" alt="First slide" onerror="this.src='{{ asset('img/no_image.jpg') }}'; this.removeAttribute('onerror'); this.removeAttribute('onload');">
+                                      <a href="/storage/item/{{$setonagi_item->item()->item_id}}.jpg" data-fancybox="images-{{$setonagi_item->item()->item_id}}">
+                                        <img class="d-block w-100" src="/storage/item/{{$setonagi_item->item()->item_id}}.jpg" alt="First slide" onerror="this.src='{{ asset('img/no_image.jpg') }}'; this.classList.add('disable_link');">
                                       </a>
                                     </div>
                                     @for($i = 1; $i < 5; $i++)
@@ -245,4 +245,28 @@
         <script>
         new LuminousGallery(document.querySelectorAll('.luminous'));
         </script> -->
+<script>
+// no_image.jpg要素のリンクを無効化
+$(document).ready(function() {
+  window.onload = function() {
+    var links = document.getElementsByTagName('a'); // すべての<a>要素を取得
+
+    for (var i = 0; i < links.length; i++) {
+      var link = links[i];
+      var imageElements = link.getElementsByTagName('img'); // <a>要素内の<img>要素を取得
+
+      for (var j = 0; j < imageElements.length; j++) {
+        var imageElement = imageElements[j];
+        var imageName = imageElement.src.substring(imageElement.src.lastIndexOf('/') + 1); // 画像のファイル名を取得
+
+        if (imageName === 'no_image.jpg') {
+          link.removeAttribute('href'); // href属性を削除してリンクを無効化
+          link.style.pointerEvents = 'none'; // クリックイベントを無効化
+          break; // ループを抜ける
+        }
+      }
+    }
+  };
+});
+</script>
 @endsection

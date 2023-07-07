@@ -229,6 +229,8 @@ class Cart extends Model
     return $order_this;
   }
 
+
+
   public function special_price_nouhin(){
     $cart = Cart::where(['id'=>$this->id])->first();
     if($cart->addtype == 'addspecialprice'){
