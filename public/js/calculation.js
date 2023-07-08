@@ -1398,6 +1398,13 @@ if(document.URL.match("/admin/buyer/recommend")) {
     var tokuisaki_id = $("#tokuisaki_id").val();
     var buyerrecommend_id = $(this).parent().parent().get(0).id;
     var price = $(this).val();
+
+    if (!/^[0-9]+$/.test(price)) {
+      // 入力が0から9までの文字で構成される整数ではない場合
+      alert("0から9までの半角数字のみを入力してください");
+      $(input).val(""); // 入力をクリアする場合はコメントアウトを解除してください
+    }
+
     console.log(tokuisaki_id);
     console.log(buyerrecommend_id);
     console.log(price);
@@ -1606,6 +1613,13 @@ if(document.URL.match("/admin/buyer/recommend")) {
     var tokuisaki_id = $("#tokuisaki_id").val();
     var buyerrecommend_id = $(this).parent().parent().get(0).id;
     var zaikosuu = $(this).val();
+
+    if (!/^[0-9]+$/.test(zaikosuu)) {
+      // 入力が0から9までの文字で構成される整数ではない場合
+      alert("0から9までの半角数字のみを入力してください");
+      $(input).val(""); // 入力をクリアする場合はコメントアウトを解除してください
+    }
+
     console.log(tokuisaki_id);
     console.log(buyerrecommend_id);
     console.log(zaikosuu);

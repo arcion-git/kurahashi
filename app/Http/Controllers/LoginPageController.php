@@ -2422,7 +2422,7 @@ class LoginPageController extends Controller
           $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $tokuisaki_id)
           // ->where('price', '>=', '1')
           ->whereNull('zaikokanri')
-          ->where('zaikosuu', '>=', 1)
+          ->where('zaikosuu', '>=', 0)
           ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
           ->where('start', '<=' , $now)
           ->where('end', '>=', $now)->first();
