@@ -1495,6 +1495,10 @@ class LoginPageController extends Controller
 
     if(!$request->has('cart_id') and !$request->has('cart_nini_id')){
       $data=[
+        'addtype' => $addtype,
+        'change_all_store' => $change_all_store,
+        'change_all_nouhin_yoteibi' => $change_all_nouhin_yoteibi,
+        'set_tokuisaki_name' => $set_tokuisaki_name,
         'message' => 'カートが空です。',
       ];
       return redirect()->route('confirm',$data);
@@ -1528,6 +1532,10 @@ class LoginPageController extends Controller
       }
       if($flg){
         $data=[
+          'addtype' => $addtype,
+          'change_all_store' => $change_all_store,
+          'change_all_nouhin_yoteibi' => $change_all_nouhin_yoteibi,
+          'set_tokuisaki_name' => $set_tokuisaki_name,
           'message' => '半角記号の入力はできません。',
         ];
         return redirect()->route('confirm',$data);
@@ -3593,6 +3601,7 @@ class LoginPageController extends Controller
 
     $name = 'ご担当者';
     $kaiin_number = $user->kaiin_number;
+    $user_name = $user->name;
     $email = $user->email;
     $tel = $user->tel;
     $admin_mail = config('app.admin_mail');
@@ -3602,7 +3611,7 @@ class LoginPageController extends Controller
     【会員情報】<br />
     得意先名：'.$repeatorder->tokuisaki_name.'<br />
     会員番号：'.$kaiin_number.'<br />
-    お名前：'.$name.'<br />
+    お名前：'.$user_name.'<br />
     メールアドレス：'.$email.'<br />
     電話番号：'.$tel.'<br />
     <br />
