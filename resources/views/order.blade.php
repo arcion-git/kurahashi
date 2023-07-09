@@ -618,7 +618,7 @@
     <div class="section-title">任意の商品</div>
     <div class="table-responsive" id="nini-wrap">
       <table id="{{$user->kaiin_number}}" class="table table-striped table-hover table-md">
-        <tbody>
+        <tbody id="nini_tbody">
 					<tr id="nini_header">
 	          <th class="head-nini_item_name text-center">商品名</th>
 	          <th class="head-nini_tantou text-center">担当</th>
