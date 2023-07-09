@@ -46,7 +46,7 @@
             </div>
 
 
-            <div class="float-right">
+            <div class="float-right approval_btn_div">
                 <input id="addtype" type="hidden" name="addtype" value="{{$addtype}}" />
                 <button id="approval_btn" type="submit" class="btn btn-warning">内容確認画面に進む</button>
                 @if($user->setonagi == 1)
