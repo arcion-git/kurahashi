@@ -53,7 +53,6 @@
                                       @if(file_exists($filename))
                                       <li data-target="#carouselExampleIndicators{{$setonagi_item->item()->item_id}}" data-slide-to="{{$i}}" class=""></li>
                                       @else
-                                      @break
                                       @endif
                                     @endfor
                                   </ol>
@@ -77,7 +76,6 @@
                                         </a>
                                       </div>
                                       @else
-                                      @break
                                       @endif
                                     @endfor
                                   </div>
