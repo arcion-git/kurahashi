@@ -53,15 +53,20 @@
                                       @if(file_exists($filename))
                                       <li data-target="#carouselExampleIndicators{{$setonagi_item->item()->item_id}}" data-slide-to="{{$i}}" class=""></li>
                                       @else
+                                      @break
                                       @endif
                                     @endfor
                                   </ol>
                                   <div class="carousel-inner">
                                     <div class="carousel-item active">
+                                      <?php $filename = public_path().'/storage/item/'.$setonagi_item->item()->item_id.'.jpg'; ?>
+                                      @if(file_exists($filename))
                                       <a href="/storage/item/{{$setonagi_item->item()->item_id}}.jpg" data-fancybox="images-{{$setonagi_item->item()->item_id}}">
-                                        <!-- <img class="d-block w-100" src="/storage/item/{{$setonagi_item->item()->item_id}}.jpg" alt="First slide" onerror="this.src='{{ asset('img/no_image.jpg') }}'; this.classList.add('disable_link');"> -->
-                                        <img class="d-block w-100" src="/storage/item/{{$setonagi_item->item()->item_id}}.jpg" alt="First slide" onerror="handleError(this);">
+                                        <img class="d-block w-100" src="/storage/item/{{$setonagi_item->item()->item_id}}.jpg" alt="First slide" onerror="this.src='{{ asset('img/no_image.jpg') }}'; this.classList.add('disable_link');">
                                       </a>
+                                      @else
+                                        <img class="d-block w-100" src="{{ asset('img/no_image.jpg') }}">
+                                      @endif
                                     </div>
                                     @for($i = 1; $i < 5; $i++)
                                       <?php $filename = public_path().'/storage/item/'.$setonagi_item->item()->item_id.'_'.$i.'.jpg'; ?>
@@ -72,6 +77,7 @@
                                         </a>
                                       </div>
                                       @else
+                                      @break
                                       @endif
                                     @endfor
                                   </div>
@@ -247,29 +253,6 @@
         new LuminousGallery(document.querySelectorAll('.luminous'));
         </script> -->
 <script>
-// no_image.jpg要素のリンクを無効化
-// $(document).ready(function() {
-//   window.onload = function() {
-//     var links = document.getElementsByTagName('a'); // すべての<a>要素を取得
-//
-//     for (var i = 0; i < links.length; i++) {
-//       var link = links[i];
-//       var imageElements = link.getElementsByTagName('img'); // <a>要素内の<img>要素を取得
-//
-//       for (var j = 0; j < imageElements.length; j++) {
-//         var imageElement = imageElements[j];
-//         var imageName = imageElement.src.substring(imageElement.src.lastIndexOf('/') + 1); // 画像のファイル名を取得
-//
-//         if (imageName === 'no_image.jpg') {
-//           link.removeAttribute('href'); // href属性を削除してリンクを無効化
-//           link.style.pointerEvents = 'none'; // クリックイベントを無効化
-//           break; // ループを抜ける
-//         }
-//       }
-//     }
-//   };
-// });
-
 function handleError(img) {
   img.src = "{{ asset('img/no_image.jpg') }}";
   img.classList.add('disable_link');
