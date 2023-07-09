@@ -4406,3 +4406,6 @@ footer .external_link ul{
 textarea.form-control{
   border: 1px solid #bfc1c3 !important;
 }
+.disable_link{
+  pointer-events: none;
+}
