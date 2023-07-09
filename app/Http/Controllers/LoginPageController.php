@@ -545,7 +545,7 @@ class LoginPageController extends Controller
 
       $recommends = Recommend::where('user_id', $kaiin_number)->where('end', '>=', $now)->orWhere('end',null)->where('user_id', $kaiin_number)->get();
 
-      $special_prices = SpecialPrice::get();
+      // $special_prices = SpecialPrice::get();
       $now = Carbon::now()->toDateTimeString();
 
       return view('user/setonagi',
@@ -555,7 +555,7 @@ class LoginPageController extends Controller
        'favorite_categories' => $favorite_categories,
        'favorite_items' => $favorite_items,
        'recommends' => $recommends,
-       'special_prices' => $special_prices,
+       // 'special_prices' => $special_prices,
        'now' => $now,
       ]);
   }
