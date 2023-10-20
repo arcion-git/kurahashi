@@ -57,6 +57,8 @@ a:hover{
 .header_bg .menu{
   display: flex;
   list-style: none;
+  justify-content: center;
+  align-items: center;
 }
 .header_bg .menu li{
   margin-left: 10px;
@@ -71,6 +73,10 @@ a:hover{
   justify-content:space-between;
   max-width: 1500px;
 }
+.register_btn form{
+  display: inline;
+}
+.register_btn button,
 .register_btn a{
   border-radius: 5px;
   border: 3px solid #1f499e;
@@ -78,6 +84,7 @@ a:hover{
   color: #1f499e;
   font-weight: bold;
 }
+
 .login_btn a{
   padding: 5px 15px;
   border-radius: 5px;
@@ -300,8 +307,10 @@ h2{
 .pay_bigtitle{
 
 }
+
+.hikitori_bigtitle span,
 .pay_bigtitle span{
-  font-size: 0.8em;
+  font-size: 0.6em;
 }
 .pay{
   flex-wrap: wrap;
@@ -319,6 +328,9 @@ h2{
 }
 .creditcard{
   width: 66%;
+}
+.creditcard_c{
+  width: 100%;
 }
 .creditcard img{
   max-width: 400px
@@ -353,6 +365,7 @@ h2{
   color: #000;
 }
 
+.kakebarai_merit_text_c,
 .kakebarai_merit_text {
 border: 2px solid #333;
 border-radius: 5px;
@@ -364,6 +377,17 @@ position: relative;
 background-color: #E2F1FC;
 color: #333;
 content: "《クロネコ掛け払いサービスご利用のメリット》";
+font-weight: bold;
+left: 30px;
+padding: 3px 10px;
+position: absolute;
+top: -15px;
+}
+
+.kakebarai_merit_text_c::before {
+background-color: #E2F1FC;
+color: #333;
+content: "《クレジットカード決済ご利用のメリット》";
 font-weight: bold;
 left: 30px;
 padding: 3px 10px;

@@ -32,14 +32,17 @@
             @csrf
 
             @if(isset($setonagi))
-            <div class="row mt-4 order">
-              <div class="col-md-12">
-                <div class="section-title">只今ご注文いただいた場合の商品受け渡しは{{$nouhin_yoteibi}}です。</div>
-              </div>
-            </div>
+              @if(isset($shipping_code))
+              @else
+                <div class="row mt-4 order">
+                  <div class="col-md-12">
+                    <div class="section-title">只今ご注文いただいた場合の商品受け渡しは{{$nouhin_yoteibi}}です。</div>
+                  </div>
+                </div>
+              @endif
             @endif
 
-            <div class="row mt-4 order">
+            <div class="row @if(isset($shipping_code))@else mt-4 @endif order">
               <div class="col-md-12">
                 <div id="order"></div>
               </div>
@@ -193,6 +196,9 @@ $(document).ready(function () {
     var store_name = $('#change_all_store').val();
     var nouhin_yoteibi = $('#change_all_nouhin_yoteibi').val();
 
+    console.log(store_name);
+    console.log(nouhin_yoteibi);
+
     // チェックボックスの状態を取得
     var isChecked = $('#show_favorite').prop('checked');
     // チェックが入っているかどうかを確認
@@ -248,7 +254,7 @@ $(document).ready(function () {
     });
   }
 
-  $(document).on("change", ".change_all_store,.change_all_nouhin_yoteibi", function () {
+  $(document).on("change", ".change_all_store,.change_all_nouhin_yoteibi,.nouhin_yoteibi_c", function () {
     order_update();
   });
 

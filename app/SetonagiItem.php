@@ -14,9 +14,11 @@ class SetonagiItem extends Model
   'sku_code',
   'img',
   'price',
+  'price_groupe',
   'start_date',
   'end_date',
   ];
+
   public function item()
   {
     // dd($this->sku_code);

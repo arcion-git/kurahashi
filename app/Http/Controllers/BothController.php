@@ -38,6 +38,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
+// BtoC向け
+use App\ShippingCalender;
+use App\ShippingCompanyCode;
+use App\ShippingInfo;
+use App\ShippingSetting;
+
 // 配列をページネーションする
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -101,6 +107,40 @@ class BothController extends Controller
     $data = "sucsess";
     return redirect()->route('setonagi',$data);
   }
+
+  public function change_uketori_place(Request $request){
+
+    $user_id = $request->user_id;
+    $uketori_place = $request->uketori_place;
+    $uketori_place=Setonagi::where(['user_id'=> $user_id])->update(['uketori_place'=> $uketori_place]);
+
+    $data = "sucsess";
+    return redirect()->route('setonagi',$data);
+  }
+
+
+  public function getDeliveryTimes(Request $request){
+      // データベースからデータを取得
+      $methodId = $request->methodId;
+      $user_id = $request->user_id;
+      $setonagi = Setonagi::where(['user_id'=> $user_id])->first();
+      $shipping_code = $setonagi->shipping_code;
+      $shipping_setting = ShippingSetting::where(['shipping_code'=> $shipping_code,'shipping_method'=> $methodId])->first();
+
+      $ukewatasibi_nyuuryoku_umu= $shipping_setting->ukewatasibi_nyuuryoku_umu;
+      $ukewatasi_kiboujikan_umu = $shipping_setting->ukewatasi_kiboujikan_umu;
+      $shipping_price = $shipping_setting->shipping_price;
+      $calender_id= $shipping_setting->calender_id;
+
+      if(isset($calender_id)){
+        $holidays = ShippingCalender::where(['calender_id'=>$calender_id])->get('date');
+      }else{
+        $holidays = null;
+      }
+
+      return response()->json(['ukewatasibi_nyuuryoku_umu' => $ukewatasibi_nyuuryoku_umu, 'holidays' => $holidays , 'ukewatasi_kiboujikan_umu' => $ukewatasi_kiboujikan_umu , 'shipping_price' => $shipping_price]);
+  }
+
 
   // 納品予定日を変更
   public function change_nouhin_yoteibi(Request $request){
@@ -317,6 +357,8 @@ class BothController extends Controller
     $user_id = $request->user_id;
     $addtype = $request->addtype;
     $nouhin_yoteibi = $request->nouhin_yoteibi;
+
+    // Log::debug($nouhin_yoteibi);
 
     $kaiin_number = User::where(['id'=>$user_id])->first()->kaiin_number;
 

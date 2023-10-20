@@ -13,6 +13,12 @@ use GuzzleHttp\Client;
 
 use Illuminate\Support\Facades\Mail;
 
+// BtoC向け
+use App\ShippingCalender;
+use App\ShippingCompanyCode;
+use App\ShippingInfo;
+use App\ShippingSetting;
+
 class RegisterController extends Controller
 {
     /*
@@ -53,23 +59,56 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
-        return Validator::make($data, [
-          'hjkjKbn' => ['required'],
-          'pay' => ['required'],
-          'first_name' => ['required', 'string', 'max:255'],
-          'last_name' => ['required', 'string', 'max:255'],
-          'first_name_kana' => ['required', 'string', 'max:255'],
-          'last_name_kana' => ['required', 'string', 'max:255'],
-          'company' => ['required', 'string', 'max:255'],
-          'company_kana' => ['required', 'string', 'max:255'],
-          'address01' => ['required', 'string', 'max:8'],
-          'address02' => ['required', 'string', 'max:255'],
-          'address03' => ['required', 'string', 'max:255'],
-          'address04' => ['required', 'string', 'max:255'],
-          'tel' => ['required', 'string', 'max:255'],
-          'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-          'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
+
+        // URLからtypeパラメータを取得
+        if(isset($data['type'])){
+          // typeパラメータが存在する場合の処理
+          $rules = [
+              'first_name' => ['required', 'string', 'max:255'],
+              'last_name' => ['required', 'string', 'max:255'],
+              'first_name_kana' => ['required', 'string', 'max:255'],
+              'last_name_kana' => ['required', 'string', 'max:255'],
+              'address01' => ['required', 'string', 'max:8'],
+              'address02' => ['required', 'string', 'max:255'],
+              'address03' => ['required', 'string', 'max:255'],
+              'address04' => ['required', 'string', 'max:255', 'regex:/^[^\x01-\x7E]+$/u'],
+              'tel' => ['required', 'string', 'max:20', 'regex:/^\d{2,5}-\d{1,4}-\d{4}$/'],
+              'company_name' => ['required'],
+              'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+              'password' => ['required', 'string', 'min:8', 'confirmed'],
+          ];
+
+          $validator = Validator::make($data, $rules);
+
+          // カスタムエラーメッセージを設定
+          $customMessages = [
+              // 'company_name.required' => '会社名は必須です。',
+          ];
+
+          $validator->setCustomMessages($customMessages);
+
+          return $validator;
+
+        } else {
+          // typeパラメータが存在しない場合の処理
+          return Validator::make($data, [
+            'hjkjKbn' => ['required'],
+            'pay' => ['required'],
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'first_name_kana' => ['required', 'string', 'max:255'],
+            'last_name_kana' => ['required', 'string', 'max:255'],
+            'company' => ['required', 'string', 'max:255'],
+            'company_kana' => ['required', 'string', 'max:255'],
+            'address01' => ['required', 'string', 'max:8'],
+            'address02' => ['required', 'string', 'max:255'],
+            'address03' => ['required', 'string', 'max:255'],
+            'address04' => ['required', 'string', 'max:255', 'regex:/^[^\x01-\x7E]+$/u'],
+            'tel' => ['required', 'string', 'max:20', 'regex:/^\d{2,5}-\d{1,4}-\d{4}$/'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+          ]);
+        }
     }
 
     /**
@@ -82,18 +121,15 @@ class RegisterController extends Controller
     {
 
       // dd($data);
-      // $array1 = array(
-      // 	"color" => "red",
-      // );
-      // $array2 = array(
-      // 	"color" => "green",
-      //   "shape" => "trapezoid",
-      // );
-      // $result = array_merge($array1, $array2);
-      //
-      // dd($result);
 
-      // dd($data);
+      // バリデーションからスタート
+      // dd($result);
+      // if(isset($data['type'])){
+      //   dd('BtoC');
+      // }else{
+      //   dd('BtoB');
+      // }
+
       $create_user = User::create([
           'email' => $data['email'],
           'password' => Hash::make($data['password']),
@@ -104,10 +140,15 @@ class RegisterController extends Controller
       $create_user->setonagi = 1;
       $create_user->save();
 
+      if(isset($data['type'])){
+        $company = '';
+      }else{
+        $company = $data['company'];
+      }
 
       $setonagi = Setonagi::create([
           // 'user_id' => $user_id,
-          'company' => $data['company'],
+          'company' => $company,
           // 'company_kana' => $data['company_kana'],
           'last_name' => $data['last_name'],
           'first_name' => $data['first_name'],
@@ -120,13 +161,33 @@ class RegisterController extends Controller
           // 'unei_company' => $data['unei_company'],
           // 'pay' => $data['pay'],
       ]);
+
       $user_id = $create_user->id;
       $setonagi->user_id = $user_id;
       $setonagi->save();
+
+      if(isset($data['type'])){
+        // BtoC
+        $company = '';
+      }else{
+        // BtoSB
+        $company = $data['company'];
+      }
+
+      if(isset($data['type'])){
+        // BtoCのみsetonagi_okを1に変更
+        $setonagi->setonagi_ok = 1;
+        $setonagi->shipping_code = $data['type'];
+        $setonagi->company_name = $data['company_name'];
+        $setonagi->save();
+      }
+
       // if(isset($data['unei_company'])){
       // 'unei_company' => $data['unei_company'],
       // }
 
+      // BtoSBユーザーのみを登録
+      if(!isset($data['type'])){
       // かけ払いAPIに送信
       $client = new Client();
       $url = config('app.kakebarai_user_touroku');
@@ -265,28 +326,36 @@ class RegisterController extends Controller
           // dd($option);
         }
       }
-
-
-
       // dd($option);
       $response = $client->request('POST', $url, $option);
       $result = simplexml_load_string($response->getBody()->getContents());
       // dd($result);
-
+      }
 
       // 登録メール送信
       $name = $data['last_name'].$data['first_name'];
       $email = $data['email'];
       $admin_mail = config('app.admin_mail');
       $url = url('');
-      $text = 'この度はSETOnagiオーダーブックにご登録くださいまして、誠にありがとうございます。<br />
-      <br />
-      SETOnagiオーダーブックのご利用には、ご登録頂いたメールアドレスとパスワードが必要となりますので、大切に保管くださいますようお願いいたします。<br />
-      <br />
-      ご登録くださいました情報に基づき、ヤマトクレジットファイナンス株式会社の審査に進ませていただきます。<br />
-      審査完了までに、最大で2営業日いただいております。<br />
-      審査が完了し次第、改めて、メールにてご案内いたします。<br />
-      オーダーブックのご利用開始まで、今しばらくお待ちください。';
+      if(isset($data['type'])){
+        // BtoC
+        $text = 'この度はSETOnagiオーダーブックにご登録くださいまして、誠にありがとうございます。<br />
+        <br />
+        SETOnagiオーダーブックのご利用には、ご登録頂いたメールアドレスとパスワードが必要となりますので、大切に保管くださいますようお願いいたします。<br />
+        <br />
+        ユーザー登録時にご登録いただいたメールアドレスとパスワードにて、下記URLよりご利用いただけます。<br />
+        URL：<a href="'.$url.'">'.$url.'</a>';
+      }else{
+        // BtoSB
+        $text = 'この度はSETOnagiオーダーブックにご登録くださいまして、誠にありがとうございます。<br />
+        <br />
+        SETOnagiオーダーブックのご利用には、ご登録頂いたメールアドレスとパスワードが必要となりますので、大切に保管くださいますようお願いいたします。<br />
+        <br />
+        ご登録くださいました情報に基づき、ヤマトクレジットファイナンス株式会社の審査に進ませていただきます。<br />
+        審査完了までに、最大で2営業日いただいております。<br />
+        審査が完了し次第、改めて、メールにてご案内いたします。<br />
+        オーダーブックのご利用開始まで、今しばらくお待ちください。';
+      }
       Mail::send('emails.register', [
           'name' => $name,
           'text' => $text,
@@ -306,6 +375,35 @@ class RegisterController extends Controller
     public function showRegistrationForm()
     {
         return view('user.auth.register');
+    }
+
+    /**
+     * Show the application registration form.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showRegistrationForm_c()
+    {
+      // URLからtypeパラメータを取得する
+        $type = $_GET['type'] ?? null;
+        $shipping_info = ShippingInfo::where('shipping_code',$type)->first();
+
+        $redirectUrl = url(''); // リダイレクト先URLを指定
+        if(!isset($shipping_info)){
+          $queryParameters=[
+            'type' => $type,
+            'message' => 'QRコードが正くありません',
+          ];
+          $redirectUrlWithQuery = $redirectUrl . '?' . http_build_query($queryParameters);
+          return redirect()->to($redirectUrlWithQuery);
+        }
+        $company_names = ShippingCompanyCode::where('shipping_code',$type)->get();
+        // dd($company_names);
+        $data=[
+          'company_names'=>$company_names,
+          'shipping_info'=>$shipping_info,
+        ];
+        return view('user.auth.register_c', $data);
     }
 
     /**

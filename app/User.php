@@ -43,6 +43,10 @@ class User extends Authenticatable
     }
 
 
+
+
+
+
     public function stores()
     {
         return $this->belongsToMany('App\Store','store_users','store_id','user_id');
@@ -52,6 +56,21 @@ class User extends Authenticatable
     {
         $setonagi_user = Setonagi::where('user_id', $this->id)->first();
         return $setonagi_user;
+    }
+
+    public function c_user()
+    {
+        $setonagi_user = Setonagi::where('user_id', $this->id)->first();
+        if(isset($setonagi_user)){
+          $shipping_code = $setonagi_user->shipping_code;
+          if(isset($shipping_code)){
+            return true;
+          }else{
+            return false;
+          }
+        }else{
+          return false;
+        }
     }
 
     // public function tokuisaki_name() {

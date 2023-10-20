@@ -3984,7 +3984,8 @@ footer .external_link ul{
 .cart-wrap .head-store,
 .cart-wrap .head-yoteibi,
 .cart-wrap .head-shoukei,
-.cart-wrap .head-sousa{
+.cart-wrap .head-sousa
+{
 	display: none;
 }
 
@@ -4424,4 +4425,31 @@ textarea.form-control{
   margin-top: 20px;
   margin-left: 5px;
   margin-bottom: 20px;
+}
+
+.nouhin_yoteibi_c{
+  text-align: left !important;
+  padding: 10px 7px !important;
+}
+
+#c_shipping_price {
+    margin-bottom: 15px;
+}
+
+.c_shipping_price-detail-name {
+    letter-spacing: .3px;
+    color: #98a6ad;
+    margin-bottom: 4px;
+}
+.c_shipping_price {
+    font-size: 18px;
+    color: #34395e;
+    font-weight: 700;
+}
+.start_btn{
+  width: 100%;
+}
+
+.alert ul{
+  margin-bottom: 0px;
 }

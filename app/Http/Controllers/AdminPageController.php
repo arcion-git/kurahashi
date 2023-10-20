@@ -30,6 +30,12 @@ use App\Setonagi;
 use App\SetonagiItem;
 use App\ItemImage;
 
+// BtoC向け
+use App\ShippingCalender;
+use App\ShippingCompanyCode;
+use App\ShippingInfo;
+use App\ShippingSetting;
+
 // PhpSpreadsheet
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Shared\File;
@@ -69,6 +75,13 @@ use App\Imports\PriceImport;
 use App\Imports\SpecialPriceImport;
 
 use App\Imports\BuyerRecommendImport;
+
+// BtoC向け
+use App\Imports\ShippingCalenderImport;
+use App\Imports\ShippingCompanyCodeImport;
+use App\Imports\ShippingInfoImport;
+use App\Imports\ShippingSettingImport;
+
 
 // ページネーション
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -334,9 +347,9 @@ class AdminPageController extends Controller
 
     $order_ids = $request->order_id;
     $prices = $request['price'];
-
+    // dd($order_ids);
     $prices = array_combine($order_ids, $prices);
-    // dd($prices);
+
     foreach($prices as $key => $value) {
       $order = Order::firstOrNew(['id'=> $key]);
       $order->price = $value;
@@ -482,7 +495,6 @@ class AdminPageController extends Controller
           return redirect()->route('admin.dealdetail',$id);
         }
       }
-
     }
     // else{
     //   // 法人ユーザーのみ確認待ちに変更
@@ -837,7 +849,54 @@ class AdminPageController extends Controller
   return redirect()->route('admin.csv', $data);
   }
 
+  // BtoC向けCSVインポート
+  public function ShippingCalenderImport(){
+  ShippingCalender::truncate();
+  Excel::import(new ShippingCalenderImport, request()->file('file'));
+  $message = '正常にインポートが完了しました。';
+  $icon = 'success';
+  $data=[
+    'message'=>$message,
+    'icon'=>$icon,
+  ];
+  return redirect()->route('admin.csv', $data);
+  }
 
+  public function ShippingCompanyCodeImport(){
+  ShippingCompanyCode::truncate();
+  Excel::import(new ShippingCompanyCodeImport, request()->file('file'));
+  $message = '正常にインポートが完了しました。';
+  $icon = 'success';
+  $data=[
+    'message'=>$message,
+    'icon'=>$icon,
+  ];
+  return redirect()->route('admin.csv', $data);
+  }
+
+  public function ShippingInfoImport(){
+  ShippingInfo::truncate();
+  Excel::import(new ShippingInfoImport, request()->file('file'));
+  $message = '正常にインポートが完了しました。';
+  $icon = 'success';
+  $data=[
+    'message'=>$message,
+    'icon'=>$icon,
+  ];
+  return redirect()->route('admin.csv', $data);
+  }
+
+  public function ShippingSettingImport(){
+  ShippingSetting::truncate();
+  Excel::import(new ShippingSettingImport, request()->file('file'));
+  $message = '正常にインポートが完了しました。';
+  $icon = 'success';
+  $data=[
+    'message'=>$message,
+    'icon'=>$icon,
+  ];
+  return redirect()->route('admin.csv', $data);
+  }
 
 
   public function download(){
@@ -2088,9 +2147,19 @@ class AdminPageController extends Controller
               $tokuisaki_name = $store->tokuisaki_name;
               // 得意先店舗名
               $store_name = $store->store_name;
+              // 配送方法
+              $haisou_houhou = '';
+              // QR区分
+              $qr = '';
             }else{
               // 会社名
-              $company = $setonagi_user->company;
+              if($user->c_user()){
+                $company = $setonagi_user->company_name;
+              }else{
+                $company = $setonagi_user->company;
+              }
+              // dd($company);
+              // 会員No
               // 会員No
               $kaiin_number = 's'.$user->id;
               // 郵便番号
@@ -2116,7 +2185,11 @@ class AdminPageController extends Controller
                 $pay = 'クロネコかけ払い';
               }
               // 取引種別
-              $torihiki_shubetu = 1;
+              if($user->c_user()){
+                $torihiki_shubetu = 4;
+              }else{
+                $torihiki_shubetu = 1;
+              }
               // 引き渡し場所
               if($deal->uketori_place == '福山魚市引き取り'){
                 $uketori_place = '010';
@@ -2124,6 +2197,8 @@ class AdminPageController extends Controller
                 $uketori_place = '020';
               }elseif($deal->uketori_place == '引取り（尾道ケンスイ）'){
                 $uketori_place = '030';
+              }else{
+                $uketori_place = null;
               }
               // 得意先コード
               $tokuisaki_id = null;
@@ -2133,6 +2208,18 @@ class AdminPageController extends Controller
               $tokuisaki_name = null;
               // 得意先店舗名
               $store_name = null;
+              // 配送方法
+              if($user->c_user()){
+                $haisou_houhou = $deal->uketori_place;
+              }else{
+                $haisou_houhou = '';
+              }
+              // QR区分
+              if($user->c_user()){
+                $qr = $setonagi_user->shipping_code;
+              }else{
+                $qr = '';
+              }
             }
             if($deal->status == '発注済'){
               $deal_status = 1;
@@ -2197,7 +2284,7 @@ class AdminPageController extends Controller
               // 決済ID
               $deal->id,
               // 配送方法
-              '',
+              $haisou_houhou,
               // 配送希望日
               $order->nouhin_yoteibi,
               // 配送時間帯
@@ -2272,6 +2359,8 @@ class AdminPageController extends Controller
               $tokuisaki_name,
               // 得意先店舗名
               $store_name,
+              // QR区分
+              $qr,
             ];
             // dd($array);
       			array_push($order_list, $array);
@@ -2454,6 +2543,8 @@ class AdminPageController extends Controller
               $store->tokuisaki_name,
               // 得意先店舗名
               $store->store_name,
+              // QR区分
+              '',
             ];
       			array_push($order_list, $array);
           }
@@ -2653,6 +2744,8 @@ class AdminPageController extends Controller
                   $tokuisaki_name,
                   // 得意先店舗名
                   $store_name,
+                  // QR区分
+                  '',
                 ];
                 // dd($array);
           			array_push($order_list, $array);
@@ -2718,6 +2811,8 @@ class AdminPageController extends Controller
                 $tokuisaki_name = $store->tokuisaki_name;
                 // 得意先店舗名
                 $store_name = $store->store_name;
+                // QR区分
+                $qr = '';
               }
               $array = [
                 // 取引番号
@@ -2848,6 +2943,8 @@ class AdminPageController extends Controller
                 $tokuisaki_name,
                 // 得意先店舗名
                 $store_name,
+                // QR区分
+                '',
               ];
               // dd($array);
         			array_push($order_list, $array);

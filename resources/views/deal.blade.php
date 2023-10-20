@@ -26,7 +26,12 @@
                       <!-- <th class="text-center">お名前</th> -->
                       <!-- <th class="text-center">お問い合わせ日時</th> -->
                       <th class="text-center">種別</th>
+
+                      @if(Auth::guard('user')->user()->setonagi())
+                      @else
                       <th class="text-center">納品先店舗</th>
+                      @endif
+
                       <th class="text-center">納品予定日</th>
                       <th class="text-center">発注日時</th>
                       <th class="text-center">状態</th>
@@ -47,12 +52,18 @@
                       <td class="text-center">
                         {{$deal->first_cart_addtype()}}
                       </td>
+
+                      @if(Auth::guard('user')->user()->setonagi())
+                      @else
                       <td class="text-center">
                         {{$deal->first_order_nouhin_tokuisaki_name_and_store_name()}}
                       </td>
+                      @endif
+
                       <td class="text-center">
                         {{$deal->first_order_nouhin_yoteibi()}}
                       </td>
+
                       <td class="text-center">
                         {{$deal->success_time}}
                       </td>

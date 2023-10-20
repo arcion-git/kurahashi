@@ -3,7 +3,11 @@
 {!! $text !!}
 <br />
 @if(isset($order_list)){!! $order_list !!}<br /><br />@endif
-@if(isset($total_price)){!! $total_price !!}<br /><br />@endif
+@if(isset($shipping_price_text)){!! $shipping_price_text !!}<br /><br />@endif
+@if(isset($total_price)){!! $total_price !!}<br />@endif
+@if(isset($zei_price_text)){!! $zei_price_text !!}<br />@endif
+@if(isset($total_price_zei_number_text)){!! $total_price_zei_number_text !!}<br />@endif
+@if(isset($shipping_price_zei_number_text)){!! $shipping_price_zei_number_text !!}<br /><br />@endif
 @if(isset($user))
 @if($user->setonagi == 1)
 @if(isset($pay)){!! $pay !!}<br /><br />@endif

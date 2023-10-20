@@ -40,6 +40,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
+// BtoC向け
+use App\ShippingCalender;
+use App\ShippingCompanyCode;
+use App\ShippingInfo;
+use App\ShippingSetting;
+
 // 配列をページネーションする
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -394,6 +400,9 @@ class LoginPageController extends Controller
         }
       $categories = Category::get()->groupBy('bu_ka_name');
       $user_id = Auth::guard('user')->user()->id;
+
+      $shipping_code = Setonagi::where('user_id',$user_id)->first('shipping_code');
+
       $favorite_categories = FavoriteCategory::where('user_id', $user_id)->get();
       $carts =  Cart::where('user_id',$user_id)->get();
       $kaiin_number = Auth::guard('user')->user()->kaiin_number;
@@ -406,6 +415,7 @@ class LoginPageController extends Controller
        'favorite_categories' => $favorite_categories,
        'recommends' => $recommends,
        'special_prices' => $special_prices,
+       'shipping_code' => $shipping_code,
       ]);
   }
   public function guide()
@@ -510,12 +520,23 @@ class LoginPageController extends Controller
 
       // $items = Item::where('zaikosuu', '>=', '0.01')->paginate(30);
 
-
       // foreach($setonagi_items as $setonagi_item){
       //   $setonagi_item = $setonagi_item->item()->item_name;
       // }
 
-      $setonagi_items = SetonagiItem::get();
+      $setonagi = Setonagi::where('user_id',$user_id)->first();
+
+      if($setonagi){
+        $shipping_code = Setonagi::where('user_id',$user_id)->first();
+        if(isset($shipping_code->shipping_code)){
+          $shipping_info = ShippingInfo::where('shipping_code', $shipping_code->shipping_code)->first();
+          $setonagi_items = SetonagiItem::where('price_groupe', $shipping_info->price_groupe)->get();
+        }else{
+          $setonagi_items = SetonagiItem::where('price_groupe', '00000000001')->get();
+        }
+      }else{
+        $setonagi_items = SetonagiItem::where('price_groupe', '00000000001')->get();
+      }
 
       $items = [];
       $n=1;
@@ -775,6 +796,7 @@ class LoginPageController extends Controller
     }
 
 
+
     // 既にカートに入っていないか確認
     $cart_in=Cart::where(['user_id'=> $user_id , 'item_id'=> $item->id , 'deal_id'=> null , 'addtype'=> 'addsetonagi'])->first();
     if($cart_in){
@@ -900,8 +922,21 @@ class LoginPageController extends Controller
     //   }
     // }
 
-    // セトナギ商品上書き
-    $setonagi_item = SetonagiItem::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])->first();
+
+
+
+    // セトナギユーザーの場合取得
+    if($setonagi_user){
+      $shipping_code = Setonagi::where('user_id',$user_id)->first('shipping_code');
+    }
+    if(isset($shipping_code->shipping_code)){
+      $shipping_info = ShippingInfo::where('shipping_code', $shipping_code->shipping_code)->first();
+      $price_groupe_code = $shipping_info->price_groupe;
+    }else{
+      $price_groupe_code = '00000000001';
+    }
+    // セトナギ商品価格上書き
+    $setonagi_item = SetonagiItem::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'price_groupe'=>$price_groupe_code])->first();
     if(isset($setonagi_item->price)){
     $order->price = $setonagi_item->price;
     }
@@ -1182,7 +1217,7 @@ class LoginPageController extends Controller
         }
       }
 
-      if(!$setonagi_user){
+      if(!$setonagi_user && !$addtype == 'addsetonagi'){
         $data=[
           'change_all_nouhin_yoteibi'=>$order->nouhin_yoteibi,
           'set_tokuisaki_name'=>$order->tokuisaki_name,
@@ -1299,7 +1334,14 @@ class LoginPageController extends Controller
     $setonagi = $user->setonagi;
     // $setonagi_uketori_place = $setonagi->uketori_place;
     // dd($setonagi_uketori_place);
+    // BtoC用の配送コードを取得
 
+    if(isset($setonagi)){
+      $shipping_code = Setonagi::where('user_id',$user_id)->first('shipping_code');
+      $shipping_code = $shipping_code->shipping_code;
+    }else{
+      $shipping_code = null;
+    }
 
     $favorite_categories = FavoriteCategory::where('user_id', $user_id)->get();
 
@@ -1446,6 +1488,7 @@ class LoginPageController extends Controller
      'change_all_store' => $change_all_store,
      'set_tokuisaki_name' => $set_tokuisaki_name,
      'change_all_nouhin_yoteibi' => $change_all_nouhin_yoteibi,
+     'shipping_code' => $shipping_code,
 
     ]);
 
@@ -1465,7 +1508,6 @@ class LoginPageController extends Controller
     $change_all_store = $request->change_all_store;
     $change_all_nouhin_yoteibi = $request->change_all_nouhin_yoteibi;
     $set_tokuisaki_name = $request->set_tokuisaki_name;
-
 
     if(!$request->has('cart_id') && !$request->has('cart_nini_id')){
       $data=[
@@ -1594,6 +1636,8 @@ class LoginPageController extends Controller
   public function order(Request $request){
 
 
+
+
     // 会員情報を取得
     $user = Auth::guard('user')->user();
     $user_id = $user->id;
@@ -1640,45 +1684,100 @@ class LoginPageController extends Controller
     $now = Carbon::now();
 
 
+
+
+
+    // BtoC用の配送コードを取得
     if($setonagi){
-      // 直近の納品予定日を取得
-      $today = date("Y-m-d");
-      $holidays = Holiday::pluck('date');
-      $currentTime = date('H:i:s');
-      // 19時より前の処理
-      if (strtotime($currentTime) < strtotime('17:00:00')) {
-        $holidays = Holiday::pluck('date')->toArray();
-        for($i = 1; $i < 10; $i++){
-          $today_plus = date('Y-m-d', strtotime($today.'+'.$i.'day'));
-          // dd($today_plus2);
-          $key = array_search($today_plus,(array)$holidays,true);
-          if($key){
-              // 休みでないので納品日を格納
-          }else{
-              // 休みなので次の日付を探す
-              $nouhin_yoteibi = $today_plus;
-              break;
-          }
-        }
+      $shipping_code = Setonagi::where('user_id',$user_id)->first('shipping_code');
+      $shipping_code = $shipping_code->shipping_code;
+      // 配送設定を呼び出し
+      if(isset($shipping_code)){
+        $shipping_settings = ShippingSetting::where('shipping_code',$shipping_code)->get();
       }else{
-      // 19時より後の処理
-        $holidays = Holiday::pluck('date')->toArray();
-        for($i = 2; $i < 10; $i++){
-          $today_plus = date('Y-m-d', strtotime($today.'+'.$i.'day'));
-          // dd($today_plus2);
-          $key = array_search($today_plus,(array)$holidays,true);
-          if($key){
-              // 休みでないので納品日を格納
-          }else{
-              // 休みなので次の日付を探す
-              $nouhin_yoteibi = $today_plus;
-              break;
-          }
-        }
+        // BtoSB
+        $shipping_code = null;
+        $shipping_settings = null;
       }
-      $sano_nissuu = $nouhin_yoteibi;
+    }else{
+      // BtoB
+      $shipping_code = null;
+      $shipping_settings = null;
+    }
+    // 価格グループコードを分岐
+    if(isset($shipping_code)){
+      // 価格グループコードを配送コードごとに分岐
+      $shipping_info = ShippingInfo::where('shipping_code', $shipping_code)->first();
+      $price_groupe_code = $shipping_info->price_groupe;
+    }else{
+      $price_groupe_code = '00000000001';
     }
 
+    // toC納品予定日の再設定を回避
+    if($url == 'approval' && isset($shipping_code) || isset($shipping_code) && isset($request->nouhin_yoteibi)){
+      $c_nouhin_yoteibi = $request->nouhin_yoteibi;
+    }
+
+    // toB納品予定日の再設定を回避
+    if(!$setonagi && isset($request->nouhin_yoteibi)){
+      $b_nouhin_yoteibi = $request->nouhin_yoteibi;
+    }
+
+
+    // 直近の納品予定日を取得
+    $today = date("Y-m-d");
+    $holidays = Holiday::pluck('date');
+    $currentTime = date('H:i:s');
+    // 19時より前の処理
+    if (strtotime($currentTime) < strtotime('17:00:00')) {
+      $holidays = Holiday::pluck('date')->toArray();
+      for($i = 1; $i < 10; $i++){
+        $today_plus = date('Y-m-d', strtotime($today.'+'.$i.'day'));
+        // dd($today_plus2);
+        $key = array_search($today_plus,(array)$holidays,true);
+        if($key){
+            // 休みでないので納品日を格納
+        }else{
+            // 休みなので次の日付を探す
+            $nouhin_yoteibi = $today_plus;
+            break;
+        }
+      }
+    }else{
+    // 19時より後の処理
+      $holidays = Holiday::pluck('date')->toArray();
+      for($i = 2; $i < 10; $i++){
+        $today_plus = date('Y-m-d', strtotime($today.'+'.$i.'day'));
+        // dd($today_plus2);
+        $key = array_search($today_plus,(array)$holidays,true);
+        if($key){
+            // 休みでないので納品日を格納
+        }else{
+            // 休みなので次の日付を探す
+            $nouhin_yoteibi = $today_plus;
+            break;
+        }
+      }
+    }
+    $sano_nissuu = $nouhin_yoteibi;
+
+
+    // BtoC用納品予定日の再設定を回避
+    if($url == 'approval' && isset($shipping_code) || isset($shipping_code) && isset($request->nouhin_yoteibi)){
+      $nouhin_yoteibi = $c_nouhin_yoteibi;
+    }
+
+    // BtoB用納品予定日の再設定を回避
+    if(!$setonagi && isset($request->nouhin_yoteibi)){
+      $nouhin_yoteibi = $b_nouhin_yoteibi;
+    }
+
+// Log::debug($nouhin_yoteibi);
+
+    // toC納品予定日の再設定を回避（order_update）
+    // if(isset($shipping_code) && isset($request->change_all_nouhin_yoteibi)){
+    //   $nouhin_yoteibi = $c_nouhin_yoteibi;
+    // }
 
 
     if(isset($addtype)){
@@ -1695,7 +1794,7 @@ class LoginPageController extends Controller
               $join->on('setonagi_items.item_id', '=', 'items.item_id')
                    ->on('setonagi_items.sku_code', '=', 'items.sku_code');
           })
-          ->where(['carts.user_id'=>$user_id, 'deal_id'=> null, 'addtype'=>$addtype])
+          ->where(['carts.user_id'=>$user_id, 'deal_id'=> null, 'addtype'=>$addtype , 'setonagi_items.price_groupe' => $price_groupe_code])
           ->where('items.zaikosuu', '>=', 0.1)
           ->get(['carts.*']);
           $groupedItems = $carts->groupBy('groupe');
@@ -1712,8 +1811,6 @@ class LoginPageController extends Controller
                    ->on('buyer_recommends.uwagaki_item_name', '=', 'carts.uwagaki_item_name')
                    ->on('buyer_recommends.uwagaki_kikaku', '=', 'carts.uwagaki_kikaku');
           })
-
-
 
           ->where('buyer_recommends.tokuisaki_id', $tokuisaki_id)
 
@@ -1796,9 +1893,22 @@ class LoginPageController extends Controller
     }
 
 
+    // 納品予定日を変更
+    if($setonagi){
+      // $shipping_code = Setonagi::where('user_id',$user_id)->first('shipping_code');
+      // $shipping_code = $shipping_code->shipping_code;
+      // BtoCの納品予定日を変更
+      if(isset($shipping_code) && isset($nouhin_yoteibi)){
+        foreach ($carts as $cart) {
+          // オーダー内容を保存
+          $order = Order::where(['cart_id'=> $cart->id])->first();
+          $order->nouhin_yoteibi = $nouhin_yoteibi;
+          $order->save();
+        }
+      }
+    }
 
-
-    // 納品先を変更
+    // 納品先・納品予定日を変更
     if(!$setonagi){
       if(isset($store) && isset($nouhin_yoteibi)){
         foreach ($carts as $cart) {
@@ -1861,7 +1971,6 @@ class LoginPageController extends Controller
     $holidays = Holiday::pluck('date');
 
 
-
     // 納品予定日を取得
     $currentDate = Carbon::now();
     $oneMonthLater = $currentDate->addMonth();
@@ -1922,47 +2031,15 @@ class LoginPageController extends Controller
 
 
 
-    // 直近の納品予定日を取得
-    $today = date("Y-m-d");
-    $holidays = Holiday::pluck('date');
-    $currentTime = date('H:i:s');
-    // 19時より前の処理
-    if (strtotime($currentTime) < strtotime('17:00:00')) {
-      $holidays = Holiday::pluck('date')->toArray();
-      for($i = 1; $i < 10; $i++){
-        $today_plus = date('Y-m-d', strtotime($today.'+'.$i.'day'));
-        // dd($today_plus2);
-        $key = array_search($today_plus,(array)$holidays,true);
-        if($key){
-            // 休みでないので納品日を格納
-        }else{
-            // 休みなので次の日付を探す
-            $nouhin_yoteibi = $today_plus;
-            break;
-        }
-      }
-    }else{
-    // 19時より後の処理
-      $holidays = Holiday::pluck('date')->toArray();
-      for($i = 2; $i < 10; $i++){
-        $today_plus = date('Y-m-d', strtotime($today.'+'.$i.'day'));
-        // dd($today_plus2);
-        $key = array_search($today_plus,(array)$holidays,true);
-        if($key){
-            // 休みでないので納品日を格納
-        }else{
-            // 休みなので次の日付を探す
-            $nouhin_yoteibi = $today_plus;
-            break;
-        }
-      }
-    }
-    $sano_nissuu = $nouhin_yoteibi;
+
 
 
     if(isset($data->memo)){
-    $memo -> $request->memo;
+      $memo -> $request->memo;
     }
+
+    // Log::debug($message);
+    // return $request;
 
     $collect = config('app.collect_password');
     $collect_tradercode = config('app.collect_tradercode');
@@ -1972,8 +2049,7 @@ class LoginPageController extends Controller
 
     $message=['message' => $message];
 
-
-
+    // return $nouhin_yoteibi;
     $data=
     ['carts' => $carts,
      'cart_ninis' => $cart_ninis,
@@ -1997,6 +2073,8 @@ class LoginPageController extends Controller
      'seted_store' => $store,
      'nouhin_yoteibi' => $nouhin_yoteibi,
      'message' => $message,
+     'shipping_code' => $shipping_code,
+     'shipping_settings' => $shipping_settings,
     ];
     // return view('order', $data)->with($message);
     return view('order', $data);
@@ -2298,10 +2376,18 @@ class LoginPageController extends Controller
     $user_id = $user->id;
     $data = $request->all();
 
+
+
     $addtype = $request->addtype;
     $now = Carbon::now();
 
     $change_all_nouhin_yoteibi = $request->change_all_nouhin_yoteibi;
+
+    // toC納品予定日の再設定を回避（必要なかった）
+    // $shipping_code = Setonagi::where('user_id',$user_id)->first();
+    // if(isset($shipping_code->shipping_code) && isset($change_all_nouhin_yoteibi)){
+    //   $c_nouhin_yoteibi = $change_all_nouhin_yoteibi;
+    // }
 
     if(!$user->setonagi == 1){
       // BtoBの必要な情報を保存
@@ -2312,6 +2398,20 @@ class LoginPageController extends Controller
       $store_id = $store->store_id;
       $kaiin_number = $user->kaiin_number;
     }
+
+    // BtoCの必要な情報を保存
+    $setonagi = Setonagi::where('user_id',$user_id)->first();
+    if($setonagi){
+      $shipping_code = $setonagi->shipping_code;
+      // 配送設定を呼び出し
+      if(isset($shipping_code)){
+        $shipping_setting = ShippingSetting::where(['shipping_code'=> $shipping_code,'shipping_method'=> $request->uketori_place])->first();
+        $shipping_name = $shipping_setting->shipping_name;
+        $shipping_price = $shipping_setting->shipping_price;
+        $calender_id= $shipping_setting->calender_id;
+      }
+    }
+    // dd($shipping_price);
 
 
     // 次の営業日を取得
@@ -2480,7 +2580,6 @@ class LoginPageController extends Controller
       foreach ($lost_items as $lost_item) {
         $lost_item_name = $lost_item['item_name'];
         $lost_item_zaiko = abs($lost_item['nokori_zaiko']);
-
         $message = "{$lost_item_name}は、在庫が{$lost_item_zaiko}不足しています。";
         $messages[] = $message;
       }
@@ -2772,149 +2871,153 @@ class LoginPageController extends Controller
     $now = Carbon::now()->format('Ymd');
     // dd($now);
 
-    if($request->uketori_siharai == 'クロネコかけ払い'){
-      // ヤマトAPI連携確認
-      $client = new Client();
-
-      $url = config('app.kakebarai_touroku');
-      $kakebarai_traderCode = config('app.kakebarai_traderCode');
-      $kakebarai_passWord = config('app.kakebarai_passWord');
-      $envi = config('app.envi');
-
-      $option = [
-        'headers' => [
-          'Accept' => '*/*',
-          'Content-Type' => 'application/x-www-form-urlencoded',
-          'charset' => 'UTF-8',
-        ],
-        'form_params' => [
-          'traderCode' => $kakebarai_traderCode,
-          // 日付
-          'orderDate' => $now,
-          'orderNo' => $deal_id.$envi,
-          // バイヤーid
-          'buyerId' => $user_id,
-          'settlePrice' => $request->all_total_val,
-          'shohiZei' => $request->tax_val,
-          'meisaiUmu' => '2',
-          'passWord' => $kakebarai_passWord
-        ]
-      ];
-      // dd($option);
-      $response = $client->request('POST', $url, $option);
-      $result = simplexml_load_string($response->getBody()->getContents());
-      // dd($result);
-      if($result->returnCode == 1){
-        $delete_deal = Deal::where(['id'=> $deal_id])->first()->delete();
-        if($result->errorCode == 'G55'){
-          // 後で処理を作る
-
-          // ヤマトAPI連携利用金額確認
-          $client = new Client();
-          $url = config('app.kakebarai_riyoukingaku');
-          $option = [
-            'headers' => [
-              'Accept' => '*/*',
-              'Content-Type' => 'application/x-www-form-urlencoded',
-              'charset' => 'UTF-8',
-            ],
-            'form_params' => [
-              'traderCode' => $kakebarai_traderCode,
-              // バイヤーid
-              'buyerId' => $user_id,
-              'buyerTelNo' => '',
-              'passWord' => $kakebarai_passWord
-            ]
-          ];
-          // dd($option);
-          $response = $client->request('POST', $url, $option);
-          $result = simplexml_load_string($response->getBody()->getContents());
-          // dd($result);
-          $message = '掛け払い金額オーバー';
-          if($result->returnCode == 0){
-            $usePayment = $result->usePayment;
-            $useOverLimit = $result->useOverLimit;
-          }
-          // %2Cになっているのをカンマを直す
-          $limitprice = $useOverLimit - $usePayment;
-          // $limitprice = number_format($limitprice);
-          // $limitprice = mb_convert_encoding($limitprice,"utf-8","sjis");
-          // dd($limitprice);
-          $message = 'かけ払い利用限度額オーバーです。<br />'.$limitprice.'円以内での購入をお願いします。';
-          $data=[
-            'message' => $message,
-          ];
-        }else{
-          $message = '決済エラーのため別の決済方法をお試しください。';
-          $data=[
-            'message' => $message,
-          ];
-        }
-        return redirect()->route('confirm',$data);
-      }
-    }
-
-
-
-
-    if($request->uketori_siharai == 'クレジットカード払い'){
-      // dd($request->token_api);
-      // EPトークン取得
-      $client = new Client();
-      // $url = 'https://api.kuronekoyamato.co.jp/api/credit';
-
-      $url = config('app.collect_touroku');
-      $collect_tradercode = config('app.collect_tradercode');
-
-      $option = [
-        'headers' => [
-          'Accept' => '*/*',
-          'Content-Type' => 'application/x-www-form-urlencoded',
-          'charset' => 'UTF-8',
-        ],
-        'form_params' => [
-          'function_div' => 'A08',
-          'trader_code' => $collect_tradercode,
-          // パソコンかスマホか
-          'device_div' => 1,
-          'order_no' => $deal_id,
-          // 決済合計金額
-          'settle_price' => $request->all_total_val,
-          'buyer_name_kanji' => $user->name,
-          'buyer_tel' => $user->tel,
-          'buyer_email' => $user->email,
-          'pay_way' => 1,
-          'token' => $request->token_api,
-
-          // 'device_info' => 1,
-          // 'option_service_div' => 00,
-          // 'check_sum' => '',
-          // 'cardNo' => '',
-          // 'cardOwner' => '',
-          // 'cardExp' => '',
-          // 'securityCode' => '',
-        ]
-      ];
-      // dd($option);
-      $response = $client->request('POST', $url, $option);
-      $result = simplexml_load_string($response->getBody()->getContents());
-      if($result->returnCode == 1){
-        $delete_deal = Deal::where(['id'=> $deal_id])->first()->delete();
-        if($result->errorCode == 123456){
-          // 後で処理を作る
-          $message = '掛け払い金額オーバー';
-          $data=[
-            'message' => $message,
-          ];
-        }else{
-          $message = '決済エラーのため別の決済方法をお試しください。';
-          $data=[
-            'message' => $message,
-          ];
-        }
-        return redirect()->route('confirm',$data);
-      }
-    }
+    // if($request->uketori_siharai == 'クロネコかけ払い'){
+    //   // ヤマトAPI連携確認
+    //   $client = new Client();
+    //
+    //   $url = config('app.kakebarai_touroku');
+    //   $kakebarai_traderCode = config('app.kakebarai_traderCode');
+    //   $kakebarai_passWord = config('app.kakebarai_passWord');
+    //   $envi = config('app.envi');
+    //
+    //   $option = [
+    //     'headers' => [
+    //       'Accept' => '*/*',
+    //       'Content-Type' => 'application/x-www-form-urlencoded',
+    //       'charset' => 'UTF-8',
+    //     ],
+    //     'form_params' => [
+    //       'traderCode' => $kakebarai_traderCode,
+    //       // 日付
+    //       'orderDate' => $now,
+    //       'orderNo' => $deal_id.$envi,
+    //       // バイヤーid
+    //       'buyerId' => $user_id,
+    //       'settlePrice' => $request->all_total_val,
+    //       'shohiZei' => $request->tax_val,
+    //       'meisaiUmu' => '2',
+    //       'passWord' => $kakebarai_passWord
+    //     ]
+    //   ];
+    //   // dd($option);
+    //   $response = $client->request('POST', $url, $option);
+    //   $result = simplexml_load_string($response->getBody()->getContents());
+    //   // dd($result);
+    //   if($result->returnCode == 1){
+    //     $delete_deal = Deal::where(['id'=> $deal_id])->first()->delete();
+    //     if($result->errorCode == 'G55'){
+    //       // 後で処理を作る
+    //
+    //       // ヤマトAPI連携利用金額確認
+    //       $client = new Client();
+    //       $url = config('app.kakebarai_riyoukingaku');
+    //       $option = [
+    //         'headers' => [
+    //           'Accept' => '*/*',
+    //           'Content-Type' => 'application/x-www-form-urlencoded',
+    //           'charset' => 'UTF-8',
+    //         ],
+    //         'form_params' => [
+    //           'traderCode' => $kakebarai_traderCode,
+    //           // バイヤーid
+    //           'buyerId' => $user_id,
+    //           'buyerTelNo' => '',
+    //           'passWord' => $kakebarai_passWord
+    //         ]
+    //       ];
+    //       // dd($option);
+    //       $response = $client->request('POST', $url, $option);
+    //       $result = simplexml_load_string($response->getBody()->getContents());
+    //       // dd($result);
+    //       $message = '掛け払い金額オーバー';
+    //       if($result->returnCode == 0){
+    //         $usePayment = $result->usePayment;
+    //         $useOverLimit = $result->useOverLimit;
+    //       }
+    //       // %2Cになっているのをカンマを直す
+    //       $limitprice = $useOverLimit - $usePayment;
+    //       // $limitprice = number_format($limitprice);
+    //       // $limitprice = mb_convert_encoding($limitprice,"utf-8","sjis");
+    //       // dd($limitprice);
+    //       $message = 'かけ払い利用限度額オーバーです。<br />'.$limitprice.'円以内での購入をお願いします。';
+    //       $data=[
+    //         'addtype' => $addtype,
+    //         'message' => $message,
+    //       ];
+    //     }else{
+    //       $message = '決済エラーのため別の決済方法をお試しください。';
+    //       $data=[
+    //         'addtype' => $addtype,
+    //         'message' => $message,
+    //       ];
+    //     }
+    //     return redirect()->route('confirm',$data);
+    //   }
+    // }
+    //
+    //
+    //
+    //
+    // if($request->uketori_siharai == 'クレジットカード払い'){
+    //   // dd($request->token_api);
+    //   // EPトークン取得
+    //   $client = new Client();
+    //   // $url = 'https://api.kuronekoyamato.co.jp/api/credit';
+    //
+    //   $url = config('app.collect_touroku');
+    //   $collect_tradercode = config('app.collect_tradercode');
+    //
+    //   $option = [
+    //     'headers' => [
+    //       'Accept' => '*/*',
+    //       'Content-Type' => 'application/x-www-form-urlencoded',
+    //       'charset' => 'UTF-8',
+    //     ],
+    //     'form_params' => [
+    //       'function_div' => 'A08',
+    //       'trader_code' => $collect_tradercode,
+    //       // パソコンかスマホか
+    //       'device_div' => 1,
+    //       'order_no' => $deal_id,
+    //       // 決済合計金額
+    //       'settle_price' => $request->all_total_val,
+    //       'buyer_name_kanji' => $user->name,
+    //       'buyer_tel' => $user->tel,
+    //       'buyer_email' => $user->email,
+    //       'pay_way' => 1,
+    //       'token' => $request->token_api,
+    //
+    //       // 'device_info' => 1,
+    //       // 'option_service_div' => 00,
+    //       // 'check_sum' => '',
+    //       // 'cardNo' => '',
+    //       // 'cardOwner' => '',
+    //       // 'cardExp' => '',
+    //       // 'securityCode' => '',
+    //     ]
+    //   ];
+    //   // dd($option);
+    //   $response = $client->request('POST', $url, $option);
+    //   $result = simplexml_load_string($response->getBody()->getContents());
+    //   if($result->returnCode == 1){
+    //     $delete_deal = Deal::where(['id'=> $deal_id])->first()->delete();
+    //     if($result->errorCode == 123456){
+    //       // 後で処理を作る
+    //       $message = '決済金額オーバー';
+    //       $data=[
+    //         'addtype' => $addtype,
+    //         'message' => $message,
+    //       ];
+    //     }else{
+    //       $message = '決済エラーのため別の決済方法をお試しください。';
+    //       $data=[
+    //         'addtype' => $addtype,
+    //         'message' => $message,
+    //       ];
+    //     }
+    //     return redirect()->route('confirm',$data);
+    //   }
+    // }
 
 
     if($request->has('addsuscess_btn')){
@@ -3009,7 +3112,6 @@ class LoginPageController extends Controller
     $deal->start_time = Carbon::now();
 
     // セトナギユーザーのみ「受け取り場所」「時間帯」「支払い方法を保存」
-
     if($request->uketori_siharai){
       $deal->uketori_siharai = $request->uketori_siharai;
       $deal->uketori_place = $request->uketori_place;
@@ -3044,6 +3146,10 @@ class LoginPageController extends Controller
         $uketori_place = '【受け取り場所】<br />'.$deal->uketori_place;
         // 受け取り予定日
         $uketori_time = '【受け取り時間】<br />'.$deal->uketori_time;
+        if(isset($shipping_code)){
+          // 受け取り場所を配送方法に修正
+          $uketori_place = '【配送方法】<br />'.$shipping_name;
+        }
       }else{
         // 支払方法
         $pay = null;
@@ -3072,10 +3178,46 @@ class LoginPageController extends Controller
           array_push($total_price, $array);
         }
       }
+
+      // 送料がかかる場合の表示設定
+
+      // 商品合計
       $total_price = array_sum($total_price);
-      $total_price = $total_price * 108 / 100;
-      $total_price = number_format($total_price);
-      $total_price = '【合計金額】<br />'.$total_price.'円（税込）';
+      // 商品合計税込
+      $total_price_zei = $total_price * (108 / 100);
+      // 商品合計税込（カンマ表示）
+      $total_price_zei_number = number_format($total_price_zei);
+      // 8%対象消費合計額テキスト
+      $total_price_zei_number_text = '8%対象：'.$total_price_zei_number.'円（税込）';
+
+      if(isset($shipping_price)){
+        // 送料税込
+        $shipping_price_zei = $shipping_price * (110 / 100);
+        // 送料（カンマ表示）
+        $shipping_price_number = number_format($shipping_price);
+        // 送料税込（カンマ表示）
+        $shipping_price_zei_number = number_format($shipping_price_zei);
+        // 10%対象消費合計額（カンマ表示）
+        $shipping_price_zei_number_text = '10%対象：'.$shipping_price_zei_number.'円（税込）';
+        // 税込合計金額
+        $all_total_price = $shipping_price_zei + $total_price_zei;
+        // 税金の計算
+        $zei_price = $all_total_price - $total_price - $shipping_price;
+        // 合計金額表示
+        $total_price = '【お支払い金額】<br />'.number_format($all_total_price).'円（税込）';
+        // 送料のみの金額表示
+        $shipping_price_text = '【送料】<br />'.$shipping_price_number.'円';
+        // 税金のみの金額表示
+        $zei_price_text = '消費税：'.number_format($zei_price).'円';
+      }else{
+        $shipping_price_zei_number_text = '10%対象：0円（税込）';
+        $shipping_price_text = '【送料】<br />0円';
+        $total_price = '【お支払い金額】<br />'.$total_price_zei_number.'円（税込）';
+        // 税金の計算
+        $zei_price = $total_price_zei - $total_price;
+        // 税金のみの金額表示
+        $zei_price_text = '消費税：'.number_format($zei_price).'円';
+      }
       // 合計金額表示をなしに設定
       if(!($user->setonagi == 1)){
         $total_price = null;
@@ -3166,6 +3308,8 @@ class LoginPageController extends Controller
               $store = null;
               // 受け取り予定日
               $nouhin_yoteibi = '【受け取り予定日】<br />'.$order->nouhin_yoteibi;
+              // 納品店舗
+              $nouhin_store = null;
               // 金額未定に対応
               if($order->price == '未定' || $order->price == '-'){
                 $item_price = 0 ;
@@ -3240,9 +3384,13 @@ class LoginPageController extends Controller
           'uketori_place' => $uketori_place,
           'uketori_time' => $uketori_time,
           'order_list' => $order_list,
+          'nouhin_yoteibi' => $nouhin_yoteibi,
+          'zei_price_text' => $zei_price_text,
+          'total_price_zei_number_text' => $total_price_zei_number_text,
+          'shipping_price_text' => $shipping_price_text,
+          'shipping_price_zei_number_text' => $shipping_price_zei_number_text,
           'total_price' => $total_price,
           'memo' => $memo,
-          'nouhin_yoteibi' => $nouhin_yoteibi,
       ], function ($message) use ($email , $admin_mail) {
           $message->to($email)->bcc($admin_mail)->subject('SETOnagiオーダーブックご注文承りました。');
       });

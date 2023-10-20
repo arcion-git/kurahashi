@@ -196,13 +196,25 @@
 																		<tr id="{{$val->id}}" class="order_item">
 																			<td class="head-price text-center">
 																				<!-- BtoB金額表示 -->
+																				<?php
+																				if ($val->price == '未定') {
+																						$price_val = '未定';
+																				} elseif ($val->price == '-') {
+																						$price_val = '-';
+																				} else {
+																						if (Auth::guard('admin')->check()) {
+																								$price_val = $val->price;
+																						} else {
+																								$price_val = number_format($val->price);
+																						}
+																				}
+																				?>
 																					@if(!$user->setonagi)
-
 																						<!-- BtoB通常金額表示 -->
-																						<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="@if($val->price=='未定'){{(0)}}@else{{ $val->price }}@endif" value="@if($val->price=='未定')未定@elseif($val->price=='-')-@else{{number_format($val->price)}}@endif" @if(isset($deal) && Auth::guard('admin')->check()) @else readonly @endif>
-
+																						<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="@if($val->price=='未定'){{(0)}}@else{{ $val->price }}@endif" value="<?php echo $price_val ?>" @if(isset($deal) && Auth::guard('admin')->check()) @else readonly @endif>
 																					@else
-																						<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="@if($val->price=='未定'){{(0)}}@else{{ $val->price }}@endif" value="@if($val->price=='未定')未定@else{{number_format($val->price)}}@endif" @if(isset($deal) && Auth::guard('admin')->check()) @else readonly @endif>
+																						<!-- BtoC通常金額表示 -->
+																						<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="@if($val->price=='未定'){{(0)}}@else{{ $val->price }}@endif" value="<?php echo $price_val ?>"  @if(isset($deal) && Auth::guard('admin')->check()) @else readonly @endif>
 																					@endif
 																			</td>
 
@@ -305,14 +317,17 @@
 																					@endif
 																			</td>
 																			@endif
+																			 --}}
+																			@if($user->setonagi)
 																			<td class="head-shoukei total text-center"></td>
-																			<td class="head-sousa text-center">
+																			<input name="order_id[]" class="order_id" type="hidden" value="{{$val->id}}" />
+																			@endif
+																			{{-- <td class="head-sousa text-center">
 																				<button type="button" id="{{$val->id}}" class="removeid_{{$val->id}} removeorder btn btn-info">削除</button>
 																				@if(!$user->setonagi)
 																				<button style="margin-top:10px;" type="button" id="{{$cart->item->id}}" class="cloneid_{{$cart->item->id}} clonecart btn btn-success">配送先を追加</button>
 																				@endif
 																			</td>
-																			<input name="order_id[]" class="order_id" type="hidden" value="{{$val->id}}" />
 																		</tr> --}}
 																		@break
 																		@endif
@@ -366,6 +381,74 @@
 					<small>※商品の受け取りに取りに来られない場合は、上記ご住所に配送させていただきます。</small></label>
 			</div>
 		</div>
+
+		@if(isset($setonagi->shipping_code))
+		<div class="row">
+			<div class="col-sm-12 col-md-2">
+					<label for="company">配送方法</label>
+			</div>
+			<div class="col-sm-12 col-md-5">
+				<select id="uketori_place" value="@if(isset($setonagi->uketori_place)){{$setonagi->uketori_place}}@endif" name="uketori_place" class="c_uketori_place form-control" required>
+				@if(isset($setonagi->uketori_place))
+					<option id="set_uletori_place" value="{{$setonagi->uketori_place}}" selected>{{$setonagi->shipping_name()}}</option>
+				@else
+					<option value="" selected>選択してください</option>
+				@endif
+					@if(isset($shipping_settings))
+						@foreach($shipping_settings as $shipping_setting)
+							<option value="{{$shipping_setting->shipping_method}}">{{$shipping_setting->shipping_name}}</option>
+						@endforeach
+					@else
+				@endif
+				</select>
+			</div>
+		</div>
+
+		<div id="c_shipping_date" class="row">
+			<div class="col-sm-12 col-md-2">
+					<label for="company">受け渡し希望日</label>
+			</div>
+			<div class="col-sm-12 col-md-5">
+				<input type="text" id="change_all_nouhin_yoteibi" name="change_all_nouhin_yoteibi" class="nouhin_yoteibi_c form-control daterange-cus datepicker" value="{{$nouhin_yoteibi}}" autocomplete="off" required>
+				<script>
+				$('.nouhin_yoteibi_c').datepicker({
+					format: 'yyyy-mm-dd',
+					autoclose: true,
+					assumeNearbyYear: true,
+					language: 'ja',
+					startDate: '{{$sano_nissuu}}',
+					endDate: '+7d',
+					// endDate: '@if($cart->nouhin_end()){{$cart->nouhin_end()}}@else +31d @endif',
+					defaultViewDate: Date(),
+					datesDisabled: [
+					@foreach($holidays as $holiday)
+					'{{$holiday}}',
+					@endforeach
+				],
+				});
+				</script>
+			</div>
+		</div>
+		<div id="c_shipping_time" class="row">
+			<div class="col-sm-12 col-md-2">
+					<label for="company">受け渡し希望時間</label>
+			</div>
+			<div class="col-sm-12 col-md-5">
+				<select id="uketori_time" value="" name="uketori_time" class="uketori_time form-control" required>
+					@if(isset($setonagi->uketori_time))
+					<option value="{{$setonagi->uketori_time}}" selected>{{$setonagi->uketori_time}}</option>
+					@else
+					<option value="" selected>選択してください</option>
+					@endif
+					<option value="午前中">午前中</option>
+					<option value="12時〜14時">12時〜14時</option>
+					<option value="14時〜16時">14時〜16時</option>
+					<!-- <option value="16時〜18時">16時〜18時</option> -->
+				</select>
+			</div>
+		</div>
+
+		@else
 		<div class="row">
 			<div class="col-sm-12 col-md-2">
 					<label for="company">受け渡し場所</label>
@@ -396,11 +479,14 @@
 				@endif
 				<option value="午前中">午前中</option>
 				<option value="12時〜14時">12時〜14時</option>
-				<option value="14時〜16時">14時〜15時</option>
+				<option value="14時〜16時">14時〜16時</option>
 				<!-- <option value="16時〜18時">16時〜18時</option> -->
 				</select>
 			</div>
 		</div>
+		@endif
+
+
 		<div class="row">
 			<div class="col-sm-12 col-md-2">
 					<label for="company">お支払い方法</label>
@@ -415,10 +501,12 @@
 				@endif
 
 				@if ( Auth::guard('admin')->check() )
+					@if ( $user->setonagi()->kakebarai_riyou == 1 )
 					<input required class="radio-input uketori_siharai_radio" type="radio" id="クロネコかけ払い" value="クロネコかけ払い" name="uketori_siharai" @if($setonagi->uketori_siharai == 'クロネコかけ払い') checked @endif ><label for="クロネコかけ払い"> クロネコかけ払い</label>
+					@endif
 				@endif
 
-					<input required class="radio-input uketori_siharai_radio" type="radio" id="クレジットカード払い" value="クレジットカード払い" name="uketori_siharai" @if($setonagi->uketori_siharai == 'クレジットカード払い') checked @endif><label for="クレジットカード払い"> クレジットカード払い</label>
+					<input required class="radio-input uketori_siharai_radio" type="radio" id="クレジットカード払い" value="クレジットカード払い" name="uketori_siharai" @if($setonagi->uketori_siharai == 'クレジットカード払い') checked @endif @if(isset($shipping_code)) checked @endif><label for="クレジットカード払い"> クレジットカード払い</label>
 					<input type="hidden" name="token_api" id="token_api" value="{{app('request')->input('token_api')}}"/>
 					<div class="invalid-feedback">
 					</div>
@@ -444,7 +532,7 @@
 							<label for="card_no">カード番号</label>
 						</div>
 						<div class="col-sm-12 col-md-5">
-							<input type="text" class="form-control" name="card_no" maxlength="16" placeholder="************1234" value="">
+							<input type="text" class="form-control" name="card_no" maxlength="16" placeholder="************1234" value="4012888888881881">
 						</div>
 					</div>
 					<div class="input-form row">
@@ -452,7 +540,7 @@
 							<label>カード名義人</label>
 						</div>
 						<div class="col-sm-12 col-md-5">
-							<input type="text" class="form-control" name="card_owner" maxlength="30" placeholder="KURONEKO TARO" value="">
+							<input type="text" class="form-control" name="card_owner" maxlength="30" placeholder="KURONEKO TARO" value="YUSEI HAMAMOTO">
 						</div>
 					</div>
 					<div class="input-form row">
@@ -460,7 +548,7 @@
 							<label>カード有効期限</label>
 						</div>
 						<div class="col-sm-12 col-md-5">
-							<input type="text" class="form-control yuukoukigen" name="exp_month" maxlength="2" placeholder="10" value="">月/ <input class="form-control yuukoukigen" type="text" name="exp_year" maxlength="2" value="" placeholder="24">年
+							<input type="text" class="form-control yuukoukigen" name="exp_month" maxlength="2" placeholder="10" value="12">月/ <input class="form-control yuukoukigen" type="text" name="exp_year" maxlength="2" value="28" placeholder="24">年
 						</div>
 					</div>
 					<div class="input-form row">
@@ -468,7 +556,7 @@
 							<label>セキュリティコード</label>
 						</div>
 						<div class="col-sm-12 col-md-5">
-							<input type="text" class="form-control" name="security_code" maxlength="4" placeholder="1234" value="">
+							<input type="text" class="form-control" name="security_code" maxlength="4" placeholder="1234" value="111">
 						</div>
 					</div>
 					<div class="input-form" style="display:none;">
@@ -477,6 +565,7 @@
 				</form>
 			</div>
 		</div>
+		<input id="sano_nissuu" type="hidden" value="{{$sano_nissuu}}" />
 
 		<!-- JavaScript ライブラリ読み込み body タグ内に記述する必要があります。-->
 		<script type="text/javascript" class="webcollect-embedded-token" src="@if(isset($collect_token)){{$collect_token}}@endif"></script>
@@ -735,20 +824,23 @@ $(document).ready(function () {
       var quantity = $(this).closest('tr').find('select.quantity').val();
       var total = price * quantity;
       $(this).text(total);
-
       sum += total;
     });
 
+		// 商品合計
     var itemTotal = sum.toLocaleString();
     $('#item_total').text('¥ ' + itemTotal);
 
+		// 税込合計金額
     var allTotal = Math.round(sum * 108 / 100);
     $('#all_total').text('¥ ' + allTotal.toLocaleString());
     $('#all_total_val').val(allTotal);
 
+		// 税額
     var tax = Math.round(allTotal - sum);
     $('#tax').text('¥ ' + tax.toLocaleString());
     $('#tax_val').val(tax);
+
   }
 });
 
@@ -766,6 +858,11 @@ $(document).ready(function () {
     <div class="invoice-detail-item">
       <div class="invoice-detail-name">合計</div>
       <div id="item_total" class="invoice-detail-value"></div>
+    </div>
+		<div id="c_shipping_price">
+      <div class="c_shipping_price-detail-name">送料</div>
+      <div class="c_shipping_price"></div>
+			<input type="hidden" name="c_shipping_price" id="c_shipping_price_val" value="" />
     </div>
     <div class="invoice-detail-item">
       <div class="invoice-detail-name">税額</div>
@@ -1093,7 +1190,20 @@ $(function(){
 }
 
 
+$("#c_shipping_price").hide();
+$("#c_shipping_date").hide();
+$("#c_shipping_time").hide();
 
+$(document).ready(function() {
+		// セットされているvalueを取得
+		var value = $("#set_uletori_place").val();
+		// valueがセットされているかチェック
+		console.log(value);
+		if (value) {
+				// .c_uketori_place要素に対してchangeイベントを手動でトリガー
+				$(".c_uketori_place").trigger("change");
+		}
+});
 
 </script>
 

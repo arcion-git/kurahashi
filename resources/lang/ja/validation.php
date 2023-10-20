@@ -141,6 +141,51 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'first_name' => '名',
+        'last_name' => '姓',
+        'first_name_kana' => '名（フリガナ）',
+        'last_name_kana' => '姓（フリガナ）',
+        'address01' => '郵便番号',
+        'address02' => '都道府県',
+        'address03' => '市区町村',
+        'address04' => '番地（ビル・マンション名）',
+        'tel' => '電話番号',
+        'company_name' => '会社名',
+        'email' => 'メールアドレス',
+        'password' => 'パスワード',
+
+        'hjkjKbn' => '法人・個人',
+        'houjinKaku' => '法人格',
+        'houjinZengo' => '法人格前後',
+        'company' => '会社名',
+        'company_kana' => '事業者名（フリガナ）',
+        
+        'unei_company' => '運営会社有無',
+        'unei_company_hjkjKbn' => '運営会法人・個人',
+        'szhoujinKaku' => '運営会法人格',
+        'szHoujinZengo' => '運営会法人格前後',
+        'szHonknjmei' => '運営会社名(漢字)（法人格を除く）',
+        'szHonknamei' => '運営会社名（フリガナ）',
+        'szaddress01' => '運営会社郵便番号',
+        'szaddress02' => '運営会社都道府県',
+        'szaddress03' => '運営会社市区町村',
+        'szaddress04' => '運営会社番地（ビル・マンション名）',
+        'szTelno' => '運営会社電話番号(代表)',
+
+        'szDaikjmei_sei'  => '運営会社代表者名（姓）',
+        'szDaikjmei_mei'  => '運営会社代表者名（名）',
+        'szDaiknamei_sei'  => '運営会社フリガナ（姓）',
+        'szDaiknamei_mei'  => '運営会社フリガナ（名）',
+
+        'sqaddress01'  => '送付先郵便番号(ハイフン無し7桁)',
+        'sqaddress02'  => '送付先都道府県',
+        'sqaddress03'  => '送付先市区町村',
+        'sqaddress04'  => '送付先番地（ビル・マンション名）',
+
+        'sofuKnjnam'  => '送付先名称',
+        'pay'  => '掛け払い代金の支払い方法',
+
+    ],
 
 ];

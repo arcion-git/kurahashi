@@ -15,8 +15,6 @@
               <div class="col-lg-12">
                 <div class="card">
                   <div class="card-body">
-
-
                     <div class="entry-content">
                     <h2>１．SETOnagiオーダーブックについて</h2>
                     <p>量販店・小売店向けの商品から、SETOnagiオリジナル商品まで、目利きの選んだ確かな全国の水産商品をご提供してまります。</p>

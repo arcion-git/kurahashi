@@ -90,6 +90,10 @@
   Route::post('/removeordernini', 'BothController@removeordernini');
   Route::post('/change_price', 'BothController@change_price');
   Route::post('/change_quantity', 'BothController@change_quantity');
+  Route::post('/change_uketori_place', 'BothController@change_uketori_place');
+
+  Route::post('/get-delivery-times', 'BothController@getDeliveryTimes');
+
   Route::post('/nini_change_item_name', 'BothController@nini_change_item_name');
   Route::post('/nini_change_tantou', 'BothController@nini_change_tantou');
   Route::post('/nini_change_price', 'BothController@nini_change_price');
@@ -232,7 +236,11 @@
   Route::post('/admin/BuyerRecommendImport', 'AdminPageController@BuyerRecommendImport');
   Route::post('/admin/SetonagiImport', 'AdminPageController@SetonagiImport');
   Route::post('/admin/SetonagiItemImport', 'AdminPageController@SetonagiItemImport');
-
+  // BtoC CSVインポート
+  Route::post('/admin/ShippingCalenderImport', 'AdminPageController@ShippingCalenderImport');
+  Route::post('/admin/ShippingCompanyCodeImport', 'AdminPageController@ShippingCompanyCodeImport');
+  Route::post('/admin/ShippingInfoImport', 'AdminPageController@ShippingInfoImport');
+  Route::post('/admin/ShippingSettingImport', 'AdminPageController@ShippingSettingImport');
 
   // CSVエクスポート
   Route::post('/admin/export', 'AdminPageController@Export');
@@ -268,6 +276,8 @@ Route::group(['prefix' => 'user'], function () {
   Route::post('/logout', 'UserAuth\LoginController@logout')->name('logout');
 
   Route::get('/register', 'UserAuth\RegisterController@showRegistrationForm')->name('register');
+  Route::get('/register_c', 'UserAuth\RegisterController@showRegistrationForm_c')->name('register_c');
+
   Route::post('/register', 'UserAuth\RegisterController@register');
 
   Route::post('/password/email', 'UserAuth\ForgotPasswordController@sendResetLinkEmail')->name('password.request');

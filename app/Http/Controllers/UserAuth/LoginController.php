@@ -7,6 +7,7 @@ use App\Cart;
 use App\Order;
 use App\CartNini;
 use App\OrderNini;
+use App\Setonagi;
 
 // 時間に関する処理
 use Carbon\Carbon;
@@ -180,7 +181,16 @@ class LoginController extends Controller
         $carts = CartNini::where(['user_id'=> $user->id,'deal_id'=> null])
         ->whereDate('created_at', '<=' , $yesterday)->delete();
 
-        return redirect()->route('bulk');
+        // shipping_codeを持つユーザーのファーストページを振り分け
+        $setonagi = Setonagi::where(['user_id'=> $user->id])->first();
+        if($setonagi){
+          $shipping_code = $setonagi->shipping_code;
+        }
+        if(isset($shipping_code)){
+          return redirect()->route('setonagi');
+        }else{
+          return redirect()->route('bulk');
+        }
     }
 
 

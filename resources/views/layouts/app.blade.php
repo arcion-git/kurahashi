@@ -238,9 +238,15 @@
               <!-- <a href="{{ url('/favoriteitem') }}" class="dropdown-item has-icon">
                 <i class="far fa-heart"></i> お気に入り商品一覧
               </a> -->
+
+              <!-- あとでCのみ消す仕様に変更 -->
+              @if(Auth::guard('user')->user()->c_user())
+              @else
               <a href="{{ url('/repeatorder') }}" class="dropdown-item has-icon">
                 <i class="fa fa-redo-alt"></i> リピートオーダー
               </a>
+              @endif
+
               <!-- <a href="{{ url('/deal') }}" class="dropdown-item has-icon">
                 <i class="far fa-user"></i> ×ご提案商品
               </a> -->
@@ -288,7 +294,11 @@
         <aside id="sidebar-wrapper">
           <div class="sidebar-brand">
             @if ( Auth::guard('user')->check() )
-            <a href="{{ url('/bulk') }}">
+              @if(Auth::guard('user')->user()->c_user())
+              <a href="{{ url('/setonagi') }}">
+              @else
+              <a href="{{ url('/bulk') }}">
+              @endif
             @endif
             @if ( Auth::guard('admin')->check() )
             <a href="{{ url('/admin/home') }}">
@@ -366,12 +376,17 @@
             <li class="nav-item">
                <a href="{{ url('/setonagi') }}" class="nav-link"><i class="fas fa-check"></i><span>限定お買い得商品</span></a>
              </li>
+
+             @if(Auth::guard('user')->user()->c_user())
+             @else
              <li class="nav-item addbuyerrecommend_button">
                <a class="nav-link"><i class="far fa-user"></i><span>担当のおすすめ商品</span></a>
              </li>
              <li class="nav-item addspecialprice_button">
                <a class="nav-link"><i class="fas fa-fire"></i><span>市況商品（時価）</span></a>
              </li>
+             @endif
+
             <!-- <li class="nav-item">
               <form action="{{ url('/addall') }}" method="POST" class="form-horizontal">
                 {{ csrf_field() }}
@@ -475,22 +490,22 @@
             <li class="nav-item nav_banner"><a target="_blank" href="https://setonagi.net/column"><img class="" src="https://setonagi.net/wp-content/themes/welcart_basic-beldad/assets/images/top-assets/setonagi_top53.jpg" /></a></li>
         		<li class="nav-item nav_banner"><a href="https://www.youtube.com/c/KurahashiCoJp" target="_blank"><img class="" src="{{ asset('img/kurahashi_channel.jpg') }}" /></a>
         <?php
-        $xml = simplexml_load_file('https://www.youtube.com/feeds/videos.xml?channel_id=UCJpBCLAQ00jMf8zzdEW3x5A');
-        if( $xml !== false):
-        $count = 0;
-        foreach($xml as $item){
-        	if($item->id) {
-        		$title = $item->title;
-        		$id = $item->children('yt', true)->videoId[0];
-        		$html = '<a href="https://www.youtube.com/watch?v='.$id.'" target="_blank"><img src="https://i1.ytimg.com/vi/'.$id.'/hqdefault.jpg"><br>';
-        		echo $html;
-        		$count++;
-        	}
-        	if($count >= 1) {
-        		break;
-        	}
-        }
-        endif;
+        // $xml = simplexml_load_file('https://www.youtube.com/feeds/videos.xml?channel_id=UCJpBCLAQ00jMf8zzdEW3x5A');
+        // if( $xml !== false):
+        // $count = 0;
+        // foreach($xml as $item){
+        // 	if($item->id) {
+        // 		$title = $item->title;
+        // 		$id = $item->children('yt', true)->videoId[0];
+        // 		$html = '<a href="https://www.youtube.com/watch?v='.$id.'" target="_blank"><img src="https://i1.ytimg.com/vi/'.$id.'/hqdefault.jpg"><br>';
+        // 		echo $html;
+        // 		$count++;
+        // 	}
+        // 	if($count >= 1) {
+        // 		break;
+        // 	}
+        // }
+        // endif;
         ?>
         </li>
 		<li class="nav-item nav_banner"><a href="https://zeitaku-shiko.com/" target="_blank"><img class="" src="https://setonagi.net/wp-content/themes/welcart_basic-beldad/assets/images/top-assets/setonagi_top26.jpg" /></a></li>

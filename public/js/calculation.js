@@ -898,6 +898,165 @@ if(document.URL.match("/approval")) {
   });
 
 
+  // 受け取り方法を保存
+  // $(document).on("change", ".uketori_place", function() {
+  //   var user_id = $(".user_id").first().attr("id");
+  //   var uketori_place = $(this).val();
+  //   console.log(uketori_place);
+  //   $.ajax({
+  //       headers: {
+  //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+  //       },
+  //       url: location.origin + '/change_uketori_place',
+  //       type: 'POST',
+  //       data: {
+  //         'user_id' : user_id,
+  //         'uketori_place': uketori_place,
+  //       }
+  //     })
+  //     .done(function(data) {
+  //       Swal.fire({
+  //         type:"success",
+  //         title: "配送方法を保存しました",
+  //         position: 'bottom-end',
+  //         toast: true,
+  //         icon: 'success',
+  //         showConfirmButton: false,
+  //         timer: 1500
+  //       });
+  //     })
+  //     .fail(function(jqXHR, textStatus, errorThrown) {
+  //       alert('配送方法を保存できませんでした');
+  //       console.log("ajax通信に失敗しました");
+  //       console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+  //       console.log("textStatus     : " + textStatus);
+  //       console.log("errorThrown    : " + errorThrown.message);
+  //     });
+  // });
+
+  // 任意の商品名を保存
+
+
+
+
+
+  $(document).on("change", ".c_uketori_place", function() {
+      var methodId = $(this).val();
+      var user_id = $(".user_id").first().attr("id");
+      var sano_nissuu = $("#sano_nissuu").val();
+      console.log(methodId);
+      console.log(user_id);
+      $.ajax({
+          headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          },
+          url: location.origin + '/get-delivery-times',
+          type: 'POST',
+          data: {
+            'methodId': methodId,
+            'user_id': user_id,
+          }
+      })
+      // Ajaxリクエスト成功時の処理
+      .done(function(data) {
+        console.log("Data received:", data); // データをコンソールに表示
+        if(data.ukewatasibi_nyuuryoku_umu == 1) {
+
+          var dates = data.holidays.map(function(item) {
+              return "'" + item.date + "'";
+          });
+          var holidays = dates.join(',');
+          console.log(holidays);
+
+          $('.datepicker').datepicker('destroy'); //Destroy it before re-initing
+          $('.nouhin_yoteibi_c').datepicker({
+  					format: 'yyyy-mm-dd',
+  					autoclose: true,
+  					assumeNearbyYear: true,
+  					language: 'ja',
+  					startDate: sano_nissuu,
+  					endDate: '+31d',
+  					defaultViewDate: Date(),
+  					datesDisabled: holidays,
+  				});
+          // 表示を有効にする
+          $("#c_shipping_date").show();
+        } else {
+          $("#c_shipping_date").hide();
+        }
+        if(data.ukewatasi_kiboujikan_umu == 1) {
+          $("#c_shipping_time").show();
+        } else {
+          $("#c_shipping_time").hide();
+        }
+        if(data.shipping_price > 1) {
+          $("#c_shipping_price").show();
+          var c_shipping_price = data.shipping_price.toLocaleString();
+          $('.c_shipping_price').text('¥ ' + c_shipping_price);
+          $('input[name="c_shipping_price"]').val(c_shipping_price);
+
+          var shipping_price = $('#c_shipping_price_val').val();
+          console.log(shipping_price);
+
+          // 商品合計
+          var sum = 0;
+          $('.total').each(function () {
+            var price = $(this).closest('tr').find('input.price').data('price');
+            var quantity = $(this).closest('tr').find('select.quantity').val();
+            var total = price * quantity;
+            $(this).text(total);
+            sum += total;
+          });
+
+          // 商品合計
+          var itemTotal = sum.toLocaleString();
+          $('#item_total').text('¥ ' + itemTotal);
+
+          // 送料税込額
+          var shipping_price_zei = Math.round(shipping_price * 110 / 100);
+          console.log(shipping_price_zei);
+
+          // 送料税額
+          var shipping_price_zei_only = shipping_price_zei - shipping_price;
+
+      		// 税込合計金額
+          var allTotal = Math.round(sum * 108 / 100) + shipping_price_zei;
+          $('#all_total').text('¥ ' + allTotal.toLocaleString());
+          $('#all_total_val').val(allTotal);
+
+      		// 税額
+          var tax = Math.round(allTotal - sum - shipping_price);
+          $('#tax').text('¥ ' + tax.toLocaleString());
+          $('#tax_val').val(tax);
+
+        } else {
+          $("#c_shipping_price").hide();
+        }
+        // Swal.fire({
+        //   type:"success",
+        //   title: "変更完了",
+        //   position: 'bottom-end',
+        //   toast: true,
+        //   icon: 'success',
+        //   showConfirmButton: false,
+        //   timer: 1500
+        // });
+      })
+      // Ajaxリクエスト失敗時の処理
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        alert('商品名を変更できませんでした。');
+        console.log("ajax通信に失敗しました");
+        console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+        console.log("textStatus     : " + textStatus);
+        console.log("errorThrown    : " + errorThrown.message);
+      });
+  });
+
+
+
+
+
+
   // 任意の商品名を保存
   $(document).on("change", ".nini_item_name", function() {
     var cart_nini_id = $(this).parent().parent().get(0).id;

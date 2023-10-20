@@ -109,7 +109,7 @@ $(document).ready( function(){
     cache: false, // キャッシュしないで読み込み
     // 通信成功時に呼び出されるコールバック
     success: function (data) {
-          $('#order').html(data);
+      $('#order').html(data);
     },
     // 通信エラー時に呼び出されるコールバック
     error: function () {
