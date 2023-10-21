@@ -59,10 +59,11 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
-
+        // dd($data);
         // URLからtypeパラメータを取得
         if(isset($data['type'])){
           // typeパラメータが存在する場合の処理
+          // dd($data['type']);
           $rules = [
               'first_name' => ['required', 'string', 'max:255'],
               'last_name' => ['required', 'string', 'max:255'],
@@ -73,7 +74,7 @@ class RegisterController extends Controller
               'address03' => ['required', 'string', 'max:255'],
               'address04' => ['required', 'string', 'max:255', 'regex:/^[^\x01-\x7E]+$/u'],
               'tel' => ['required', 'string', 'max:20', 'regex:/^\d{2,5}-\d{1,4}-\d{4}$/'],
-              'company_name' => ['required'],
+              // 'company_name' => ['required'],
               'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
               'password' => ['required', 'string', 'min:8', 'confirmed'],
           ];
@@ -167,18 +168,23 @@ class RegisterController extends Controller
       $setonagi->save();
 
       if(isset($data['type'])){
-        // BtoC
-        $company = '';
+        if(isset($data['company_name'])){
+          $company = $data['company_name'];
+        }else{
+          $company = null;
+        }
       }else{
         // BtoSB
         $company = $data['company'];
       }
 
+
+
       if(isset($data['type'])){
         // BtoCのみsetonagi_okを1に変更
         $setonagi->setonagi_ok = 1;
         $setonagi->shipping_code = $data['type'];
-        $setonagi->company_name = $data['company_name'];
+        $setonagi->company_name = $company;
         $setonagi->save();
       }
 

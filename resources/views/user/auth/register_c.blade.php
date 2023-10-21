@@ -151,7 +151,7 @@
         </div>
       </div>
 
-
+      <input id="type" type="hidden" class="form-control" name="type" value="<?php echo isset($_GET['type']) ? htmlspecialchars($_GET['type']) : ''; ?>" required>
       <?php if(($shipping_info->keiyaku_company_hyouji == 1)){ ?>
         <div class="form-divider">
           ご契約会社名
@@ -159,9 +159,8 @@
         <div class="row">
           <div class="form-group col-sm-12 col-md-6">
             <!-- <label for="shipping_type">ご契約会社コード</label> -->
-            <input id="type" type="hidden" class="form-control" name="type" value="<?php echo isset($_GET['type']) ? htmlspecialchars($_GET['type']) : ''; ?>" required>
             <label for="company_name">ご契約会社名</label>
-            <select name="company_name" class="form-control" value="{{ old('company_name') }}">
+            <select name="company_name" class="form-control" value="{{ old('company_name') }}" @if($shipping_info->keiyaku_company_hissu == 1) required @endif>
                 <option value="">選択してください</option>
                 @foreach($company_names as $company_name)
                 <option value="{{$company_name->company_name}}">{{$company_name->company_name}}</option>
