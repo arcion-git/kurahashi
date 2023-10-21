@@ -86,15 +86,21 @@ class LoginPageController extends Controller
             Auth::guard('admin')->logout();
         }
 
-
         $categories = Category::get();
         $categories = $categories->groupBy('bu_ka_name');
         // dd($categories);
-
         $user_id = Auth::guard('user')->user()->id;
         $carts = Cart::where('user_id',$user_id)->get();
 
-        return view('user/auth/bulk', ['categories' => $categories]);
+        $setonagi = Setonagi::where(['user_id'=> $user_id])->first();
+        if($setonagi){
+          $shipping_code = $setonagi->shipping_code;
+        }
+        if(isset($shipping_code)){
+          return redirect()->route('setonagi');
+        }else{
+          return view('user/auth/bulk', ['categories' => $categories]);
+        }
     }
 
 

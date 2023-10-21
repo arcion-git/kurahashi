@@ -9,6 +9,8 @@ use App\CartNini;
 use App\OrderNini;
 use App\Setonagi;
 
+use App\ShippingInfo;
+
 // 時間に関する処理
 use Carbon\Carbon;
 
@@ -67,7 +69,18 @@ class LoginController extends Controller
      */
     public function showLoginForm()
     {
+      // $type = $_GET['type'] ?? null;
+      // $shipping_info = ShippingInfo::where('shipping_code',$type)->first();
+      // $redirectUrl = url('user/login'); // リダイレクト先URLを指定
+      // if(isset($shipping_info)){
+      //   $queryParameters=[
+      //     'type' => $type,
+      //   ];
+      //   $redirectUrlWithQuery = $redirectUrl . '?' . http_build_query($queryParameters);
+      //   return redirect()->to($redirectUrlWithQuery);
+      // }else{
         return view('user.auth.login');
+      // }
     }
 
     public function showWelcome(){

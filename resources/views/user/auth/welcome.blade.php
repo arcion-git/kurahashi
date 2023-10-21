@@ -53,7 +53,7 @@
               </form>
             </li>
           <?php } ?>
-          <li class="login_btn"><a href="{{ route('login') }}">ログイン</a></li>
+          <li class="login_btn"><a href="{{ route('login', ['type' => request()->input('type')]) }}">ログイン</a></li>
         </ul>
         <div id="nav-wrapper" class="nav-wrapper sp">
           <div class="hamburger" id="js-hamburger">

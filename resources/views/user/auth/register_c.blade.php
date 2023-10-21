@@ -3,11 +3,15 @@
 @section('content')
 <ul class="nav nav-tabs">
   <li class="nav-item col-6 text-center">
-    <a class="nav-link font-weight-bold" href="{{ route('login') }}">{{ __('Login') }}</a>
+    <a class="nav-link font-weight-bold" href="{{ route('login', ['type' => request()->input('type')]) }}">{{ __('Login') }}</a>
   </li>
   @if (Route::has('register'))
       <li class="nav-item col-6 text-center">
+        <?php if(!isset($_GET['type'])) { ?>
           <a class="nav-link font-weight-bold active" href="{{ route('register') }}">{{ __('Register') }}</a>
+        <?php } else { ?>
+          <a class="nav-link font-weight-bold active" href="{{ route('register_c', ['type' => request()->input('type')]) }}">{{ __('Register') }}</a>
+        <?php } ?>
       </li>
   @endif
 </ul>
@@ -163,7 +167,7 @@
             <select name="company_name" class="form-control" value="{{ old('company_name') }}" @if($shipping_info->keiyaku_company_hissu == 1) required @endif>
                 <option value="">選択してください</option>
                 @foreach($company_names as $company_name)
-                <option value="{{$company_name->company_name}}">{{$company_name->company_name}}</option>
+                    <option value="{{ $company_name->company_name }}" @if(old('company_name') == $company_name->company_name) selected @endif>{{ $company_name->company_name }}</option>
                 @endforeach
             </select>
             <span class="small">※配送契約をされている企業のお客様は、会社名を選択してください。</span>

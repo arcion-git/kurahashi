@@ -3,11 +3,15 @@
 @section('content')
 <ul class="nav nav-tabs">
   <li class="nav-item col-6 text-center">
-    <a class="nav-link font-weight-bold active" href="{{ route('login') }}">{{ __('Login') }}</a>
+    <a class="nav-link font-weight-bold active" href="{{ route('login', ['type' => request()->input('type')]) }}">{{ __('Login') }}</a>
   </li>
   @if (Route::has('register'))
       <li class="nav-item col-6 text-center">
+        <?php if(!isset($_GET['type'])) { ?>
           <a class="nav-link font-weight-bold" href="{{ route('register') }}">{{ __('Register') }}</a>
+        <?php } else { ?>
+          <a class="nav-link font-weight-bold" href="{{ route('register_c', ['type' => request()->input('type')]) }}">{{ __('Register') }}</a>
+        <?php } ?>
       </li>
   @endif
 </ul>
