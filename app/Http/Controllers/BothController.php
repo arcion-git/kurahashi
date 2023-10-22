@@ -905,4 +905,27 @@ class BothController extends Controller
       // return view('order', $data)->with($message);
       return view('order', $data);
     }
+
+    public function change_nouhin_yoteibi_c(Request $request){
+
+      // データベースからデータを取得
+      $nouhin_yoteibi_c = $request->nouhin_yoteibi_c;
+
+      $user_id = $request->user_id;
+      $setonagi = Setonagi::where(['user_id'=> $user_id])->first();
+
+      $carts = Cart::where(['user_id'=>$user_id, 'deal_id'=> null])->get();
+
+      if($carts){
+        foreach ($carts as $cart) {
+          $order = Order::where(['cart_id'=>$cart->id])->first();
+          $order->nouhin_yoteibi = $nouhin_yoteibi_c;
+          $order->save();
+        }
+      }
+
+      return $nouhin_yoteibi_c;
+
+    }
+
 }

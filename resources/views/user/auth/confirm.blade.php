@@ -254,7 +254,7 @@ $(document).ready(function () {
     });
   }
 
-  $(document).on("change", ".change_all_store,.change_all_nouhin_yoteibi,.nouhin_yoteibi_c", function () {
+  $(document).on("change", ".change_all_store,.change_all_nouhin_yoteibi", function () {
     order_update();
   });
 

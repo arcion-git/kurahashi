@@ -93,6 +93,7 @@
   Route::post('/change_uketori_place', 'BothController@change_uketori_place');
 
   Route::post('/get-delivery-times', 'BothController@getDeliveryTimes');
+  Route::post('/change_nouhin_yoteibi_c', 'BothController@change_nouhin_yoteibi_c');
 
   Route::post('/nini_change_item_name', 'BothController@nini_change_item_name');
   Route::post('/nini_change_tantou', 'BothController@nini_change_tantou');
