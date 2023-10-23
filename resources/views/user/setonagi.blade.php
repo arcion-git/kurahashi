@@ -10,7 +10,11 @@
               @if(isset($category_name))
               {{$category_name}}
               @else
-              限定お買い得商品
+              @if(Auth::guard('user')->user()->c_user())
+               商品一覧
+              @else
+               限定お買い得商品
+              @endif
               @endif
             </h1>
           </div>

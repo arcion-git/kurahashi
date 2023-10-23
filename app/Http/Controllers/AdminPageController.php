@@ -2193,9 +2193,9 @@ class AdminPageController extends Controller
               // 引き渡し場所
               if($deal->uketori_place == '福山魚市引き取り'){
                 $uketori_place = '010';
-              }elseif($deal->uketori_place == '引取り（マリンネクスト）'){
+              }elseif($deal->uketori_place == '三原引き取り（マリンネクスト）'){
                 $uketori_place = '020';
-              }elseif($deal->uketori_place == '引取り（尾道ケンスイ）'){
+              }elseif($deal->uketori_place == '尾道引取り（ケンスイ）'){
                 $uketori_place = '030';
               }else{
                 $uketori_place = null;

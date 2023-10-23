@@ -8,7 +8,10 @@
     <div class="section-header">
       <h1>オーダー内容確認
         @if ($addtype == 'addsetonagi')
-        （限定お買い得商品）
+          @if(Auth::guard('user')->user()->c_user())
+          @else
+           （限定お買い得商品）
+          @endif
         @elseif ($addtype == 'addbuyerrecommend')
         （担当のおすすめ商品）
         @elseif ($addtype == 'addspecialprice')

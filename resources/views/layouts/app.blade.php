@@ -205,12 +205,15 @@
                 </a>
               </div>
               <div class="dropdown-footer text-center">
-                <!-- <a href="{{ url('/confirm') }}" class="btn btn-warning">注文個数入力に進む <i class="fas fa-chevron-right"></i></a> -->
+                @if(Auth::guard('user')->user()->c_user())
+                <a href="{{ url('/confirm?addtype=addsetonagi') }}" class="btn btn-warning">注文個数入力に進む <i class="fas fa-chevron-right"></i></a>
+                @else
                 <form action="{{ url('/addall') }}" method="POST" class="form-horizontal">
                   {{ csrf_field() }}
                   <input type="hidden" name="addtype" value="addsetonagi" />
                   <button type="submit" class="btn btn-warning"><span>注文個数入力に進む</span></button>
                 </form>
+                @endif
               </div>
             </div>
           </li>
@@ -374,7 +377,13 @@
 
 
             <li class="nav-item">
-               <a href="{{ url('/setonagi') }}" class="nav-link"><i class="fas fa-check"></i><span>限定お買い得商品</span></a>
+               <a href="{{ url('/setonagi') }}" class="nav-link"><i class="fas fa-check"></i><span>
+                 @if(Auth::guard('user')->user()->c_user())
+                  商品一覧
+                 @else
+                  限定お買い得商品
+                 @endif
+               </span></a>
              </li>
 
              @if(Auth::guard('user')->user()->c_user())
