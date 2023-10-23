@@ -170,7 +170,7 @@
 																		{{$cart->item->item_name}}
 																	@endif
 																	@if(!isset($deal))
-																		@if($cart->addtype == 'addbuyerrecommend')
+																		@if($cart->addtype == 'addbuyerrecommend' && !$user->setonagi)
 																			@if($cart->favoriteitem())
 				                              <span name="item_id" value="{{$cart->item->id}}" id="{{$cart->item->id}}" class="favoritebutton removefavoriteitem"><i class="fa fa-heart"></i></span>
 				                              @else
