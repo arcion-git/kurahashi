@@ -162,6 +162,14 @@ $(document).ready(function () {
     var tokuisaki_name = '{{ $set_tokuisaki_name }}';
     var nouhin_yoteibi = '{{ $change_all_nouhin_yoteibi }}';
     var url = 'confirm';
+
+    console.log(addtype);
+    console.log(show_favorite);
+    console.log(store_name);
+    console.log(tokuisaki_name);
+    console.log(nouhin_yoteibi);
+    console.log(url);
+
     $.ajax({
       headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

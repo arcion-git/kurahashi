@@ -61,6 +61,12 @@
                     <th class="text-center">単価</th>
                     <th class="text-center">掲載開始</th>
                     <th class="text-center">掲載終了</th>
+                    <!-- <th class="text-center nouhin_end">納品期限</th>
+                    <th class="text-center">限定店舗</th>
+                    <th class="text-center">操作</th>
+                    <th class="text-center">価格非表示<input type="checkbox" id="all_hidden_price" name="all_hidden_price"></th>
+                    <th class="text-center">在庫管理しない<input type="checkbox" id="all_zaikokanri" name="all_zaikokanri"></th>
+                    <th class="text-center">限定数</th> -->
                     <th class="text-center">操作</th>
                   </tr>
                 </thead>

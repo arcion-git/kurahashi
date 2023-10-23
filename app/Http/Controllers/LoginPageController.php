@@ -1016,15 +1016,16 @@ class LoginPageController extends Controller
             ->get();
             $buyer_recommends = collect($buyer_recommends)->merge($buyer_recommend_loop);
           }
-          // dd($buyer_recommends);
           $get_items = $buyer_recommends;
         }else{
           // セトナギ会員
+          // dd($user_id);
           $recommends = Recommend::where('user_id', $user_id)
           ->where('start', '<=' , $now)
           ->where('end', '>=', $now)
           ->orderBy('order_no', 'asc')->get();
           $get_items = $recommends;
+          // dd($get_items);
           // dd($get_items);
         }
       }elseif($addtype == 'addspecialprice'){
@@ -1149,6 +1150,8 @@ class LoginPageController extends Controller
               $uwagaki_item_name = $get_item->uwagaki_item_name;
               $uwagaki_kikaku = $get_item->uwagaki_kikaku;
             }
+          }else{
+            $groupe = $item->busho_name;
           }
 
           // 市況商品の場合は、部署名をグループ名とする
@@ -1157,14 +1160,18 @@ class LoginPageController extends Controller
           }
 
           if($addtype == 'addbuyerrecommend'){
-            // カート情報を保存
-            $cart=Cart::firstOrNew(['user_id'=> $user_id, 'item_id'=> $item->id, 'deal_id'=> null, 'addtype'=> $addtype, 'groupe'=> $groupe, 'uwagaki_item_name'=> $uwagaki_item_name, 'uwagaki_kikaku'=> $uwagaki_kikaku]);
+            // カート情報を保存（BtoSBだとグループとかがない）
+            if(!$setonagi_user){
+              $cart=Cart::firstOrNew(['user_id'=> $user_id, 'item_id'=> $item->id, 'deal_id'=> null, 'addtype'=> $addtype, 'groupe'=> $groupe, 'uwagaki_item_name'=> $uwagaki_item_name, 'uwagaki_kikaku'=> $uwagaki_kikaku]);
+            }else{
+              $cart=Cart::firstOrNew(['user_id'=> $user_id , 'item_id'=> $item->id , 'deal_id'=> null, 'addtype'=> $addtype , 'groupe'=>$groupe]);
+            }
           }else{
             // カート情報を保存
-            $cart=Cart::firstOrNew(['user_id'=> $user_id , 'item_id'=> $item->id , 'deal_id'=> null, 'addtype'=> $addtype , 'item_id'=> $item->id , 'groupe'=>$groupe]);
+            $cart=Cart::firstOrNew(['user_id'=> $user_id , 'item_id'=> $item->id , 'deal_id'=> null, 'addtype'=> $addtype , 'groupe'=>$groupe]);
           }
           $cart->save();
-          // dd($cart->id);
+          // dd($cart);
           // オーダー情報を保存
           // BtoBユーザーの場合は、オーダーに納品予定日と得意先名を保存
 
@@ -1235,6 +1242,7 @@ class LoginPageController extends Controller
           'addtype'=>$addtype,
         ];
       }
+      // dd($data);
       return redirect()->route('confirm',$data);
   }
 
@@ -1328,7 +1336,6 @@ class LoginPageController extends Controller
     $set_tokuisaki_name = $request->set_tokuisaki_name;
     $change_all_nouhin_yoteibi = $request->change_all_nouhin_yoteibi;
 
-
     $addtype = $request->addtype;
 
     $show_favorite = $request->show_favorite;
@@ -1344,7 +1351,13 @@ class LoginPageController extends Controller
 
     if(isset($setonagi)){
       $shipping_code = Setonagi::where('user_id',$user_id)->first('shipping_code');
-      $shipping_code = $shipping_code->shipping_code;
+      // 配送設定を呼び出し
+      if(isset($shipping_code)){
+        $shipping_code = $shipping_code->shipping_code;
+      }else{
+        // BtoSB
+        $shipping_code = null;
+      }
     }else{
       $shipping_code = null;
     }
@@ -1808,59 +1821,84 @@ class LoginPageController extends Controller
         }elseif($addtype == 'addbuyerrecommend'){
           // 担当のおすすめ商品を取得
           // $carts = Cart::where(['carts.user_id'=>$user_id, 'deal_id'=> null, 'addtype'=>$addtype])->get();
-                              // dd($carts);
-          $carts = Cart::join('items', 'carts.item_id', '=', 'items.id')
+          // dd($carts);
 
-          ->join('buyer_recommends', function ($join) {
-              $join->on('buyer_recommends.item_id', '=', 'items.item_id')
-                   ->on('buyer_recommends.sku_code', '=', 'items.sku_code')
-                   ->on('buyer_recommends.uwagaki_item_name', '=', 'carts.uwagaki_item_name')
-                   ->on('buyer_recommends.uwagaki_kikaku', '=', 'carts.uwagaki_kikaku');
-          })
+          if(!$setonagi){
+            $carts = Cart::join('items', 'carts.item_id', '=', 'items.id')
 
-          ->where('buyer_recommends.tokuisaki_id', $tokuisaki_id)
+            ->join('buyer_recommends', function ($join) {
+                $join->on('buyer_recommends.item_id', '=', 'items.item_id')
+                     ->on('buyer_recommends.sku_code', '=', 'items.sku_code')
+                     ->on('buyer_recommends.uwagaki_item_name', '=', 'carts.uwagaki_item_name')
+                     ->on('buyer_recommends.uwagaki_kikaku', '=', 'carts.uwagaki_kikaku');
+            })
 
-          ->where('buyer_recommends.price', '>=', 1)
-          ->where(function ($query) use ($store_name) {
-              $query->Where('buyer_recommends.gentei_store', $store_name)
-                    ->orWhereNull('buyer_recommends.gentei_store');
-          })
+            ->where('buyer_recommends.tokuisaki_id', $tokuisaki_id)
 
-          ->where(['carts.user_id'=>$user_id, 'deal_id'=> null, 'addtype'=>$addtype])
+            ->where('buyer_recommends.price', '>=', 1)
+            ->where(function ($query) use ($store_name) {
+                $query->Where('buyer_recommends.gentei_store', $store_name)
+                      ->orWhereNull('buyer_recommends.gentei_store');
+            })
 
-          ->where('buyer_recommends.start', '<=', $now)
-          ->where('buyer_recommends.end', '>=', $now)
-          ->where('buyer_recommends.nouhin_end', '>=', $nouhin_yoteibi)
+            ->where(['carts.user_id'=>$user_id, 'deal_id'=> null, 'addtype'=>$addtype])
 
-          // 下記の条件に直してくれ、 buyer_recommends.gentei_store が store_name と一致するレコードが取得しているものを取得。また、buyer_recommends.gentei_storeがnullのものも取得を行うが、取得をする際の条件として、既に同じitem_idのものがアイテム内に存在している場合は、取得をしない。
+            ->where('buyer_recommends.start', '<=', $now)
+            ->where('buyer_recommends.end', '>=', $now)
+            ->where('buyer_recommends.nouhin_end', '>=', $nouhin_yoteibi)
 
-          // ここに途中で、同じitem_idを持つアイテムがあるか確認して、もしある場合は、gentei_storeの値がnullの方を削除したい
+            // 下記の条件に直してくれ、 buyer_recommends.gentei_store が store_name と一致するレコードが取得しているものを取得。また、buyer_recommends.gentei_storeがnullのものも取得を行うが、取得をする際の条件として、既に同じitem_idのものがアイテム内に存在している場合は、取得をしない。
 
-          // ->where('buyer_recommends.zaikokanri' , null)
-          // ->where('buyer_recommends.zaikosuu', '>=', 0.1)
-          // ->where('buyer_recommends.zaikokanri' , 1)
-          // ->orwhere(function ($query) use ($store_name) {
-          //     $query->Where('buyer_recommends.zaikokanri' , null)
-          //           ->Where('buyer_recommends.zaikosuu', '>=', 0.1);
-          // })
+            // ここに途中で、同じitem_idを持つアイテムがあるか確認して、もしある場合は、gentei_storeの値がnullの方を削除したい
 
-          ->orderByRaw('CAST(buyer_recommends.order_no AS UNSIGNED) asc')
-          ->select('carts.*', 'buyer_recommends.gentei_store', DB::raw('IF(buyer_recommends.zaikokanri IS NULL AND buyer_recommends.zaikosuu >= 0, buyer_recommends.zaikosuu, IF(buyer_recommends.zaikokanri = 1, 999, items.zaikosuu)) AS zaikosuu'))
-          ->get();
+            // ->where('buyer_recommends.zaikokanri' , null)
+            // ->where('buyer_recommends.zaikosuu', '>=', 0.1)
+            // ->where('buyer_recommends.zaikokanri' , 1)
+            // ->orwhere(function ($query) use ($store_name) {
+            //     $query->Where('buyer_recommends.zaikokanri' , null)
+            //           ->Where('buyer_recommends.zaikosuu', '>=', 0.1);
+            // })
 
-          // dd($store_name);
+            ->orderByRaw('CAST(buyer_recommends.order_no AS UNSIGNED) asc')
+            ->select('carts.*', 'buyer_recommends.gentei_store', DB::raw('IF(buyer_recommends.zaikokanri IS NULL AND buyer_recommends.zaikosuu >= 0, buyer_recommends.zaikosuu, IF(buyer_recommends.zaikokanri = 1, 999, items.zaikosuu)) AS zaikosuu'))
+            ->get();
 
-          $carts = $carts->filter(function ($cart) use ($carts) {
-              $count = $carts->where('item_id', $cart->item_id)->count();
-              return $count === 1 || (!is_null($cart->gentei_store) && $count > 1);
-          });
+            // dd($store_name);
 
-          foreach ($carts as $cart) {
-            $cart->zaikosuu = floatval($cart->zaikosuu);
+            $carts = $carts->filter(function ($cart) use ($carts) {
+                $count = $carts->where('item_id', $cart->item_id)->count();
+                return $count === 1 || (!is_null($cart->gentei_store) && $count > 1);
+            });
+
+            foreach ($carts as $cart) {
+              $cart->zaikosuu = floatval($cart->zaikosuu);
+            }
+          }else{
+            // BtoSBの価格グループを取得
+            // $price_groupe = '10000000005';
+            $carts = Cart::join('items', 'carts.item_id', '=', 'items.id')
+            ->join('recommends', function ($join) {
+                $join->on('recommends.item_id', '=', 'items.item_id')
+                     ->on('recommends.sku_code', '=', 'items.sku_code');
+            })
+            ->where(['carts.user_id'=>$user_id, 'deal_id'=> null, 'addtype'=>$addtype])
+            ->where('recommends.start', '<=' , $now)
+            ->where('recommends.end', '>=', $now)
+            ->where('items.zaikosuu', '>=', 0.1)
+            ->selectRaw('carts.*, items.zaikosuu as zaikosuu') // "items.zaikosuu"の値を取得
+            ->get();
+            // ->get(['carts.*']);
+            // foreach ($carts as $cart) {
+            //   $cart->zaikosuu = floatval($cart->zaikosuu);
+            // }
+            // $addtype_items = $carts;
           }
           $groupedItems = $carts->groupBy('groupe');
+
           // dd($carts);
           // dd($groupedItems);
+
+
         }elseif($addtype == 'addspecialprice'){
           // 市況商品を取得
           if($setonagi){

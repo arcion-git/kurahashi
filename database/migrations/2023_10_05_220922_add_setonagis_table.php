@@ -15,8 +15,8 @@ class AddSetonagisTable extends Migration
     {
         Schema::table('setonagis', function (Blueprint $table) {
           //
-          $table->string('shipping_code')->nullable()->comment('配送コード');
-          $table->string('company_name')->nullable()->comment('契約会社名');
+          // $table->string('shipping_code')->nullable()->comment('配送コード');
+          // $table->string('company_name')->nullable()->comment('契約会社名');
         });
     }
 
@@ -29,8 +29,8 @@ class AddSetonagisTable extends Migration
     {
         Schema::table('setonagis', function (Blueprint $table) {
             //
-            $table->string('shipping_code')->nullable()->comment('配送コード');
-            $table->string('company_name')->nullable()->comment('契約会社名');
+            // $table->string('shipping_code')->nullable()->comment('配送コード');
+            // $table->string('company_name')->nullable()->comment('契約会社名');
         });
     }
 }
