@@ -146,7 +146,6 @@
                 <input name="deal_id" type="hidden" value="{{$deal->id}}" id="deal_id"/>
 
                 <div class="float-right">
-
                 @if ( Auth::guard('user')->check() )
                   @if($deal->status == 'キャンセル')
                   @else

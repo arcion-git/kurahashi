@@ -84,7 +84,7 @@
 
 
 
-<div class="table-responsive mt-4">
+<div id="@if(isset($deal)){{$deal->id}}@endif" class="deal_id table-responsive mt-4">
 	<div class="section-title">オーダー内容</div>
 		<div id="cartAccordion">
 				    <table id="cartHeader" class="table table-striped table-hover table-md cart-wrap">
@@ -409,7 +409,8 @@
 					<label for="company">受け渡し希望日</label>
 			</div>
 			<div class="col-sm-12 col-md-5">
-				<input type="text" id="change_all_nouhin_yoteibi" name="change_all_nouhin_yoteibi" class="nouhin_yoteibi_c form-control daterange-cus datepicker" value="{{$nouhin_yoteibi}}" autocomplete="off" required>
+				<input type="text" id="change_all_nouhin_yoteibi" name="change_all_nouhin_yoteibi" class="nouhin_yoteibi_c form-control daterange-cus datepicker" value="@if(isset($deal)){{$set_order->nouhin_yoteibi}}@else{{$nouhin_yoteibi}}@endif
+				" autocomplete="off" required>
 				<script>
 				$('.nouhin_yoteibi_c').datepicker({
 					format: 'yyyy-mm-dd',

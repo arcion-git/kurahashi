@@ -764,7 +764,7 @@ class BothController extends Controller
 
 
 
-  // カート画面からの遷移先
+    // 取引詳細を表示するためのもの
     public function dealorder(Request $request){
 
       $deal_id = $request->deal_id;
@@ -910,12 +910,16 @@ class BothController extends Controller
 
       // データベースからデータを取得
       $nouhin_yoteibi_c = $request->nouhin_yoteibi_c;
-
+      $deal_id = $request->deal_id;
       $user_id = $request->user_id;
       $setonagi = Setonagi::where(['user_id'=> $user_id])->first();
 
-      $carts = Cart::where(['user_id'=>$user_id, 'deal_id'=> null])->get();
-
+      if(isset($deal_id)){
+        $carts = Cart::where(['user_id'=>$user_id, 'deal_id'=> $deal_id])->get();
+      }else{
+        $carts = Cart::where(['user_id'=>$user_id, 'deal_id'=> null])->get();
+      }
+      
       if($carts){
         foreach ($carts as $cart) {
           $order = Order::where(['cart_id'=>$cart->id])->first();

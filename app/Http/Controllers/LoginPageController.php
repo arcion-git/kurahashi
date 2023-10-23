@@ -3218,9 +3218,10 @@ class LoginPageController extends Controller
       }else{
         $shipping_price_zei_number_text = '10%対象：0円（税込）';
         $shipping_price_text = '【送料】<br />0円';
-        $total_price = '【お支払い金額】<br />'.$total_price_zei_number.'円（税込）';
         // 税金の計算
         $zei_price = $total_price_zei - $total_price;
+        // 金額表示部分
+        $total_price = '【お支払い金額】<br />'.$total_price_zei_number.'円（税込）';
         // 税金のみの金額表示
         $zei_price_text = '消費税：'.number_format($zei_price).'円';
       }

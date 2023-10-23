@@ -1,5 +1,3 @@
-
-
 @if(!$user->setonagi)
 <div class="table-responsive" id="nouhin_store_nouhin_yoteibi">
 	<div class="section-title">納品先・納品日</div>

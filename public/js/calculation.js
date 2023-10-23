@@ -946,8 +946,10 @@ if(document.URL.match("/approval")) {
 
 
   $(document).on("change", ".nouhin_yoteibi_c", function() {
+    var deal_id = $(".deal_id").first().attr("id");
     var user_id = $(".user_id").first().attr("id");
     var nouhin_yoteibi_c = $(".nouhin_yoteibi_c").val();
+    console.log(deal_id);
     console.log(user_id);
     console.log(nouhin_yoteibi_c);
     $.ajax({
@@ -959,6 +961,7 @@ if(document.URL.match("/approval")) {
       data: {
         'nouhin_yoteibi_c': nouhin_yoteibi_c,
         'user_id': user_id,
+        'deal_id': deal_id,
       }
     })
     // Ajaxリクエスト成功時の処理
