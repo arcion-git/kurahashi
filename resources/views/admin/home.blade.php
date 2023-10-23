@@ -111,7 +111,9 @@
                   <th class="text-center">取引ID</th>
                   <th class="text-center">バイヤー</th>
                   <th class="text-center">お名前</th>
-                  <th class="text-center">お問い合わせ日時</th>
+                  <th class="text-center">納品予定日</th>
+                  <th class="text-center">受け取り予定時間</th>
+                  <!-- <th class="text-center">お問い合わせ日時</th> -->
                   <th class="text-center">受注日時</th>
                   <th class="text-center">状態</th>
                   <th class="text-center">操作</th>
@@ -131,8 +133,14 @@
                     {{$deal->user->name}}
                   </td>
                   <td class="text-center">
-                    {{$deal->created_at}}
+                    {{$deal->first_order_nouhin_yoteibi()}}
                   </td>
+                  <td class="text-center">
+                    {{$deal->uketori_time}}
+                  </td>
+                  <!-- <td class="text-center">
+                    {{$deal->created_at}}
+                  </td> -->
                   <td class="text-center">
                     {{$deal->success_time}}
                   </td>

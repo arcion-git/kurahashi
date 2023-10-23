@@ -107,7 +107,6 @@ class AdminPageController extends Controller
     $deals = Deal::latest('created_at')->paginate(30);
 
 
-
     $tokuisakis = Store::select('tokuisaki_name')->distinct()->get();
 
     // dd($store_users);
