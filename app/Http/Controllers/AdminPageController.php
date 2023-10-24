@@ -2204,13 +2204,13 @@ class AdminPageController extends Controller
                 $haisou_houhou = $deal->uketori_place;
               }else{
                 if($deal->uketori_place == '福山魚市引き取り'){
-                  $uketori_place = '010';
+                  $haisou_houhou = '010';
                 }elseif($deal->uketori_place == '三原引き取り（マリンネクスト）'){
-                  $uketori_place = '020';
+                  $haisou_houhou = '020';
                 }elseif($deal->uketori_place == '尾道引取り（ケンスイ）'){
-                  $uketori_place = '030';
+                  $haisou_houhou = '030';
                 }else{
-                  $uketori_place = null;
+                  $haisou_houhou = null;
                 }
               }
               // QR区分
