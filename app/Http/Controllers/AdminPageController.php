@@ -2137,7 +2137,7 @@ class AdminPageController extends Controller
               // 取引種別
               $torihiki_shubetu = $store->torihiki_shubetu;
               // 引き渡し場所
-              $uketori_place = $store->uketori_place;
+              $uketori_place = '';
               // 得意先コード
               $tokuisaki_id = $store->tokuisaki_id;
               // 得意先店舗コード
@@ -2147,7 +2147,7 @@ class AdminPageController extends Controller
               // 得意先店舗名
               $store_name = $store->store_name;
               // 配送方法
-              $haisou_houhou = '';
+              $haisou_houhou = $store->uketori_place;;
               // QR区分
               $qr = '';
             }else{
@@ -2190,15 +2190,7 @@ class AdminPageController extends Controller
                 $torihiki_shubetu = 1;
               }
               // 引き渡し場所
-              if($deal->uketori_place == '福山魚市引き取り'){
-                $uketori_place = '010';
-              }elseif($deal->uketori_place == '三原引き取り（マリンネクスト）'){
-                $uketori_place = '020';
-              }elseif($deal->uketori_place == '尾道引取り（ケンスイ）'){
-                $uketori_place = '030';
-              }else{
-                $uketori_place = null;
-              }
+              $uketori_place = null;
               // 得意先コード
               $tokuisaki_id = null;
               // 得意先店舗コード
@@ -2211,7 +2203,15 @@ class AdminPageController extends Controller
               if($user->c_user()){
                 $haisou_houhou = $deal->uketori_place;
               }else{
-                $haisou_houhou = '';
+                if($deal->uketori_place == '福山魚市引き取り'){
+                  $uketori_place = '010';
+                }elseif($deal->uketori_place == '三原引き取り（マリンネクスト）'){
+                  $uketori_place = '020';
+                }elseif($deal->uketori_place == '尾道引取り（ケンスイ）'){
+                  $uketori_place = '030';
+                }else{
+                  $uketori_place = null;
+                }
               }
               // QR区分
               if($user->c_user()){
