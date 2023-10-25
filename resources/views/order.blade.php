@@ -387,7 +387,7 @@
 					<label for="company">配送方法</label>
 			</div>
 			<div class="col-sm-12 col-md-5">
-				<select id="uketori_place" value="@if(isset($setonagi->uketori_place)){{$setonagi->uketori_place}}@endif" name="uketori_place" class="c_uketori_place form-control" required>
+				<select id="uketori_place" value="@if(isset($setonagi->uketori_place)){{$setonagi->uketori_place}}@endif" name="uketori_place" class="c_uketori_place form-control">
 				@if(isset($setonagi->uketori_place))
 					<option id="set_uletori_place" value="{{$setonagi->uketori_place}}" selected>{{$setonagi->shipping_name()}}</option>
 				@else
@@ -408,8 +408,7 @@
 					<label for="company">受け渡し希望日</label>
 			</div>
 			<div class="col-sm-12 col-md-5">
-				<input type="text" id="change_all_nouhin_yoteibi" name="change_all_nouhin_yoteibi" class="nouhin_yoteibi_c form-control daterange-cus datepicker" value="@if(isset($deal)){{$set_order->nouhin_yoteibi}}@else{{$nouhin_yoteibi}}@endif
-				" autocomplete="off" required>
+				<input type="text" id="change_all_nouhin_yoteibi" name="change_all_nouhin_yoteibi" class="nouhin_yoteibi_c form-control daterange-cus datepicker" value="@if(isset($deal)){{$set_order->nouhin_yoteibi}}@else{{$nouhin_yoteibi}}@endif" autocomplete="off">
 				<script>
 				$('.nouhin_yoteibi_c').datepicker({
 					format: 'yyyy-mm-dd',
@@ -418,8 +417,9 @@
 					language: 'ja',
 					startDate: '{{$sano_nissuu}}',
 					endDate: '+7d',
+          setDate: null,
 					// endDate: '@if($cart->nouhin_end()){{$cart->nouhin_end()}}@else +31d @endif',
-					defaultViewDate: Date(),
+					// defaultViewDate: Date(),
 					datesDisabled: [
 					@foreach($holidays as $holiday)
 					'{{$holiday}}',
@@ -434,7 +434,7 @@
 					<label for="company">受け渡し希望時間</label>
 			</div>
 			<div class="col-sm-12 col-md-5">
-				<select id="uketori_time" value="" name="uketori_time" class="uketori_time form-control" required>
+				<select id="uketori_time" value="" name="uketori_time" class="uketori_time form-control">
 					@if(isset($setonagi->uketori_time))
 					<option value="{{$setonagi->uketori_time}}" selected>{{$setonagi->uketori_time}}</option>
 					@else
@@ -443,7 +443,7 @@
 					<option value="午前中">午前中</option>
 					<option value="12時〜14時">12時〜14時</option>
 					<option value="14時〜16時">14時〜16時</option>
-					<!-- <option value="16時〜18時">16時〜18時</option> -->
+					<option value="16時〜17時">16時〜17時</option>
 				</select>
 			</div>
 		</div>
@@ -480,7 +480,7 @@
 				<option value="午前中">午前中</option>
 				<option value="12時〜14時">12時〜14時</option>
 				<option value="14時〜16時">14時〜16時</option>
-				<!-- <option value="16時〜18時">16時〜18時</option> -->
+				<option value="16時〜17時">16時〜17時</option>
 				</select>
 			</div>
 		</div>
@@ -1194,6 +1194,8 @@ $("#c_shipping_price").hide();
 $("#c_shipping_date").hide();
 $("#c_shipping_time").hide();
 
+
+
 $(document).ready(function() {
 		// セットされているvalueを取得
 		var value = $("#set_uletori_place").val();
@@ -1203,6 +1205,44 @@ $(document).ready(function() {
 				// .c_uketori_place要素に対してchangeイベントを手動でトリガー
 				$(".c_uketori_place").trigger("change");
 		}
+
+
+
+
+});
+
+// 配送方法が選択されない状態だと、カード情報の入力エリアを非表示にするconfirmのみ起動
+$(document).ready(function() {
+	if (window.location.pathname.indexOf('confirm') !== -1) {
+		// 日付の手入力を禁止
+		$(".nouhin_yoteibi_c").keydown(function(e) {
+				e.preventDefault();
+		});
+
+		// URLパスに「confirm」が含まれている場合に実行
+		updatePayCardVisibility();
+		$('#uketori_place, #change_all_nouhin_yoteibi').change(function() {
+		// セレクトボックスの値が変更されたときに実行
+			updatePayCardVisibility();
+		});
+		function updatePayCardVisibility() {
+		  if ($('#change_all_nouhin_yoteibi').is(':visible')) {
+				console.log('表示しているよ');
+		    if ($('#uketori_place').val() !== '' && $('#change_all_nouhin_yoteibi').val() !== '') {
+		      $('#pay_card').show();
+		    } else {
+		      $('#pay_card').hide();
+		    }
+		  } else {
+				console.log('非表示だよ');
+		    if ($('#uketori_place').val() !== '') {
+		      $('#pay_card').show();
+		    } else {
+		      $('#pay_card').hide();
+		    }
+		  }
+		}
+	}
 });
 
 </script>
@@ -1230,6 +1270,11 @@ function equalizeHeightByClass(className) {
 window.onload = function() {
   equalizeHeightByClass('order_item');
 };
+
+
+
+
+
 </script>
 
 

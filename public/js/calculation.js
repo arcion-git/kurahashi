@@ -970,15 +970,15 @@ if(document.URL.match("/approval")) {
       // setTimeout(doReload);
       // setTimeout(order_update);
       // setTimeout(dealorder_update);
-      Swal.fire({
-        type:"success",
-        title: "納品日を保存しました",
-        position: 'bottom-end',
-        toast: true,
-        icon: 'success',
-        showConfirmButton: false,
-        timer: 1500
-      });
+      // Swal.fire({
+      //   type:"success",
+      //   title: "納品日を保存しました",
+      //   position: 'bottom-end',
+      //   toast: true,
+      //   icon: 'success',
+      //   showConfirmButton: false,
+      //   timer: 1500
+      // });
     })
     // Ajaxリクエスト失敗時の処理
     .fail(function(jqXHR, textStatus, errorThrown) {
@@ -1027,7 +1027,9 @@ if(document.URL.match("/approval")) {
 					language: 'ja',
 					startDate: sano_nissuu,
 					endDate: '+31d',
-					defaultViewDate: Date(),
+          setDate: null,
+					// defaultViewDate: Date(),
+					// defaultViewDate: { year: null, month: null, day: null },
 					datesDisabled: holidays,
 				});
         // 表示を有効にする
@@ -1080,8 +1082,36 @@ if(document.URL.match("/approval")) {
         $('#tax').text('¥ ' + tax.toLocaleString());
         $('#tax_val').val(tax);
 
+
+        // $('.nouhin_yoteibi_c').datepicker('setDate', null);
+        // $('.nouhin_yoteibi_c').val('');
+        // $('#change_all_nouhin_yoteibi').datepicker('setDate', null);
+        // $('#change_all_nouhin_yoteibi').val('');
+        // $('#change_all_nouhin_yoteibi').trigger('change');
+
       } else {
         $("#c_shipping_price").hide();
+      }
+
+      // confirmのみ予め設定されている入力値をクリア
+      if(document.URL.match("/confirm")) {
+        $('#change_all_nouhin_yoteibi').datepicker('setDate', null);
+    		$('#change_all_nouhin_yoteibi').val('');
+        // if ($('#change_all_nouhin_yoteibi').is(':visible')) {
+  			// 	console.log('true');
+  		  //   if ($('#uketori_place').val() !== '' && $('#change_all_nouhin_yoteibi').val() !== '') {
+  		  //     $('#pay_card').show();
+  		  //   } else {
+  		  //     $('#pay_card').hide();
+  		  //   }
+  		  // } else {
+  			// 	console.log('false');
+  		  //   if ($('#uketori_place').val() !== '') {
+  		  //     $('#pay_card').show();
+  		  //   } else {
+  		  //     $('#pay_card').hide();
+  		  //   }
+  		  // }
       }
       // Swal.fire({
       //   type:"success",
