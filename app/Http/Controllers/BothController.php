@@ -123,6 +123,7 @@ class BothController extends Controller
       // データベースからデータを取得
       $methodId = $request->methodId;
       $user_id = $request->user_id;
+      $nouhin_yoteibi = $request->sano_nissuu;
       $setonagi = Setonagi::where(['user_id'=> $user_id])->first();
       $shipping_code = $setonagi->shipping_code;
       $shipping_setting = ShippingSetting::where(['shipping_code'=> $shipping_code,'shipping_method'=> $methodId])->first();
@@ -136,6 +137,16 @@ class BothController extends Controller
         $holidays = ShippingCalender::where(['calender_id'=>$calender_id])->get('date');
       }else{
         $holidays = null;
+      }
+
+      if($shipping_setting->ukewatasi_kiboujikan_umu == 0 && $shipping_setting->ukewatasi_kiboujikan_umu == 0){
+        $carts = Cart::where(['user_id'=>$user_id , 'deal_id'=>null, 'addtype'=>'addsetonagi'])->get();
+        foreach ($carts as $cart) {
+          // オーダー内容を保存
+          $order = Order::where(['cart_id'=> $cart->id])->first();
+          $order->nouhin_yoteibi = $nouhin_yoteibi;
+          $order->save();
+        }
       }
 
       return response()->json(['ukewatasibi_nyuuryoku_umu' => $ukewatasibi_nyuuryoku_umu, 'holidays' => $holidays , 'ukewatasi_kiboujikan_umu' => $ukewatasi_kiboujikan_umu , 'shipping_price' => $shipping_price]);
@@ -731,6 +742,7 @@ class BothController extends Controller
     if($user->setonagi == 1){
       $cart_id = Cart::where(['user_id'=>$deal->user_id, 'deal_id'=> $id])->first()->id;
       $nouhin_yoteibi = Order::where(['cart_id'=>$cart_id])->first()->nouhin_yoteibi;
+      // 納品予定日のレンダリングを阻止する
     }
 
 
@@ -919,7 +931,7 @@ class BothController extends Controller
       }else{
         $carts = Cart::where(['user_id'=>$user_id, 'deal_id'=> null])->get();
       }
-      
+
       if($carts){
         foreach ($carts as $cart) {
           $order = Order::where(['cart_id'=>$cart->id])->first();

@@ -1211,6 +1211,7 @@ $(document).ready(function() {
 
 });
 
+@if(isset($setonagi->shipping_code))
 // 配送方法が選択されない状態だと、カード情報の入力エリアを非表示にするconfirmのみ起動
 $(document).ready(function() {
 	if (window.location.pathname.indexOf('confirm') !== -1) {
@@ -1221,14 +1222,14 @@ $(document).ready(function() {
 
 		// URLパスに「confirm」が含まれている場合に実行
 		updatePayCardVisibility();
-		$('#uketori_place, #change_all_nouhin_yoteibi').change(function() {
+		$('#uketori_place, .nouhin_yoteibi_c').change(function() {
 		// セレクトボックスの値が変更されたときに実行
 			updatePayCardVisibility();
 		});
 		function updatePayCardVisibility() {
-		  if ($('#change_all_nouhin_yoteibi').is(':visible')) {
+		  if ($('.nouhin_yoteibi_c').is(':visible')) {
 				console.log('表示しているよ');
-		    if ($('#uketori_place').val() !== '' && $('#change_all_nouhin_yoteibi').val() !== '') {
+		    if ($('#uketori_place').val() !== '' && $('.nouhin_yoteibi_c').val() !== '') {
 		      $('#pay_card').show();
 		    } else {
 		      $('#pay_card').hide();
@@ -1244,7 +1245,7 @@ $(document).ready(function() {
 		}
 	}
 });
-
+@endif
 </script>
 
 <script>

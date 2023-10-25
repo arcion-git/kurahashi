@@ -51,6 +51,17 @@ class Deal extends Model
     if($first_cart){
       $first_order = Order::where(['cart_id'=>$first_cart->id])->first();
       $nouhin_yoteibi = $first_order->nouhin_yoteibi;
+
+      $shipping_method = $this->uketori_place;
+      $setonagi = Setonagi::where(['user_id'=> $this->user_id])->first();
+
+      if(isset($setonagi)){
+        $shipping_setting = ShippingSetting::where(['shipping_method'=> $shipping_method ,'shipping_code'=> $setonagi->shipping_code ])->first();
+        if(isset($shipping_setting))
+          if($shipping_setting->ukewatasi_kiboujikan_umu == 0 && $shipping_setting->ukewatasi_kiboujikan_umu == 0){
+          $nouhin_yoteibi = null;
+        }
+      }
     }else{
       $nouhin_yoteibi = null;
     }

@@ -997,6 +997,7 @@ if(document.URL.match("/approval")) {
     var sano_nissuu = $("#sano_nissuu").val();
     console.log(methodId);
     console.log(user_id);
+    console.log(sano_nissuu);
     $.ajax({
         headers: {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -1006,6 +1007,7 @@ if(document.URL.match("/approval")) {
         data: {
           'methodId': methodId,
           'user_id': user_id,
+          'sano_nissuu': sano_nissuu,
         }
     })
     // Ajaxリクエスト成功時の処理
@@ -1095,23 +1097,8 @@ if(document.URL.match("/approval")) {
 
       // confirmのみ予め設定されている入力値をクリア
       if(document.URL.match("/confirm")) {
-        $('#change_all_nouhin_yoteibi').datepicker('setDate', null);
-    		$('#change_all_nouhin_yoteibi').val('');
-        // if ($('#change_all_nouhin_yoteibi').is(':visible')) {
-  			// 	console.log('true');
-  		  //   if ($('#uketori_place').val() !== '' && $('#change_all_nouhin_yoteibi').val() !== '') {
-  		  //     $('#pay_card').show();
-  		  //   } else {
-  		  //     $('#pay_card').hide();
-  		  //   }
-  		  // } else {
-  			// 	console.log('false');
-  		  //   if ($('#uketori_place').val() !== '') {
-  		  //     $('#pay_card').show();
-  		  //   } else {
-  		  //     $('#pay_card').hide();
-  		  //   }
-  		  // }
+        $('.nouhin_yoteibi_c').datepicker('setDate', null);
+    		$('.nouhin_yoteibi_c').val('');
       }
       // Swal.fire({
       //   type:"success",
