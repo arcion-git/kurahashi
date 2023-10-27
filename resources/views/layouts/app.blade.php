@@ -193,30 +193,33 @@
 
         <ul class="navbar-nav navbar-right">
           @if ( Auth::guard('user')->check() )
-          <li class="dropdown dropdown-list-toggle">
-            <a id="toggle" href="#" data-toggle="dropdown" class="nav-link nav-link-lg message-toggle">
-              <i class="fas fa-shopping-cart"></i>
-            </a>
-            <div id="cart-container" class="dropdown-menu dropdown-list dropdown-menu-right">
-              <div class="dropdown-header">ショッピングカート</div>
-              <div class="dropdown-list-content dropdown-list-message">
-                <a href="#" class="dropdown-item dropdown-item-unread">
-                  <div id="cart"></div>
-                </a>
+            @if (Str::contains(Request::url(), ['approval', 'confirm']))
+            @else
+            <li class="dropdown dropdown-list-toggle">
+              <a id="toggle" href="#" data-toggle="dropdown" class="nav-link nav-link-lg message-toggle">
+                <i class="fas fa-shopping-cart"></i>
+              </a>
+              <div id="cart-container" class="dropdown-menu dropdown-list dropdown-menu-right">
+                <div class="dropdown-header">ショッピングカート</div>
+                <div class="dropdown-list-content dropdown-list-message">
+                  <a href="#" class="dropdown-item dropdown-item-unread">
+                    <div id="cart"></div>
+                  </a>
+                </div>
+                <div class="dropdown-footer text-center">
+                  @if(Auth::guard('user')->user()->c_user())
+                  <a href="{{ url('/confirm?addtype=addsetonagi') }}" class="btn btn-warning">注文個数入力に進む <i class="fas fa-chevron-right"></i></a>
+                  @else
+                  <form action="{{ url('/addall') }}" method="POST" class="form-horizontal">
+                    {{ csrf_field() }}
+                    <input type="hidden" name="addtype" value="addsetonagi" />
+                    <button type="submit" class="btn btn-warning"><span>注文個数入力に進む</span></button>
+                  </form>
+                  @endif
+                </div>
               </div>
-              <div class="dropdown-footer text-center">
-                @if(Auth::guard('user')->user()->c_user())
-                <a href="{{ url('/confirm?addtype=addsetonagi') }}" class="btn btn-warning">注文個数入力に進む <i class="fas fa-chevron-right"></i></a>
-                @else
-                <form action="{{ url('/addall') }}" method="POST" class="form-horizontal">
-                  {{ csrf_field() }}
-                  <input type="hidden" name="addtype" value="addsetonagi" />
-                  <button type="submit" class="btn btn-warning"><span>注文個数入力に進む</span></button>
-                </form>
-                @endif
-              </div>
-            </div>
-          </li>
+            </li>
+            @endif
           @endif
           <li class="dropdown">
             <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
