@@ -90,8 +90,36 @@ class BothController extends Controller
   public function change_quantity(Request $request){
     $order_id = $request->order_id;
     $quantity = $request->quantity;
+    $order=Order::where(['id'=> $order_id])->first();
+
+    // 元々入っていた個数
+    $old_quantity = $order->quantity;
+
+    // 在庫数の増減量を計算
+    $change_quantity = $quantity - $old_quantity;
+
+    $cart=Cart::where(['id'=> $order->cart_id])->first();
+
+    // $deal=Deal::where(['id'=> $cart->deal_id])->first();
+    $addtype = $cart->addtype;
+
+    if( $addtype == 'addsetonagi' || $addtype == 'addspecialprice' ){
+      $item=Item::where(['id'=> $cart->item_id])->first();
+      // 在庫数を増減させるロジック
+      $item->zaikosuu  -= $change_quantity;
+      // 在庫数をデータベースに更新
+      $item->save();
+    }
 
     $order=Order::where(['id'=> $order_id])->update(['quantity'=> $quantity]);
+
+    // }elseif($addtype == 'addbuyerrecommend'){
+    //
+    // }else{
+    //
+    //
+    // }
+
 
     $data = "sucsess";
     return $data;
@@ -641,6 +669,16 @@ class BothController extends Controller
   public function dealdetail($id){
 
     $deal = Deal::where('id',$id)->first();
+
+    if (Auth::guard('user')->check()) {
+      $login_user_id = Auth::guard('user')->user()->id;
+      if($deal->user_id  == $login_user_id ){
+
+      }else{
+        return redirect()->route('bulk');
+      }
+    }
+
     $user_id = $deal->user_id;
     $user = User::where('id',$user_id)->first();
 

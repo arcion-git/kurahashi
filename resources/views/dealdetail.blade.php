@@ -132,10 +132,10 @@
           @endif
             {{ csrf_field() }}
 
-            @if($nouhin_yoteibi)
+            @if($deal->first_order_nouhin_yoteibi())
               <div class="row mt-4 order">
                 <div class="col-md-12">
-                  <div class="section-title">商品受け渡し予定日：{{$nouhin_yoteibi}}</div>
+                  <div class="section-title">商品受け渡し予定日：{{$deal->first_order_nouhin_yoteibi()}}</div>
                 </div>
               </div>
             @endif
