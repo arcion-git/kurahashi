@@ -90,27 +90,26 @@ class BothController extends Controller
   public function change_quantity(Request $request){
     $order_id = $request->order_id;
     $quantity = $request->quantity;
-    $order=Order::where(['id'=> $order_id])->first();
-
-    // 元々入っていた個数
-    $old_quantity = $order->quantity;
-
-    // 在庫数の増減量を計算
-    $change_quantity = $quantity - $old_quantity;
-
-    $cart=Cart::where(['id'=> $order->cart_id])->first();
-
-    // $deal=Deal::where(['id'=> $cart->deal_id])->first();
-    $addtype = $cart->addtype;
-
-    if( $addtype == 'addsetonagi' || $addtype == 'addspecialprice' ){
-      $item=Item::where(['id'=> $cart->item_id])->first();
-      // 在庫数を増減させるロジック
-      $item->zaikosuu  -= $change_quantity;
-      // 在庫数をデータベースに更新
-      $item->save();
-    }
-
+    // $order=Order::where(['id'=> $order_id])->first();
+    //
+    // // 元々入っていた個数
+    // $old_quantity = $order->quantity;
+    //
+    // // 在庫数の増減量を計算
+    // $change_quantity = $quantity - $old_quantity;
+    //
+    // $cart=Cart::where(['id'=> $order->cart_id])->first();
+    //
+    // // $deal=Deal::where(['id'=> $cart->deal_id])->first();
+    // $addtype = $cart->addtype;
+    //
+    // if( $addtype == 'addsetonagi' || $addtype == 'addspecialprice' ){
+    //   $item=Item::where(['id'=> $cart->item_id])->first();
+    //   // 在庫数を増減させるロジック
+    //   $item->zaikosuu  -= $change_quantity;
+    //   // 在庫数をデータベースに更新
+    //   $item->save();
+    // }
     $order=Order::where(['id'=> $order_id])->update(['quantity'=> $quantity]);
 
     // }elseif($addtype == 'addbuyerrecommend'){
@@ -167,7 +166,7 @@ class BothController extends Controller
         $holidays = null;
       }
 
-      if($shipping_setting->ukewatasi_kiboujikan_umu == 0 && $shipping_setting->ukewatasi_kiboujikan_umu == 0){
+      if($shipping_setting->ukewatasi_kiboujikan_umu == 0 && $shipping_setting->ukewatasibi_nyuuryoku_umu == 0){
         $carts = Cart::where(['user_id'=>$user_id , 'deal_id'=>null, 'addtype'=>'addsetonagi'])->get();
         foreach ($carts as $cart) {
           // オーダー内容を保存

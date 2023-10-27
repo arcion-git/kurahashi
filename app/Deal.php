@@ -48,6 +48,7 @@ class Deal extends Model
 
   public function first_order_nouhin_yoteibi() {
     $first_cart = Cart::where(['deal_id'=>$this->id])->first();
+    // dd($first_cart);
     if($first_cart){
       $first_order = Order::where(['cart_id'=>$first_cart->id])->first();
       $nouhin_yoteibi = $first_order->nouhin_yoteibi;
@@ -58,7 +59,7 @@ class Deal extends Model
       if(isset($setonagi)){
         $shipping_setting = ShippingSetting::where(['shipping_method'=> $shipping_method ,'shipping_code'=> $setonagi->shipping_code ])->first();
         if(isset($shipping_setting))
-          if($shipping_setting->ukewatasi_kiboujikan_umu == 0 && $shipping_setting->ukewatasi_kiboujikan_umu == 0){
+          if($shipping_setting->ukewatasibi_nyuuryoku_umu == 0 && $shipping_setting->ukewatasi_kiboujikan_umu == 0){
           $nouhin_yoteibi = null;
         }
       }
@@ -68,5 +69,13 @@ class Deal extends Model
     return $nouhin_yoteibi;
   }
 
+
+  public function c_uketori_houhou() {
+
+    $setonagi = Setonagi::where(['user_id'=> $this->user_id])->first();
+    $shipping_setting = ShippingSetting::where(['shipping_method' => $this->uketori_place , 'shipping_code' => $setonagi->shipping_code])->first();
+
+    return $shipping_setting->shipping_name;
+  }
 
 }

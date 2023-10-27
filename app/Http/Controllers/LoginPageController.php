@@ -3352,7 +3352,8 @@ class LoginPageController extends Controller
             }else{
               $store = null;
               // 受け取り予定日
-              $nouhin_yoteibi = '【受け取り予定日】<br />'.$order->nouhin_yoteibi;
+              // $nouhin_yoteibi = '【受け取り予定日】<br />'.$order->nouhin_yoteibi;
+              $nouhin_yoteibi = '【受け取り予定日】<br />'.$deal->first_order_nouhin_yoteibi();
               // 納品店舗
               $nouhin_store = null;
               // 金額未定に対応

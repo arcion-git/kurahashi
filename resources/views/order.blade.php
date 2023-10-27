@@ -387,17 +387,21 @@
 					<label for="company">配送方法</label>
 			</div>
 			<div class="col-sm-12 col-md-5">
-				<select id="uketori_place" value="@if(isset($setonagi->uketori_place)){{$setonagi->uketori_place}}@endif" name="uketori_place" class="c_uketori_place form-control">
-				@if(isset($setonagi->uketori_place))
-					<option id="set_uletori_place" value="{{$setonagi->uketori_place}}" selected>{{$setonagi->shipping_name()}}</option>
+				<select id="uketori_place" value="@if(isset($deal)){{$deal->uketori_place}}@else@if(isset($setonagi->uketori_place)){{$setonagi->uketori_place}}@endif@endif" name="uketori_place" class="c_uketori_place form-control">
+				@if(isset($deal))
+					<option id="set_uletori_place" value="{{$deal->uketori_place}}" selected>{{$deal->c_uketori_houhou()}}</option>
 				@else
-					<option value="" selected>選択してください</option>
-				@endif
-					@if(isset($shipping_settings))
-						@foreach($shipping_settings as $shipping_setting)
-							<option value="{{$shipping_setting->shipping_method}}">{{$shipping_setting->shipping_name}}</option>
-						@endforeach
+					@if(isset($setonagi->uketori_place))
+						<option id="set_uletori_place" value="{{$setonagi->uketori_place}}" selected>{{$setonagi->shipping_name()}}</option>
 					@else
+						<option value="" selected>選択してください</option>
+					@endif
+						@if(isset($shipping_settings))
+							@foreach($shipping_settings as $shipping_setting)
+								<option value="{{$shipping_setting->shipping_method}}">{{$shipping_setting->shipping_name}}</option>
+							@endforeach
+						@else
+					@endif
 				@endif
 				</select>
 			</div>
@@ -532,7 +536,7 @@
 							<label for="card_no">カード番号</label>
 						</div>
 						<div class="col-sm-12 col-md-5">
-							<input type="text" class="form-control" name="card_no" maxlength="16" placeholder="************1234" value="4012888888881881">
+							<input type="text" class="form-control" name="card_no" maxlength="16" placeholder="************1234" value="">
 						</div>
 					</div>
 					<div class="input-form row">
@@ -540,7 +544,7 @@
 							<label>カード名義人</label>
 						</div>
 						<div class="col-sm-12 col-md-5">
-							<input type="text" class="form-control" name="card_owner" maxlength="30" placeholder="KURONEKO TARO" value="YUSEI HAMAMOTO">
+							<input type="text" class="form-control" name="card_owner" maxlength="30" placeholder="KURONEKO TARO" value="">
 						</div>
 					</div>
 					<div class="input-form row">
@@ -548,7 +552,7 @@
 							<label>カード有効期限</label>
 						</div>
 						<div class="col-sm-12 col-md-5">
-							<input type="text" class="form-control yuukoukigen" name="exp_month" maxlength="2" placeholder="10" value="12">月/ <input class="form-control yuukoukigen" type="text" name="exp_year" maxlength="2" value="28" placeholder="24">年
+							<input type="text" class="form-control yuukoukigen" name="exp_month" maxlength="2" placeholder="10" value="">月/ <input class="form-control yuukoukigen" type="text" name="exp_year" maxlength="2" value="" placeholder="24">年
 						</div>
 					</div>
 					<div class="input-form row">
@@ -556,7 +560,7 @@
 							<label>セキュリティコード</label>
 						</div>
 						<div class="col-sm-12 col-md-5">
-							<input type="text" class="form-control" name="security_code" maxlength="4" placeholder="1234" value="111">
+							<input type="text" class="form-control" name="security_code" maxlength="4" placeholder="1234" value="">
 						</div>
 					</div>
 					<div class="input-form" style="display:none;">
@@ -1056,6 +1060,62 @@ $(function() {
 
 
 @if(isset($user->setonagi))
+
+@if(isset($setonagi->shipping_code))
+<script>
+
+
+$("#c_shipping_price").hide();
+$("#c_shipping_date").hide();
+$("#c_shipping_time").hide();
+
+$(document).ready(function() {
+		// セットされているvalueを取得
+		var value = $("#set_uletori_place").val();
+		// valueがセットされているかチェック
+		console.log(value);
+		if (value) {
+				// .c_uketori_place要素に対してchangeイベントを手動でトリガー
+				$(".c_uketori_place").trigger("change");
+		}
+});
+// 配送方法が選択されない状態だと、カード情報の入力エリアを非表示にするconfirmのみ起動
+$(document).ready(function() {
+	if (window.location.pathname.indexOf('confirm') !== -1) {
+		// 日付の手入力を禁止
+		$(".nouhin_yoteibi_c").keydown(function(e) {
+				e.preventDefault();
+		});
+
+		// URLパスに「confirm」が含まれている場合に実行
+		updatePayCardVisibility();
+		$('#uketori_place, .nouhin_yoteibi_c').change(function() {
+		// セレクトボックスの値が変更されたときに実行
+			updatePayCardVisibility();
+		});
+		function updatePayCardVisibility() {
+		  if ($('.nouhin_yoteibi_c').is(':visible')) {
+				console.log('表示しているよ');
+		    if ($('#uketori_place').val() !== '' && $('.nouhin_yoteibi_c').val() !== '') {
+		      $('#pay_card').show();
+		    } else {
+		      $('#pay_card').hide();
+		    }
+		  } else {
+				console.log('非表示だよ');
+		    if ($('#uketori_place').val() !== '') {
+		      $('#pay_card').show();
+		    } else {
+		      $('#pay_card').hide();
+		    }
+		  }
+		}
+	}
+});
+
+</script>
+@endif
+
 	@if(Auth::guard('user')->check() )
 <script>
 if(document.URL.match('confirm')) {
@@ -1188,64 +1248,6 @@ $(function(){
 		$('#pay_card').hide();
 	});
 }
-
-
-$("#c_shipping_price").hide();
-$("#c_shipping_date").hide();
-$("#c_shipping_time").hide();
-
-
-
-$(document).ready(function() {
-		// セットされているvalueを取得
-		var value = $("#set_uletori_place").val();
-		// valueがセットされているかチェック
-		console.log(value);
-		if (value) {
-				// .c_uketori_place要素に対してchangeイベントを手動でトリガー
-				$(".c_uketori_place").trigger("change");
-		}
-
-
-
-
-});
-
-@if(isset($setonagi->shipping_code))
-// 配送方法が選択されない状態だと、カード情報の入力エリアを非表示にするconfirmのみ起動
-$(document).ready(function() {
-	if (window.location.pathname.indexOf('confirm') !== -1) {
-		// 日付の手入力を禁止
-		$(".nouhin_yoteibi_c").keydown(function(e) {
-				e.preventDefault();
-		});
-
-		// URLパスに「confirm」が含まれている場合に実行
-		updatePayCardVisibility();
-		$('#uketori_place, .nouhin_yoteibi_c').change(function() {
-		// セレクトボックスの値が変更されたときに実行
-			updatePayCardVisibility();
-		});
-		function updatePayCardVisibility() {
-		  if ($('.nouhin_yoteibi_c').is(':visible')) {
-				console.log('表示しているよ');
-		    if ($('#uketori_place').val() !== '' && $('.nouhin_yoteibi_c').val() !== '') {
-		      $('#pay_card').show();
-		    } else {
-		      $('#pay_card').hide();
-		    }
-		  } else {
-				console.log('非表示だよ');
-		    if ($('#uketori_place').val() !== '') {
-		      $('#pay_card').show();
-		    } else {
-		      $('#pay_card').hide();
-		    }
-		  }
-		}
-	}
-});
-@endif
 </script>
 
 <script>
