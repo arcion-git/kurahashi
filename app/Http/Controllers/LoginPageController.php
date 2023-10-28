@@ -2999,9 +2999,6 @@ class LoginPageController extends Controller
     //   }
     // }
     //
-    //
-    //
-    //
     // if($request->uketori_siharai == 'クレジットカード払い'){
     //   // dd($request->token_api);
     //   // EPトークン取得

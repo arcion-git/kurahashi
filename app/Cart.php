@@ -230,6 +230,45 @@ class Cart extends Model
   }
 
 
+  public function buyerrecommend_zaikosuu(){
+    // $cart = Cart::where(['id'=>$this->id])->first();
+
+    $order = Order::where(['cart_id'=>$this->id])->first();
+    $tokuisaki_name = $order->tokuisaki_name;
+
+    $store = Store::where(['tokuisaki_name'=>$tokuisaki_name])->first();
+    $tokuisaki_id = $store->tokuisaki_id;
+    // $deal = Deal::where(['id'=>$this->deal_id])->first();
+    // $kaiin_number = User::where(['id'=>$deal->user_id])->first()->kaiin_number;
+    $item = Item::where(['id'=>$this->item_id])->first();
+    // $now = Carbon::now();
+
+    $buyer_recommend_item = BuyerRecommend::where(['tokuisaki_id'=>$tokuisaki_id , 'item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
+    // ->where('start', '<=' , $now)
+    // ->where('end', '>=', $now)
+    ->first();
+    if($buyer_recommend_item->zaikokanri == 1){
+      return '999';
+    }else{
+      return $buyer_recommend_item->zaikosuu;
+    }
+
+    // $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get()->unique('tokuisaki_id');
+
+
+    // foreach ($tokuisaki_ids as $key => $value) {
+    //   // 担当のおすすめ商品の在庫数を探す
+    //   $buyer_recommend_item = BuyerRecommend::where(['tokuisaki_id'=>$value->tokuisaki_id , 'item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
+    //   ->where('start', '<=' , $now)
+    //   ->where('end', '>=', $now)->first();
+    //   if($buyer_recommend_item->zaikokanri == 1){
+    //     return '999';
+    //   }else{
+    //     return $buyer_recommend_item->zaikosuu;
+    //   }
+    // }
+
+  }
 
   public function special_price_nouhin(){
     $cart = Cart::where(['id'=>$this->id])->first();

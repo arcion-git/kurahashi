@@ -1093,6 +1093,32 @@ if(document.URL.match("/approval")) {
 
       } else {
         $("#c_shipping_price").hide();
+
+        // 商品合計
+        var sum = 0;
+
+        $('.total').each(function () {
+          var price = $(this).closest('tr').find('input.price').data('price');
+          var quantity = $(this).closest('tr').find('select.quantity').val();
+          var total = price * quantity;
+          $(this).text(total);
+          sum += total;
+        });
+
+        // 商品合計
+        var itemTotal = sum.toLocaleString();
+        $('#item_total').text('¥ ' + itemTotal);
+
+    		// 税込合計金額
+        var allTotal = Math.round(sum * 108 / 100);
+        $('#all_total').text('¥ ' + allTotal.toLocaleString());
+        $('#all_total_val').val(allTotal);
+
+    		// 税額
+        var tax = Math.round(allTotal - sum);
+        $('#tax').text('¥ ' + tax.toLocaleString());
+        $('#tax_val').val(tax);
+
       }
 
       // confirmのみ予め設定されている入力値をクリア

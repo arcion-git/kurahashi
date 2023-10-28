@@ -258,6 +258,7 @@
 																							<option value="{{$val->quantity}}">{{$val->quantity}}</option>
 																						@endif
 																					@endif
+
 																					@if($cart->addtype == 'addbuyerrecommend')
 																						@for ($i = 0; $i <= $cart->zaikosuu; $i++)
 																						<option value="{{$i}}">{{$i}}</option>
@@ -267,6 +268,7 @@
 																						<option value="{{$i}}">{{$i}}</option>
 																						@endfor
 																					@endif
+
 																				</select>
 																			</td>
 																			<td class="head-tani text-center">
@@ -439,15 +441,19 @@
 			</div>
 			<div class="col-sm-12 col-md-5">
 				<select id="uketori_time" value="" name="uketori_time" class="uketori_time form-control">
-					@if(isset($setonagi->uketori_time))
-					<option value="{{$setonagi->uketori_time}}" selected>{{$setonagi->uketori_time}}</option>
+					@if(isset($deal))
+						<option value="{{$deal->uketori_time}}" selected>{{$deal->uketori_time}}</option>
 					@else
-					<option value="" selected>選択してください</option>
+						@if(isset($setonagi->uketori_time))
+						<option value="{{$setonagi->uketori_time}}" selected>{{$setonagi->uketori_time}}</option>
+						@else
+						<option value="" selected>選択してください</option>
+						@endif
 					@endif
-					<option value="午前中">午前中</option>
-					<option value="12時〜14時">12時〜14時</option>
-					<option value="14時〜16時">14時〜16時</option>
-					<option value="16時〜17時">16時〜17時</option>
+						<option value="午前中">午前中</option>
+						<option value="12時〜14時">12時〜14時</option>
+						<option value="14時〜16時">14時〜16時</option>
+						<option value="16時〜17時">16時〜17時</option>
 				</select>
 			</div>
 		</div>
@@ -536,7 +542,7 @@
 							<label for="card_no">カード番号</label>
 						</div>
 						<div class="col-sm-12 col-md-5">
-							<input type="text" class="form-control" name="card_no" maxlength="16" placeholder="************1234" value="">
+							<input type="text" class="form-control" name="card_no" maxlength="16" placeholder="************1234" value="4111111111111111">
 						</div>
 					</div>
 					<div class="input-form row">
@@ -544,7 +550,7 @@
 							<label>カード名義人</label>
 						</div>
 						<div class="col-sm-12 col-md-5">
-							<input type="text" class="form-control" name="card_owner" maxlength="30" placeholder="KURONEKO TARO" value="">
+							<input type="text" class="form-control" name="card_owner" maxlength="30" placeholder="KURONEKO TARO" value="YUSEI HAMAMOTO">
 						</div>
 					</div>
 					<div class="input-form row">
@@ -552,7 +558,7 @@
 							<label>カード有効期限</label>
 						</div>
 						<div class="col-sm-12 col-md-5">
-							<input type="text" class="form-control yuukoukigen" name="exp_month" maxlength="2" placeholder="10" value="">月/ <input class="form-control yuukoukigen" type="text" name="exp_year" maxlength="2" value="" placeholder="24">年
+							<input type="text" class="form-control yuukoukigen" name="exp_month" maxlength="2" placeholder="10" value="10">月/ <input class="form-control yuukoukigen" type="text" name="exp_year" maxlength="2" value="24" placeholder="24">年
 						</div>
 					</div>
 					<div class="input-form row">
@@ -560,7 +566,7 @@
 							<label>セキュリティコード</label>
 						</div>
 						<div class="col-sm-12 col-md-5">
-							<input type="text" class="form-control" name="security_code" maxlength="4" placeholder="1234" value="">
+							<input type="text" class="form-control" name="security_code" maxlength="4" placeholder="1234" value="1245">
 						</div>
 					</div>
 					<div class="input-form" style="display:none;">

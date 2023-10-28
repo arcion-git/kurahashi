@@ -90,34 +90,35 @@ class BothController extends Controller
   public function change_quantity(Request $request){
     $order_id = $request->order_id;
     $quantity = $request->quantity;
+
+
     // $order=Order::where(['id'=> $order_id])->first();
-    //
     // // 元々入っていた個数
     // $old_quantity = $order->quantity;
-    //
     // // 在庫数の増減量を計算
     // $change_quantity = $quantity - $old_quantity;
-    //
     // $cart=Cart::where(['id'=> $order->cart_id])->first();
     //
-    // // $deal=Deal::where(['id'=> $cart->deal_id])->first();
-    // $addtype = $cart->addtype;
     //
-    // if( $addtype == 'addsetonagi' || $addtype == 'addspecialprice' ){
-    //   $item=Item::where(['id'=> $cart->item_id])->first();
-    //   // 在庫数を増減させるロジック
-    //   $item->zaikosuu  -= $change_quantity;
-    //   // 在庫数をデータベースに更新
-    //   $item->save();
+    // $deal=Deal::where(['id'=> $cart->deal_id])->first();
+    //
+    //
+    // if(isset($deal)){
+    //   $setonagi=Setonagi::where(['user_id'=> $deal->user_id])->first();
+    //   $addtype = $cart->addtype;
+    //   if( $addtype == 'addsetonagi' || $addtype == 'addspecialprice' || $addtype == 'addbuyerrecommend' && isset($setonagi)){
+    //     $item=Item::where(['id'=> $cart->item_id])->first();
+    //     // 在庫数を増減させるロジック
+    //     $item->zaikosuu  -= $change_quantity;
+    //     // 在庫数をデータベースに更新
+    //     $item->save();
+    //   }elseif ( $addtype == 'addbuyerrecommend' ) {
+    //
+    //   }
     // }
-    $order=Order::where(['id'=> $order_id])->update(['quantity'=> $quantity]);
 
-    // }elseif($addtype == 'addbuyerrecommend'){
-    //
-    // }else{
-    //
-    //
-    // }
+
+    $order=Order::where(['id'=> $order_id])->update(['quantity'=> $quantity]);
 
 
     $data = "sucsess";
