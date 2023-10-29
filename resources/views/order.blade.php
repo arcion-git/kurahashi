@@ -818,6 +818,10 @@ $('.nini_nouhin_yoteibi').datepicker({
 <!-- <div id="item_total" class="total_price"></div>
 <div id="tax" class="total_price">税：</div>
 <div id="all_total" class="total_price">税込金額：</div> -->
+
+
+
+
 <script>
 $(document).ready(function () {
   updateFields();
@@ -828,32 +832,73 @@ $(document).ready(function () {
 
   function updateFields() {
     var sum = 0;
+		var c_shipping_price = $("#c_shipping_price_val").val();
 
-    $('.total').each(function () {
-      var price = $(this).closest('tr').find('input.price').data('price');
-      var quantity = $(this).closest('tr').find('select.quantity').val();
-      var total = price * quantity;
-      $(this).text(total);
-      sum += total;
-    });
+		if(c_shipping_price > 1) {
+			$("#c_shipping_price").show();
+			$('.c_shipping_price').text('¥ ' + c_shipping_price);
+			$('input[name="c_shipping_price"]').val(c_shipping_price);
 
-		// 商品合計
-    var itemTotal = sum.toLocaleString();
-    $('#item_total').text('¥ ' + itemTotal);
+			var shipping_price = $('#c_shipping_price_val').val();
+			console.log(shipping_price);
 
-		// 税込合計金額
-    var allTotal = Math.round(sum * 108 / 100);
-    $('#all_total').text('¥ ' + allTotal.toLocaleString());
-    $('#all_total_val').val(allTotal);
+			// 商品合計
+			var sum = 0;
+			$('.total').each(function () {
+				var price = $(this).closest('tr').find('input.price').data('price');
+				var quantity = $(this).closest('tr').find('select.quantity').val();
+				var total = price * quantity;
+				$(this).text(total);
+				sum += total;
+			});
 
-		// 税額
-    var tax = Math.round(allTotal - sum);
-    $('#tax').text('¥ ' + tax.toLocaleString());
-    $('#tax_val').val(tax);
+			// 商品合計
+			var itemTotal = sum.toLocaleString();
+			$('#item_total').text('¥ ' + itemTotal);
 
+			// 送料税込額
+			var shipping_price_zei = Math.round(shipping_price * 110 / 100);
+			console.log(shipping_price_zei);
+
+			// 送料税額
+			var shipping_price_zei_only = shipping_price_zei - shipping_price;
+
+			// 税込合計金額
+			var allTotal = Math.round(sum * 108 / 100) + shipping_price_zei;
+			$('#all_total').text('¥ ' + allTotal.toLocaleString());
+			$('#all_total_val').val(allTotal);
+
+			// 税額
+			var tax = Math.round(allTotal - sum - shipping_price);
+			$('#tax').text('¥ ' + tax.toLocaleString());
+			$('#tax_val').val(tax);
+
+		}else{
+
+	    $('.total').each(function () {
+	      var price = $(this).closest('tr').find('input.price').data('price');
+	      var quantity = $(this).closest('tr').find('select.quantity').val();
+	      var total = price * quantity;
+	      $(this).text(total);
+	      sum += total;
+	    });
+
+			// 商品合計
+	    var itemTotal = sum.toLocaleString();
+	    $('#item_total').text('¥ ' + itemTotal);
+
+			// 税込合計金額
+	    var allTotal = Math.round(sum * 108 / 100);
+	    $('#all_total').text('¥ ' + allTotal.toLocaleString());
+	    $('#all_total_val').val(allTotal);
+
+			// 税額
+	    var tax = Math.round(allTotal - sum);
+	    $('#tax').text('¥ ' + tax.toLocaleString());
+	    $('#tax_val').val(tax);
+		}
   }
 });
-
 </script>
 
 

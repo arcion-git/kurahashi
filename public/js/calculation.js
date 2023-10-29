@@ -940,9 +940,7 @@ if(document.URL.match("/approval")) {
 
 
 
-  $(document).on("change", ".c_uketori_place", function() {
-    c_uketori_place_set();
-  });
+
 
 
   $(document).on("change", ".nouhin_yoteibi_c", function() {
@@ -990,6 +988,9 @@ if(document.URL.match("/approval")) {
     });
   });
 
+  $(document).on("change", ".c_uketori_place", function() {
+    c_uketori_place_set();
+  });
 
   function c_uketori_place_set() {
     var methodId = $(".c_uketori_place").val();
