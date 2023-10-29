@@ -70,6 +70,7 @@ class Deal extends Model
   }
 
 
+
   public function c_uketori_houhou() {
 
     $setonagi = Setonagi::where(['user_id'=> $this->user_id])->first();

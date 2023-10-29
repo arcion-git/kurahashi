@@ -1043,6 +1043,7 @@ if(document.URL.match("/approval")) {
         $("#c_shipping_time").show();
       } else {
         $("#c_shipping_time").hide();
+    		$('#uketori_time').val('');
       }
       if(data.shipping_price > 1) {
         $("#c_shipping_price").show();

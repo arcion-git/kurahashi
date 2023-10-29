@@ -3423,6 +3423,7 @@ class LoginPageController extends Controller
           'user' => $user,
           'text' => $text,
           'pay' => $pay,
+          'deal' => $deal,
           'nouhin_store' => $nouhin_store,
           'uketori_place' => $uketori_place,
           'uketori_time' => $uketori_time,
