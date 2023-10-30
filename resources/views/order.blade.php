@@ -440,7 +440,7 @@
 					<label for="company">受け渡し希望時間</label>
 			</div>
 			<div class="col-sm-12 col-md-5">
-				<select id="uketori_time" value="" name="uketori_time" class="uketori_time form-control" required>
+				<select id="uketori_time" value="" name="uketori_time" class="uketori_time form-control">
 					@if(isset($deal))
 						<option value="{{$deal->uketori_time}}" selected>{{$deal->uketori_time}}</option>
 					@else
@@ -1145,6 +1145,21 @@ $(document).ready(function() {
 			updatePayCardVisibility();
 		});
 		function updatePayCardVisibility() {
+
+
+		  if ($('#uketori_time').is(':visible') && $('.nouhin_yoteibi_c').is(':visible')) {
+		    console.log('uketori_time と nouhin_yoteibi_c が表示しているよ');
+		    if ($('#uketori_place').val() !== '' && $('.nouhin_yoteibi_c').val() !== '' && $('#uketori_time').val() !== '') {
+		      $('#pay_card').show();
+		    } else {
+		      $('#pay_card').hide();
+		    }
+		  } else {
+		    console.log('非表示だよ');
+		    $('#pay_card').hide();
+		  }
+
+
 		  if ($('.nouhin_yoteibi_c').is(':visible')) {
 				console.log('表示しているよ');
 		    if ($('#uketori_place').val() !== '' && $('.nouhin_yoteibi_c').val() !== '') {

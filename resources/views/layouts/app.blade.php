@@ -207,7 +207,7 @@
                   </a>
                 </div>
                 <div class="dropdown-footer text-center">
-                  @if(Auth::guard('user')->user()->c_user())
+                  @if(Auth::guard('user')->user())
                   <a href="{{ url('/confirm?addtype=addsetonagi') }}" class="btn btn-warning">注文個数入力に進む <i class="fas fa-chevron-right"></i></a>
                   @else
                   <form action="{{ url('/addall') }}" method="POST" class="form-horizontal">
