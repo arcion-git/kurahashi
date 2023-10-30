@@ -713,6 +713,8 @@ class BothController extends Controller
 
     // セトナギユーザーの場合
     // 注文完了時間
+    // $success_time = $deal->success_time;
+
     $success_time = $deal->success_time;
     $success_jikan = date('H:i:s', strtotime($success_time));
     // dd($success_jikan);
@@ -752,6 +754,13 @@ class BothController extends Controller
         }
       }
     }
+
+
+    if(isset($setonagi->shipping_code)){
+      $nouhin_yoteibi = $deal->first_order_nouhin_yoteibi_cancel();
+    }
+
+
     // dd($nouhin_yoteibi);
     // 注文の翌営業日の納品予定19時を取得
     $zenjitu19ji = date($nouhin_yoteibi.'17:00:00');

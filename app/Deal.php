@@ -69,6 +69,18 @@ class Deal extends Model
     return $nouhin_yoteibi;
   }
 
+  public function first_order_nouhin_yoteibi_cancel() {
+    $first_cart = Cart::where(['deal_id'=>$this->id])->first();
+    // dd($first_cart);
+    if($first_cart){
+      $first_order = Order::where(['cart_id'=>$first_cart->id])->first();
+      $nouhin_yoteibi = $first_order->nouhin_yoteibi;
+    }else{
+      $nouhin_yoteibi = null;
+    }
+    return $nouhin_yoteibi;
+  }
+
 
 
   public function c_uketori_houhou() {

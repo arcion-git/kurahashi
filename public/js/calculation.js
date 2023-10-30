@@ -1070,14 +1070,14 @@ if(document.URL.match("/approval")) {
         $('#item_total').text('¥ ' + itemTotal);
 
         // 送料税込額
-        var shipping_price_zei = Math.round(shipping_price * 110 / 100);
+        var shipping_price_zei = Math.floor(shipping_price * 110 / 100);
         console.log(shipping_price_zei);
 
         // 送料税額
         var shipping_price_zei_only = shipping_price_zei - shipping_price;
 
     		// 税込合計金額
-        var allTotal = Math.round(sum * 108 / 100) + shipping_price_zei;
+        var allTotal = Math.floor(sum * 108 / 100) + shipping_price_zei;
         $('#all_total').text('¥ ' + allTotal.toLocaleString());
         $('#all_total_val').val(allTotal);
 
@@ -1112,7 +1112,7 @@ if(document.URL.match("/approval")) {
         $('#item_total').text('¥ ' + itemTotal);
 
     		// 税込合計金額
-        var allTotal = Math.round(sum * 108 / 100);
+        var allTotal = Math.floor(sum * 108 / 100);
         $('#all_total').text('¥ ' + allTotal.toLocaleString());
         $('#all_total_val').val(allTotal);
 

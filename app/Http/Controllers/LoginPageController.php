@@ -3554,6 +3554,7 @@ class LoginPageController extends Controller
     // キャンセルができるか判定
     $deal=Deal::where(['id'=> $deal_id])->first();
     $user = User::where(['id'=> $user_id])->first();
+    $setonagi = Setonagi::where(['user_id'=> $user_id])->first();
 
 
     // 注文完了時間
@@ -3597,6 +3598,11 @@ class LoginPageController extends Controller
       }
     }
     // dd($nouhin_yoteibi);
+
+    if(isset($setonagi->shipping_code)){
+      $nouhin_yoteibi = $deal->first_order_nouhin_yoteibi_cancel();
+    }
+
     // 注文の翌営業日の納品予定19時を取得
     $zenjitu19ji = date($nouhin_yoteibi.'17:00:00');
     // 納品予定日の19時を取得
@@ -3654,7 +3660,7 @@ class LoginPageController extends Controller
         // dd($result);
         if($result->returnCode == 1){
             $id= $deal_id;
-            $message = 'キャンセル期間を過ぎたためキャンセルできませんでした。';
+            $message = 'クロネコかけ払いキャンセルエラーです。';
             $data=[
               'id' => $deal_id,
               'cancel_error' => $message,
@@ -3692,7 +3698,7 @@ class LoginPageController extends Controller
                 // dd($result);
         if($result->returnCode == 1){
           $id= $deal_id;
-          $message = 'キャンセル期間を過ぎたためキャンセルできませんでした。';
+          $message = 'クレジットカード払いキャンセルエラーです。';
           $data=[
             'id' => $deal_id,
             'cancel_error' => $message,

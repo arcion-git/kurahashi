@@ -857,14 +857,14 @@ $(document).ready(function () {
 			$('#item_total').text('¥ ' + itemTotal);
 
 			// 送料税込額
-			var shipping_price_zei = Math.round(shipping_price * 110 / 100);
+			var shipping_price_zei = Math.floor(shipping_price * 110 / 100);
 			console.log(shipping_price_zei);
 
 			// 送料税額
 			var shipping_price_zei_only = shipping_price_zei - shipping_price;
 
 			// 税込合計金額
-			var allTotal = Math.round(sum * 108 / 100) + shipping_price_zei;
+			var allTotal = Math.floor(sum * 108 / 100) + shipping_price_zei;
 			$('#all_total').text('¥ ' + allTotal.toLocaleString());
 			$('#all_total_val').val(allTotal);
 
@@ -888,7 +888,7 @@ $(document).ready(function () {
 	    $('#item_total').text('¥ ' + itemTotal);
 
 			// 税込合計金額
-	    var allTotal = Math.round(sum * 108 / 100);
+	    var allTotal = Math.floor(sum * 108 / 100);
 	    $('#all_total').text('¥ ' + allTotal.toLocaleString());
 	    $('#all_total_val').val(allTotal);
 
@@ -1140,35 +1140,24 @@ $(document).ready(function() {
 
 		// URLパスに「confirm」が含まれている場合に実行
 		updatePayCardVisibility();
-		$('#uketori_place, .nouhin_yoteibi_c').change(function() {
+		$('#uketori_place, .nouhin_yoteibi_c, #uketori_time').change(function() {
 		// セレクトボックスの値が変更されたときに実行
 			updatePayCardVisibility();
 		});
 		function updatePayCardVisibility() {
-
-
 		  if ($('#uketori_time').is(':visible') && $('.nouhin_yoteibi_c').is(':visible')) {
-		    console.log('uketori_time と nouhin_yoteibi_c が表示しているよ');
-		    if ($('#uketori_place').val() !== '' && $('.nouhin_yoteibi_c').val() !== '' && $('#uketori_time').val() !== '') {
+		    if ($('#uketori_place').val() !== '' && $('.nouhin_yoteibi_c').val() !== '' && $('#uketori_time option:selected').val() !== '') {
 		      $('#pay_card').show();
 		    } else {
 		      $('#pay_card').hide();
 		    }
-		  } else {
-		    console.log('非表示だよ');
-		    $('#pay_card').hide();
-		  }
-
-
-		  if ($('.nouhin_yoteibi_c').is(':visible')) {
-				console.log('表示しているよ');
+		  }else if ($('#uketori_time').is(':hidden') && $('.nouhin_yoteibi_c').is(':visible')) {
 		    if ($('#uketori_place').val() !== '' && $('.nouhin_yoteibi_c').val() !== '') {
 		      $('#pay_card').show();
 		    } else {
 		      $('#pay_card').hide();
 		    }
 		  } else {
-				console.log('非表示だよ');
 		    if ($('#uketori_place').val() !== '') {
 		      $('#pay_card').show();
 		    } else {
