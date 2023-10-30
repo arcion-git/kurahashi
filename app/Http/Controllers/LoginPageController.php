@@ -3624,83 +3624,83 @@ class LoginPageController extends Controller
 
 
     // セトナギユーザーの場合
-    // if($user->setonagi == 1){
-    //
-    //   // ヤマトAPIキャンセル
-    //   if($deal->uketori_siharai == 'クロネコかけ払い'){
-    //     $client = new Client();
-    //     $url = config('app.kakebarai_cancel');
-    //     $kakebarai_traderCode = config('app.kakebarai_traderCode');
-    //     $kakebarai_passWord = config('app.kakebarai_passWord');
-    //     $envi = config('app.envi');
-    //     $option = [
-    //       'headers' => [
-    //         'Accept' => '*/*',
-    //         'Content-Type' => 'application/x-www-form-urlencoded',
-    //         'charset' => 'UTF-8',
-    //       ],
-    //       'form_params' => [
-    //         'traderCode' => $kakebarai_traderCode,
-    //         // 取引id
-    //         'orderNo' => $deal_id.$envi,
-    //         // バイヤーid
-    //         'buyerId' => $user_id,
-    //         'passWord' => $kakebarai_passWord
-    //       ]
-    //     ];
-    //     // dd($option);
-    //     $response = $client->request('POST', $url, $option);
-    //     $result = simplexml_load_string($response->getBody()->getContents());
-    //     // dd($result);
-    //     if($result->returnCode == 1){
-    //         $id= $deal_id;
-    //         $message = 'キャンセル期間を過ぎたためキャンセルできませんでした。';
-    //         $data=[
-    //           'id' => $deal_id,
-    //           'cancel_error' => $message,
-    //         ];
-    //         return redirect()->route('dealdetail',$data);
-    //       }
-    //     }
-    //
-    //
-    //
-    //
-    //   // クレジットカードAPIキャンセル
-    //   if($deal->uketori_siharai == 'クレジットカード払い'){
-    //     // dd($request->token_api);
-    //     // EPトークン取得
-    //     $client = new Client();
-    //     // $url = 'https://api.kuronekoyamato.co.jp/api/credit';
-    //     $url = config('app.collect_cancel');
-    //     $collect_tradercode = config('app.collect_tradercode');
-    //     $option = [
-    //       'headers' => [
-    //         'Accept' => '*/*',
-    //         'Content-Type' => 'application/x-www-form-urlencoded',
-    //         'charset' => 'UTF-8',
-    //       ],
-    //       'form_params' => [
-    //         'function_div' => 'A06',
-    //         'trader_code' => $collect_tradercode,
-    //         'order_no' => $deal_id,
-    //       ]
-    //     ];
-    //     // dd($option);
-    //     $response = $client->request('POST', $url, $option);
-    //     $result = simplexml_load_string($response->getBody()->getContents());
-    //             // dd($result);
-    //     if($result->returnCode == 1){
-    //       $id= $deal_id;
-    //       $message = 'キャンセル期間を過ぎたためキャンセルできませんでした。';
-    //       $data=[
-    //         'id' => $deal_id,
-    //         'cancel_error' => $message,
-    //       ];
-    //       return redirect()->route('dealdetail',$data);
-    //     }
-    //   }
-    // }
+    if($user->setonagi == 1){
+
+      // ヤマトAPIキャンセル
+      if($deal->uketori_siharai == 'クロネコかけ払い'){
+        $client = new Client();
+        $url = config('app.kakebarai_cancel');
+        $kakebarai_traderCode = config('app.kakebarai_traderCode');
+        $kakebarai_passWord = config('app.kakebarai_passWord');
+        $envi = config('app.envi');
+        $option = [
+          'headers' => [
+            'Accept' => '*/*',
+            'Content-Type' => 'application/x-www-form-urlencoded',
+            'charset' => 'UTF-8',
+          ],
+          'form_params' => [
+            'traderCode' => $kakebarai_traderCode,
+            // 取引id
+            'orderNo' => $deal_id.$envi,
+            // バイヤーid
+            'buyerId' => $user_id,
+            'passWord' => $kakebarai_passWord
+          ]
+        ];
+        // dd($option);
+        $response = $client->request('POST', $url, $option);
+        $result = simplexml_load_string($response->getBody()->getContents());
+        // dd($result);
+        if($result->returnCode == 1){
+            $id= $deal_id;
+            $message = 'キャンセル期間を過ぎたためキャンセルできませんでした。';
+            $data=[
+              'id' => $deal_id,
+              'cancel_error' => $message,
+            ];
+            return redirect()->route('dealdetail',$data);
+          }
+        }
+
+
+
+
+      // クレジットカードAPIキャンセル
+      if($deal->uketori_siharai == 'クレジットカード払い'){
+        // dd($request->token_api);
+        // EPトークン取得
+        $client = new Client();
+        // $url = 'https://api.kuronekoyamato.co.jp/api/credit';
+        $url = config('app.collect_cancel');
+        $collect_tradercode = config('app.collect_tradercode');
+        $option = [
+          'headers' => [
+            'Accept' => '*/*',
+            'Content-Type' => 'application/x-www-form-urlencoded',
+            'charset' => 'UTF-8',
+          ],
+          'form_params' => [
+            'function_div' => 'A06',
+            'trader_code' => $collect_tradercode,
+            'order_no' => $deal_id,
+          ]
+        ];
+        // dd($option);
+        $response = $client->request('POST', $url, $option);
+        $result = simplexml_load_string($response->getBody()->getContents());
+                // dd($result);
+        if($result->returnCode == 1){
+          $id= $deal_id;
+          $message = 'キャンセル期間を過ぎたためキャンセルできませんでした。';
+          $data=[
+            'id' => $deal_id,
+            'cancel_error' => $message,
+          ];
+          return redirect()->route('dealdetail',$data);
+        }
+      }
+    }
 
 
 
