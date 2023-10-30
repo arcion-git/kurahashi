@@ -3040,7 +3040,7 @@ class LoginPageController extends Controller
       // dd($option);
       $response = $client->request('POST', $url, $option);
       $result = simplexml_load_string($response->getBody()->getContents());
-      dd($result);
+      // dd($result);
       if($result->returnCode == 1){
         $delete_deal = Deal::where(['id'=> $deal_id])->first()->delete();
         if($result->errorCode == 123456){
