@@ -440,7 +440,7 @@
 					<label for="company">受け渡し希望時間</label>
 			</div>
 			<div class="col-sm-12 col-md-5">
-				<select id="uketori_time" value="" name="uketori_time" class="uketori_time form-control">
+				<select id="uketori_time" value="" name="uketori_time" class="uketori_time form-control" required>
 					@if(isset($deal))
 						<option value="{{$deal->uketori_time}}" selected>{{$deal->uketori_time}}</option>
 					@else
@@ -487,7 +487,7 @@
 				@else
 				<option value="" selected>選択してください</option>
 				@endif
-				<option value="午前中">午前中</option>
+				<option value="午前中" selected>午前中</option>
 				<option value="12時〜14時">12時〜14時</option>
 				<option value="14時〜16時">14時〜16時</option>
 				<option value="16時〜17時">16時〜17時</option>
