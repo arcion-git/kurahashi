@@ -434,6 +434,7 @@ class LoginPageController extends Controller
           // dd($categories);
           return view('user/auth/questionnaire', ['categories' => $categories]);
         }
+      $setonagi = Setonagi::where('user_id',$user_id)->first();
       $categories = Category::get()->groupBy('bu_ka_name');
       $user_id = Auth::guard('user')->user()->id;
       $favorite_categories = FavoriteCategory::where('user_id', $user_id)->get();
@@ -444,6 +445,7 @@ class LoginPageController extends Controller
       $special_prices = SpecialPrice::get();
       return view('user/guide',
       ['carts' => $carts ,
+       'setonagi' => $setonagi ,
        'categories' => $categories ,
        'favorite_categories' => $favorite_categories,
        'recommends' => $recommends,

@@ -563,8 +563,8 @@
   							<div class="footer_contact">
   								<h3>お問い合わせ窓口<span>CONTACT</span></h3>
   								<!-- <p><strong>TEL 084-941-3510</strong></p> -->
-  								<p><strong>TEL 080-2943-7978</strong></p>
-  								<p class="small">平日9：00～18：00（定休 土日祝）</p>
+  								<!-- <p><strong>TEL 080-2943-7978</strong></p> -->
+  								<!-- <p class="small">平日9：00～18：00（定休 土日祝）</p> -->
   								<a href="{{ url('/contact') }}"><div class="btn navy">お問い合わせフォーム</div></a>
   							</div>
   						</div>

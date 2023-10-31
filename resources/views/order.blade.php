@@ -447,7 +447,7 @@
 						@if(isset($setonagi->uketori_time))
 						<option value="{{$setonagi->uketori_time}}" selected>{{$setonagi->uketori_time}}</option>
 						@else
-						<option value="" selected>選択してください</option>
+						<!-- <option value="" selected>選択してください</option> -->
 						@endif
 					@endif
 						<option value="午前中">午前中</option>
@@ -834,8 +834,7 @@ $(document).ready(function () {
     var sum = 0;
 
 
-
-		if($('#c_shipping_price_val').is(':visible')) {
+		if($('#c_shipping_price').is(':visible')) {
 			var c_shipping_price = $("#c_shipping_price_val").val();
 			$('.c_shipping_price').text('¥ ' + c_shipping_price);
 			$('input[name="c_shipping_price"]').val(c_shipping_price);
