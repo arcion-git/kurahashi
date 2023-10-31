@@ -396,7 +396,7 @@
 					@if(isset($setonagi->uketori_place))
 						<option id="set_uletori_place" value="{{$setonagi->uketori_place}}" selected>{{$setonagi->shipping_name()}}</option>
 					@else
-						<option value="" selected>選択してください</option>
+						<!-- <option value="" selected>選択してください</option> -->
 					@endif
 						@if(isset($shipping_settings))
 							@foreach($shipping_settings as $shipping_setting)
@@ -832,10 +832,11 @@ $(document).ready(function () {
 
   function updateFields() {
     var sum = 0;
-		var c_shipping_price = $("#c_shipping_price_val").val();
 
-		if(c_shipping_price > 1) {
-			$("#c_shipping_price").show();
+
+
+		if($('#c_shipping_price_val').is(':visible')) {
+			var c_shipping_price = $("#c_shipping_price_val").val();
 			$('.c_shipping_price').text('¥ ' + c_shipping_price);
 			$('input[name="c_shipping_price"]').val(c_shipping_price);
 
@@ -874,7 +875,6 @@ $(document).ready(function () {
 			$('#tax_val').val(tax);
 
 		}else{
-
 	    $('.total').each(function () {
 	      var price = $(this).closest('tr').find('input.price').data('price');
 	      var quantity = $(this).closest('tr').find('select.quantity').val();
