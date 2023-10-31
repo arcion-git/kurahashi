@@ -31,12 +31,12 @@ class AddRecommendsTable extends Migration
     public function down()
     {
         Schema::table('recommends', function (Blueprint $table) {
-          $table->dropColumn('groupe');
-          $table->dropColumn('hidden_price');
-          $table->dropColumn('zaikokanri');
-          $table->dropColumn('zaikosuu');
-          $table->dropColumn('uwagaki_item_name');
-          $table->dropColumn('uwagaki_kikaku');
+          // $table->dropColumn('groupe');
+          // $table->dropColumn('hidden_price');
+          // $table->dropColumn('zaikokanri');
+          // $table->dropColumn('zaikosuu');
+          // $table->dropColumn('uwagaki_item_name');
+          // $table->dropColumn('uwagaki_kikaku');
           // $table->dropColumn('gentei_store');
         });
     }
