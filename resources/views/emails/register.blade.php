@@ -19,10 +19,8 @@
     @if(isset($uketori_time)){!! $uketori_time !!}<br /><br />@endif
   @endif
 @endif
-@if(!$user->setonagi == 1)
-  @if(isset($nouhin_store)){!! $nouhin_store !!}<br /><br />@endif
-  @if(isset($nouhin_yoteibi)){!! $nouhin_yoteibi !!}<br /><br />@endif
-@endif
+@if(isset($nouhin_store)){!! $nouhin_store !!}<br /><br />@endif
+@if(isset($nouhin_yoteibi)){!! $nouhin_yoteibi !!}<br /><br />@endif
 @if(isset($memo)){!! $memo !!}<br /><br />@endif
 引き続き、SETOnagiのご利用を心よりお待ちしております。<br />
 <br />
