@@ -2299,7 +2299,7 @@ class AdminPageController extends Controller
               // 商品合計
               '',
               // 送料
-              '',
+              $deal->get_shipping_price(),
               // 代引手数料
               '',
               // 内消費税

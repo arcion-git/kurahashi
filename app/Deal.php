@@ -91,4 +91,21 @@ class Deal extends Model
     return $shipping_setting->shipping_name;
   }
 
+  public function get_shipping_price() {
+
+    $setonagi = Setonagi::where(['user_id'=> $this->user_id])->first();
+
+    if(isset($setonagi)){
+      $shipping_setting = ShippingSetting::where(['shipping_method' => $this->uketori_place , 'shipping_code' => $setonagi->shipping_code])->first();
+      if(isset($shipping_setting)){
+        $shipping_price = $shipping_setting->shipping_price;
+      }else{
+        $shipping_price = 0;
+      }
+    }else{
+        $shipping_price = 0;
+    }
+    return $shipping_price;
+  }
+
 }
