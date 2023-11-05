@@ -1567,6 +1567,7 @@ class LoginPageController extends Controller
       return redirect()->route('confirm',$data);
     }
 
+
     if($request->setonagi_id){
       $setonagi = Setonagi::where('id',$request->setonagi_id)->first();
       // $setonagi = 1;

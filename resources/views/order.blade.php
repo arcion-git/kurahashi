@@ -474,10 +474,14 @@
 			</div>
 			<div class="col-sm-12 col-md-5">
 				<select id="uketori_place" value="" name="uketori_place" class="uketori_place form-control" required>
-				@if(isset($setonagi->uketori_place))
-				<option value="{{$setonagi->uketori_place}}" selected>{{$setonagi->uketori_place}}</option>
+				@if(isset($deal))
+					<option value="{{$deal->uketori_place}}" selected>{{$deal->uketori_place}}</option>
 				@else
-				<option value="" selected>選択してください</option>
+					@if(isset($setonagi->uketori_place))
+					<option value="{{$setonagi->uketori_place}}" selected>{{$setonagi->uketori_place}}</option>
+					@else
+					<option value="" selected>選択してください</option>
+					@endif
 				@endif
 				<!-- <option value="福山魚市引き取り">福山魚市引き取り</option> -->
 				<option value="三原引き取り（マリンネクスト）">三原引き取り（マリンネクスト）</option>
@@ -491,15 +495,19 @@
 			</div>
 			<div class="col-sm-12 col-md-5">
 				<select id="uketori_time" value="" name="uketori_time" class="uketori_time form-control" required>
-				@if(isset($setonagi->uketori_time))
-				<option value="{{$setonagi->uketori_time}}" selected>{{$setonagi->uketori_time}}</option>
+				@if(isset($deal))
+					<option value="{{$deal->uketori_time}}" selected>{{$deal->uketori_time}}</option>
 				@else
-				<option value="" selected>選択してください</option>
+					@if(isset($setonagi->uketori_time))
+					<option value="{{$setonagi->uketori_time}}" selected>{{$setonagi->uketori_time}}</option>
+					@else
+					<option value="" selected>選択してください</option>
+					@endif
 				@endif
-				<option value="午前中" selected>午前中</option>
-				<option value="12時〜14時">12時〜14時</option>
-				<option value="14時〜16時">14時〜16時</option>
-				<option value="16時〜17時">16時〜17時</option>
+					<option value="午前中">午前中</option>
+					<option value="12時〜14時">12時〜14時</option>
+					<option value="14時〜16時">14時〜16時</option>
+					<option value="16時〜17時">16時〜17時</option>
 				</select>
 			</div>
 		</div>

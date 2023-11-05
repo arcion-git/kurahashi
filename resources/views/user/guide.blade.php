@@ -268,13 +268,25 @@
                     @endif
 
 
-
                     <!-- URL：<a href="https://www.kurahashi.co.jp/">https://www.kurahashi.co.jp/</a></p> -->
                   </div>
                 </div>
               </div>
-          </div>
-        </section>
+            </div>
 
+      </section>
+<style>
+.main-footer {
+    padding: 20px 30px 20px 30px;
+}
+ .guide #colophon .external_link img {
+    height: 15px;
+    width: 15px;
+    margin-left: 5px;
+}
+ .guide .sns_link ul img {
+    height: 20px;
+}
+</style>
 
 @endsection
