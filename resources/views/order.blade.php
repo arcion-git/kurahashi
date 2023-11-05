@@ -1526,11 +1526,22 @@ window.onload = function() {
   equalizeHeightByClass('order_item');
 };
 
-
-
-
 </script>
 
+@if(Auth::guard('user')->check() )
+@if(isset($deal))
+<style>
+/* @media (max-width: 767px) {
+	.head-price input{
+		height: 23px !important;
+	}
+	.head-quantity select{
+		height: 23px !important;
+	}
+} */
+</style>
+@endif
+@endif
 
 	@endif
 @endif

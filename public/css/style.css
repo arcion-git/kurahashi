@@ -948,13 +948,22 @@ table tr:hover .table-links {
   opacity: 1; }
 
 .table-striped tbody tr:nth-of-type(odd) {
-  background-color: rgba(0, 0, 0, 0.02); }
+    background-color: #fff;
+}
+
+#nini_header,
+#order_header{
+  background-color: rgba(0,0,0,.05);
+}
 
 @media (max-width: 575.98px) {
   .table-responsive table {
     /* min-width: 800px;  */
-}}
-
+  }
+}
+.section .section-title{
+  font-size: 16px !important;
+}
 /* 3.7 Tooltip */
 .tooltip {
   font-size: 12px; }
@@ -3111,7 +3120,7 @@ a:not(.btn-social-icon):not(.btn-social):not(.page-link) .ion, a:not(.btn-social
 
 @media (max-width: 767px) {
 .invoice{
-  padding: 5px !important;
+  padding: 20px 10px !important;
 }
 .main-content {
     padding-left: 7px !important;
@@ -3712,6 +3721,10 @@ footer .flex-container {
     padding: 0px;
     min-width: inherit;
 } */
+.invoice hr{
+  margin-top: 10px !important;
+  margin-bottom: 10px !important;
+}
 #cart .table-responsive table {
     min-width: inherit !important;
     width: 100% !important;
@@ -3719,6 +3732,13 @@ footer .flex-container {
 #memo{
   min-width: inherit !important;
   width: 100% !important;
+  margin-bottom: 20px;
+}
+.main-footer {
+    margin-top: 0px !important;
+}
+.section .section-title{
+  margin: 0px 0 10px 0 !important;
 }
 .table-striped tbody tr {
     /* border: 3px solid #bfc1c3 !important; */
@@ -4324,6 +4344,8 @@ footer .external_link ul{
 }
 
 @media (max-width: 767px) {
+
+
   .repeatorder_header,
   .repeatorder_item,
   .repeatorder_order {
@@ -4457,4 +4479,18 @@ textarea.form-control{
   .fa-bars{
     display: none;
   }
+}
+body {
+  color: #000;
+}
+.form-control{
+  color: #000;
+}
+
+.table-hover tbody tr:hover {
+    /* color: #212529; */
+    background-color: rgba(0,0,0,.075);
+}
+.fa-search{
+  display: none;
 }

@@ -340,9 +340,9 @@
               <li class="nav-item">
                 <a href="/admin/setonagiuser" class="nav-link"><i class="fa fa-users"></i><span>セトナギユーザー審査</span></a>
               </li>
-              <li class="nav-item">
+              <!-- <li class="nav-item">
                 <a href="/admin/recommendcategory" class="nav-link"><i class="fa fa-bullhorn"></i><span>カテゴリーのおすすめ</span></a>
-              </li>
+              </li> -->
               <li class="nav-item">
                 <a href="/admin/item" class="nav-link"><i class="fas fa-list"></i><span>商品一覧</span></a>
               </li>
