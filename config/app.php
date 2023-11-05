@@ -146,6 +146,7 @@ return [
     'kakebarai_sinsa' => env('KAKEBARAI_SINSA'),
     'kakebarai_riyoukingaku' => env('KAKEBARAI_RIYOUKINGAKU'),
     'kakebarai_torikesi' => env('KAKEBARAI_TORIKESI'),
+    'kakebarai_pricechange' => env('KAKEBARAI_PRICECHANGE'),
 
     'collect_tradercode' => env('COLLECT_TRADERCODE'),
     'collect_password' => env('COLLECT_PASSWORD'),

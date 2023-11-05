@@ -16,12 +16,13 @@ $(function() {
     $("#overlayajax").fadeOut();
   });
 
+  // リロード処理
   function doReload() {
       window.location.reload();
   }
 
 
-  // 管理者側検索時
+  // 管理者側検索時取引一覧post処理
   if(document.URL.match("/admin/")) {
     $(document).on("change", "#admin_deal_search", function() {
       $('#admin_deal_search').submit();
@@ -1037,6 +1038,11 @@ if(document.URL.match("/approval")) {
 				});
         // 表示を有効にする
         $("#c_shipping_date").show();
+        // confirmのみ予め設定されている入力値をクリア
+        if(document.URL.match("/confirm")) {
+          $('.nouhin_yoteibi_c').datepicker('setDate', null);
+      		$('.nouhin_yoteibi_c').val('');
+        }
       } else {
         $("#c_shipping_date").hide();
       }
@@ -1123,11 +1129,8 @@ if(document.URL.match("/approval")) {
 
       }
 
-      // confirmのみ予め設定されている入力値をクリア
-      if(document.URL.match("/confirm")) {
-        $('.nouhin_yoteibi_c').datepicker('setDate', null);
-    		$('.nouhin_yoteibi_c').val('');
-      }
+
+
       // Swal.fire({
       //   type:"success",
       //   title: "変更完了",

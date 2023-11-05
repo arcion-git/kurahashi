@@ -4453,3 +4453,8 @@ textarea.form-control{
 .alert ul{
   margin-bottom: 0px;
 }
+@media (min-width: 1025px){
+  .fa-bars{
+    display: none;
+  }
+}

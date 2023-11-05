@@ -2,14 +2,12 @@
 <br />
 {!! $text !!}
 <br />
-@if(isset($deal->id))【注文ID】<br />{!! $deal->id !!}<br /><br />@endif
 @if(isset($order_list)){!! $order_list !!}<br /><br />@endif
 @if(isset($user))
   @if($user->setonagi == 1)
     @if(isset($shipping_price_text)){!! $shipping_price_text !!}<br /><br />@endif
-    @if(isset($total_price)){!! $total_price !!}<br />@endif
-    @if(isset($zei_price_text)){!! $zei_price_text !!}<br />@endif
-    @if(isset($total_price_zei_number_text)){!! $total_price_zei_number_text !!}<br />@endif
+    @if(isset($total_price)){!! $total_price !!}<br /><br />@endif
+    @if(isset($total_price_zei_number_text)){!! $total_price_zei_number_text !!}<br /><br />@endif
     @if(isset($shipping_price_zei_number_text)){!! $shipping_price_zei_number_text !!}<br /><br />@endif
     @if(isset($pay)){!! $pay !!}<br /><br />@endif
     @if(isset($uketori_place)){!! $uketori_place !!}<br /><br />@endif
@@ -21,7 +19,11 @@
   @endif
 @endif
 @if(isset($nouhin_store)){!! $nouhin_store !!}<br /><br />@endif
-@if(isset($nouhin_yoteibi)){!! $nouhin_yoteibi !!}<br /><br />@endif
+@if(isset($user))
+  @if(!$user->setonagi == 1)
+    @if(isset($nouhin_yoteibi)){!! $nouhin_yoteibi !!}<br /><br />@endif
+  @endif
+@endif
 @if(isset($memo)){!! $memo !!}<br /><br />@endif
 引き続き、SETOnagiのご利用を心よりお待ちしております。<br />
 <br />

@@ -74,7 +74,7 @@
               <input type="hidden" name="change_all_store" value="{{$change_all_store}}" />
               <input type="hidden" name="set_tokuisaki_name" value="{{$set_tokuisaki_name}}" />
               <input type="hidden" name="change_all_nouhin_yoteibi" value="{{$change_all_nouhin_yoteibi}}" />
-              <button type="submit" name="" class="btn btn-info">戻って編集する</button>
+              <button id="back_confirm" type="submit" name="" class="btn btn-info">戻って編集する</button>
             </div>
           </div>
           <br style="clear:both;" />
@@ -186,6 +186,51 @@ function order_update() {
       }
   });
 }
+$(document).ready(function() {
+  $("#addsuscess_btn").click(function() {
+    var submitButton = $(this);
+    // 二重送信を防止するためにボタンを無効化
+    submitButton.addClass("disabled_btn");
+    $('#cart_form').submit();
+  });
+});
+
+// 戻るボタンでの警告
+$(document).ready(function() {
+  history.pushState(null, null, null);
+  $(window).on("popstate", function(){
+    history.pushState(null, null, null);
+    Swal.fire({
+      title: '前の画面に戻りますか？',
+      html : 'クレジットカード決済を選択されている場合、情報の再入力が必要となります。',
+      icon : 'warning',
+      showCancelButton: true,
+  	  cancelButtonText: '閉じる',
+      confirmButtonText: '前の画面に戻る'
+    }).then(function(result){
+      if (result.value) {
+        $('#back_confirm').trigger('click');
+      }
+    });
+  });
+});
+
+// リロード時に警告を表示
+// $(document).ready(function() {
+//   let isReloading = false;
+//   // ページがリロードされる前に警告を表示する
+//   window.addEventListener("beforeunload", function (e) {
+//     if (!isReloading) {
+//       e.preventDefault(); // ブラウザのデフォルト動作を無効化
+//       e.returnValue = "ページを離れますか？"; // メッセージを設定
+//     }
+//   });
+//   // ページがリロードされた場合にフラグを設定
+//   window.addEventListener("unload", function () {
+//     isReloading = true;
+//   });
+// });
+
 </script>
 
 

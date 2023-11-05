@@ -360,14 +360,17 @@ class AdminPageController extends Controller
     $user = User::where('id',$deal->user_id)->first();
     $user_id = $deal->user_id;
 
+    // dd($request);
+    $zeinuki = $request->all_total_val - $request->tax_val;
+
 
     if($user->setonagi == 1){
       // SETOnagiユーザーはクレジットカード、もしくは、ヤマトかけばらいの金額を変更する
-      // クロネコかけ払い決済取消
+      // クロネコかけ払い決済金額変更
       if($deal->uketori_siharai == 'クロネコかけ払い'){
         // ヤマトAPI連携確認
         $client = new Client();
-        $url = config('app.kakebarai_torikesi');
+        $url = config('app.kakebarai_pricechange');
         $kakebarai_traderCode = config('app.kakebarai_traderCode');
         $kakebarai_passWord = config('app.kakebarai_passWord');
         $envi = config('app.envi');
@@ -381,6 +384,15 @@ class AdminPageController extends Controller
             'traderCode' => $kakebarai_traderCode,
             'orderNo' => $deal_id.$envi,
             'buyerId' => $user_id,
+            'settlePrice' => $zeinuki,
+            'keigenShohiZei' => $request->tax_val,
+
+            'shohinMei1' => '商品合計',
+            'kessaiKingaku1' => $zeinuki,
+            'zeiritsuKbn1' => '2',
+
+            // 'shohiZei' => $request->tax_val,
+            'meisaiUmu' => '2',
             'passWord' => $kakebarai_passWord
           ]
         ];
@@ -390,49 +402,7 @@ class AdminPageController extends Controller
         // dd($result);
         // エラーの場合戻す
         if($result->returnCode == 1){
-          $delete_deal = Deal::where(['id'=> $deal_id])->first()->delete();
-          if($result->errorCode == 123456){
-            // 後で処理を作る
-            $message = '掛け払い金額オーバー';
-            $data=[
-              'message' => $message,
-            ];
-          }else{
-            $message = '決済金額変更エラー。金額の変更ができませんでした。';
-            $data=[
-              'message' => $message,
-            ];
-          }
-          return redirect()->route('admin.dealdetail',$id);
-        }
-        // かけ払い決済再登録
-        $client = new Client();
-        $url = config('app.kakebarai_touroku');
-        $now = Carbon::now()->format('Ymd');
-        $option = [
-          'headers' => [
-            'Accept' => '*/*',
-            'Content-Type' => 'application/x-www-form-urlencoded',
-            'charset' => 'UTF-8',
-          ],
-          'form_params' => [
-            'traderCode' => $kakebarai_traderCode,
-            // 日付
-            'orderDate' => $now,
-            'orderNo' => $deal_id.$envi,
-            // バイヤーid
-            'buyerId' => $user_id,
-            'settlePrice' => $request->all_total_val,
-            'shohiZei' => $request->tax_val,
-            'meisaiUmu' => '2',
-            'passWord' => $kakebarai_passWord
-          ]
-        ];
-        // dd($option);
-        $response = $client->request('POST', $url, $option);
-        $result = simplexml_load_string($response->getBody()->getContents());
-        // dd($result);
-        if($result->returnCode == 1){
+          // $delete_deal = Deal::where(['id'=> $deal_id])->first()->delete();
           if($result->errorCode == 123456){
             // 後で処理を作る
             $message = '掛け払い金額オーバー';
@@ -481,12 +451,12 @@ class AdminPageController extends Controller
         if($result->returnCode == 1){
           if($result->errorCode == 123456){
             // 後で処理を作る
-            $message = '掛け払い金額オーバー';
+            $message = 'クレジットカード決済金額変更エラー';
             $data=[
               'message' => $message,
             ];
           }else{
-            $message = '決済金額変更エラー。金額の変更ができませんでした。';
+            $message = 'クレジットカード決済金額変更エラー';
             $data=[
               'message' => $message,
             ];

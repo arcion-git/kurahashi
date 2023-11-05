@@ -167,17 +167,31 @@ class BothController extends Controller
         $holidays = null;
       }
 
-      if($shipping_setting->ukewatasi_kiboujikan_umu == 0 && $shipping_setting->ukewatasibi_nyuuryoku_umu == 0){
-        $carts = Cart::where(['user_id'=>$user_id , 'deal_id'=>null, 'addtype'=>'addsetonagi'])->get();
-        foreach ($carts as $cart) {
-          // オーダー内容を保存
-          $order = Order::where(['cart_id'=> $cart->id])->first();
-          $order->nouhin_yoteibi = $nouhin_yoteibi;
-          $order->save();
-        }
-      }
+      // 受け渡し日、受け渡し時間の入力を受け付けない場合、受け渡し日は処理上必ず必要なため次の営業日を代入
+      // if($shipping_setting->ukewatasi_kiboujikan_umu == 0 && $shipping_setting->ukewatasibi_nyuuryoku_umu == 0){
+      //   $carts = Cart::where(['user_id'=>$user_id , 'deal_id'=>null, 'addtype'=>'addsetonagi'])->get();
+      //   foreach ($carts as $cart) {
+      //     // オーダー内容を保存
+      //     $order = Order::where(['cart_id'=> $cart->id])->first();
+      //     $order->nouhin_yoteibi = $nouhin_yoteibi;
+      //     $order->save();
+      //     $order_nouhin_yoteibi = null;
+      //   }
+      // }else{
+      //   // 前の画面からの受け渡し日を戻すために呼び出し
+      //   $carts = Cart::where(['user_id'=>$user_id , 'deal_id'=>null, 'addtype'=>'addsetonagi'])->get();
+      //   foreach ($carts as $cart) {
+      //     // オーダー内容を保存
+      //     $order = Order::where(['cart_id'=> $cart->id])->first();
+      //     $order_nouhin_yoteibi = $order->nouhin_yoteibi;
+      //     break;
+      //   }
+      // }
 
-      return response()->json(['ukewatasibi_nyuuryoku_umu' => $ukewatasibi_nyuuryoku_umu, 'holidays' => $holidays , 'ukewatasi_kiboujikan_umu' => $ukewatasi_kiboujikan_umu , 'shipping_price' => $shipping_price]);
+      return response()->json([
+      'ukewatasibi_nyuuryoku_umu' => $ukewatasibi_nyuuryoku_umu, 'holidays' => $holidays , 'ukewatasi_kiboujikan_umu' => $ukewatasi_kiboujikan_umu ,
+      // 'order_nouhin_yoteibi' => $order_nouhin_yoteibi ,
+      'shipping_price' => $shipping_price]);
   }
 
 

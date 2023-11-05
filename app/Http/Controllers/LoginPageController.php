@@ -2421,6 +2421,7 @@ class LoginPageController extends Controller
     $user = Auth::guard('user')->user();
     $user_id = $user->id;
     $data = $request->all();
+    // dd($data);
 
 
 
@@ -2918,153 +2919,259 @@ class LoginPageController extends Controller
     // dd($now);
 
 
-    // if($setonagi){
-    //   if($request->uketori_siharai == 'クロネコかけ払い'){
-    //     // ヤマトAPI連携確認
-    //     $client = new Client();
+
+    // 以下新規挿入
+    // 合計金額
+    $total_price = [];
+    $carts = Cart::where(['deal_id'=> $deal->id])->get();
+    // カート商品の出力
+    foreach ($carts as $cart) {
+      $orders = Order::where(['cart_id'=> $cart->id])->get();
+      foreach ($orders as $order) {
+        // dd($store);
+        // 金額未定に対応
+        if($order->price == '未定' || $order->price == '-'){
+          $array = 0;
+        }else{
+          $array = $order->price * $order->quantity;
+        }
+        array_push($total_price, $array);
+      }
+    }
+
+    // 送料がかかる場合の表示設定
+    // 商品合計
+    // $total_price = array_sum($total_price);
+    // // 商品合計税込
+    // $total_price_zei = $total_price * (108 / 100);
+    // // 8%税額
+    // $zeinomi8 = $total_price_zei - $total_price;
+    // // 商品合計税込（カンマ表示）
+    // $total_price_zei_number = number_format($total_price_zei);
+    // // 8%対象消費合計額テキスト
+    // $total_price_zei_number_text = '軽減税率8％対象'.number_format($total_price).'円（税抜）<br />軽減税率8％消費税：'.number_format($zeinomi8).'円<br />軽減税率8％対象：'.$total_price_zei_number.'円（税込）';
     //
-    //     $url = config('app.kakebarai_touroku');
-    //     $kakebarai_traderCode = config('app.kakebarai_traderCode');
-    //     $kakebarai_passWord = config('app.kakebarai_passWord');
-    //     $envi = config('app.envi');
-    //
-    //     $option = [
-    //       'headers' => [
-    //         'Accept' => '*/*',
-    //         'Content-Type' => 'application/x-www-form-urlencoded',
-    //         'charset' => 'UTF-8',
-    //       ],
-    //       'form_params' => [
-    //         'traderCode' => $kakebarai_traderCode,
-    //         // 日付
-    //         'orderDate' => $now,
-    //         'orderNo' => $deal_id.$envi,
-    //         // バイヤーid
-    //         'buyerId' => $user_id,
-    //         'settlePrice' => $request->all_total_val,
-    //         'shohiZei' => $request->tax_val,
-    //         'meisaiUmu' => '2',
-    //         'passWord' => $kakebarai_passWord
-    //       ]
-    //     ];
-    //     // dd($option);
-    //     $response = $client->request('POST', $url, $option);
-    //     $result = simplexml_load_string($response->getBody()->getContents());
-    //     // dd($result);
-    //     if($result->returnCode == 1){
-    //       $delete_deal = Deal::where(['id'=> $deal_id])->first()->delete();
-    //       if($result->errorCode == 'G55'){
-    //         // 後で処理を作る
-    //
-    //         // ヤマトAPI連携利用金額確認
-    //         $client = new Client();
-    //         $url = config('app.kakebarai_riyoukingaku');
-    //         $option = [
-    //           'headers' => [
-    //             'Accept' => '*/*',
-    //             'Content-Type' => 'application/x-www-form-urlencoded',
-    //             'charset' => 'UTF-8',
-    //           ],
-    //           'form_params' => [
-    //             'traderCode' => $kakebarai_traderCode,
-    //             // バイヤーid
-    //             'buyerId' => $user_id,
-    //             'buyerTelNo' => '',
-    //             'passWord' => $kakebarai_passWord
-    //           ]
-    //         ];
-    //         // dd($option);
-    //         $response = $client->request('POST', $url, $option);
-    //         $result = simplexml_load_string($response->getBody()->getContents());
-    //         // dd($result);
-    //         $message = '掛け払い金額オーバー';
-    //         if($result->returnCode == 0){
-    //           $usePayment = $result->usePayment;
-    //           $useOverLimit = $result->useOverLimit;
-    //         }
-    //         // %2Cになっているのをカンマを直す
-    //         $limitprice = $useOverLimit - $usePayment;
-    //         // $limitprice = number_format($limitprice);
-    //         // $limitprice = mb_convert_encoding($limitprice,"utf-8","sjis");
-    //         // dd($limitprice);
-    //         $message = 'かけ払い利用限度額オーバーです。<br />'.$limitprice.'円以内での購入をお願いします。';
-    //         $data=[
-    //           'addtype' => $addtype,
-    //           'message' => $message,
-    //         ];
-    //       }else{
-    //         $message = '決済エラーのため別の決済方法をお試しください。';
-    //         $data=[
-    //           'addtype' => $addtype,
-    //           'message' => $message,
-    //         ];
-    //       }
-    //       return redirect()->route('confirm',$data);
-    //     }
-    //   }
-    //
-    //   if($request->uketori_siharai == 'クレジットカード払い'){
-    //     // dd($request->token_api);
-    //     // EPトークン取得
-    //     $client = new Client();
-    //     // $url = 'https://api.kuronekoyamato.co.jp/api/credit';
-    //
-    //     $url = config('app.collect_touroku');
-    //     $collect_tradercode = config('app.collect_tradercode');
-    //
-    //     $option = [
-    //       'headers' => [
-    //         'Accept' => '*/*',
-    //         'Content-Type' => 'application/x-www-form-urlencoded',
-    //         'charset' => 'UTF-8',
-    //       ],
-    //       'form_params' => [
-    //         'function_div' => 'A08',
-    //         'trader_code' => $collect_tradercode,
-    //         // パソコンかスマホか
-    //         'device_div' => 1,
-    //         'order_no' => $deal_id,
-    //         // 決済合計金額
-    //         'settle_price' => $request->all_total_val,
-    //         'buyer_name_kanji' => $user->name,
-    //         'buyer_tel' => $user->tel,
-    //         'buyer_email' => $user->email,
-    //         'pay_way' => 1,
-    //         'token' => $request->token_api,
-    //
-    //         // 'device_info' => 1,
-    //         // 'option_service_div' => 00,
-    //         // 'check_sum' => '',
-    //         // 'cardNo' => '',
-    //         // 'cardOwner' => '',
-    //         // 'cardExp' => '',
-    //         // 'securityCode' => '',
-    //       ]
-    //     ];
-    //     // dd($option);
-    //     $response = $client->request('POST', $url, $option);
-    //     $result = simplexml_load_string($response->getBody()->getContents());
-    //     // dd($result);
-    //     if($result->returnCode == 1){
-    //       $delete_deal = Deal::where(['id'=> $deal_id])->first()->delete();
-    //       if($result->errorCode == 123456){
-    //         // 後で処理を作る
-    //         $message = '決済金額オーバー';
-    //         $data=[
-    //           'addtype' => $addtype,
-    //           'message' => $message,
-    //         ];
-    //       }else{
-    //         $message = '決済エラーのため別の決済方法をお試しください。';
-    //         $data=[
-    //           'addtype' => $addtype,
-    //           'message' => $message,
-    //         ];
-    //       }
-    //       return redirect()->route('confirm',$data);
-    //     }
-    //   }
+    // if(isset($shipping_price)){
+    //   // 送料税込
+    //   $shipping_price_zei = $shipping_price * (110 / 100);
+    //   // 10%税のみ
+    //   $zeinomi10 = $shipping_price_zei - $shipping_price;
+    //   // 送料（カンマ表示）
+    //   $shipping_price_number = number_format($shipping_price);
+    //   // 送料税込（カンマ表示）
+    //   $shipping_price_zei_number = number_format($shipping_price_zei);
+    //   // 10%対象消費合計額（カンマ表示）
+    //   $shipping_price_zei_number_text = '税率10%対象：'.$shipping_price_number.'円（税抜）<br />税率10％消費税：'.number_format($zeinomi10).'円<br />税率10％対象：'.$shipping_price_zei_number.'円（税込）';
+    //   // 税込合計金額
+    //   $all_total_price = $shipping_price_zei + $total_price_zei;
+    //   // 税金の計算
+    //   $zei_price = $all_total_price - $total_price - $shipping_price;
+    //   // 合計金額表示
+    //   $total_price = '【お支払い金額】<br />'.number_format($all_total_price).'円（税込）';
+    //   // 送料のみの金額表示
+    //   $shipping_price_text = '【送料】<br />'.$shipping_price_number.'円';
+    //   // 税金のみの金額表示
+    //   $zei_price_text = '消費税：'.number_format($zei_price).'円';
+    // }else{
+    //   $shipping_price_zei_number_text = '10%対象：0円（税込）';
+    //   $shipping_price_text = '【送料】<br />0円';
+    //   // 税金の計算
+    //   $zei_price = $total_price_zei - $total_price;
+    //   // 金額表示部分
+    //   $total_price = '【お支払い金額】<br />'.$total_price_zei_number.'円（税込）';
+    //   // 税金のみの金額表示
+    //   $zei_price_text = '消費税：'.number_format($zei_price).'円';
     // }
+    // // 合計金額表示をなしに設定
+    // if(!($user->setonagi == 1)){
+    //   $total_price = null;
+    // }
+    // ここまで
+
+    $zeinuki = $request->all_total_val - $request->tax_val;
+    // dd($zeinuki);
+
+
+    if($setonagi){
+      if($request->uketori_siharai == 'クロネコかけ払い'){
+        // ヤマトAPI連携確認
+        $client = new Client();
+
+        $url = config('app.kakebarai_touroku');
+        $kakebarai_traderCode = config('app.kakebarai_traderCode');
+        $kakebarai_passWord = config('app.kakebarai_passWord');
+        $envi = config('app.envi');
+
+        $option = [
+          'headers' => [
+            'Accept' => '*/*',
+            'Content-Type' => 'application/x-www-form-urlencoded',
+            'charset' => 'UTF-8',
+          ],
+          'form_params' => [
+            'traderCode' => $kakebarai_traderCode,
+            // 日付
+            'orderDate' => $now,
+            'orderNo' => $deal_id.$envi,
+            // バイヤーid
+            'buyerId' => $user_id,
+            'settlePrice' => $zeinuki,
+
+            'shohinMei1' => '商品合計',
+            // 'shohinCode1' => '',
+            // 'suryo1' => '',
+            // 'tani1' => '',
+            // 'tanka1' => '',
+
+            'kessaiKingaku1' => $zeinuki,
+            // 8%対象
+            'zeiritsuKbn1' => '2',
+
+            // 'henpinDate1' => '',
+
+            // 'shohinMei2' => '送料',
+
+            // 'shohinCode2' => '',
+            // 'suryo2' => '',
+            // 'tani2' => '',
+            // 'tanka2' => '',
+
+            // 'kessaiKingaku2' => '620',
+            // 'zeiritsuKbn2' => '1',
+
+            // 'henpinDate2' => '',
+
+            // 下記の内容を変更する
+            // 'shohiZei' => $request->tax_val,
+
+            // 以下新規追加項目
+            // 'tsujoShohiZei' => '',
+            'keigenShohiZei' => $request->tax_val,
+
+            'meisaiUmu' => '2',
+            'passWord' => $kakebarai_passWord
+          ]
+        ];
+        // dd($option);
+        $response = $client->request('POST', $url, $option);
+        $result = simplexml_load_string($response->getBody()->getContents());
+        // dd($result);
+        if($result->returnCode == 1){
+          $delete_deal = Deal::where(['id'=> $deal_id])->first()->delete();
+          if($result->errorCode == 'G55'){
+            // 後で処理を作る
+
+            // ヤマトAPI連携利用金額確認
+            $client = new Client();
+            $url = config('app.kakebarai_riyoukingaku');
+            $option = [
+              'headers' => [
+                'Accept' => '*/*',
+                'Content-Type' => 'application/x-www-form-urlencoded',
+                'charset' => 'UTF-8',
+              ],
+              'form_params' => [
+                'traderCode' => $kakebarai_traderCode,
+                // バイヤーid
+                'buyerId' => $user_id,
+                'buyerTelNo' => '',
+                'passWord' => $kakebarai_passWord
+              ]
+            ];
+            // dd($option);
+            $response = $client->request('POST', $url, $option);
+            $result = simplexml_load_string($response->getBody()->getContents());
+            // dd($result);
+            $message = '掛け払い金額オーバー';
+            if($result->returnCode == 0){
+              $usePayment = $result->usePayment;
+              $useOverLimit = $result->useOverLimit;
+            }
+            // %2Cになっているのをカンマを直す
+            $limitprice = $useOverLimit - $usePayment;
+            // $limitprice = number_format($limitprice);
+            // $limitprice = mb_convert_encoding($limitprice,"utf-8","sjis");
+            // dd($limitprice);
+            $message = 'かけ払い利用限度額オーバーです。<br />'.$limitprice.'円以内での購入をお願いします。';
+            $data=[
+              'addtype' => $addtype,
+              'message' => $message,
+            ];
+          }else{
+            $message = '決済エラーのため別の決済方法をお試しください。';
+            $data=[
+              'addtype' => $addtype,
+              'message' => $message,
+            ];
+          }
+          return redirect()->route('confirm',$data);
+        }
+      }
+
+      if($request->uketori_siharai == 'クレジットカード払い'){
+        // dd($request->token_api);
+        // EPトークン取得
+        $client = new Client();
+        // $url = 'https://api.kuronekoyamato.co.jp/api/credit';
+
+        $url = config('app.collect_touroku');
+        $collect_tradercode = config('app.collect_tradercode');
+
+        $option = [
+          'headers' => [
+            'Accept' => '*/*',
+            'Content-Type' => 'application/x-www-form-urlencoded',
+            'charset' => 'UTF-8',
+          ],
+          'form_params' => [
+            'function_div' => 'A08',
+            'trader_code' => $collect_tradercode,
+            // パソコンかスマホか
+            'device_div' => 1,
+            'order_no' => $deal_id,
+            // 決済合計金額
+            'settle_price' => $request->all_total_val,
+            'buyer_name_kanji' => $user->name,
+            'buyer_tel' => $user->tel,
+            'buyer_email' => $user->email,
+            'pay_way' => 1,
+            'token' => $request->token_api,
+
+            // 'device_info' => 1,
+            // 'option_service_div' => 00,
+            // 'check_sum' => '',
+            // 'cardNo' => '',
+            // 'cardOwner' => '',
+            // 'cardExp' => '',
+            // 'securityCode' => '',
+          ]
+        ];
+        // dd($option);
+        $response = $client->request('POST', $url, $option);
+        $result = simplexml_load_string($response->getBody()->getContents());
+        // dd($result);
+        if($result->returnCode == 1){
+          $delete_deal = Deal::where(['id'=> $deal_id])->first()->delete();
+          if($result->errorCode == 123456){
+            // 後で処理を作る
+            $message = '決済金額オーバー';
+            $data=[
+              'addtype' => $addtype,
+              'message' => $message,
+            ];
+          }else{
+            $message = '決済エラーのため別の決済方法をお試しください。';
+            $data=[
+              'addtype' => $addtype,
+              'message' => $message,
+            ];
+          }
+          return redirect()->route('confirm',$data);
+        }
+      }
+    }
+
+
 
     if($request->has('addsuscess_btn')){
     // 在庫がある場合商品の在庫数を減らす
@@ -3184,6 +3291,7 @@ class LoginPageController extends Controller
       $text = 'SETOnagiオーダーブックをご利用くださいまして誠にありがとうございます。<br />
       下記の通りご注文をお受けいたしましたのでご確認をお願いいたします。<br />
       <br />
+      【注文ID】<br />'.$deal->id.'<br /><br />
       【ご注文内容】';
       if($user->setonagi == 1){
         // 支払方法
@@ -3226,25 +3334,28 @@ class LoginPageController extends Controller
       }
 
       // 送料がかかる場合の表示設定
-
       // 商品合計
       $total_price = array_sum($total_price);
       // 商品合計税込
       $total_price_zei = $total_price * (108 / 100);
+      // 8%税額
+      $zeinomi8 = $total_price_zei - $total_price;
       // 商品合計税込（カンマ表示）
       $total_price_zei_number = number_format($total_price_zei);
       // 8%対象消費合計額テキスト
-      $total_price_zei_number_text = '8%対象：'.$total_price_zei_number.'円（税込）';
+      $total_price_zei_number_text = '軽減税率8％対象：'.number_format($total_price).'円（税抜）<br />軽減税率8％消費税：'.number_format($zeinomi8).'円<br />軽減税率8％対象：'.$total_price_zei_number.'円（税込）';
 
       if(isset($shipping_price)){
         // 送料税込
         $shipping_price_zei = $shipping_price * (110 / 100);
+        // 10%税のみ
+        $zeinomi10 = $shipping_price_zei - $shipping_price;
         // 送料（カンマ表示）
         $shipping_price_number = number_format($shipping_price);
         // 送料税込（カンマ表示）
         $shipping_price_zei_number = number_format($shipping_price_zei);
         // 10%対象消費合計額（カンマ表示）
-        $shipping_price_zei_number_text = '10%対象：'.$shipping_price_zei_number.'円（税込）';
+        $shipping_price_zei_number_text = '税率10%対象：'.$shipping_price_number.'円（税抜）<br />税率10％消費税：'.number_format($zeinomi10).'円<br />税率10％対象：'.$shipping_price_zei_number.'円（税込）';
         // 税込合計金額
         $all_total_price = $shipping_price_zei + $total_price_zei;
         // 税金の計算
@@ -3256,8 +3367,8 @@ class LoginPageController extends Controller
         // 税金のみの金額表示
         $zei_price_text = '消費税：'.number_format($zei_price).'円';
       }else{
-        $shipping_price_zei_number_text = '10%対象：0円（税込）';
-        $shipping_price_text = '【送料】<br />0円';
+        $shipping_price_zei_number_text = null;
+        $shipping_price_text = null;
         // 税金の計算
         $zei_price = $total_price_zei - $total_price;
         // 金額表示部分
@@ -3634,85 +3745,83 @@ class LoginPageController extends Controller
 
 
     // セトナギユーザーの場合
-    // if($user->setonagi == 1){
-    //
-    //   // ヤマトAPIキャンセル
-    //   if($deal->uketori_siharai == 'クロネコかけ払い'){
-    //     $client = new Client();
-    //     $url = config('app.kakebarai_cancel');
-    //     $kakebarai_traderCode = config('app.kakebarai_traderCode');
-    //     $kakebarai_passWord = config('app.kakebarai_passWord');
-    //     $envi = config('app.envi');
-    //     $option = [
-    //       'headers' => [
-    //         'Accept' => '*/*',
-    //         'Content-Type' => 'application/x-www-form-urlencoded',
-    //         'charset' => 'UTF-8',
-    //       ],
-    //       'form_params' => [
-    //         'traderCode' => $kakebarai_traderCode,
-    //         // 取引id
-    //         'orderNo' => $deal_id.$envi,
-    //         // バイヤーid
-    //         'buyerId' => $user_id,
-    //         'passWord' => $kakebarai_passWord
-    //       ]
-    //     ];
-    //     // dd($option);
-    //     $response = $client->request('POST', $url, $option);
-    //     $result = simplexml_load_string($response->getBody()->getContents());
-    //     // dd($result);
-    //     if($result->returnCode == 1){
-    //         $id= $deal_id;
-    //         $message = 'クロネコかけ払いキャンセルエラーです。';
-    //         $data=[
-    //           'id' => $deal_id,
-    //           'cancel_error' => $message,
-    //         ];
-    //         return redirect()->route('dealdetail',$data);
-    //       }
-    //     }
-    //
-    //
-    //
-    //
-    //   // クレジットカードAPIキャンセル
-    //   if($deal->uketori_siharai == 'クレジットカード払い'){
-    //     // dd($request->token_api);
-    //     // EPトークン取得
-    //     $client = new Client();
-    //     // $url = 'https://api.kuronekoyamato.co.jp/api/credit';
-    //     $url = config('app.collect_cancel');
-    //     $collect_tradercode = config('app.collect_tradercode');
-    //     $option = [
-    //       'headers' => [
-    //         'Accept' => '*/*',
-    //         'Content-Type' => 'application/x-www-form-urlencoded',
-    //         'charset' => 'UTF-8',
-    //       ],
-    //       'form_params' => [
-    //         'function_div' => 'A06',
-    //         'trader_code' => $collect_tradercode,
-    //         'order_no' => $deal_id,
-    //       ]
-    //     ];
-    //     // dd($option);
-    //     $response = $client->request('POST', $url, $option);
-    //     $result = simplexml_load_string($response->getBody()->getContents());
-    //             // dd($result);
-    //     if($result->returnCode == 1){
-    //       $id= $deal_id;
-    //       $message = 'クレジットカード払いキャンセルエラーです。';
-    //       $data=[
-    //         'id' => $deal_id,
-    //         'cancel_error' => $message,
-    //       ];
-    //       return redirect()->route('dealdetail',$data);
-    //     }
-    //   }
-    // }
+    if($user->setonagi == 1){
+
+      // ヤマトAPIキャンセル
+      if($deal->uketori_siharai == 'クロネコかけ払い'){
+        $client = new Client();
+        $url = config('app.kakebarai_cancel');
+        $kakebarai_traderCode = config('app.kakebarai_traderCode');
+        $kakebarai_passWord = config('app.kakebarai_passWord');
+        $envi = config('app.envi');
+        $option = [
+          'headers' => [
+            'Accept' => '*/*',
+            'Content-Type' => 'application/x-www-form-urlencoded',
+            'charset' => 'UTF-8',
+          ],
+          'form_params' => [
+            'traderCode' => $kakebarai_traderCode,
+            // 取引id
+            'orderNo' => $deal_id.$envi,
+            // バイヤーid
+            'buyerId' => $user_id,
+            'passWord' => $kakebarai_passWord
+          ]
+        ];
+        // dd($option);
+        $response = $client->request('POST', $url, $option);
+        $result = simplexml_load_string($response->getBody()->getContents());
+        // dd($result);
+        if($result->returnCode == 1){
+            $id= $deal_id;
+            $message = 'クロネコかけ払いキャンセルエラーです。';
+            $data=[
+              'id' => $deal_id,
+              'cancel_error' => $message,
+            ];
+            return redirect()->route('dealdetail',$data);
+          }
+        }
 
 
+
+
+      // クレジットカードAPIキャンセル
+      if($deal->uketori_siharai == 'クレジットカード払い'){
+        // dd($request->token_api);
+        // EPトークン取得
+        $client = new Client();
+        // $url = 'https://api.kuronekoyamato.co.jp/api/credit';
+        $url = config('app.collect_cancel');
+        $collect_tradercode = config('app.collect_tradercode');
+        $option = [
+          'headers' => [
+            'Accept' => '*/*',
+            'Content-Type' => 'application/x-www-form-urlencoded',
+            'charset' => 'UTF-8',
+          ],
+          'form_params' => [
+            'function_div' => 'A06',
+            'trader_code' => $collect_tradercode,
+            'order_no' => $deal_id,
+          ]
+        ];
+        // dd($option);
+        $response = $client->request('POST', $url, $option);
+        $result = simplexml_load_string($response->getBody()->getContents());
+                // dd($result);
+        if($result->returnCode == 1){
+          $id= $deal_id;
+          $message = 'クレジットカード払いキャンセルエラーです。';
+          $data=[
+            'id' => $deal_id,
+            'cancel_error' => $message,
+          ];
+          return redirect()->route('dealdetail',$data);
+        }
+      }
+    }
 
 
     $deal=Deal::firstOrNew(['id'=> $deal_id]);
