@@ -200,6 +200,7 @@
 																	 @if($val)
 																		<tr id="{{$val->id}}" class="order_item">
 																			<td class="head-price text-center">
+																				<span class="sp">¥</span>
 																				<!-- BtoB金額表示 -->
 																				<?php
 																				if ($val->price == '未定') {
@@ -373,7 +374,7 @@
 	<div class="form-group col-12">
 		<div class="row">
 			<div class="col-sm-12 col-md-2">
-					<label for="company">ご注文者名</label>
+					<label for="company"><strong>ご注文者名</strong></label>
 			</div>
 			<div class="col-sm-12 col-md-5">
 					<label for="">{{$user->name}}</label>
@@ -381,7 +382,7 @@
 		</div>
 		<div class="row">
 			<div class="col-sm-12 col-md-2">
-					<label for="company">ご注文者住所</label>
+					<label for="company"><strong>ご注文者住所</strong></label>
 			</div>
 			<div class="col-sm-12 col-md-5">
 					<label for="">{{$setonagi->address02}}{{$setonagi->address03}}{{$setonagi->address04}}<br />
@@ -392,7 +393,7 @@
 		@if(isset($setonagi->shipping_code))
 		<div class="row">
 			<div class="col-sm-12 col-md-2">
-					<label for="company">配送方法</label>
+					<label for="company"><strong>配送方法</strong></label>
 			</div>
 			<div class="col-sm-12 col-md-5">
 				<select id="uketori_place" value="@if(isset($deal)){{$deal->uketori_place}}@else@if(isset($setonagi->uketori_place)){{$setonagi->uketori_place}}@endif@endif" name="uketori_place" class="c_uketori_place form-control">
@@ -417,7 +418,7 @@
 
 		<div id="c_shipping_date" class="row">
 			<div class="col-sm-12 col-md-2">
-					<label for="company">受け渡し希望日</label>
+					<label for="company"><strong>受け渡し希望日</strong></label>
 			</div>
 			<div class="col-sm-12 col-md-5">
 				<input type="text" id="change_all_nouhin_yoteibi" name="change_all_nouhin_yoteibi" class="nouhin_yoteibi_c form-control daterange-cus datepicker" value="@if(isset($deal)){{$set_order->nouhin_yoteibi}}@else{{$nouhin_yoteibi}}@endif" autocomplete="off">
@@ -446,7 +447,7 @@
 		</div>
 		<div id="c_shipping_time" class="row">
 			<div class="col-sm-12 col-md-2">
-					<label for="company">受け渡し希望時間</label>
+					<label for="company"><strong>受け渡し希望時間</strong></label>
 			</div>
 			<div class="col-sm-12 col-md-5">
 				<select id="uketori_time" value="" name="uketori_time" class="uketori_time form-control">
@@ -456,7 +457,6 @@
 						@if(isset($setonagi->uketori_time))
 						<option value="{{$setonagi->uketori_time}}" selected>{{$setonagi->uketori_time}}</option>
 						@else
-						<!-- <option value="" selected>選択してください</option> -->
 						@endif
 					@endif
 						<option value="午前中">午前中</option>
@@ -470,7 +470,7 @@
 		@else
 		<div class="row">
 			<div class="col-sm-12 col-md-2">
-					<label for="company">受け渡し場所</label>
+					<label for="company"><strong>受け渡し場所</strong></label>
 			</div>
 			<div class="col-sm-12 col-md-5">
 				<select id="uketori_place" value="" name="uketori_place" class="uketori_place form-control" required>
@@ -491,7 +491,7 @@
 		</div>
 		<div class="row">
 			<div class="col-sm-12 col-md-2">
-					<label for="company">受け渡し希望時間</label>
+					<label for="company"><strong>受け渡し希望時間</strong></label>
 			</div>
 			<div class="col-sm-12 col-md-5">
 				<select id="uketori_time" value="" name="uketori_time" class="uketori_time form-control" required>
@@ -516,7 +516,7 @@
 
 		<div class="row">
 			<div class="col-sm-12 col-md-2">
-					<label for="company">お支払い方法</label>
+					<label for="company"><strong>お支払い方法</strong></label>
 			</div>
 			<div class="col-sm-12 col-md-10">
 
@@ -594,40 +594,65 @@
 		</div>
 		<input id="sano_nissuu" type="hidden" value="{{$sano_nissuu}}" />
 
-		<!-- JavaScript ライブラリ読み込み body タグ内に記述する必要があります。-->
+		<!-- JavaScript ライブラリ読み込み -->
 		<script type="text/javascript" class="webcollect-embedded-token" src="@if(isset($collect_token)){{$collect_token}}@endif"></script>
 		<script type="text/javascript">
+
 		/*
 		* 送信ボタン押下時に実行する JavaScript 関数
 		*/
-
-
 		function executePay() {
 		$("#overlayajax").fadeIn(300);
 
+		// function async_digestMessage(message) {
+		// 	return new Promise(function(resolve){
+		// 	var msgUint8 = new TextEncoder("utf-8").encode(message);
+		// 	crypto.subtle.digest('SHA-256', msgUint8).then(
+		// 		function(hashBuffer){
+		// 				var hashArray = Array.from(new Uint8Array(hashBuffer));
+		// 				var hashHex = hashArray.map(function(b){return b.toString(16).padStart(2, '0')}).join('');
+		// 				return resolve(hashHex);
+		// 		});
+		// 	})
+		// }
+		// if(window.Promise && window.crypto){
+		// 	async_digestMessage(text).then(
+		// 			function(shatxt){
+		// 					getHashText(shatxt);
+		// 			}
+		// 	).catch(function(e){
+		// 			console.log('エラー：', e.message);
+		// 	})
+		// }else{
+		// 	console.log('Promiseかcryptoに非対応');
+		// }
+
 		var text = '@if(isset($collect_password)){{$collect_password}}@endif';
-		function async_digestMessage(message) {
-			return new Promise(function(resolve){
-			var msgUint8 = new TextEncoder("utf-8").encode(message);
-			crypto.subtle.digest('SHA-256', msgUint8).then(
-					function(hashBuffer){
-							var hashArray = Array.from(new Uint8Array(hashBuffer));
-							var hashHex = hashArray.map(function(b){return b.toString(16).padStart(2, '0')}).join('');
-							return resolve(hashHex);
-					});
-			})
+
+		// ハッシュ化された値を受け入れる非同期関数
+		function async_digestMessage(hashValue) {
+		  return new Promise(function (resolve) {
+		    // サーバーからのハッシュ値を直接解決して返す
+		    return resolve(hashValue);
+		  });
 		}
-		if(window.Promise && window.crypto){
-			async_digestMessage(text).then(
-					function(shatxt){
-							getHashText(shatxt);
-					}
-			).catch(function(e){
-					console.log('エラー：', e.message);
-			})
-		}else{
-			console.log('Promiseかcryptoに非対応');
+
+		// ブラウザがPromiseをサポートしているか確認
+		if (window.Promise) {
+		  // サーバーからのハッシュ値を非同期関数に渡し、結果を別の関数に渡す
+		  async_digestMessage(text).then(
+		    function (shatxt) {
+		      getHashText(shatxt);
+		    }
+		  ).catch(function (e) {
+		    // エラーが発生した場合、エラーメッセージをログに表示
+		    console.log('エラー：', e.message);
+		  })
+		} else {
+		  // サポートされていない場合、エラーメッセージをログに表示
+		  console.log('Promiseに非対応');
 		}
+
 		function getHashText(text) {
 		console.log(text);
 
@@ -659,11 +684,7 @@
 		$(function(){
 		    $("#approval_btn").click();
 		});
-		// alert(token_api);
-		// document.location.href = "https://www.ipentec.com/"+token;
 
-		// form をサブミットする
-		// formElement.submit(params);
 		};
 
 		// コールバック関数(「異常」の場合)
@@ -832,12 +853,6 @@ $('.nini_nouhin_yoteibi').datepicker({
 </script>
 @endif
 
-<!-- <div id="item_total" class="total_price"></div>
-<div id="tax" class="total_price">税：</div>
-<div id="all_total" class="total_price">税込金額：</div> -->
-
-
-
 
 <script>
 $(document).ready(function () {
@@ -951,51 +966,6 @@ $(document).ready(function () {
   </div>
 	@endif
 </div>
-
-
-
-
-
-<!-- <tr>
-		<td class="teika">
-			<input name="nini_item_name[]" class="text-center form-control" value=" ハマグリ 4kg 天然"></td>
-		<td class="text-center">
-			<select name="nini_tantou[]" class="text-center form-control" value="1">
-				<option value="鮮魚">鮮魚</option>
-				<option value="青物">青物</option>
-				<option value="太物">太物</option>
-				<option value="近海">近海</option>
-				<option value="特殊">特殊</option>
-				<option value="養魚">養魚</option>
-				<option value="水産">水産</option>
-			</select>
-		</td>
-
-		<td class="text-center">
-			<select name="nini_store[]" class="text-center form-control" value="1">
-				<option value="サンプル1">春日店</option>
-				<option value="サンプル2">緑町店</option>
-				<option value="サンプル3">蔵王店</option>
-			</select>
-		</td>
-		<td class="text-center"><input name="nini_quantity[]" class="quantity text-center form-control" value="1"></td>
-		<td class="text-center">
-			<div class="input-group">
-				<div class="input-group-prepend">
-					<div class="input-group-text">
-						<i class="fas fa-calendar"></i>
-					</div>
-				</div>
-				<input  type="text" name="nini_nouhinbi[]" class="nouhinbi text-center form-control daterange-cus" value="">
-				<inputclass="form-control daterange-cus">
-			</div>
-		</td>
-		<td class="text-center">
-			<button id="" class="removeid_ removecart btn btn-info">削除</button>
-			<button id="" class="btn btn-success" style="margin-top:20px;">配送先を追加</button>
-		<input type="hidden" value="" />
-		</td>
-</tr> -->
 
 
 
@@ -1155,6 +1125,7 @@ $(document).ready(function() {
 			// 		// .c_uketori_place要素に対してchangeイベントを手動でトリガー
 			// 		$(".c_uketori_place").trigger("change");
 			// }
+			$("#overlayajax").fadeOut();
 	    var methodId = $(".c_uketori_place").val();
 	    var user_id = $(".user_id").first().attr("id");
 	    var sano_nissuu = $("#sano_nissuu").val();
@@ -1304,7 +1275,7 @@ $(document).ready(function() {
 	      // Swal.fire({
 	      //   type:"success",
 	      //   title: "変更完了",
-	      //   position: 'bottom-end',
+	      //   position: 'center-center',
 	      //   toast: true,
 	      //   icon: 'success',
 	      //   showConfirmButton: false,
@@ -1323,6 +1294,7 @@ $(document).ready(function() {
 });
 // 配送方法が選択されない状態だと、カード情報の入力エリアを非表示にするconfirmのみ起動
 $(document).ready(function() {
+
 	if (window.location.pathname.indexOf('confirm') !== -1) {
 		// 日付の手入力を禁止
 		$(".nouhin_yoteibi_c").keydown(function(e) {

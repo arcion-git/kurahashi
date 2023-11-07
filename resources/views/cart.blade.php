@@ -1,17 +1,17 @@
 <div class="table-responsive">
-	<table class="table table-striped">
+	<table class="table table-striped cart_ajax">
 		<tbody>
-			<tr>
-				<th>商品名</th>
-				<th>在庫数</th>
-				<th>単位</th>
-				<th>操作</th>
+			<tr class="cart_header pc">
+				<th class="cart_item_name">商品名</th>
+				<th class="cart_zaikosuu">在庫数</th>
+				<th class="cart_tani">単位</th>
+				<th class="cart_sousa">操作</th>
 			</tr>
       @foreach($carts as $cart)
 			<tr>
-				<td>{{$cart->item->item_name}}</td>
-				<td>{{$cart->item->zaikosuu}}</td>
-				<td>
+				<td class="cart_item_name">{{$cart->item->item_name}}</td>
+				<td class="cart_zaikosuu pc">{{$cart->item->zaikosuu}}</td>
+				<td class="cart_tani pc">
 					@if ($cart->item->tani == 1)
 					ｹｰｽ
 					@elseif ($cart->item->tani == 2)
@@ -22,7 +22,7 @@
 					Kg
 					@endif
 				</td>
-				<td><button id="{{$cart->id}}" class="removecart removeid_{{$cart->item->id}} btn btn-info">削除</button></td>
+				<td class="cart_sousa"><button id="{{$cart->id}}" class="removecart removeid_{{$cart->item->id}} btn btn-info">削除</button></td>
 			</tr>
       @endforeach
 		</tbody>

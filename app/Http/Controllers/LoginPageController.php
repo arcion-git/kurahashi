@@ -39,6 +39,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Hash;
 
 // BtoC向け
 use App\ShippingCalender;
@@ -2091,8 +2092,13 @@ class LoginPageController extends Controller
     $collect = config('app.collect_password');
     $collect_tradercode = config('app.collect_tradercode');
     $collect_password = config('app.collect_password').'2';
+    $collect_password = hash('sha256', utf8_encode($collect_password));
     $collect_touroku = config('app.collect_touroku');
     $collect_token = config('app.collect_token');
+
+
+    // dd($hashedPassword);
+
 
     $message=['message' => $message];
 
@@ -2424,6 +2430,20 @@ class LoginPageController extends Controller
     $data = $request->all();
     // dd($data);
 
+    // セトナギユーザーのバリデーション
+    if($user->setonagi == 1){
+      $validator = $request->validate([
+        'addtype' => ['required', 'in:addsetonagi,addbuyerrecommend,addspecialprice'],
+        'uketori_siharai' => ['required', 'in:クレジットカード払い,クロネコかけ払い'],
+        'uketori_time' => ['in:午前中,12時〜14時,14時〜16時,16時〜17時'],
+      ]);
+    }else{
+      $validator = $request->validate([
+        'addtype' => ['required', 'in:addsetonagi,addbuyerrecommend,addspecialprice'],
+      ]);
+    }
+
+    // $uketori_place = $request->uketori_place;
 
 
     $addtype = $request->addtype;
@@ -2460,6 +2480,9 @@ class LoginPageController extends Controller
       }
     }
     // dd($shipping_price);
+
+
+
 
 
     // 次の営業日を取得
@@ -2542,6 +2565,11 @@ class LoginPageController extends Controller
     foreach($cart_ids as $cart_id) {
       // カート内の該当アイテムを検索
       $cart = Cart::where(['id'=> $cart_id])->first();
+
+      // アイテムが取得できない場合
+      if(!isset($cart)){
+        return redirect()->route('bulk',$data);
+      }
 
       // アイテム情報を取得
       $item = item::where(['id'=> $cart->item_id])->first();
@@ -2845,6 +2873,10 @@ class LoginPageController extends Controller
               // 'id' => $deal_id,
               // 'order_id' => $order->id,
               // 'nouhin_yoteibi' => $nouhin_yoteibi,
+              'addtype' => $addtype,
+              'change_all_nouhin_yoteibi' => $order->nouhin_yoteibi,
+              'change_all_store' => $order->store_name,
+              'set_tokuisaki_name' => $order->tokuisaki_name,
               'message' => '締め時間の17時を過ぎたため全ての商品の引き取り予定日が'.$nouhin_kanoubi.'に変更されました。よろしければこのまま注文に進んでください。',
             ];
             return redirect()->route('confirm',$data);
@@ -2854,6 +2886,10 @@ class LoginPageController extends Controller
             // 'id' => $deal_id,
             // 'order_id' => $order->id,
             // 'nouhin_yoteibi' => $nouhin_yoteibi,
+            'addtype' => $addtype,
+            'change_all_nouhin_yoteibi' => $order->nouhin_yoteibi,
+            'change_all_store' => $order->store_name,
+            'set_tokuisaki_name' => $order->tokuisaki_name,
             'message' => '納品予定日'.$nouhin_yoteibi.'は指定できません。他の日付を設定してください。',
           ];
           return redirect()->route('confirm',$data);
@@ -2880,6 +2916,10 @@ class LoginPageController extends Controller
             // 'id' => $deal_id,
             // 'order_id' => $order->id,
             // 'nouhin_yoteibi' => $nouhin_yoteibi,
+            'addtype' => $addtype,
+            'change_all_nouhin_yoteibi' => $order->nouhin_yoteibi,
+            'change_all_store' => $order->store_name,
+            'set_tokuisaki_name' => $order->tokuisaki_name,
             'message' => '納品予定日'.$nouhin_yoteibi.'は指定できません。他の日付を設定してください。',
           ];
           return redirect()->route('confirm',$data);
@@ -2922,78 +2962,54 @@ class LoginPageController extends Controller
 
 
     // 以下新規挿入
-    // 合計金額
-    $total_price = [];
-    $carts = Cart::where(['deal_id'=> $deal->id])->get();
-    // カート商品の出力
-    foreach ($carts as $cart) {
-      $orders = Order::where(['cart_id'=> $cart->id])->get();
-      foreach ($orders as $order) {
-        // dd($store);
-        // 金額未定に対応
-        if($order->price == '未定' || $order->price == '-'){
-          $array = 0;
-        }else{
-          $array = $order->price * $order->quantity;
-        }
-        array_push($total_price, $array);
-      }
-    }
-
-    // 送料がかかる場合の表示設定
-    // 商品合計
-    // $total_price = array_sum($total_price);
-    // // 商品合計税込
-    // $total_price_zei = $total_price * (108 / 100);
-    // // 8%税額
-    // $zeinomi8 = $total_price_zei - $total_price;
-    // // 商品合計税込（カンマ表示）
-    // $total_price_zei_number = number_format($total_price_zei);
-    // // 8%対象消費合計額テキスト
-    // $total_price_zei_number_text = '軽減税率8％対象'.number_format($total_price).'円（税抜）<br />軽減税率8％消費税：'.number_format($zeinomi8).'円<br />軽減税率8％対象：'.$total_price_zei_number.'円（税込）';
-    //
-    // if(isset($shipping_price)){
-    //   // 送料税込
-    //   $shipping_price_zei = $shipping_price * (110 / 100);
-    //   // 10%税のみ
-    //   $zeinomi10 = $shipping_price_zei - $shipping_price;
-    //   // 送料（カンマ表示）
-    //   $shipping_price_number = number_format($shipping_price);
-    //   // 送料税込（カンマ表示）
-    //   $shipping_price_zei_number = number_format($shipping_price_zei);
-    //   // 10%対象消費合計額（カンマ表示）
-    //   $shipping_price_zei_number_text = '税率10%対象：'.$shipping_price_number.'円（税抜）<br />税率10％消費税：'.number_format($zeinomi10).'円<br />税率10％対象：'.$shipping_price_zei_number.'円（税込）';
-    //   // 税込合計金額
-    //   $all_total_price = $shipping_price_zei + $total_price_zei;
-    //   // 税金の計算
-    //   $zei_price = $all_total_price - $total_price - $shipping_price;
-    //   // 合計金額表示
-    //   $total_price = '【お支払い金額】<br />'.number_format($all_total_price).'円（税込）';
-    //   // 送料のみの金額表示
-    //   $shipping_price_text = '【送料】<br />'.$shipping_price_number.'円';
-    //   // 税金のみの金額表示
-    //   $zei_price_text = '消費税：'.number_format($zei_price).'円';
-    // }else{
-    //   $shipping_price_zei_number_text = '10%対象：0円（税込）';
-    //   $shipping_price_text = '【送料】<br />0円';
-    //   // 税金の計算
-    //   $zei_price = $total_price_zei - $total_price;
-    //   // 金額表示部分
-    //   $total_price = '【お支払い金額】<br />'.$total_price_zei_number.'円（税込）';
-    //   // 税金のみの金額表示
-    //   $zei_price_text = '消費税：'.number_format($zei_price).'円';
-    // }
-    // // 合計金額表示をなしに設定
-    // if(!($user->setonagi == 1)){
-    //   $total_price = null;
-    // }
-    // ここまで
-
-    $zeinuki = $request->all_total_val - $request->tax_val;
-    // dd($zeinuki);
-
-
+    // BtoC+SB合計金額計算
     if($setonagi){
+      $total_price = [];
+      $carts = Cart::where(['deal_id'=> $deal->id])->get();
+      // カート商品の出力
+      foreach($cart_ids as $cart_id) {
+        $cart = Cart::where(['id'=> $cart_id])->first();
+        $orders = Order::where(['cart_id'=> $cart->id])->get();
+        foreach ($orders as $order) {
+          // dd($store);
+          // 金額未定に対応
+          if($order->price == '未定' || $order->price == '-'){
+            $array = 0;
+          }else{
+            $array = $order->price * $order->quantity;
+          }
+          array_push($total_price, $array);
+        }
+      }
+      // 送料がかかる場合の表示設定
+      // 商品合計
+      $total_price = array_sum($total_price);
+      // 商品合計税込
+      $all_total_price = floor($total_price * (108 / 100));
+      // 8%税額
+      $zeinomi8 = $all_total_price - $total_price;
+
+      if(isset($shipping_price)){
+        // 送料税込
+        $shipping_price_zei = floor($shipping_price * (110 / 100));
+        // 10%税のみ
+        $zeinomi10 = $shipping_price_zei - $shipping_price;
+        // 10%対象消費合計額（カンマ表示）
+        // 税込合計金額
+        $all_total_price = $shipping_price_zei + $all_total_price;
+        // 税金の計算
+        $zei_price = $all_total_price - $total_price - $shipping_price;
+      }else{
+        // 税金の計算
+        $zei_price = $all_total_price - $total_price;
+      }
+
+      // ここまで
+
+      // $zeinuki = floor($request->all_total_val - $request->tax_val);
+      // dd($zeinuki);
+      // dd($total_price);
+
       if($request->uketori_siharai == 'クロネコかけ払い'){
         // ヤマトAPI連携確認
         $client = new Client();
@@ -3016,7 +3032,7 @@ class LoginPageController extends Controller
             'orderNo' => $deal_id.$envi,
             // バイヤーid
             'buyerId' => $user_id,
-            'settlePrice' => $zeinuki,
+            'settlePrice' => $total_price,
 
             'shohinMei1' => '商品合計',
             // 'shohinCode1' => '',
@@ -3024,7 +3040,7 @@ class LoginPageController extends Controller
             // 'tani1' => '',
             // 'tanka1' => '',
 
-            'kessaiKingaku1' => $zeinuki,
+            'kessaiKingaku1' => $total_price,
             // 8%対象
             'zeiritsuKbn1' => '2',
 
@@ -3047,7 +3063,9 @@ class LoginPageController extends Controller
 
             // 以下新規追加項目
             // 'tsujoShohiZei' => '',
-            'keigenShohiZei' => $request->tax_val,
+
+            // この項目はなくてもいける
+            'keigenShohiZei' => $zei_price,
 
             'meisaiUmu' => '2',
             'passWord' => $kakebarai_passWord
@@ -3131,7 +3149,7 @@ class LoginPageController extends Controller
       //       'device_div' => 1,
       //       'order_no' => $deal_id,
       //       // 決済合計金額
-      //       'settle_price' => $request->all_total_val,
+      //       'settle_price' => $all_total_price,
       //       'buyer_name_kanji' => $user->name,
       //       'buyer_tel' => $user->tel,
       //       'buyer_email' => $user->email,
@@ -3281,8 +3299,7 @@ class LoginPageController extends Controller
       $deal->success_time = Carbon::now();
       $deal->save();
 
-
-      // 注文完了メール送信
+      // 注文完了メールの送信
       $user = User::where('id',$user_id)->first();
 
       $name = $user->name;
@@ -3292,15 +3309,15 @@ class LoginPageController extends Controller
       $text = 'SETOnagiオーダーブックをご利用くださいまして誠にありがとうございます。<br />
       下記の通りご注文をお受けいたしましたのでご確認をお願いいたします。<br />
       <br />
-      【注文ID】<br />'.$deal->id.'<br /><br />
+      【注文番号】<br />'.$deal->id.'<br /><br />
       【ご注文内容】';
       if($user->setonagi == 1){
         // 支払方法
         $pay = '【お支払い方法】<br />'.$deal->uketori_siharai;
         // 受け取り場所
-        $uketori_place = '【受け取り場所】<br />'.$deal->uketori_place;
+        $uketori_place = '【受け渡し希望日】<br />'.$deal->uketori_place;
         // 受け取り予定日
-        $uketori_time = '【受け取り時間】<br />'.$deal->uketori_time;
+        $uketori_time = '【受け渡し希望時間】<br />'.$deal->uketori_time;
         if(isset($shipping_code)){
           // 受け取り場所を配送方法に修正
           $uketori_place = '【配送方法】<br />'.$shipping_name;
@@ -3314,7 +3331,7 @@ class LoginPageController extends Controller
         $uketori_time = null;
       }
       // メモ
-      $memo =  '【メモ】<br />'.$deal->memo;
+      $memo =  '【通信欄】<br />'.$deal->memo;
 
       // 合計金額
       $total_price = [];
@@ -3338,7 +3355,7 @@ class LoginPageController extends Controller
       // 商品合計
       $total_price = array_sum($total_price);
       // 商品合計税込
-      $total_price_zei = $total_price * (108 / 100);
+      $total_price_zei = floor($total_price * (108 / 100));
       // 8%税額
       $zeinomi8 = $total_price_zei - $total_price;
       // 商品合計税込（カンマ表示）
@@ -3348,7 +3365,7 @@ class LoginPageController extends Controller
 
       if(isset($shipping_price)){
         // 送料税込
-        $shipping_price_zei = $shipping_price * (110 / 100);
+        $shipping_price_zei = floor($shipping_price * (110 / 100));
         // 10%税のみ
         $zeinomi10 = $shipping_price_zei - $shipping_price;
         // 送料（カンマ表示）
@@ -3829,6 +3846,282 @@ class LoginPageController extends Controller
     $deal->status = 'キャンセル';
     $deal->cancel_time = Carbon::now();
     $deal->save();
+
+
+    // キャンセル完了メールの送信
+    $user = User::where('id',$user_id)->first();
+
+    $name = $user->name;
+    // $email = $user->email;
+    $email = $user->email;
+    $url = url('');
+    $text = 'SETOnagiオーダーブックをご利用くださいまして誠にありがとうございます。<br />
+    下記のご注文がキャンセルされましたのでご確認をお願いいたします。<br />
+    <br />
+    【注文番号】<br />'.$deal->id.'<br /><br />
+    【ご注文内容】';
+    if($user->setonagi == 1){
+      // 支払方法
+      $pay = '【お支払い方法】<br />'.$deal->uketori_siharai;
+      // 受け取り場所
+      $uketori_place = '【受け渡し希望日】<br />'.$deal->uketori_place;
+      // 受け取り予定日
+      $uketori_time = '【受け渡し希望時間】<br />'.$deal->uketori_time;
+      if(isset($shipping_code)){
+        // 受け取り場所を配送方法に修正
+        $uketori_place = '【配送方法】<br />'.$shipping_name;
+      }
+    }else{
+      // 支払方法
+      $pay = null;
+      // 受け取り場所
+      $uketori_place = null;
+      // 受け取り時間
+      $uketori_time = null;
+    }
+    // メモ
+    $memo =  '【通信欄】<br />'.$deal->memo;
+
+    // 合計金額
+    $total_price = [];
+    $carts = Cart::where(['deal_id'=> $deal->id])->get();
+    // カート商品の出力
+    foreach ($carts as $cart) {
+      $orders = Order::where(['cart_id'=> $cart->id])->get();
+      foreach ($orders as $order) {
+        // dd($store);
+        // 金額未定に対応
+        if($order->price == '未定' || $order->price == '-'){
+          $array = 0;
+        }else{
+          $array = $order->price * $order->quantity;
+        }
+        array_push($total_price, $array);
+      }
+    }
+
+    // 送料がかかる場合の表示設定
+    // 商品合計
+    $total_price = array_sum($total_price);
+    // 商品合計税込
+    $total_price_zei = floor($total_price * (108 / 100));
+    // 8%税額
+    $zeinomi8 = $total_price_zei - $total_price;
+    // 商品合計税込（カンマ表示）
+    $total_price_zei_number = number_format($total_price_zei);
+    // 8%対象消費合計額テキスト
+    $total_price_zei_number_text = '軽減税率8％対象：'.number_format($total_price).'円（税抜）<br />軽減税率8％消費税：'.number_format($zeinomi8).'円<br />軽減税率8％対象：'.$total_price_zei_number.'円（税込）';
+
+    if(isset($shipping_price)){
+      // 送料税込
+      $shipping_price_zei = floor($shipping_price * (110 / 100));
+      // 10%税のみ
+      $zeinomi10 = $shipping_price_zei - $shipping_price;
+      // 送料（カンマ表示）
+      $shipping_price_number = number_format($shipping_price);
+      // 送料税込（カンマ表示）
+      $shipping_price_zei_number = number_format($shipping_price_zei);
+      // 10%対象消費合計額（カンマ表示）
+      $shipping_price_zei_number_text = '税率10%対象：'.$shipping_price_number.'円（税抜）<br />税率10％消費税：'.number_format($zeinomi10).'円<br />税率10％対象：'.$shipping_price_zei_number.'円（税込）';
+      // 税込合計金額
+      $all_total_price = $shipping_price_zei + $total_price_zei;
+      // 税金の計算
+      $zei_price = $all_total_price - $total_price - $shipping_price;
+      // 合計金額表示
+      $total_price = '【お支払い金額】<br />'.number_format($all_total_price).'円（税込）';
+      // 送料のみの金額表示
+      $shipping_price_text = '【送料】<br />'.$shipping_price_number.'円';
+      // 税金のみの金額表示
+      $zei_price_text = '消費税：'.number_format($zei_price).'円';
+    }else{
+      $shipping_price_zei_number_text = null;
+      $shipping_price_text = null;
+      // 税金の計算
+      $zei_price = $total_price_zei - $total_price;
+      // 金額表示部分
+      $total_price = '【お支払い金額】<br />'.$total_price_zei_number.'円（税込）';
+      // 税金のみの金額表示
+      $zei_price_text = '消費税：'.number_format($zei_price).'円';
+    }
+    // 合計金額表示をなしに設定
+    if(!($user->setonagi == 1)){
+      $total_price = null;
+    }
+
+    // オーダーリストの作成
+    $order_list=[];
+      $carts = Cart::where(['deal_id'=> $deal->id])->get();
+      // カート商品の出力
+      foreach ($carts as $cart) {
+        $orders = Order::where(['cart_id'=> $cart->id])->get();
+        foreach ($orders as $order) {
+          $user = User::where('id',$deal->user_id)->first();
+          $item = Item::where(['id'=> $cart->item_id])->first();
+          // セトナギユーザーの場合
+          if($user->setonagi == 1){
+            $setonagi_user = Setonagi::where('user_id',$user->id)->first();
+          }
+          // BtoBユーザーの場合
+          if(!($user->setonagi == 1)){
+            $store = Store::where(['tokuisaki_name'=> $order->tokuisaki_name , 'store_name'=> $order->store_name])->first();
+          }
+
+          // 単位を取得
+          if ($item->tani == 1){
+          $tani = 'ｹｰｽ';
+          }
+          elseif ($item->tani == 2){
+          $tani = 'ﾎﾞｰﾙ';
+          }
+          elseif ($item->tani == 3){
+          $tani = 'ﾊﾞﾗ';
+          }
+          elseif ($item->tani == 4){
+          $tani = 'kg';
+          }
+
+          if(isset($cart->uwagaki_item_name)){
+            $item_name = $cart->uwagaki_item_name;
+          }else{
+            $item_name = $item->item_name;
+          }
+          if(isset($cart->uwagaki_kikaku)){
+            $item_kikaku = $cart->uwagaki_kikaku;
+          }else{
+            $item_kikaku = $item->kikaku;
+          }
+
+          // 出力が分岐する項目
+          // BtoBユーザー
+          if(!($user->setonagi == 1)){
+            // BtoBの場合は配送先の店舗を追加する
+            $store = $order->tokuisaki_name.$order->store_name;
+            // $nouhin_yoteibi = $order->nouhin_yoteibi;
+            $nouhin_yoteibi = '【納品予定日】<br />'.$order->nouhin_yoteibi;
+            $nouhin_store = '【納品店舗】<br />'.$store;
+            // 未定の金額表示に対応
+            if($order->price == '未定'){
+              $item_price = '金額未定 ' ;
+            }elseif($order->price == '-'){
+              $item_price = '- ' ;
+            }else{
+              $item_price = number_format($order->price).'円 ';
+            }
+            $array =
+              '・'.
+              // 商品コード
+              // $item->item_id.
+              // SKUコード
+              // $item->sku_code.
+              // 商品名
+              $item_name.' '.
+              // 数量
+              $order->quantity.
+              // 単位
+              $tani.' '
+              // 単価
+              // $item_price.' '.$store.' '.$nouhin_yoteibi
+              // 配送希望日
+              // $order->nouhin_yoteibi.
+              // 受け取り
+              // ''.
+              // 内消費税
+              // '10%'
+            ;
+          // セトナギユーザー
+          }else{
+            $store = null;
+            // 受け取り予定日
+            // $nouhin_yoteibi = '【受け取り予定日】<br />'.$order->nouhin_yoteibi;
+            $nouhin_yoteibi = '【受け渡し希望日】<br />'.$deal->first_order_nouhin_yoteibi();
+            // 納品店舗
+            $nouhin_store = null;
+            // 金額未定に対応
+            if($order->price == '未定' || $order->price == '-'){
+              $item_price = 0 ;
+            }else{
+              $item_price = $order->price;
+            }
+            $array =
+              '・'.
+              // 商品コード
+              // $item->item_id.
+              // SKUコード
+              // $item->sku_code.
+              // 商品名
+              $item_name.' '.
+              // 数量
+              $order->quantity.
+              // 単位
+              $tani.' '.
+              // 単価
+              number_format($item_price).'円'
+              // 配送希望日
+              // $order->nouhin_yoteibi.
+              // 受け取り
+              // ''.
+              // 内消費税
+              // '10%'
+            ;
+          }
+          array_push($order_list, $array);
+        }
+      }
+      // BtoBユーザーのみ任意の商品を出力
+      if(!($user->setonagi == 1)){
+        $cart_ninis = CartNini::where(['deal_id'=> $deal->id])->get();
+        // dd($cart_ninis);
+        foreach ($cart_ninis as $cart_nini) {
+          $order_ninis = OrderNini::where(['cart_nini_id'=> $cart_nini->id])->get();
+          foreach ($order_ninis as $order_nini) {
+            // dd($orders);
+            // orderslist出力
+            $user = User::where('id',$deal->user_id)->first();
+            // dd($user);
+            $store = Store::where(['tokuisaki_name'=> $order_nini->tokuisaki_name , 'store_name'=> $order_nini->store_name])->first();
+            // 出力が分岐する項目
+            // BtoBユーザー
+            if(!($user->setonagi == 1)){
+              // BtoBの場合は配送先の店舗を追加する
+              // $store = $order_nini->tokuisaki_name.$order_nini->store_name;
+              // $nouhin_yoteibi = $order_nini->nouhin_yoteibi;
+              $array =
+                '・[任意の商品] '.
+                $cart_nini->item_name.' × '.
+                // 数量
+                // $order_nini->quantity.' '.$store.' '.$nouhin_yoteibi
+                $order_nini->quantity
+              ;
+            // セトナギユーザー
+            }
+            array_push($order_list, $array);
+          }
+        }
+      }
+    $order_list = implode('<br>', $order_list);
+    // dd($order_list);
+    $admin_mail = config('app.admin_mail');
+    Mail::send('emails.register', [
+        'name' => $name,
+        'user' => $user,
+        'text' => $text,
+        'pay' => $pay,
+        'deal' => $deal,
+        'nouhin_store' => $nouhin_store,
+        'uketori_place' => $uketori_place,
+        'uketori_time' => $uketori_time,
+        'order_list' => $order_list,
+        'nouhin_yoteibi' => $nouhin_yoteibi,
+        'zei_price_text' => $zei_price_text,
+        'total_price_zei_number_text' => $total_price_zei_number_text,
+        'shipping_price_text' => $shipping_price_text,
+        'shipping_price_zei_number_text' => $shipping_price_zei_number_text,
+        'total_price' => $total_price,
+        'memo' => $memo,
+    ], function ($message) use ($email , $admin_mail) {
+        $message->to($email)->bcc($admin_mail)->subject('SETOnagiオーダーブックご注文のキャンセルを承りました。');
+    });
+    // 注文完了メール送信ここまで
 
     // foreach($item_ids as $key => $input) {
     //   $cart = Cart::firstOrNew(['user_id'=> $user_id , 'item_id'=> $item_ids[$key], 'deal_id'=> $deal_id]);

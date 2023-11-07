@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 class SetonagiItem extends Model
 {
   protected $fillable = [
+  'id',
   'item_id',
   'sku_code',
   'img',

@@ -31,11 +31,11 @@
 ありすぎる情報と品揃えの時代<br />
 【探す手間】を市場が解消します。<br />
 SETOnagi オーダーブック<br />
-株式会社クラハシ<br />
+株式会社 Umidas(クラハシグループ)<br />
 〒721-0942<br />
 広島県福山市引野町1丁目1−1<br />
 事業者登録番号：T6240001039693<br />
 URL:https://setonagi-orderbook.com/<br />
 公式HP:https://www.kurahashi.co.jp/<br />
-お問い合わせ:info@setonagi.net<br />
+お問い合わせ:info@setonagi-orderbook.com<br />
 =============================================

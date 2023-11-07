@@ -10,6 +10,7 @@ $(function() {
 
   $(document).ajaxSend(function() {
     $("#overlayajax").fadeIn();　
+
   });
 
   $(document).ajaxComplete(function() {
@@ -65,7 +66,7 @@ $(function() {
           // $('#toggle').trigger('click');
           Swal.fire({
             title: "既にカートに追加されています",
-            position: 'bottom-end',
+            position: 'center-center',
             toast: true,
             icon: 'info',
             showConfirmButton: false,
@@ -77,7 +78,7 @@ $(function() {
           Swal.fire({
             type:"success",
             title: "カートに追加しました",
-            position: 'bottom-end',
+            position: 'center-center',
             toast: true,
             icon: 'success',
             showConfirmButton: false,
@@ -86,11 +87,16 @@ $(function() {
         }
       })
       .fail(function(jqXHR, textStatus, errorThrown) {
-        alert('ユーザーに紐づく得意先店舗がありません');
-        console.log("ajax通信に失敗しました");
-        console.log("XMLHttpRequest : " + XMLHttpRequest.status);
-        console.log("textStatus     : " + textStatus);
-        console.log("errorThrown    : " + errorThrown.message);
+        if (jqXHR.status === 401) {
+          // セッションが切れた場合の処理
+          window.location.href = location.origin + '/user/login'; // ログインページへのリダイレクト
+        } else {
+          alert('ユーザーに紐づく得意先店舗がありません');
+          console.log("ajax通信に失敗しました");
+          console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+          console.log("textStatus     : " + textStatus);
+          console.log("errorThrown    : " + errorThrown.message);
+        }
       });
   });
 
@@ -106,8 +112,17 @@ $(function() {
                 $('#cart').html(data);
           },
           // 通信エラー時に呼び出されるコールバック
-          error: function () {
-              alert("カートの中身を更新できませんでした。");
+          error: function (jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status === 401) {
+                // セッションが切れた場合の処理
+                window.location.href = location.origin + '/user/login'; // ログインページへのリダイレクト
+            } else {
+            alert('カートを更新できませんでした。');
+            console.log("ajax通信に失敗しました");
+            console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+            console.log("textStatus     : " + textStatus);
+            console.log("errorThrown    : " + errorThrown.message);
+            }
           }
       });
       $('#cart-container').addClass('show');
@@ -154,7 +169,7 @@ $(function() {
         Swal.fire({
           type:"success",
           title: "商品を削除しました",
-          position: 'bottom-end',
+          position: 'center-center',
           toast: true,
           icon: 'success',
           showConfirmButton: false,
@@ -212,11 +227,16 @@ if (document.URL.includes("user") && !document.URL.includes("admin/user") &&  !d
       })
       // Ajaxリクエスト失敗時の処理
       .fail(function(jqXHR, textStatus, errorThrown) {
+        if (jqXHR.status === 401) {
+            // セッションが切れた場合の処理
+            window.location.href = location.origin + '/user/login'; // ログインページへのリダイレクト
+        } else {
         alert('オーダー内容が取得できません。');
         console.log("ajax通信に失敗しました");
         console.log("XMLHttpRequest : " + XMLHttpRequest.status);
         console.log("textStatus     : " + textStatus);
         console.log("errorThrown    : " + errorThrown.message);
+        }
       });
   	}
   // 個数入力画面を開いたらオーダー内容を取得
@@ -383,7 +403,7 @@ if(document.URL.match("/approval")) {
         Swal.fire({
           type:"success",
           title: "配送先を追加しました",
-          position: 'bottom-end',
+          position: 'center-center',
           toast: true,
           icon: 'success',
           showConfirmButton: false,
@@ -483,7 +503,7 @@ if(document.URL.match("/approval")) {
         Swal.fire({
           type:"success",
           title: "配送先を追加しました",
-          position: 'bottom-end',
+          position: 'center-center',
           toast: true,
           icon: 'success',
           showConfirmButton: false,
@@ -533,7 +553,7 @@ if(document.URL.match("/approval")) {
         Swal.fire({
           // type:"success",
           title: "任意の商品を追加しました",
-          position: 'bottom-end',
+          position: 'center-center',
           toast: true,
           icon: 'success',
           showConfirmButton: false,
@@ -580,7 +600,7 @@ if(document.URL.match("/approval")) {
         Swal.fire({
           type:"success",
           title: "カートから削除しました",
-          position: 'bottom-end',
+          position: 'center-center',
           toast: true,
           icon: 'success',
           showConfirmButton: false,
@@ -628,7 +648,7 @@ if(document.URL.match("/approval")) {
           Swal.fire({
             type:"success",
             title: "カートから削除しました",
-            position: 'bottom-end',
+            position: 'center-center',
             toast: true,
             icon: 'success',
             showConfirmButton: false,
@@ -678,7 +698,7 @@ if(document.URL.match("/approval")) {
             Swal.fire({
               type:"success",
               title: "金額を変更しました",
-              position: 'bottom-end',
+              position: 'center-center',
               toast: true,
               icon: 'success',
               showConfirmButton: false,
@@ -722,7 +742,7 @@ if(document.URL.match("/approval")) {
         Swal.fire({
           type:"success",
           title: "個数を変更しました",
-          position: 'bottom-end',
+          position: 'center-center',
           toast: true,
           icon: 'success',
           showConfirmButton: false,
@@ -766,7 +786,7 @@ if(document.URL.match("/approval")) {
         Swal.fire({
           type:"success",
           title: "納品予定日を変更しました",
-          position: 'bottom-end',
+          position: 'center-center',
           toast: true,
           icon: 'success',
           showConfirmButton: false,
@@ -837,7 +857,7 @@ if(document.URL.match("/approval")) {
             Swal.fire({
               type:"success",
               title: "配送先店舗を変更しました",
-              position: 'bottom-end',
+              position: 'center-center',
               toast: true,
               icon: 'success',
               showConfirmButton: false,
@@ -880,7 +900,7 @@ if(document.URL.match("/approval")) {
         Swal.fire({
           type:"success",
           title: "配送先店舗を変更しました",
-          position: 'bottom-end',
+          position: 'center-center',
           toast: true,
           icon: 'success',
           showConfirmButton: false,
@@ -919,7 +939,7 @@ if(document.URL.match("/approval")) {
   //       Swal.fire({
   //         type:"success",
   //         title: "配送方法を保存しました",
-  //         position: 'bottom-end',
+  //         position: 'center-center',
   //         toast: true,
   //         icon: 'success',
   //         showConfirmButton: false,
@@ -972,7 +992,7 @@ if(document.URL.match("/approval")) {
       // Swal.fire({
       //   type:"success",
       //   title: "納品日を保存しました",
-      //   position: 'bottom-end',
+      //   position: 'center-center',
       //   toast: true,
       //   icon: 'success',
       //   showConfirmButton: false,
@@ -1134,7 +1154,7 @@ if(document.URL.match("/approval")) {
       // Swal.fire({
       //   type:"success",
       //   title: "変更完了",
-      //   position: 'bottom-end',
+      //   position: 'center-center',
       //   toast: true,
       //   icon: 'success',
       //   showConfirmButton: false,
@@ -1182,7 +1202,7 @@ if(document.URL.match("/approval")) {
         Swal.fire({
           type:"success",
           title: "任意の商品名を保存しました",
-          position: 'bottom-end',
+          position: 'center-center',
           toast: true,
           icon: 'success',
           showConfirmButton: false,
@@ -1225,7 +1245,7 @@ if(document.URL.match("/approval")) {
         Swal.fire({
           type:"success",
           title: "担当を変更しました",
-          position: 'bottom-end',
+          position: 'center-center',
           toast: true,
           icon: 'success',
           showConfirmButton: false,
@@ -1268,7 +1288,7 @@ if(document.URL.match("/approval")) {
         Swal.fire({
           type:"success",
           title: "価格を変更しました",
-          position: 'bottom-end',
+          position: 'center-center',
           toast: true,
           icon: 'success',
           showConfirmButton: false,
@@ -1311,7 +1331,7 @@ if(document.URL.match("/approval")) {
         Swal.fire({
           type:"success",
           title: "数量（単位）を変更しました",
-          position: 'bottom-end',
+          position: 'center-center',
           toast: true,
           icon: 'success',
           showConfirmButton: false,
@@ -1353,7 +1373,7 @@ if(document.URL.match("/approval")) {
         Swal.fire({
           type:"success",
           title: "納品予定日を変更しました",
-          position: 'bottom-end',
+          position: 'center-center',
           toast: true,
           icon: 'success',
           showConfirmButton: false,
@@ -1419,7 +1439,7 @@ if(document.URL.match("/approval")) {
             Swal.fire({
               type:"success",
               title: "配送先店舗を変更しました",
-              position: 'bottom-end',
+              position: 'center-center',
               toast: true,
               icon: 'success',
               showConfirmButton: false,
@@ -1461,7 +1481,7 @@ if(document.URL.match("/approval")) {
         Swal.fire({
           type:"success",
           title: "納品先店舗を変更しました",
-          position: 'bottom-end',
+          position: 'center-center',
           toast: true,
           icon: 'success',
           showConfirmButton: false,
@@ -1569,7 +1589,7 @@ if(document.URL.match("/admin/buyer/recommend")) {
       // Swal.fire({
       //   type:"success",
       //   title: "変更しました",
-      //   position: 'bottom-end',
+      //   position: 'center-center',
       //   toast: true,
       //   icon: 'success',
       //   showConfirmButton: false,
@@ -2032,7 +2052,7 @@ $(".stoprepeatorder").on("click",function(){
       // Swal.fire({
       //   type:"success",
       //   title: "キャンセル処理を行いました。",
-      //   position: 'bottom-end',
+      //   position: 'center-center',
       //   toast: true,
       //   icon: 'success',
       //   showConfirmButton: false,
@@ -2060,7 +2080,7 @@ $("#deal_cancel_button").on("click",function(e){
       // Swal.fire({
       //   type:"success",
       //   title: "キャンセル処理を行いました。",
-      //   position: 'bottom-end',
+      //   position: 'center-center',
       //   toast: true,
       //   icon: 'success',
       //   showConfirmButton: false,

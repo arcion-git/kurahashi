@@ -108,7 +108,7 @@
             <div class="table-responsive">
               <table class="table table-striped">
                 <tr>
-                  <th class="text-center">取引ID</th>
+                  <th class="text-center">注文番号</th>
                   <th class="text-center">バイヤー</th>
                   <th class="text-center">お名前</th>
                   <th class="text-center">種別</th>

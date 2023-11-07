@@ -188,8 +188,21 @@ $(document).ready(function () {
       success: function (data) {
         $('#order').html(data);
       },
-      error: function () {
-        alert("オーダー内容をアップデートできません。");
+      // error: function () {
+      //   alert("オーダー内容をアップデートできません。");
+      // }
+      error: function (jqXHR, textStatus, errorThrown) {
+        if (jqXHR.status === 401) {
+            alert('オーダー内容をアップデートできません。');
+            // セッションが切れた場合の処理
+            window.location.href = location.origin + '/user/login'; // ログインページへのリダイレクト
+        } else {
+        alert('オーダー内容をアップデートできません。');
+        console.log("ajax通信に失敗しました");
+        console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+        console.log("textStatus     : " + textStatus);
+        console.log("errorThrown    : " + errorThrown.message);
+        }
       }
     });
   }
@@ -294,7 +307,7 @@ $(document).ready(function () {
   //       // Swal.fire({
   //       //   type: "success",
   //       //   title: "配送先店舗を変更しました",
-  //       //   position: 'bottom-end',
+  //       //   position: 'center-center',
   //       //   toast: true,
   //       //   icon: 'success',
   //       //   showConfirmButton: false,
@@ -330,7 +343,7 @@ $(document).ready(function () {
   //       // Swal.fire({
   //       //   type: "success",
   //       //   title: "納品予定日を変更しました。",
-  //       //   position: 'bottom-end',
+  //       //   position: 'center-center',
   //       //   toast: true,
   //       //   icon: 'success',
   //       //   showConfirmButton: false,
@@ -373,7 +386,7 @@ $(document).ready(function () {
           // $('#toggle').trigger('click');
           Swal.fire({
             title: "既にお気に入りに追加されています",
-            position: 'bottom-end',
+            position: 'center-center',
             toast: true,
             icon: 'info',
             showConfirmButton: false,
@@ -387,7 +400,7 @@ $(document).ready(function () {
           // Swal.fire({
           //   type:"success",
           //   title: "お気に入りに追加しました",
-          //   position: 'bottom-end',
+          //   position: 'center-center',
           //   toast: true,
           //   iconColor: "rgba(241,73,41,1)",
           //   icon: 'success',
@@ -432,7 +445,7 @@ $(document).ready(function () {
         // Swal.fire({
         //   type:"success",
         //   title: "お気に入り商品を削除しました",
-        //   position: 'bottom-end',
+        //   position: 'center-center',
         //   toast: true,
         //   icon: 'success',
         //   showConfirmButton: false,

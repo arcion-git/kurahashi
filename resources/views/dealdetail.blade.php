@@ -67,7 +67,7 @@
                       </a>
                     @endif
                   @endif
-                  取引ID #{{$deal->id}}
+                  注文番号 #{{$deal->id}}
                 </div>
               <hr>
               <div class="row">
@@ -97,7 +97,7 @@
                     <!-- <strong>お問い合わせ日時:</strong><br>
                     {{ $deal->created_at }}<br> -->
                     @if($deal->status == '発注済')
-                    <strong>発注日時:</strong><br>
+                    <strong>注文日時:</strong><br>
                     {{ $deal->success_time }}<br>
                     @endif
                     @if($deal->status == 'キャンセル')
