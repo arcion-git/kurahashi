@@ -172,7 +172,11 @@
   </div>
 </section>
 
-
+<style>
+.card .card-body{
+    padding: 10px 10px !important;
+}
+</style>
 
 
 
