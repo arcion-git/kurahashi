@@ -42,7 +42,7 @@
             @yield('content')
 
             <div class="simple-footer">
-              Copyright &copy; KURAHASHI
+              Copyright &copy; UMIDASU Co., Ltd. All rights reserved.
             </div>
           </div>
         </div>
