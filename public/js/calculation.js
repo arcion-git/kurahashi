@@ -693,8 +693,8 @@ if(document.URL.match("/approval")) {
           .done(function(data) {
             // console.log(data);
             // setTimeout(doReload);
-            setTimeout(order_update);
-            setTimeout(dealorder_update);
+            // setTimeout(order_update);
+            // setTimeout(dealorder_update);
             Swal.fire({
               type:"success",
               title: "金額を変更しました",
@@ -707,7 +707,7 @@ if(document.URL.match("/approval")) {
           })
           // Ajaxリクエスト失敗時の処理
           .fail(function(jqXHR, textStatus, errorThrown) {
-            alert('金額を変更できませんでした。');
+            // alert('金額を変更できませんでした。');
             console.log("ajax通信に失敗しました");
             console.log("XMLHttpRequest : " + XMLHttpRequest.status);
             console.log("textStatus     : " + textStatus);

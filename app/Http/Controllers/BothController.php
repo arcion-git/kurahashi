@@ -133,7 +133,7 @@ class BothController extends Controller
     $order=Order::where(['id'=> $order_id])->update(['price'=> $price]);
 
     $data = "sucsess";
-    return redirect()->route('setonagi',$data);
+    return $data;
   }
 
   public function change_uketori_place(Request $request){
