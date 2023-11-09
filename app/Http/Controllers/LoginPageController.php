@@ -2490,6 +2490,8 @@ class LoginPageController extends Controller
     $holidays = Holiday::pluck('date');
     $currentTime = date('H:i:s');
 
+    // dd($currentTime);
+
     // 17時より前の処理
     if (strtotime($currentTime) < strtotime('17:00:00')) {
       $holidays = Holiday::pluck('date')->toArray();
@@ -2525,16 +2527,24 @@ class LoginPageController extends Controller
     // dd($current_time);
     $cutoff_time = date('Y-m-d 17:00:00');
     $order_time = date('Y-m-d H:i:s');
+    // 確認画面からオーダーまでに17:00を跨いだ場合一度戻す
     if (strtotime($current_time) < strtotime($cutoff_time) && strtotime($cutoff_time) < strtotime($order_time)) {
-        // リダイレクトやメッセージの表示など、最終確認画面に戻す処理を追加
         $message = '締め時間を過ぎたため一度注文確認画面に戻ります。';
-        $data=[
-          'addtype' => $addtype,
-          'change_all_nouhin_yoteibi' => $nouhin_kanoubi,
-          'change_all_store' => $store_name,
-          'set_tokuisaki_name' => $tokuisaki_name,
-          'message' => $message,
-        ];
+        if($user->setonagi == 1){
+          $data=[
+            'addtype' => $addtype,
+            'message' => $message,
+          ];
+        }else{
+          // リダイレクトやメッセージの表示など、最終確認画面に戻す処理を追加
+          $data=[
+            'addtype' => $addtype,
+            'change_all_nouhin_yoteibi' => $nouhin_kanoubi,
+            'change_all_store' => $store_name,
+            'set_tokuisaki_name' => $tokuisaki_name,
+            'message' => $message,
+          ];
+        }
         return redirect()->route('confirm',$data);
     }
 
@@ -3315,7 +3325,7 @@ class LoginPageController extends Controller
         // 支払方法
         $pay = '【お支払い方法】<br />'.$deal->uketori_siharai;
         // 受け取り場所
-        $uketori_place = '【受け渡し希望日】<br />'.$deal->uketori_place;
+        $uketori_place = '【配送方法】<br />'.$deal->uketori_place;
         // 受け取り予定日
         $uketori_time = '【受け渡し希望時間】<br />'.$deal->uketori_time;
         if(isset($shipping_code)){
@@ -3484,7 +3494,7 @@ class LoginPageController extends Controller
               $store = null;
               // 受け取り予定日
               // $nouhin_yoteibi = '【受け取り予定日】<br />'.$order->nouhin_yoteibi;
-              $nouhin_yoteibi = '【受け取り予定日】<br />'.$deal->first_order_nouhin_yoteibi();
+              $nouhin_yoteibi = '【受け渡し希望日】<br />'.$deal->first_order_nouhin_yoteibi();
               // 納品店舗
               $nouhin_store = null;
               // 金額未定に対応
@@ -3690,6 +3700,18 @@ class LoginPageController extends Controller
     $setonagi = Setonagi::where(['user_id'=> $user_id])->first();
 
 
+    // shipping_codeの内容を保存
+    if($setonagi){
+      $shipping_code = $setonagi->shipping_code;
+      // 配送設定を呼び出し
+      if(isset($shipping_code)){
+        $shipping_setting = ShippingSetting::where(['shipping_code'=> $shipping_code,'shipping_method'=> $deal->uketori_place])->first();
+        $shipping_name = $shipping_setting->shipping_name;
+        $shipping_price = $shipping_setting->shipping_price;
+        $calender_id= $shipping_setting->calender_id;
+      }
+    }
+
     // 注文完了時間
     $success_time = $deal->success_time;
     $success_jikan = date('H:i:s', strtotime($success_time));
@@ -3864,7 +3886,7 @@ class LoginPageController extends Controller
       // 支払方法
       $pay = '【お支払い方法】<br />'.$deal->uketori_siharai;
       // 受け取り場所
-      $uketori_place = '【受け渡し希望日】<br />'.$deal->uketori_place;
+      $uketori_place = '【配送方法】<br />'.$deal->uketori_place;
       // 受け取り予定日
       $uketori_time = '【受け渡し希望時間】<br />'.$deal->uketori_time;
       if(isset($shipping_code)){

@@ -593,6 +593,21 @@
         <span class="spinner"></span>
       </div>
     </div>
+
+    @if(Auth::guard('user')->user() && str_contains(request()->path(), 'setonagi'))
+      <div id="fix_cart_btn" class="sp">
+        @if(Auth::guard('user')->user())
+        <a href="{{ url('/confirm?addtype=addsetonagi') }}" class="btn btn-warning"><i class="fas fa-shopping-cart"></i></a>
+        @else
+        <form action="{{ url('/addall') }}" method="POST" class="form-horizontal">
+          {{ csrf_field() }}
+          <input type="hidden" name="addtype" value="addsetonagi" />
+          <button type="submit" class="btn btn-warning"><i class="fas fa-shopping-cart"></i></button>
+        </form>
+        @endif
+      </div>
+    @endif
+
   </div>
 
 
