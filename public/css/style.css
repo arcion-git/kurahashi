@@ -4122,14 +4122,14 @@ footer .external_link ul{
     min-width: 20% !important;
   }
   #cartAccordion .head-price{
-    width: 20%;
+    width: 30%;
     border-top: 0px !important;
     border-bottom: 0px !important;
     border-left: 0px !important;
     border-right: 0px !important;
   }
   #cartAccordion .head-kikaku{
-    width: 35%;
+    width: 20%;
     border: 0px !important;
   }
   #cartAccordion .head-quantity{
