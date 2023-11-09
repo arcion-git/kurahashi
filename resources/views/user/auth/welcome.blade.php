@@ -451,7 +451,7 @@
           <div class="flex-container external_link">
             <ul class="">
               <!-- <li><a href="https://www.kurahashi.co.jp/" target="_blank">株式会社クラハシオフィシャルサイト<img src="https://setonagi.net/wp-content/themes/welcart_basic-beldad-expo/assets/images/expo/footer_link.png"></a></li> -->
-              <li><a href="http://u-midas.com/" target="_blank">株式会U-midasフィシャルサイト<img src="https://setonagi.net/wp-content/themes/welcart_basic-beldad-expo/assets/images/expo/footer_link.png"></a></li>
+              <li><a href="http://u-midas.com/" target="_blank">株式会U-midasオフィシャルサイト<img src="https://setonagi.net/wp-content/themes/welcart_basic-beldad-expo/assets/images/expo/footer_link.png"></a></li>
             </ul>
           </div>
           <div class="flex-container sns_link">
