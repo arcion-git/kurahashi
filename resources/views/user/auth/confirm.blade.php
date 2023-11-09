@@ -147,6 +147,25 @@ label,
 .memo_note{
   display: block;
 }
+.nouhin_yoteibi_c{
+    display: block;
+    width: 100%;
+    height: calc(2.25rem + 6px) !important;
+    padding: 0.375rem 0.75rem !important;
+    font-size: 1rem !important;
+    font-weight: 400 !important;
+    line-height: 1.5 !important;
+    color: #495057 !important;
+    background-color: #fff !important;
+    background-clip: padding-box !important;
+    border: 1px solid #ced4da !important;
+    border-radius: 0.25rem !important;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out !important;
+    font-size: 14px !important;
+    padding: 10px 5px !important;
+    background-color: #fdfdff !important;
+    border-color: #c7e2fe !important;
+}
 </style>
 
 

@@ -421,7 +421,7 @@
 					<label for="company"><strong>受け渡し希望日</strong></label>
 			</div>
 			<div class="col-sm-12 col-md-5">
-				<input type="text" id="change_all_nouhin_yoteibi" name="change_all_nouhin_yoteibi" class="nouhin_yoteibi_c form-control daterange-cus datepicker" value="@if(isset($deal)){{$set_order->nouhin_yoteibi}}@else{{$nouhin_yoteibi}}@endif" autocomplete="off">
+				<input type="text" id="change_all_nouhin_yoteibi" name="change_all_nouhin_yoteibi" class="nouhin_yoteibi_c form-control daterange-cus datepicker" value="@if(isset($deal)){{$set_order->nouhin_yoteibi}}@else{{$nouhin_yoteibi}}@endif" autocomplete="off" readonly>
 
 				@if(old('change_all_nouhin_yoteibi')){{old('change_all_nouhin_yoteibi')}}@endif
 
