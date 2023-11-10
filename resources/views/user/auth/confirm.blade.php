@@ -117,28 +117,6 @@ $(function(){
 
 </script>
 
-<!--
-<script>
-// hideElementsByAddtype() 関数を定義
-function hideElementsByAddtype() {
-  var dataAttrName = "data-addtype"; // 取得する data 属性名
-  var dataAttrValue = "addsetonagi"; // Blade の変数から値を取得
-  var elements = document.querySelectorAll('[' + dataAttrName + '="' + dataAttrValue + '"]');
-  for (var i = 0; i < elements.length; i++) {
-    elements[i].style.display = 'none';
-  }
-}
-
-// ページが読み込まれたら hideElementsByAddtype() 関数を実行する
-window.addEventListener('load', function() {
-  hideElementsByAddtype();
-});
-
-// 外部の JavaScript ファイルが読み込まれたら hideElementsByAddtype() 関数を実行する
-$(document).ready(function() {
-  hideElementsByAddtype();
-});
-</script> -->
 <style>
 label,
 .uketori_siharai_radio{

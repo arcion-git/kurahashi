@@ -2445,7 +2445,6 @@ class LoginPageController extends Controller
 
     // $uketori_place = $request->uketori_place;
 
-
     $addtype = $request->addtype;
     $now = Carbon::now();
 
@@ -2474,6 +2473,15 @@ class LoginPageController extends Controller
       // 配送設定を呼び出し
       if(isset($shipping_code)){
         $shipping_setting = ShippingSetting::where(['shipping_code'=> $shipping_code,'shipping_method'=> $request->uketori_place])->first();
+        // 配送方法が取得できない場合
+        if(!isset($shipping_setting)){
+          $message = '配送方法が取得できません';
+          $data=[
+            'addtype' => $addtype,
+            'message' => $message,
+          ];
+          return redirect()->route('bulk',$data);
+        }
         $shipping_name = $shipping_setting->shipping_name;
         $shipping_price = $shipping_setting->shipping_price;
         $calender_id= $shipping_setting->calender_id;
@@ -2578,6 +2586,11 @@ class LoginPageController extends Controller
 
       // アイテムが取得できない場合
       if(!isset($cart)){
+        $message = '商品コードエラー';
+        $data=[
+          'addtype' => $addtype,
+          'message' => $message,
+        ];
         return redirect()->route('bulk',$data);
       }
 

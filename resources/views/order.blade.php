@@ -544,7 +544,7 @@
 
 
 
-		<!-- カード情報confirmでクレジットカード払いが選択されたら表示 -->
+		<!-- クレジットカード払いが選択されたら表示 -->
 		@if($user->setonagi & Auth::guard('user')->check() )
 		<div id="pay_card">
 			<div class="row mt-4">
@@ -594,7 +594,7 @@
 		</div>
 		<input id="sano_nissuu" type="hidden" value="{{$sano_nissuu}}" />
 
-		<!-- JavaScript ライブラリ読み込み -->
+		<!-- ライブラリ読み込み -->
 		<script type="text/javascript" class="webcollect-embedded-token" src="@if(isset($collect_token)){{$collect_token}}@endif"></script>
 		<script type="text/javascript">
 
@@ -986,7 +986,7 @@ $(document).ready(function() {
 
 
 
-<!-- 取引確認画面で操作ができないようにする -->
+<!-- 操作に関する処理 -->
 <script>
 if(document.URL.match("/approval")) {
   $(function(){
@@ -1011,7 +1011,7 @@ label,
 </style>
 
 
-<!-- 発注済、キャンセルの場合操作ができないようにする -->
+<!-- 発注済・CN操作に関する処理 -->
 @if ( Auth::guard('user')->check() )
 	@if(isset($deal))
 		@if($deal->status == '発注済' or $deal->status == 'キャンセル' or $deal->status == 'リピートオーダー')
