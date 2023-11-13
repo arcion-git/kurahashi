@@ -567,7 +567,7 @@
 							<label>カード名義人</label>
 						</div>
 						<div class="col-sm-12 col-md-5">
-							<input type="text" class="form-control" name="card_owner" maxlength="30" placeholder="KURONEKO TARO" value="">
+							<input type="text" class="form-control" name="card_owner" maxlength="30" placeholder="KURONEKO TARO" value="" pattern="[A-Z]*">
 						</div>
 					</div>
 					<div class="input-form row">
@@ -575,7 +575,7 @@
 							<label>カード有効期限</label>
 						</div>
 						<div class="col-sm-12 col-md-5">
-							<input type="number" class="form-control yuukoukigen" name="exp_month" maxlength="2" placeholder="10" value="">月/ <input class="form-control yuukoukigen" type="number" name="exp_year" maxlength="2" value="" placeholder="28">年
+							<input type="number" class="form-control yuukoukigen" name="exp_month" maxlength="2" placeholder="10" value="" pattern="[0-9]*">月/ <input class="form-control yuukoukigen" type="number" name="exp_year" maxlength="2" value="" placeholder="28" pattern="[0-9]*">年
 						</div>
 					</div>
 					<div class="input-form row">
@@ -583,7 +583,7 @@
 							<label>セキュリティコード</label>
 						</div>
 						<div class="col-sm-12 col-md-5">
-							<input type="number" class="form-control" name="security_code" maxlength="4" placeholder="1234" value="">
+							<input type="number" class="form-control" name="security_code" maxlength="4" placeholder="1234" value="" pattern="[0-9]*">
 						</div>
 					</div>
 					<div class="input-form" style="display:none;">
