@@ -559,7 +559,7 @@
 							<label for="card_no">カード番号</label>
 						</div>
 						<div class="col-sm-12 col-md-5">
-							<input type="number" class="form-control" name="card_no" maxlength="16" placeholder="************1234" value="">
+							<input type="number" class="form-control" name="card_no" maxlength="16" placeholder="************1234" value="" pattern="[0-9]*">
 						</div>
 					</div>
 					<div class="input-form row">
