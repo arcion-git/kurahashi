@@ -4566,3 +4566,11 @@ body {
   opacity: 0.5 !important;
   speed: 0.5s !important;
 }
+.approval_message{
+  color: #E21E1B;
+}
+@media (min-width: 768px) {
+.approval_message{
+  text-align: right;
+}
+}

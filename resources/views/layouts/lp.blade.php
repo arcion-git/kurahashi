@@ -33,16 +33,26 @@
     <div class="header_bg">
       <header>
         <div class="logo">
-          <a href="{{ url('/') }}"><img src="{{ asset('img/logo.png') }}" /></a>
+          <a href="{{ url('/') }}{{ request()->has('type') ? '?type=' . request()->input('type') : '' }}"><img src="{{ asset('img/logo.png') }}" /></a>
         </div>
         <ul class="menu pc">
-          <li><a href="{{ url('/') }}#NEWS">新着情報</a></li>
-          <li><a href="{{ url('/') }}#ABOUT">サービスについて</a></li>
-          <li><a href="{{ url('/') }}#FUNCTION">機能紹介</a></li>
-          <li><a href="{{ url('/') }}#PAY">決済方法</a></li>
-          <li><a href="{{ url('/') }}#START">ご利用スタートの流れ</a></li>
-          <li class="register_btn"><a href="{{ route('register') }}">会員登録</a></li>
-          <li class="login_btn"><a href="{{ route('login') }}">ログイン</a></li>
+          <li><a href="{{ url('/') }}{{ request()->has('type') ? '?type=' . request()->input('type') : '' }}#NEWS">新着情報</a></li>
+          <li><a href="{{ url('/') }}{{ request()->has('type') ? '?type=' . request()->input('type') : '' }}#ABOUT">サービスについて</a></li>
+          <li><a href="{{ url('/') }}{{ request()->has('type') ? '?type=' . request()->input('type') : '' }}#FUNCTION">機能紹介</a></li>
+          <li><a href="{{ url('/') }}{{ request()->has('type') ? '?type=' . request()->input('type') : '' }}#PAY">決済方法</a></li>
+          <li><a href="{{ url('/') }}{{ request()->has('type') ? '?type=' . request()->input('type') : '' }}#START">ご利用スタートの流れ</a></li>
+          <?php if(!isset($_GET['type'])) { ?>
+            <li class="register_btn"><a href="{{ route('register') }}">会員登録</a></li>
+          <?php } else { ?>
+            <li class="register_btn">
+              <form action="{{ url('/user/register_c') }}" method="GET" class="form-horizontal">
+                {{ csrf_field() }}
+                <input type="hidden" id="type" name="type" value="<?php echo isset($_GET['type']) ? htmlspecialchars($_GET['type']) : ''; ?>">
+                <button id="" type="submit" class="">会員登録</button>
+              </form>
+            </li>
+          <?php } ?>
+          <li class="login_btn"><a href="{{ route('login') }}{{ request()->has('type') ? '?type=' . request()->input('type') : '' }}">ログイン</a></li>
         </ul>
         <div id="nav-wrapper" class="nav-wrapper sp">
           <div class="hamburger" id="js-hamburger">
@@ -52,14 +62,14 @@
           </div>
           <nav class="sp-nav">
             <ul>
-              <li><a href="{{ url('/') }}#NEWS">新着情報</a></li>
-              <li><a href="{{ url('/') }}#ABOUT">サービスについて</a></li>
-              <li><a href="{{ url('/') }}#FUNCTION">機能紹介</a></li>
-              <li><a href="{{ url('/') }}#PAY">決済方法</a></li>
-              <li><a href="{{ url('/') }}#START">ご利用スタートの流れ</a></li>
-              <li><a href="{{ url('/welcomecontact') }}">お問い合わせ</a></li>
-              <li class="register_btn"><a href="{{ route('register') }}">会員登録</a></li>
-              <li class="login_btn"><a href="{{ route('login') }}">ログイン</a></li>
+              <li><a href="{{ url('/') }}{{ request()->has('type') ? '?type=' . request()->input('type') : '' }}#NEWS">新着情報</a></li>
+              <li><a href="{{ url('/') }}{{ request()->has('type') ? '?type=' . request()->input('type') : '' }}#ABOUT">サービスについて</a></li>
+              <li><a href="{{ url('/') }}{{ request()->has('type') ? '?type=' . request()->input('type') : '' }}#FUNCTION">機能紹介</a></li>
+              <li><a href="{{ url('/') }}{{ request()->has('type') ? '?type=' . request()->input('type') : '' }}#PAY">決済方法</a></li>
+              <li><a href="{{ url('/') }}{{ request()->has('type') ? '?type=' . request()->input('type') : '' }}#START">ご利用スタートの流れ</a></li>
+              <li><a href="{{ url('/welcomecontact') }}{{ request()->has('type') ? '?type=' . request()->input('type') : '' }}">お問い合わせ</a></li>
+              <li class="register_btn"><a href="{{ route('register') }}{{ request()->has('type') ? '?type=' . request()->input('type') : '' }}">会員登録</a></li>
+              <li class="login_btn"><a href="{{ route('login') }}{{ request()->has('type') ? '?type=' . request()->input('type') : '' }}">ログイン</a></li>
             </ul>
           </nav>
           <div class="black-bg" id="js-black-bg"></div>
@@ -80,17 +90,17 @@
             </div>
             <div class="footer_menu">
               <ul class="">
-                <li><a href="{{ url('/welcomeguide') }}">ご利用ガイド</a></li>
-                <li><a href="{{ url('/welcomelow') }}">特商法取引に基づく表記</a></li>
-                <li><a href="{{ url('/welcomeprivacypolicy') }}">個人情報保護方針</a></li>
+                <li><a href="{{ url('/welcomeguide') }}{{ request()->has('type') ? '?type=' . request()->input('type') : '' }}">ご利用ガイド</a></li>
+                <li><a href="{{ url('/welcomelow') }}{{ request()->has('type') ? '?type=' . request()->input('type') : '' }}">特商法取引に基づく表記</a></li>
+                <li><a href="{{ url('/welcomeprivacypolicy') }}{{ request()->has('type') ? '?type=' . request()->input('type') : '' }}">個人情報保護方針</a></li>
               </ul>
             </div>
             <div class="footer_contact">
               <h3>お問い合わせ窓口<span>CONTACT</span></h3>
               <!-- <p><strong>TEL 084-941-3510</strong></p> -->
-              <p><strong>TEL 080-2943-7978</strong></p>
-              <p class="small">平日9：00～18：00（定休 土日祝）</p>
-              <a href="{{ url('/welcomecontact') }}"><div class="btn navy">メールでお問い合わせ</div></a>
+              <!-- <p><strong>TEL 080-2943-7978</strong></p>
+              <p class="small">平日9：00～18：00（定休 土日祝）</p> -->
+              <a href="{{ url('/welcomecontact') }}{{ request()->has('type') ? '?type=' . request()->input('type') : '' }}"><div class="btn navy">メールでお問い合わせ</div></a>
             </div>
           </div>
           <div class="flex-container external_link">

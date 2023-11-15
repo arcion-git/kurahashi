@@ -78,6 +78,7 @@
             </div>
           </div>
           <br style="clear:both;" />
+          <p class="approval_message">※注文後の内容変更は承れませんのであらかじめご了承ください。</p>
         </div>
       </div>
     </div>

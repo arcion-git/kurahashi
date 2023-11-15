@@ -435,17 +435,17 @@
             </div>
             <div class="footer_menu">
               <ul class="">
-                <li><a href="{{ url('/welcomeguide') }}">ご利用ガイド</a></li>
-                <li><a href="{{ url('/welcomelow') }}">特商法取引に基づく表記</a></li>
-                <li><a href="{{ url('/welcomeprivacypolicy') }}">個人情報保護方針</a></li>
+                <li><a href="{{ url('/welcomeguide') }}{{ request()->has('type') ? '?type=' . request()->input('type') : '' }}">ご利用ガイド</a></li>
+                <li><a href="{{ url('/welcomelow') }}{{ request()->has('type') ? '?type=' . request()->input('type') : '' }}">特商法取引に基づく表記</a></li>
+                <li><a href="{{ url('/welcomeprivacypolicy') }}{{ request()->has('type') ? '?type=' . request()->input('type') : '' }}">個人情報保護方針</a></li>
               </ul>
             </div>
             <div class="footer_contact">
               <h3>お問い合わせ窓口<span>CONTACT</span></h3>
               <!-- <p><strong>TEL 084-941-3510</strong></p> -->
-              <p><strong>TEL 080-2943-7978</strong></p>
-              <p class="small">平日9：00～18：00（定休 土日祝）</p>
-              <a href="{{ url('/welcomecontact') }}"><div class="btn navy">メールでお問い合わせ</div></a>
+              <!-- <p><strong>TEL 080-2943-7978</strong></p>
+              <p class="small">平日9：00～18：00（定休 土日祝）</p> -->
+              <a href="{{ url('/welcomecontact') }}{{ request()->has('type') ? '?type=' . request()->input('type') : '' }}"><div class="btn navy">メールでお問い合わせ</div></a>
             </div>
           </div>
           <div class="flex-container external_link">

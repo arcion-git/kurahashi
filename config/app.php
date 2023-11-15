@@ -154,6 +154,7 @@ return [
     'collect_touroku' => env('COLLECT_TOUROKU'),
     'collect_cancel' => env('COLLECT_CANCEL'),
     'collect_pricechange' => env('COLLECT_PRICECHANGE'),
+    'collect_infoupdate' => env('COLLECT_INFOUPDATE'),
 
     /*
     |--------------------------------------------------------------------------
