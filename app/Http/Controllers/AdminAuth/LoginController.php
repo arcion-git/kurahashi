@@ -7,6 +7,8 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
 use Hesto\MultiAuth\Traits\LogsoutGuard;
 
+use Illuminate\Http\Request;
+
 class LoginController extends Controller
 {
     /*
@@ -20,8 +22,18 @@ class LoginController extends Controller
     |
     */
 
+    // ユーザ認証およびログアウト機能のためのトレイトの使用
     use AuthenticatesUsers, LogsoutGuard {
         LogsoutGuard::logout insteadof AuthenticatesUsers;
+        AuthenticatesUsers::attemptLogin as originalAttemptLogin; // 追加
+    }
+
+    // Remember Me 機能のためのトークンを発行するためのログイン試行メソッド
+    protected function attemptLogin(Request $request, $remember = true)
+    {
+        return $this->guard()->attempt(
+            $this->credentials($request), $remember
+        );
     }
 
     /**

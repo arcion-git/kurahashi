@@ -84,7 +84,7 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\User::class,
-            'lifetime' => 1, // 30分に設定
+            // 'lifetime' => 1, // 30分に設定
         ],
 
         // 'users' => [

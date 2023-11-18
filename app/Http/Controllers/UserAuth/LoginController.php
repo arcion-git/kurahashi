@@ -39,8 +39,18 @@ class LoginController extends Controller
 
 
 
+    // ユーザ認証およびログアウト機能のためのトレイトの使用
     use AuthenticatesUsers, LogsoutGuard {
         LogsoutGuard::logout insteadof AuthenticatesUsers;
+        AuthenticatesUsers::attemptLogin as originalAttemptLogin; // 追加
+    }
+
+    // Remember Me 機能のためのトークンを発行するためのログイン試行メソッド
+    protected function attemptLogin(Request $request, $remember = true) // $remember を true に変更
+    {
+        return $this->guard()->attempt(
+            $this->credentials($request), $remember
+        );
     }
 
     /**
@@ -172,33 +182,37 @@ class LoginController extends Controller
         $user = User::where(['email'=> $request->email])->first();
         $yesterday = Carbon::yesterday();
 
-        // 取引IDのないカートの商品を削除
-        $carts = Cart::where(['user_id'=> $user->id,'deal_id'=> null])
-        ->whereDate('created_at', '<=' , $yesterday)->get();
-        if($carts){
-          foreach ($carts as $key => $value) {
-            $orders=Order::where(['cart_id'=> $value->id])->delete();
-          }
-        }
-        $carts = Cart::where(['user_id'=> $user->id,'deal_id'=> null])
-        ->whereDate('created_at', '<=' , $yesterday)->delete();
-
-        // 取引IDのない任意の商品を削除
-        $carts = CartNini::where(['user_id'=> $user->id,'deal_id'=> null])
-        ->whereDate('created_at', '<=' , $yesterday)->get();
-        if($carts){
-          foreach ($carts as $key => $value) {
-            $orders=OrderNini::where(['cart_nini_id'=> $value->id])->delete();
-          }
-        }
-        $carts = CartNini::where(['user_id'=> $user->id,'deal_id'=> null])
-        ->whereDate('created_at', '<=' , $yesterday)->delete();
-
-        // shipping_codeを持つユーザーのファーストページを振り分け
         $setonagi = Setonagi::where(['user_id'=> $user->id])->first();
         if($setonagi){
           $shipping_code = $setonagi->shipping_code;
         }
+
+        // 取引IDのないカートの商品を削除（Cユーザーは除く）
+        if(!isset($shipping_code)){
+          // 取引IDのないカートの商品を削除
+          $carts = Cart::where(['user_id'=> $user->id,'deal_id'=> null])
+          ->whereDate('created_at', '<=' , $yesterday)->get();
+          if($carts){
+            foreach ($carts as $key => $value) {
+              $orders=Order::where(['cart_id'=> $value->id])->delete();
+            }
+          }
+          $carts = Cart::where(['user_id'=> $user->id,'deal_id'=> null])
+          ->whereDate('created_at', '<=' , $yesterday)->delete();
+
+          // 取引IDのない任意の商品を削除
+          $carts = CartNini::where(['user_id'=> $user->id,'deal_id'=> null])
+          ->whereDate('created_at', '<=' , $yesterday)->get();
+          if($carts){
+            foreach ($carts as $key => $value) {
+              $orders=OrderNini::where(['cart_nini_id'=> $value->id])->delete();
+            }
+          }
+          $carts = CartNini::where(['user_id'=> $user->id,'deal_id'=> null])
+          ->whereDate('created_at', '<=' , $yesterday)->delete();
+        }
+
+        // shipping_codeを持つユーザーのファーストページを振り分け
         if(isset($shipping_code)){
           return redirect()->route('setonagi');
         }else{

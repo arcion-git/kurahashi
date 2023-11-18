@@ -116,14 +116,14 @@
       </ul>
     </section>
     <section id="ABOUT">
-      <h2>SETOnagiオーダーブックでできること</h2>
+      <h2>SETOnagiでできること</h2>
       <div class="about">
         <div class="about_div">
           <div class="about_logo">
               <img src="{{ asset('img/logo.png') }}" />
           </div>
           <div class="about_text nagi02">
-              <p>SETOnagiオーダーブックは、<span>新鮮な市場のお魚をネットショプ感覚</span>でかんたんに<span>仕入れ・購入できるサービス</span>です。<br />また当サービスは、<span>老舗の「魚市場」が運営しています。</span><br />当社営業が、「人的パワー」でお客様の仕入れをバックアップ、<br /><span>今が旬の商品、おすすめの仕入れ商品をご提案</span>をさせていただきます。<br />安心できる食品・食材を市場から、<br /><span class="blue">「美味しいで元気。」</span><br />お届けいたします。<br /><div class="sp sp_nagi02"><img class="" src="{{ asset('img/lp/nagi02.png') }}" /></div>
+              <p>SETOnagiは、<span>新鮮な市場のお魚をネットショプ感覚</span>でかんたんに<span>仕入れ・購入できるサービス</span>です。<br />また当サービスは、<span>老舗の「魚市場」が運営しています。</span><br />当社営業が、「人的パワー」でお客様の仕入れをバックアップ、<br /><span>今が旬の商品、おすすめの仕入れ商品をご提案</span>をさせていただきます。<br />安心できる食品・食材を市場から、<br /><span class="blue">「美味しいで元気。」</span><br />お届けいたします。<br /><div class="sp sp_nagi02"><img class="" src="{{ asset('img/lp/nagi02.png') }}" /></div>
               <?php if(!isset($_GET['type'])) { ?>
                 <p class="small">※弊社と取引のないお客様はヤマト<br />掛け払いの審査があり、法人会員様限定となります。<br />※市場での引き取り限定となります。<br />（配送に関しましては、今後ご用意予定です。）</p>
               <?php } else { ?>
@@ -140,7 +140,7 @@
     </section>
     <section id="BENEFIT">
       <div class="nagi03">
-        <h2><span class="pc">SETOnagi</span>オーダーブックの<br class="sp"/>3つのメリット</h2>
+        <h2><span class="pc">SETOnagi</span>の<br class="sp"/>3つのメリット</h2>
       </div>
       <div class="benefit">
         <div class="benefit_item">
@@ -177,7 +177,7 @@
             <h3>市場で直接<br /><?php if(!isset($_GET['type'])) { ?><?php } else { ?>ご指定の場所で<br /><?php } ?>最短翌日受け取り</h3>
           </div>
           <div class="benefit_text">
-              <p>SETOnagiオーダーブックでは所定の場所にて、直接商品をお引き取りいただけます。<br /><a href="#HIKITORI">お引き取り場所・時間帯の詳細はこちら</a></p>
+              <p>SETOnagiでは所定の場所にて、直接商品をお引き取りいただけます。<br /><a href="#HIKITORI">お引き取り場所・時間帯の詳細はこちら</a></p>
           </div>
         </div>
       </div>
@@ -193,7 +193,7 @@
     </div>
     <section id="FUNCTION">
       <div class="function_bigtitle">
-        <h2><span>かんたん</span>に特化した<br />SETOnagiオーダーブックの機能について</h2>
+        <h2><span>かんたん</span>に特化した<br />SETOnagiの機能について</h2>
       </div>
       <div class="function">
         <div class="function_item">

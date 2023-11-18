@@ -114,7 +114,7 @@
                                   @elseif ($setonagi_item->item()->tani == 2)
                                   ﾎﾞｰﾙ
                                   @elseif ($setonagi_item->item()->tani == 3)
-                                  ﾊﾞﾗ
+                                  個
                                   @elseif ($setonagi_item->item()->tani == 4)
                                   Kg
                                   @endif

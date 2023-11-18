@@ -24,10 +24,9 @@
                     <h2 class="firstguide_title">SETOnagiオーダーブックの特徴</h2>
                     <p>創業80年の中四国の市場(荷受)である<span>「株式会社クラハシ」</span>が運営しております。</p>
 
+                    @if(!isset($shipping_code))
                     <h2 class="firstguide_title"><i class="fa fa-check"></i>限定お買い得商品</h2>
                     <p>営業が特にお勧めする「今こそお買い得」商品を、写真とともに掲載しています。この機会にぜひお買い求めください。</p>
-
-                    @if(!isset($shipping_code))
                     <h2 class="firstguide_title"><i class="fa fa-user"></i>担当おすすめ商品</h2>
                     <p>営業がお客様毎のご要望に応じた、おすすめ商品を登録し掲載いたします。</p>
                     <h2 class="firstguide_title"><i class="fa fa-fire"></i>市況商品</h2>
@@ -39,7 +38,7 @@
                     @endif
 
                     <div class="firstguide_btn">
-                      <a href="setonagi" class="btn-lg btn-warning">限定お買い得商品一覧はこちら</a>
+                      <a href="setonagi" class="btn-lg btn-warning">@if(isset($shipping_code))商品一覧はこちら@else限定お買い得商品一覧はこちら@endif</a>
                     </div>
 
                   </div>

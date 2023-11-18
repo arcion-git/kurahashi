@@ -284,7 +284,7 @@
 																				@elseif ($cart->item->tani == 2)
 																				ﾎﾞｰﾙ
 																				@elseif ($cart->item->tani == 3)
-																				ﾊﾞﾗ
+																				個
 																				@elseif ($cart->item->tani == 4)
 																				Kg
 																				@endif
@@ -949,7 +949,7 @@ $(document).ready(function () {
 	<div class="col-lg-8">
 	  <div class="section-title">通信欄</div>
 	    <textarea id="memo" style="height:250px; width:500px;" name="memo" rows="10" value="@if(isset($deal)){{$deal->memo}}@elseif(isset($user->memo)){{$user->memo}}@endif" class="form-control selectric" maxlength="374" onchange="Limit(event)" onkeyup="Limit(event)">@if(isset($deal)){{$deal->memo}}@elseif(isset($user->memo)){{$user->memo}}@endif</textarea>
-			<p class="memo_note">※通信欄は「内容確認画面に進む」を押すと保存されます。<br />確認画面に進む直前に通信欄の入力をしてください。</p>
+			<p class="memo_note">※通信欄は「内容確認画面に進む」を押すと保存されます。<br />確認画面に進む直前に通信欄の入力をしてください。<br />「 " 」「 , 」「 # 」「 ! 」「 $ 」「 % 」<br class="sp"/>「 & 」「 = 」「 ; 」「 : 」「 ? 」「 + 」<br />上記の文字は使用できません。</p>
 	</div>
 	@if($user->setonagi)
   <div class="col-lg-4 text-right">
