@@ -20,8 +20,8 @@
                         <img src="{{ asset('img/logo.png') }}" width="300px;">
                       </div>
                     <h2 class="firstguide_title">探す手間を市場が取り除く<i class="fa fa-lightbulb"></i></h2>
-                    <p>この度は、SETOnagiデジタルオーダーブックのご利用をいただき、有難うございます。手軽に頼め安心できる食品を、<span>「市場からお届けする」</span>ことをコンセプトとしています。 <span>デジタル化が進むほど</span>、寧ろ気付かされる <span>”人と人との繋がり” の大切さ。</span>当社営業が、皆様の購買活動を<span>「人的パワー」</span>でバックアップいたします。 健康寿命を全うするにも、なにより「人間同志の繋がり」が大切。 SETOnagiは、<span>「美味しいで元気。」</span>を皆様にお届けします。</p>
-                    <h2 class="firstguide_title">SETOnagiオーダーブックの特徴</h2>
+                    <p>この度は、SETOnagiのご利用をいただき、有難うございます。手軽に頼め安心できる食品を、<span>「市場からお届けする」</span>ことをコンセプトとしています。 <span>デジタル化が進むほど</span>、寧ろ気付かされる <span>”人と人との繋がり” の大切さ。</span>当社営業が、皆様の購買活動を<span>「人的パワー」</span>でバックアップいたします。 健康寿命を全うするにも、なにより「人間同志の繋がり」が大切。 SETOnagiは、<span>「美味しいで元気。」</span>を皆様にお届けします。</p>
+                    <h2 class="firstguide_title">SETOnagiの特徴</h2>
                     <p>創業80年の中四国の市場(荷受)である<span>「株式会社クラハシ」</span>が運営しております。</p>
 
                     @if(!isset($shipping_code))

@@ -347,7 +347,7 @@ class LoginPageController extends Controller
           'text' => $text,
           'admin_mail' => $admin_mail,
       ], function ($message) use ($email , $admin_mail) {
-          $message->to($email)->bcc($admin_mail)->subject('SETOnagiオーダーブックお問い合わせ完了のお知らせ');
+          $message->to($email)->bcc($admin_mail)->subject('SETOnagiお問い合わせ完了のお知らせ');
       });
       $message = 'お問い合わせ内容が送信されました';
       $data=[
@@ -1601,7 +1601,7 @@ class LoginPageController extends Controller
           'change_all_store' => $change_all_store,
           'change_all_nouhin_yoteibi' => $change_all_nouhin_yoteibi,
           'set_tokuisaki_name' => $set_tokuisaki_name,
-          'message' => '入力できない文字が含まれています。',
+          'message' => '通信欄に入力できない文字が含まれています。',
         ];
         return redirect()->route('confirm',$data);
       }
@@ -3336,7 +3336,7 @@ class LoginPageController extends Controller
       // $email = $user->email;
       $email = $user->email;
       $url = url('');
-      $text = 'SETOnagiオーダーブックをご利用くださいまして誠にありがとうございます。<br />
+      $text = 'SETOnagiをご利用くださいまして誠にありがとうございます。<br />
       下記の通りご注文をお受けいたしましたのでご確認をお願いいたします。<br />
       <br />
       【注文番号】<br />'.$deal->id.'<br /><br />
@@ -3600,7 +3600,7 @@ class LoginPageController extends Controller
           'total_price' => $total_price,
           'memo' => $memo,
       ], function ($message) use ($email , $admin_mail) {
-          $message->to($email)->bcc($admin_mail)->subject('SETOnagiオーダーブックご注文承りました。');
+          $message->to($email)->bcc($admin_mail)->subject('SETOnagiご注文承りました。');
       });
       // 注文完了メール送信ここまで
     }
@@ -3897,7 +3897,7 @@ class LoginPageController extends Controller
     // $email = $user->email;
     $email = $user->email;
     $url = url('');
-    $text = 'SETOnagiオーダーブックをご利用くださいまして誠にありがとうございます。<br />
+    $text = 'SETOnagiをご利用くださいまして誠にありがとうございます。<br />
     下記のご注文がキャンセルされましたのでご確認をお願いいたします。<br />
     <br />
     【注文番号】<br />'.$deal->id.'<br /><br />
@@ -4161,7 +4161,7 @@ class LoginPageController extends Controller
         'total_price' => $total_price,
         'memo' => $memo,
     ], function ($message) use ($email , $admin_mail) {
-        $message->to($email)->bcc($admin_mail)->subject('SETOnagiオーダーブックご注文のキャンセルを承りました。');
+        $message->to($email)->bcc($admin_mail)->subject('SETOnagiご注文のキャンセルを承りました。');
     });
     // 注文完了メール送信ここまで
 

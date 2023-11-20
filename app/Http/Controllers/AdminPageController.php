@@ -1686,14 +1686,14 @@ class AdminPageController extends Controller
     $email = $user->email;
     $admin_mail = config('app.admin_mail');
     $url = url('');
-    $text = 'この度、ヤマトクレジットファイナンス株式会社の審査の結果、オーダーブックが利用可能となりました。<br />
+    $text = 'この度、ヤマトクレジットファイナンス株式会社の審査の結果、が利用可能となりました。<br />
     ユーザー登録時にご登録いただいたメールアドレスとパスワードにて、下記URLよりご利用いただけます。<br />
     URL：<a href="'.$url.'">'.$url.'</a>';
     Mail::send('emails.register', [
         'name' => $name,
         'text' => $text,
     ], function ($message) use ($email ,$admin_mail) {
-        $message->to($email)->bcc($admin_mail)->subject('SETOnagiオーダーブック審査通過のお知らせ');
+        $message->to($email)->bcc($admin_mail)->subject('SETOnagi審査通過のお知らせ');
     });
     return redirect()->route('admin.setonagiuser');
   }
@@ -1711,12 +1711,12 @@ class AdminPageController extends Controller
     $admin_mail = config('app.admin_mail');
     $url = url('');
     $text = 'この度、ヤマトクレジットファイナンス株式会社の審査の結果、<br />
-    オーダーブックが利用不可となりましたことをお知らせいたします。';
+    が利用不可となりましたことをお知らせいたします。';
     Mail::send('emails.register', [
         'name' => $name,
         'text' => $text,
     ], function ($message) use ($email ,$admin_mail) {
-        $message->to($email)->bcc($admin_mail)->subject('SETOnagiオーダーブック利用停止のお知らせ');
+        $message->to($email)->bcc($admin_mail)->subject('SETOnagi利用停止のお知らせ');
     });
     return redirect()->route('admin.setonagiuser');
   }
@@ -1741,7 +1741,7 @@ class AdminPageController extends Controller
         'name' => $name,
         'text' => $text,
     ], function ($message) use ($email , $admin_mail) {
-        $message->to($email)->bcc($admin_mail)->subject('SETOnagiオーダーブック審査結果のお知らせ');
+        $message->to($email)->bcc($admin_mail)->subject('SETOnagi審査結果のお知らせ');
     });
     return redirect()->route('admin.setonagiuser');
   }
