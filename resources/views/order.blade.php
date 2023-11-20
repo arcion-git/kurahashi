@@ -719,8 +719,12 @@
 			//メッセージを alert で出力
 			alert(errorInfo[i].errorCode + " : " + errorInfo[i].errorMsg);
 			if (errorInfo[i].errorCode === "Y021011105" || errorInfo[i].errorCode === "Y021011171") {
-			    // exp_month input要素にフォーカスを移動
-			    document.charge_form.exp_month.focus();
+			  // exp_month input要素にフォーカスを移動
+			  document.charge_form.exp_month.focus();
+			}
+			if(errorInfo[i].errorCode === "Y021011302"){
+				// security_code input要素にフォーカスを移動
+				document.charge_form.security_code.focus();
 			}
 		}
 		};
