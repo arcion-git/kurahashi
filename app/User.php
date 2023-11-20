@@ -73,6 +73,22 @@ class User extends Authenticatable
         }
     }
 
+    public function mail_shipping_code()
+    {
+        $setonagi_user = Setonagi::where('user_id', $this->id)->first();
+        if(isset($setonagi_user)){
+          $shipping_code = $setonagi_user->shipping_code;
+          if(isset($shipping_code)){
+            $shipping_code_url = '?type='.$shipping_code;
+            return $shipping_code_url;
+          }else{
+            return false;
+          }
+        }else{
+          return false;
+        }
+    }
+
     // public function tokuisaki_name() {
     //     return $this->belongsTo('App\Store', 'tokuisaki_id')
     //     ->first()->tokuisaki_name;

@@ -1258,6 +1258,8 @@ $(document).ready(function() {
 
 	      } else {
 	        $("#c_shipping_price").hide();
+					$('input[name="security_code"]').val('');
+					$('#card_approval_btn').addClass('disabled_btn');
 
 	        // 商品合計
 	        var sum = 0;
@@ -1352,6 +1354,8 @@ $(document).ready(function() {
 <script>
 $(function() {
 $("#c_shipping_price").hide();
+$('input[name="security_code"]').val('');
+$('#card_approval_btn').addClass('disabled_btn');
 });
 </script>
 @endif
@@ -1420,12 +1424,12 @@ $('.charge_form input:required').each(function () {
 		$(this).prev("label").addClass("required");
 });
 //入力欄の操作時
-$('.charge_form input:required').change(function () {
+$('.charge_form input, #uketori_place').change(function () {
 		//必須項目が空かどうかフラグ
 		let flag = true;
 		//必須項目をひとつずつチェック
 		$('.charge_form input:required').each(function(e) {
-				//もし必須項目が空なら
+				//もし必須項目が1つでも空なら
 				if ($('.charge_form input:required').eq(e).val() === "") {
 						flag = false;
 				}

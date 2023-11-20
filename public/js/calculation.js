@@ -1121,6 +1121,8 @@ if(document.URL.match("/approval")) {
 
       } else {
         $("#c_shipping_price").hide();
+        $('input[name="security_code"]').val('');
+        $('#card_approval_btn').addClass('disabled_btn');
 
         // 商品合計
         var sum = 0;

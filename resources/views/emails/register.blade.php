@@ -36,7 +36,10 @@
 〒729-0324<br />
 広島県三原市糸崎7丁目8番22号<br />
 事業者登録番号:T6240001039693<br />
-URL:https://setonagi-orderbook.com/<br />
+@php
+  $url = isset($user) && $user->mail_shipping_code() ? 'https://setonagi-orderbook.com' . $user->mail_shipping_code() : 'https://setonagi-orderbook.com/';
+@endphp
+URL:{{$url}}<br />
 お問い合わせ:info@setonagi-orderbook.com<br />
 <br />
 株式会社クラハシ 公式 HP<br />
