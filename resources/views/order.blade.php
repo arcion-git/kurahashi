@@ -396,7 +396,7 @@
 					<label for="company"><strong>配送方法</strong></label>
 			</div>
 			<div class="col-sm-12 col-md-5">
-				<select id="uketori_place" value="@if(isset($deal)){{$deal->uketori_place}}@else@if(isset($setonagi->uketori_place)){{$setonagi->uketori_place}}@endif@endif" name="uketori_place" class="c_uketori_place form-control">
+				<select id="uketori_place" value="@if(isset($deal) && isset($deal->uketori_place)){{$deal->uketori_place}}@elseif(isset($setonagi) && isset($setonagi->uketori_place)){{$setonagi->uketori_place}}@endif" name="uketori_place" class="c_uketori_place form-control">
 				@if(isset($deal))
 					<option id="set_uletori_place" value="{{$deal->uketori_place}}" selected>{{$deal->c_uketori_houhou()}}</option>
 				@else
@@ -598,10 +598,13 @@
 		<script type="text/javascript" class="webcollect-embedded-token" src="@if(isset($collect_token)){{$collect_token}}@endif"></script>
 		<script type="text/javascript">
 
+
 		/*
 		* 送信ボタン押下時に実行する JavaScript 関数
 		*/
 		function executePay() {
+
+
 		$("#overlayajax").fadeIn(300);
 
 		// function async_digestMessage(message) {

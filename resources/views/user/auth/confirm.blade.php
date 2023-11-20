@@ -152,6 +152,25 @@ label,
 <script>
 $(document).ready(function () {
 
+
+
+    function reloadOnBack() {
+      // ページをリロード
+      location.reload();
+    }
+
+    // popstate イベントのリスナーを追加
+    window.addEventListener('popstate', reloadOnBack);
+
+    // pageshow イベントのリスナーを追加
+    window.addEventListener('pageshow', function (event) {
+      // event.persisted が true の場合、ページがキャッシュから復元されたことを示す
+      if (event.persisted) {
+        reloadOnBack();
+      }
+    });
+
+
   function order_update_ready() {
     var addtype = '{{ $addtype }}';
     var show_favorite = '{{ $show_favorite }}';

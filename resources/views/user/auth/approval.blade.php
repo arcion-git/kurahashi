@@ -78,7 +78,8 @@
             </div>
           </div>
           <br style="clear:both;" />
-          <p class="approval_message">※注文後の内容変更は承れませんのであらかじめご了承ください。</p>
+          <p class="approval_message">※注文後の内容変更は承れませんのであらかじめご了承ください。<br />
+            ※ブラウザの「戻る」ボタンを使うと情報の再入力が必要となります。</p>
         </div>
       </div>
     </div>
@@ -196,25 +197,49 @@ $(document).ready(function() {
   });
 });
 
-// 戻るボタンでの警告
+
+
+
 $(document).ready(function() {
+  // 初回ページ遷移時に履歴を追加
   history.pushState(null, null, null);
+
+  // Safari向けにwindow.onpageshowイベントもリッスン
+  window.addEventListener('pageshow', function (event) {
+    // event.persisted が true の場合、ページがキャッシュから復元されたことを示す
+    if (event.persisted) {
+      setTimeout(showBackWarning, 0);
+    }
+  });
+
+  // popstate イベントのリスナーを追加
   $(window).on("popstate", function(){
+    // ブラウザの履歴を追加して警告を表示
     history.pushState(null, null, null);
+    setTimeout(showBackWarning, 0);
+  });
+
+  function showBackWarning() {
+    // 警告を表示
     Swal.fire({
       title: '前の画面に戻りますか？',
-      html : 'クレジットカード決済を選択されている場合、情報の再入力が必要となります。',
-      icon : 'warning',
+      html: 'クレジットカード決済を選択されている場合、情報の再入力が必要となります。',
+      icon: 'warning',
       showCancelButton: true,
-  	  cancelButtonText: '閉じる',
+      cancelButtonText: '閉じる',
       confirmButtonText: '前の画面に戻る'
-    }).then(function(result){
+    }).then(function(result) {
       if (result.value) {
+        // 確認ボタンがクリックされた場合、指定されたイベントをトリガー
         $('#back_confirm').trigger('click');
       }
     });
-  });
+  }
 });
+
+
+
+
 
 // リロード時に警告を表示
 // $(document).ready(function() {
