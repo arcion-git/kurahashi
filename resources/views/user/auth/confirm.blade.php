@@ -153,12 +153,11 @@ label,
 $(document).ready(function () {
 
 
-
     function reloadOnBack() {
       // ページをリロード
+      $('.nouhin_yoteibi_c').val('');
       location.reload();
     }
-
     // popstate イベントのリスナーを追加
     window.addEventListener('popstate', reloadOnBack);
 
@@ -499,5 +498,7 @@ $(document).ready(function () {
 
 });
 </script>
+
+
 
 @endsection

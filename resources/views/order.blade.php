@@ -422,9 +422,6 @@
 			</div>
 			<div class="col-sm-12 col-md-5">
 				<input type="text" id="change_all_nouhin_yoteibi" name="change_all_nouhin_yoteibi" class="nouhin_yoteibi_c form-control daterange-cus datepicker" value="@if(isset($deal)){{$set_order->nouhin_yoteibi}}@else{{$nouhin_yoteibi}}@endif" autocomplete="off" readonly>
-
-				@if(old('change_all_nouhin_yoteibi')){{old('change_all_nouhin_yoteibi')}}@endif
-
 				<script>
 				$('.nouhin_yoteibi_c').datepicker({
 					format: 'yyyy-mm-dd',
@@ -559,7 +556,7 @@
 							<label for="card_no">カード番号</label>
 						</div>
 						<div class="col-sm-12 col-md-5">
-							<input type="text" class="form-control" name="card_no" maxlength="16" placeholder="************1234" value="" pattern="[0-9]*">
+							<input type="text" class="form-control" name="card_no" maxlength="16" placeholder="" value="0000000000000001" pattern="[0-9]*">
 						</div>
 					</div>
 					<div class="input-form row">
@@ -567,7 +564,7 @@
 							<label>カード名義人</label>
 						</div>
 						<div class="col-sm-12 col-md-5">
-							<input type="text" class="form-control" name="card_owner" maxlength="30" placeholder="KURONEKO TARO" value="">
+							<input type="text" class="form-control" name="card_owner" maxlength="30" placeholder="" value="KURONEKO TARO">
 						</div>
 					</div>
 					<div class="input-form row">
@@ -575,7 +572,7 @@
 							<label>カード有効期限</label>
 						</div>
 						<div class="col-sm-12 col-md-5">
-							<input type="text" class="form-control yuukoukigen" name="exp_month" maxlength="2" placeholder="10" value="" pattern="[0-9]*">月/ <input class="form-control yuukoukigen" type="text" name="exp_year" maxlength="2" value="" placeholder="28" pattern="[0-9]*">年
+							<input type="text" class="form-control yuukoukigen" name="exp_month" maxlength="2" placeholder="" value="11" pattern="[0-9]*">月 <input class="form-control yuukoukigen" type="text" name="exp_year" maxlength="2" value="28" placeholder="" pattern="[0-9]*">年
 						</div>
 					</div>
 					<div class="input-form row">
@@ -583,7 +580,7 @@
 							<label>セキュリティコード</label>
 						</div>
 						<div class="col-sm-12 col-md-5">
-							<input type="text" class="form-control" name="security_code" maxlength="4" placeholder="1234" value="" pattern="[0-9]*">
+							<input type="text" class="form-control" name="security_code" maxlength="4" placeholder="" value="123" pattern="[0-9]*">
 						</div>
 					</div>
 					<div class="input-form" style="display:none;">
@@ -1134,184 +1131,185 @@ $(function() {
 $("#c_shipping_price").hide();
 $("#c_shipping_date").hide();
 $("#c_shipping_time").hide();
+// $(".c_uketori_place").trigger("change");
 
 $(document).ready(function() {
-		// セットされているvalueを取得
-			// var value = $("#set_uletori_place").val();
-			// valueがセットされているかチェック
-			// console.log(value);
-			// if (value) {
-			// 		// .c_uketori_place要素に対してchangeイベントを手動でトリガー
-			// 		$(".c_uketori_place").trigger("change");
-			// }
-			$("#overlayajax").fadeOut();
-	    var methodId = $(".c_uketori_place").val();
-	    var user_id = $(".user_id").first().attr("id");
-	    var sano_nissuu = $("#sano_nissuu").val();
-	    console.log(methodId);
-	    console.log(user_id);
-	    console.log(sano_nissuu);
-	    $.ajax({
-	        headers: {
-	          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-	        },
-	        url: location.origin + '/get-delivery-times',
-	        type: 'POST',
-	        data: {
-	          'methodId': methodId,
-	          'user_id': user_id,
-	          'sano_nissuu': sano_nissuu,
-	        }
-	    })
-	    // Ajaxリクエスト成功時の処理
-	    .done(function(data) {
-	      console.log("Data received:", data); // データをコンソールに表示
-	      if(data.ukewatasibi_nyuuryoku_umu == 1) {
+	// セットされているvalueを取得
+	// var value = $("#set_uletori_place").val();
+	// valueがセットされているかチェック
+	// console.log(value);
+	// if (value) {
+	// 		// .c_uketori_place要素に対してchangeイベントを手動でトリガー
+	// 		$(".c_uketori_place").trigger("change");
+	// }
+	$("#overlayajax").fadeOut();
+  var methodId = $(".c_uketori_place").val();
+  var user_id = $(".user_id").first().attr("id");
+  var sano_nissuu = $("#sano_nissuu").val();
+  console.log(methodId);
+  console.log(user_id);
+  console.log(sano_nissuu);
+  $.ajax({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      },
+      url: location.origin + '/get-delivery-times',
+      type: 'POST',
+      data: {
+        'methodId': methodId,
+        'user_id': user_id,
+        'sano_nissuu': sano_nissuu,
+      }
+  })
+  // Ajaxリクエスト成功時の処理
+  .done(function(data) {
+    console.log("Data received:", data); // データをコンソールに表示
+    if(data.ukewatasibi_nyuuryoku_umu == 1) {
 
-	        var dates = data.holidays.map(function(item) {
-	            return "'" + item.date + "'";
-	        });
-	        var holidays = dates.join(',');
-	        console.log(holidays);
+      var dates = data.holidays.map(function(item) {
+          return "'" + item.date + "'";
+      });
+      var holidays = dates.join(',');
+      console.log(holidays);
 
-	        $('.datepicker').datepicker('destroy'); //Destroy it before re-initing
-	        $('.nouhin_yoteibi_c').datepicker({
-						format: 'yyyy-mm-dd',
-						autoclose: true,
-						assumeNearbyYear: true,
-						language: 'ja',
-						startDate: sano_nissuu,
-						endDate: '+31d',
-	          setDate: null,
-						// defaultViewDate: Date(),
-						// defaultViewDate: { year: null, month: null, day: null },
-						datesDisabled: holidays,
-					});
-	        // 表示を有効にする
-	        $("#c_shipping_date").show();
-					// 前の画面から戻った場合、confirmのみ予め設定されている入力値をクリア
-	        if(document.URL.match("/confirm")) {
-						$(function() {
-								var change_all_nouhin_yoteibi = getUrlParam('change_all_nouhin_yoteibi');
-								if (change_all_nouhin_yoteibi) {
-									console.log(change_all_nouhin_yoteibi);
-									// $('#change_all_nouhin_yoteibi').text(change_all_nouhin_yoteibi);
-									// $('#change_all_nouhin_yoteibi').val(change_all_nouhin_yoteibi);
-								}else{
-									$('.nouhin_yoteibi_c').datepicker('setDate', null);
-									$('.nouhin_yoteibi_c').val('');
-								}
-						});
-	        }
-	      } else {
-	        $("#c_shipping_date").hide();
-	      }
-	      if(data.ukewatasi_kiboujikan_umu == 1) {
-	        $("#c_shipping_time").show();
-	      } else {
-	        $("#c_shipping_time").hide();
-	    		$('#uketori_time').val('');
-	      }
-	      if(data.shipping_price > 1) {
-	        $("#c_shipping_price").show();
-	        var c_shipping_price = data.shipping_price.toLocaleString();
-	        $('.c_shipping_price').text('¥ ' + c_shipping_price);
-	        $('input[name="c_shipping_price"]').val(c_shipping_price);
+      $('.datepicker').datepicker('destroy'); //Destroy it before re-initing
+      $('.nouhin_yoteibi_c').datepicker({
+				format: 'yyyy-mm-dd',
+				autoclose: true,
+				assumeNearbyYear: true,
+				language: 'ja',
+				startDate: sano_nissuu,
+				endDate: '+31d',
+        setDate: null,
+				// defaultViewDate: Date(),
+				// defaultViewDate: { year: null, month: null, day: null },
+				datesDisabled: holidays,
+			});
+      // 表示を有効にする
+      $("#c_shipping_date").show();
+			// 前の画面から戻った場合、confirmのみ予め設定されている入力値をクリア
+      if(document.URL.match("/confirm")) {
+				$(function() {
+						var change_all_nouhin_yoteibi = getUrlParam('change_all_nouhin_yoteibi');
+						if (change_all_nouhin_yoteibi) {
+							console.log(change_all_nouhin_yoteibi);
+							// $('#change_all_nouhin_yoteibi').text(change_all_nouhin_yoteibi);
+							// $('#change_all_nouhin_yoteibi').val(change_all_nouhin_yoteibi);
+						}else{
+							$('.nouhin_yoteibi_c').datepicker('setDate', null);
+							$('.nouhin_yoteibi_c').val('');
+						}
+				});
+      }
+    } else {
+      $("#c_shipping_date").hide();
+    }
+    if(data.ukewatasi_kiboujikan_umu == 1) {
+      $("#c_shipping_time").show();
+    	$('#uketori_time').val($('#uketori_time option:first').val());
+    } else {
+      $("#c_shipping_time").hide();
+  		$('#uketori_time').val('');
+    }
+    if(data.shipping_price > 1) {
+      $("#c_shipping_price").show();
+      var c_shipping_price = data.shipping_price.toLocaleString();
+      $('.c_shipping_price').text('¥ ' + c_shipping_price);
+      $('input[name="c_shipping_price"]').val(c_shipping_price);
 
-	        var shipping_price = $('#c_shipping_price_val').val();
-	        console.log(shipping_price);
+      var shipping_price = $('#c_shipping_price_val').val();
+      console.log(shipping_price);
 
-	        // 商品合計
-	        var sum = 0;
-	        $('.total').each(function () {
-	          var price = $(this).closest('tr').find('input.price').data('price');
-	          var quantity = $(this).closest('tr').find('select.quantity').val();
-	          var total = price * quantity;
-	          $(this).text(total);
-	          sum += total;
-	        });
+      // 商品合計
+      var sum = 0;
+      $('.total').each(function () {
+        var price = $(this).closest('tr').find('input.price').data('price');
+        var quantity = $(this).closest('tr').find('select.quantity').val();
+        var total = price * quantity;
+        $(this).text(total);
+        sum += total;
+      });
 
-	        // 商品合計
-	        var itemTotal = sum.toLocaleString();
-	        $('#item_total').text('¥ ' + itemTotal);
+      // 商品合計
+      var itemTotal = sum.toLocaleString();
+      $('#item_total').text('¥ ' + itemTotal);
 
-	        // 送料税込額
-	        var shipping_price_zei = Math.floor(shipping_price * 110 / 100);
-	        console.log(shipping_price_zei);
+      // 送料税込額
+      var shipping_price_zei = Math.floor(shipping_price * 110 / 100);
+      console.log(shipping_price_zei);
 
-	        // 送料税額
-	        var shipping_price_zei_only = shipping_price_zei - shipping_price;
+      // 送料税額
+      var shipping_price_zei_only = shipping_price_zei - shipping_price;
 
-	    		// 税込合計金額
-	        var allTotal = Math.floor(sum * 108 / 100) + shipping_price_zei;
-	        $('#all_total').text('¥ ' + allTotal.toLocaleString());
-	        $('#all_total_val').val(allTotal);
+  		// 税込合計金額
+      var allTotal = Math.floor(sum * 108 / 100) + shipping_price_zei;
+      $('#all_total').text('¥ ' + allTotal.toLocaleString());
+      $('#all_total_val').val(allTotal);
 
-	    		// 税額
-	        var tax = Math.round(allTotal - sum - shipping_price);
-	        $('#tax').text('¥ ' + tax.toLocaleString());
-	        $('#tax_val').val(tax);
-
-
-	        // $('.nouhin_yoteibi_c').datepicker('setDate', null);
-	        // $('.nouhin_yoteibi_c').val('');
-	        // $('#change_all_nouhin_yoteibi').datepicker('setDate', null);
-	        // $('#change_all_nouhin_yoteibi').val('');
-	        // $('#change_all_nouhin_yoteibi').trigger('change');
-
-	      } else {
-	        $("#c_shipping_price").hide();
-					$('input[name="security_code"]').val('');
-					$('#card_approval_btn').addClass('disabled_btn');
-
-	        // 商品合計
-	        var sum = 0;
-
-	        $('.total').each(function () {
-	          var price = $(this).closest('tr').find('input.price').data('price');
-	          var quantity = $(this).closest('tr').find('select.quantity').val();
-	          var total = price * quantity;
-	          $(this).text(total);
-	          sum += total;
-	        });
-
-	        // 商品合計
-	        var itemTotal = sum.toLocaleString();
-	        $('#item_total').text('¥ ' + itemTotal);
-
-	    		// 税込合計金額
-	        var allTotal = Math.floor(sum * 108 / 100);
-	        $('#all_total').text('¥ ' + allTotal.toLocaleString());
-	        $('#all_total_val').val(allTotal);
-
-	    		// 税額
-	        var tax = Math.round(allTotal - sum);
-	        $('#tax').text('¥ ' + tax.toLocaleString());
-	        $('#tax_val').val(tax);
-
-	      }
+  		// 税額
+      var tax = Math.round(allTotal - sum - shipping_price);
+      $('#tax').text('¥ ' + tax.toLocaleString());
+      $('#tax_val').val(tax);
 
 
+      // $('.nouhin_yoteibi_c').datepicker('setDate', null);
+      // $('.nouhin_yoteibi_c').val('');
+      // $('#change_all_nouhin_yoteibi').datepicker('setDate', null);
+      // $('#change_all_nouhin_yoteibi').val('');
+      // $('#change_all_nouhin_yoteibi').trigger('change');
 
-	      // Swal.fire({
-	      //   type:"success",
-	      //   title: "変更完了",
-	      //   position: 'center-center',
-	      //   toast: true,
-	      //   icon: 'success',
-	      //   showConfirmButton: false,
-	      //   timer: 1500
-	      // });
-	    })
-	    // Ajaxリクエスト失敗時の処理
-	    .fail(function(jqXHR, textStatus, errorThrown) {
-	      alert('配送方法を変更できませんでした。');
-	      console.log("ajax通信に失敗しました");
-	      console.log("XMLHttpRequest : " + XMLHttpRequest.status);
-	      console.log("textStatus     : " + textStatus);
-	      console.log("errorThrown    : " + errorThrown.message);
-	    });
+    } else {
+      $("#c_shipping_price").hide();
+			// $('input[name="security_code"]').val('');
+			// $('#card_approval_btn').addClass('disabled_btn');
 
+      // 商品合計
+      var sum = 0;
+
+      $('.total').each(function () {
+        var price = $(this).closest('tr').find('input.price').data('price');
+        var quantity = $(this).closest('tr').find('select.quantity').val();
+        var total = price * quantity;
+        $(this).text(total);
+        sum += total;
+      });
+
+      // 商品合計
+      var itemTotal = sum.toLocaleString();
+      $('#item_total').text('¥ ' + itemTotal);
+
+  		// 税込合計金額
+      var allTotal = Math.floor(sum * 108 / 100);
+      $('#all_total').text('¥ ' + allTotal.toLocaleString());
+      $('#all_total_val').val(allTotal);
+
+  		// 税額
+      var tax = Math.round(allTotal - sum);
+      $('#tax').text('¥ ' + tax.toLocaleString());
+      $('#tax_val').val(tax);
+
+    }
+
+
+
+    // Swal.fire({
+    //   type:"success",
+    //   title: "変更完了",
+    //   position: 'center-center',
+    //   toast: true,
+    //   icon: 'success',
+    //   showConfirmButton: false,
+    //   timer: 1500
+    // });
+  })
+  // Ajaxリクエスト失敗時の処理
+  .fail(function(jqXHR, textStatus, errorThrown) {
+    alert('配送方法を変更できませんでした。');
+    console.log("ajax通信に失敗しました");
+    console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+    console.log("textStatus     : " + textStatus);
+    console.log("errorThrown    : " + errorThrown.message);
+  });
 });
 // 配送方法が選択されない状態だと、カード情報の入力エリアを非表示にするconfirmのみ起動
 $(document).ready(function() {
@@ -1325,7 +1323,7 @@ $(document).ready(function() {
 		updatePayCardVisibility();
 		$('#uketori_place, .nouhin_yoteibi_c, #uketori_time').change(function() {
 		// セレクトボックスの値が変更されたときに実行
-			updatePayCardVisibility();
+			// updatePayCardVisibility();
 		});
 		function updatePayCardVisibility() {
 			// 納品予定日などが存在する場合
@@ -1357,8 +1355,8 @@ $(document).ready(function() {
 <script>
 $(function() {
 $("#c_shipping_price").hide();
-$('input[name="security_code"]').val('');
-$('#card_approval_btn').addClass('disabled_btn');
+// $('input[name="security_code"]').val('');
+// $('#card_approval_btn').addClass('disabled_btn');
 });
 </script>
 @endif
@@ -1382,11 +1380,11 @@ $('input[name="security_code"]').attr('required', true);
 //始めにjQueryで送信ボタンを無効化する
 $('#card_approval_btn').addClass('disabled_btn');
 //始めにjQueryで必須欄を加工する
-$('.charge_form input:required').each(function () {
+$('.charge_form input, #uketori_place').each(function () {
 		$(this).prev("label").addClass("required");
 });
-//入力欄の操作時
-$('.charge_form input:required').change(function () {
+// 入力欄の操作時
+$('.charge_form input, #uketori_place').change(function () {
 		//必須項目が空かどうかフラグ
 		let flag = true;
 		//必須項目をひとつずつチェック
@@ -1452,6 +1450,7 @@ $('.charge_form input, #uketori_place').change(function () {
 });
 
 
+// ボタンの表示非表示
 $(function() {
 if ($("[id=クロネコかけ払い]").prop("checked") == false) {
 $('#card_approval_btn').hide();
@@ -1460,6 +1459,7 @@ $('#approval_btn').hide();
 $('#card_approval_btn').hide();
 $('#approval_btn').hide();
 }
+
 if ($("[id=クロネコかけ払い]").prop("checked") == true) {
 $('#card_approval_btn').hide();
 $('#approval_btn').show();
@@ -1467,8 +1467,6 @@ $('#approval_btn').show();
 $('#card_approval_btn').show();
 $('#approval_btn').hide();
 }
-
-
 
 $('[name="uketori_siharai"]:radio').change( function() {
 if($('[id=クロネコかけ払い]').prop('checked')){
@@ -1496,6 +1494,8 @@ $(function(){
 	});
 }
 </script>
+	@endif
+@endif
 
 <script>
 function equalizeHeightByClass(className) {
@@ -1521,6 +1521,30 @@ window.onload = function() {
   equalizeHeightByClass('order_item');
 };
 
+
+$(document).ready(function() {
+	// テキストエリアのIDを指定
+	var textarea = $('#memo');
+
+	// 入力があった場合のイベントを設定
+	textarea.on('input', function() {
+		// 入力されたテキストを取得
+		var inputText = textarea.val();
+
+		// 禁止文字のリスト
+		var forbiddenChars = ['"', ',', '#', '!', '$', '%', '&', '=', ';', ':', '?', '+'];
+
+		// 禁止文字が含まれているかチェック
+		for (var i = 0; i < forbiddenChars.length; i++) {
+			var forbiddenChar = forbiddenChars[i];
+			// 禁止文字が含まれている場合、その文字を削除
+			inputText = inputText.split(forbiddenChar).join('');
+		}
+
+		// 修正されたテキストをセット
+		textarea.val(inputText);
+	});
+});
 </script>
 
 @if(Auth::guard('user')->check() )
@@ -1536,7 +1560,4 @@ window.onload = function() {
 } */
 </style>
 @endif
-@endif
-
-	@endif
 @endif

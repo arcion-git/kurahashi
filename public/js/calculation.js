@@ -962,55 +962,145 @@ if(document.URL.match("/approval")) {
 
 
 
-
-
+  // $('.nouhin_yoteibi_c').datepicker().on('change', function(){
   $(document).on("change", ".nouhin_yoteibi_c", function() {
-    var deal_id = $(".deal_id").first().attr("id");
-    var user_id = $(".user_id").first().attr("id");
-    var nouhin_yoteibi_c = $(".nouhin_yoteibi_c").val();
-    console.log(deal_id);
-    console.log(user_id);
-    console.log(nouhin_yoteibi_c);
-    $.ajax({
-      headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-      },
-      url: location.origin + '/change_nouhin_yoteibi_c',
-      type: 'POST',
-      data: {
-        'nouhin_yoteibi_c': nouhin_yoteibi_c,
-        'user_id': user_id,
-        'deal_id': deal_id,
-      }
-    })
-    // Ajaxリクエスト成功時の処理
-    .done(function(data) {
-      // console.log(data);
-      // setTimeout(doReload);
-      // setTimeout(order_update);
-      // setTimeout(dealorder_update);
-      // Swal.fire({
-      //   type:"success",
-      //   title: "納品日を保存しました",
-      //   position: 'center-center',
-      //   toast: true,
-      //   icon: 'success',
-      //   showConfirmButton: false,
-      //   timer: 1500
-      // });
-    })
-    // Ajaxリクエスト失敗時の処理
-    .fail(function(jqXHR, textStatus, errorThrown) {
-      alert('納品日を保存できませんでした。');
-      console.log("ajax通信に失敗しました");
-      console.log("XMLHttpRequest : " + XMLHttpRequest.status);
-      console.log("textStatus     : " + textStatus);
-      console.log("errorThrown    : " + errorThrown.message);
-    });
+    if ($(this).val() == '') {
+    } else {
+      var deal_id = $(".deal_id").first().attr("id");
+      var user_id = $(".user_id").first().attr("id");
+      var nouhin_yoteibi_c = $(".nouhin_yoteibi_c").val();
+      console.log(deal_id);
+      console.log(user_id);
+      console.log(nouhin_yoteibi_c);
+      $.ajax({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        url: location.origin + '/change_nouhin_yoteibi_c',
+        type: 'POST',
+        data: {
+          'nouhin_yoteibi_c': nouhin_yoteibi_c,
+          'user_id': user_id,
+          'deal_id': deal_id,
+        }
+      })
+      // Ajaxリクエスト成功時の処理
+      .done(function(data) {
+        // console.log(data);
+        // setTimeout(doReload);
+        // setTimeout(order_update);
+        // setTimeout(dealorder_update);
+        // Swal.fire({
+        //   type:"success",
+        //   title: "納品日を保存しました",
+        //   position: 'center-center',
+        //   toast: true,
+        //   icon: 'success',
+        //   showConfirmButton: false,
+        //   timer: 1500
+        // });
+      })
+      // Ajaxリクエスト失敗時の処理
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        alert('納品日を保存できませんでした。');
+        console.log("ajax通信に失敗しました");
+        console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+        console.log("textStatus     : " + textStatus);
+        console.log("errorThrown    : " + errorThrown.message);
+      });
+    }
   });
+
+  if(document.URL.match('/confirm')) {
+    $(document).on("change", ".charge_form input,.c_uketori_place,.nouhin_yoteibi_c,.uketori_time", function() {
+
+  		// フラグの初期化
+      var flag_a = true;
+      var flag_b = true;
+      let uketori_time = $('#uketori_time').val();
+
+
+      if ($('#uketori_time').is(':visible') && $('.nouhin_yoteibi_c').is(':visible')) {
+		    if ($('#uketori_place').val() !== '' && $('.nouhin_yoteibi_c').val() !== '' && $('#uketori_time').val() !== '') {
+		    } else {
+          var flag_b = false;
+		    }
+		  }else if ($('#uketori_time').is(':hidden') && $('.nouhin_yoteibi_c').is(':visible')) {
+		    if ($('#uketori_place').val() !== '' && $('.nouhin_yoteibi_c').val() !== '') {
+
+		    } else {
+          var flag_b = false;
+		    }
+		  } else {
+		    if ($('#uketori_place').val() !== '') {
+
+		    } else {
+          var flag_b = false;
+		    }
+		  }
+
+
+      // if ($('#uketori_time').is(':visible') && $('.nouhin_yoteibi_c').is(':visible')) {
+		  //   if ($('#uketori_place').val() !== '' && $('.nouhin_yoteibi_c').val() !== '' && $('#uketori_time option:selected').val() !== '') {
+      //     // c_uketori_placeに「set」というクラスが付与されていない場合、flag_bをfalseにする
+      //     if ($('.nouhin_yoteibi_c.c_set').length > 0) {
+      //       console.log('nouhin_yoteibi_c：入力済');
+      //       flag_b = true;
+      // 		}else{
+      //       flag_b = false;
+      //     }
+      //     if (uketori_time !== null && uketori_time !== "") {
+      //       // 選択された値が空でない場合の処理
+      //       console.log('uketori_time：入力済');
+      //       flag_b = true;
+      //     } else {
+      //       // 選択された値が空の場合の処理
+      //       flag_b = false;
+      //     }
+		  //   } else {
+		  //   }
+		  // }else if ($('#uketori_time').is(':hidden') && $('.nouhin_yoteibi_c').is(':visible')) {
+		  //   if ($('#uketori_place').val() !== '' && $('.nouhin_yoteibi_c').val() !== '') {
+      //     if ($('.nouhin_yoteibi_c.c_set').length > 0) {
+      //       console.log('nouhin_yoteibi_c：入力済');
+      //       flag_b = true;
+      // 		}else{
+      //       flag_b = false;
+      //     }
+		  //   } else {
+		  //   }
+		  // } else {
+		  //   if ($('#uketori_place').val() !== '') {
+      // 		flag_b = false;
+		  //   } else {
+		  //   }
+		  // }
+
+      // 項目をひとつずつチェック
+      $('.charge_form input').each(function(e) {
+          // もし項目が1つでも空なら
+          if ($('.charge_form input').eq(e).val() === "") {
+              flag_a = false;
+          }
+      });
+
+  		console.log('flag_a:', flag_a);
+  		console.log('flag_b:', flag_b);
+
+      // 全て埋まっていたら
+      if (flag_a == true && flag_b == true) {
+          // 送信ボタンをアクティブ
+          $('#card_approval_btn').removeClass('disabled_btn');
+      } else {
+          // 送信ボタン解除
+          $('#card_approval_btn').addClass('disabled_btn');
+      }
+    });
+  }
 
   $(document).on("change", ".c_uketori_place", function() {
     c_uketori_place_set();
+    $('.nouhin_yoteibi_c').removeClass('set');
   });
 
   function c_uketori_place_set() {
@@ -1068,6 +1158,7 @@ if(document.URL.match("/approval")) {
       }
       if(data.ukewatasi_kiboujikan_umu == 1) {
         $("#c_shipping_time").show();
+    		$('#uketori_time').val($('#uketori_time option:first').val());
       } else {
         $("#c_shipping_time").hide();
     		$('#uketori_time').val('');
@@ -1121,8 +1212,8 @@ if(document.URL.match("/approval")) {
 
       } else {
         $("#c_shipping_price").hide();
-        $('input[name="security_code"]').val('');
-        $('#card_approval_btn').addClass('disabled_btn');
+        // $('input[name="security_code"]').val('');
+        // $('#card_approval_btn').addClass('disabled_btn');
 
         // 商品合計
         var sum = 0;
