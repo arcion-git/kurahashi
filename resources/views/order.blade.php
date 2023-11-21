@@ -718,13 +718,21 @@
 		changeColor(errorInfo[i].errorItem); }
 			//メッセージを alert で出力
 			alert(errorInfo[i].errorCode + " : " + errorInfo[i].errorMsg);
-			if (errorInfo[i].errorCode === "Y021011105" || errorInfo[i].errorCode === "Y021011171") {
+			if (errorInfo[i].errorCode === "Y021011105" || errorInfo[i].errorCode === "Y021011171" || errorInfo[i].errorCode === "Y021011105") {
 			  // exp_month input要素にフォーカスを移動
 			  document.charge_form.exp_month.focus();
 			}
-			if(errorInfo[i].errorCode === "Y021011302"){
+			if(errorInfo[i].errorCode === "Y021011302" || errorInfo[i].errorCode === "Y021011304" ){
 				// security_code input要素にフォーカスを移動
 				document.charge_form.security_code.focus();
+			}
+			if(errorInfo[i].errorCode === "Y021011004"){
+				// card_owner input要素にフォーカスを移動
+				document.charge_form.card_owner.focus();
+			}
+			if(errorInfo[i].errorCode === "Y021010904"){
+				// card_no input要素にフォーカスを移動
+				document.charge_form.card_no.focus();
 			}
 		}
 		};
