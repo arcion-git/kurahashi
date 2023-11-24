@@ -421,7 +421,7 @@
 					<label for="company"><strong>受け渡し希望日</strong></label>
 			</div>
 			<div class="col-sm-12 col-md-5">
-				<input type="text" id="change_all_nouhin_yoteibi" name="change_all_nouhin_yoteibi" class="nouhin_yoteibi_c form-control daterange-cus datepicker" value="@if(isset($deal)){{$set_order->nouhin_yoteibi}}@else{{$nouhin_yoteibi}}@endif" autocomplete="off" readonly>
+				<input type="text" id="change_all_nouhin_yoteibi" name="change_all_nouhin_yoteibi" class="nouhin_yoteibi_c form-control daterange-cus datepicker" value="@if(isset($deal)){{$set_order->nouhin_yoteibi}}@else{{$nouhin_yoteibi}}@endif" autocomplete="off" onkeydown="return event.key != 'Enter';" readonly >
 				<script>
 				$('.nouhin_yoteibi_c').datepicker({
 					format: 'yyyy-mm-dd',
@@ -549,14 +549,14 @@
 					<div class="section-title">クレジットカード情報</div>
 				</div>
 			</div>
-			<div class="form-group col-12">
+			<div class="form-group">
 				<form method="POST" action="@if(isset($collect_touroku)){{$collect_touroku}}@endif" name="charge_form" class="charge_form" onsubmit="return false;">
 					<div class="input-form row">
 						<div class="col-sm-12 col-md-2">
 							<label for="card_no">カード番号</label>
 						</div>
 						<div class="col-sm-12 col-md-5">
-							<input type="text" class="form-control" name="card_no" maxlength="16" placeholder="" value="" pattern="[0-9]*">
+							<input type="text" class="form-control" name="card_no" maxlength="16" placeholder="************1234" value="" pattern="[0-9]*">
 						</div>
 					</div>
 					<div class="input-form row">
@@ -564,7 +564,7 @@
 							<label>カード名義人</label>
 						</div>
 						<div class="col-sm-12 col-md-5">
-							<input type="text" class="form-control" name="card_owner" maxlength="30" placeholder="" value="">
+							<input type="text" class="form-control" name="card_owner" maxlength="30" placeholder="KURONEKO TARO" value="">
 						</div>
 					</div>
 					<div class="input-form row">
@@ -572,7 +572,7 @@
 							<label>カード有効期限</label>
 						</div>
 						<div class="col-sm-12 col-md-5">
-							<input type="text" class="form-control yuukoukigen" name="exp_month" maxlength="2" placeholder="" value="" pattern="[0-9]*">月 <input class="form-control yuukoukigen" type="text" name="exp_year" maxlength="2" value="" placeholder="" pattern="[0-9]*">年
+							<input type="text" class="form-control yuukoukigen" name="exp_month" maxlength="2" placeholder="04" value="" pattern="[0-9]*">月 <input class="form-control yuukoukigen" type="text" name="exp_year" maxlength="2" value="" placeholder="28" pattern="[0-9]*">年
 						</div>
 					</div>
 					<div class="input-form row">
@@ -580,11 +580,11 @@
 							<label>セキュリティコード</label>
 						</div>
 						<div class="col-sm-12 col-md-5">
-							<input type="text" class="form-control" name="security_code" maxlength="4" placeholder="" value="" pattern="[0-9]*">
+							<input type="text" class="form-control" name="security_code" maxlength="4" placeholder="1234" value="" pattern="[0-9]*">
 						</div>
 					</div>
 					<div class="input-form" style="display:none;">
-						<input class="executePay" type="submit" value="送信" onclick="executePay()">
+						<input class="executePay" type="button" value="送信" onclick="executePay()">
 					</div>
 				</form>
 			</div>
@@ -718,13 +718,13 @@
 		changeColor(errorInfo[i].errorItem); }
 			//メッセージを alert で出力
 			alert(errorInfo[i].errorCode + " : " + errorInfo[i].errorMsg);
-			if (errorInfo[i].errorCode === "Y021011105" || errorInfo[i].errorCode === "Y021011171" || errorInfo[i].errorCode === "Y021011105") {
-			  // exp_month input要素にフォーカスを移動
-			  document.charge_form.exp_month.focus();
-			}
 			if(errorInfo[i].errorCode === "Y021011302" || errorInfo[i].errorCode === "Y021011304" ){
 				// security_code input要素にフォーカスを移動
 				document.charge_form.security_code.focus();
+			}
+			if (errorInfo[i].errorCode === "Y021011105" || errorInfo[i].errorCode === "Y021011171" || errorInfo[i].errorCode === "Y021011105") {
+			  // exp_month input要素にフォーカスを移動
+			  document.charge_form.exp_month.focus();
 			}
 			if(errorInfo[i].errorCode === "Y021011004"){
 				// card_owner input要素にフォーカスを移動
@@ -959,7 +959,7 @@ $(document).ready(function () {
 
 <div class="row mt-4">
 	<div class="col-lg-8">
-	  <div class="section-title">通信欄</div>
+	  <div class="section-title">通信欄（任意）</div>
 	    <textarea id="memo" style="height:250px; width:500px;" name="memo" rows="10" value="@if(isset($deal)){{$deal->memo}}@elseif(isset($user->memo)){{$user->memo}}@endif" class="form-control selectric" maxlength="374" onchange="Limit(event)" onkeyup="Limit(event)">@if(isset($deal)){{$deal->memo}}@elseif(isset($user->memo)){{$user->memo}}@endif</textarea>
 			<p class="memo_note">※通信欄は「内容確認画面に進む」を押すと保存されます。<br />確認画面に進む直前に通信欄の入力をしてください。<br />「 " 」「 , 」「 # 」「 ! 」「 $ 」「 % 」<br class="sp"/>「 & 」「 = 」「 ; 」「 : 」「 ? 」「 + 」<br />上記の文字は使用できません。</p>
 	</div>
@@ -1321,12 +1321,19 @@ $(document).ready(function() {
 });
 // 配送方法が選択されない状態だと、カード情報の入力エリアを非表示にするconfirmのみ起動
 $(document).ready(function() {
-
 	if (window.location.pathname.indexOf('confirm') !== -1) {
 		// 日付の手入力を禁止
 		$(".nouhin_yoteibi_c").keydown(function(e) {
-				e.preventDefault();
+			// if (e.which == 13 && $(this).prop("readonly")) {
+			// 		e.preventDefault();
+			// 		e.stopImmediatePropagation();
+			// 		return false;
+			// }
+			e.preventDefault();
+			e.stopImmediatePropagation();
+			return false;
 		});
+
 		// URLパスに「confirm」が含まれている場合に実行
 		updatePayCardVisibility();
 		$('#uketori_place, .nouhin_yoteibi_c, #uketori_time').change(function() {
@@ -1553,6 +1560,8 @@ $(document).ready(function() {
 		textarea.val(inputText);
 	});
 });
+
+
 </script>
 
 @if(Auth::guard('user')->check() )

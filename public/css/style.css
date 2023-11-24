@@ -4574,3 +4574,7 @@ body {
   text-align: right;
 }
 }
+
+::placeholder {
+   color: #aaa !important;
+}

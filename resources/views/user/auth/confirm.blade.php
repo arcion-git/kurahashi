@@ -31,7 +31,7 @@
         <div class="invoice-print">
 
           <!-- <form action="{{ url('/adddeal') }}" method="POST" class="form-horizontal"> -->
-          <form action="{{ url('/approval') }}" method="POST" class="form-horizontal">
+          <form action="{{ url('/approval') }}" method="POST" class="form-horizontal" onsubmit="return false;">
             @csrf
 
             @if(isset($setonagi))
@@ -54,7 +54,7 @@
 
             <div class="float-right approval_btn_div">
                 <input id="addtype" type="hidden" name="addtype" value="{{$addtype}}" />
-                <button id="approval_btn" type="submit" class="btn btn-warning">内容確認画面に進む</button>
+                <button id="approval_btn" type="button" onclick="submit();" class="btn btn-warning">内容確認画面に進む</button>
                 @if($user->setonagi == 1)
                 <div id="card_approval_btn" class="btn btn-warning" onclick="executePay">内容確認画面に進む</div>
                 @endif
@@ -144,6 +144,9 @@ label,
     background-color: #fdfdff !important;
     border-color: #c7e2fe !important;
 }
+.bg_red{
+  background-color: rgb(253, 238, 241) !important;
+}
 </style>
 
 
@@ -208,15 +211,29 @@ $(document).ready(function () {
       // }
       error: function (jqXHR, textStatus, errorThrown) {
         if (jqXHR.status === 401) {
-            alert('オーダー内容をアップデートできません。');
+            alert('表示できる商品がありませんでした。');
             // セッションが切れた場合の処理
             window.location.href = location.origin + '/user/login'; // ログインページへのリダイレクト
         } else {
-        alert('オーダー内容をアップデートできません。');
-        console.log("ajax通信に失敗しました");
-        console.log("XMLHttpRequest : " + XMLHttpRequest.status);
-        console.log("textStatus     : " + textStatus);
-        console.log("errorThrown    : " + errorThrown.message);
+        // alert('オーダー内容を取得できません。');
+        // console.log("ajax通信に失敗しました");
+        // console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+        // console.log("textStatus     : " + textStatus);
+        // console.log("errorThrown    : " + errorThrown.message);
+        Swal.fire({
+          text: "表示できる商品がありませんでした。",
+          position: 'center',
+          // toast: true,
+          icon: 'warning',
+          showConfirmButton: false,
+          timer: 3000
+        });
+        // 3秒後にリダイレクトする関数
+        function redirectToHomepage() {
+          window.location.href = location.origin + '/';
+        }
+        // 3秒後にredirectToHomepage関数を呼び出す
+        setTimeout(redirectToHomepage, 2000);
         }
       }
     });
@@ -493,7 +510,6 @@ $(document).ready(function () {
       }
     });
   });
-
 
 
 });

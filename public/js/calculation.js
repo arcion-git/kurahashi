@@ -999,6 +999,7 @@ if(document.URL.match("/approval")) {
         //   showConfirmButton: false,
         //   timer: 1500
         // });
+        $('.nouhin_yoteibi_c').removeClass('bg_red');
       })
       // Ajaxリクエスト失敗時の処理
       .fail(function(jqXHR, textStatus, errorThrown) {
@@ -1100,7 +1101,7 @@ if(document.URL.match("/approval")) {
 
   $(document).on("change", ".c_uketori_place", function() {
     c_uketori_place_set();
-    $('.nouhin_yoteibi_c').removeClass('set');
+    // $('.nouhin_yoteibi_c').removeClass('set');
   });
 
   function c_uketori_place_set() {
@@ -1152,6 +1153,7 @@ if(document.URL.match("/approval")) {
         if(document.URL.match("/confirm")) {
           $('.nouhin_yoteibi_c').datepicker('setDate', null);
       		$('.nouhin_yoteibi_c').val('');
+      		$('.nouhin_yoteibi_c').addClass('bg_red');
         }
       } else {
         $("#c_shipping_date").hide();
