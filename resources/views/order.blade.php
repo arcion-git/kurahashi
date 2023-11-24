@@ -713,28 +713,74 @@
 		$("#overlayajax").fadeOut(300);
 
 		//エラーの数だけ処理を繰り返す
-		for (var i = 0; i<errorInfo.length; i++) {
-		if (errorInfo[i].errorItem) {
-		changeColor(errorInfo[i].errorItem); }
-			//メッセージを alert で出力
-			alert(errorInfo[i].errorCode + " : " + errorInfo[i].errorMsg);
-			if(errorInfo[i].errorCode === "Y021011302" || errorInfo[i].errorCode === "Y021011304" ){
-				// security_code input要素にフォーカスを移動
-				document.charge_form.security_code.focus();
-			}
-			if (errorInfo[i].errorCode === "Y021011105" || errorInfo[i].errorCode === "Y021011171" || errorInfo[i].errorCode === "Y021011105") {
-			  // exp_month input要素にフォーカスを移動
-			  document.charge_form.exp_month.focus();
-			}
-			if(errorInfo[i].errorCode === "Y021011004"){
-				// card_owner input要素にフォーカスを移動
-				document.charge_form.card_owner.focus();
-			}
-			if(errorInfo[i].errorCode === "Y021010904"){
-				// card_no input要素にフォーカスを移動
-				document.charge_form.card_no.focus();
-			}
+		// for (var i = 0; i<errorInfo.length; i++) {
+		// if (errorInfo[i].errorItem) {
+		// changeColor(errorInfo[i].errorItem); }
+		// 	//メッセージを alert で出力
+		// 	alert(errorInfo[i].errorCode + " : " + errorInfo[i].errorMsg);
+		// 	if(errorInfo[i].errorCode === "Y021010904"){
+		// 		// card_no input要素にフォーカスを移動
+		// 		document.charge_form.card_no.focus();
+		// 	}
+		// 	if(errorInfo[i].errorCode === "Y021011004"){
+		// 		// card_owner input要素にフォーカスを移動
+		// 		document.charge_form.card_owner.focus();
+		// 	}
+		// 	if (errorInfo[i].errorCode === "Y021011105" || errorInfo[i].errorCode === "Y021011171" || errorInfo[i].errorCode === "Y021011105") {
+		// 	  // exp_month input要素にフォーカスを移動
+		// 	  document.charge_form.exp_month.focus();
+		// 	}
+		// 	if(errorInfo[i].errorCode === "Y021011302" || errorInfo[i].errorCode === "Y021011304" ){
+		// 		// security_code input要素にフォーカスを移動
+		// 		document.charge_form.security_code.focus();
+		// 	}
+		// }
+
+		var errorMessage = "";
+		var focusSet = false; // フォーカスが設定されたかどうかを示すフラグ
+
+		// エラーの数だけ処理を繰り返す
+		for (var i = 0; i < errorInfo.length; i++) {
+		  if (errorInfo[i].errorItem) {
+		    changeColor(errorInfo[i].errorItem);
+		  }
+
+		  // エラーメッセージをまとめる
+		  errorMessage += errorInfo[i].errorCode + " : " + errorInfo[i].errorMsg + "\n";
+
+		  if (!focusSet) {
+		    // エラーコードに応じてフォーカスを設定
+		    if (errorInfo[i].errorCode === "Y021010904" && !document.charge_form.card_no.disabled) {
+		      // card_no input要素にフォーカスを移動
+		      document.charge_form.card_no.focus();
+		      focusSet = true; // フォーカスが設定されたことを示すフラグを更新
+		    } else if (errorInfo[i].errorCode === "Y021011004" && !document.charge_form.card_owner.disabled) {
+		      // card_owner input要素にフォーカスを移動
+		      document.charge_form.card_owner.focus();
+		      focusSet = true;
+		    } else if (
+		      (errorInfo[i].errorCode === "Y021011105" ||
+		        errorInfo[i].errorCode === "Y021011171" ||
+		        errorInfo[i].errorCode === "Y021011105") &&
+		      !document.charge_form.exp_month.disabled
+		    ) {
+		      // exp_month input要素にフォーカスを移動
+		      document.charge_form.exp_month.focus();
+		      focusSet = true;
+		    } else if (
+		      (errorInfo[i].errorCode === "Y021011302" || errorInfo[i].errorCode === "Y021011304") &&
+		      !document.charge_form.security_code.disabled
+		    ) {
+		      // security_code input要素にフォーカスを移動
+		      document.charge_form.security_code.focus();
+		      focusSet = true;
+		    }
+		  }
 		}
+
+		// まとめたエラーメッセージを表示
+		alert(errorMessage);
+
 		};
 
 		// トークン発行 API へ渡すパラメータ
