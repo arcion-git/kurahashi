@@ -92,30 +92,96 @@ class BothController extends Controller
     $quantity = $request->quantity;
 
 
-    // $order=Order::where(['id'=> $order_id])->first();
-    // // 元々入っていた個数
-    // $old_quantity = $order->quantity;
-    // // 在庫数の増減量を計算
-    // $change_quantity = $quantity - $old_quantity;
-    // $cart=Cart::where(['id'=> $order->cart_id])->first();
-    //
-    //
-    // $deal=Deal::where(['id'=> $cart->deal_id])->first();
-    //
-    //
-    // if(isset($deal)){
-    //   $setonagi=Setonagi::where(['user_id'=> $deal->user_id])->first();
-    //   $addtype = $cart->addtype;
-    //   if( $addtype == 'addsetonagi' || $addtype == 'addspecialprice' || $addtype == 'addbuyerrecommend' && isset($setonagi)){
-    //     $item=Item::where(['id'=> $cart->item_id])->first();
-    //     // 在庫数を増減させるロジック
-    //     $item->zaikosuu  -= $change_quantity;
-    //     // 在庫数をデータベースに更新
-    //     $item->save();
-    //   }elseif ( $addtype == 'addbuyerrecommend' ) {
-    //
-    //   }
-    // }
+    $order=Order::where(['id'=> $order_id])->first();
+    // 元々入っていた個数
+    $old_quantity = $order->quantity;
+    // 在庫数の増減量を計算
+    $change_quantity = $quantity - $old_quantity;
+    // オーダーからカートを取得
+    $cart=Cart::where(['id'=> $order->cart_id])->first();
+    // カートから取引を取得
+    $deal=Deal::where(['id'=> $cart->deal_id])->first();
+    // カートからユーザーを取得
+    $user=User::where(['id'=> $cart->user_id])->first();
+
+    if(isset($deal)){
+      $setonagi=Setonagi::where(['user_id'=> $deal->user_id])->first();
+      $item=Item::where(['id'=> $cart->item_id])->first();
+      $addtype = $cart->addtype;
+      if( $addtype == 'addsetonagi' || $addtype == 'addspecialprice' || $addtype == 'addbuyerrecommend' && isset($setonagi)){
+        // 在庫数が0を下回る場合
+        if (($item->zaikosuu - $change_quantity) < 0) {
+          $message = 'fail';
+          $data=[
+            'message'=>$message,
+          ];
+          return $data;
+        }
+        // 在庫数を増減させるロジック
+        $item->zaikosuu  -= $change_quantity;
+        // 在庫数をデータベースに更新
+        $item->save();
+      }elseif ( $addtype == 'addbuyerrecommend' ) {
+        $kaiin_number = $user->kaiin_number;
+        $store = Store::where(['tokuisaki_name'=>$order->tokuisaki_name,'store_name'=>$order->store_name])->first();
+        // 限定数の在庫増減があるか確認
+        $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $store->tokuisaki_id)
+        ->where(function($query) use ($store) {
+            $query->where('gentei_store', null)
+                  ->orWhere('gentei_store', $store->store_name);
+        })
+        ->where('zaikokanri', null)
+        ->whereNotNull('zaikosuu')
+        ->where('price', '>=', '1')
+        ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
+        ->where('nouhin_end', '>=', $order->nouhin_yoteibi)
+        ->where('start', '<=' , $deal->success_time)
+        ->where('end', '>=', $deal->success_time)
+        ->first();
+        // Log::debug($buyer_recommend_item);
+        if($buyer_recommend_item){
+          if (($buyer_recommend_item->zaikosuu - $change_quantity) < 0) {
+            $message = 'fail';
+            $data=[
+              'message'=>$message,
+            ];
+            return $data;
+          }
+          // 在庫数を増減させるロジック
+          $buyer_recommend_item->zaikosuu  -= $change_quantity;
+          // 在庫数をデータベースに更新
+          $buyer_recommend_item->save();
+        }
+        // 在庫を使う商品があるか確認
+        $not_buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $store->tokuisaki_id)
+        ->where(function($query) use ($store) {
+            $query->where('gentei_store', null)
+                  ->orWhere('gentei_store', $store->store_name);
+        })
+        ->where('zaikokanri', null)
+        ->where('zaikosuu', null)
+        ->where('price', '>=', '1')
+        ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
+        ->where('nouhin_end', '>=', $order->nouhin_yoteibi)
+        ->where('start', '<=' , $deal->success_time)
+        ->where('end', '>=', $deal->success_time)
+        ->first();
+        if($not_buyer_recommend_item){
+          // 在庫数が0を下回る場合
+          if (($item->zaikosuu - $change_quantity) < 0) {
+            $message = 'fail';
+            $data=[
+              'message'=>$message,
+            ];
+            return $data;
+          }
+          // 在庫数を増減させるロジック
+          $item->zaikosuu  -= $change_quantity;
+          // 在庫数をデータベースに更新
+          $item->save();
+        }
+      }
+    }
 
 
     $order=Order::where(['id'=> $order_id])->update(['quantity'=> $quantity]);

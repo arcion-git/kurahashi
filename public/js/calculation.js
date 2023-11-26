@@ -734,28 +734,46 @@ if(document.URL.match("/approval")) {
         } //Laravelに渡すデータ
       })
       // Ajaxリクエスト成功時の処理
-      .done(function(data) {
-        // console.log(data);
-        // setTimeout(doReload);
-        // setTimeout(order_update);
-        // setTimeout(dealorder_update);
-        Swal.fire({
-          type:"success",
-          title: "個数を変更しました",
-          position: 'center-center',
-          toast: true,
-          icon: 'success',
-          showConfirmButton: false,
-          timer: 1500
-        });
+      .done(function(json) {
+        // 既にカートにあるときの分岐
+        console.log(json['message']);
+        if(json['message']=='fail'){
+          // $('#toggle').addClass('beep');
+          // $('#toggle').trigger('click');
+          Swal.fire({
+            text: "在庫数が0を下回るため変更できません。",
+            position: 'center-center',
+            icon: 'info',
+            showConfirmButton: false,
+            timer: 3000
+          });
+          // 2秒後にリロード
+          setTimeout(function() {
+              location.reload();
+          }, 2000);
+        }else{
+          Swal.fire({
+            type:"success",
+            title: "個数を変更しました",
+            position: 'center-center',
+            toast: true,
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1500
+          });
+        }
       })
-      // Ajaxリクエスト失敗時の処理
       .fail(function(jqXHR, textStatus, errorThrown) {
-        alert('個数を変更できませんでした。半角数字で入力してください。');
-        console.log("ajax通信に失敗しました");
-        console.log("XMLHttpRequest : " + XMLHttpRequest.status);
-        console.log("textStatus     : " + textStatus);
-        console.log("errorThrown    : " + errorThrown.message);
+        if (jqXHR.status === 401) {
+          // セッションが切れた場合の処理
+          window.location.href = location.origin + '/user/login'; // ログインページへのリダイレクト
+        } else {
+          alert('個数を変更できませんでした。半角数字で入力してください。');
+          console.log("ajax通信に失敗しました");
+          console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+          console.log("textStatus     : " + textStatus);
+          console.log("errorThrown    : " + errorThrown.message);
+        }
       });
   });
 
@@ -969,6 +987,7 @@ if(document.URL.match("/approval")) {
       var deal_id = $(".deal_id").first().attr("id");
       var user_id = $(".user_id").first().attr("id");
       var nouhin_yoteibi_c = $(".nouhin_yoteibi_c").val();
+      $(".nouhin_yoteibi_c").removeClass("default");
       console.log(deal_id);
       console.log(user_id);
       console.log(nouhin_yoteibi_c);

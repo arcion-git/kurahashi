@@ -211,7 +211,7 @@ $(document).ready(function () {
       // }
       error: function (jqXHR, textStatus, errorThrown) {
         if (jqXHR.status === 401) {
-            alert('表示できる商品がありませんでした。');
+            alert('カート内全ての商品の在庫が切れています。');
             // セッションが切れた場合の処理
             window.location.href = location.origin + '/user/login'; // ログインページへのリダイレクト
         } else {
@@ -221,7 +221,7 @@ $(document).ready(function () {
         // console.log("textStatus     : " + textStatus);
         // console.log("errorThrown    : " + errorThrown.message);
         Swal.fire({
-          text: "表示できる商品がありませんでした。",
+          text: "カート内全ての商品の在庫が切れています。",
           position: 'center',
           // toast: true,
           icon: 'warning',

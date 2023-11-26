@@ -5,6 +5,7 @@ namespace App;
 use App\Store;
 use App\User;
 use App\Item;
+use App\Deal;
 use App\Order;
 use App\StoreUser;
 use App\BuyerRecommend;
@@ -252,6 +253,78 @@ class Cart extends Model
     }else{
       return $buyer_recommend_item->zaikosuu;
     }
+
+    // $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get()->unique('tokuisaki_id');
+
+
+    // foreach ($tokuisaki_ids as $key => $value) {
+    //   // 担当のおすすめ商品の在庫数を探す
+    //   $buyer_recommend_item = BuyerRecommend::where(['tokuisaki_id'=>$value->tokuisaki_id , 'item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
+    //   ->where('start', '<=' , $now)
+    //   ->where('end', '>=', $now)->first();
+    //   if($buyer_recommend_item->zaikokanri == 1){
+    //     return '999';
+    //   }else{
+    //     return $buyer_recommend_item->zaikosuu;
+    //   }
+    // }
+
+  }
+
+  public function deal_buyerrecommend_zaikosuu(){
+    // $cart = Cart::where(['id'=>$this->id])->first();
+
+    $order = Order::where(['cart_id'=>$this->id])->first();
+    $store = Store::where(['tokuisaki_name'=>$order->tokuisaki_name,'store_name'=>$order->store_name])->first();
+
+    // オーダーからカートを取得
+    $cart=Cart::where(['id'=> $order->cart_id])->first();
+    // カートから取引を取得
+    $deal=Deal::where(['id'=> $cart->deal_id])->first();
+    // カートからユーザーを取得
+    $user=User::where(['id'=> $cart->user_id])->first();
+
+    // $deal = Deal::where(['id'=>$this->deal_id])->first();
+    // $kaiin_number = User::where(['id'=>$deal->user_id])->first()->kaiin_number;
+    $item = Item::where(['id'=>$this->item_id])->first();
+
+    // $now = Carbon::now();
+
+    $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $store->tokuisaki_id)
+    ->where(function($query) use ($store) {
+        $query->where('gentei_store', null)
+              ->orWhere('gentei_store', $store->store_name);
+    })
+    ->where('zaikokanri', null)
+    ->whereNotNull('zaikosuu')
+    ->where('price', '>=', '1')
+    ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
+    ->where('nouhin_end', '>=', $order->nouhin_yoteibi)
+    ->where('start', '<=' , $deal->success_time)
+    ->where('end', '>=', $deal->success_time)
+    ->first();
+    if($buyer_recommend_item){
+      return $buyer_recommend_item->zaikosuu;
+    }
+    // 在庫を使う商品があるか確認
+    $not_buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $store->tokuisaki_id)
+    ->where(function($query) use ($store) {
+        $query->where('gentei_store', null)
+              ->orWhere('gentei_store', $store->store_name);
+    })
+    ->where('zaikokanri', null)
+    ->where('zaikosuu', null)
+    ->where('price', '>=', '1')
+    ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
+    ->where('nouhin_end', '>=', $order->nouhin_yoteibi)
+    ->where('start', '<=' , $deal->success_time)
+    ->where('end', '>=', $deal->success_time)
+    ->first();
+    if($not_buyer_recommend_item){
+      return $item->zaikosuu;
+    }
+    return '999';
+
 
     // $tokuisaki_ids = StoreUser::where('user_id',$kaiin_number)->get()->unique('tokuisaki_id');
 

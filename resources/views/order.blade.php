@@ -266,14 +266,30 @@
 																						@endif
 																					@endif
 
-																					@if($cart->addtype == 'addbuyerrecommend')
-																						@for ($i = 0; $i <= $cart->zaikosuu; $i++)
+																					<!-- 取引データが設定されていたら -->
+																					@if(isset($deal))
+																						@if($cart->addtype == 'addbuyerrecommend' && !$user->setonagi)
+																							<?php
+																								$zaikosuu = $cart->deal_buyerrecommend_zaikosuu() + $val->quantity;
+																							?>
+																						@else
+																							<?php
+																								$zaikosuu = $cart->item->zaikosuu + $val->quantity;
+																							?>
+																						@endif
+																						@for ($i = 0; $i <= $zaikosuu; $i++)
 																						<option value="{{$i}}">{{$i}}</option>
 																						@endfor
 																					@else
-																						@for ($i = 0; $i <= $cart->item->zaikosuu; $i++)
-																						<option value="{{$i}}">{{$i}}</option>
-																						@endfor
+																						@if($cart->addtype == 'addbuyerrecommend' && !$user->setonagi)
+																							@for ($i = 0; $i <= $cart->zaikosuu; $i++)
+																							<option value="{{$i}}">{{$i}}</option>
+																							@endfor
+																						@else
+																							@for ($i = 0; $i <= $cart->item->zaikosuu; $i++)
+																							<option value="{{$i}}">{{$i}}</option>
+																							@endfor
+																						@endif
 																					@endif
 
 																				</select>
@@ -421,7 +437,7 @@
 					<label for="company"><strong>受け渡し希望日</strong></label>
 			</div>
 			<div class="col-sm-12 col-md-5">
-				<input type="text" id="change_all_nouhin_yoteibi" name="change_all_nouhin_yoteibi" class="nouhin_yoteibi_c form-control daterange-cus datepicker" value="@if(isset($deal)){{$set_order->nouhin_yoteibi}}@else{{$nouhin_yoteibi}}@endif" autocomplete="off" onkeydown="return event.key != 'Enter';" readonly >
+				<input type="text" id="change_all_nouhin_yoteibi" name="change_all_nouhin_yoteibi" class="nouhin_yoteibi_c form-control daterange-cus datepicker" value="@if(isset($deal)){{$set_order->nouhin_yoteibi}}@else{{$nouhin_yoteibi}}@endif" autocomplete="off" onkeydown="return event.key != 'Enter';" >
 				<script>
 				$('.nouhin_yoteibi_c').datepicker({
 					format: 'yyyy-mm-dd',
@@ -1247,6 +1263,7 @@ $(document).ready(function() {
 						var change_all_nouhin_yoteibi = getUrlParam('change_all_nouhin_yoteibi');
 						if (change_all_nouhin_yoteibi) {
 							console.log(change_all_nouhin_yoteibi);
+							$(".nouhin_yoteibi_c").removeClass("default");
 							// $('#change_all_nouhin_yoteibi').text(change_all_nouhin_yoteibi);
 							// $('#change_all_nouhin_yoteibi').val(change_all_nouhin_yoteibi);
 						}else{
@@ -1368,17 +1385,6 @@ $(document).ready(function() {
 // 配送方法が選択されない状態だと、カード情報の入力エリアを非表示にするconfirmのみ起動
 $(document).ready(function() {
 	if (window.location.pathname.indexOf('confirm') !== -1) {
-		// 日付の手入力を禁止
-		$(".nouhin_yoteibi_c").keydown(function(e) {
-			// if (e.which == 13 && $(this).prop("readonly")) {
-			// 		e.preventDefault();
-			// 		e.stopImmediatePropagation();
-			// 		return false;
-			// }
-			e.preventDefault();
-			e.stopImmediatePropagation();
-			return false;
-		});
 
 		// URLパスに「confirm」が含まれている場合に実行
 		updatePayCardVisibility();
@@ -1409,6 +1415,19 @@ $(document).ready(function() {
 		  }
 		}
 	}
+});
+
+
+$(function () {
+  // 最初に.defaultクラスを付与
+  $(".nouhin_yoteibi_c").addClass("default");
+  // 次のinput要素にフォーカスが当たった時の処理
+  $("input[name='card_no'], input[name='card_owner'], input[name='exp_month'], input[name='exp_year'], input[name='security_code']").on('focus', function () {
+    // .defaultクラスが残っている場合はクラスを追加
+    if ($(".nouhin_yoteibi_c").hasClass("default")) {
+      $(".nouhin_yoteibi_c").addClass("bg_red");
+    }
+  });
 });
 
 </script>
@@ -1559,6 +1578,15 @@ $(function(){
 @endif
 
 <script>
+
+// 日付の手入力を禁止
+$(".nouhin_yoteibi_c").keydown(function(e) {
+	e.preventDefault();
+	e.stopImmediatePropagation();
+	return false;
+});
+
+
 function equalizeHeightByClass(className) {
   var elements = document.getElementsByClassName(className);
   var maxHeight = 0;
