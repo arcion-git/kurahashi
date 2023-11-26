@@ -200,6 +200,7 @@
 
   <script>
   $(function(){
+
     //ＵＲＬのパラメータを取得するための関数
     function getUrlParam(param){
         var pageUrl = window.location.search.substring(1);

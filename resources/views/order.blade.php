@@ -944,13 +944,12 @@ $('.nini_nouhin_yoteibi').datepicker({
 $(document).ready(function () {
   updateFields();
 
-  $('select.quantity').on('change', function () {
+  $('select.quantity , input.price').on('change', function () {
     updateFields();
   });
 
   function updateFields() {
     var sum = 0;
-
 
 		if($('#c_shipping_price').is(':visible')) {
 			var c_shipping_price = $("#c_shipping_price_val").val();
@@ -963,6 +962,8 @@ $(document).ready(function () {
 			// 商品合計
 			var sum = 0;
 			$('.total').each(function () {
+				var priceInput = $(this).closest('tr').find('input.price');
+				priceInput.data('price', priceInput.val());
 				var price = $(this).closest('tr').find('input.price').data('price');
 				var quantity = $(this).closest('tr').find('select.quantity').val();
 				var total = price * quantity;
@@ -993,6 +994,8 @@ $(document).ready(function () {
 
 		}else{
 	    $('.total').each(function () {
+				var priceInput = $(this).closest('tr').find('input.price');
+				priceInput.data('price', priceInput.val());
 	      var price = $(this).closest('tr').find('input.price').data('price');
 	      var quantity = $(this).closest('tr').find('select.quantity').val();
 	      var total = price * quantity;
@@ -1016,6 +1019,7 @@ $(document).ready(function () {
 		}
   }
 });
+
 </script>
 
 
@@ -1651,4 +1655,9 @@ $(document).ready(function() {
 } */
 </style>
 @endif
+@endif
+@if(isset($deal))
+<script>
+$("#uketori_place,#uketori_time,.nouhin_yoteibi_c,#memo").prop("disabled", true);
+</script>
 @endif
