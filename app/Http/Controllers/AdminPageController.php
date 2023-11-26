@@ -121,7 +121,6 @@ class AdminPageController extends Controller
   }
 
 
-// 以下の処理で、「change_tokuisaki_name」が実行された場合、そのまま「$tokuisaki_name 」で取得した値を「search」に値を渡して実行したい。
 
   public function change_tokuisaki_name(Request $request){
       $tokuisaki_name = $request->tokuisaki_name;

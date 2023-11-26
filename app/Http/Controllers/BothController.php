@@ -193,13 +193,17 @@ class BothController extends Controller
 
   // 価格を変更
   public function change_price(Request $request){
-    $order_id = $request->order_id;
-    $price = $request->price;
 
-    $order=Order::where(['id'=> $order_id])->update(['price'=> $price]);
+    if (Auth::guard('admin')->check()) {
+      $order_id = $request->order_id;
+      $price = $request->price;
+      $order=Order::where(['id'=> $order_id])->update(['price'=> $price]);
+      $data = "sucsess";
+      return $data;
+    }else{
+      return response('Unauthorized.', 401);
+    }
 
-    $data = "sucsess";
-    return $data;
   }
 
   public function change_uketori_place(Request $request){

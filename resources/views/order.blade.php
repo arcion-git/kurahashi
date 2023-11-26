@@ -944,7 +944,11 @@ $('.nini_nouhin_yoteibi').datepicker({
 $(document).ready(function () {
   updateFields();
 
+	@if(isset($deal) && Auth::guard('admin')->check())
   $('select.quantity , input.price').on('change', function () {
+	@else
+  $('select.quantity').on('change', function () {
+	@endif
     updateFields();
   });
 
@@ -962,8 +966,10 @@ $(document).ready(function () {
 			// 商品合計
 			var sum = 0;
 			$('.total').each(function () {
+					@if(isset($deal) && Auth::guard('admin')->check())
 				var priceInput = $(this).closest('tr').find('input.price');
 				priceInput.data('price', priceInput.val());
+				@endif
 				var price = $(this).closest('tr').find('input.price').data('price');
 				var quantity = $(this).closest('tr').find('select.quantity').val();
 				var total = price * quantity;
@@ -994,8 +1000,10 @@ $(document).ready(function () {
 
 		}else{
 	    $('.total').each(function () {
+				@if(isset($deal) && Auth::guard('admin')->check())
 				var priceInput = $(this).closest('tr').find('input.price');
 				priceInput.data('price', priceInput.val());
+				@endif
 	      var price = $(this).closest('tr').find('input.price').data('price');
 	      var quantity = $(this).closest('tr').find('select.quantity').val();
 	      var total = price * quantity;
