@@ -4597,6 +4597,7 @@ header .fa-search{
   padding-right: 15px;
   padding-left: 15px;
   padding-bottom: 0px;
+  padding-top: 5px;
   width: calc(280px + 16.666667%);
 }
 @media (max-width: 767px) {
