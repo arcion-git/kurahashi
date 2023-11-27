@@ -567,6 +567,12 @@
 			</div>
 			<div class="form-group">
 				<form method="POST" action="@if(isset($collect_touroku)){{$collect_touroku}}@endif" name="charge_form" class="charge_form" onsubmit="return false;">
+					<div class="row">
+						<div class="order_card_img">
+							<img src="{{ asset('img/order_card.jpg') }}" />
+							<p class="">上記のクレジットカードがご利用いただけます。</p>
+						</div>
+					</div>
 					<div class="input-form row">
 						<div class="col-sm-12 col-md-2">
 							<label for="card_no">カード番号</label>
@@ -588,7 +594,34 @@
 							<label>カード有効期限</label>
 						</div>
 						<div class="col-sm-12 col-md-5">
-							<input type="text" class="form-control yuukoukigen" name="exp_month" maxlength="2" placeholder="04" value="" pattern="[0-9]*">月 <input class="form-control yuukoukigen" type="text" name="exp_year" maxlength="2" value="" placeholder="28" pattern="[0-9]*">年
+							<!-- 月のセレクトボックス -->
+							<select class="form-control yuukoukigen" name="exp_month">
+							  <option value="01">01</option>
+							  <option value="02">02</option>
+							  <option value="03">03</option>
+							  <option value="04">04</option>
+							  <option value="05">05</option>
+							  <option value="06">06</option>
+							  <option value="07">07</option>
+							  <option value="08">08</option>
+							  <option value="09">09</option>
+							  <option value="10">10</option>
+							  <option value="11">11</option>
+							  <option value="12">12</option>
+							</select> 月
+
+							<!-- 年のセレクトボックス -->
+							<select class="form-control yuukoukigen" name="exp_year">
+							  <!-- 例として、2023年から10年先まで表示 -->
+							  <?php
+							  $currentYear = date("Y");
+							  for ($i = $currentYear; $i <= $currentYear + 10; $i++) {
+							    $displayYear = substr($i, -2); // 後ろから2桁を取得
+							    echo '<option value="' . $displayYear . '">' . $i . '</option>';
+							  }
+							  ?>
+							</select> 年
+
 						</div>
 					</div>
 					<div class="input-form row">
@@ -597,6 +630,11 @@
 						</div>
 						<div class="col-sm-12 col-md-5">
 							<input type="text" class="form-control" name="security_code" maxlength="4" placeholder="1234" value="" pattern="[0-9]*">
+						</div>
+					</div>
+					<div class="row">
+						<div class="order_card_text">
+							<p class="">※ご入力頂きます情報は、SSLにより全て暗号化されます。お客様のカード情報はカード取り扱い会社（ヤマトフィナンシャル株式会社）のみで管理され、当店には一切開示されておりません。また、お客様登録情報としても残りませんのでご安心下さい。</p>
 						</div>
 					</div>
 					<div class="input-form" style="display:none;">
@@ -1434,7 +1472,7 @@ $(function () {
   // 最初に.defaultクラスを付与
   $(".nouhin_yoteibi_c").addClass("default");
   // 次のinput要素にフォーカスが当たった時の処理
-  $("input[name='card_no'], input[name='card_owner'], input[name='exp_month'], input[name='exp_year'], input[name='security_code']").on('focus', function () {
+  $("input[name='card_no'], input[name='card_owner'], select[name='exp_month'], select[name='exp_year'], input[name='security_code']").on('focus', function () {
     // .defaultクラスが残っている場合はクラスを追加
     if ($(".nouhin_yoteibi_c").hasClass("default")) {
       $(".nouhin_yoteibi_c").addClass("bg_red");
@@ -1465,8 +1503,8 @@ $('#pay_card').hide();
 $('#pay_card').show();
 $('input[name="card_no"]').attr('required', true);
 $('input[name="card_owner"]').attr('required', true);
-$('input[name="exp_month"]').attr('required', true);
-$('input[name="yuukoukigen"]').attr('required', true);
+$('select[name="exp_month"]').attr('required', true);
+$('select[name="yuukoukigen"]').attr('required', true);
 $('input[name="exp_year"]').attr('required', true);
 $('input[name="security_code"]').attr('required', true);
 //始めにjQueryで送信ボタンを無効化する
@@ -1506,8 +1544,8 @@ $('').fadeIn();
 $('#pay_card').show();
 $('input[name="card_no"]').attr('required', true);
 $('input[name="card_owner"]').attr('required', true);
-$('input[name="exp_month"]').attr('required', true);
-$('input[name="yuukoukigen"]').attr('required', true);
+$('select[name="exp_month"]').attr('required', true);
+$('select[name="yuukoukigen"]').attr('required', true);
 $('input[name="exp_year"]').attr('required', true);
 $('input[name="security_code"]').attr('required', true);
 //始めにjQueryで送信ボタンを無効化する
