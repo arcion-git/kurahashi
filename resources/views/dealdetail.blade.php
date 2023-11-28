@@ -229,19 +229,19 @@
           });
         }
     });
-    $(function() {
-        var cancel_error = getUrlParam('cancel_error');
-        if (cancel_error) {
-          Swal.fire({
-            html: '締め時間を過ぎているためキャンセルできません。',
-            // position: 'top-end',
-            // toast: true,
-            icon: 'warning',
-            showConfirmButton: false,
-            // timer: 1500
-          });
-        }
-    });
+    // $(function() {
+    //     var cancel_error = getUrlParam('cancel_error');
+    //     if (cancel_error) {
+    //       Swal.fire({
+    //         html: '締め時間を過ぎているためキャンセルできません。',
+    //         // position: 'top-end',
+    //         // toast: true,
+    //         icon: 'warning',
+    //         showConfirmButton: false,
+    //         // timer: 1500
+    //       });
+    //     }
+    // });
   });
   </script>
 @endsection

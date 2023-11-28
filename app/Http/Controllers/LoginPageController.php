@@ -3716,6 +3716,16 @@ class LoginPageController extends Controller
 
     // キャンセルができるか判定
     $deal=Deal::where(['id'=> $deal_id])->first();
+    if($deal->status == 'キャンセル'){
+      $id = $deal_id;
+      $message = 'キャンセルエラーです。';
+      $data=[
+        'id' => $deal_id,
+        'message' => $message,
+      ];
+      return redirect()->route('dealdetail',$data);
+    }
+
     $user = User::where(['id'=> $user_id])->first();
     $setonagi = Setonagi::where(['user_id'=> $user_id])->first();
 
@@ -3796,9 +3806,10 @@ class LoginPageController extends Controller
     // 翌営業日締め時間より後
     // キャンセルはできないのでその旨をアラート
       $id= $deal_id;
+      $message = '締め時間を過ぎているためキャンセルできません。';
       $data=[
         'id' => $deal_id,
-        'cancel_error' => 'キャンセルエラーです',
+        'message' => $message,
       ];
       return redirect()->route('dealdetail',$data);
     }
