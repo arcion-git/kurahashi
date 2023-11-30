@@ -707,6 +707,8 @@
 		  console.log('Promiseに非対応');
 		}
 
+
+
 		function getHashText(text) {
 		console.log(text);
 
