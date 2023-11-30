@@ -3201,6 +3201,14 @@ class LoginPageController extends Controller
         if($result->returnCode == 1){
           $delete_deal = Deal::where(['id'=> $deal_id])->first()->delete();
           // dd($result);
+          if($result->errorCode == Z012000009){
+            // 後で処理を作る
+            $message = '登録グローバルIP誤り';
+            $data=[
+              'addtype' => $addtype,
+              'message' => $message,
+            ];
+          }
           if($result->errorCode == 123456){
             // 後で処理を作る
             $message = '決済金額オーバー';
