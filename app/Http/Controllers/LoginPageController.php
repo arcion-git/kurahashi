@@ -3198,23 +3198,22 @@ class LoginPageController extends Controller
         // dd($option);
         $response = $client->request('POST', $url, $option);
         $result = simplexml_load_string($response->getBody()->getContents());
-        if($result->returnCode == 1){
-          $delete_deal = Deal::where(['id'=> $deal_id])->first()->delete();
-          // dd($result);
-          if ($result->errorCode == 123456) {
-              // 後で処理を作る
-              $message = '決済金額オーバー';
-          } elseif ($result->errorCode == Z012000009) {
-              // 後で処理を作る
-              $message = '登録グローバルIP誤り';
-          } else {
-              $message = '決済エラーのため別の決済方法をお試しください。';
-          }
-          $data = [
-              'addtype' => $addtype,
-              'message' => $message,
-          ];
-          return redirect()->route('confirm',$data);
+        if ($result->returnCode == 1) {
+            $delete_deal = Deal::where(['id' => $deal_id])->first()->delete();
+            // dd($result);
+            if ($result->errorCode == 123456) {
+                $message = '決済金額オーバー';
+            } elseif ($result->errorCode == Z012000009) {
+                // 後で処理を作る
+                $message = '登録グローバルIP誤り';
+            } else {
+                $message = '決済エラーのため別の決済方法をお試しください。';
+            }
+            $data = [
+                'addtype' => $addtype,
+                'message' => $message,
+            ];
+            return redirect()->route('confirm', $data);
         }
       }
     }
