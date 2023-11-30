@@ -452,16 +452,14 @@ class AdminPageController extends Controller
           if($result->errorCode == 123456){
             // 後で処理を作る
             $message = 'クレジットカード決済金額変更エラー';
-            $data=[
-              'message' => $message,
-            ];
           }else{
             $message = 'クレジットカード決済金額変更エラー';
-            $data=[
-              'message' => $message,
-            ];
           }
-          return redirect()->route('admin.dealdetail', ['id' => $id, 'data' => $data]);
+          $data=[
+            'id' => $id,
+            'message' => $message,
+          ];
+          return redirect()->route('admin.dealdetail',$data);
         }
       }
     }
