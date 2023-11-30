@@ -169,7 +169,7 @@
                 @else
                 @if ( Auth::guard('admin')->check() )
                   @if ( $setonagi )
-                    <button type="submit" name="deal_id" value="{{ $deal->id }}" class="btn btn-warning">金額を変更する</button>
+                    <button id="kingaku_henkou" type="submit" name="deal_id" value="{{ $deal->id }}" class="btn btn-warning">金額を変更する</button>
                   @endif
                 @endif
                 @endif
@@ -229,6 +229,13 @@
           });
         }
     });
+
+    $("#kingaku_henkou").click(function() {
+      var submitButton = $(this);
+      // 二重送信を防止するためにボタンを無効化
+      submitButton.addClass("disabled_btn");
+    });
+
     // $(function() {
     //     var cancel_error = getUrlParam('cancel_error');
     //     if (cancel_error) {
