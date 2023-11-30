@@ -461,7 +461,7 @@ class AdminPageController extends Controller
               'message' => $message,
             ];
           }
-          return redirect()->route('admin.dealdetail',$id);
+          return redirect()->route('admin.dealdetail', ['id' => $id, 'data' => $data]);
         }
       }
     }
