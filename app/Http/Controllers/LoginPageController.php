@@ -3200,7 +3200,7 @@ class LoginPageController extends Controller
         $result = simplexml_load_string($response->getBody()->getContents());
         if($result->returnCode == 1){
           $delete_deal = Deal::where(['id'=> $deal_id])->first()->delete();
-          dd($result);
+          // dd($result);
           if($result->errorCode == 123456){
             // 後で処理を作る
             $message = '決済金額オーバー';

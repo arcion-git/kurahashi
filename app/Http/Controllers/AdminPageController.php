@@ -447,6 +447,7 @@ class AdminPageController extends Controller
         // dd($option);
         $response = $client->request('POST', $url, $option);
         $result = simplexml_load_string($response->getBody()->getContents());
+        dd($result);
         if($result->returnCode == 1){
           if($result->errorCode == 123456){
             // 後で処理を作る
