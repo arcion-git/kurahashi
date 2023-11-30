@@ -406,15 +406,17 @@ class AdminPageController extends Controller
             // 後で処理を作る
             $message = '掛け払い金額オーバー';
             $data=[
+              'id' => $id,
               'message' => $message,
             ];
           }else{
             $message = '決済金額変更エラー。金額の変更ができませんでした。';
             $data=[
+              'id' => $id,
               'message' => $message,
             ];
           }
-          return redirect()->route('admin.dealdetail',$id);
+          return redirect()->route('admin.dealdetail',$data);
         }
       }
 
