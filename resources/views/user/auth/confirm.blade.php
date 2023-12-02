@@ -147,6 +147,9 @@ label,
 .bg_red{
   background-color: rgb(253, 238, 241) !important;
 }
+.bg_white{
+  background-color: #ffffff !important;
+}
 </style>
 
 
@@ -514,7 +517,5 @@ $(document).ready(function () {
 
 });
 </script>
-
-
 
 @endsection

@@ -754,6 +754,11 @@ class BothController extends Controller
 
     $deal = Deal::where('id',$id)->first();
 
+    if (Auth::guard('user')->check() || Auth::guard('admin')->check()) {
+    }else{
+      return redirect()->route('bulk');
+    }
+
     if (Auth::guard('user')->check()) {
       $login_user_id = Auth::guard('user')->user()->id;
       if($deal->user_id  == $login_user_id ){

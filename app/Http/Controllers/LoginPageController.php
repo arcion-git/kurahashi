@@ -3101,9 +3101,9 @@ class LoginPageController extends Controller
         // dd($option);
         $response = $client->request('POST', $url, $option);
         $result = simplexml_load_string($response->getBody()->getContents());
-        // dd($result);
         if($result->returnCode == 1){
           $delete_deal = Deal::where(['id'=> $deal_id])->first()->delete();
+          // dd($result);
           if($result->errorCode == 'G55'){
             // 後で処理を作る
 
@@ -3154,70 +3154,70 @@ class LoginPageController extends Controller
         }
       }
 
-      if($request->uketori_siharai == 'クレジットカード払い'){
-        // dd($request->token_api);
-        // EPトークン取得
-        $client = new Client();
-        // $url = 'https://api.kuronekoyamato.co.jp/api/credit';
-
-        $url = config('app.collect_touroku');
-        $collect_tradercode = config('app.collect_tradercode');
-
-        $option = [
-          'headers' => [
-            'Accept' => '*/*',
-            'Content-Type' => 'application/x-www-form-urlencoded',
-            'charset' => 'UTF-8',
-          ],
-          'form_params' => [
-            'function_div' => 'A08',
-            'trader_code' => $collect_tradercode,
-            // パソコンかスマホか
-            'device_div' => 1,
-            'order_no' => $deal_id,
-            // 決済合計金額
-            'settle_price' => $all_total_price,
-            'buyer_name_kanji' => $user->name,
-            'buyer_tel' => $user->tel,
-            'buyer_email' => $user->email,
-            'pay_way' => 1,
-            'token' => $request->token_api,
-
-            // ここからカード預かりサービス追加分
-
-            // 'card_judge_div' => 1,
-            // 'device_info' => 1,
-            // 'option_service_div' => 00,
-            // 'check_sum' => '',
-            // 'cardNo' => '',
-            // 'cardOwner' => '',
-            // 'cardExp' => '',
-            // 'securityCode' => '',
-          ]
-        ];
-        // dd($option);
-        $response = $client->request('POST', $url, $option);
-        $result = simplexml_load_string($response->getBody()->getContents());
-        if($result->returnCode == 1){
-          $delete_deal = Deal::where(['id'=> $deal_id])->first()->delete();
-          // dd($result);
-          if($result->errorCode == 123456){
-            // 後で処理を作る
-            $message = '決済金額オーバー';
-            $data=[
-              'addtype' => $addtype,
-              'message' => $message,
-            ];
-          }else{
-            $message = '決済エラーのため別の決済方法をお試しください。';
-            $data=[
-              'addtype' => $addtype,
-              'message' => $message,
-            ];
-          }
-          return redirect()->route('confirm',$data);
-        }
-      }
+      // if($request->uketori_siharai == 'クレジットカード払い'){
+      //   // dd($request->token_api);
+      //   // EPトークン取得
+      //   $client = new Client();
+      //   // $url = 'https://api.kuronekoyamato.co.jp/api/credit';
+      //
+      //   $url = config('app.collect_touroku');
+      //   $collect_tradercode = config('app.collect_tradercode');
+      //
+      //   $option = [
+      //     'headers' => [
+      //       'Accept' => '*/*',
+      //       'Content-Type' => 'application/x-www-form-urlencoded',
+      //       'charset' => 'UTF-8',
+      //     ],
+      //     'form_params' => [
+      //       'function_div' => 'A08',
+      //       'trader_code' => $collect_tradercode,
+      //       // パソコンかスマホか
+      //       'device_div' => 1,
+      //       'order_no' => $deal_id,
+      //       // 決済合計金額
+      //       'settle_price' => $all_total_price,
+      //       'buyer_name_kanji' => $user->name,
+      //       'buyer_tel' => $user->tel,
+      //       'buyer_email' => $user->email,
+      //       'pay_way' => 1,
+      //       'token' => $request->token_api,
+      //
+      //       // ここからカード預かりサービス追加分
+      //
+      //       // 'card_judge_div' => 1,
+      //       // 'device_info' => 1,
+      //       // 'option_service_div' => 00,
+      //       // 'check_sum' => '',
+      //       // 'cardNo' => '',
+      //       // 'cardOwner' => '',
+      //       // 'cardExp' => '',
+      //       // 'securityCode' => '',
+      //     ]
+      //   ];
+      //   // dd($option);
+      //   $response = $client->request('POST', $url, $option);
+      //   $result = simplexml_load_string($response->getBody()->getContents());
+      //   if($result->returnCode == 1){
+      //     $delete_deal = Deal::where(['id'=> $deal_id])->first()->delete();
+      //     // dd($result);
+      //     if($result->errorCode == 123456){
+      //       // 後で処理を作る
+      //       $message = '決済金額オーバー';
+      //       $data=[
+      //         'addtype' => $addtype,
+      //         'message' => $message,
+      //       ];
+      //     }else{
+      //       $message = '決済エラーのため別の決済方法をお試しください。';
+      //       $data=[
+      //         'addtype' => $addtype,
+      //         'message' => $message,
+      //       ];
+      //     }
+      //     return redirect()->route('confirm',$data);
+      //   }
+      // }
     }
 
 
@@ -3859,41 +3859,103 @@ class LoginPageController extends Controller
 
 
       // クレジットカードAPIキャンセル
-      if($deal->uketori_siharai == 'クレジットカード払い'){
-        // dd($request->token_api);
-        // EPトークン取得
-        $client = new Client();
-        // $url = 'https://api.kuronekoyamato.co.jp/api/credit';
-        $url = config('app.collect_cancel');
-        $collect_tradercode = config('app.collect_tradercode');
-        $option = [
-          'headers' => [
-            'Accept' => '*/*',
-            'Content-Type' => 'application/x-www-form-urlencoded',
-            'charset' => 'UTF-8',
-          ],
-          'form_params' => [
-            'function_div' => 'A06',
-            'trader_code' => $collect_tradercode,
-            'order_no' => $deal_id,
-          ]
-        ];
-        // dd($option);
-        $response = $client->request('POST', $url, $option);
-        $result = simplexml_load_string($response->getBody()->getContents());
-                // dd($result);
-        if($result->returnCode == 1){
-          $id= $deal_id;
-          $message = 'クレジットカード払いキャンセルエラーです。';
-          $data=[
-            'id' => $deal_id,
-            'cancel_error' => $message,
-          ];
-          return redirect()->route('dealdetail',$data);
+      // if($deal->uketori_siharai == 'クレジットカード払い'){
+      //   // dd($request->token_api);
+      //   // EPトークン取得
+      //   $client = new Client();
+      //   // $url = 'https://api.kuronekoyamato.co.jp/api/credit';
+      //   $url = config('app.collect_cancel');
+      //   $collect_tradercode = config('app.collect_tradercode');
+      //   $option = [
+      //     'headers' => [
+      //       'Accept' => '*/*',
+      //       'Content-Type' => 'application/x-www-form-urlencoded',
+      //       'charset' => 'UTF-8',
+      //     ],
+      //     'form_params' => [
+      //       'function_div' => 'A06',
+      //       'trader_code' => $collect_tradercode,
+      //       'order_no' => $deal_id,
+      //     ]
+      //   ];
+      //   // dd($option);
+      //   $response = $client->request('POST', $url, $option);
+      //   $result = simplexml_load_string($response->getBody()->getContents());
+      //   if($result->returnCode == 1){
+      //     $id= $deal_id;
+      //     $message = 'クレジットカード払いキャンセルエラーです。';
+      //     $data=[
+      //       'id' => $deal_id,
+      //       'cancel_error' => $message,
+      //     ];
+      //     return redirect()->route('dealdetail',$data);
+      //   }
+      // }
+    }
+
+
+
+
+    // 在庫を戻す処理
+    if(isset($deal)){
+      $setonagi=Setonagi::where(['user_id'=> $deal->user_id])->first();
+      $carts = Cart::where(['deal_id'=> $deal->id])->get();
+      foreach ($carts as $cart) {
+        $item=Item::where(['id'=> $cart->item_id])->first();
+        $order = Order::where(['cart_id'=>$cart->id])->first();
+        $addtype = $cart->addtype;
+        if( $addtype == 'addsetonagi' || $addtype == 'addspecialprice' || $addtype == 'addbuyerrecommend' && isset($setonagi)){
+          // 在庫数を増やすロジック
+          $item->zaikosuu += $order->quantity;
+          // 在庫数をデータベースに更新
+          $item->save();
+        }elseif ( $addtype == 'addbuyerrecommend' ) {
+          $kaiin_number = $user->kaiin_number;
+          $store = Store::where(['tokuisaki_name'=>$order->tokuisaki_name,'store_name'=>$order->store_name])->first();
+          // 限定数の在庫増減があるか確認
+          $buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $store->tokuisaki_id)
+          ->where(function($query) use ($store) {
+              $query->where('gentei_store', null)
+                    ->orWhere('gentei_store', $store->store_name);
+          })
+          ->where('zaikokanri', null)
+          ->whereNotNull('zaikosuu')
+          ->where('price', '>=', '1')
+          ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
+          ->where('nouhin_end', '>=', $order->nouhin_yoteibi)
+          ->where('start', '<=' , $deal->success_time)
+          ->where('end', '>=', $deal->success_time)
+          ->first();
+          // Log::debug($buyer_recommend_item);
+          if($buyer_recommend_item){
+            // 在庫数を増減させるロジック
+            $buyer_recommend_item->zaikosuu += $order->quantity;
+            // 在庫数をデータベースに更新
+            $buyer_recommend_item->save();
+          }
+          // 在庫を使う商品があるか確認
+          $not_buyer_recommend_item = BuyerRecommend::where('tokuisaki_id', $store->tokuisaki_id)
+          ->where(function($query) use ($store) {
+              $query->where('gentei_store', null)
+                    ->orWhere('gentei_store', $store->store_name);
+          })
+          ->where('zaikokanri', null)
+          ->where('zaikosuu', null)
+          ->where('price', '>=', '1')
+          ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
+          ->where('nouhin_end', '>=', $order->nouhin_yoteibi)
+          ->where('start', '<=' , $deal->success_time)
+          ->where('end', '>=', $deal->success_time)
+          ->first();
+          if($not_buyer_recommend_item){
+            // 在庫数を増減させるロジック
+            $item->zaikosuu += $order->quantity;
+            // 在庫数をデータベースに更新
+            $item->save();
+          }
         }
       }
     }
-
 
     $deal=Deal::firstOrNew(['id'=> $deal_id]);
     $deal->status = 'キャンセル';
