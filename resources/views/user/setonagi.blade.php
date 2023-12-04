@@ -108,7 +108,7 @@
                                 @else
                                   {{number_format($setonagi_item->price)}}
                                 @endif
-                                 /
+                                 <span class="setonagi_stock">（税別）</span>/
                                   @if ($setonagi_item->item()->tani == 1)
                                   ｹｰｽ
                                   @elseif ($setonagi_item->item()->tani == 2)
