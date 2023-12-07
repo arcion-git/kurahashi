@@ -149,6 +149,7 @@ return [
     'kakebarai_pricechange' => env('KAKEBARAI_PRICECHANGE'),
 
     'collect_tradercode' => env('COLLECT_TRADERCODE'),
+    'collect_shipment' => env('COLLECT_SHIPMENT'),
     'collect_password' => env('COLLECT_PASSWORD'),
     'collect_token' => env('COLLECT_TOKEN'),
     'collect_touroku' => env('COLLECT_TOUROKU'),

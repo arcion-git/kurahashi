@@ -3217,6 +3217,47 @@ class LoginPageController extends Controller
           }
           return redirect()->route('confirm',$data);
         }
+
+        // 出荷登録
+        $client = new Client();
+        $url = config('app.collect_shipment');
+        // $collect_tradercode = config('app.collect_tradercode');
+        $option = [
+          'headers' => [
+            'Accept' => '*/*',
+            'Content-Type' => 'application/x-www-form-urlencoded',
+            'charset' => 'UTF-8',
+          ],
+          'form_params' => [
+            'function_div' => 'E01',
+            'trader_code' => $collect_tradercode,
+            'order_no' => $deal_id,
+            'slip_no' => $deal_id,
+            'delivery_service_code' => 99,
+          ]
+        ];
+        // dd($option);
+        $response = $client->request('POST', $url, $option);
+        $result = simplexml_load_string($response->getBody()->getContents());
+        if($result->returnCode == 1){
+          $delete_deal = Deal::where(['id'=> $deal_id])->first()->delete();
+          // dd($result);
+          if($result->errorCode == 123456){
+            // 後で処理を作る
+            $message = '決済金額オーバー';
+            $data=[
+              'addtype' => $addtype,
+              'message' => $message,
+            ];
+          }else{
+            $message = '決済エラーのため別の決済方法をお試しください。';
+            $data=[
+              'addtype' => $addtype,
+              'message' => $message,
+            ];
+          }
+          return redirect()->route('confirm',$data);
+        }
       }
     }
 
