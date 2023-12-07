@@ -2550,7 +2550,6 @@ class AdminPageController extends Controller
 
     // リピートオーダーを出力
     $repeatorders = Repeatorder::where('status','有効')->get();
-    dd($repeatorders);
     if(isset($repeatorders)){
       if($kikan){
         for ($nouhin_yoteibi = $start; $nouhin_yoteibi <= $end; $nouhin_yoteibi = date('Y-m-d', strtotime($nouhin_yoteibi . '+1 day'))) {
