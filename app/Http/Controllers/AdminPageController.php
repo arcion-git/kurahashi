@@ -508,12 +508,12 @@ class AdminPageController extends Controller
 
     $users = User::paginate(30);
 
-    $kaiin_number = User::first()->kaiin_number;
-    $tokuisaki = StoreUser::where('user_id',$kaiin_number)->first();
-    $tokuisaki_name = Store::where(['tokuisaki_id' => $tokuisaki->tokuisaki_id ,'store_id' => $tokuisaki->store_id])->first()->tokuisaki_name;
-
-    $setonagi_users = Setonagi::get();
-    $now = Carbon::now();
+    // $kaiin_number = User::first()->kaiin_number;
+    // $tokuisaki = StoreUser::where('user_id',$kaiin_number)->first();
+    // $tokuisaki_name = Store::where(['tokuisaki_id' => $tokuisaki->tokuisaki_id ,'store_id' => $tokuisaki->store_id])->first()->tokuisaki_name;
+    //
+    // $setonagi_users = Setonagi::get();
+    // $now = Carbon::now();
 
     return view('admin.auth.user', ['users' => $users]);
   }
