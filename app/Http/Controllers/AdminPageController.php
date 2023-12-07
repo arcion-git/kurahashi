@@ -513,18 +513,18 @@ class AdminPageController extends Controller
       if($kaiin_number){
         $tokuisaki = StoreUser::where('user_id',$kaiin_number)->first();
         if($tokuisaki){
-          $tokuisaki_name = Store::where(['tokuisaki_id' => $tokuisaki->tokuisaki_id ,'store_id' => $tokuisaki->store_id])->first()->tokuisaki_name;
-          if($tokuisaki_name){
+          $store = Store::where(['tokuisaki_id' => $tokuisaki->tokuisaki_id ,'store_id' => $tokuisaki->store_id])->first();
+          if($store){
 
           }else{
-            $message = $user.'が所属している店舗が見つかりません';
+            $message = $user->name.'が所属している店舗が見つかりません';
             $data=[
               'message'=>$message,
             ];
             return redirect()->route('admin.home', $data);
           }
         }else{
-          $message = $user.'が所属している得意先が見つかりません';
+          $message = $user->name.'が所属している店舗一覧が見つかりません';
           $data=[
             'message'=>$message,
           ];
