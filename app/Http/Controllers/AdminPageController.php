@@ -506,14 +506,39 @@ class AdminPageController extends Controller
 
   public function user(){
 
+    $users = User::get();
+
+    foreach ($users as $user) {
+      $kaiin_number = $user->kaiin_number;
+      if($kaiin_number){
+        $tokuisaki = StoreUser::where('user_id',$kaiin_number)->first();
+        if($tokuisaki){
+          $tokuisaki_name = Store::where(['tokuisaki_id' => $tokuisaki->tokuisaki_id ,'store_id' => $tokuisaki->store_id])->first()->tokuisaki_name;
+          if($tokuisaki_name){
+
+          }else{
+            $message = $user.'が所属している店舗が見つかりません';
+            $data=[
+              'message'=>$message,
+            ];
+            return redirect()->route('admin.home', $data);
+          }
+        }else{
+          $message = $user.'が所属している得意先が見つかりません';
+          $data=[
+            'message'=>$message,
+          ];
+          return redirect()->route('admin.home', $data);
+        }
+      }
+
+    }
+
+
     $users = User::paginate(30);
 
-    // $kaiin_number = User::first()->kaiin_number;
-    // $tokuisaki = StoreUser::where('user_id',$kaiin_number)->first();
-    // $tokuisaki_name = Store::where(['tokuisaki_id' => $tokuisaki->tokuisaki_id ,'store_id' => $tokuisaki->store_id])->first()->tokuisaki_name;
-    //
-    // $setonagi_users = Setonagi::get();
-    // $now = Carbon::now();
+    $setonagi_users = Setonagi::get();
+    $now = Carbon::now();
 
     return view('admin.auth.user', ['users' => $users]);
   }
