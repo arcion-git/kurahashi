@@ -2103,10 +2103,10 @@ class AdminPageController extends Controller
             $item = Item::where(['id'=> $cart->item_id])->first();
             $zei = '8%';
             // dd($user);
-            if(($user->setonagi == null)){
+            if(!($user->setonagi == 1)){
               $store = Store::where(['tokuisaki_name'=> $order->tokuisaki_name , 'store_name'=> $order->store_name])->first();
             }
-            if(($user->setonagi == null)){
+            if(!($user->setonagi == 1)){
               // 会社名
               $company = $order->tokuisaki_name;
               // 会員No
@@ -2549,8 +2549,8 @@ class AdminPageController extends Controller
     }
 
     // リピートオーダーを出力
-
     $repeatorders = Repeatorder::where('status','有効')->get();
+    dd($repeatorders);
     if(isset($repeatorders)){
       if($kikan){
         for ($nouhin_yoteibi = $start; $nouhin_yoteibi <= $end; $nouhin_yoteibi = date('Y-m-d', strtotime($nouhin_yoteibi . '+1 day'))) {
@@ -2575,7 +2575,7 @@ class AdminPageController extends Controller
                 $user = User::where('kaiin_number',$repeatcart->kaiin_number)->first();
                 $item = Item::where(['item_id'=> $repeatcart->item_id, 'sku_code'=> $repeatcart->sku_code])->first();
                 $store = Store::where(['tokuisaki_name'=> $repeatorder->tokuisaki_name , 'store_name'=> $repeatorder->store_name])->first();
-                if(($user->setonagi == null)){
+                if(!($user->setonagi == 1)){
                   // 会社名
                   $company = $repeatorder->tokuisaki_name;
                   // 会員No
@@ -2772,7 +2772,7 @@ class AdminPageController extends Controller
               $user = User::where('kaiin_number',$repeatcart->kaiin_number)->first();
               $item = Item::where(['item_id'=> $repeatcart->item_id, 'sku_code'=> $repeatcart->sku_code])->first();
               $store = Store::where(['tokuisaki_name'=> $repeatorder->tokuisaki_name , 'store_name'=> $repeatorder->store_name])->first();
-              if(($user->setonagi == null)){
+              if(!($user->setonagi == 1)){
                 // 会社名
                 $company = $repeatorder->tokuisaki_name;
                 // 会員No
