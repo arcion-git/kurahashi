@@ -3462,7 +3462,7 @@ class LoginPageController extends Controller
         // 金額表示部分（クロネコかけ払いの場合）
         if($deal->uketori_siharai == 'クロネコかけ払い'){
           // クロネコかけ払いの場合
-          $total_price = '【お支払い金額】<br />'.number_format($total_price).'円（税別）';
+          $total_price = '【お支払い金額】<br />'.number_format($total_price).'円（税抜）';
         }else{
           // それ以外
           $total_price = '【お支払い金額】<br />'.$total_price_zei_number.'円（税込）';
@@ -4071,7 +4071,13 @@ class LoginPageController extends Controller
     // 商品合計税込（カンマ表示）
     $total_price_zei_number = number_format($total_price_zei);
     // 8%対象消費合計額テキスト
-    $total_price_zei_number_text = '軽減税率8％対象：'.number_format($total_price).'円（税抜）<br />軽減税率8％消費税：'.number_format($zeinomi8).'円<br />軽減税率8％対象：'.$total_price_zei_number.'円（税込）';
+    if($deal->uketori_siharai == 'クロネコかけ払い'){
+      // クロネコかけ払いの場合
+      $total_price_zei_number_text = '軽減税率8％対象：'.number_format($total_price).'円（税抜）';
+    }else{
+      // それ以外
+      $total_price_zei_number_text = '軽減税率8％対象：'.number_format($total_price).'円（税抜）<br />軽減税率8％消費税：'.number_format($zeinomi8).'円<br />軽減税率8％対象：'.$total_price_zei_number.'円（税込）';
+    }
 
     if(isset($shipping_price)){
       // 送料税込
@@ -4099,8 +4105,14 @@ class LoginPageController extends Controller
       $shipping_price_text = null;
       // 税金の計算
       $zei_price = $total_price_zei - $total_price;
-      // 金額表示部分
-      $total_price = '【お支払い金額】<br />'.$total_price_zei_number.'円（税込）';
+      // 金額表示部分（クロネコかけ払いの場合）
+      if($deal->uketori_siharai == 'クロネコかけ払い'){
+        // クロネコかけ払いの場合
+        $total_price = '【お支払い金額】<br />'.number_format($total_price).'円（税抜）';
+      }else{
+        // それ以外
+        $total_price = '【お支払い金額】<br />'.$total_price_zei_number.'円（税込）';
+      }
       // 税金のみの金額表示
       $zei_price_text = '消費税：'.number_format($zei_price).'円';
     }
