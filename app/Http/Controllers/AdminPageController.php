@@ -430,6 +430,7 @@ class AdminPageController extends Controller
           foreach ($orders as $order) {
             $item = Item::where(['id' => $cart->item_id])->first();
           }
+          $cart_items['shohinCode' . $n] = $item->item_id;
           $cart_items['shohinMei' . $n] = $item->item_name;
           $cart_items['suryo' . $n] = $order->quantity;
           $cart_items['tanka' . $n] = $order->price;
