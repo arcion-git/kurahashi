@@ -365,7 +365,50 @@ class AdminPageController extends Controller
     $zeinuki = $request->all_total_val - $request->tax_val;
 
 
+    // BtoC+SB合計金額計算
     if($user->setonagi == 1){
+      $total_price = [];
+      $carts = Cart::where(['deal_id'=> $deal_id])->get();
+      // カート商品の出力
+      foreach($carts as $cart) {
+        $orders = Order::where(['cart_id'=> $cart->id])->get();
+        foreach ($orders as $order) {
+          // dd($store);
+          // 金額未定に対応
+          if($order->price == '未定' || $order->price == '-'){
+            $array = 0;
+          }else{
+            $array = $order->price * $order->quantity;
+          }
+          array_push($total_price, $array);
+        }
+      }
+      // 送料がかかる場合の表示設定
+      // 商品合計
+      $total_price = array_sum($total_price);
+      // 商品合計税込
+      $all_total_price = floor($total_price * (108 / 100));
+      // 8%税額
+      $zeinomi8 = $all_total_price - $total_price;
+
+      if(isset($shipping_price)){
+        // 送料税込
+        $shipping_price_zei = floor($shipping_price * (110 / 100));
+        // 10%税のみ
+        $zeinomi10 = $shipping_price_zei - $shipping_price;
+        // 10%対象消費合計額（カンマ表示）
+        // 税込合計金額
+        $all_total_price = $shipping_price_zei + $all_total_price;
+        // 税金の計算
+        $zei_price = $all_total_price - $total_price - $shipping_price;
+      }else{
+        // 税金の計算
+        $zei_price = $all_total_price - $total_price;
+      }
+
+
+
+
       // SETOnagiユーザーはクレジットカード、もしくは、ヤマトかけばらいの金額を変更する
       // クロネコかけ払い決済金額変更
       if($deal->uketori_siharai == 'クロネコかけ払い'){
@@ -375,6 +418,28 @@ class AdminPageController extends Controller
         $kakebarai_traderCode = config('app.kakebarai_traderCode');
         $kakebarai_passWord = config('app.kakebarai_passWord');
         $envi = config('app.envi');
+
+
+        // カート商品の出力
+        $cart_items = [];
+        $n = 1;
+        // カート商品の出力
+        $carts = Cart::where(['deal_id'=> $deal_id])->get();
+        foreach($carts as $cart) {
+          $orders = Order::where(['cart_id'=> $cart->id])->get();
+          foreach ($orders as $order) {
+            $item = Item::where(['id' => $cart->item_id])->first();
+          }
+          $cart_items['shohinMei' . $n] = $item->item_name;
+          $cart_items['suryo' . $n] = $order->quantity;
+          $cart_items['tanka' . $n] = $order->price;
+          $cart_items['tani' . $n] = $item->kuroneko_item_tani();
+          $cart_items['kessaiKingaku' . $n] = $order->price * $order->quantity;
+          $cart_items['zeiritsuKbn' . $n] = '2';
+          $n++;
+        }
+        // dd($cart_items);
+
         $option = [
           'headers' => [
             'Accept' => '*/*',
@@ -383,21 +448,21 @@ class AdminPageController extends Controller
           ],
           'form_params' => [
             'traderCode' => $kakebarai_traderCode,
+            // 日付
             'orderNo' => $deal_id.$envi,
+            // バイヤーid
             'buyerId' => $user_id,
-            'settlePrice' => $zeinuki,
-            'keigenShohiZei' => $request->tax_val,
-
-            'shohinMei1' => '商品合計',
-            'kessaiKingaku1' => $zeinuki,
-            'zeiritsuKbn1' => '2',
-
-            // 'shohiZei' => $request->tax_val,
-            'meisaiUmu' => '2',
+            'settlePrice' => $total_price,
             'passWord' => $kakebarai_passWord
           ]
         ];
+
+        // $cart_items 配列の内容を $option の 'form_params' に追加
+        foreach($cart_items as $key => $value) {
+            $option['form_params'][$key] = $value;
+        }
         // dd($option);
+
         $response = $client->request('POST', $url, $option);
         $result = simplexml_load_string($response->getBody()->getContents());
         // dd($result);
@@ -517,18 +582,18 @@ class AdminPageController extends Controller
           if($store){
 
           }else{
-            $message = $user->name.'が所属している店舗が見つかりません';
-            $data=[
-              'message'=>$message,
-            ];
-            return redirect()->route('admin.home', $data);
+            // $message = $user->name.'が所属している店舗が見つかりません';
+            // $data=[
+            //   'message'=>$message,
+            // ];
+            // return redirect()->route('admin.home', $data);
           }
         }else{
-          $message = $user->name.'が所属している店舗一覧が見つかりません';
-          $data=[
-            'message'=>$message,
-          ];
-          return redirect()->route('admin.home', $data);
+          // $message = $user->name.'が所属している店舗一覧が見つかりません';
+          // $data=[
+          //   'message'=>$message,
+          // ];
+          // return redirect()->route('admin.home', $data);
         }
       }
 

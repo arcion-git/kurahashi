@@ -63,6 +63,25 @@ class Item extends Model
     }
   }
 
+  public function kuroneko_item_tani(){
+    // 単位を取得
+    if ($this->tani == 1){
+    $tani = 'ケース';
+    }
+    elseif ($this->tani == 2){
+    $tani = 'ボール';
+    }
+    elseif ($this->tani == 3){
+    $tani = '個';
+    }
+    elseif ($this->tani == 4){
+    $tani = 'KG';
+    }else{
+      $tani = '個';
+    }
+    return $tani;
+  }
+
   // protected $primaryKey = 'item_id';
 
 }

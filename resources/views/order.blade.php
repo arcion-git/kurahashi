@@ -533,20 +533,19 @@
 			</div>
 			<div class="col-sm-12 col-md-10">
 
-
 				@if ( Auth::guard('user')->check() )
 					@if ( Auth::guard('user')->user()->setonagi()->kakebarai_riyou == 1 )
-						<input required class="radio-input uketori_siharai_radio" type="radio" id="クロネコかけ払い" value="クロネコかけ払い" name="uketori_siharai" @if($setonagi->uketori_siharai == 'クロネコかけ払い') checked @endif ><label for="クロネコかけ払い"> クロネコかけ払い</label>
+						<input required class="radio-input uketori_siharai_radio" type="radio" id="クロネコかけ払い" value="クロネコかけ払い" name="uketori_siharai" @if(isset($deal)) @if($deal->uketori_siharai == 'クロネコかけ払い') checked @endif @elseif(isset($setonagi) && $setonagi->uketori_siharai == 'クロネコかけ払い') checked @endif ><label for="クロネコかけ払い"> クロネコかけ払い</label>
 					@endif
 				@endif
 
 				@if ( Auth::guard('admin')->check() )
 					@if ( $user->setonagi()->kakebarai_riyou == 1 )
-					<input required class="radio-input uketori_siharai_radio" type="radio" id="クロネコかけ払い" value="クロネコかけ払い" name="uketori_siharai" @if($setonagi->uketori_siharai == 'クロネコかけ払い') checked @endif ><label for="クロネコかけ払い"> クロネコかけ払い</label>
+					<input required class="radio-input uketori_siharai_radio" type="radio" id="クロネコかけ払い" value="クロネコかけ払い" name="uketori_siharai" @if(isset($deal)) @if($deal->uketori_siharai == 'クロネコかけ払い') checked @endif @elseif(isset($setonagi) && $setonagi->uketori_siharai == 'クロネコかけ払い') checked @endif ><label for="クロネコかけ払い"> クロネコかけ払い</label>
 					@endif
 				@endif
 
-					<input required class="radio-input uketori_siharai_radio" type="radio" id="クレジットカード払い" value="クレジットカード払い" name="uketori_siharai" @if($setonagi->uketori_siharai == 'クレジットカード払い') checked @endif @if(isset($shipping_code)) checked @endif><label for="クレジットカード払い"> クレジットカード払い</label>
+					<input required class="radio-input uketori_siharai_radio" type="radio" id="クレジットカード払い" value="クレジットカード払い" name="uketori_siharai" @if(isset($deal)) @if($deal->uketori_siharai == 'クレジットカード払い') checked @endif @elseif(isset($setonagi) && $setonagi->uketori_siharai == 'クレジットカード払い') checked @endif @if(isset($shipping_code)) checked @endif><label for="クレジットカード払い"> クレジットカード払い</label>
 					<input type="hidden" name="token_api" id="token_api" value="{{app('request')->input('token_api')}}"/>
 					<div class="invalid-feedback">
 					</div>
@@ -984,11 +983,8 @@ $('.nini_nouhin_yoteibi').datepicker({
 $(document).ready(function () {
   updateFields();
 
-	@if(isset($deal) && Auth::guard('admin')->check())
   $('select.quantity , input.price').on('change', function () {
-	@else
-  $('select.quantity').on('change', function () {
-	@endif
+
     updateFields();
   });
 
@@ -1090,13 +1086,13 @@ $(document).ready(function () {
 			<input type="hidden" name="c_shipping_price" id="c_shipping_price_val" value="" />
     </div>
 
-    <div class="invoice-detail-item">
+    <div class="invoice-detail-item tax_price">
       <div class="invoice-detail-name">税額</div>
       <div id="tax" class="invoice-detail-value"></div>
 			<input id="tax_val" type="hidden" name="tax_val" value="" />
     </div>
     <hr class="mt-2 mb-2">
-    <div class="invoice-detail-item">
+    <div class="invoice-detail-item all_total_price">
       <div class="invoice-detail-name">税込合計額</div>
       <div id="all_total" class="invoice-detail-value invoice-detail-value-lg"></div>
 			<input id="all_total_val" type="hidden" name="all_total_val" value="" />
@@ -1121,8 +1117,14 @@ $(document).ready(function() {
 </script>
 
 
-
-
+<!-- 取引の支払い方法がクロネコかけ払いであれば合計金額以外の表示を消す -->
+@if(isset($deal))
+	@if($deal->uketori_siharai == 'クロネコかけ払い')
+	<script>
+		$('.tax_price , .all_total_price').hide();
+	</script>
+	@endif
+@endif
 
 <!-- 操作に関する処理 -->
 <script>
@@ -1138,6 +1140,10 @@ if(document.URL.match("/approval")) {
 		$('.datepicker').attr("disabled", true);
 		$('.head-sousa').remove();
 		$('.addniniorder').remove();
+    // クロネコかけ払いチェックが入っていたら
+		if ($('.uketori_siharai_radio[value="クロネコかけ払い"]').is(':checked')) {
+			$('.tax_price , .all_total_price').hide();
+    }
   });
 }
 </script>
@@ -1147,7 +1153,6 @@ label,
   pointer-events: none;
 }
 </style>
-
 
 <!-- 発注済・CN操作に関する処理 -->
 @if ( Auth::guard('user')->check() )
@@ -1501,8 +1506,10 @@ $(function() {
 
 if ($("[id=クロネコかけ払い]").prop("checked") == true) {
 $('#pay_card').hide();
+$('.tax_price , .all_total_price').hide();
 } else if ($('[id=クレジットカード払い]').prop('checked')) {
 $('#pay_card').show();
+$('.tax_price , .all_total_price').show();
 $('input[name="card_no"]').attr('required', true);
 $('input[name="card_owner"]').attr('required', true);
 $('select[name="exp_month"]').attr('required', true);
@@ -1541,9 +1548,11 @@ $('.charge_form input, #uketori_place').change(function () {
 $('[name="uketori_siharai"]:radio').change( function() {
 if($('[id=クロネコかけ払い]').prop('checked')){
 $('#pay_card').hide();
+$('.tax_price , .all_total_price').hide();
 $('').fadeIn();
 } else if ($('[id=クレジットカード払い]').prop('checked')) {
 $('#pay_card').show();
+$('.tax_price , .all_total_price').show();
 $('input[name="card_no"]').attr('required', true);
 $('input[name="card_owner"]').attr('required', true);
 $('select[name="exp_month"]').attr('required', true);

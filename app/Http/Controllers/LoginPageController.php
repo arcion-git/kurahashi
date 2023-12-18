@@ -3046,6 +3046,28 @@ class LoginPageController extends Controller
         $kakebarai_passWord = config('app.kakebarai_passWord');
         $envi = config('app.envi');
 
+
+        // カート商品の出力
+        $cart_items = [];
+        $n = 1;
+        // カート商品の出力
+        foreach($cart_ids as $cart_id) {
+          $cart = Cart::where(['id'=> $cart_id])->first();
+          $orders = Order::where(['cart_id'=> $cart_id])->get();
+          foreach ($orders as $order) {
+            $item = Item::where(['id' => $cart->item_id])->first();
+          }
+          $cart_items['shohinCode' . $n] = $item->item_id;
+          $cart_items['shohinMei' . $n] = $item->item_name;
+          $cart_items['suryo' . $n] = $order->quantity;
+          $cart_items['tanka' . $n] = $order->price;
+          $cart_items['tani' . $n] = $item->kuroneko_item_tani();
+          $cart_items['kessaiKingaku' . $n] = $order->price * $order->quantity;
+          $cart_items['zeiritsuKbn' . $n] = '2';
+          $n++;
+        }
+        // dd($cart_items);
+
         $option = [
           'headers' => [
             'Accept' => '*/*',
@@ -3060,45 +3082,16 @@ class LoginPageController extends Controller
             // バイヤーid
             'buyerId' => $user_id,
             'settlePrice' => $total_price,
-
-            'shohinMei1' => '商品合計',
-            // 'shohinCode1' => '',
-            // 'suryo1' => '',
-            // 'tani1' => '',
-            // 'tanka1' => '',
-
-            'kessaiKingaku1' => $total_price,
-            // 8%対象
-            'zeiritsuKbn1' => '2',
-
-            // 'henpinDate1' => '',
-
-            // 'shohinMei2' => '送料',
-
-            // 'shohinCode2' => '',
-            // 'suryo2' => '',
-            // 'tani2' => '',
-            // 'tanka2' => '',
-
-            // 'kessaiKingaku2' => '620',
-            // 'zeiritsuKbn2' => '1',
-
-            // 'henpinDate2' => '',
-
-            // 下記の内容を変更する
-            // 'shohiZei' => $request->tax_val,
-
-            // 以下新規追加項目
-            // 'tsujoShohiZei' => '',
-
-            // この項目はなくてもいける
-            'keigenShohiZei' => $zei_price,
-
-            'meisaiUmu' => '2',
             'passWord' => $kakebarai_passWord
           ]
         ];
+
+        // $cart_items 配列の内容を $option の 'form_params' に追加
+        foreach($cart_items as $key => $value) {
+            $option['form_params'][$key] = $value;
+        }
         // dd($option);
+
         $response = $client->request('POST', $url, $option);
         $result = simplexml_load_string($response->getBody()->getContents());
         if($result->returnCode == 1){
@@ -3432,7 +3425,13 @@ class LoginPageController extends Controller
       // 商品合計税込（カンマ表示）
       $total_price_zei_number = number_format($total_price_zei);
       // 8%対象消費合計額テキスト
-      $total_price_zei_number_text = '軽減税率8％対象：'.number_format($total_price).'円（税抜）<br />軽減税率8％消費税：'.number_format($zeinomi8).'円<br />軽減税率8％対象：'.$total_price_zei_number.'円（税込）';
+      if($deal->uketori_siharai == 'クロネコかけ払い'){
+        // クロネコかけ払いの場合
+        $total_price_zei_number_text = '軽減税率8％対象：'.number_format($total_price).'円（税抜）';
+      }else{
+        // それ以外
+        $total_price_zei_number_text = '軽減税率8％対象：'.number_format($total_price).'円（税抜）<br />軽減税率8％消費税：'.number_format($zeinomi8).'円<br />軽減税率8％対象：'.$total_price_zei_number.'円（税込）';
+      }
 
       if(isset($shipping_price)){
         // 送料税込
@@ -3460,8 +3459,14 @@ class LoginPageController extends Controller
         $shipping_price_text = null;
         // 税金の計算
         $zei_price = $total_price_zei - $total_price;
-        // 金額表示部分
-        $total_price = '【お支払い金額】<br />'.$total_price_zei_number.'円（税込）';
+        // 金額表示部分（クロネコかけ払いの場合）
+        if($deal->uketori_siharai == 'クロネコかけ払い'){
+          // クロネコかけ払いの場合
+          $total_price = '【お支払い金額】<br />'.number_format($total_price).'円（税別）';
+        }else{
+          // それ以外
+          $total_price = '【お支払い金額】<br />'.$total_price_zei_number.'円（税込）';
+        }
         // 税金のみの金額表示
         $zei_price_text = '消費税：'.number_format($zei_price).'円';
       }
