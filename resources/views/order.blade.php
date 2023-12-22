@@ -983,7 +983,11 @@ $('.nini_nouhin_yoteibi').datepicker({
 $(document).ready(function () {
   updateFields();
 
+	@if(isset($deal) && Auth::guard('admin')->check())
   $('select.quantity , input.price').on('change', function () {
+	@else
+  $('select.quantity').on('change', function () {
+	@endif
 
     updateFields();
   });
