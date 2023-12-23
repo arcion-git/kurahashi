@@ -491,47 +491,47 @@ class AdminPageController extends Controller
 
 
       // クレジットカード決済の金額を変更
-      // if($request->uketori_siharai == 'クレジットカード払い'){
-      //   // dd($request->token_api);
-      //   // EPトークン取得
-      //   $client = new Client();
-      //   // $url = 'https://api.kuronekoyamato.co.jp/api/credit';
-      //
-      //   $url = config('app.collect_pricechange');
-      //   $collect_tradercode = config('app.collect_tradercode');
-      //
-      //   $option = [
-      //     'headers' => [
-      //       'Accept' => '*/*',
-      //       'Content-Type' => 'application/x-www-form-urlencoded',
-      //       'charset' => 'UTF-8',
-      //     ],
-      //     'form_params' => [
-      //       'function_div' => 'A07',
-      //       'trader_code' => $collect_tradercode,
-      //       'order_no' => $deal_id,
-      //       // 決済変更金額
-      //       'new_price' => $request->all_total_val,
-      //     ]
-      //   ];
-      //   // dd($option);
-      //   $response = $client->request('POST', $url, $option);
-      //   $result = simplexml_load_string($response->getBody()->getContents());
-      //   // dd($result);
-      //   if($result->returnCode == 1){
-      //     if($result->errorCode == 123456){
-      //       // 後で処理を作る
-      //       $message = 'クレジットカード決済金額変更エラー';
-      //     }else{
-      //       $message = 'クレジットカード決済金額変更エラー';
-      //     }
-      //     $data=[
-      //       'id' => $id,
-      //       'message' => $message,
-      //     ];
-      //     return redirect()->route('admin.dealdetail',$data);
-      //   }
-      // }
+      if($request->uketori_siharai == 'クレジットカード払い'){
+        // dd($request->token_api);
+        // EPトークン取得
+        $client = new Client();
+        // $url = 'https://api.kuronekoyamato.co.jp/api/credit';
+
+        $url = config('app.collect_pricechange');
+        $collect_tradercode = config('app.collect_tradercode');
+
+        $option = [
+          'headers' => [
+            'Accept' => '*/*',
+            'Content-Type' => 'application/x-www-form-urlencoded',
+            'charset' => 'UTF-8',
+          ],
+          'form_params' => [
+            'function_div' => 'A07',
+            'trader_code' => $collect_tradercode,
+            'order_no' => $deal_id,
+            // 決済変更金額
+            'new_price' => $request->all_total_val,
+          ]
+        ];
+        // dd($option);
+        $response = $client->request('POST', $url, $option);
+        $result = simplexml_load_string($response->getBody()->getContents());
+        // dd($result);
+        if($result->returnCode == 1){
+          if($result->errorCode == 123456){
+            // 後で処理を作る
+            $message = 'クレジットカード決済金額変更エラー';
+          }else{
+            $message = 'クレジットカード決済金額変更エラー';
+          }
+          $data=[
+            'id' => $id,
+            'message' => $message,
+          ];
+          return redirect()->route('admin.dealdetail',$data);
+        }
+      }
     }
     // else{
     //   // 法人ユーザーのみ確認待ちに変更
