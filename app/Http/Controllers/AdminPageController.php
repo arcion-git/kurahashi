@@ -642,6 +642,7 @@ class AdminPageController extends Controller
 
     $kakebarai_traderCode = config('app.kakebarai_traderCode');
     $kakebarai_passWord = config('app.kakebarai_passWord');
+    $envi = config('app.envi');
 
     foreach ($setonagi_users as $setonagi_user) {
       $user_id = $setonagi_user->user_id;
@@ -659,7 +660,7 @@ class AdminPageController extends Controller
         'form_params' => [
           'traderCode' => $kakebarai_traderCode,
           // バイヤーid
-          'buyerId' => $user_id,
+          'buyerId' => $user_id.$envi,
           'buyerTelNo' => '',
           'passWord' => $kakebarai_passWord
         ]
@@ -689,7 +690,7 @@ class AdminPageController extends Controller
         'form_params' => [
           'traderCode' => $kakebarai_traderCode,
           // バイヤーid
-          'buyerId' => $user_id,
+          'buyerId' => $user_id.$envi,
           'buyerTelNo' => '',
           'passWord' => $kakebarai_passWord
         ]

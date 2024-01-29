@@ -212,6 +212,13 @@ class LoginController extends Controller
           ->whereDate('created_at', '<=' , $yesterday)->delete();
         }
 
+        // BtoSB審査前のユーザーをsetonagiページに
+        if($setonagi){
+          if(!isset($shipping_code) && $setonagi->setonagi_ok == null && $setonagi->kakebarai_riyou == null ){
+            return redirect()->route('setonagi');
+          }
+        }
+
         // shipping_codeを持つユーザーのファーストページを振り分け
         if(isset($shipping_code)){
           return redirect()->route('setonagi');
