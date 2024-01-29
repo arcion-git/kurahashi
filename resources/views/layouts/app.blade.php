@@ -301,25 +301,20 @@
       <div class="main-sidebar">
         <aside id="sidebar-wrapper">
           <div class="sidebar-brand">
+            
             @if ( Auth::guard('user')->check() )
               @if(Auth::guard('user')->user()->c_user())
               <a href="{{ url('/setonagi') }}">
               @else
-<<<<<<< HEAD
                 @if ( Auth::guard('user')->user()->setonagi == 1 )
-=======
->>>>>>> 88918293fc4cbe70df53d8ae2bd4f813ae2b18c4
                   @if ( Auth::guard('user')->user()->setonagi()->kakebarai_riyou == null && Auth::guard('user')->user()->setonagi()->setonagi_ok == null )
                     <a href="{{ url('/setonagi') }}">
                     @else
                     <a href="{{ url('/bulk') }}">
                   @endif
-<<<<<<< HEAD
                 @else
                   <a href="{{ url('/bulk') }}">
                 @endif
-=======
->>>>>>> 88918293fc4cbe70df53d8ae2bd4f813ae2b18c4
               @endif
             @endif
 
