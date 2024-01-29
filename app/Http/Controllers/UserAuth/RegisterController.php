@@ -13,6 +13,9 @@ use GuzzleHttp\Client;
 
 use Illuminate\Support\Facades\Mail;
 
+use Illuminate\Http\Request;
+use Illuminate\Auth\Events\Registered;
+
 // BtoC向け
 use App\ShippingCalender;
 use App\ShippingCompanyCode;
@@ -97,13 +100,13 @@ class RegisterController extends Controller
             'pay' => ['required'],
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
-            'first_name_kana' => ['required', 'string', 'max:255'],
-            'last_name_kana' => ['required', 'string', 'max:255'],
-            'company' => ['required', 'string', 'max:255'],
-            'company_kana' => ['required', 'string', 'max:255'],
+            'first_name_kana' => ['required', 'string', 'max:255', 'regex:/^[ァ-ンヴー]+$/u'],
+            'last_name_kana' => ['required', 'string', 'max:255', 'regex:/^[ァ-ンヴー]+$/u'],
+            'company' => ['required', 'string', 'max:255', 'regex:/^[^\x20-\x7E]+$/u'],
+            'company_kana' => ['required', 'string', 'max:255', 'regex:/^[^\x20-\x7E]+$/u'],
             'address01' => ['required', 'string', 'max:8'],
-            'address02' => ['required', 'string', 'max:255'],
-            'address03' => ['required', 'string', 'max:255'],
+            'address02' => ['required', 'string', 'max:255', 'regex:/^[^\x20-\x7E]+$/u'],
+            'address03' => ['required', 'string', 'max:255', 'regex:/^[^\x20-\x7E]+$/u'],
             'address04' => ['required', 'string', 'max:255', 'regex:/^[^\x01-\x7E]+$/u'],
             'tel' => ['required', 'string', 'max:20', 'regex:/^\d{2,5}-\d{1,4}-\d{4}$/'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
@@ -200,6 +203,7 @@ class RegisterController extends Controller
       $kakebarai_traderCode = config('app.kakebarai_traderCode');
       // dd($kakebarai_traderCode);
       $kakebarai_passWord = config('app.kakebarai_passWord');
+      $envi = config('app.envi');
       $option = [
         'headers' => [
           'Accept' => '*/*',
@@ -208,7 +212,7 @@ class RegisterController extends Controller
         ],
         'form_params' => [
           'traderCode' => $kakebarai_traderCode,
-          'cId' => '00'.$user_id,
+          'cId' => $user_id.$envi,
           'hjkjKbn' => $data['hjkjKbn'],
           'sMei' => $data['company'],
           'shitenMei' => '',
@@ -217,6 +221,7 @@ class RegisterController extends Controller
           'ybnNo' => $data['address01'],
           'Adress' => $data['address02'].$data['address03'].$data['address04'],
           'telNo' => $data['tel'],
+          'mailAddress1' => $data['email'],
           // 'keitaiNo' => '080-2888-5281',
           // 'gyscod1' => '',
           // 'gyscod2' => '',
@@ -335,7 +340,17 @@ class RegisterController extends Controller
       // dd($option);
       $response = $client->request('POST', $url, $option);
       $result = simplexml_load_string($response->getBody()->getContents());
-      // dd($result);
+      if($result->returnCode == 1){
+        $create_user = User::where(['id'=> $create_user->id])->first()->delete();
+        $setonagi = Setonagi::where(['user_id'=> $setonagi->user_id])->first()->delete();
+        // dd($result);
+        return null;
+        // return redirect()->back()->with('error', '登録に失敗しました。');
+        // $data=[
+        //   'message'=> '登録エラー'.$result->errorCode,
+        // ];
+        // return view('user.auth.register',$data);
+      }
       }
 
       // 登録メール送信
@@ -367,10 +382,26 @@ class RegisterController extends Controller
           'text' => $text,
           'admin_mail' => $admin_mail,
       ], function ($message) use ($email , $admin_mail) {
-          $message->to($email)->subject('SETOnagiオーダーブックにご登録いただきありがとうございます。');
+          $message->to($email)->bcc($admin_mail)->subject('SETOnagiオーダーブックにご登録いただきありがとうございます。');
       });
 
       return $create_user;
+    }
+
+    // 登録失敗時にnullを返した場合の処理
+    public function register(Request $request)
+    {
+        $this->validator($request->all())->validate();
+        $user = $this->create($request->all());
+        if (!$user) {
+            // create メソッドが null を返した場合
+            return redirect()->back()->with('error', '登録に失敗しました。');
+        }
+        // ユーザーをログインさせる
+        $this->guard()->login($user);
+        // 登録後のリダイレクト
+        return $this->registered($request, $user)
+                    ?: redirect($this->redirectPath());
     }
 
     /**

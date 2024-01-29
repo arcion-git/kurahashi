@@ -544,7 +544,6 @@
 					<input required class="radio-input uketori_siharai_radio" type="radio" id="クロネコかけ払い" value="クロネコかけ払い" name="uketori_siharai" @if(isset($deal)) @if($deal->uketori_siharai == 'クロネコかけ払い') checked @endif @elseif(isset($setonagi) && $setonagi->uketori_siharai == 'クロネコかけ払い') checked @endif ><label for="クロネコかけ払い"> クロネコかけ払い</label>
 					@endif
 				@endif
-
 					<input required class="radio-input uketori_siharai_radio" type="radio" id="クレジットカード払い" value="クレジットカード払い" name="uketori_siharai" @if(isset($deal)) @if($deal->uketori_siharai == 'クレジットカード払い') checked @endif @elseif(isset($setonagi) && $setonagi->uketori_siharai == 'クレジットカード払い') checked @endif @if(isset($shipping_code)) checked @endif><label for="クレジットカード払い"> クレジットカード払い</label>
 					<input type="hidden" name="token_api" id="token_api" value="{{app('request')->input('token_api')}}"/>
 					<div class="invalid-feedback">

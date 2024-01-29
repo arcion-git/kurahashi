@@ -305,9 +305,18 @@
               @if(Auth::guard('user')->user()->c_user())
               <a href="{{ url('/setonagi') }}">
               @else
-              <a href="{{ url('/bulk') }}">
+                @if ( Auth::guard('user')->user()->setonagi == 1 )
+                  @if ( Auth::guard('user')->user()->setonagi()->kakebarai_riyou == null && Auth::guard('user')->user()->setonagi()->setonagi_ok == null )
+                    <a href="{{ url('/setonagi') }}">
+                    @else
+                    <a href="{{ url('/bulk') }}">
+                  @endif
+                @else
+                  <a href="{{ url('/bulk') }}">
+                @endif
               @endif
             @endif
+
             @if ( Auth::guard('admin')->check() )
             <a href="{{ url('/admin/home') }}">
             @endif
@@ -392,13 +401,25 @@
              </li>
 
              @if(Auth::guard('user')->user()->c_user())
-             @else
-             <li class="nav-item addbuyerrecommend_button">
-               <a class="nav-link"><i class="far fa-user"></i><span>担当のおすすめ商品</span></a>
-             </li>
-             <li class="nav-item addspecialprice_button">
-               <a class="nav-link"><i class="fas fa-fire"></i><span>市況商品（時価）</span></a>
-             </li>
+               @else
+               @if ( Auth::guard('user')->user()->setonagi == 1 )
+                 @if ( Auth::guard('user')->user()->setonagi()->kakebarai_riyou == 1 || Auth::guard('user')->user()->setonagi()->setonagi_ok == 1 )
+                 <li class="nav-item addbuyerrecommend_button">
+                   <a class="nav-link"><i class="far fa-user"></i><span>担当のおすすめ商品</span></a>
+                 </li>
+                 <li class="nav-item addspecialprice_button">
+                   <a class="nav-link"><i class="fas fa-fire"></i><span>市況商品（時価）</span></a>
+                 </li>
+                 @else
+                 @endif
+               @else
+               <li class="nav-item addbuyerrecommend_button">
+                 <a class="nav-link"><i class="far fa-user"></i><span>担当のおすすめ商品</span></a>
+               </li>
+               <li class="nav-item addspecialprice_button">
+                 <a class="nav-link"><i class="fas fa-fire"></i><span>市況商品（時価）</span></a>
+               </li>
+               @endif
              @endif
 
             <!-- <li class="nav-item">
