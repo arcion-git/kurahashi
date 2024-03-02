@@ -11,6 +11,7 @@ class Order extends Model
     'tokuisaki_name',
     'store_name',
     'price',
+    'hidden_price',
     'nouhin_yoteibi',
     'quantity',
   ];

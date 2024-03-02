@@ -205,7 +205,7 @@
 																				<?php
 																				if ($val->price == '未定') {
 																						$price_val = '未定';
-																				} elseif ($val->price == '-') {
+																				} elseif ($val->hidden_price == '-') {
 																						$price_val = '-';
 																				} else {
 																						if (Auth::guard('admin')->check()) {
