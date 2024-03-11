@@ -1309,7 +1309,6 @@ class AdminPageController extends Controller
 
       // 同じ商品の掲載を禁止する場合
       // $recommend = Recommend::firstOrNew(['user_id'=> $user->id , 'item_id'=> $item->item_id , 'sku_code'=> $item->sku_code ]);
-
       // dd($tokuisaki_id);
 
       if($order_no){
@@ -1317,7 +1316,7 @@ class AdminPageController extends Controller
       }else{
         $order_no = 99999;
       }
-      $recommend = BuyerRecommend::create(['item_id'=> $item->item_id , 'sku_code'=> $item->sku_code ,'tokuisaki_id'=> $request->tokuisaki_id ,'order_no'=> $order_no]);
+      $recommend = BuyerRecommend::create(['item_id'=> $item->item_id , 'sku_code'=> $item->sku_code ,'tokuisaki_id'=> $request->tokuisaki_id ,'order_no'=> $order_no, 'uwagaki_item_name'=> $item->item_name , 'uwagaki_kikaku'=> $item->kikaku]);
       $recommend -> save();
 
       // $buyerrecommends = BuyerRecommend::where('tokuisaki_id',$tokuisaki_id)->orderBy('order_no')->get();
