@@ -87,6 +87,8 @@ class LoginPageController extends Controller
             Auth::guard('admin')->logout();
         }
 
+        $user = Auth::guard('user')->user();
+
         $categories = Category::get();
         $categories = $categories->groupBy('bu_ka_name');
         // dd($categories);
@@ -100,7 +102,11 @@ class LoginPageController extends Controller
         if(isset($shipping_code)){
           return redirect()->route('setonagi');
         }else{
-          return view('user/auth/bulk', ['categories' => $categories]);
+          return view('user/auth/bulk', [
+            'categories' => $categories,
+            'user' => $user,
+            'setonagi' => $setonagi,
+          ]);
         }
     }
 
@@ -970,6 +976,8 @@ class LoginPageController extends Controller
       $setonagi_user = $user->setonagi;
       $addtype = $request->addtype;
 
+      $setonagi = Setonagi::where('user_id',$user_id)->first();
+
       // 日時
       $now = Carbon::now()->toDateTimeString();
 
@@ -1112,8 +1120,45 @@ class LoginPageController extends Controller
       }
 
       // ここからカートへの追加処理を商品ごとに行う（限定お買い得商品は追加しない）
-      if($addtype == 'addsetonagi'){
+      if ($addtype == 'addsetonagi') {
+        if($setonagi){
+          $shipping_code = Setonagi::where('user_id',$user_id)->first();
+          if(isset($shipping_code->shipping_code)){
+            $shipping_info = ShippingInfo::where('shipping_code', $shipping_code->shipping_code)->first();
+            $setonagi_items = SetonagiItem::where('price_groupe', $shipping_info->price_groupe)->get();
+          }else{
+            $setonagi_items = SetonagiItem::where('price_groupe', '00000000001')->get();
+          }
         }else{
+          $setonagi_items = SetonagiItem::where('price_groupe', '00000000001')->get();
+        }
+        foreach ($get_items as $get_item) {
+            // アイテム情報を取得
+            $item = Item::where(['item_id' => $get_item->item_id, 'sku_code' => $get_item->sku_code])->first();
+            
+            if (!$item) {
+                continue; // アイテムが見つからない場合はスキップ
+            }
+    
+            // SetonagiItemから価格を取得
+            $setonagiItem = SetonagiItem::where('item_id', $item->item_id)->first();
+            $price = $setonagiItem ? $setonagiItem->price : null;
+    
+            // カートに商品を追加（数量は0または購入意志がある数量に設定）
+            $cart = Cart::firstOrNew(
+                ['user_id' => $user_id, 'item_id' => $item->id, 'deal_id' => null, 'addtype' => $addtype]
+            );
+            $cart->save();
+    
+            // オーダー情報を保存
+            $order = Order::firstOrNew(
+                ['cart_id' => $cart->id],
+                ['nouhin_yoteibi' => $nouhin_yoteibi, 'quantity' => 0] // 納品予定日と数量を設定
+            );
+            $order->price = $price; // SetonagiItemの価格を使用
+            $order->save();
+        }
+      }else{
         foreach ($get_items as $get_item) {
 
           // アイテム情報を取得
@@ -1378,16 +1423,17 @@ class LoginPageController extends Controller
     }else{
       $carts =  Cart::where(['user_id'=>$user_id, 'deal_id'=> null])->get();
     }
-
-    if($carts->isNotEmpty()) {
-      // foreach ($carts as $cart) {
-      //   $set_order = Order::where(['cart_id'=>$cart->id])->first();
-      // }
-    }else{
-      $data=[
-        'message' => 'カートが空です。',
-      ];
-      return redirect()->route('setonagi',$data);
+    if ($addtype !== 'addallitems') {
+      if($carts->isNotEmpty()) {
+        // foreach ($carts as $cart) {
+        //   $set_order = Order::where(['cart_id'=>$cart->id])->first();
+        // }
+      }else{
+        $data=[
+          'message' => 'カートが空です。',
+        ];
+        return redirect()->route('setonagi',$data);
+      }
     }
 
     //
@@ -2443,7 +2489,7 @@ class LoginPageController extends Controller
     // セトナギユーザーのバリデーション
     if($user->setonagi == 1){
       $validator = $request->validate([
-        'addtype' => ['required', 'in:addsetonagi,addbuyerrecommend,addspecialprice'],
+        'addtype' => ['required', 'in:addsetonagi,addbuyerrecommend,addspecialprice,addallitems'],
         'uketori_siharai' => ['required', 'in:クレジットカード払い,クロネコかけ払い'],
         'uketori_time' => ['in:午前中,12時〜14時,14時〜16時,16時〜17時'],
       ]);
@@ -3482,10 +3528,36 @@ class LoginPageController extends Controller
       }
 
       // オーダーリストの作成
-      $order_list=[];
-        $carts = Cart::where(['deal_id'=> $deal->id])->get();
+      $priority = [
+        'addsetonagi' => 1,
+        'addbuyerrecommend' => 2,
+        'addspecialprice' => 3
+    ];
+
+        // $carts をソート
+        $carts = Cart::where(['deal_id'=> $deal->id])->get()->sortBy(function ($cart) use ($priority) {
+            return $priority[$cart->addtype] ?? 999; // addtypeが定義されていない場合は最後に
+        });
+
+        // ソートされたカートを処理してオーダーリストを作成
+        $order_list = [];
+        $added_titles = [];
         // カート商品の出力
         foreach ($carts as $cart) {
+          // タイトルがまだ追加されていない場合は追加
+          if ($user->setonagi == 1 && is_null($setonagi->shipping_code)) {
+              if (!isset($added_titles[$cart->addtype])) {
+                  $title = match ($cart->addtype) {
+                      'addsetonagi' => '■限定お買い得商品',
+                      'addbuyerrecommend' => '■担当のおすすめ商品',
+                      'addspecialprice' => '■市況商品',
+                      default => ''
+                  };
+                  $order_list[] = $title; // タイトルをオーダーリストに追加
+                  $added_titles[$cart->addtype] = true; // このタイプのタイトルが追加されたことを記録
+              }
+          }
+
           $orders = Order::where(['cart_id'=> $cart->id])->get();
           foreach ($orders as $order) {
             $user = User::where('id',$deal->user_id)->first();
@@ -4608,5 +4680,160 @@ class LoginPageController extends Controller
   }
 
 
+  //
+  public function orderSB(Request $request)
+  {
+    $user = Auth::guard('user')->user(); // ユーザー情報の取得
+    $setonagi = Setonagi::where('user_id',$user->id)->first();
+    $user_id = $user->id; // ユーザーIDの取得
 
+    $addtype = $request->addtype;
+
+    $shipping_code = null;
+    $shipping_settings = null;
+
+    if(isset($request->nouhin_yoteibi)){
+      $nouhin_yoteibi = $request->nouhin_yoteibi;
+    }else{
+      $nouhin_yoteibi = null;
+    }
+
+    // ユーザーIDに紐付いたカートデータを取得し、deal_idがnullのものだけをフィルタリング
+    $carts = Cart::where('user_id', $user_id)->whereNull('deal_id')->get();
+
+    $orders = Order::whereIn('cart_id', $carts->pluck('id'))->get()->keyBy('cart_id');
+
+    // 関連する商品情報とカートデータを取得
+    $items = [];
+    $validCarts = collect();
+
+    foreach ($carts as $cart) {
+        if ($orders->has($cart->id)) {
+            // オーダーが存在する場合のみ、カートを有効なリストに追加
+            $validCarts->push($cart);
+
+            $item = Item::where('id', $cart->item_id)->first();
+            if ($item) {
+                $items[$cart->item_id] = $item; // 商品IDをキーにして商品情報を保存
+            }
+        }
+    }
+
+    // 3つのaddtypeの商品情報を取得
+    $setonagiItems = $this->getItemsByAddType('addsetonagi');
+    $buyerRecommendItems = $this->getItemsByAddType('addbuyerrecommend');
+    $specialPriceItems = $this->getItemsByAddType('addspecialprice');
+
+
+    // 直近の納品予定日を取得
+    $today = date("Y-m-d");
+    $holidays = Holiday::pluck('date');
+    $currentTime = date('H:i:s');
+    // 19時より前の処理
+    if (strtotime($currentTime) < strtotime('17:00:00')) {
+      $holidays = Holiday::pluck('date')->toArray();
+      for($i = 1; $i < 10; $i++){
+        $today_plus = date('Y-m-d', strtotime($today.'+'.$i.'day'));
+        // dd($today_plus2);
+        $key = array_search($today_plus,(array)$holidays,true);
+        if($key){
+            // 休みでないので納品日を格納
+        }else{
+            // 休みなので次の日付を探す
+            $nouhin_yoteibi = $today_plus;
+            break;
+        }
+      }
+    }else{
+    // 19時より後の処理
+      $holidays = Holiday::pluck('date')->toArray();
+      for($i = 2; $i < 10; $i++){
+        $today_plus = date('Y-m-d', strtotime($today.'+'.$i.'day'));
+        // dd($today_plus2);
+        $key = array_search($today_plus,(array)$holidays,true);
+        if($key){
+            // 休みでないので納品日を格納
+        }else{
+            // 休みなので次の日付を探す
+            $nouhin_yoteibi = $today_plus;
+            break;
+        }
+      }
+    }
+    $sano_nissuu = $nouhin_yoteibi;
+
+
+    // 取得したデータをビューに渡す
+    $data=
+    ['user' => $user,
+    'setonagi' => $setonagi,
+    'carts' => $validCarts,
+    'orders' => $orders,
+    'items' => $items,
+    'setonagiItems' => $setonagiItems,
+    'buyerRecommendItems' => $buyerRecommendItems,
+    'specialPriceItems' => $specialPriceItems,
+    'sano_nissuu' => $sano_nissuu,
+    'holidays' => $holidays,
+    'today_plus' => $today_plus,
+    'nouhin_yoteibi' => $nouhin_yoteibi,
+    'shipping_code' => $shipping_code,
+    'shipping_settings' => $shipping_settings,
+    'addtype' => $addtype,
+    ];
+    return view('orderSB', $data);
+  }
+  private function getItemsByAddType($addType)
+  {
+      // 現在日時を取得
+      $now = Carbon::now()->toDateTimeString();
+  
+      // addTypeに応じて商品データを取得
+      switch ($addType) {
+          case 'addsetonagi':
+              return SetonagiItem::where('start_date', '<=' , $now)->where('end_date', '>=', $now)->get();
+          case 'addbuyerrecommend':
+              return BuyerRecommend::where('start', '<=' , $now)->where('end', '>=', $now)->get();
+          case 'addspecialprice':
+              return SpecialPrice::where('start', '<=' , $now)->where('end', '>=', $now)->get();
+          default:
+              return collect(); // 空のコレクションを返す
+      }
+  }
+
+  public function checkCart(Request $request){
+    $user = Auth::guard('user')->user();
+
+    // セッションからユーザーIDを取得し、カートアイテムが存在するか確認
+    $user_id = $user->id;
+    $cartItems = Cart::where('user_id', $user_id)
+                      ->where('deal_id', null)
+                      ->get();
+
+    // 数量が0でないカートアイテムがあるかどうかフラグ
+    $nonEmptyQuantityExists = false;
+
+    // カートアイテムが存在する場合、それぞれのカートアイテムについて検証
+    if ($cartItems->isNotEmpty()) {
+        foreach($cartItems as $cartItem) {
+            // orders テーブルと結合し、数量が0より大きいものを検索
+            $orderQuantity = Order::where('cart_id', $cartItem->id)
+                                  ->where('quantity', '>', 0)
+                                  ->first();
+            
+            // 1つでも数量が0でないものが見つかれば、ループを抜ける
+            if($orderQuantity) {
+                $nonEmptyQuantityExists = true;
+                break;
+            }
+        }
+    }
+
+    // 数量が0でないカートアイテムが存在するかに基づいてJSONレスポンスを返す
+    if ($nonEmptyQuantityExists) {
+        return response()->json(['cartEmpty' => false]);
+    } else {
+        return response()->json(['cartEmpty' => true]);
+    }
+}
 }

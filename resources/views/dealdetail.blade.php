@@ -143,6 +143,9 @@
             <div class="row mt-4 order">
               <div class="col-md-12">
                 <div id="dealorder"></div>
+                @if($user->setonagi && $setonagi->shipping_code === null)
+                <input name="deal_SB" type="hidden" value="deal_SB" id="deal_SB"/>
+                @endif
                 <input name="deal_id" type="hidden" value="{{$deal->id}}" id="deal_id"/>
 
                 <div class="float-right">

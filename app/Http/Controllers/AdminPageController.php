@@ -101,23 +101,24 @@ class AdminPageController extends Controller
 
   public function index()
   {
-    if ( Auth::guard('user')->check() ){
-        Auth::guard('user')->logout();
+    if (Auth::guard('user')->check()) {
+      Auth::guard('user')->logout();
     }
+    
     $deals = Deal::latest('created_at')->paginate(30);
-
-
     $tokuisakis = Store::select('tokuisaki_name')->distinct()->get();
-
-    // dd($store_users);
-    // foreach ($store_users as $key => $value) {
-    //   dd($value);
-    // }
-    $data=[
-      'deals'=>$deals,
-      'tokuisakis'=>$tokuisakis,
+    
+    // 各取引に対してSetonagi情報を取得
+    $deals->each(function ($deal) {
+      $deal->setonagi = Setonagi::where('user_id', $deal->user_id)->first();
+    });
+  
+    $data = [
+      'deals' => $deals,
+      'tokuisakis' => $tokuisakis,
     ];
-    return view('admin/home',$data);
+    
+    return view('admin/home', $data);
   }
 
 

@@ -1,486 +1,310 @@
-
-
-
-@if(request()->input('addtype') == 'addbuyerrecommend' && $user->setonagi)
-@else
-<div class="table-responsive" id="nouhin_store_nouhin_yoteibi">
-	@if(!$user->setonagi)
-	<div class="section-title">納品先・納品日</div>
-	@elseif(request()->input('addtype') === 'addbuyerrecommend')
-		@if($url == 'confirm')
-			<div class="section-title">お気に入り表示</div>
-		@endif
-	@endif
-	<table id="{{$user->id}}" class="user_id table table-striped table-hover table-md cart-wrap">
-		@if(!$user->setonagi)
-		<tr>
-			<th class="">納入先店舗</th>
-			<th class="">
-				<select id="change_all_store" name="change_all_store" class="change_all_store text-center form-control" value="" required @if(isset($deal)) readonly disabled @endif>
-					<option id="@if(isset($set_order)){{$set_order->tokuisaki_name}}@endif" value="@if(isset($set_order)){{$set_order->store_name}}@endif">@if(isset($set_order)){{$set_order->tokuisaki_name}} {{$set_order->store_name}}@endif</option>
-					@foreach($stores as $store)
-						<option id="@if(isset($set_order)){{$store->tokuisaki_name}}@endif" value="{{$store->store_name}}">{{$store->tokuisaki_name}} {{$store->store_name}}</option>
-					@endforeach
-					<input type="hidden" name="set_tokuisaki_name" value="@if(isset($set_order)){{$set_order->tokuisaki_name}}@endif" id="set_tokuisaki_name" />
-				</select>
-
-			</th>
+@php
+	$hasSetonagiItems = $carts->contains(function ($cart) use ($orders) {
+		return $cart->addtype == 'addsetonagi' && isset($orders[$cart->id]) && $orders[$cart->id]->quantity >= 1;
+	});
+@endphp
+@if($hasSetonagiItems)
+<div class="section-title">オーダー内容（限定お買い得商品）</div>
+<div id="cartAccordion">
+	<table id="cartHeader" class="table table-striped table-hover table-md cart-wrap">
+		<tr id="order_header">
+		<th class="head-item-id head text-center">商品番号</th>
+		<th class="head-item-name head">商品名</th>
+		<th class="head-sanchi head text-center">産地</th>
+		<th class="head-price head text-center">金額</th>
+		<th class="head-kikaku head text-center">規格</th>
+		<th class="head-quantity head text-center">数量</th>
+		<th class="head-tani head text-center">単位</th>
 		</tr>
-		<tr>
-			<th class="">納品予定日</th>
-			<td class="text-center">
-
-					<input id="change_all_nouhin_yoteibi" type="text" name="change_all_nouhin_yoteibi" class="change_all_nouhin_yoteibi text-center form-control daterange-cus datepicker" value="@if(isset($set_order)){{$set_order->nouhin_yoteibi}}@endif" autocomplete="off" required @if(isset($deal)) readonly disabled @endif>
-					@if($user->kyuujitu_haisou == 1)
-					<script>
-					$('.change_all_nouhin_yoteibi').datepicker({
-						format: 'yyyy-mm-dd',
-						autoclose: true,
-						assumeNearbyYear: true,
-						language: 'ja',
-						startDate: '{{$sano_nissuu}}',
-						endDate: '{{$all_nouhin_end}}',
-					});
-					</script>
-					@else
-					<script>
-					$('.change_all_nouhin_yoteibi').datepicker({
-						format: 'yyyy-mm-dd',
-						autoclose: true,
-						assumeNearbyYear: true,
-						language: 'ja',
-						startDate: '{{$sano_nissuu}}',
-						endDate: '{{$all_nouhin_end}}',
-						defaultViewDate: Date(),
-						datesDisabled: [
-						@foreach($holidays as $holiday)
-						'{{$holiday}}',
-						@endforeach
-					],
-					});
-					</script>
-					@endif
+	</table>
+	<table class="table table-striped table-hover table-md cart-wrap">
+		@foreach($carts as $cart)
+		@php
+			$order = $orders->firstWhere('cart_id', $cart->id);
+		@endphp
+		
+		@if($cart->addtype == 'addsetonagi' && isset($orders[$cart->id]) && $orders[$cart->id]->quantity >= 1)
+		<tr class="cart_item" id="{{$order->id}}">
+			<input name="cart_id[]" type="hidden" value="{{$cart->id}}" />
+			<td class="head-item-id cartid_{{$cart->id}} text-center">{{$cart->item->item_id}}</td>
+			<td class="head-item-name">
+				{{ $items[$cart->item_id]->item_name }}
 			</td>
-			</th>
-		</tr>
-		@endif
-		@if(request()->input('addtype') === 'addbuyerrecommend' && $url == 'confirm')
-		<tr>
-			<th class="">お気に入り商品のみを表示</th>
-			<td class="text-center">
-					@if(request()->input('show_favorite') == true)
-		      <input type="checkbox" id="show_favorite" name="show_favorite" value="1" checked>
-					@else
-		      <input type="checkbox" id="show_favorite" name="show_favorite" value="1">
-					@endif
-		      <label class="show_favorite_label" for="show_favorite">お気に入り商品のみを表示</label>
+			<td class="head-sanchi text-center">
+				@if(isset($cart->item->sanchi_name))
+				{{$cart->item->sanchi_name}}
+				@else
+				@endif
 			</td>
+			<td class="head-price text-center" data-price="">
+				<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="{{ $orders[$cart->id]->price }}" value="{{ $orders[$cart->id]->price }}" @if(isset($deal) && Auth::guard('admin')->check()) @else readonly @endif>
+			</td>
+			<td class="head-kikaku text-center">
+				@if($cart->uwagaki_kikaku)
+				{{$cart->uwagaki_kikaku}}
+				@else
+				{{ $cart->item ? $cart->item->kikaku : '' }}
+				@endif
+			</td>
+			<td class="head-quantity text-center">
+			@php
+				// $cart に対応する注文の数量を取得
+				$orderQuantity = isset($orders[$cart->id]) ? $orders[$cart->id]->quantity : 0;
+			@endphp
+
+			<select name="quantity[]" class="quantity text-center form-control" required>
+				<!-- 現在の数量が選択されるようにする -->
+				@for ($i = 0; $i <= $cart->item->zaikosuu; $i++)
+					<option value="{{ $i }}" {{ $i == $orderQuantity ? 'selected' : '' }}>{{ $i }}</option>
+				@endfor
+			</select>
+			</td>
+			<td class="head-tani text-center">
+				@if ($cart->item)
+				@switch($cart->item->tani)
+					@case(1)
+					ｹｰｽ
+					@break
+					@case(2)
+					ﾎﾞｰﾙ
+					@break
+					@case(3)
+					個
+					@break
+					@case(4)
+					Kg
+					@break
+					@default
+					N/A
+				@endswitch
+				@else
+				N/A
+			@endif
+			</td>
+			<td class="head-shoukei total text-center"></td>
+			<input name="order_id[]" class="order_id" type="hidden" value="{{$order->id}}" />
 		</tr>
 		@endif
+		@endforeach
 	</table>
 </div>
+@endif
+
+@php
+	$buyerRecommendCarts = $carts->filter(function ($cart) use ($orders) {
+        return $cart->addtype == 'addbuyerrecommend' && isset($orders[$cart->id]) && $orders[$cart->id]->quantity >= 1;
+    });
+    $sortedCarts = $buyerRecommendCarts->sortByDesc(function ($cart) {
+        return $cart->id;
+    });
+    $groupedCarts = $sortedCarts->groupBy('groupe');
+@endphp
+
+@if($buyerRecommendCarts->isNotEmpty())
+    <div class="section-title">オーダー内容（担当のおすすめ商品）</div>
+    <div id="cartAccordion" class="cartAccordionSB">
+        <!-- 商品番号ヘッダーはここで1回だけ出力 -->
+        <table id="cartHeader" class="table table-striped table-hover table-md cart-wrap">
+            <tr id="order_header">
+                <th class="head-item-id head text-center">商品番号</th>
+                <th class="head-item-name head">商品名</th>
+                <th class="head-sanchi head text-center">産地</th>
+                <th class="head-price head text-center">金額</th>
+                <th class="head-kikaku head text-center">規格</th>
+                <th class="head-quantity head text-center">数量</th>
+                <th class="head-tani head text-center">単位</th>
+            </tr>
+        </table>
+        <!-- 各グループごとにループして表示 -->
+        @foreach($groupedCarts as $groupe => $groupCarts)
+			<div class="card-header groupe_button" id="heading{{ $loop->index }}" data-toggle="collapse" data-target="#collapse{{ $loop->index }}" aria-expanded="true" aria-controls="collapse{{ $loop->index }}">
+				<h2 class="mb-0">
+					<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse{{ $loop->index }}" aria-expanded="true" aria-controls="collapse{{ $loop->index }}">
+						<span id="collapse-icon-{{ $groupe }}">-</span> {{ $groupe }}
+					</button>
+				</h2>
+			</div>
+			<div id="collapse{{ $loop->index }}" class="collapse show" aria-labelledby="heading{{ $loop->index }}" data-parent="#cartAccordion">
+				<table class="table table-striped table-hover table-md cart-wrap">
+				@foreach($groupCarts as $cart)
+					@php
+						$order = $orders->firstWhere('cart_id', $cart->id);
+					@endphp
+					<tr class="cart_item" id="{{$order->id}}">
+						<input name="cart_id[]" type="hidden" value="{{$cart->id}}" />
+						<td class="head-item-id cartid_{{$cart->id}} text-center">{{$cart->item->item_id}}</td>
+						<td class="head-item-name">
+						{{ $items[$cart->item_id]->item_name }}
+						</td>
+						<td class="head-sanchi text-center">
+						@if(isset($cart->item->sanchi_name))
+							{{$cart->item->sanchi_name}}
+						@else
+						@endif
+						</td>
+						<td class="head-price text-center" data-price="">
+							<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="{{ $orders[$cart->id]->price }}" value="{{ $orders[$cart->id]->price }}" @if(isset($deal) && Auth::guard('admin')->check()) @else readonly @endif>
+						</td>
+						<td class="head-kikaku text-center">
+						@if($cart->uwagaki_kikaku)
+							{{$cart->uwagaki_kikaku}}
+						@else
+							{{ $cart->item ? $cart->item->kikaku : '' }}
+						@endif
+						</td>
+						<td class="head-quantity text-center">
+						@php
+							// $cart に対応する注文の数量を取得
+							$orderQuantity = isset($orders[$cart->id]) ? $orders[$cart->id]->quantity : 0;
+						@endphp
+						<select name="quantity[]" class="quantity text-center form-control" required>
+							<!-- 現在の数量が選択されるようにする -->
+							@for ($i = 0; $i <= $cart->item->zaikosuu; $i++)
+								<option value="{{ $i }}" {{ $i == $orderQuantity ? 'selected' : '' }}>{{ $i }}</option>
+							@endfor
+						</select>
+						</td>
+						<td class="head-tani text-center">
+						@if ($cart->item)
+							@switch($cart->item->tani)
+							@case(1)
+								ｹｰｽ
+								@break
+							@case(2)
+								ﾎﾞｰﾙ
+								@break
+							@case(3)
+								個
+								@break
+							@case(4)
+								Kg
+								@break
+							@default
+								N/A
+							@endswitch
+						@else
+							N/A
+						@endif
+						</td>
+						<td class="head-shoukei total text-center"></td>
+						<input name="order_id[]" class="order_id" type="hidden" value="{{$order->id}}" />
+					</tr>
+				@endforeach
+				</table>
+			</div>
+        @endforeach
+    </div>
+@endif
+
+@php
+    $SpecialpriceCarts = $carts->filter(function ($cart) use ($orders) {
+        return $cart->addtype == 'addspecialprice' && isset($orders[$cart->id]) && $orders[$cart->id]->quantity >= 1;
+    });
+	$sortedCarts = $SpecialpriceCarts->sortByDesc(function ($cart) {
+        return $cart->id;
+    });
+    $groupedCarts = $SpecialpriceCarts->groupBy('groupe')->reverse();
+@endphp
+
+@if($SpecialpriceCarts->isNotEmpty())
+    <div class="section-title">オーダー内容（市況商品）</div>
+    <div id="cartAccordion" class="cartAccordionSB">
+        <!-- 商品番号ヘッダーはここで1回だけ出力 -->
+        <table id="cartHeader" class="table table-striped table-hover table-md cart-wrap">
+            <tr id="order_header">
+                <th class="head-item-id head text-center">商品番号</th>
+                <th class="head-item-name head">商品名</th>
+                <th class="head-sanchi head text-center">産地</th>
+                <th class="head-price head text-center">金額</th>
+                <th class="head-kikaku head text-center">規格</th>
+                <th class="head-quantity head text-center">数量</th>
+                <th class="head-tani head text-center">単位</th>
+            </tr>
+        </table>
+        <!-- 各グループごとにループして表示 -->
+        @foreach($groupedCarts as $groupe => $groupCarts)
+			<div class="card-header groupe_button" id="heading{{ $loop->index }}" data-toggle="collapse" data-target="#collapse{{ $loop->index }}" aria-expanded="true" aria-controls="collapse{{ $loop->index }}">
+				<h2 class="mb-0">
+					<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse{{ $loop->index }}" aria-expanded="true" aria-controls="collapse{{ $loop->index }}">
+						<span id="collapse-icon-{{ $groupe }}">-</span> {{ $groupe }}
+					</button>
+				</h2>
+			</div>
+			<div id="collapse{{ $loop->index }}" class="collapse show" aria-labelledby="heading{{ $loop->index }}" data-parent="#cartAccordion">
+				<table class="table table-striped table-hover table-md cart-wrap">
+				@foreach($groupCarts as $cart)
+					@php
+						$order = $orders->firstWhere('cart_id', $cart->id);
+					@endphp
+					<tr class="cart_item" id="{{$order->id}}">
+						<input name="cart_id[]" type="hidden" value="{{$cart->id}}" />
+						<td class="head-item-id cartid_{{$cart->id}} text-center">{{$cart->item->item_id}}</td>
+						<td class="head-item-name">
+						{{ $items[$cart->item_id]->item_name }}
+						</td>
+						<td class="head-sanchi text-center">
+						@if(isset($cart->item->sanchi_name))
+							{{$cart->item->sanchi_name}}
+						@else
+						@endif
+						</td>
+						<td class="head-price text-center" data-price="">
+							<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="{{ $orders[$cart->id]->price }}" value="{{ $orders[$cart->id]->price }}" @if(isset($deal) && Auth::guard('admin')->check()) @else readonly @endif>
+						</td>
+						<td class="head-kikaku text-center">
+						@if($cart->uwagaki_kikaku)
+							{{$cart->uwagaki_kikaku}}
+						@else
+							{{ $cart->item ? $cart->item->kikaku : '' }}
+						@endif
+						</td>
+						<td class="head-quantity text-center">
+						@php
+							// $cart に対応する注文の数量を取得
+							$orderQuantity = isset($orders[$cart->id]) ? $orders[$cart->id]->quantity : 0;
+						@endphp
+						<select name="quantity[]" class="quantity text-center form-control" required>
+							<!-- 現在の数量が選択されるようにする -->
+							@for ($i = 0; $i <= $cart->item->zaikosuu; $i++)
+								<option value="{{ $i }}" {{ $i == $orderQuantity ? 'selected' : '' }}>{{ $i }}</option>
+							@endfor
+						</select>
+						</td>
+						<td class="head-tani text-center">
+						@if ($cart->item)
+							@switch($cart->item->tani)
+							@case(1)
+								ｹｰｽ
+								@break
+							@case(2)
+								ﾎﾞｰﾙ
+								@break
+							@case(3)
+								個
+								@break
+							@case(4)
+								Kg
+								@break
+							@default
+								N/A
+							@endswitch
+						@else
+							N/A
+						@endif
+						</td>
+						<td class="head-shoukei total text-center"></td>
+						<input name="order_id[]" class="order_id" type="hidden" value="{{$order->id}}" />
+					</tr>
+				@endforeach
+				</table>
+			</div>
+        @endforeach
+    </div>
 @endif
 
 
 
 
-<div id="@if(isset($deal)){{$deal->id}}@endif" class="deal_id table-responsive mt-4">
-	<div class="section-title">オーダー内容</div>
-		<div id="cartAccordion">
-				    <table id="cartHeader" class="table table-striped table-hover table-md cart-wrap">
-				        <tr id="order_header">
-				            <th class="head-item-id head text-center">商品番号</th>
-				            <th class="head-item-name head">商品名</th>
-				            <th class="head-sanchi head text-center">産地</th>
-				            <th class="head-zaikosuu head text-center">在庫数</th>
-				            <!-- <th class="head text-center">特記事項</th> -->
-				            <th class="head-price head text-center">金額</th>
-				            @if(!$user->setonagi)
-				                <th class="head-store head text-center">納品先店舗</th>
-				            @endif
-				            <th class="head-kikaku head text-center">規格</th>
-				            <th class="head-quantity head text-center">数量</th>
-				            <th class="head-tani head text-center">単位</th>
-				            @if(!$user->setonagi)
-				                <th class="head-yoteibi head text-center">納品予定日</th>
-				            @endif
-				            <th class="head-shoukei head text-center">小計</th>
-				            <th class="head-sousa head text-center">操作</th>
-				        </tr>
-				    </table>
-
-
-
-						@if(isset($groupedItems))
-				    @foreach($groupedItems as $text => $carts)
-				    <div class="accordion cartAccordion" id="cartAccordion{{ $loop->index }}">
-				        <!-- <div class="card"> -->
-								@foreach($carts as $cart)
-									@if($cart->addtype == 'addsetonagi' || $cart->addtype == 'addrepeatorder')
-									<style>
-									.card-header{
-										display: none;
-									}
-									#cartAccordion {
-									    border-bottom: 0px solid #bfc1c3;
-									}
-									.cartAccordion{
-									    border-bottom: 1px solid #bfc1c3;
-									}
-									</style>
-									@break
-									@endif
-								@endforeach
-				        <div class="">
-				            <div class="card-header groupe_button" id="heading{{ $loop->index }}" data-toggle="collapse" data-target="#collapse{{ $loop->index }}" aria-expanded="true" aria-controls="collapse{{ $loop->index }}">
-				                <h2 class="mb-0">
-				                    <button class="btn btn-link" type="button" onclick="toggleAccordion(this)">
-				                        <span id="collapse-icon-{{ $text }}">-</span> {{ $text }}
-				                    </button>
-				                </h2>
-				            </div>
-				            <div id="collapse{{ $loop->index }}" class="collapse @if($url == 'approval' || isset($deal) || request()->input('addtype') === 'addsetonagi') show @endif" aria-labelledby="heading{{ $loop->index }}" data-parent="#cartAccordion{{ $loop->index }}">
-				                <div class="">
-				                    <table id="{{$user->kaiin_number}}" class="table table-striped table-hover table-md cart-wrap">
-
-
-															@foreach($carts as $cart)
-
-															<!-- お気に入り商品表示非表示 -->
-															@if(!isset($show_favorite) && ($cart->addtype == 'addbuyerrecommend' || $cart->addtype == 'addsetonagi' || $cart->addtype == 'addrepeatorder' || $cart->addtype == 'addspecialprice') || (isset($show_favorite) && ($cart->favoriteitem())))
-
-															<!-- 最終確認画面で在庫がある商品のみ -->
-
-															@if(!isset($deal) && $cart->addtype == 'addbuyerrecommend' && $cart->zaikosuu == 0)
-															@else
-
-															@if($url == 'approval' && $cart->order_this())
-															@else
-
-															<!-- カートに1つでも商品があるか、BtoBユーザーか確認 -->
-															@if(!isset($set_order) && !$user->setonagi)
-															@else
-
-															<!-- BtoB担当のおすすめ商品 -->
-															<!-- 在庫管理のある商品を表示 -->
-
-
-															<!-- 納品先の得意先IDと、担当のおすすめ商品の得意先IDが一致するか確認 -->
-															<tr id="{{$cart->id}}" class="cart_item" data-addtype="{{$cart->addtype}}">
-																<input name="cart_id[]" type="hidden" value="{{$cart->id}}" />
-																<td class="head-item-id cartid_{{$cart->id}} text-center">{{$cart->item->item_id}}</td>
-																<td class="head-item-name cartid_{{$cart->id}}">
-																	@if($cart->uwagaki_item_name)
-																		@if($cart->addtype == 'addsetonagi' && $user->setonagi && $setonagi->shipping_code === null)
-																			<div class="setonagi-item">
-																				<div class="setonagi-item-img">
-																					<?php $filename = public_path().'/storage/item/'.$cart->item->item_id.'.jpg'; ?>
-																					@if(file_exists($filename))
-																					<a href="/storage/item/{{$cart->item->item_id}}.jpg" data-fancybox="images-{{$cart->item->item_id}}">
-																						<img class="d-block w-100" src="/storage/item/{{$cart->item->item_id}}.jpg" alt="First slide" onerror="this.src='{{ asset('img/no_image.jpg') }}'; this.classList.add('disable_link');">
-																					</a>
-																					@else
-																						<img class="d-block w-100" src="{{ asset('img/no_image.jpg') }}">
-																					@endif
-																				</div>
-																				<div class="setonagi-item-name">
-																					<button class="tokkijikou_btn tokkijikou_btnSB" type="button" data-toggle="collapse" data-target="#collapseExample_{{$cart->item->item_id}}" aria-expanded="true" aria-controls="collapseExample_{{$cart->item->item_id}}">{{$cart->uwagaki_item_name}}<i class="fa fa-chevron-down"></i></button>
-																					<div class="collapse" id="collapseExample_{{$cart->item->item_id}}" style="">
-																					<!-- 特記事項がある場合は表示 -->
-																					@if(isset($cart->item->tokkijikou) && !empty($cart->item->tokkijikou))
-																						<div class="tokkijikou-content">{{ $cart->item->tokkijikou }}</div>
-																					@endif
-																					</div>
-																				</div>
-																			</div>
-																		@else
-																		{{$cart->uwagaki_item_name}}
-																		@endif
-																	@else
-																		@if($cart->addtype == 'addsetonagi' && $user->setonagi && $setonagi->shipping_code === null)
-																			<div class="setonagi-item">
-																				<div class="setonagi-item-img active carousel-item">
-																					<?php $filename = public_path().'/storage/item/'.$cart->item->item_id.'.jpg'; ?>
-																					@if(file_exists($filename))
-																					<a href="/storage/item/{{$cart->item->item_id}}.jpg" data-fancybox="images-{{$cart->item->item_id}}">
-																						<img class="d-block w-100" src="/storage/item/{{$cart->item->item_id}}.jpg" alt="First slide" onerror="this.src='{{ asset('img/no_image.jpg') }}'; this.classList.add('disable_link');">
-																					</a>
-																					@else
-																					<img class="d-block w-100" src="{{ asset('img/no_image.jpg') }}">
-																					@endif
-																				</div>
-																				<div class=" carousel-item">
-																					@for($i = 1; $i < 5; $i++)
-																					<?php $filename = public_path().'/storage/item/'.$cart->item->item_id.'_'.$i.'.jpg'; ?>
-																						@if(file_exists($filename))
-																						<a href="/storage/item/{{$cart->item->item_id}}_{{$i}}.jpg" data-fancybox="images-{{$cart->item->item_id}}">
-																						<img class="d-block w-100" src="/storage/item/{{$cart->item->item_id}}_{{$i}}.jpg" alt="slide">
-																						</a>
-																						@endif
-																					@endfor
-																				</div>
-																				<div class="setonagi-item-name">
-																					<button class="tokkijikou_btn tokkijikou_btnSB" type="button" data-toggle="collapse" data-target="#collapseExample_{{$cart->item->item_id}}" aria-expanded="true" aria-controls="collapseExample_{{$cart->item->item_id}}">{{$cart->item->item_name}}<i class="fa fa-chevron-down"></i></button>
-																					<div class="collapse" id="collapseExample_{{$cart->item->item_id}}" style="">
-																					<!-- 特記事項がある場合は表示 -->
-																					@if(isset($cart->item->tokkijikou) && !empty($cart->item->tokkijikou))
-																						<div class="tokkijikou-content">{{ $cart->item->tokkijikou }}</div>
-																					@endif
-																					</div>
-																				</div>
-																			</div>
-																		@else
-																			{{$cart->item->item_name}}
-																		@endif
-																	@endif
-																	@if(!isset($deal))
-																		@if($cart->addtype == 'addbuyerrecommend' && !$user->setonagi)
-																			@if($cart->favoriteitem())
-				                              <span name="item_id" value="{{$cart->item->id}}" id="{{$cart->item->id}}" class="favoritebutton removefavoriteitem"><i class="fa fa-heart"></i></span>
-				                              @else
-				                              <span name="item_id" value="{{$cart->item->id}}" id="{{$cart->item->id}}" class="favoritebutton addfavoriteitem"><i class="far fa-heart"></i></span>
-				                              @endif
-																		@endif
-																	@endif
-																</td>
-																<td class="head-sanchi cartid_{{$cart->id}} text-center">
-																	@if(isset($cart->item->sanchi_name))
-																		{{$cart->item->sanchi_name}}
-																	@else
-																	@endif
-
-																</td>
-																<td class="head-zaikosuu cartid_{{$cart->id}} text-center">{{$cart->item->zaikosuu}}</td>
-																<!-- <td class="cartid_{$cart->id}} text-center">{{$cart->item->tokkijikou}}</td> -->
-																<td colspan="8" class="order-table">
-																	<table class="table table-striped table-hover table-md">
-																	@foreach($cart->orders as $val)
-																	 @if($val)
-																		<tr id="{{$val->id}}" class="order_item">
-																			<td class="head-price text-center">
-																				<span class="sp">¥</span>
-																				<!-- BtoB金額表示 -->
-																				<?php
-																				if ($val->price == '未定') {
-																						$price_val = '未定';
-																				} elseif ($val->hidden_price == '-') {
-																						$price_val = '-';
-																				} else {
-																						if (Auth::guard('admin')->check()) {
-																								$price_val = $val->price;
-																						} else {
-																								$price_val = number_format($val->price);
-																						}
-																				}
-																				?>
-																					@if(!$user->setonagi)
-																						<!-- BtoB通常金額表示 -->
-																						<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="@if($val->price=='未定'){{(0)}}@else{{ $val->price }}@endif" value="<?php echo $price_val ?>" @if(isset($deal) && Auth::guard('admin')->check()) @else readonly @endif>
-																					@else
-																						<!-- BtoC通常金額表示 -->
-																						<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="@if($val->price=='未定'){{(0)}}@else{{ $val->price }}@endif" value="<?php echo $price_val ?>"  @if(isset($deal) && Auth::guard('admin')->check()) @else readonly @endif>
-																					@endif
-																			</td>
-
-																			@if(!$user->setonagi)
-																			<td class="head-store text-center">
-
-
-																				<select name="store[]" class="store text-center form-control" value="{{$val->tokuisaki_name}} {{$val->store_name}}" required>
-																					<option id="{{$val->tokuisaki_name}}" value="{{$val->store_name}}">{{$val->tokuisaki_name}} {{$val->store_name}}</option>
-
-																					<!-- 該当する得意先店舗のみが選べるように -->
-
-																						@if($stores)
-
-																							@foreach($stores as $store)
-																								<option id="{{$store->tokuisaki_name}}" value="{{$store->store_name}}">{{$store->tokuisaki_name}} {{$store->store_name}}</option>
-																							@endforeach
-																							<!-- <option value="all_store">全店舗に追加</option> -->
-																						@endif
-
-
-																				</select>
-																			</td>
-																			@endif
-
-																			<td class="head-kikaku text-center">
-																				@if($cart->uwagaki_kikaku)
-																					{{$cart->uwagaki_kikaku}}
-																					@else
-																					{{$cart->item->kikaku}}
-																				@endif
-																			</td>
-																			<td class="head-quantity text-center">
-																			@if($user->setonagi && $setonagi->shipping_code == null)
-																				<select name="quantity[]" class="quantitySB text-center form-control" value="{{$val->quantity}}" data-db-quantity="{{$val->quantity}}" required>
-
-																				@if(isset($deal))
-																					<option value="{{$val->quantity}}">{{$val->quantity}}</option>
-																				@else
-																					@if($val->quantity == 1)
-																						<option value="{{$val->quantity}}">{{$val->quantity}}</option>
-																					@elseif($val->quantity)
-																						<option value="{{$val->quantity}}">{{$val->quantity}}</option>
-																					@endif
-																				@endif
-
-																				<!-- 取引データが設定されていたら -->
-																				@if(isset($deal))
-																					@if($cart->addtype == 'addbuyerrecommend' && !$user->setonagi)
-																						<?php
-																							$zaikosuu = $cart->deal_buyerrecommend_zaikosuu() + $val->quantity;
-																						?>
-																					@else
-																						<?php
-																							$zaikosuu = $cart->item->zaikosuu + $val->quantity;
-																						?>
-																					@endif
-																					@for ($i = 0; $i <= $zaikosuu; $i++)
-																					<option value="{{$i}}">{{$i}}</option>
-																					@endfor
-																				@else
-																					@if($cart->addtype == 'addbuyerrecommend' && !$user->setonagi)
-																						@for ($i = 0; $i <= $cart->zaikosuu; $i++)
-																						<option value="{{$i}}">{{$i}}</option>
-																						@endfor
-																					@else
-																						@for ($i = 0; $i <= $cart->item->zaikosuu; $i++)
-																						<option value="{{$i}}">{{$i}}</option>
-																						@endfor
-																					@endif
-																				@endif
-
-																				</select>
-																			@else
-																				<select name="quantity[]" class="quantity text-center form-control" value="{{$val->quantity}}" required>
-
-																					@if(isset($deal))
-																						<option value="{{$val->quantity}}">{{$val->quantity}}</option>
-																					@else
-																						@if($val->quantity == 1)
-																							<option value="{{$val->quantity}}">{{$val->quantity}}</option>
-																						@elseif($val->quantity)
-																							<option value="{{$val->quantity}}">{{$val->quantity}}</option>
-																						@endif
-																					@endif
-
-																					<!-- 取引データが設定されていたら -->
-																					@if(isset($deal))
-																						@if($cart->addtype == 'addbuyerrecommend' && !$user->setonagi)
-																							<?php
-																								$zaikosuu = $cart->deal_buyerrecommend_zaikosuu() + $val->quantity;
-																							?>
-																						@else
-																							<?php
-																								$zaikosuu = $cart->item->zaikosuu + $val->quantity;
-																							?>
-																						@endif
-																						@for ($i = 0; $i <= $zaikosuu; $i++)
-																						<option value="{{$i}}">{{$i}}</option>
-																						@endfor
-																					@else
-																						@if($cart->addtype == 'addbuyerrecommend' && !$user->setonagi)
-																							@for ($i = 0; $i <= $cart->zaikosuu; $i++)
-																							<option value="{{$i}}">{{$i}}</option>
-																							@endfor
-																						@else
-																							@for ($i = 0; $i <= $cart->item->zaikosuu; $i++)
-																							<option value="{{$i}}">{{$i}}</option>
-																							@endfor
-																						@endif
-																					@endif
-
-																				</select>
-																			@endif
-																			</td>
-																			<td class="head-tani text-center">
-																				@if ($cart->item->tani == 1)
-																				ｹｰｽ
-																				@elseif ($cart->item->tani == 2)
-																				ﾎﾞｰﾙ
-																				@elseif ($cart->item->tani == 3)
-																				個
-																				@elseif ($cart->item->tani == 4)
-																				Kg
-																				@endif
-																			</td>
-																		{{--	@if(!$user->setonagi)
-																			<td class="head-yoteibi text-center">
-																					<input type="text" name="nouhin_yoteibi[]" class="nouhin_yoteibi nouhin_yoteibi_{{$cart->id}} text-center form-control daterange-cus datepicker" value="{{$val->nouhin_yoteibi}}" autocomplete="off" required>
-																					@if($user->kyuujitu_haisou == 1)
-																					<script>
-																					$('.nouhin_yoteibi_{{$cart->id}}').datepicker({
-																						format: 'yyyy-mm-dd',
-																						autoclose: true,
-																						assumeNearbyYear: true,
-																						language: 'ja',
-																						startDate: '{{$sano_nissuu}}',
-																						endDate: '{{$cart->nouhin_end()}}',
-																						// endDate: '@if($cart->nouhin_end()){{$cart->nouhin_end()}}@else +31d @endif',
-																					});
-																					</script>
-																					@else
-																					<script>
-																					$('.nouhin_yoteibi_{{$cart->id}}').datepicker({
-																						format: 'yyyy-mm-dd',
-																						autoclose: true,
-																						assumeNearbyYear: true,
-																						language: 'ja',
-																						startDate: '{{$sano_nissuu}}',
-																						endDate: '{{$cart->nouhin_end()}}',
-																						// endDate: '@if($cart->nouhin_end()){{$cart->nouhin_end()}}@else +31d @endif',
-																						defaultViewDate: Date(),
-																						datesDisabled: [
-																						@foreach($holidays as $holiday)
-																						'{{$holiday}}',
-																						@endforeach
-																					],
-																					});
-																					</script>
-																					@endif
-																			</td>
-																			@endif
-																			 --}}
-																			@if($user->setonagi)
-																			<td class="head-shoukei total text-center"></td>
-																			<input name="order_id[]" class="order_id" type="hidden" value="{{$val->id}}" />
-																			@endif
-																			{{-- <td class="head-sousa text-center">
-																				<button type="button" id="{{$val->id}}" class="removeid_{{$val->id}} removeorder btn btn-info">削除</button>
-																				@if(!$user->setonagi)
-																				<button style="margin-top:10px;" type="button" id="{{$cart->item->id}}" class="cloneid_{{$cart->item->id}} clonecart btn btn-success">配送先を追加</button>
-																				@endif
-																			</td>
-																		</tr> --}}
-																		@break
-																		@endif
-																	@endforeach
-																	</table>
-																</td>
-															</tr>
-
-															@endif
-															@endif
-															@endif
-															@endif
-															@endforeach
-				                    </table>
-				        				</div>
-				    				</div>
-								</div>
-						</div>
-						@endforeach
-						@endif
-				</div>
-	</div>
-</div>
-
-
-
-
-
-@if($user->setonagi && $setonagi->shipping_code !== null)
 <div class="row mt-4 order">
 	<div class="col-md-12">
 		<div class="section-title">商品の受け渡し・お支払い方法</div>
@@ -546,7 +370,7 @@
 					language: 'ja',
 					startDate: '{{$sano_nissuu}}',
 					endDate: '+7d',
-          setDate: null,
+					setDate: null,
 					// endDate: '@if($cart->nouhin_end()){{$cart->nouhin_end()}}@else +31d @endif',
 					// defaultViewDate: Date(),
 					datesDisabled: [
@@ -755,29 +579,6 @@
 
 
 		$("#overlayajax").fadeIn(300);
-
-		// function async_digestMessage(message) {
-		// 	return new Promise(function(resolve){
-		// 	var msgUint8 = new TextEncoder("utf-8").encode(message);
-		// 	crypto.subtle.digest('SHA-256', msgUint8).then(
-		// 		function(hashBuffer){
-		// 				var hashArray = Array.from(new Uint8Array(hashBuffer));
-		// 				var hashHex = hashArray.map(function(b){return b.toString(16).padStart(2, '0')}).join('');
-		// 				return resolve(hashHex);
-		// 		});
-		// 	})
-		// }
-		// if(window.Promise && window.crypto){
-		// 	async_digestMessage(text).then(
-		// 			function(shatxt){
-		// 					getHashText(shatxt);
-		// 			}
-		// 	).catch(function(e){
-		// 			console.log('エラー：', e.message);
-		// 	})
-		// }else{
-		// 	console.log('Promiseかcryptoに非対応');
-		// }
 		var text = '@if(isset($collect_password)){{$collect_password}}@endif';
 		// var text = '@if(isset($collect_password_save)){{$collect_password_save}}@endif';
 
@@ -866,30 +667,6 @@
 		//フェードアウト
 		$("#overlayajax").fadeOut(300);
 
-		//エラーの数だけ処理を繰り返す
-		// for (var i = 0; i<errorInfo.length; i++) {
-		// if (errorInfo[i].errorItem) {
-		// changeColor(errorInfo[i].errorItem); }
-		// 	//メッセージを alert で出力
-		// 	alert(errorInfo[i].errorCode + " : " + errorInfo[i].errorMsg);
-		// 	if(errorInfo[i].errorCode === "Y021010904"){
-		// 		// card_no input要素にフォーカスを移動
-		// 		document.charge_form.card_no.focus();
-		// 	}
-		// 	if(errorInfo[i].errorCode === "Y021011004"){
-		// 		// card_owner input要素にフォーカスを移動
-		// 		document.charge_form.card_owner.focus();
-		// 	}
-		// 	if (errorInfo[i].errorCode === "Y021011105" || errorInfo[i].errorCode === "Y021011171" || errorInfo[i].errorCode === "Y021011105") {
-		// 	  // exp_month input要素にフォーカスを移動
-		// 	  document.charge_form.exp_month.focus();
-		// 	}
-		// 	if(errorInfo[i].errorCode === "Y021011302" || errorInfo[i].errorCode === "Y021011304" ){
-		// 		// security_code input要素にフォーカスを移動
-		// 		document.charge_form.security_code.focus();
-		// 	}
-		// }
-
 		var errorMessage = "";
 		var focusSet = false; // フォーカスが設定されたかどうかを示すフラグ
 
@@ -941,15 +718,7 @@
 		var createTokenInfo = {
 		traderCode: "@if(isset($collect_tradercode)){{$collect_tradercode}}@endif",
 		authDiv: "2",
-		// 保存しない場合
 		optServDiv: "00",
-		// 以下保存する場合
-		// 追加
-		// memberId: "@if(isset($user)){{$user->id}}@endif",
-		// 追加
-		// authKey: "test",
-		// 保存する場合
-		// optServDiv: "01",
 		checkSum: text,
 		cardNo: document.charge_form.card_no.value,
 		cardOwner: document.charge_form.card_owner.value,
@@ -971,111 +740,10 @@
 		</div>
 	</div>
 </div>
-@endif
-
-@if(!$user->setonagi)
-<div class="row mt-4">
-  <div class="col-md-12">
-    <div class="section-title">任意の商品</div>
-    <div class="table-responsive" id="nini-wrap">
-      <table id="{{$user->kaiin_number}}" class="table table-striped table-hover table-md">
-        <tbody id="nini_tbody">
-					<tr id="nini_header">
-	          <th class="head-nini_item_name text-center">商品名</th>
-	          <th class="head-nini_tantou text-center">担当</th>
-	          <th class="head-store text-center">納品先店舗</th>
-	          <th class="head-quantity text-center">数量</th>
-	          <th class="head-yoteibi text-center">納品予定日</th>
-	          <th class="head-sousa text-center">操作</th>
-	        </tr>
-					@foreach($cart_ninis as $cart_nini)
-					<tr width="" id="{{$cart_nini->id}}" class="cart_nini_item">
-						<input name="cart_nini_id[]" type="hidden" value="{{$cart_nini->id}}" />
-						<td class="cart_nini_id_{{$cart_nini->id}} head-nini_item_name">
-							<input name="nini_item_name[]" class="nini_item_name form-control" value="{{$cart_nini->item_name}}" required>
-						</td>
-						<td class="head-nini_tantou text-center">
-							<select name="nini_tantou[]" class=" nini_tantou text-center form-control" value="{{$cart_nini->tantou_name}}" required>
-								<option value="{{$cart_nini->tantou_name}}">{{$cart_nini->tantou_name}}</option>
-								<option value="青物">青物</option>
-								<option value="太物">太物</option>
-								<option value="近海">近海</option>
-								<option value="養魚">養魚</option>
-								<option value="特殊">特殊</option>
-								<option value="水産">水産</option>
-							</select>
-						</td>
-						<td colspan="5" class="order-table">
-							<table class="table table-striped table-hover table-md">
-							@foreach($cart_nini->order_ninis as $val)
-								<tr id="{{$val->id}}">
-									<td class="head-store text-center">
-										<select name="nini_store[]" class="nini_store text-center form-control" value="{{$val->tokuisaki_name}} {{$val->store_name}}" required>
-											<option id="{{$val->tokuisaki_name}}" value="{{$val->store_name}}">{{$val->tokuisaki_name}} {{$val->store_name}}</option>
-
-											@foreach($stores as $store)
-												<option id="{{$store->tokuisaki_name}}" value="{{$store->store_name}}">{{$store->tokuisaki_name}} {{$store->store_name}}</option>
-											@endforeach
-											<!-- <option value="all_store_nini">全店舗に追加</option> -->
-										</select>
-									</td>
-									<td class="head-quantity text-center">
-										<input name="nini_quantity[]" class="nini_quantity text-center form-control" value="{{$val->quantity}}" required>
-									</td>
-									<td class="head-yoteibi text-center">
-											<input type="text" name="nini_nouhin_yoteibi[]" class="nini_nouhin_yoteibi text-center form-control daterange-cus datepicker" value="{{$val->nouhin_yoteibi}}" autocomplete="off" required>
-									</td>
-									<td class="head-sousa text-center">
-										<button type="button" id="{{$val->id}}" class="removeid_{{$val->id}} removeordernini btn btn-info">削除</button><br />
-										<button style="margin-top:10px;" type="button" id="{{$cart_nini->id}}" class="cloneid_{{$cart_nini->id}} addordernini btn btn-success">配送先を追加</button>
-									</td>
-								</tr>
-							@endforeach
-							</table>
-						</td>
-					</tr>
-					@endforeach
-      	</tbody>
-			</table>
-		@if(isset($deal))
-		@else
-    <button style="min-width:200px;" type="button" name="" id="@if(isset($deal)){{$deal->id}}@endif" class="addniniorder btn btn-success"><i class="fas fa-plus"></i> 任意の商品を追加</button>
-		@endif
-    </div>
-  </div>
-</div>
-@endif
 
 
-@if($user->kyuujitu_haisou == 1)
-<script>
-$('.nini_nouhin_yoteibi').datepicker({
-	format: 'yyyy-mm-dd',
-	autoclose: true,
-	assumeNearbyYear: true,
-	language: 'ja',
-	startDate: '{{$sano_nissuu}}',
-	endDate: '+31d',
-});
-</script>
-@else
-<script>
-$('.nini_nouhin_yoteibi').datepicker({
-	format: 'yyyy-mm-dd',
-	autoclose: true,
-	assumeNearbyYear: true,
-	language: 'ja',
-	startDate: '{{$sano_nissuu}}',
-	endDate: '+31d',
-	defaultViewDate: Date(),
-	datesDisabled: [
-	@foreach($holidays as $holiday)
-	'{{$holiday}}',
-	@endforeach
-	]
-});
-</script>
-@endif
+
+
 
 
 <script>
@@ -1148,6 +816,7 @@ $(document).ready(function () {
 	      var total = price * quantity;
 	      $(this).text(total);
 	      sum += total;
+
 	    });
 
 			// 商品合計
@@ -1169,7 +838,7 @@ $(document).ready(function () {
 
 </script>
 
-@if($user->setonagi && $setonagi->shipping_code !== null)
+
 <div class="row mt-4">
 	<div class="col-lg-8">
 	  <div class="section-title">通信欄（任意）</div>
@@ -1203,7 +872,7 @@ $(document).ready(function () {
   </div>
 	@endif
 </div>
-@endif
+
 
 
 
@@ -1820,101 +1489,4 @@ $(document).ready(function() {
 <script>
 $("#uketori_place,#uketori_time,.nouhin_yoteibi_c,#memo").prop("disabled", true);
 </script>
-@endif
-
-
-@if($user->setonagi && $setonagi->shipping_code == null)
-<script>
-$(document).ready(function () {
-  var userNavigatedAway = false;
-  var currentUrl = window.location.href;
-
-  // 数量のチェック関数を定義
-	function checkQuantities() {
-	var allQuantitiesMatch = true;
-	$('.quantitySB').each(function() {
-		var elementValue = parseInt($(this).val(), 10);
-		var dbQuantity = $(this).data('db-quantity'); // data-db-quantityはundefinedを返す可能性がある
-
-		// DBの数量が設定されていない(undefined)、または0であり、
-		// ユーザーが数量を0に設定している場合は、この要素はチェックから除外する
-		if ((dbQuantity === undefined || dbQuantity === 0) && elementValue === 0) {
-			return true;
-		}
-
-		// DBの数量が設定されている場合、整数値に変換する
-		// data-db-quantityがundefinedの場合、isNaN(dbQuantity)がtrueになる
-		dbQuantity = parseInt(dbQuantity, 10);
-		if (isNaN(dbQuantity)) {
-		dbQuantity = 0; // DBの数量が未定義(undefined)の場合、0として扱う
-		}
-
-		if (elementValue !== dbQuantity) {
-		allQuantitiesMatch = false;
-		return false;
-		}
-	});
-	return allQuantitiesMatch;
-	}
-
-  // ブラウザの戻る、進む、またはページを閉じる際に警告を表示
-  window.addEventListener('beforeunload', function(e) {
-    if (!checkQuantities() && !userNavigatedAway) {
-      var confirmationMessage = 'ページから離れると、未保存の変更が失われます。';
-      e.returnValue = confirmationMessage; // 一部のブラウザで必要
-      return confirmationMessage; // 標準に従ってこのように設定
-    }
-  });
-
-  // ページ遷移を引き起こすイベントを捕捉
-  $(document).on('click', 'a', function(e) {
-    var linkUrl = $(this).attr('href');
-    if (linkUrl && linkUrl !== '#' && !linkUrl.startsWith('javascript') && new URL(linkUrl, currentUrl).href !== currentUrl && !checkQuantities() && !userNavigatedAway) {
-      e.preventDefault(); // デフォルトの遷移を防止
-
-      // SweetAlertを表示
-      Swal.fire({
-        title: 'カートに入っていない商品があります。',
-        text: 'このまま別画面に移動すると変更された数量はカートに反映されません。',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: '移動する',
-        cancelButtonText: '閉じる'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          userNavigatedAway = true;
-          window.location.href = linkUrl; // ユーザーが確認した場合、強制的に遷移
-        }
-      });
-    }
-  });
-
-  // フォーム送信時のイベントを捕捉
-  $(document).on('submit', 'form', function(e) {
-    var formAction = $(this).attr('action');
-    if (formAction && new URL(formAction, currentUrl).href !== currentUrl && !checkQuantities() && !userNavigatedAway) {
-      e.preventDefault(); // デフォルトの送信を防止
-
-      // SweetAlertを表示
-      Swal.fire({
-        title: 'カートに入っていない商品があります。',
-        text: 'このまま別画面に移動すると変更された数量はカートに反映されません。',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: '移動する',
-        cancelButtonText: 'キャンセル'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          userNavigatedAway = true;
-          this.submit(); // ユーザーが確認した場合、フォーム送信
-        }
-      });
-    }
-  });
-});
-</script>
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
-<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
-
 @endif

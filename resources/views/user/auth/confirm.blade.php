@@ -50,8 +50,8 @@
                 <div id="order"></div>
               </div>
             </div>
-
-
+            @if($user->setonagi && $shipping_code == null && $addtype !== 'addallitems')
+            @else
             <div class="float-right approval_btn_div">
                 <input id="addtype" type="hidden" name="addtype" value="{{$addtype}}" />
                 <button id="approval_btn" type="button" onclick="submit();" class="btn btn-warning">内容確認画面に進む</button>
@@ -59,9 +59,23 @@
                 <div id="card_approval_btn" class="btn btn-warning" onclick="executePay">内容確認画面に進む</div>
                 @endif
             </div>
+            @endif
+
           </form>
-
-
+          @if($user->setonagi && $shipping_code == null && $addtype !== 'addallitems')
+            <div class="float-right approval_btn_div d-flex">
+              <div class="mr-2">
+                <button class="addAllcart btn btn-primary">カートに入れる</button>
+              </div>
+              <div>
+                <form class="orderSB-form">
+                  {{ csrf_field() }}
+                  <input type="hidden" name="addtype" value="addallitems" />
+                  <button type="button" class="btn btn-warning orderSBButton">お支払いに進む</button>
+                </form>
+              </div>
+            </div>
+          @endif
           <br style="clear:both;" />
 
         </div>
@@ -191,55 +205,73 @@ $(document).ready(function () {
     console.log(nouhin_yoteibi);
     console.log(url);
 
-    $.ajax({
-      headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-      },
-      url: location.origin + '/order',
+    if(addtype === 'addallitems') {
+      $.ajax({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+      url: location.origin + '/orderSB',
       type: "POST",
-      data: {
-        'addtype': addtype,
-        'show_favorite': show_favorite,
-        'url': url,
-        'tokuisaki_name': tokuisaki_name,
-        'store_name': store_name,
-        'nouhin_yoteibi': nouhin_yoteibi,
-      },
-      cache: false,
-      success: function (data) {
+      data: { addtype: addtype },
+      success: function(data) {
         $('#order').html(data);
       },
-      // error: function () {
-      //   alert("オーダー内容をアップデートできません。");
-      // }
-      error: function (jqXHR, textStatus, errorThrown) {
-        if (jqXHR.status === 401) {
-            alert('カート内全ての商品の在庫が切れています。');
-            // セッションが切れた場合の処理
-            window.location.href = location.origin + '/user/login'; // ログインページへのリダイレクト
-        } else {
-        // alert('オーダー内容を取得できません。');
-        // console.log("ajax通信に失敗しました");
-        // console.log("XMLHttpRequest : " + XMLHttpRequest.status);
-        // console.log("textStatus     : " + textStatus);
-        // console.log("errorThrown    : " + errorThrown.message);
-        Swal.fire({
-          text: "カート内全ての商品の在庫が切れています。",
-          position: 'center',
-          // toast: true,
-          icon: 'warning',
-          showConfirmButton: false,
-          timer: 3000
-        });
-        // 3秒後にリダイレクトする関数
-        function redirectToHomepage() {
-          window.location.href = location.origin + '/';
-        }
-        // 3秒後にredirectToHomepage関数を呼び出す
-        setTimeout(redirectToHomepage, 2000);
-        }
+      error: function(xhr, status, error) {
+        console.error("Error on AJAX request: " + error);
+        alert('エラーが発生しました。');
       }
     });
+    } else {
+      $.ajax({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        url: location.origin + '/order',
+        type: "POST",
+        data: {
+          'addtype': addtype,
+          'show_favorite': show_favorite,
+          'url': url,
+          'tokuisaki_name': tokuisaki_name,
+          'store_name': store_name,
+          'nouhin_yoteibi': nouhin_yoteibi,
+        },
+        cache: false,
+        success: function (data) {
+          $('#order').html(data);
+        },
+        // error: function () {
+        //   alert("オーダー内容をアップデートできません。");
+        // }
+        error: function (jqXHR, textStatus, errorThrown) {
+          if (jqXHR.status === 401) {
+              alert('カート内全ての商品の在庫が切れています。');
+              // セッションが切れた場合の処理
+              window.location.href = location.origin + '/user/login'; // ログインページへのリダイレクト
+          } else {
+          // alert('オーダー内容を取得できません。');
+          // console.log("ajax通信に失敗しました");
+          // console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+          // console.log("textStatus     : " + textStatus);
+          // console.log("errorThrown    : " + errorThrown.message);
+          Swal.fire({
+            text: "カート内全ての商品の在庫が切れています。",
+            position: 'center',
+            // toast: true,
+            icon: 'warning',
+            showConfirmButton: false,
+            timer: 3000
+          });
+          // 3秒後にリダイレクトする関数
+          function redirectToHomepage() {
+            window.location.href = location.origin + '/';
+          }
+          // 3秒後にredirectToHomepage関数を呼び出す
+          setTimeout(redirectToHomepage, 2000);
+          }
+        }
+      });
+    }
   }
 
   setTimeout(order_update_ready);
@@ -515,6 +547,108 @@ $(document).ready(function () {
   });
 
 
+});
+</script>
+<script>
+function updateCartSB() {
+  var items = $('.quantitySB').map(function () {
+    console.log("Order ID: " + $(this).closest('tr').find('.order_id').val() + ", Quantity: " + $(this).val());
+    return {
+      order_id: $(this).closest('tr').find('.order_id').val(),
+      quantity: $(this).val(),
+      element: this  // 各要素を保存しておく
+    };
+  }).get();
+
+  var updatePromises = [];
+  var failedUpdates = [];
+
+  items.forEach(function (item) {
+    var promise = $.ajax({
+      headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+      url: location.origin + '/change_quantity',
+      type: 'POST',
+      data: {
+        'order_id': item.order_id,
+        'quantity': item.quantity
+      }
+    });
+
+    promise.done(function (json) {
+      if (json['message'] == 'fail') {
+        failedUpdates.push('注文ID ' + item.order_id + ' の数量を変更できませんでした。在庫数が不足しています。');
+      } else {
+        // 更新が成功した場合、data-db-quantityを更新する
+        $(item.element).data('db-quantity', item.quantity);
+        $(item.element).attr('data-db-quantity', item.quantity);
+      }
+    });
+
+    updatePromises.push(promise);
+  });
+
+  return $.when.apply($, updatePromises).then(function () {
+    if (failedUpdates.length > 0) {
+      Swal.fire({
+        text: failedUpdates.join("\n"),
+        icon: 'error',
+        confirmButtonText: 'OK'
+      });
+      return Promise.reject('いくつかの更新に失敗しました。');
+    } else {
+      // 成功メッセージの後に、UI上の数量を最新状態に更新する処理を追加
+      $('.quantitySB').each(function () {
+        var newQuantity = $(this).val();
+        $(this).data('db-quantity', newQuantity);
+        $(this).attr('data-db-quantity', newQuantity);
+      });
+
+      Swal.fire({
+        title: "個数を変更しました",
+        icon: 'success',
+        toast: true,
+        position: 'center-center',
+        showConfirmButton: false,
+        timer: 1500
+      });
+      return Promise.resolve(); // 全ての更新が成功したことを示す
+    }
+  });
+}
+
+$(document).ready(function() {
+  $('.addAllcart').click(function () {
+    updateCartSB();  // updateCartSB関数を呼び出す
+  });
+
+  $('.orderSBButton').on('click', function() {
+    updateCartSB().then(function() {
+      // カートの更新処理が成功した後、カートのチェックを行う
+      $.ajax({
+        url: '/check_cart',
+        type: 'GET',
+        success: function(response) {
+          if (response.cartEmpty) {
+            Swal.fire({
+              icon: 'warning',
+              text: 'カートが空です。',
+              showConfirmButton: false
+            });
+          } else {
+            var addtypeValue = $('.orderSB-form input[name="addtype"]').val();
+            window.location.href = '/confirm?addtype=' + addtypeValue;
+          }
+        },
+        error: function() {
+          alert('カートの状態を確認できませんでした。');
+        }
+      });
+    }).catch(function(error) {
+      // カートの更新処理でエラーが発生した場合は、ここで処理される
+      console.error(error);
+      // 適切なエラーメッセージを表示する
+    });
+  });
 });
 </script>
 

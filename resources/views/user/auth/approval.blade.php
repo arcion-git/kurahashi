@@ -93,30 +93,51 @@ $(document).ready( function(){
   var tokuisaki_name = '{{ $set_tokuisaki_name }}';
   var nouhin_yoteibi = '{{ $change_all_nouhin_yoteibi }}'
   var url = 'approval';
-  $.ajax({
-    headers: {
-      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }, //Headersを書き忘れるとエラーになる
-    url: location.origin + '/order',
-    type: "POST", // GETメソッドで通信
-    data: {
-      'addtype': addtype,
-      'show_favorite': show_favorite,
-      'store_name': store_name,
-      'tokuisaki_name': tokuisaki_name,
-      'nouhin_yoteibi': nouhin_yoteibi,
-      'url': url,
-    },
-    cache: false, // キャッシュしないで読み込み
-    // 通信成功時に呼び出されるコールバック
-    success: function (data) {
-      $('#order').html(data);
-    },
-    // 通信エラー時に呼び出されるコールバック
-    error: function () {
-        alert("オーダー内容をアップデートできません。");
-    }
-  });
+
+  if(addtype === 'addallitems') {
+    $.ajax({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+      url: location.origin + '/orderSB',
+      type: "POST",
+      data: { addtype: addtype },
+      success: function(data) {
+        $('#order').html(data);
+        console.log("addtype after ajax call:", addtype);
+
+      },
+      error: function(xhr, status, error) {
+        console.error("Error on AJAX request: " + error);
+        alert('エラーが発生しました。');
+      }
+    });
+  } else {
+    $.ajax({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }, //Headersを書き忘れるとエラーになる
+      url: location.origin + '/order',
+      type: "POST", // GETメソッドで通信
+      data: {
+        'addtype': addtype,
+        'show_favorite': show_favorite,
+        'store_name': store_name,
+        'tokuisaki_name': tokuisaki_name,
+        'nouhin_yoteibi': nouhin_yoteibi,
+        'url': url,
+      },
+      cache: false, // キャッシュしないで読み込み
+      // 通信成功時に呼び出されるコールバック
+      success: function (data) {
+        $('#order').html(data);
+      },
+      // 通信エラー時に呼び出されるコールバック
+      error: function () {
+          alert("オーダー内容をアップデートできません。");
+      }
+    });
+  }
 });
 
 $(document).on("click", "#show_favorite", function() {

@@ -889,6 +889,24 @@ class BothController extends Controller
     $collect_token = config('app.collect_token');
 
 
+    if($setonagi){
+      $shipping_code = Setonagi::where('user_id',$user_id)->first('shipping_code');
+      $shipping_code = $shipping_code->shipping_code;
+      // 配送設定を呼び出し
+      if(isset($shipping_code)){
+        $shipping_settings = ShippingSetting::where('shipping_code',$shipping_code)->get();
+      }else{
+        // BtoSB
+        $shipping_code = null;
+        $shipping_settings = null;
+      }
+    }else{
+      // BtoB
+      $shipping_code = null;
+      $shipping_settings = null;
+    }
+
+
     $data=[
       // 'carts'=>$carts,
       'nouhin_yoteibi'=>$nouhin_yoteibi,
@@ -905,6 +923,7 @@ class BothController extends Controller
       'collect_password' => $collect_password,
       'collect_touroku' => $collect_touroku,
       'collect_token' => $collect_token,
+      'shipping_code' => $shipping_code,
     ];
     return view('dealdetail', $data);
   }
@@ -1054,6 +1073,155 @@ class BothController extends Controller
       return view('order', $data);
     }
 
+    // 取引詳細を表示するためのもの
+    public function dealorderSB(Request $request){
+
+      $deal_id = $request->deal_id;
+      $deal =  Deal::where(['id'=>$deal_id])->first();
+      $user_id = $deal->user_id;
+
+      $user = User::where('id',$user_id)->first();
+      $setonagi = Setonagi::where('user_id',$user_id)->first();
+
+      $carts = Cart::where(['user_id'=>$user_id, 'deal_id'=> $deal_id])->get();
+      $orders = Order::whereIn('cart_id', $carts->pluck('id'))->get()->keyBy('cart_id');
+
+      $item_ids = $carts->pluck('item_id')->unique();
+      $items = Item::whereIn('id', $item_ids)->get()->keyBy('id');
+
+      foreach ($carts as $cart) {
+        $set_order = Order::where(['cart_id'=>$cart->id])->first();
+        if($set_order){
+          break;
+        }
+      }
+      $groupedItems = $carts->groupBy('groupe');
+
+      // dd($groupedItems);
+      // 取引IDが一致しているものを取得
+      if(!$setonagi){
+        $cart_ninis =  CartNini::where(['user_id'=>$user_id, 'deal_id'=> $deal_id])->get();
+      // dd($cart_ninis);
+      }else{
+        $cart_ninis = null;
+      }
+
+      // 休日についての処理
+      $today = date("Y-m-d");
+      $holidays = Holiday::pluck('date');
+
+      // BtoBユーザーの場合、店舗一覧取得
+      if(!isset($setonagi)){
+        $kaiin_number = $user->kaiin_number;
+        $store_users = StoreUser::where('user_id',$kaiin_number)->get(['store_id','tokuisaki_id']);
+        $stores = [];
+        $n=1;
+        foreach ($store_users as $store_user) {
+        $store = Store::where([ 'tokuisaki_id'=> $store_user->tokuisaki_id,'store_id'=> $store_user->store_id ])->first();
+          array_push($stores, $store);
+        $n++;
+        }
+      }else{
+        $stores = null;
+      }
+
+
+
+      if(isset($request->url)){
+        $url = $request->url;
+      }else{
+        $url = null;
+      }
+
+
+      // 納品予定日を取得
+      $currentDate = Carbon::now();
+      $oneMonthLater = $currentDate->addMonth();
+
+      // 1ヶ月後をフォーマット指定
+      $oneMonthLaterFormatted = $oneMonthLater->format('Y-m-d');
+      $all_nouhin_end = $oneMonthLaterFormatted;
+
+
+
+      // 直近の納品予定日を取得
+      $today = date("Y-m-d");
+      $holidays = Holiday::pluck('date');
+      $currentTime = date('H:i:s');
+      // 19時より前の処理
+      if (strtotime($currentTime) < strtotime('17:00:00')) {
+        $holidays = Holiday::pluck('date')->toArray();
+        for($i = 1; $i < 10; $i++){
+          $today_plus = date('Y-m-d', strtotime($today.'+'.$i.'day'));
+          // dd($today_plus2);
+          $key = array_search($today_plus,(array)$holidays,true);
+          if($key){
+              // 休みでないので納品日を格納
+          }else{
+              // 休みなので次の日付を探す
+              $nouhin_yoteibi = $today_plus;
+              break;
+          }
+        }
+      }else{
+      // 19時より後の処理
+        $holidays = Holiday::pluck('date')->toArray();
+        for($i = 2; $i < 10; $i++){
+          $today_plus = date('Y-m-d', strtotime($today.'+'.$i.'day'));
+          // dd($today_plus2);
+          $key = array_search($today_plus,(array)$holidays,true);
+          if($key){
+              // 休みでないので納品日を格納
+          }else{
+              // 休みなので次の日付を探す
+              $nouhin_yoteibi = $today_plus;
+              break;
+          }
+        }
+      }
+      // $sano_nissuu = '+'.((strtotime($nouhin_yoteibi) - strtotime($today)) / 86400).'d';
+
+      $sano_nissuu = $nouhin_yoteibi;
+      $url = 'deal';
+
+
+      $collect = config('app.collect_password');
+      $collect_tradercode = config('app.collect_tradercode');
+      $collect_password = config('app.collect_password').'2';
+      $collect_touroku = config('app.collect_touroku');
+      $collect_token = config('app.collect_token');
+
+
+      $data=
+      ['deal' => $deal,
+       'setonagi' => $setonagi,
+       'carts' => $carts,
+       'cart_ninis' => $cart_ninis,
+       'stores' => $stores,
+       'holidays' => $holidays,
+       'url' => $url,
+       'user' => $user,
+       'today_plus' => $today_plus,
+       'sano_nissuu' => $sano_nissuu,
+       'set_order' => $set_order,
+       'all_nouhin_end' => $all_nouhin_end,
+       'groupedItems' => $groupedItems,
+       'nouhin_yoteibi' => $nouhin_yoteibi,
+       'collect_tradercode' => $collect_tradercode,
+       'collect_password' => $collect_password,
+       'collect' => $collect,
+       'collect_touroku' => $collect_touroku,
+       'collect_token' => $collect_token,
+       'orders' => $orders,
+       'items' => $items,
+      ];
+
+      // return view('order', $data)->with($message);
+      return view('orderSB', $data);
+    }
+
+
+
     public function change_nouhin_yoteibi_c(Request $request){
 
       // データベースからデータを取得
@@ -1079,5 +1247,5 @@ class BothController extends Controller
       return $nouhin_yoteibi_c;
 
     }
-
+    
 }

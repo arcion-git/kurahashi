@@ -101,7 +101,10 @@
                           {{$deal->created_at}}
                         </td> -->
                         <td class="text-center">
-                          @if(Auth::guard('user')->user()->c_user())-@else{{$deal->first_cart_addtype()}}@endif
+                          @if (Auth::guard('user')->user()->setonagi == 1 && Auth::guard('user')->user()->setonagi()->shipping_code == null)
+                          @else
+                            @if(Auth::guard('user')->user()->c_user())-@else{{$deal->first_cart_addtype()}}@endif
+                          @endif
                         </td>
 
                         @if(Auth::guard('user')->user()->setonagi())

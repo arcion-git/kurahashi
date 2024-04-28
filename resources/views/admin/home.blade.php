@@ -134,7 +134,10 @@
                     {{$deal->user->name}}
                   </td>
                   <td class="text-center">
-                    {{$deal->first_cart_addtype()}}
+                    @if(isset($deal->setonagi) && $deal->setonagi->shipping_code == null)
+                    @else
+                      {{$deal->first_cart_addtype()}}
+                    @endif
                   </td>
                   <td class="text-center">
                     {{$deal->first_order_nouhin_yoteibi()}}

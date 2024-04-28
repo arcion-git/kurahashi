@@ -26,8 +26,16 @@
 
                 <!-- <input type="hidden" name="addtype" value="addsetonagi" />
                 <button id="" type="submit" class="btn btn-warning">限定お買い得商品</button> -->
-                <a href="{{ url('/setonagi') }}" class="btn btn-warning addsetonagi_link"><span>限定お買い得商品</span></a>
+                @if($user->setonagi && !isset($user->shipping_code))
+                <form action="{{ url('/addall') }}" method="POST" class="form-horizontal">
+                  {{ csrf_field() }}
+                  <input type="hidden" name="addtype" value="addsetonagi" />
+                  <button id="" type="submit" class="btn btn-warning">限定お買い得商品</button>
+                </form>
 
+                @else
+                <a href="{{ url('/setonagi') }}" class="btn btn-warning addsetonagi_link"><span>限定お買い得商品</span></a>
+                @endif
             </div>
             <div class="">
               <form action="{{ url('/addall') }}" method="POST" class="form-horizontal">

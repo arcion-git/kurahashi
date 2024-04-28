@@ -194,9 +194,18 @@
         </div> -->
 
         <ul class="navbar-nav navbar-right">
-          @if ( Auth::guard('user')->check() )
-            @if (Str::contains(Request::url(), ['approval', 'confirm']))
-            @else
+        @if ( Auth::guard('user')->check() )
+          @if (Auth::guard('user')->user()->setonagi == 1 && Auth::guard('user')->user()->setonagi()->shipping_code == null)
+            <div>
+              <form class="orderSB-form">
+                {{ csrf_field() }}
+                <input type="hidden" name="addtype" value="addallitems" />
+                <a id="toggle" href="#" data-toggle="dropdown" class="nav-link nav-link-lg message-toggle">
+                  <i class="fas fa-shopping-cart" id="paymentButton"></i>
+                </a>
+              </form>
+            </div>
+          @else
             <li class="dropdown dropdown-list-toggle">
               <a id="toggle" href="#" data-toggle="dropdown" class="nav-link nav-link-lg message-toggle">
                 <i class="fas fa-shopping-cart"></i>
@@ -221,8 +230,8 @@
                 </div>
               </div>
             </li>
-            @endif
           @endif
+        @endif
           <li class="dropdown">
             <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
               <img alt="image" src="{{ asset('img/avatar/avatar-1.png') }}" class="rounded-circle mr-1">
@@ -390,7 +399,11 @@
             <li class="menu-header">メニュー</li>
 
 
-
+            @if (Auth::guard('user')->user()->setonagi == 1 && Auth::guard('user')->user()->setonagi()->shipping_code == null)
+            <li class="nav-item addsetonagi_button">
+              <a class="nav-link"><i class="fas fa-check"></i><span>限定お買い得商品</span></a>
+            </li>
+            @else
             <li class="nav-item">
                <a href="{{ url('/setonagi') }}" class="nav-link"><i class="fas fa-check"></i><span>
                  @if(Auth::guard('user')->user()->c_user())
@@ -400,6 +413,7 @@
                  @endif
                </span></a>
              </li>
+             @endif
 
              @if(Auth::guard('user')->user()->c_user())
                @else
@@ -430,7 +444,11 @@
                 <button type="submit" class="nav-link nav_alladd"><i class="fas fa-check"></i><span>限定お買い得商品</span></button>
               </form>
             </li> -->
-
+              <form id="addsetonagi_form" style="display:none;" action="{{ url('/addall') }}" method="POST" class="form-horizontal">
+                {{ csrf_field() }}
+                <input type="hidden" name="addtype" value="addsetonagi" />
+                <button type="submit" class="nav-link nav_alladd"><i class="far fa-user"></i><span>担当のおすすめ商品</span></button>
+              </form>
               <form id="addbuyerrecommend_form" style="display:none;" action="{{ url('/addall') }}" method="POST" class="form-horizontal">
                 {{ csrf_field() }}
                 <input type="hidden" name="addtype" value="addbuyerrecommend" />
@@ -646,6 +664,36 @@
     <script src="https://ajaxzip3.github.io/ajaxzip3.js" charset="UTF-8"></script>
     <script src="{{ asset('js/stisla.js') }}"></script>
 
+    <script>
+    $(document).ready(function() {
+      $('#paymentButton').on('click', function() {
+          $.ajax({
+            url: '/check_cart',
+            type: 'GET',
+            success: function(response) {
+              if (response.cartEmpty) {
+                Swal.fire({
+                  icon: 'warning',
+                  text: 'カートが空です。',
+                  showConfirmButton: false
+                });
+              } else {
+                var addtypeValue = $('.orderSB-form input[name="addtype"]').val();
+                window.location.href = '/confirm?addtype=' + addtypeValue;
+              }
+            },
+            error: function() {
+              alert('カートの状態を確認できませんでした。');
+            }
+          });
+        }).catch(function(error) {
+          // カートの更新処理でエラーが発生した場合は、ここで処理される
+          console.error(error);
+          // 適切なエラーメッセージを表示する
+        });
+      });
+    </script>
+
     <!-- JS Libraies -->
     <!-- <script src="../node_modules/jquery-pwstrength/jquery.pwstrength.min.js"></script>
     <script src="../node_modules/selectric/public/jquery.selectric.min.js"></script> -->
@@ -701,6 +749,9 @@
         }
     });
     $(document).ready(function() {
+      $(".addsetonagi_button").click(function() {
+        $("#addsetonagi_form").submit();
+      });
       $(".addbuyerrecommend_button").click(function() {
         $("#addbuyerrecommend_form").submit();
       });

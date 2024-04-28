@@ -73,11 +73,13 @@
 
   // Ajax POST&GET（ユーザー側）
   Route::post('/dealorder', 'BothController@dealorder');
+  Route::post('/dealorderSB', 'BothController@dealorderSB');
   Route::get('/search', 'LoginPageController@search');
   Route::post('/search', 'LoginPageController@search');
 
   // Ajax POST&GET（管理者側）
   Route::post('/admin/dealorder', 'BothController@dealorder');
+  Route::post('/admin/dealorderSB', 'BothController@dealorderSB');
 
   // Ajax POST
   Route::post('/addcart', 'LoginPageController@addcart');
@@ -286,3 +288,8 @@ Route::group(['prefix' => 'user'], function () {
   Route::get('/password/reset', 'UserAuth\ForgotPasswordController@showLinkRequestForm')->name('password.reset');
   Route::get('/password/reset/{token}', 'UserAuth\ResetPasswordController@showResetForm');
 });
+
+//
+Route::post('/orderSB', 'LoginPageController@orderSB')->name('orderSB');
+
+Route::get('/check_cart', 'LoginPageController@checkCart')->name('checkCart');
