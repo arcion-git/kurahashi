@@ -4762,6 +4762,16 @@ class LoginPageController extends Controller
     }
     $sano_nissuu = $nouhin_yoteibi;
 
+    $stores = null;
+    $collect = config('app.collect_password');
+    $collect_tradercode = config('app.collect_tradercode');
+    $collect_password = config('app.collect_password').'2';
+    $collect_password_save = $user->id.'test'.$collect_password;
+    $collect_password = hash('sha256', utf8_encode($collect_password));
+    // dd($collect_password_save);
+    $collect_password_save = hash('sha256', utf8_encode($collect_password_save));
+    $collect_touroku = config('app.collect_touroku');
+    $collect_token = config('app.collect_token');
 
     // 取得したデータをビューに渡す
     $data=
@@ -4780,6 +4790,13 @@ class LoginPageController extends Controller
     'shipping_code' => $shipping_code,
     'shipping_settings' => $shipping_settings,
     'addtype' => $addtype,
+    'stores' => $stores,
+    'collect_tradercode' => $collect_tradercode,
+    'collect_password' => $collect_password,
+    'collect_password_save' => $collect_password_save,
+    'collect' => $collect,
+    'collect_touroku' => $collect_touroku,
+    'collect_token' => $collect_token,
     ];
     return view('orderSB', $data);
   }
