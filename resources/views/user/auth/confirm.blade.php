@@ -172,14 +172,29 @@ label,
 <script>
 $(document).ready(function () {
 
+    var fancyboxOpened = false;
 
     function reloadOnBack() {
       // ページをリロード
       $('.nouhin_yoteibi_c').val('');
       location.reload();
     }
+
+    $(document).on('afterLoad.fb', function() {
+      fancyboxOpened = true;
+    });
+    // Fancyboxが閉じられたときのイベントリスナーを追加
+    $(document).on('afterClose.fb', function() {
+      fancyboxOpened = false;
+    });
+
     // popstate イベントのリスナーを追加
-    window.addEventListener('popstate', reloadOnBack);
+    window.addEventListener('popstate', function(event) {
+      // Fancyboxが閉じられた時以外リロードを行う
+      if (!fancyboxOpened) {
+        reloadOnBack();
+      }
+    });
 
     // pageshow イベントのリスナーを追加
     window.addEventListener('pageshow', function (event) {

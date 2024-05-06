@@ -3532,7 +3532,7 @@ class LoginPageController extends Controller
         'addsetonagi' => 1,
         'addbuyerrecommend' => 2,
         'addspecialprice' => 3
-    ];
+      ];
 
         // $carts をソート
         $carts = Cart::where(['deal_id'=> $deal->id])->get()->sortBy(function ($cart) use ($priority) {
@@ -4208,11 +4208,45 @@ class LoginPageController extends Controller
       $total_price = null;
     }
 
-    // オーダーリストの作成
-    $order_list=[];
-      $carts = Cart::where(['deal_id'=> $deal->id])->get();
+      // オーダーリストの作成
+      $priority = [
+        'addsetonagi' => 1,
+        'addbuyerrecommend' => 2,
+        'addspecialprice' => 3
+      ];
+      // $carts をソート
+      $carts = Cart::where(['deal_id'=> $deal->id])->get()->sortBy(function ($cart) use ($priority) {
+        return $priority[$cart->addtype] ?? 999; // addtypeが定義されていない場合は最後に
+      });
+      
+
+      $order_list=[];
+      $added_titles = [];
       // カート商品の出力
       foreach ($carts as $cart) {
+
+        // タイトルがまだ追加されていない場合は追加
+        if ($user->setonagi == 1 && is_null($setonagi->shipping_code)) {
+          if (!isset($added_titles[$cart->addtype])) {
+              $title = ''; // 初期値を空文字に設定
+              switch ($cart->addtype) {
+                  case 'addsetonagi':
+                      $title = '■限定お買い得商品';
+                      break;
+                  case 'addbuyerrecommend':
+                      $title = '■担当のおすすめ商品';
+                      break;
+                  case 'addspecialprice':
+                      $title = '■市況商品';
+                      break;
+                  default:
+                      $title = ''; // 一致しない場合は空文字を維持
+              }
+              $order_list[] = $title; // タイトルをオーダーリストに追加
+              $added_titles[$cart->addtype] = true; // このタイプのタイトルが追加されたことを記録
+            }
+        }
+
         $orders = Order::where(['cart_id'=> $cart->id])->get();
         foreach ($orders as $order) {
           $user = User::where('id',$deal->user_id)->first();

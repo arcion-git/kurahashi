@@ -176,7 +176,7 @@
 																				<div class="setonagi-item-img">
 																					<?php $filename = public_path().'/storage/item/'.$cart->item->item_id.'.jpg'; ?>
 																					@if(file_exists($filename))
-																					<a href="/storage/item/{{$cart->item->item_id}}.jpg" data-fancybox="images-{{$cart->item->item_id}}">
+																					<a href="/storage/item/{{$cart->item->item_id}}.jpg" data-fancybox="images-{{$cart->item->item_id}}" class="fancybox">
 																						<img class="d-block w-100" src="/storage/item/{{$cart->item->item_id}}.jpg" alt="First slide" onerror="this.src='{{ asset('img/no_image.jpg') }}'; this.classList.add('disable_link');">
 																					</a>
 																					@else
@@ -184,13 +184,15 @@
 																					@endif
 																				</div>
 																				<div class="setonagi-item-name">
+																					@if(isset($cart->item->tokkijikou) && !empty($cart->item->tokkijikou))
+																					<!-- 特記事項がある場合は表示 -->
 																					<button class="tokkijikou_btn tokkijikou_btnSB" type="button" data-toggle="collapse" data-target="#collapseExample_{{$cart->item->item_id}}" aria-expanded="true" aria-controls="collapseExample_{{$cart->item->item_id}}">{{$cart->uwagaki_item_name}}<i class="fa fa-chevron-down"></i></button>
 																					<div class="collapse" id="collapseExample_{{$cart->item->item_id}}" style="">
-																					<!-- 特記事項がある場合は表示 -->
-																					@if(isset($cart->item->tokkijikou) && !empty($cart->item->tokkijikou))
-																						<div class="tokkijikou-content">{{ $cart->item->tokkijikou }}</div>
-																					@endif
+																					<div class="tokkijikou-content">{{ $cart->item->tokkijikou }}</div>
 																					</div>
+																					@else
+																					{{$cart->uwagaki_item_name}}
+																					@endif
 																				</div>
 																			</div>
 																		@else
@@ -202,7 +204,7 @@
 																				<div class="setonagi-item-img active carousel-item">
 																					<?php $filename = public_path().'/storage/item/'.$cart->item->item_id.'.jpg'; ?>
 																					@if(file_exists($filename))
-																					<a href="/storage/item/{{$cart->item->item_id}}.jpg" data-fancybox="images-{{$cart->item->item_id}}">
+																					<a href="/storage/item/{{$cart->item->item_id}}.jpg" data-fancybox="images-{{$cart->item->item_id}}" class="fancybox">
 																						<img class="d-block w-100" src="/storage/item/{{$cart->item->item_id}}.jpg" alt="First slide" onerror="this.src='{{ asset('img/no_image.jpg') }}'; this.classList.add('disable_link');">
 																					</a>
 																					@else
@@ -220,11 +222,13 @@
 																					@endfor
 																				</div>
 																				<div class="setonagi-item-name">
+																					@if(isset($cart->item->tokkijikou) && !empty($cart->item->tokkijikou))
+																					<!-- 特記事項がある場合は表示 -->
 																					<button class="tokkijikou_btn tokkijikou_btnSB" type="button" data-toggle="collapse" data-target="#collapseExample_{{$cart->item->item_id}}" aria-expanded="true" aria-controls="collapseExample_{{$cart->item->item_id}}">{{$cart->item->item_name}}<i class="fa fa-chevron-down"></i></button>
 																					<div class="collapse" id="collapseExample_{{$cart->item->item_id}}" style="">
-																					<!-- 特記事項がある場合は表示 -->
-																					@if(isset($cart->item->tokkijikou) && !empty($cart->item->tokkijikou))
-																						<div class="tokkijikou-content">{{ $cart->item->tokkijikou }}</div>
+																					<div class="tokkijikou-content">{{ $cart->item->tokkijikou }}</div>
+																					@else
+																					{{$cart->item->item_name}}
 																					@endif
 																					</div>
 																				</div>
@@ -1868,6 +1872,14 @@ $(document).ready(function () {
 
   // ページ遷移を引き起こすイベントを捕捉
   $(document).on('click', 'a', function(e) {
+	// クリックされたリンクのクラスを取得
+	var linkClass = $(this).attr('class');
+  
+	// 特定のクラスを持つ場合はイベントを発火しない
+	if (linkClass && linkClass.includes('fancybox')) {
+		return;
+	}
+
     var linkUrl = $(this).attr('href');
     if (linkUrl && linkUrl !== '#' && !linkUrl.startsWith('javascript') && new URL(linkUrl, currentUrl).href !== currentUrl && !checkQuantities() && !userNavigatedAway) {
       e.preventDefault(); // デフォルトの遷移を防止
@@ -1912,9 +1924,10 @@ $(document).ready(function () {
     }
   });
 });
+
 </script>
+
+@endif
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
 <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
-
-@endif
