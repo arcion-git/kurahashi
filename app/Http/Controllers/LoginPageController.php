@@ -1135,21 +1135,21 @@ class LoginPageController extends Controller
         foreach ($get_items as $get_item) {
             // アイテム情報を取得
             $item = Item::where(['item_id' => $get_item->item_id, 'sku_code' => $get_item->sku_code])->first();
-            
+
             if (!$item) {
                 continue; // アイテムが見つからない場合はスキップ
             }
-    
+
             // SetonagiItemから価格を取得
             $setonagiItem = SetonagiItem::where('item_id', $item->item_id)->first();
             $price = $setonagiItem ? $setonagiItem->price : null;
-    
+
             // カートに商品を追加（数量は0または購入意志がある数量に設定）
             $cart = Cart::firstOrNew(
                 ['user_id' => $user_id, 'item_id' => $item->id, 'deal_id' => null, 'addtype' => $addtype]
             );
             $cart->save();
-    
+
             // オーダー情報を保存
             $order = Order::firstOrNew(
                 ['cart_id' => $cart->id],
@@ -3547,16 +3547,25 @@ class LoginPageController extends Controller
           // タイトルがまだ追加されていない場合は追加
           if ($user->setonagi == 1 && is_null($setonagi->shipping_code)) {
               if (!isset($added_titles[$cart->addtype])) {
-                  $title = match ($cart->addtype) {
-                      'addsetonagi' => '■限定お買い得商品',
-                      'addbuyerrecommend' => '■担当のおすすめ商品',
-                      'addspecialprice' => '■市況商品',
-                      default => ''
-                  };
+                  $title = ''; // 初期値を空文字に設定
+                  switch ($cart->addtype) {
+                      case 'addsetonagi':
+                          $title = '■限定お買い得商品';
+                          break;
+                      case 'addbuyerrecommend':
+                          $title = '■担当のおすすめ商品';
+                          break;
+                      case 'addspecialprice':
+                          $title = '■市況商品';
+                          break;
+                      default:
+                          $title = ''; // 一致しない場合は空文字を維持
+                  }
                   $order_list[] = $title; // タイトルをオーダーリストに追加
                   $added_titles[$cart->addtype] = true; // このタイプのタイトルが追加されたことを記録
               }
           }
+
 
           $orders = Order::where(['cart_id'=> $cart->id])->get();
           foreach ($orders as $order) {
@@ -4804,7 +4813,7 @@ class LoginPageController extends Controller
   {
       // 現在日時を取得
       $now = Carbon::now()->toDateTimeString();
-  
+
       // addTypeに応じて商品データを取得
       switch ($addType) {
           case 'addsetonagi':
@@ -4837,7 +4846,7 @@ class LoginPageController extends Controller
             $orderQuantity = Order::where('cart_id', $cartItem->id)
                                   ->where('quantity', '>', 0)
                                   ->first();
-            
+
             // 1つでも数量が0でないものが見つかれば、ループを抜ける
             if($orderQuantity) {
                 $nonEmptyQuantityExists = true;
