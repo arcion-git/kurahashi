@@ -665,34 +665,88 @@
     <script src="{{ asset('js/stisla.js') }}"></script>
 
     <script>
-    $(document).ready(function() {
-      $('#paymentButton').on('click', function() {
-          $.ajax({
-            url: '/check_cart',
-            type: 'GET',
-            success: function(response) {
-              if (response.cartEmpty) {
-                Swal.fire({
-                  icon: 'warning',
-                  text: 'カートが空です。',
-                  showConfirmButton: false
-                });
-              } else {
-                var addtypeValue = $('.orderSB-form input[name="addtype"]').val();
-                window.location.href = '/confirm?addtype=' + addtypeValue;
+      $(document).ready(function() {
+          var userNavigatedAway = false;
+          var currentUrl = window.location.href;
+
+          function checkQuantities() {
+              var allQuantitiesMatch = true;
+              $('.quantitySB').each(function() {
+                  var elementValue = parseInt($(this).val(), 10);
+                  var dbQuantity = $(this).data('db-quantity');
+
+                  if ((dbQuantity === undefined || dbQuantity === 0) && elementValue === 0) {
+                      return true;
+                  }
+
+                  dbQuantity = parseInt(dbQuantity, 10);
+                  if (isNaN(dbQuantity)) {
+                      dbQuantity = 0;
+                  }
+
+                  if (elementValue !== dbQuantity) {
+                      allQuantitiesMatch = false;
+                      return false;
+                  }
+              });
+              return allQuantitiesMatch;
+          }
+
+          function handleNavigation(url) {
+              // 先にカートが空かどうかを確認する
+              $.ajax({
+                  url: '/check_cart',
+                  type: 'GET',
+                  success: function(response) {
+                      if (response.cartEmpty) {
+                          Swal.fire({
+                              icon: 'warning',
+                              text: 'カートが空です。',
+                              showConfirmButton: false
+                          });
+                      } else {
+                          // カートが空ではない場合、数量チェックを行う
+                          if (checkQuantities()) {
+                              var addtypeValue = $('.orderSB-form input[name="addtype"]').val();
+                              window.location.href = url + '?addtype=' + addtypeValue;
+                          } else {
+                              Swal.fire({
+                                  title: 'カートに入っていない商品があります。',
+                                  text: 'このまま別画面に移動すると変更された数量はカートに反映されません。',
+                                  icon: 'warning',
+                                  showCancelButton: true,
+                                  confirmButtonText: '移動する',
+                                  cancelButtonText: '閉じる'
+                              }).then((result) => {
+                                  if (result.isConfirmed) {
+                                      userNavigatedAway = true;
+                                      var addtypeValue = $('.orderSB-form input[name="addtype"]').val();
+                                      window.location.href = url + '?addtype=' + addtypeValue;
+                                  }
+                              });
+                          }
+                      }
+                  },
+                  error: function() {
+                      alert('カートの状態を確認できませんでした。');
+                  }
+              });
+          }
+
+          window.addEventListener('beforeunload', function(e) {
+              if (!checkQuantities() && !userNavigatedAway) {
+                  var confirmationMessage = 'ページから離れると、未保存の変更が失われます。';
+                  e.returnValue = confirmationMessage;
+                  return confirmationMessage;
               }
-            },
-            error: function() {
-              alert('カートの状態を確認できませんでした。');
-            }
           });
-        }).catch(function(error) {
-          // カートの更新処理でエラーが発生した場合は、ここで処理される
-          console.error(error);
-          // 適切なエラーメッセージを表示する
-        });
+
+          $('#paymentButton').on('click', function(e) {
+              e.preventDefault();
+              handleNavigation('/confirm');
+          });
       });
-    </script>
+      </script>
 
     <!-- JS Libraies -->
     <!-- <script src="../node_modules/jquery-pwstrength/jquery.pwstrength.min.js"></script>

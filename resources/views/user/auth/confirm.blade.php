@@ -633,7 +633,16 @@ function updateCartSB() {
 
 $(document).ready(function() {
   $('.addAllcart').click(function () {
-    updateCartSB();  // updateCartSB関数を呼び出す
+    updateCartSB().then(function() {
+      window.location.href = '/bulk';
+    }).catch(function(error) {
+      Swal.fire({
+        text: failedUpdates.join("\n"),
+        icon: 'error',
+        confirmButtonText: 'OK'
+      });
+      return Promise.reject('更新に失敗しました。');
+    });
   });
 
   $('.orderSBButton').on('click', function() {
