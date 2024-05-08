@@ -666,79 +666,35 @@
 
     <script>
       $(document).ready(function() {
-          var userNavigatedAway = false;
-          var currentUrl = window.location.href;
+        // 現在のページのURLを取得
+        var currentUrl = window.location.href;
 
-          function checkQuantities() {
-              var allQuantitiesMatch = true;
-              $('.quantitySB').each(function() {
-                  var elementValue = parseInt($(this).val(), 10);
-                  var dbQuantity = $(this).data('db-quantity');
-
-                  if ((dbQuantity === undefined || dbQuantity === 0) && elementValue === 0) {
-                      return true;
-                  }
-
-                  dbQuantity = parseInt(dbQuantity, 10);
-                  if (isNaN(dbQuantity)) {
-                      dbQuantity = 0;
-                  }
-
-                  if (elementValue !== dbQuantity) {
-                      allQuantitiesMatch = false;
-                      return false;
-                  }
-              });
-              return allQuantitiesMatch;
-          }
-
-          function handleNavigation(url) {
-              $.ajax({
-                  url: '/check_cart',
-                  type: 'GET',
-                  success: function(response) {
-                      if (response.cartEmpty) {
-                          Swal.fire({
-                              icon: 'warning',
-                              text: 'カートが空です。',
-                              showConfirmButton: false
-                          });
-                      } else {
-                          if (checkQuantities()) {
-                              var addtypeValue = $('.orderSB-form input[name="addtype"]').val();
-                              userNavigatedAwayHead = true; // 数量が一致しており、ユーザーが移動を選択する場合
-                              window.location.href = url + '?addtype=' + addtypeValue;
-                          } else {
-                              Swal.fire({
-                                  title: 'カートに入っていない商品があります。',
-                                  text: 'このまま別画面に移動すると変更された数量はカートに反映されません。',
-                                  icon: 'warning',
-                                  showCancelButton: true,
-                                  confirmButtonText: '移動する',
-                                  cancelButtonText: '閉じる'
-                              }).then((result) => {
-                                  if (result.isConfirmed) {
-                                      userNavigatedAwayHead = true; // ユーザーが移動を確定した場合
-                                      var addtypeValue = $('.orderSB-form input[name="addtype"]').val();
-                                      window.location.href = url + '?addtype=' + addtypeValue;
-                                  }
-                              });
-                          }
-                      }
-                  },
-                  error: function() {
-                      alert('カートの状態を確認できませんでした。');
-                  }
-              });
-          }
-
-
+        // URLに 'confirm' が含まれていない場合に処理を実行
+        if (!currentUrl.includes('/confirm')) {
           $('#paymentButton').on('click', function(e) {
-              e.preventDefault();
-              handleNavigation('/confirm');
+            $.ajax({
+              url: '/check_cart',
+              type: 'GET',
+              success: function(response) {
+                if (response.cartEmpty) {
+                  Swal.fire({
+                    icon: 'warning',
+                    text: 'カートが空です。',
+                    showConfirmButton: false
+                  });
+                } else {
+                  var addtypeValue = $('.orderSB-form input[name="addtype"]').val();
+                  window.location.href = '/confirm?addtype=' + addtypeValue;
+                }
+              },
+              error: function() {
+                alert('カートの状態を確認できませんでした。');
+              }
+            });
           });
+        }
       });
-      </script>
+    </script>
 
     <!-- JS Libraies -->
     <!-- <script src="../node_modules/jquery-pwstrength/jquery.pwstrength.min.js"></script>

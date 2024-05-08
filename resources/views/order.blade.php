@@ -1830,8 +1830,9 @@ $("#uketori_place,#uketori_time,.nouhin_yoteibi_c,#memo").prop("disabled", true)
 @if($user->setonagi && $setonagi->shipping_code == null)
 <script>
 $(document).ready(function () {
-  var userNavigatedAway = false;
-  var currentUrl = window.location.href;
+	var userNavigatedAway = false;
+	var userNavigatedAwayHead = false;
+	var currentUrl = window.location.href;
 
   // 数量のチェック関数を定義
 	function checkQuantities() {
@@ -1861,68 +1862,113 @@ $(document).ready(function () {
 	return allQuantitiesMatch;
 	}
 
-  // ブラウザの戻る、進む、またはページを閉じる際に警告を表示
-  window.addEventListener('beforeunload', function(e) {
-    if (!checkQuantities() && !userNavigatedAway && !userNavigatedAwayHead) {
-      var confirmationMessage = 'ページから離れると、未保存の変更が失われます。';
-      e.returnValue = confirmationMessage; // 一部のブラウザで必要
-      return confirmationMessage; // 標準に従ってこのように設定
-    }
-  });
+	// ブラウザの戻る、進む、またはページを閉じる際に警告を表示
+	window.addEventListener('beforeunload', function(e) {
+	if (!checkQuantities() && (!userNavigatedAway && !userNavigatedAwayHead)) {
+		var confirmationMessage = 'ページから離れると、未保存の変更が失われます。';
+		e.returnValue = confirmationMessage; // 一部のブラウザで必要
+		return confirmationMessage; // 標準に従ってこのように設定
+	}
+	});
 
-  // ページ遷移を引き起こすイベントを捕捉
-  $(document).on('click', 'a', function(e) {
-	// クリックされたリンクのクラスを取得
-	var linkClass = $(this).attr('class');
-  
-	// 特定のクラスを持つ場合はイベントを発火しない
-	if (linkClass && linkClass.includes('fancybox')) {
-		return;
+	function handleNavigation(url) {
+		$.ajax({
+			url: '/check_cart',
+			type: 'GET',
+			success: function(response) {
+				if (response.cartEmpty) {
+					Swal.fire({
+						icon: 'warning',
+						text: 'カートが空です。',
+						showConfirmButton: false
+					});
+				} else {
+					if (checkQuantities()) {
+						var addtypeValue = $('.orderSB-form input[name="addtype"]').val();
+						userNavigatedAwayHead = true; // 数量が一致しており、ユーザーが移動を選択する場合
+						window.location.href = url + '?addtype=' + addtypeValue;
+					} else {
+						Swal.fire({
+							title: 'カートに入っていない商品があります。',
+							text: 'このまま別画面に移動すると変更された数量はカートに反映されません。',
+							icon: 'warning',
+							showCancelButton: true,
+							confirmButtonText: '移動する',
+							cancelButtonText: '閉じる'
+						}).then((result) => {
+							if (result.isConfirmed) {
+								userNavigatedAwayHead = true; // ユーザーが移動を確定した場合
+								var addtypeValue = $('.orderSB-form input[name="addtype"]').val();
+								window.location.href = url + '?addtype=' + addtypeValue;
+							}
+						});
+					}
+				}
+			},
+			error: function() {
+				alert('カートの状態を確認できませんでした。');
+			}
+		});
 	}
 
-    var linkUrl = $(this).attr('href');
-    if (linkUrl && linkUrl !== '#' && !linkUrl.startsWith('javascript') && new URL(linkUrl, currentUrl).href !== currentUrl && !checkQuantities() && !userNavigatedAway) {
-      e.preventDefault(); // デフォルトの遷移を防止
+	$('#paymentButton').on('click', function(e) {
+		e.preventDefault();
+		handleNavigation('/confirm');
+	});
 
-      // SweetAlertを表示
-      Swal.fire({
-        title: 'カートに入っていない商品があります。',
-        text: 'このまま別画面に移動すると変更された数量はカートに反映されません。',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: '移動する',
-        cancelButtonText: '閉じる'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          userNavigatedAway = true;
-          window.location.href = linkUrl; // ユーザーが確認した場合、強制的に遷移
-        }
-      });
-    }
-  });
+	// ページ遷移を引き起こすイベントを捕捉
+	$(document).on('click', 'a', function(e) {
+		// クリックされたリンクのクラスを取得
+		var linkClass = $(this).attr('class');
+	
+		// 特定のクラスを持つ場合はイベントを発火しない
+		if (linkClass && linkClass.includes('fancybox')) {
+			return;
+	}
 
-  // フォーム送信時のイベントを捕捉
-  $(document).on('submit', 'form', function(e) {
-    var formAction = $(this).attr('action');
-    if (formAction && new URL(formAction, currentUrl).href !== currentUrl && !checkQuantities() && !userNavigatedAway) {
-      e.preventDefault(); // デフォルトの送信を防止
+		var linkUrl = $(this).attr('href');
+		if (linkUrl && linkUrl !== '#' && !linkUrl.startsWith('javascript') && new URL(linkUrl, currentUrl).href !== currentUrl && !checkQuantities() && !userNavigatedAway) {
+		e.preventDefault(); // デフォルトの遷移を防止
 
-      // SweetAlertを表示
-      Swal.fire({
-        title: 'カートに入っていない商品があります。',
-        text: 'このまま別画面に移動すると変更された数量はカートに反映されません。',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: '移動する',
-        cancelButtonText: 'キャンセル'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          userNavigatedAway = true;
-          this.submit(); // ユーザーが確認した場合、フォーム送信
-        }
-      });
-    }
-  });
+		// SweetAlertを表示
+		Swal.fire({
+			title: 'カートに入っていない商品があります。',
+			text: 'このまま別画面に移動すると変更された数量はカートに反映されません。',
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonText: '移動する',
+			cancelButtonText: '閉じる'
+		}).then((result) => {
+			if (result.isConfirmed) {
+			userNavigatedAway = true;
+			window.location.href = linkUrl; // ユーザーが確認した場合、強制的に遷移
+			}
+		});
+		}
+	});
+
+	// フォーム送信時のイベントを捕捉
+	$(document).on('submit', 'form', function(e) {
+		var formAction = $(this).attr('action');
+		if (formAction && new URL(formAction, currentUrl).href !== currentUrl && !checkQuantities() && !userNavigatedAway) {
+		e.preventDefault(); // デフォルトの送信を防止
+
+		// SweetAlertを表示
+		Swal.fire({
+			title: 'カートに入っていない商品があります。',
+			text: 'このまま別画面に移動すると変更された数量はカートに反映されません。',
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonText: '移動する',
+			cancelButtonText: 'キャンセル'
+		}).then((result) => {
+			if (result.isConfirmed) {
+			userNavigatedAway = true;
+			this.submit(); // ユーザーが確認した場合、フォーム送信
+			}
+		});
+		}
+	});
 });
 
 </script>
