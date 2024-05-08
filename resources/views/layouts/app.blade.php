@@ -693,7 +693,6 @@
           }
 
           function handleNavigation(url) {
-              // 先にカートが空かどうかを確認する
               $.ajax({
                   url: '/check_cart',
                   type: 'GET',
@@ -705,9 +704,9 @@
                               showConfirmButton: false
                           });
                       } else {
-                          // カートが空ではない場合、数量チェックを行う
                           if (checkQuantities()) {
                               var addtypeValue = $('.orderSB-form input[name="addtype"]').val();
+                              userNavigatedAwayHead = true; // 数量が一致しており、ユーザーが移動を選択する場合
                               window.location.href = url + '?addtype=' + addtypeValue;
                           } else {
                               Swal.fire({
@@ -719,7 +718,7 @@
                                   cancelButtonText: '閉じる'
                               }).then((result) => {
                                   if (result.isConfirmed) {
-                                      userNavigatedAway = true;
+                                      userNavigatedAwayHead = true; // ユーザーが移動を確定した場合
                                       var addtypeValue = $('.orderSB-form input[name="addtype"]').val();
                                       window.location.href = url + '?addtype=' + addtypeValue;
                                   }
@@ -733,13 +732,6 @@
               });
           }
 
-          window.addEventListener('beforeunload', function(e) {
-              if (!checkQuantities() && !userNavigatedAway) {
-                  var confirmationMessage = 'ページから離れると、未保存の変更が失われます。';
-                  e.returnValue = confirmationMessage;
-                  return confirmationMessage;
-              }
-          });
 
           $('#paymentButton').on('click', function(e) {
               e.preventDefault();

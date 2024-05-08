@@ -1861,7 +1861,14 @@ $(document).ready(function () {
 	return allQuantitiesMatch;
 	}
 
-
+  // ブラウザの戻る、進む、またはページを閉じる際に警告を表示
+  window.addEventListener('beforeunload', function(e) {
+    if (!checkQuantities() && !userNavigatedAway && !userNavigatedAwayHead) {
+      var confirmationMessage = 'ページから離れると、未保存の変更が失われます。';
+      e.returnValue = confirmationMessage; // 一部のブラウザで必要
+      return confirmationMessage; // 標準に従ってこのように設定
+    }
+  });
 
   // ページ遷移を引き起こすイベントを捕捉
   $(document).on('click', 'a', function(e) {
@@ -1916,27 +1923,7 @@ $(document).ready(function () {
       });
     }
   });
-
-    // ページ遷移、フォーム送信、リロード、または閉じる操作に対する警告
-	$(window).on('beforeunload', function(e) {
-		if (!formSubmitted && !userNavigatedAway && !checkQuantities()) {
-		var confirmationMessage = 'ページから離れると、未保存の変更が失われます。';
-		e.returnValue = confirmationMessage; // for legacy browsers
-		return confirmationMessage;
-		}
-	});
-	// フォーム送信を検出
-	$('form').on('submit', function() {
-		formSubmitted = true;
-	});
-  	// リンククリックでページ内遷移の監視
-	$('a').click(function() {
-		var link = $(this).attr('href');
-		if (link && link !== '#' && !link.startsWith('javascript:')) {
-		userNavigatedAway = true;
-			}
-		});
-	});
+});
 
 </script>
 
