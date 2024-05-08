@@ -1862,15 +1862,6 @@ $(document).ready(function () {
 	return allQuantitiesMatch;
 	}
 
-	// ブラウザの戻る、進む、またはページを閉じる際に警告を表示
-	window.addEventListener('beforeunload', function(e) {
-	if (!checkQuantities() && (!userNavigatedAway && !userNavigatedAwayHead)) {
-		var confirmationMessage = 'ページから離れると、未保存の変更が失われます。';
-		e.returnValue = confirmationMessage; // 一部のブラウザで必要
-		return confirmationMessage; // 標準に従ってこのように設定
-	}
-	});
-
 	function handleNavigation(url) {
 		$.ajax({
 			url: '/check_cart',
@@ -1912,8 +1903,16 @@ $(document).ready(function () {
 	}
 
 	$('#paymentButton').on('click', function(e) {
-		e.preventDefault();
 		handleNavigation('/confirm');
+	});
+
+	// ブラウザの戻る、進む、またはページを閉じる際に警告を表示
+	window.addEventListener('beforeunload', function(e) {
+	if (!checkQuantities() && (!userNavigatedAway && !userNavigatedAwayHead)) {
+		var confirmationMessage = 'ページから離れると、未保存の変更が失われます。';
+		e.returnValue = confirmationMessage; // 一部のブラウザで必要
+		return confirmationMessage; // 標準に従ってこのように設定
+	}
 	});
 
 	// ページ遷移を引き起こすイベントを捕捉

@@ -200,8 +200,8 @@
               <form class="orderSB-form">
                 {{ csrf_field() }}
                 <input type="hidden" name="addtype" value="addallitems" />
-                <a id="toggle" href="#" data-toggle="dropdown" class="nav-link nav-link-lg message-toggle">
-                  <i class="fas fa-shopping-cart" id="paymentButton"></i>
+                <a id="paymentButton" href="#" data-toggle="dropdown" class="nav-link nav-link-lg message-toggle">
+                  <i class="fas fa-shopping-cart"></i>
                 </a>
               </form>
             </div>
