@@ -6189,14 +6189,20 @@ header .fa-search {
     display: block;
   }
 
-  .setonagi-item-img-td {
+  .cart_item td.setonagi-item-img-td {
     width: 100%;
+    display: flex;
+    justify-content: center;
   }
 
   .setonagi-item-img {
-    width: 100%;
+    width: 70%;
     margin-right: 0;
     max-width: unset;
     text-align: center;
+  }
+
+  .p-mb20 {
+    margin-bottom: 20px;
   }
 }

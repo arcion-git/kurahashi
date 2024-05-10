@@ -5,7 +5,7 @@
 @endphp
 @if($hasSetonagiItems)
 <div class="section-title">オーダー内容（限定お買い得商品）</div>
-<div id="cartAccordion">
+<div id="cartAccordion" class="p-mb20">
 	<table id="cartHeader" class="table table-striped table-hover table-md cart-wrap">
 		<tr id="order_header">
 		<th class="head-item-id head text-center">商品番号</th>
@@ -102,7 +102,7 @@
 
 @if($buyerRecommendCarts->isNotEmpty())
     <div class="section-title">オーダー内容（担当のおすすめ商品）</div>
-    <div id="cartAccordion" class="cartAccordionSB">
+    <div id="cartAccordion" class="cartAccordionSB p-mb20">
         <!-- 商品番号ヘッダーはここで1回だけ出力 -->
         <table id="cartHeader" class="table table-striped table-hover table-md cart-wrap">
             <tr id="order_header">
@@ -208,7 +208,7 @@
 
 @if($SpecialpriceCarts->isNotEmpty())
     <div class="section-title">オーダー内容（市況商品）</div>
-    <div id="cartAccordion" class="cartAccordionSB">
+    <div id="cartAccordion" class="cartAccordionSB p-mb20">
         <!-- 商品番号ヘッダーはここで1回だけ出力 -->
         <table id="cartHeader" class="table table-striped table-hover table-md cart-wrap">
             <tr id="order_header">
