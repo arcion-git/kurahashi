@@ -27,7 +27,10 @@
                       注文番号：{{$deal->id}}<br />
                       注文日時：{{$deal->success_time}}<br />
                       受渡希望：{{$deal->first_order_nouhin_yoteibi()}} {{$deal->uketori_time}}<br />
+                      @if (Auth::guard('user')->user()->setonagi == 1 && Auth::guard('user')->user()->setonagi()->shipping_code == null)
+                      @else
                       種別：@if(Auth::guard('user')->user()->c_user())-@else{{$deal->first_cart_addtype()}}@endif<br />
+                      @endif
                       @if(Auth::guard('user')->user()->setonagi())
                       @else
                       納品先店舗：{{$deal->first_order_nouhin_tokuisaki_name_and_store_name()}}

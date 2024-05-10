@@ -5178,6 +5178,10 @@ table td{
     border: 1px solid #bfc1c3 !important;
   }
 
+  table td.item-img {
+    border: none !important;
+  }
+
   .btn {
     /* font-size: 0.5em; */
   }

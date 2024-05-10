@@ -169,26 +169,40 @@
 															<tr id="{{$cart->id}}" class="cart_item" data-addtype="{{$cart->addtype}}">
 																<input name="cart_id[]" type="hidden" value="{{$cart->id}}" />
 																<td class="head-item-id cartid_{{$cart->id}} text-center">{{$cart->item->item_id}}</td>
+																@if($cart->addtype == 'addsetonagi' && $user->setonagi && $setonagi->shipping_code === null)
+																<td class="item-img">
+																	<div class="setonagi-item-img active carousel-item">
+																		<?php $filename = public_path().'/storage/item/'.$cart->item->item_id.'.jpg'; ?>
+																		@if(file_exists($filename))
+																		<a href="/storage/item/{{$cart->item->item_id}}.jpg" data-fancybox="images-{{$cart->item->item_id}}" class="fancybox">
+																			<img class="d-block w-100" src="/storage/item/{{$cart->item->item_id}}.jpg" alt="First slide" onerror="this.src='{{ asset('img/no_image.jpg') }}'; this.classList.add('disable_link');">
+																		</a>
+																		@else
+																		<img class="d-block w-100" src="{{ asset('img/no_image.jpg') }}">
+																		@endif
+																	</div>
+																	<div class=" carousel-item">
+																		@for($i = 1; $i < 5; $i++)
+																		<?php $filename = public_path().'/storage/item/'.$cart->item->item_id.'_'.$i.'.jpg'; ?>
+																			@if(file_exists($filename))
+																			<a href="/storage/item/{{$cart->item->item_id}}_{{$i}}.jpg" data-fancybox="images-{{$cart->item->item_id}}">
+																			<img class="d-block w-100" src="/storage/item/{{$cart->item->item_id}}_{{$i}}.jpg" alt="slide">
+																			</a>
+																			@endif
+																		@endfor
+																	</div>
+																</td>
+																@endif
 																<td class="head-item-name cartid_{{$cart->id}}">
 																	@if($cart->uwagaki_item_name)
 																		@if($cart->addtype == 'addsetonagi' && $user->setonagi && $setonagi->shipping_code === null)
 																			<div class="setonagi-item">
-																				<div class="setonagi-item-img">
-																					<?php $filename = public_path().'/storage/item/'.$cart->item->item_id.'.jpg'; ?>
-																					@if(file_exists($filename))
-																					<a href="/storage/item/{{$cart->item->item_id}}.jpg" data-fancybox="images-{{$cart->item->item_id}}" class="fancybox">
-																						<img class="d-block w-100" src="/storage/item/{{$cart->item->item_id}}.jpg" alt="First slide" onerror="this.src='{{ asset('img/no_image.jpg') }}'; this.classList.add('disable_link');">
-																					</a>
-																					@else
-																						<img class="d-block w-100" src="{{ asset('img/no_image.jpg') }}">
-																					@endif
-																				</div>
 																				<div class="setonagi-item-name">
 																					@if(isset($cart->item->tokkijikou) && !empty($cart->item->tokkijikou))
 																					<!-- 特記事項がある場合は表示 -->
 																					<button class="tokkijikou_btn tokkijikou_btnSB" type="button" data-toggle="collapse" data-target="#collapseExample_{{$cart->item->item_id}}" aria-expanded="true" aria-controls="collapseExample_{{$cart->item->item_id}}">{{$cart->uwagaki_item_name}}<i class="fa fa-chevron-down"></i></button>
 																					<div class="collapse" id="collapseExample_{{$cart->item->item_id}}" style="">
-																					<div class="tokkijikou-content">{{ $cart->item->tokkijikou }}</div>
+																						<div class="tokkijikou-content">{{ $cart->item->tokkijikou }}</div>
 																					</div>
 																					@else
 																					{{$cart->uwagaki_item_name}}
@@ -201,36 +215,16 @@
 																	@else
 																		@if($cart->addtype == 'addsetonagi' && $user->setonagi && $setonagi->shipping_code === null)
 																			<div class="setonagi-item">
-																				<div class="setonagi-item-img active carousel-item">
-																					<?php $filename = public_path().'/storage/item/'.$cart->item->item_id.'.jpg'; ?>
-																					@if(file_exists($filename))
-																					<a href="/storage/item/{{$cart->item->item_id}}.jpg" data-fancybox="images-{{$cart->item->item_id}}" class="fancybox">
-																						<img class="d-block w-100" src="/storage/item/{{$cart->item->item_id}}.jpg" alt="First slide" onerror="this.src='{{ asset('img/no_image.jpg') }}'; this.classList.add('disable_link');">
-																					</a>
-																					@else
-																					<img class="d-block w-100" src="{{ asset('img/no_image.jpg') }}">
-																					@endif
-																				</div>
-																				<div class=" carousel-item">
-																					@for($i = 1; $i < 5; $i++)
-																					<?php $filename = public_path().'/storage/item/'.$cart->item->item_id.'_'.$i.'.jpg'; ?>
-																						@if(file_exists($filename))
-																						<a href="/storage/item/{{$cart->item->item_id}}_{{$i}}.jpg" data-fancybox="images-{{$cart->item->item_id}}">
-																						<img class="d-block w-100" src="/storage/item/{{$cart->item->item_id}}_{{$i}}.jpg" alt="slide">
-																						</a>
-																						@endif
-																					@endfor
-																				</div>
 																				<div class="setonagi-item-name">
 																					@if(isset($cart->item->tokkijikou) && !empty($cart->item->tokkijikou))
 																					<!-- 特記事項がある場合は表示 -->
 																					<button class="tokkijikou_btn tokkijikou_btnSB" type="button" data-toggle="collapse" data-target="#collapseExample_{{$cart->item->item_id}}" aria-expanded="true" aria-controls="collapseExample_{{$cart->item->item_id}}">{{$cart->item->item_name}}<i class="fa fa-chevron-down"></i></button>
 																					<div class="collapse" id="collapseExample_{{$cart->item->item_id}}" style="">
-																					<div class="tokkijikou-content">{{ $cart->item->tokkijikou }}</div>
+																						<p class="tokkijikou-content">{{ $cart->item->tokkijikou }}</p>
+																					</div>
 																					@else
 																					{{$cart->item->item_name}}
 																					@endif
-																					</div>
 																				</div>
 																			</div>
 																		@else
@@ -240,10 +234,10 @@
 																	@if(!isset($deal))
 																		@if($cart->addtype == 'addbuyerrecommend' && !$user->setonagi)
 																			@if($cart->favoriteitem())
-				                              <span name="item_id" value="{{$cart->item->id}}" id="{{$cart->item->id}}" class="favoritebutton removefavoriteitem"><i class="fa fa-heart"></i></span>
-				                              @else
-				                              <span name="item_id" value="{{$cart->item->id}}" id="{{$cart->item->id}}" class="favoritebutton addfavoriteitem"><i class="far fa-heart"></i></span>
-				                              @endif
+																			<span name="item_id" value="{{$cart->item->id}}" id="{{$cart->item->id}}" class="favoritebutton removefavoriteitem"><i class="fa fa-heart"></i></span>
+																			@else
+																			<span name="item_id" value="{{$cart->item->id}}" id="{{$cart->item->id}}" class="favoritebutton addfavoriteitem"><i class="far fa-heart"></i></span>
+																			@endif
 																		@endif
 																	@endif
 																</td>
@@ -1820,12 +1814,22 @@ $(document).ready(function() {
 </style>
 @endif
 @endif
+
 @if(isset($deal))
 <script>
 $("#uketori_place,#uketori_time,.nouhin_yoteibi_c,#memo").prop("disabled", true);
 </script>
 @endif
 
+@if($user->setonagi && $setonagi->shipping_code == null)
+<style>
+	@media (max-width: 767px) {
+		.cart_item{
+			height: auto !important;
+		}
+	}
+</style>
+@endif
 
 @if($user->setonagi && $setonagi->shipping_code == null)
 <script>
