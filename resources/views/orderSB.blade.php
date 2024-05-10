@@ -22,7 +22,7 @@
 		@php
 			$order = $orders->firstWhere('cart_id', $cart->id);
 		@endphp
-		
+
 		@if($cart->addtype == 'addsetonagi' && isset($orders[$cart->id]) && $orders[$cart->id]->quantity >= 1)
 		<tr class="cart_item" id="{{$order->id}}">
 			<input name="cart_id[]" type="hidden" value="{{$cart->id}}" />
@@ -1474,6 +1474,14 @@ $(document).ready(function() {
 @if(Auth::guard('user')->check() )
 @if(isset($deal))
 <style>
+@media (max-width: 767px) {
+select.quantity{
+	text-align: right !important;
+}
+.head-tani{
+	text-align: left !important;
+}
+}
 /* @media (max-width: 767px) {
 	.head-price input{
 		height: 23px !important;
