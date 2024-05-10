@@ -4218,7 +4218,7 @@ class LoginPageController extends Controller
       $carts = Cart::where(['deal_id'=> $deal->id])->get()->sortBy(function ($cart) use ($priority) {
         return $priority[$cart->addtype] ?? 999; // addtypeが定義されていない場合は最後に
       });
-      
+
 
       $order_list=[];
       $added_titles = [];

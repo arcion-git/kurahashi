@@ -104,20 +104,20 @@ class AdminPageController extends Controller
     if (Auth::guard('user')->check()) {
       Auth::guard('user')->logout();
     }
-    
+
     $deals = Deal::latest('created_at')->paginate(30);
     $tokuisakis = Store::select('tokuisaki_name')->distinct()->get();
-    
+
     // 各取引に対してSetonagi情報を取得
     $deals->each(function ($deal) {
       $deal->setonagi = Setonagi::where('user_id', $deal->user_id)->first();
     });
-  
+
     $data = [
       'deals' => $deals,
       'tokuisakis' => $tokuisakis,
     ];
-    
+
     return view('admin/home', $data);
   }
 

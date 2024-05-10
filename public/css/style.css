@@ -202,7 +202,7 @@ h6 {
 p,
 ul:not(.list-unstyled),
 ol {
-  line-height: 28px;
+  line-height: 160%;
 }
 
 .shadow {
@@ -4734,17 +4734,17 @@ table {
 
 @media (min-width: 768px) {
   .table-striped tbody tr {
-    border: 1px solid #bfc1c3 !important;
+    border: 1px solid #3c3c3c !important;
   }
 
   .table-striped tbody .order-table tr {
     border: none !important;
-    border-left: 1px solid #bfc1c3 !important;
-    border-bottom: 1px solid #bfc1c3 !important;
+    border-left: 1px solid #3c3c3c !important;
+    border-bottom: 1px solid #3c3c3c !important;
   }
 
   .table-striped tbody .order-table tr:last-child {
-    border-bottom: 0px solid #6c757d !important;
+    border-bottom: 0px solid #3c3c3c !important;
   }
 }
 
@@ -5169,13 +5169,13 @@ table td{
   }
 
   .table-striped tbody tr {
-    /* border: 3px solid #bfc1c3 !important; */
+    /* border: 3px solid #3c3c3c !important; */
   }
 
   table th,
   table td {
     /* font-size: 0.5em; */
-    border: 1px solid #bfc1c3 !important;
+    border: 1px solid #3c3c3c !important;
   }
 
   table td.item-img {
@@ -5451,14 +5451,14 @@ table td{
 }
 
 .cartAccordionSB .card-header {
-  border-bottom: 1px solid #bfc1c3 !important;
+  border-bottom: 1px solid #3c3c3c !important;
 }
 
 /* ここからV1.1 */
 .groupe_button {
-  border-left: 1px solid #bfc1c3;
-  border-right: 1px solid #bfc1c3;
-  border-bottom: 1px solid #bfc1c3;
+  border-left: 1px solid #3c3c3c;
+  border-right: 1px solid #3c3c3c;
+  border-bottom: 1px solid #3c3c3c;
   border-radius: 0 !important;
 }
 
@@ -5515,9 +5515,9 @@ table td{
     background-color: #fff;
   } */
   .groupe_button {
-    /* border-left: 1px solid #bfc1c3;
-    border-right: 1px solid #bfc1c3; */
-    border: 1px solid #bfc1c3;
+    /* border-left: 1px solid #3c3c3c;
+    border-right: 1px solid #3c3c3c; */
+    border: 1px solid #3c3c3c;
     border-radius: 0 !important;
   }
 
@@ -5532,7 +5532,7 @@ table td{
   }
 
   #cartAccordion {
-    border-bottom: 1px solid #bfc1c3;
+    border-bottom: 1px solid #3c3c3c;
   }
 
   .order_item td,
@@ -5565,14 +5565,14 @@ table td{
   }
 
   #cartAccordion .card-header {
-    /* border-bottom: 1px solid #bfc1c3 !important; */
+    /* border-bottom: 1px solid #3c3c3c !important; */
   }
 
   .cart_item {
-    border: 1px solid #bfc1c3 !important;
-    /* border-top: 1px solid #bfc1c3 !important;
-    border-right: 1px solid #bfc1c3 !important;
-    border-left: 1px solid #bfc1c3 !important; */
+    border: 1px solid #3c3c3c !important;
+    /* border-top: 1px solid #3c3c3c !important;
+    border-right: 1px solid #3c3c3c !important;
+    border-left: 1px solid #3c3c3c !important; */
   }
 
   .cart_item .head-item-name {
@@ -5628,15 +5628,15 @@ table td{
   }
 
   #order_header .head-price {
-    border-left: 1px solid #bfc1c3 !important;
+    border-left: 1px solid #3c3c3c !important;
   }
 
   #order_header .head-tani {
-    border-right: 1px solid #bfc1c3 !important;
+    border-right: 1px solid #3c3c3c !important;
   }
 
   .order-table {
-    border-top: 0px solid #bfc1c3 !important;
+    border-top: 0px solid #3c3c3c !important;
     border-right: 0px !important;
     border-bottom: 0px !important;
     border-left: 0px !important;
@@ -5651,7 +5651,7 @@ table td{
   }
 
   .cartAccordion:last-of-type {
-    /* border-bottom: 1px solid #bfc1c3 !important; */
+    /* border-bottom: 1px solid #3c3c3c !important; */
   }
 
   .cart_item .head-sanchi {
@@ -5679,7 +5679,7 @@ table td{
   }
 
   #nini_tbody {
-    border-bottom: 1px solid #bfc1c3 !important;
+    border-bottom: 1px solid #3c3c3c !important;
   }
 
   .cart_nini_item,
@@ -5754,7 +5754,7 @@ table td{
   }
 
   .cart_nini_item:last-of-type {
-    /* border-bottom: 1px solid #bfc1c3 !important; */
+    /* border-bottom: 1px solid #3c3c3c !important; */
   }
 }
 
@@ -5818,7 +5818,7 @@ table td{
   }
 
   #cartAccordion .cartAccordion {
-    border-bottom: 1px solid #bfc1c3 !important;
+    border-bottom: 1px solid #3c3c3c !important;
   }
 }
 
@@ -5939,7 +5939,7 @@ table td{
   }
 
   #repeatorder_form .repeatorder_item {
-    border: 1px solid #bfc1c3;
+    border: 1px solid #3c3c3c;
   }
 
   #repeatorder_form .repeatorder_item td {
@@ -5947,7 +5947,7 @@ table td{
   }
 
   #repeatorder_form .repeatorder_order {
-    border-top: 1px solid #bfc1c3;
+    border-top: 1px solid #3c3c3c;
   }
 
 }
@@ -6047,7 +6047,7 @@ header .fa-search {
 .deals_sp {
   display: flex;
   justify-content: space-between;
-  border: 1px solid #bfc1c3;
+  border: 1px solid #3c3c3c;
   margin-bottom: 10px;
   padding: 10px;
 }
@@ -6174,12 +6174,14 @@ header .fa-search {
 
 .setonagi-item-name {
   width: 100%;
+  font-weight: bold;
 }
 
 .tokkijikou_btnSB {
   display: flex;
   align-items: center;
   text-align: left;
+  font-weight: bold;
 }
 
 @media (max-width: 767px) {

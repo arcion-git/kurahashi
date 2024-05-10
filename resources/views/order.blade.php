@@ -125,10 +125,10 @@
 										display: none;
 									}
 									#cartAccordion {
-									    border-bottom: 0px solid #bfc1c3;
+									    border-bottom: 0px solid #3c3c3c;
 									}
 									.cartAccordion{
-									    border-bottom: 1px solid #bfc1c3;
+									    border-bottom: 1px solid #3c3c3c;
 									}
 									</style>
 									@break
@@ -1831,6 +1831,9 @@ $("#uketori_place,#uketori_time,.nouhin_yoteibi_c,#memo").prop("disabled", true)
 	}
 	.tokkijikou-content{
 		margin-bottom: 0;
+		margin-top: 7px;
+		font-size: 0.9em;
+		font-weight: normal;
 	}
 	@media (max-width: 767px) {
 		.cart_item{
@@ -1932,7 +1935,7 @@ $(document).ready(function () {
 	$(document).on('click', 'a', function(e) {
 		// クリックされたリンクのクラスを取得
 		var linkClass = $(this).attr('class');
-	
+
 		// 特定のクラスを持つ場合はイベントを発火しない
 		if (linkClass && linkClass.includes('fancybox')) {
 			return;

@@ -67,13 +67,13 @@
               <div class="mr-2">
                 <button class="addAllcart btn btn-primary">カートに入れる</button>
               </div>
-              <div>
+              <!-- <div>
                 <form class="orderSB-form">
                   {{ csrf_field() }}
                   <input type="hidden" name="addtype" value="addallitems" />
                   <button type="button" class="btn btn-warning orderSBButton">お支払いに進む</button>
                 </form>
-              </div>
+              </div> -->
             </div>
           @endif
           <br style="clear:both;" />
