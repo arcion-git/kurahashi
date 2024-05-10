@@ -90,7 +90,10 @@
 				    <table id="cartHeader" class="table table-striped table-hover table-md cart-wrap">
 				        <tr id="order_header">
 				            <th class="head-item-id head text-center">商品番号</th>
-				            <th class="head-item-name @if(request()->input('addtype') == 'addsetonagi') head-item-name-setonagi @endif head">商品名</th>
+							@if(request()->input('addtype') == 'addsetonagi' && $user->setonagi && $setonagi->shipping_code === null)
+							<th class="setonagi-item-img-th"><div class="setonagi-item-img-th-inr"></div></th>
+							@endif
+				            <th class="head-item-name head">商品名</th>
 				            <th class="head-sanchi head text-center">産地</th>
 				            <th class="head-zaikosuu head text-center">在庫数</th>
 				            <!-- <th class="head text-center">特記事項</th> -->

@@ -6160,7 +6160,15 @@ header .fa-search {
   width: 5%;
 }
 
+.setonagi-item-img-th {
+  width: 5%;
+}
+
 .setonagi-item-img {
+  width: 55px;
+}
+
+.setonagi-item-img-th-inr {
   width: 55px;
 }
 
