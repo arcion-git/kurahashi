@@ -90,7 +90,7 @@
 				    <table id="cartHeader" class="table table-striped table-hover table-md cart-wrap">
 				        <tr id="order_header">
 				            <th class="head-item-id head text-center">商品番号</th>
-				            <th class="head-item-name head">商品名</th>
+				            <th class="head-item-name @if(request()->input('addtype') == 'addsetonagi') head-item-name-setonagi @endif head">商品名</th>
 				            <th class="head-sanchi head text-center">産地</th>
 				            <th class="head-zaikosuu head text-center">在庫数</th>
 				            <!-- <th class="head text-center">特記事項</th> -->
@@ -170,7 +170,7 @@
 																<input name="cart_id[]" type="hidden" value="{{$cart->id}}" />
 																<td class="head-item-id cartid_{{$cart->id}} text-center">{{$cart->item->item_id}}</td>
 																@if($cart->addtype == 'addsetonagi' && $user->setonagi && $setonagi->shipping_code === null)
-																<td class="item-img">
+																<td class="item-img setonagi-item-img-td">
 																	<div class="setonagi-item-img active carousel-item">
 																		<?php $filename = public_path().'/storage/item/'.$cart->item->item_id.'.jpg'; ?>
 																		@if(file_exists($filename))
@@ -1823,6 +1823,12 @@ $("#uketori_place,#uketori_time,.nouhin_yoteibi_c,#memo").prop("disabled", true)
 
 @if($user->setonagi && $setonagi->shipping_code == null)
 <style>
+	.head-item-name-setonagi {
+		width: 37.5%;
+	}
+	.tokkijikou-content{
+		margin-bottom: 0;
+	}
 	@media (max-width: 767px) {
 		.cart_item{
 			height: auto !important;
