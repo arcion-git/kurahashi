@@ -650,6 +650,20 @@
       </div>
     @endif
 
+    @if (Auth::guard('user')->user()->setonagi == 1 && Auth::guard('user')->user()->setonagi()->shipping_code == null)
+      @if(str_contains(request()->path(), 'confirm') && request()->query('addtype') != 'addallitems')
+        <div class="sp SBcart-btn">
+          <form class="orderSB-form">
+            {{ csrf_field() }}
+            <input type="hidden" name="addtype" value="addallitems" />
+            <a id="paymentButton-SP" href="#" data-toggle="dropdown" class="btn btn-warning">
+              <i class="fas fa-shopping-cart"></i>
+            </a>
+          </form>
+        </div>
+      @endif
+    @endif
+
   </div>
 
 

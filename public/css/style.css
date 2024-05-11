@@ -6206,3 +6206,26 @@ header .fa-search {
     margin-bottom: 20px;
   }
 }
+
+.SBcart-btn {
+  z-index: 10000;
+  position: fixed;
+  right: 15px;
+  bottom: 15px;
+}
+
+.SBcart-btn .btn-warning {
+  padding-top: 13px;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  background-color: #2f6db5 !important;
+  box-shadow: none !important;
+  border-color: #fff !important;
+}
+
+.SBcart-btn .btn-warning i {
+  margin-left: 0 !important;
+  font-size: 18px;
+  line-height: 32px;
+}

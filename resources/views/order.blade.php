@@ -1929,6 +1929,9 @@ $(document).ready(function () {
 	$('#paymentButton').on('click', function(e) {
 		handleNavigation('/confirm');
 	});
+	$('#paymentButton-SP').on('click', function(e) {
+		handleNavigation('/confirm');
+	});
 
 	// ブラウザの戻る、進む、またはページを閉じる際に警告を表示
 	window.addEventListener('beforeunload', function(e) {
