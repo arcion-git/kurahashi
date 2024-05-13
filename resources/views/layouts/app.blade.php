@@ -310,7 +310,7 @@
       <div class="main-sidebar">
         <aside id="sidebar-wrapper">
           <div class="sidebar-brand">
-            
+
             @if ( Auth::guard('user')->check() )
               @if(Auth::guard('user')->user()->c_user())
               <a href="{{ url('/setonagi') }}">
@@ -650,6 +650,7 @@
       </div>
     @endif
 
+  @if ( Auth::guard('user')->check() )
     @if (Auth::guard('user')->user()->setonagi == 1 && Auth::guard('user')->user()->setonagi()->shipping_code == null)
       @if(str_contains(request()->path(), 'confirm') && request()->query('addtype') != 'addallitems')
         <div class="sp SBcart-btn">
@@ -663,6 +664,7 @@
         </div>
       @endif
     @endif
+  @endif
 
   </div>
 
