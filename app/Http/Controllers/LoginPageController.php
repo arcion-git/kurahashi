@@ -2831,32 +2831,51 @@ class LoginPageController extends Controller
         $cart = Cart::where(['id'=> $cart_id])->first();
         $order = Order::where(['cart_id'=> $cart_id])->first();
         $item = Item::where('id', $cart->item_id)->first();
-        // dd($item);
-        // 担当のおすすめ商品の納品期日を探す
-        $recommend_item = Recommend::where('user_id', $user->id)
-        ->where('price', '=', $order->price)
-        ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
-        ->where('end', '<=', $now)->first();
-        // dd($buyer_recommend_item);
-        if(isset($recommend_item)){
-          // 配列を格納
-          $over_deadline_item = [
-            'cart_id' => $cart->id,
-            'item_name' => $item->item_name,
-          ];
-          array_push($over_deadline_items, $over_deadline_item);
+        if($cart->addtype == 'addsetonagi'){
+          // セトナギ商品の納品期日を探す
+          $setonagi_item = SetonagiItem::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
+          ->where('start_date', '<=', $now)
+          ->where('end_date', '>=', $now)->first();
+          // dd($buyer_recommend_item);
+          if(!isset($setonagi_item)){
+            // 配列を格納
+            $over_deadline_item = [
+              'cart_id' => $cart->id,
+              'item_name' => $item->item_name,
+            ];
+            array_push($over_deadline_items, $over_deadline_item);
+          }
         }
-        // 市況商品を探す
-        $price_groupe = '10000000005';
-        $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'price_groupe'=>$price_groupe])
-        ->where('end', '<=', $now)->first();
-        if(isset($special_price_item)){
-          // 配列を格納
-          $over_deadline_item = [
-            'cart_id' => $cart->id,
-            'item_name' => $item->item_name,
-          ];
-          array_push($over_deadline_items, $over_deadline_item);
+        if($cart->addtype == 'addbuyerrecommend'){
+          // 担当のおすすめ商品の納品期日を探す
+          $recommend_item = Recommend::where('user_id', $user->id)
+          // ->where('price', '=', $order->price)
+          ->where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code])
+          ->where('start', '<=', $now)
+          ->where('end', '>=', $now)->first();
+          // dd($buyer_recommend_item);
+          if(!isset($recommend_item)){
+            // 配列を格納
+            $over_deadline_item = [
+              'cart_id' => $cart->id,
+              'item_name' => $item->item_name,
+            ];
+            array_push($over_deadline_items, $over_deadline_item);
+          }
+        }
+        if($cart->addtype == 'addspecialprice'){
+          $price_groupe = '10000000005';
+          $special_price_item = SpecialPrice::where(['item_id'=>$item->item_id,'sku_code'=>$item->sku_code,'price_groupe'=>$price_groupe])
+          ->where('start', '<=', $now)
+          ->where('end', '>=', $now)->first();
+          if(!isset($special_price_item)){
+            // 配列を格納
+            $over_deadline_item = [
+              'cart_id' => $cart->id,
+              'item_name' => $item->item_name,
+            ];
+            array_push($over_deadline_items, $over_deadline_item);
+          }
         }
       }
       if(!empty($over_deadline_items)){
@@ -3214,111 +3233,111 @@ class LoginPageController extends Controller
         }
       }
 
-      if($request->uketori_siharai == 'クレジットカード払い'){
-        // dd($request->token_api);
-        // EPトークン取得
-        $client = new Client();
-        // $url = 'https://api.kuronekoyamato.co.jp/api/credit';
-
-        $url = config('app.collect_touroku');
-        $collect_tradercode = config('app.collect_tradercode');
-
-        $option = [
-          'headers' => [
-            'Accept' => '*/*',
-            'Content-Type' => 'application/x-www-form-urlencoded',
-            'charset' => 'UTF-8',
-          ],
-          'form_params' => [
-            'function_div' => 'A08',
-            'trader_code' => $collect_tradercode,
-            // パソコンかスマホか
-            'device_div' => 1,
-            'order_no' => $deal_id,
-            // 決済合計金額
-            'settle_price' => $all_total_price,
-            'buyer_name_kanji' => $user->name,
-            'buyer_tel' => $user->tel,
-            'buyer_email' => $user->email,
-            'pay_way' => 1,
-            'token' => $request->token_api,
-
-            // ここからカード預かりサービス追加分
-
-            // 'card_judge_div' => 1,
-            // 'device_info' => 1,
-            // 'option_service_div' => 00,
-            // 'check_sum' => '',
-            // 'cardNo' => '',
-            // 'cardOwner' => '',
-            // 'cardExp' => '',
-            // 'securityCode' => '',
-          ]
-        ];
-        // dd($option);
-        $response = $client->request('POST', $url, $option);
-        $result = simplexml_load_string($response->getBody()->getContents());
-        if($result->returnCode == 1){
-          $delete_deal = Deal::where(['id'=> $deal_id])->first()->delete();
-          // dd($result);
-          if($result->errorCode == 123456){
-            // 後で処理を作る
-            $message = '決済金額オーバー';
-            $data=[
-              'addtype' => $addtype,
-              'message' => $message,
-            ];
-          }else{
-            $message = '決済エラーのため別の決済方法をお試しください。';
-            $data=[
-              'addtype' => $addtype,
-              'message' => $message,
-            ];
-          }
-          return redirect()->route('confirm',$data);
-        }
-
-        // 出荷登録
-        $client = new Client();
-        $url = config('app.collect_shipment');
-        // $collect_tradercode = config('app.collect_tradercode');
-        $option = [
-          'headers' => [
-            'Accept' => '*/*',
-            'Content-Type' => 'application/x-www-form-urlencoded',
-            'charset' => 'UTF-8',
-          ],
-          'form_params' => [
-            'function_div' => 'E01',
-            'trader_code' => $collect_tradercode,
-            'order_no' => $deal_id,
-            'slip_no' => $deal_id,
-            'delivery_service_code' => 99,
-          ]
-        ];
-        // dd($option);
-        $response = $client->request('POST', $url, $option);
-        $result = simplexml_load_string($response->getBody()->getContents());
-        if($result->returnCode == 1){
-          $delete_deal = Deal::where(['id'=> $deal_id])->first()->delete();
-          // dd($result);
-          if($result->errorCode == 123456){
-            // 後で処理を作る
-            $message = '決済金額オーバー';
-            $data=[
-              'addtype' => $addtype,
-              'message' => $message,
-            ];
-          }else{
-            $message = '決済エラーのため別の決済方法をお試しください。';
-            $data=[
-              'addtype' => $addtype,
-              'message' => $message,
-            ];
-          }
-          return redirect()->route('confirm',$data);
-        }
-      }
+      // if($request->uketori_siharai == 'クレジットカード払い'){
+      //   // dd($request->token_api);
+      //   // EPトークン取得
+      //   $client = new Client();
+      //   // $url = 'https://api.kuronekoyamato.co.jp/api/credit';
+      //
+      //   $url = config('app.collect_touroku');
+      //   $collect_tradercode = config('app.collect_tradercode');
+      //
+      //   $option = [
+      //     'headers' => [
+      //       'Accept' => '*/*',
+      //       'Content-Type' => 'application/x-www-form-urlencoded',
+      //       'charset' => 'UTF-8',
+      //     ],
+      //     'form_params' => [
+      //       'function_div' => 'A08',
+      //       'trader_code' => $collect_tradercode,
+      //       // パソコンかスマホか
+      //       'device_div' => 1,
+      //       'order_no' => $deal_id,
+      //       // 決済合計金額
+      //       'settle_price' => $all_total_price,
+      //       'buyer_name_kanji' => $user->name,
+      //       'buyer_tel' => $user->tel,
+      //       'buyer_email' => $user->email,
+      //       'pay_way' => 1,
+      //       'token' => $request->token_api,
+      //
+      //       // ここからカード預かりサービス追加分
+      //
+      //       // 'card_judge_div' => 1,
+      //       // 'device_info' => 1,
+      //       // 'option_service_div' => 00,
+      //       // 'check_sum' => '',
+      //       // 'cardNo' => '',
+      //       // 'cardOwner' => '',
+      //       // 'cardExp' => '',
+      //       // 'securityCode' => '',
+      //     ]
+      //   ];
+      //   // dd($option);
+      //   $response = $client->request('POST', $url, $option);
+      //   $result = simplexml_load_string($response->getBody()->getContents());
+      //   if($result->returnCode == 1){
+      //     $delete_deal = Deal::where(['id'=> $deal_id])->first()->delete();
+      //     // dd($result);
+      //     if($result->errorCode == 123456){
+      //       // 後で処理を作る
+      //       $message = '決済金額オーバー';
+      //       $data=[
+      //         'addtype' => $addtype,
+      //         'message' => $message,
+      //       ];
+      //     }else{
+      //       $message = '決済エラーのため別の決済方法をお試しください。';
+      //       $data=[
+      //         'addtype' => $addtype,
+      //         'message' => $message,
+      //       ];
+      //     }
+      //     return redirect()->route('confirm',$data);
+      //   }
+      //
+      //   // 出荷登録
+      //   $client = new Client();
+      //   $url = config('app.collect_shipment');
+      //   // $collect_tradercode = config('app.collect_tradercode');
+      //   $option = [
+      //     'headers' => [
+      //       'Accept' => '*/*',
+      //       'Content-Type' => 'application/x-www-form-urlencoded',
+      //       'charset' => 'UTF-8',
+      //     ],
+      //     'form_params' => [
+      //       'function_div' => 'E01',
+      //       'trader_code' => $collect_tradercode,
+      //       'order_no' => $deal_id,
+      //       'slip_no' => $deal_id,
+      //       'delivery_service_code' => 99,
+      //     ]
+      //   ];
+      //   // dd($option);
+      //   $response = $client->request('POST', $url, $option);
+      //   $result = simplexml_load_string($response->getBody()->getContents());
+      //   if($result->returnCode == 1){
+      //     $delete_deal = Deal::where(['id'=> $deal_id])->first()->delete();
+      //     // dd($result);
+      //     if($result->errorCode == 123456){
+      //       // 後で処理を作る
+      //       $message = '決済金額オーバー';
+      //       $data=[
+      //         'addtype' => $addtype,
+      //         'message' => $message,
+      //       ];
+      //     }else{
+      //       $message = '決済エラーのため別の決済方法をお試しください。';
+      //       $data=[
+      //         'addtype' => $addtype,
+      //         'message' => $message,
+      //       ];
+      //     }
+      //     return redirect()->route('confirm',$data);
+      //   }
+      // }
     }
 
 
