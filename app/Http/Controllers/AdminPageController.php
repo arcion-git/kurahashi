@@ -1781,9 +1781,10 @@ class AdminPageController extends Controller
     $email = $user->email;
     $admin_mail = config('app.admin_mail');
     $url = url('');
-    $text = 'この度、ヤマトクレジットファイナンス株式会社の審査の結果、が利用可能となりました。<br />
+    $text = 'この度ヤマトクレジットファイナンス株式会社の審査の結果、SETOnagiがご利用可能となりました。<br />
     ユーザー登録時にご登録いただいたメールアドレスとパスワードにて、下記URLよりご利用いただけます。<br />
-    URL：<a href="'.$url.'">'.$url.'</a>';
+    <br />
+    URL：<a href="'.$url.'">'.$url.'</a><br />';
     Mail::send('emails.register', [
         'name' => $name,
         'text' => $text,

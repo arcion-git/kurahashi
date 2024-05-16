@@ -398,7 +398,7 @@
 
             <li class="menu-header">メニュー</li>
 
-
+            <!-- ここから続き -->
             @if (Auth::guard('user')->user()->setonagi == 1 && Auth::guard('user')->user()->setonagi()->shipping_code == null)
             <li class="nav-item addsetonagi_button">
               <a class="nav-link"><i class="fas fa-check"></i><span>限定お買い得商品</span></a>
