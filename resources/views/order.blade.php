@@ -278,8 +278,12 @@
 																						<!-- BtoB通常金額表示 -->
 																						<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="@if($val->price=='未定'){{(0)}}@else{{ $val->price }}@endif" value="<?php echo $price_val ?>" @if(isset($deal) && Auth::guard('admin')->check()) @else readonly @endif>
 																					@else
+																						@if($setonagi->kakebarai_riyou == 1 || $setonagi->setonagi_ok == 1)
 																						<!-- BtoC通常金額表示 -->
 																						<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="@if($val->price=='未定'){{(0)}}@else{{ $val->price }}@endif" value="<?php echo $price_val ?>"  @if(isset($deal) && Auth::guard('admin')->check()) @else readonly @endif>
+																						@else
+																						---
+																						@endif
 																					@endif
 																			</td>
 
@@ -314,7 +318,7 @@
 																			</td>
 																			<td class="head-quantity text-center">
 																			@if($user->setonagi && $setonagi->shipping_code == null)
-																				<select name="quantity[]" class="quantitySB text-center form-control" value="{{$val->quantity}}" data-db-quantity="{{$val->quantity}}" required>
+																				<select name="quantity[]" class="quantitySB text-center form-control @if($setonagi->kakebarai_riyou != 1 && $setonagi->setonagi_ok != 1) arrow_hidden @endif" value="{{$val->quantity}}" data-db-quantity="{{$val->quantity}}" required @if($setonagi->kakebarai_riyou != 1 && $setonagi->setonagi_ok != 1) disabled @endif>
 
 																				@if(isset($deal))
 																					<option value="{{$val->quantity}}">{{$val->quantity}}</option>

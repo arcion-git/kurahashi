@@ -1415,6 +1415,14 @@ class LoginPageController extends Controller
     }else{
       $shipping_code = null;
     }
+    $setonagi_data = Setonagi::where('user_id', $user_id)->first(['kakebarai_riyou', 'setonagi_ok']);
+    if ($setonagi_data) {
+        $kakebarai_riyou = $setonagi_data->kakebarai_riyou;
+        $setonagi_ok = $setonagi_data->setonagi_ok;
+    } else {
+        $kakebarai_riyou = null;
+        $setonagi_ok = null;
+    }
 
     $favorite_categories = FavoriteCategory::where('user_id', $user_id)->get();
 
@@ -1563,7 +1571,8 @@ class LoginPageController extends Controller
      'set_tokuisaki_name' => $set_tokuisaki_name,
      'change_all_nouhin_yoteibi' => $change_all_nouhin_yoteibi,
      'shipping_code' => $shipping_code,
-
+     'kakebarai_riyou' => $kakebarai_riyou,
+     'setonagi_ok' => $setonagi_ok,
     ]);
 
   }

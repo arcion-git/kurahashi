@@ -63,6 +63,7 @@
 
           </form>
           @if($user->setonagi && $shipping_code == null && $addtype !== 'addallitems')
+            @if($kakebarai_riyou == 1 || $setonagi_ok == 1)
             <div class="float-right approval_btn_div d-flex">
               <div class="mr-2">
                 <button class="addAllcart btn btn-primary">カートに入れる</button>
@@ -75,6 +76,11 @@
                 </form>
               </div> -->
             </div>
+            @else
+            <div class="float-right approval_btn_div d-flex">
+              <div class="btn btn-primary">現在審査中です</div>
+            </div>
+            @endif
           @endif
           <br style="clear:both;" />
 
