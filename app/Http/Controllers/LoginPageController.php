@@ -3175,7 +3175,7 @@ class LoginPageController extends Controller
             'orderDate' => $now,
             'orderNo' => $deal_id.$envi,
             // バイヤーid
-            'buyerId' => $user_id,
+            'buyerId' => $user_id.$envi,
             'settlePrice' => $total_price,
             'passWord' => $kakebarai_passWord
           ]
@@ -3207,7 +3207,7 @@ class LoginPageController extends Controller
               'form_params' => [
                 'traderCode' => $kakebarai_traderCode,
                 // バイヤーid
-                'buyerId' => $user_id,
+                'buyerId' => $user_id.$envi,
                 'buyerTelNo' => '',
                 'passWord' => $kakebarai_passWord
               ]
