@@ -2260,8 +2260,8 @@ $(function () {
       html: 'この取引を本当にキャンセルしますか？',
       icon: 'warning',
       showCancelButton: true,
-      cancelButtonText: '前の画面に戻る',
-      confirmButtonText: 'キャンセルする'
+      cancelButtonText: 'いいえ',
+      confirmButtonText: 'はい'
     }).then(function (result) {
       if (result.value) {
         // Swal.fire({
