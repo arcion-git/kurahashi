@@ -215,7 +215,7 @@ class LoginController extends Controller
         // BtoSB審査前のユーザーをsetonagiページに
         if($setonagi){
           if(!isset($shipping_code) && $setonagi->setonagi_ok == null && $setonagi->kakebarai_riyou == null ){
-            return redirect()->route('setonagi');
+            return redirect()->route('firstguide');
           }
         }
 

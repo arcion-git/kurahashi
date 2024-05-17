@@ -37,9 +37,21 @@
                     <p>「毎週」「指定する曜日」等、リピート発注したい場合に設定頂くと、自動的に発注する事が出来ます。</p>
                     @endif
 
+                    <!-- <div class="firstguide_btn">
+                      <a href="setonagi" class="btn-lg btn-warning">@if(isset($shipping_code))商品一覧はこちら@else限定お買い得商品一覧はこちら@endif</a>
+                    </div> -->
+
+                    @if (Auth::guard('user')->user()->setonagi == 1 && Auth::guard('user')->user()->setonagi()->shipping_code == null)
+                    <div class="addsetonagi_button firstguide_btn">
+                      <a style="color:#fff;" class="btn-lg btn-warning">限定お買い得商品一覧はこちら</a>
+                    </div>
+                    @else
                     <div class="firstguide_btn">
                       <a href="setonagi" class="btn-lg btn-warning">@if(isset($shipping_code))商品一覧はこちら@else限定お買い得商品一覧はこちら@endif</a>
                     </div>
+                    @endif
+
+
 
                   </div>
                 </div>
