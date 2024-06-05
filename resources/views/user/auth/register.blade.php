@@ -38,8 +38,8 @@
           <label for="company">法人・個人</label>
           <select id="hjkjKbn" name="hjkjKbn" class="hjkjKbn @if($errors->has('hjkjKbn')) is-invalid @endif form-control">
             <option value="">選択してください</option>
-            <option value="1" @if(old('hjkjKbn') == 1) selected @endif selected>法人</option>
-            <!-- <option value="2" @if(old('hjkjKbn') == 2) selected @endif>個人事業主</option> -->
+            <option value="1" @if(old('hjkjKbn') == 1) selected @endif>法人</option>
+            <option value="2" @if(old('hjkjKbn') == 2) selected @endif>個人事業主</option>
           </select>
           @if($errors->has('hjkjKbn'))
           <span class="invalid-feedback" role="alert">
@@ -165,6 +165,26 @@
           <span class="small">※<span class="red">全角</span>で入力してください。</span>
         </div> -->
       </div>
+
+      <div id="daihyoaddress">
+        <div class="form-divider">
+          代表者自宅ご住所<span class="small">
+        </div>
+        <div class="row">
+            <div class="form-group col-sm-12 col-md-6">
+                <label for="daiYbnno">自宅郵便番号</label>
+                <input type="text" name="daiYbnno" maxlength="7" onKeyUp="AjaxZip3.zip2addr(this, '', 'daiAddress', 'daiAddress');" class="form-control" id="daiYbnno" placeholder="1001000" value="{{ old('daiYbnno') }}">
+                <span class="small">※<span class="red">ハイフン無し半角7桁</span>で入力してください。</span>
+            </div>
+            <div class="form-group col-sm-12 col-md-12">
+                <label for="daiAddress">自宅ご住所</label>
+                <input type="text" name="daiAddress" id="daiAddress" class="form-control" placeholder="広島県福山市〇〇町１−１ー１" value="{{ old('daiAddress') }}">
+                <span class="small">※<span class="red">全角50文字以内</span>で入力してください。</span>
+            </div>
+        </div>
+      </div>
+
+
       <div class="form-divider">
         ご連絡先
       </div>
@@ -222,6 +242,7 @@
         <div class="form-group col-sm-12 col-md-6">
           <label for="password" class="d-block">パスワード</label>
           <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password" value="{{ old('password') }}">
+          <span class="small">※<span class="red">半角英数字8文字以上16文字以内</span>で入力してください。</span>
           @error('password')
               <span class="invalid-feedback" role="alert">
                   <strong>{{ $message }}</strong>
@@ -233,11 +254,12 @@
         <div class="form-group col-sm-12 col-md-6">
           <label for="password-confirm" class="d-block">パスワード（再入力）</label>
           <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password" value="{{ old('password') }}">
+          <span class="small">※<span class="red">半角英数字8文字以上16文字以内</span>で入力してください。</span>
         </div>
       </div>
 
       <div class="form-group">
-        <button type="submit" class="btn btn-primary btn-lg btn-block">
+        <button type="submit" id="registerButton" class="btn btn-primary btn-lg btn-block">
             {{ __('Register') }}
         </button>
       </div>

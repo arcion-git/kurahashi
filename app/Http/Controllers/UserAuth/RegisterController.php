@@ -94,24 +94,35 @@ class RegisterController extends Controller
           return $validator;
 
         } else {
-          // typeパラメータが存在しない場合の処理
-          return Validator::make($data, [
-            'hjkjKbn' => ['required'],
-            'pay' => ['required'],
-            'first_name' => ['required', 'string', 'max:255'],
-            'last_name' => ['required', 'string', 'max:255'],
-            'first_name_kana' => ['required', 'string', 'max:255', 'regex:/^[ァ-ンヴー]+$/u'],
-            'last_name_kana' => ['required', 'string', 'max:255', 'regex:/^[ァ-ンヴー]+$/u'],
-            'company' => ['required', 'string', 'max:255', 'regex:/^[^\x20-\x7E]+$/u'],
-            'company_kana' => ['required', 'string', 'max:255', 'regex:/^[^\x20-\x7E]+$/u'],
-            'address01' => ['required', 'string', 'max:8'],
-            'address02' => ['required', 'string', 'max:255', 'regex:/^[^\x20-\x7E]+$/u'],
-            'address03' => ['required', 'string', 'max:255', 'regex:/^[^\x20-\x7E]+$/u'],
-            'address04' => ['required', 'string', 'max:255', 'regex:/^[^\x01-\x7E]+$/u'],
-            'tel' => ['required', 'string', 'max:20', 'regex:/^\d{2,5}-\d{1,4}-\d{4}$/'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-          ]);
+          // ルールの初期定義
+          $rules = [
+              'hjkjKbn' => ['required'],
+              'pay' => ['required'],
+              'first_name' => ['required', 'string', 'max:255', 'regex:/^[^\x01-\x7E]+$/u'],
+              'last_name' => ['required', 'string', 'max:255', 'regex:/^[^\x01-\x7E]+$/u'],
+              'first_name_kana' => ['required', 'string', 'max:255', 'regex:/^[ァ-ンヴー]+$/u'],
+              'last_name_kana' => ['required', 'string', 'max:255', 'regex:/^[ァ-ンヴー]+$/u'],
+              'company' => ['required', 'string', 'max:255', 'regex:/^[^\x20-\x7E]+$/u'],
+              'company_kana' => ['required', 'string', 'max:255', 'regex:/^[^\x20-\x7E]+$/u'],
+              'address01' => ['required', 'string', 'max:8', 'regex:/^[0-9]+$/'],
+              'address02' => ['required', 'string', 'max:255', 'regex:/^[^\x20-\x7E]+$/u'],
+              'address03' => ['required', 'string', 'max:255', 'regex:/^[^\x20-\x7E]+$/u'],
+              'address04' => ['required', 'string', 'max:255', 'regex:/^[^\x01-\x7E]+$/u'],
+              'tel' => ['required', 'string', 'max:20', 'regex:/^\d{2,5}-\d{1,4}-\d{4}$/'],
+              'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+              'password' => ['required', 'string', 'min:8', 'max:16', 'confirmed'],
+          ];
+
+          // `hjkjKbn` が '2' の場合に追加のバリデーションルールを追加
+          if (isset($data['hjkjKbn']) && $data['hjkjKbn'] == '2') {
+              $rules['daiYbnno'] = ['required', 'string', 'max:8', 'regex:/^[0-9]+$/'];
+              $rules['daiAddress'] = ['required', 'string', 'max:50', 'regex:/^[^\x01-\x7E]+$/u'];
+          }
+
+          // バリデーションの作成
+          $validator = Validator::make($data, $rules);
+
+          return $validator;
         }
     }
 
@@ -134,6 +145,8 @@ class RegisterController extends Controller
       //   dd('BtoB');
       // }
 
+
+
       $create_user = User::create([
           'email' => $data['email'],
           'password' => Hash::make($data['password']),
@@ -149,6 +162,8 @@ class RegisterController extends Controller
       }else{
         $company = $data['company'];
       }
+
+
 
       $setonagi = Setonagi::create([
           // 'user_id' => $user_id,
@@ -169,6 +184,7 @@ class RegisterController extends Controller
       $user_id = $create_user->id;
       $setonagi->user_id = $user_id;
       $setonagi->save();
+
 
       if(isset($data['type'])){
         if(isset($data['company_name'])){
@@ -235,8 +251,8 @@ class RegisterController extends Controller
           'daiknameiMei' => $data['first_name_kana'],
 
           // 代表者情報エリア(No.3 「法人・個人事業主」が「個人事業主:2」の場合に、指定可能です。)
-          // 'daiYbnno' => '',
-          // 'daiAddress' => '',
+          'daiYbnno' => $data['daiYbnno'],
+          'daiAddress' => $data['daiAddress'],
 
           // 運営会社有無
           'szUmu' => 0,
@@ -306,6 +322,7 @@ class RegisterController extends Controller
           $option = array_replace_recursive($option, $option_add);
           // dd($option);
         }
+        // 運営会社情報エリア（No.26「運営会社有無」が「運営会社有り:1」の場合に、指定可能です。）
         if($data['szHjkjKbn'] == '1'){
           $option_add = [
           'form_params' => [
@@ -340,17 +357,17 @@ class RegisterController extends Controller
       // dd($option);
       $response = $client->request('POST', $url, $option);
       $result = simplexml_load_string($response->getBody()->getContents());
-      if($result->returnCode == 1){
-        $create_user = User::where(['id'=> $create_user->id])->first()->delete();
-        $setonagi = Setonagi::where(['user_id'=> $setonagi->user_id])->first()->delete();
-        // dd($result);
-        return null;
-        // return redirect()->back()->with('error', '登録に失敗しました。');
-        // $data=[
-        //   'message'=> '登録エラー'.$result->errorCode,
-        // ];
-        // return view('user.auth.register',$data);
-      }
+        if($result->returnCode == 1){
+          $create_user = User::where(['id'=> $create_user->id])->first()->delete();
+          $setonagi = Setonagi::where(['user_id'=> $setonagi->user_id])->first()->delete();
+          // dd($result);
+          // return null;
+          // return redirect()->back()->with('error', '登録に失敗しました。');
+          // $data=[
+          //   'message'=> '登録エラー'.$result->errorCode,
+          // ];
+          // return view('user.auth.register',$data);
+        }
       }
 
       // 登録メール送信
@@ -405,6 +422,7 @@ class RegisterController extends Controller
         return $this->registered($request, $user)
                     ?: redirect($this->redirectPath());
     }
+
 
     /**
      * Show the application registration form.

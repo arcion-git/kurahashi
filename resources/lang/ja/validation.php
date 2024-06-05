@@ -160,7 +160,7 @@ return [
         'houjinZengo' => '法人格前後',
         'company' => '会社名',
         'company_kana' => '事業者名（フリガナ）',
-        
+
         'unei_company' => '運営会社有無',
         'unei_company_hjkjKbn' => '運営会法人・個人',
         'szhoujinKaku' => '運営会法人格',
@@ -185,6 +185,9 @@ return [
 
         'sofuKnjnam'  => '送付先名称',
         'pay'  => '掛け払い代金の支払い方法',
+
+        'daiYbnno'  => '代表者郵便番号',
+        'daiAddress'  => '代表者住所',
 
     ],
 

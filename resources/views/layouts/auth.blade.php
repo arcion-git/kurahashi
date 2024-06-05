@@ -111,36 +111,39 @@
 
     <script>
     $(function() {
-      $(document).ready(function(){
-        var selected = $('#hjkjKbn').val();
-        // alert('test');
-        //     console.log(selected);
-        if ( selected == '1' ) {
-          $('#maekabu').show();
-          $('#kojin').hide();
-        }else if ( selected == '2' ){
-          $('#kojin').show();
-          $('#maekabu').hide();
-        }else{
-          $('#maekabu').hide();
-          $('#kojin').hide();
-        }
+
+      $(document).ready(function() {
+        handleSelectionChange();
       });
+
       $(document).on("change", "#hjkjKbn", function() {
-        var selected = $(this).val();
-        // alert('test');
-        //     console.log(selected);
-        if ( selected == '1' ) {
+        handleSelectionChange();
+      });
+
+      function handleSelectionChange() {
+        var selected = $('#hjkjKbn').val();
+        if (selected == '1') {
           $('#maekabu').show();
           $('#kojin').hide();
-        }else if ( selected == '2' ){
+          $('#daihyoaddress').hide();
+          $('#daiYbnno').prop('required', false);
+          $('#daiAddress').prop('required', false);
+        } else if (selected == '2') {
           $('#kojin').show();
           $('#maekabu').hide();
-        }else{
+          $('#daihyoaddress').show();
+          $('#daiYbnno').prop('required', true);
+          $('#daiAddress').prop('required', true);
+        } else {
           $('#maekabu').hide();
           $('#kojin').hide();
+          $('#daihyoaddress').hide();
+          $('#daiYbnno').prop('required', false);
+          $('#daiAddress').prop('required', false);
         }
-      });
+      }
+
+
       $(document).on("change", "#unei_company_hjkjKbn", function() {
         var selected = $(this).val();
         // alert('test');
