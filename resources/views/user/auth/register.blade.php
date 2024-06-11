@@ -191,7 +191,7 @@
       <div class="row">
         <div class="form-group col-sm-12 col-md-6">
           <label for="tel">電話番号(代表)</label>
-          <input id="tel" type="tel" class="form-control" name="tel" value="{{ old('tel') }}" required>
+          <input id="tel" type="text" class="form-control phone" name="tel" value="{{ old('tel') }}" required>
           <span class="small">※<span class="red">半角ハイフンあり</span>で入力してください。</span>
           <div class="invalid-feedback">
           </div>

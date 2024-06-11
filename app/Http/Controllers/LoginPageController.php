@@ -3232,7 +3232,7 @@ class LoginPageController extends Controller
               'message' => $message,
             ];
           }else{
-            $message = '決済エラーのため別の決済方法をお試しください。';
+            $message = '決済エラーのため別の決済方法をお試しください。'.$result->errorCode;
             $data=[
               'addtype' => $addtype,
               'message' => $message,
@@ -3240,6 +3240,24 @@ class LoginPageController extends Controller
           }
           return redirect()->route('confirm',$data);
         }
+        // ヤマトAPI出荷
+        $client = new Client();
+        $url = config('app.kakebarai_shukka');
+        $option = [
+          'headers' => [
+            'Accept' => '*/*',
+            'Content-Type' => 'application/x-www-form-urlencoded',
+            'charset' => 'UTF-8',
+          ],
+          'form_params' => [
+            'traderCode' => $kakebarai_traderCode,
+            'orderNo' => $deal_id.$envi,
+            'passWord' => $kakebarai_passWord
+          ]
+        ];
+        $response = $client->request('POST', $url, $option);
+        $result = simplexml_load_string($response->getBody()->getContents());
+        // dd($result);
       }
 
       if($request->uketori_siharai == 'クレジットカード払い'){
@@ -4012,7 +4030,7 @@ class LoginPageController extends Controller
             // 取引id
             'orderNo' => $deal_id.$envi,
             // バイヤーid
-            'buyerId' => $user_id,
+            'buyerId' => $user_id.$envi,
             'passWord' => $kakebarai_passWord
           ]
         ];
@@ -4022,7 +4040,7 @@ class LoginPageController extends Controller
         // dd($result);
         if($result->returnCode == 1){
             $id= $deal_id;
-            $message = 'クロネコかけ払いキャンセルエラーです。';
+            $message = 'クロネコかけ払いキャンセルエラーです。'.$result->errorCode;
             $data=[
               'id' => $deal_id,
               'cancel_error' => $message,

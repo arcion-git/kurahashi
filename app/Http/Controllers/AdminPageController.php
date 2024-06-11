@@ -453,7 +453,7 @@ class AdminPageController extends Controller
             // 日付
             'orderNo' => $deal_id.$envi,
             // バイヤーid
-            'buyerId' => $user_id,
+            'buyerId' => $user_id.$envi,
             'settlePrice' => $total_price,
             'passWord' => $kakebarai_passWord
           ]
@@ -479,7 +479,7 @@ class AdminPageController extends Controller
               'message' => $message,
             ];
           }else{
-            $message = '決済金額変更エラー。金額の変更ができませんでした。';
+            $message = '決済金額変更エラー。金額の変更ができませんでした。'.$result->errorCode;
             $data=[
               'id' => $id,
               'message' => $message,
