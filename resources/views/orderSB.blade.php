@@ -1,307 +1,590 @@
-@php
-	$hasSetonagiItems = $carts->contains(function ($cart) use ($orders) {
-		return $cart->addtype == 'addsetonagi' && isset($orders[$cart->id]) && $orders[$cart->id]->quantity >= 1;
-	});
-@endphp
-@if($hasSetonagiItems)
-<div class="section-title">オーダー内容（限定お買い得商品）</div>
-<div id="cartAccordion" class="p-mb20">
-	<table id="cartHeader" class="table table-striped table-hover table-md cart-wrap">
-		<tr id="order_header">
-		<th class="head-item-id head text-center">商品番号</th>
-		<th class="head-item-name head">商品名</th>
-		<th class="head-sanchi head text-center">産地</th>
-		<th class="head-price head text-center">金額</th>
-		<th class="head-kikaku head text-center">規格</th>
-		<th class="head-quantity head text-center">数量</th>
-		<th class="head-tani head text-center">単位</th>
-		</tr>
-	</table>
-	<table class="table table-striped table-hover table-md cart-wrap">
-		@foreach($carts as $cart)
-		@php
-			$order = $orders->firstWhere('cart_id', $cart->id);
-		@endphp
-
-		@if($cart->addtype == 'addsetonagi' && isset($orders[$cart->id]) && $orders[$cart->id]->quantity >= 1)
-		<tr class="cart_item" id="{{$order->id}}">
-			<input name="cart_id[]" type="hidden" value="{{$cart->id}}" />
-			<td class="head-item-id cartid_{{$cart->id}} text-center">{{$cart->item->item_id}}</td>
-			<td class="head-item-name">
-				{{ $items[$cart->item_id]->item_name }}
-			</td>
-			<td class="head-sanchi text-center">
-				@if(isset($cart->item->sanchi_name))
-				{{$cart->item->sanchi_name}}
-				@else
-				@endif
-			</td>
-			<td class="head-price text-center" data-price="">
-				<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="{{ $orders[$cart->id]->price }}" value="{{ $orders[$cart->id]->price }}" @if(isset($deal) && Auth::guard('admin')->check()) @else readonly @endif>
-			</td>
-			<td class="head-kikaku text-center">
-				@if($cart->uwagaki_kikaku)
-				{{$cart->uwagaki_kikaku}}
-				@else
-				{{ $cart->item ? $cart->item->kikaku : '' }}
-				@endif
-			</td>
-			<td class="head-quantity text-center">
+@if(isset($deal->id))
+	@php
+		$hasSetonagiItems = $carts->contains(function ($cart) use ($orders) {
+			return $cart->addtype == 'addsetonagi' && isset($orders[$cart->id]) && $orders[$cart->id]->quantity >= 1;
+		});
+	@endphp
+	@if($hasSetonagiItems)
+	<div class="section-title">オーダー内容（限定お買い得商品）</div>
+	<div id="cartAccordion" class="p-mb20">
+		<table id="cartHeader" class="table table-striped table-hover table-md cart-wrap">
+			<tr id="order_header">
+			<th class="head-item-id head text-center">商品番号</th>
+			<th class="head-item-name head">商品名</th>
+			<th class="head-sanchi head text-center">産地</th>
+			<th class="head-price head text-center">金額</th>
+			<th class="head-kikaku head text-center">規格</th>
+			<th class="head-quantity head text-center">数量</th>
+			<th class="head-tani head text-center">単位</th>
+			</tr>
+		</table>
+		<table class="table table-striped table-hover table-md cart-wrap">
+			@foreach($carts as $cart)
 			@php
-				// $cart に対応する注文の数量を取得
-				$orderQuantity = isset($orders[$cart->id]) ? $orders[$cart->id]->quantity : 0;
+				$order = $orders->firstWhere('cart_id', $cart->id);
 			@endphp
 
-			<select name="quantity[]" class="quantity text-center form-control" required>
-				<!-- 現在の数量が選択されるようにする -->
-				@for ($i = 0; $i <= $cart->item->zaikosuu; $i++)
-					<option value="{{ $i }}" {{ $i == $orderQuantity ? 'selected' : '' }}>{{ $i }}</option>
-				@endfor
-			</select>
-			</td>
-			<td class="head-tani text-center">
-				@if ($cart->item)
-				@switch($cart->item->tani)
-					@case(1)
-					ｹｰｽ
-					@break
-					@case(2)
-					ﾎﾞｰﾙ
-					@break
-					@case(3)
-					個
-					@break
-					@case(4)
-					Kg
-					@break
-					@default
+			@if($cart->addtype == 'addsetonagi' && isset($orders[$cart->id]) && $orders[$cart->id]->quantity >= 1)
+			<tr class="cart_item" id="{{$order->id}}">
+				<input name="cart_id[]" type="hidden" value="{{$cart->id}}" />
+				<td class="head-item-id cartid_{{$cart->id}} text-center">{{$cart->item->item_id}}</td>
+				<td class="head-item-name">
+					{{ $items[$cart->item_id]->item_name }}
+				</td>
+				<td class="head-sanchi text-center">
+					@if(isset($cart->item->sanchi_name))
+					{{$cart->item->sanchi_name}}
+					@else
+					@endif
+				</td>
+				<td class="head-price text-center" data-price="">
+					<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="{{ $orders[$cart->id]->price }}" value="{{ $orders[$cart->id]->price }}" @if(isset($deal) && Auth::guard('admin')->check()) @else readonly @endif>
+				</td>
+				<td class="head-kikaku text-center">
+					@if($cart->uwagaki_kikaku)
+					{{$cart->uwagaki_kikaku}}
+					@else
+					{{ $cart->item ? $cart->item->kikaku : '' }}
+					@endif
+				</td>
+				<td class="head-quantity text-center">
+					<select name="quantity[]" class="quantity text-center form-control" required>
+						<option value="{{ $orders[$cart->id]->quantity }}" selected>{{ $orders[$cart->id]->quantity }}</option>
+					</select>
+				</td>
+				<td class="head-tani text-center">
+					@if ($cart->item)
+					@switch($cart->item->tani)
+						@case(1)
+						ｹｰｽ
+						@break
+						@case(2)
+						ﾎﾞｰﾙ
+						@break
+						@case(3)
+						個
+						@break
+						@case(4)
+						Kg
+						@break
+						@default
+						N/A
+					@endswitch
+					@else
 					N/A
-				@endswitch
-				@else
-				N/A
+				@endif
+				</td>
+				<td class="head-shoukei total text-center"></td>
+				<input name="order_id[]" class="order_id" type="hidden" value="{{$order->id}}" />
+			</tr>
 			@endif
-			</td>
-			<td class="head-shoukei total text-center"></td>
-			<input name="order_id[]" class="order_id" type="hidden" value="{{$order->id}}" />
-		</tr>
-		@endif
-		@endforeach
-	</table>
-</div>
-@endif
+			@endforeach
+		</table>
+	</div>
+	@endif
 
-@php
-	$buyerRecommendCarts = $carts->filter(function ($cart) use ($orders) {
-        return $cart->addtype == 'addbuyerrecommend' && isset($orders[$cart->id]) && $orders[$cart->id]->quantity >= 1;
-    });
-    $sortedCarts = $buyerRecommendCarts->sortByDesc(function ($cart) {
-        return $cart->id;
-    });
-    $groupedCarts = $sortedCarts->groupBy('groupe');
-@endphp
+	@php
+		$buyerRecommendCarts = $carts->filter(function ($cart) use ($orders) {
+			return $cart->addtype == 'addbuyerrecommend' && isset($orders[$cart->id]) && $orders[$cart->id]->quantity >= 1;
+		});
+		$sortedCarts = $buyerRecommendCarts->sortByDesc(function ($cart) {
+			return $cart->id;
+		});
+		$groupedCarts = $sortedCarts->groupBy('groupe');
+	@endphp
 
-@if($buyerRecommendCarts->isNotEmpty())
-    <div class="section-title">オーダー内容（担当のおすすめ商品）</div>
-    <div id="cartAccordion" class="cartAccordionSB p-mb20">
-        <!-- 商品番号ヘッダーはここで1回だけ出力 -->
-        <table id="cartHeader" class="table table-striped table-hover table-md cart-wrap">
-            <tr id="order_header">
-                <th class="head-item-id head text-center">商品番号</th>
-                <th class="head-item-name head">商品名</th>
-                <th class="head-sanchi head text-center">産地</th>
-                <th class="head-price head text-center">金額</th>
-                <th class="head-kikaku head text-center">規格</th>
-                <th class="head-quantity head text-center">数量</th>
-                <th class="head-tani head text-center">単位</th>
-            </tr>
-        </table>
-        <!-- 各グループごとにループして表示 -->
-        @foreach($groupedCarts as $groupe => $groupCarts)
-			<div class="card-header groupe_button" id="heading{{ $loop->index }}" data-toggle="collapse" data-target="#collapse{{ $loop->index }}" aria-expanded="true" aria-controls="collapse{{ $loop->index }}">
-				<h2 class="mb-0">
-					<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse{{ $loop->index }}" aria-expanded="true" aria-controls="collapse{{ $loop->index }}">
-						<span id="collapse-icon-{{ $groupe }}">-</span> {{ $groupe }}
-					</button>
-				</h2>
-			</div>
-			<div id="collapse{{ $loop->index }}" class="collapse show" aria-labelledby="heading{{ $loop->index }}" data-parent="#cartAccordion">
-				<table class="table table-striped table-hover table-md cart-wrap">
-				@foreach($groupCarts as $cart)
-					@php
-						$order = $orders->firstWhere('cart_id', $cart->id);
-					@endphp
-					<tr class="cart_item" id="{{$order->id}}">
-						<input name="cart_id[]" type="hidden" value="{{$cart->id}}" />
-						<td class="head-item-id cartid_{{$cart->id}} text-center">{{$cart->item->item_id}}</td>
-						<td class="head-item-name">
-						{{ $items[$cart->item_id]->item_name }}
-						</td>
-						<td class="head-sanchi text-center">
-						@if(isset($cart->item->sanchi_name))
-							{{$cart->item->sanchi_name}}
-						@else
-						@endif
-						</td>
-						<td class="head-price text-center" data-price="">
-							<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="{{ $orders[$cart->id]->price }}" value="{{ $orders[$cart->id]->price }}" @if(isset($deal) && Auth::guard('admin')->check()) @else readonly @endif>
-						</td>
-						<td class="head-kikaku text-center">
-						@if($cart->uwagaki_kikaku)
-							{{$cart->uwagaki_kikaku}}
-						@else
-							{{ $cart->item ? $cart->item->kikaku : '' }}
-						@endif
-						</td>
-						<td class="head-quantity text-center">
+	@if($buyerRecommendCarts->isNotEmpty())
+		<div class="section-title">オーダー内容（担当のおすすめ商品）</div>
+		<div id="cartAccordion" class="cartAccordionSB p-mb20">
+			<!-- 商品番号ヘッダーはここで1回だけ出力 -->
+			<table id="cartHeader" class="table table-striped table-hover table-md cart-wrap">
+				<tr id="order_header">
+					<th class="head-item-id head text-center">商品番号</th>
+					<th class="head-item-name head">商品名</th>
+					<th class="head-sanchi head text-center">産地</th>
+					<th class="head-price head text-center">金額</th>
+					<th class="head-kikaku head text-center">規格</th>
+					<th class="head-quantity head text-center">数量</th>
+					<th class="head-tani head text-center">単位</th>
+				</tr>
+			</table>
+			<!-- 各グループごとにループして表示 -->
+			@foreach($groupedCarts as $groupe => $groupCarts)
+				<div class="card-header groupe_button" id="heading{{ $loop->index }}" data-toggle="collapse" data-target="#collapse{{ $loop->index }}" aria-expanded="true" aria-controls="collapse{{ $loop->index }}">
+					<h2 class="mb-0">
+						<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse{{ $loop->index }}" aria-expanded="true" aria-controls="collapse{{ $loop->index }}">
+							<span id="collapse-icon-{{ $groupe }}">-</span> {{ $groupe }}
+						</button>
+					</h2>
+				</div>
+				<div id="collapse{{ $loop->index }}" class="collapse show" aria-labelledby="heading{{ $loop->index }}" data-parent="#cartAccordion">
+					<table class="table table-striped table-hover table-md cart-wrap">
+					@foreach($groupCarts as $cart)
 						@php
-							// $cart に対応する注文の数量を取得
-							$orderQuantity = isset($orders[$cart->id]) ? $orders[$cart->id]->quantity : 0;
+							$order = $orders->firstWhere('cart_id', $cart->id);
 						@endphp
-						<select name="quantity[]" class="quantity text-center form-control" required>
-							<!-- 現在の数量が選択されるようにする -->
-							@for ($i = 0; $i <= $cart->item->zaikosuu; $i++)
-								<option value="{{ $i }}" {{ $i == $orderQuantity ? 'selected' : '' }}>{{ $i }}</option>
-							@endfor
-						</select>
-						</td>
-						<td class="head-tani text-center">
-						@if ($cart->item)
-							@switch($cart->item->tani)
-							@case(1)
-								ｹｰｽ
-								@break
-							@case(2)
-								ﾎﾞｰﾙ
-								@break
-							@case(3)
-								個
-								@break
-							@case(4)
-								Kg
-								@break
-							@default
+						<tr class="cart_item" id="{{$order->id}}">
+							<input name="cart_id[]" type="hidden" value="{{$cart->id}}" />
+							<td class="head-item-id cartid_{{$cart->id}} text-center">{{$cart->item->item_id}}</td>
+							<td class="head-item-name">
+							{{ $items[$cart->item_id]->item_name }}
+							</td>
+							<td class="head-sanchi text-center">
+							@if(isset($cart->item->sanchi_name))
+								{{$cart->item->sanchi_name}}
+							@else
+							@endif
+							</td>
+							<td class="head-price text-center" data-price="">
+								<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="{{ $orders[$cart->id]->price }}" value="{{ $orders[$cart->id]->price }}" @if(isset($deal) && Auth::guard('admin')->check()) @else readonly @endif>
+							</td>
+							<td class="head-kikaku text-center">
+							@if($cart->uwagaki_kikaku)
+								{{$cart->uwagaki_kikaku}}
+							@else
+								{{ $cart->item ? $cart->item->kikaku : '' }}
+							@endif
+							</td>
+							<td class="head-quantity text-center">
+								<select name="quantity[]" class="quantity text-center form-control" required>
+									<option value="{{ $orders[$cart->id]->quantity }}" selected>{{ $orders[$cart->id]->quantity }}</option>
+								</select>
+							</td>
+							<td class="head-tani text-center">
+							@if ($cart->item)
+								@switch($cart->item->tani)
+								@case(1)
+									ｹｰｽ
+									@break
+								@case(2)
+									ﾎﾞｰﾙ
+									@break
+								@case(3)
+									個
+									@break
+								@case(4)
+									Kg
+									@break
+								@default
+									N/A
+								@endswitch
+							@else
 								N/A
-							@endswitch
-						@else
-							N/A
-						@endif
-						</td>
-						<td class="head-shoukei total text-center"></td>
-						<input name="order_id[]" class="order_id" type="hidden" value="{{$order->id}}" />
-					</tr>
-				@endforeach
-				</table>
-			</div>
-        @endforeach
-    </div>
-@endif
+							@endif
+							</td>
+							<td class="head-shoukei total text-center"></td>
+							<input name="order_id[]" class="order_id" type="hidden" value="{{$order->id}}" />
+						</tr>
+					@endforeach
+					</table>
+				</div>
+			@endforeach
+		</div>
+	@endif
 
-@php
-    $SpecialpriceCarts = $carts->filter(function ($cart) use ($orders) {
-        return $cart->addtype == 'addspecialprice' && isset($orders[$cart->id]) && $orders[$cart->id]->quantity >= 1;
-    });
-	$sortedCarts = $SpecialpriceCarts->sortByDesc(function ($cart) {
-        return $cart->id;
-    });
-    $groupedCarts = $SpecialpriceCarts->groupBy('groupe')->reverse();
-@endphp
+	@php
+		$SpecialpriceCarts = $carts->filter(function ($cart) use ($orders) {
+			return $cart->addtype == 'addspecialprice' && isset($orders[$cart->id]) && $orders[$cart->id]->quantity >= 1;
+		});
+		$sortedCarts = $SpecialpriceCarts->sortByDesc(function ($cart) {
+			return $cart->id;
+		});
+		$groupedCarts = $SpecialpriceCarts->groupBy('groupe')->reverse();
+	@endphp
 
-@if($SpecialpriceCarts->isNotEmpty())
-    <div class="section-title">オーダー内容（市況商品）</div>
-    <div id="cartAccordion" class="cartAccordionSB p-mb20">
-        <!-- 商品番号ヘッダーはここで1回だけ出力 -->
-        <table id="cartHeader" class="table table-striped table-hover table-md cart-wrap">
-            <tr id="order_header">
-                <th class="head-item-id head text-center">商品番号</th>
-                <th class="head-item-name head">商品名</th>
-                <th class="head-sanchi head text-center">産地</th>
-                <th class="head-price head text-center">金額</th>
-                <th class="head-kikaku head text-center">規格</th>
-                <th class="head-quantity head text-center">数量</th>
-                <th class="head-tani head text-center">単位</th>
-            </tr>
-        </table>
-        <!-- 各グループごとにループして表示 -->
-        @foreach($groupedCarts as $groupe => $groupCarts)
-			<div class="card-header groupe_button" id="heading{{ $loop->index }}" data-toggle="collapse" data-target="#collapse{{ $loop->index }}" aria-expanded="true" aria-controls="collapse{{ $loop->index }}">
-				<h2 class="mb-0">
-					<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse{{ $loop->index }}" aria-expanded="true" aria-controls="collapse{{ $loop->index }}">
-						<span id="collapse-icon-{{ $groupe }}">-</span> {{ $groupe }}
-					</button>
-				</h2>
-			</div>
-			<div id="collapse{{ $loop->index }}" class="collapse show" aria-labelledby="heading{{ $loop->index }}" data-parent="#cartAccordion">
-				<table class="table table-striped table-hover table-md cart-wrap">
-				@foreach($groupCarts as $cart)
-					@php
-						$order = $orders->firstWhere('cart_id', $cart->id);
-					@endphp
-					<tr class="cart_item" id="{{$order->id}}">
-						<input name="cart_id[]" type="hidden" value="{{$cart->id}}" />
-						<td class="head-item-id cartid_{{$cart->id}} text-center">{{$cart->item->item_id}}</td>
-						<td class="head-item-name">
-						{{ $items[$cart->item_id]->item_name }}
-						</td>
-						<td class="head-sanchi text-center">
-						@if(isset($cart->item->sanchi_name))
-							{{$cart->item->sanchi_name}}
-						@else
-						@endif
-						</td>
-						<td class="head-price text-center" data-price="">
-							<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="{{ $orders[$cart->id]->price }}" value="{{ $orders[$cart->id]->price }}" @if(isset($deal) && Auth::guard('admin')->check()) @else readonly @endif>
-						</td>
-						<td class="head-kikaku text-center">
-						@if($cart->uwagaki_kikaku)
-							{{$cart->uwagaki_kikaku}}
-						@else
-							{{ $cart->item ? $cart->item->kikaku : '' }}
-						@endif
-						</td>
-						<td class="head-quantity text-center">
+	@if($SpecialpriceCarts->isNotEmpty())
+		<div class="section-title">オーダー内容（市況商品）</div>
+		<div id="cartAccordion" class="cartAccordionSB p-mb20">
+			<!-- 商品番号ヘッダーはここで1回だけ出力 -->
+			<table id="cartHeader" class="table table-striped table-hover table-md cart-wrap">
+				<tr id="order_header">
+					<th class="head-item-id head text-center">商品番号</th>
+					<th class="head-item-name head">商品名</th>
+					<th class="head-sanchi head text-center">産地</th>
+					<th class="head-price head text-center">金額</th>
+					<th class="head-kikaku head text-center">規格</th>
+					<th class="head-quantity head text-center">数量</th>
+					<th class="head-tani head text-center">単位</th>
+				</tr>
+			</table>
+			<!-- 各グループごとにループして表示 -->
+			@foreach($groupedCarts as $groupe => $groupCarts)
+				<div class="card-header groupe_button" id="heading{{ $loop->index }}" data-toggle="collapse" data-target="#collapse{{ $loop->index }}" aria-expanded="true" aria-controls="collapse{{ $loop->index }}">
+					<h2 class="mb-0">
+						<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse{{ $loop->index }}" aria-expanded="true" aria-controls="collapse{{ $loop->index }}">
+							<span id="collapse-icon-{{ $groupe }}">-</span> {{ $groupe }}
+						</button>
+					</h2>
+				</div>
+				<div id="collapse{{ $loop->index }}" class="collapse show" aria-labelledby="heading{{ $loop->index }}" data-parent="#cartAccordion">
+					<table class="table table-striped table-hover table-md cart-wrap">
+					@foreach($groupCarts as $cart)
 						@php
-							// $cart に対応する注文の数量を取得
-							$orderQuantity = isset($orders[$cart->id]) ? $orders[$cart->id]->quantity : 0;
+							$order = $orders->firstWhere('cart_id', $cart->id);
 						@endphp
-						<select name="quantity[]" class="quantity text-center form-control" required>
-							<!-- 現在の数量が選択されるようにする -->
-							@for ($i = 0; $i <= $cart->item->zaikosuu; $i++)
-								<option value="{{ $i }}" {{ $i == $orderQuantity ? 'selected' : '' }}>{{ $i }}</option>
-							@endfor
-						</select>
-						</td>
-						<td class="head-tani text-center">
-						@if ($cart->item)
-							@switch($cart->item->tani)
-							@case(1)
-								ｹｰｽ
-								@break
-							@case(2)
-								ﾎﾞｰﾙ
-								@break
-							@case(3)
-								個
-								@break
-							@case(4)
-								Kg
-								@break
-							@default
+						<tr class="cart_item" id="{{$order->id}}">
+							<input name="cart_id[]" type="hidden" value="{{$cart->id}}" />
+							<td class="head-item-id cartid_{{$cart->id}} text-center">{{$cart->item->item_id}}</td>
+							<td class="head-item-name">
+							{{ $items[$cart->item_id]->item_name }}
+							</td>
+							<td class="head-sanchi text-center">
+							@if(isset($cart->item->sanchi_name))
+								{{$cart->item->sanchi_name}}
+							@else
+							@endif
+							</td>
+							<td class="head-price text-center" data-price="">
+								<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="{{ $orders[$cart->id]->price }}" value="{{ $orders[$cart->id]->price }}" @if(isset($deal) && Auth::guard('admin')->check()) @else readonly @endif>
+							</td>
+							<td class="head-kikaku text-center">
+							@if($cart->uwagaki_kikaku)
+								{{$cart->uwagaki_kikaku}}
+							@else
+								{{ $cart->item ? $cart->item->kikaku : '' }}
+							@endif
+							</td>
+							<td class="head-quantity text-center">
+								<select name="quantity[]" class="quantity text-center form-control" required>
+									<option value="{{ $orders[$cart->id]->quantity }}" selected>{{ $orders[$cart->id]->quantity }}</option>
+								</select>
+							</td>
+							<td class="head-tani text-center">
+							@if ($cart->item)
+								@switch($cart->item->tani)
+								@case(1)
+									ｹｰｽ
+									@break
+								@case(2)
+									ﾎﾞｰﾙ
+									@break
+								@case(3)
+									個
+									@break
+								@case(4)
+									Kg
+									@break
+								@default
+									N/A
+								@endswitch
+							@else
 								N/A
-							@endswitch
-						@else
-							N/A
-						@endif
-						</td>
-						<td class="head-shoukei total text-center"></td>
-						<input name="order_id[]" class="order_id" type="hidden" value="{{$order->id}}" />
-					</tr>
-				@endforeach
-				</table>
-			</div>
-        @endforeach
-    </div>
-@endif
+							@endif
+							</td>
+							<td class="head-shoukei total text-center"></td>
+							<input name="order_id[]" class="order_id" type="hidden" value="{{$order->id}}" />
+						</tr>
+					@endforeach
+					</table>
+				</div>
+			@endforeach
+		</div>
+	@endif
+@else
+	@php
+		$hasSetonagiItems = $carts->contains(function ($cart) use ($orders) {
+			return $cart->addtype == 'addsetonagi' && isset($orders[$cart->id]) && $orders[$cart->id]->quantity >= 1;
+		});
+	@endphp
+	@if($hasSetonagiItems)
+	<div class="section-title">オーダー内容（限定お買い得商品）</div>
+	<div id="cartAccordion" class="p-mb20">
+		<table id="cartHeader" class="table table-striped table-hover table-md cart-wrap">
+			<tr id="order_header">
+			<th class="head-item-id head text-center">商品番号</th>
+			<th class="head-item-name head">商品名</th>
+			<th class="head-sanchi head text-center">産地</th>
+			<th class="head-price head text-center">金額</th>
+			<th class="head-kikaku head text-center">規格</th>
+			<th class="head-quantity head text-center">数量</th>
+			<th class="head-tani head text-center">単位</th>
+			</tr>
+		</table>
+		<table class="table table-striped table-hover table-md cart-wrap">
+			@foreach($carts as $cart)
+			@php
+				$order = $orders->firstWhere('cart_id', $cart->id);
+			@endphp
 
+			@if($cart->addtype == 'addsetonagi' && isset($orders[$cart->id]) && $orders[$cart->id]->quantity >= 1)
+			<tr class="cart_item" id="{{$order->id}}">
+				<input name="cart_id[]" type="hidden" value="{{$cart->id}}" />
+				<td class="head-item-id cartid_{{$cart->id}} text-center">{{$cart->item->item_id}}</td>
+				<td class="head-item-name">
+					{{ $items[$cart->item_id]->item_name }}
+				</td>
+				<td class="head-sanchi text-center">
+					@if(isset($cart->item->sanchi_name))
+					{{$cart->item->sanchi_name}}
+					@else
+					@endif
+				</td>
+				<td class="head-price text-center" data-price="">
+					<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="{{ $orders[$cart->id]->price }}" value="{{ $orders[$cart->id]->price }}" @if(isset($deal) && Auth::guard('admin')->check()) @else readonly @endif>
+				</td>
+				<td class="head-kikaku text-center">
+					@if($cart->uwagaki_kikaku)
+					{{$cart->uwagaki_kikaku}}
+					@else
+					{{ $cart->item ? $cart->item->kikaku : '' }}
+					@endif
+				</td>
+				<td class="head-quantity text-center">
+				@php
+					// $cart に対応する注文の数量を取得
+					$orderQuantity = isset($orders[$cart->id]) ? $orders[$cart->id]->quantity : 0;
+				@endphp
+
+				<select name="quantity[]" class="quantity text-center form-control" required>
+					<!-- 現在の数量が選択されるようにする -->
+					@for ($i = 0; $i <= $cart->item->zaikosuu; $i++)
+						<option value="{{ $i }}" {{ $i == $orderQuantity ? 'selected' : '' }}>{{ $i }}</option>
+					@endfor
+				</select>
+				</td>
+				<td class="head-tani text-center">
+					@if ($cart->item)
+					@switch($cart->item->tani)
+						@case(1)
+						ｹｰｽ
+						@break
+						@case(2)
+						ﾎﾞｰﾙ
+						@break
+						@case(3)
+						個
+						@break
+						@case(4)
+						Kg
+						@break
+						@default
+						N/A
+					@endswitch
+					@else
+					N/A
+				@endif
+				</td>
+				<td class="head-shoukei total text-center"></td>
+				<input name="order_id[]" class="order_id" type="hidden" value="{{$order->id}}" />
+			</tr>
+			@endif
+			@endforeach
+		</table>
+	</div>
+	@endif
+
+	@php
+		$buyerRecommendCarts = $carts->filter(function ($cart) use ($orders) {
+			return $cart->addtype == 'addbuyerrecommend' && isset($orders[$cart->id]) && $orders[$cart->id]->quantity >= 1;
+		});
+		$sortedCarts = $buyerRecommendCarts->sortByDesc(function ($cart) {
+			return $cart->id;
+		});
+		$groupedCarts = $sortedCarts->groupBy('groupe');
+	@endphp
+
+	@if($buyerRecommendCarts->isNotEmpty())
+		<div class="section-title">オーダー内容（担当のおすすめ商品）</div>
+		<div id="cartAccordion" class="cartAccordionSB p-mb20">
+			<!-- 商品番号ヘッダーはここで1回だけ出力 -->
+			<table id="cartHeader" class="table table-striped table-hover table-md cart-wrap">
+				<tr id="order_header">
+					<th class="head-item-id head text-center">商品番号</th>
+					<th class="head-item-name head">商品名</th>
+					<th class="head-sanchi head text-center">産地</th>
+					<th class="head-price head text-center">金額</th>
+					<th class="head-kikaku head text-center">規格</th>
+					<th class="head-quantity head text-center">数量</th>
+					<th class="head-tani head text-center">単位</th>
+				</tr>
+			</table>
+			<!-- 各グループごとにループして表示 -->
+			@foreach($groupedCarts as $groupe => $groupCarts)
+				<div class="card-header groupe_button" id="heading{{ $loop->index }}" data-toggle="collapse" data-target="#collapse{{ $loop->index }}" aria-expanded="true" aria-controls="collapse{{ $loop->index }}">
+					<h2 class="mb-0">
+						<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse{{ $loop->index }}" aria-expanded="true" aria-controls="collapse{{ $loop->index }}">
+							<span id="collapse-icon-{{ $groupe }}">-</span> {{ $groupe }}
+						</button>
+					</h2>
+				</div>
+				<div id="collapse{{ $loop->index }}" class="collapse show" aria-labelledby="heading{{ $loop->index }}" data-parent="#cartAccordion">
+					<table class="table table-striped table-hover table-md cart-wrap">
+					@foreach($groupCarts as $cart)
+						@php
+							$order = $orders->firstWhere('cart_id', $cart->id);
+						@endphp
+						<tr class="cart_item" id="{{$order->id}}">
+							<input name="cart_id[]" type="hidden" value="{{$cart->id}}" />
+							<td class="head-item-id cartid_{{$cart->id}} text-center">{{$cart->item->item_id}}</td>
+							<td class="head-item-name">
+							{{ $items[$cart->item_id]->item_name }}
+							</td>
+							<td class="head-sanchi text-center">
+							@if(isset($cart->item->sanchi_name))
+								{{$cart->item->sanchi_name}}
+							@else
+							@endif
+							</td>
+							<td class="head-price text-center" data-price="">
+								<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="{{ $orders[$cart->id]->price }}" value="{{ $orders[$cart->id]->price }}" @if(isset($deal) && Auth::guard('admin')->check()) @else readonly @endif>
+							</td>
+							<td class="head-kikaku text-center">
+							@if($cart->uwagaki_kikaku)
+								{{$cart->uwagaki_kikaku}}
+							@else
+								{{ $cart->item ? $cart->item->kikaku : '' }}
+							@endif
+							</td>
+							<td class="head-quantity text-center">
+							@php
+								// $cart に対応する注文の数量を取得
+								$orderQuantity = isset($orders[$cart->id]) ? $orders[$cart->id]->quantity : 0;
+							@endphp
+							<select name="quantity[]" class="quantity text-center form-control" required>
+								<!-- 現在の数量が選択されるようにする -->
+								@for ($i = 0; $i <= $cart->item->zaikosuu; $i++)
+									<option value="{{ $i }}" {{ $i == $orderQuantity ? 'selected' : '' }}>{{ $i }}</option>
+								@endfor
+							</select>
+							</td>
+							<td class="head-tani text-center">
+							@if ($cart->item)
+								@switch($cart->item->tani)
+								@case(1)
+									ｹｰｽ
+									@break
+								@case(2)
+									ﾎﾞｰﾙ
+									@break
+								@case(3)
+									個
+									@break
+								@case(4)
+									Kg
+									@break
+								@default
+									N/A
+								@endswitch
+							@else
+								N/A
+							@endif
+							</td>
+							<td class="head-shoukei total text-center"></td>
+							<input name="order_id[]" class="order_id" type="hidden" value="{{$order->id}}" />
+						</tr>
+					@endforeach
+					</table>
+				</div>
+			@endforeach
+		</div>
+	@endif
+
+	@php
+		$SpecialpriceCarts = $carts->filter(function ($cart) use ($orders) {
+			return $cart->addtype == 'addspecialprice' && isset($orders[$cart->id]) && $orders[$cart->id]->quantity >= 1;
+		});
+		$sortedCarts = $SpecialpriceCarts->sortByDesc(function ($cart) {
+			return $cart->id;
+		});
+		$groupedCarts = $SpecialpriceCarts->groupBy('groupe')->reverse();
+	@endphp
+
+	@if($SpecialpriceCarts->isNotEmpty())
+		<div class="section-title">オーダー内容（市況商品）</div>
+		<div id="cartAccordion" class="cartAccordionSB p-mb20">
+			<!-- 商品番号ヘッダーはここで1回だけ出力 -->
+			<table id="cartHeader" class="table table-striped table-hover table-md cart-wrap">
+				<tr id="order_header">
+					<th class="head-item-id head text-center">商品番号</th>
+					<th class="head-item-name head">商品名</th>
+					<th class="head-sanchi head text-center">産地</th>
+					<th class="head-price head text-center">金額</th>
+					<th class="head-kikaku head text-center">規格</th>
+					<th class="head-quantity head text-center">数量</th>
+					<th class="head-tani head text-center">単位</th>
+				</tr>
+			</table>
+			<!-- 各グループごとにループして表示 -->
+			@foreach($groupedCarts as $groupe => $groupCarts)
+				<div class="card-header groupe_button" id="heading{{ $loop->index }}" data-toggle="collapse" data-target="#collapse{{ $loop->index }}" aria-expanded="true" aria-controls="collapse{{ $loop->index }}">
+					<h2 class="mb-0">
+						<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse{{ $loop->index }}" aria-expanded="true" aria-controls="collapse{{ $loop->index }}">
+							<span id="collapse-icon-{{ $groupe }}">-</span> {{ $groupe }}
+						</button>
+					</h2>
+				</div>
+				<div id="collapse{{ $loop->index }}" class="collapse show" aria-labelledby="heading{{ $loop->index }}" data-parent="#cartAccordion">
+					<table class="table table-striped table-hover table-md cart-wrap">
+					@foreach($groupCarts as $cart)
+						@php
+							$order = $orders->firstWhere('cart_id', $cart->id);
+						@endphp
+						<tr class="cart_item" id="{{$order->id}}">
+							<input name="cart_id[]" type="hidden" value="{{$cart->id}}" />
+							<td class="head-item-id cartid_{{$cart->id}} text-center">{{$cart->item->item_id}}</td>
+							<td class="head-item-name">
+							{{ $items[$cart->item_id]->item_name }}
+							</td>
+							<td class="head-sanchi text-center">
+							@if(isset($cart->item->sanchi_name))
+								{{$cart->item->sanchi_name}}
+							@else
+							@endif
+							</td>
+							<td class="head-price text-center" data-price="">
+								<input name="price[]" pattern="^[0-9]+$" class="price text-center form-control" data-price="{{ $orders[$cart->id]->price }}" value="{{ $orders[$cart->id]->price }}" @if(isset($deal) && Auth::guard('admin')->check()) @else readonly @endif>
+							</td>
+							<td class="head-kikaku text-center">
+							@if($cart->uwagaki_kikaku)
+								{{$cart->uwagaki_kikaku}}
+							@else
+								{{ $cart->item ? $cart->item->kikaku : '' }}
+							@endif
+							</td>
+							<td class="head-quantity text-center">
+							@php
+								// $cart に対応する注文の数量を取得
+								$orderQuantity = isset($orders[$cart->id]) ? $orders[$cart->id]->quantity : 0;
+							@endphp
+							<select name="quantity[]" class="quantity text-center form-control" required>
+								<!-- 現在の数量が選択されるようにする -->
+								@for ($i = 0; $i <= $cart->item->zaikosuu; $i++)
+									<option value="{{ $i }}" {{ $i == $orderQuantity ? 'selected' : '' }}>{{ $i }}</option>
+								@endfor
+							</select>
+							</td>
+							<td class="head-tani text-center">
+							@if ($cart->item)
+								@switch($cart->item->tani)
+								@case(1)
+									ｹｰｽ
+									@break
+								@case(2)
+									ﾎﾞｰﾙ
+									@break
+								@case(3)
+									個
+									@break
+								@case(4)
+									Kg
+									@break
+								@default
+									N/A
+								@endswitch
+							@else
+								N/A
+							@endif
+							</td>
+							<td class="head-shoukei total text-center"></td>
+							<input name="order_id[]" class="order_id" type="hidden" value="{{$order->id}}" />
+						</tr>
+					@endforeach
+					</table>
+				</div>
+			@endforeach
+		</div>
+	@endif
+@endif
 
 
 
