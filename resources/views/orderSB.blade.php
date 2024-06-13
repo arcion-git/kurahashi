@@ -1,4 +1,4 @@
-@if(isset($deal->id))
+@if(isset($deal->id) && Auth::guard('user')->check())
 	@php
 		$hasSetonagiItems = $carts->contains(function ($cart) use ($orders) {
 			return $cart->addtype == 'addsetonagi' && isset($orders[$cart->id]) && $orders[$cart->id]->quantity >= 1;
