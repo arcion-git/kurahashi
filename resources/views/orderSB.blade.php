@@ -1,4 +1,4 @@
-@if(isset($deal->id) && Auth::guard('user')->check())
+@if(isset($deal->id))
 	@php
 		$hasSetonagiItems = $carts->contains(function ($cart) use ($orders) {
 			return $cart->addtype == 'addsetonagi' && isset($orders[$cart->id]) && $orders[$cart->id]->quantity >= 1;
@@ -49,7 +49,16 @@
 				</td>
 				<td class="head-quantity text-center">
 					<select name="quantity[]" class="quantity text-center form-control" required>
-						<option value="{{ $orders[$cart->id]->quantity }}" selected>{{ $orders[$cart->id]->quantity }}</option>
+						@if(Auth::guard('admin')->check())
+							@php
+								$maxQuantity = $cart->item->zaikosuu + $orders[$cart->id]->quantity;
+							@endphp
+							@for ($i = 0; $i <= $maxQuantity; $i++)
+								<option value="{{ $i }}" {{ $i == $orders[$cart->id]->quantity ? 'selected' : '' }}>{{ $i }}</option>
+							@endfor
+						@else
+							<option value="{{ $orders[$cart->id]->quantity }}" selected>{{ $orders[$cart->id]->quantity }}</option>
+						@endif
 					</select>
 				</td>
 				<td class="head-tani text-center">
@@ -147,7 +156,16 @@
 							</td>
 							<td class="head-quantity text-center">
 								<select name="quantity[]" class="quantity text-center form-control" required>
-									<option value="{{ $orders[$cart->id]->quantity }}" selected>{{ $orders[$cart->id]->quantity }}</option>
+									@if(Auth::guard('admin')->check())
+										@php
+											$maxQuantity = $cart->item->zaikosuu + $orders[$cart->id]->quantity;
+										@endphp
+										@for ($i = 0; $i <= $maxQuantity; $i++)
+											<option value="{{ $i }}" {{ $i == $orders[$cart->id]->quantity ? 'selected' : '' }}>{{ $i }}</option>
+										@endfor
+									@else
+										<option value="{{ $orders[$cart->id]->quantity }}" selected>{{ $orders[$cart->id]->quantity }}</option>
+									@endif
 								</select>
 							</td>
 							<td class="head-tani text-center">
@@ -246,7 +264,16 @@
 							</td>
 							<td class="head-quantity text-center">
 								<select name="quantity[]" class="quantity text-center form-control" required>
-									<option value="{{ $orders[$cart->id]->quantity }}" selected>{{ $orders[$cart->id]->quantity }}</option>
+									@if(Auth::guard('admin')->check())
+										@php
+											$maxQuantity = $cart->item->zaikosuu + $orders[$cart->id]->quantity;
+										@endphp
+										@for ($i = 0; $i <= $maxQuantity; $i++)
+											<option value="{{ $i }}" {{ $i == $orders[$cart->id]->quantity ? 'selected' : '' }}>{{ $i }}</option>
+										@endfor
+									@else
+										<option value="{{ $orders[$cart->id]->quantity }}" selected>{{ $orders[$cart->id]->quantity }}</option>
+									@endif
 								</select>
 							</td>
 							<td class="head-tani text-center">
