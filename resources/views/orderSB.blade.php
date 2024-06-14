@@ -53,8 +53,9 @@
 							@php
 								$maxQuantity = $cart->item->zaikosuu + $orders[$cart->id]->quantity;
 							@endphp
+							<option value="{{ $orders[$cart->id]->quantity }}" selected>{{ $orders[$cart->id]->quantity }}</option>
 							@for ($i = 0; $i <= $maxQuantity; $i++)
-								<option value="{{ $i }}" {{ $i == $orders[$cart->id]->quantity ? 'selected' : '' }}>{{ $i }}</option>
+								<option value="{{ $i }}">{{ $i }}</option>
 							@endfor
 						@else
 							<option value="{{ $orders[$cart->id]->quantity }}" selected>{{ $orders[$cart->id]->quantity }}</option>
@@ -160,8 +161,9 @@
 										@php
 											$maxQuantity = $cart->item->zaikosuu + $orders[$cart->id]->quantity;
 										@endphp
+										<option value="{{ $orders[$cart->id]->quantity }}" selected>{{ $orders[$cart->id]->quantity }}</option>
 										@for ($i = 0; $i <= $maxQuantity; $i++)
-											<option value="{{ $i }}" {{ $i == $orders[$cart->id]->quantity ? 'selected' : '' }}>{{ $i }}</option>
+											<option value="{{ $i }}">{{ $i }}</option>
 										@endfor
 									@else
 										<option value="{{ $orders[$cart->id]->quantity }}" selected>{{ $orders[$cart->id]->quantity }}</option>
@@ -268,8 +270,9 @@
 										@php
 											$maxQuantity = $cart->item->zaikosuu + $orders[$cart->id]->quantity;
 										@endphp
+										<option value="{{ $orders[$cart->id]->quantity }}" selected>{{ $orders[$cart->id]->quantity }}</option>
 										@for ($i = 0; $i <= $maxQuantity; $i++)
-											<option value="{{ $i }}" {{ $i == $orders[$cart->id]->quantity ? 'selected' : '' }}>{{ $i }}</option>
+											<option value="{{ $i }}">{{ $i }}</option>
 										@endfor
 									@else
 										<option value="{{ $orders[$cart->id]->quantity }}" selected>{{ $orders[$cart->id]->quantity }}</option>
