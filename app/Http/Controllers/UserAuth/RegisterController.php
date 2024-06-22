@@ -412,12 +412,17 @@ class RegisterController extends Controller
     {
         $this->validator($request->all())->validate();
         $user = $this->create($request->all());
-        if (!$user) {
-            // create メソッドが null を返した場合
+
+        if (is_null($user)) {
             return redirect()->back()->with('error', '登録に失敗しました。');
+        } elseif (!$user instanceof \Illuminate\Contracts\Auth\Authenticatable) {
+            // create メソッドが \Illuminate\Contracts\Auth\Authenticatable インターフェースを実装していない場合
+            return redirect()->back()->with('error', '無効なユーザーオブジェクトが返されました。');
         }
+
         // ユーザーをログインさせる
         $this->guard()->login($user);
+
         // 登録後のリダイレクト
         return $this->registered($request, $user)
                     ?: redirect($this->redirectPath());
