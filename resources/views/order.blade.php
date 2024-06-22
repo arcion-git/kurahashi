@@ -1,6 +1,5 @@
 
 
-
 @if(request()->input('addtype') == 'addbuyerrecommend' && $user->setonagi)
 @else
 <div class="table-responsive" id="nouhin_store_nouhin_yoteibi">
@@ -178,7 +177,7 @@
 																		<?php $filename = public_path().'/storage/item/'.$cart->item->item_id.'.jpg'; ?>
 																		@if(file_exists($filename))
 																		<a href="/storage/item/{{$cart->item->item_id}}.jpg" data-fancybox="images-{{$cart->item->item_id}}" class="fancybox">
-																			<img class="d-block w-100" src="/storage/item/{{$cart->item->item_id}}.jpg" alt="First slide" onerror="this.src='{{ asset('img/no_image.jpg') }}'; this.classList.add('disable_link');">
+																			<img class="d-block w-100 priority" src="/storage/item/{{$cart->item->item_id}}.jpg" alt="First slide" onerror="this.src='{{ asset('img/no_image.jpg') }}'; this.classList.add('disable_link');">
 																		</a>
 																		@else
 																		<img class="d-block w-100" src="{{ asset('img/no_image.jpg') }}">
@@ -2001,9 +2000,33 @@ $(document).ready(function () {
 	});
 });
 
+
+
 </script>
+
 
 @endif
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
 <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+
+
+<script>
+$(document).ready(function() {
+		// 優先的に読み込みたい画像を取得
+		const priorityImages = document.querySelectorAll('img.priority');
+
+		// 優先画像を読み込み
+		priorityImages.forEach(img => {
+				const src = img.getAttribute('src');
+				img.setAttribute('src', src);
+		});
+
+		// 他の画像を遅延読み込み
+		const otherImages = document.querySelectorAll('img[data-src]');
+		otherImages.forEach(img => {
+				const src = img.getAttribute('data-src');
+				img.setAttribute('src', src);
+		});
+});
+</script>
