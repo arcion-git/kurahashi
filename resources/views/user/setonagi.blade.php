@@ -83,7 +83,7 @@
                           <?php $filename = public_path().'/storage/item/'.$setonagi_item->item()->item_id.'.jpg'; ?>
                           @if(file_exists($filename))
                           <a href="/storage/item/{{$setonagi_item->item()->item_id}}.jpg" data-fancybox="images-{{$setonagi_item->item()->item_id}}">
-                            <img class="d-block w-100" src="/storage/item/{{$setonagi_item->item()->item_id}}.jpg" alt="First slide" onerror="this.src='{{ asset('img/no_image.jpg') }}'; this.classList.add('disable_link');">
+                            <img class="d-block w-100 lazyload" src="/storage/item/{{$setonagi_item->item()->item_id}}.jpg" alt="First slide" onerror="this.src='{{ asset('img/no_image.jpg') }}'; this.classList.add('disable_link');">
                           </a>
                           @else
                             <img class="d-block w-100" src="{{ asset('img/no_image.jpg') }}">
@@ -94,7 +94,7 @@
                           @if(file_exists($filename))
                           <div class="carousel-item">
                             <a href="/storage/item/{{$setonagi_item->item()->item_id}}_{{$i}}.jpg" data-fancybox="images-{{$setonagi_item->item()->item_id}}">
-                              <img class="d-block w-100" src="/storage/item/{{$setonagi_item->item()->item_id}}_{{$i}}.jpg" alt="slide" class="">
+                              <img class="d-block w-100 lazyload" src="/storage/item/{{$setonagi_item->item()->item_id}}_{{$i}}.jpg" alt="slide" class="">
                             </a>
                           </div>
                           @else

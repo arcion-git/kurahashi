@@ -23,6 +23,9 @@
     <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
     <!-- datepicker -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css">
+
+    <!-- 遅延読み込み -->
+    <script src="https://cdn.jsdelivr.net/npm/lazyload@2.0.0-rc.2/lazyload.min.js"></script>
     <!-- <script src="{{ asset('js/daterangepicker.js') }}"></script> -->
 
 
@@ -726,6 +729,12 @@
     <script src="{{ asset('js/calculation.js') }}"></script>
 
     <script>
+    // lazyloadの初期化
+    document.addEventListener("DOMContentLoaded", function() {
+        var lazyLoadInstance = new LazyLoad({
+            elements_selector: ".lazyload"
+        });
+    });
     //ＵＲＬのパラメータを取得するための関数
     function getUrlParam(param){
         var pageUrl = window.location.search.substring(1);
