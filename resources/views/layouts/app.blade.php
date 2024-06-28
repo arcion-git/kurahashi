@@ -64,6 +64,9 @@
           <ul class="navbar-nav mr-3">
             <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg"><i class="fas fa-bars"></i></a></li>
             <!-- <li><a href="#" data-toggle="search" class="nav-link nav-link-lg d-sm-none"><i class="fas fa-search"></i></a></li> -->
+            @if(config('app.test') == 1)
+                <li style="color:#fff; font-weight:bold; margin-top:5px;">テスト環境</li>
+            @endif
           </ul>
 
 
