@@ -1057,21 +1057,39 @@ class AdminPageController extends Controller
     $item_search = $request->item_search;
     $order_no = $request->ordernosave;
     $user = User::where('id',$id)->first();
-    // 水産の前方コード
+
     $code = 1103;
-    // 本番用
+    $code_kensui = 930000;
+    $code_marinenext = 920000;
+
+    if(isset($item_search)){
+        $items = Item::where(function($query) use ($code, $code_kensui, $code_marinenext){
+            $query->where("busho_code", "LIKE", $code.'%')
+                  ->orWhere("busho_code", "LIKE", $code_kensui.'%')
+                  ->orWhere("busho_code", "LIKE", $code_marinenext.'%');
+        })
+        ->where(function($items) use ($item_search){
+            $items->where('item_name','like', "%$item_search%")
+                  ->orWhere('item_id','like', "%$item_search%");
+        })
+        ->orWhere('item_name_kana','like', "%$item_search%")
+        ->get();
+    }else{
+        $items = [];
+    }
 
     // $items = Item::where("busho_code", "LIKE", $code.'%')->get();
     // 処理が重いので一時的に在庫数のある商品だけを表示
-    if(isset($item_search)){
-    $items = Item::where("busho_code", "LIKE", $code.'%')
-    ->where(function($items) use ($item_search){
-    $items->where('item_name','like', "%$item_search%")->orWhere('item_id','like', "%$item_search%");
-    })->orWhere('item_name_kana','like', "%$item_search%")->get();
-    }else{
-    $items = [];
-    }
-    // dd($items);
+    // if(isset($item_search)){
+    // $items = Item::where("busho_code", "LIKE", $code.'%')
+    // ->where(function($items) use ($item_search){
+    // $items->where('item_name','like', "%$item_search%")->orWhere('item_id','like', "%$item_search%");
+    // })->orWhere('item_name_kana','like', "%$item_search%")->get();
+    // }else{
+    // $items = [];
+    // }
+
+
     $recommends = Recommend::where('user_id',$user->id)->orderByRaw('CAST(order_no as SIGNED) ASC')->get();
     // dd($recommends);
     $data=[
