@@ -100,10 +100,10 @@ class RegisterController extends Controller
               'pay' => ['required'],
               'first_name' => ['required', 'string', 'max:255', 'regex:/^[^\x01-\x7E]+$/u'],
               'last_name' => ['required', 'string', 'max:255', 'regex:/^[^\x01-\x7E]+$/u'],
-              'first_name_kana' => ['required', 'string', 'max:255', 'regex:/^[ァ-ンヴー]+$/u'],
-              'last_name_kana' => ['required', 'string', 'max:255', 'regex:/^[ァ-ンヴー]+$/u'],
+              'first_name_kana' => ['required', 'string', 'max:255', 'regex:/\A[ァ-ヴー]+\z/u'],
+              'last_name_kana' => ['required', 'string', 'max:255', 'regex:/\A[ァ-ヴー]+\z/u'],
               'company' => ['required', 'string', 'max:255', 'regex:/^[^\x20-\x7E]+$/u'],
-              'company_kana' => ['required', 'string', 'max:255', 'regex:/^[^\x20-\x7E]+$/u'],
+              // 'company_kana' => ['required', 'string', 'max:255', 'regex:/\A[ァ-ヴー]+\z/u'],
               'address01' => ['required', 'string', 'max:8', 'regex:/^[0-9]+$/'],
               'address02' => ['required', 'string', 'max:255', 'regex:/^[^\x20-\x7E]+$/u'],
               'address03' => ['required', 'string', 'max:255', 'regex:/^[^\x20-\x7E]+$/u'],
@@ -363,10 +363,9 @@ class RegisterController extends Controller
           // dd($result);
           // return null;
           // return redirect()->back()->with('error', '登録に失敗しました。');
-          // $data=[
-          //   'message'=> '登録エラー'.$result->errorCode,
-          // ];
           // return view('user.auth.register',$data);
+          $message = '登録エラー：コード'.$result->errorCode;
+          return redirect()->route('register', ['message' => $message]);
         }
       }
 
@@ -429,12 +428,13 @@ class RegisterController extends Controller
     }
 
 
+
     /**
      * Show the application registration form.
      *
      * @return \Illuminate\Http\Response
      */
-    public function showRegistrationForm()
+    public function showRegistrationForm(Request $request)
     {
       $type = $_GET['type'] ?? null;
       $shipping_info = ShippingInfo::where('shipping_code',$type)->first();
@@ -447,9 +447,15 @@ class RegisterController extends Controller
         $redirectUrlWithQuery = $redirectUrl . '?' . http_build_query($queryParameters);
         return redirect()->to($redirectUrlWithQuery);
       }else{
-        return view('user.auth.register');
+        $data = [];
+        if ($request->has('message')) {
+            $data['message'] = $request->query('message');
+                        dd($data['message']);
+        }
+        return view('user.auth.register', $data);
       }
     }
+
 
     /**
      * Show the application registration form.
