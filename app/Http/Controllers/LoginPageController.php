@@ -1951,6 +1951,7 @@ class LoginPageController extends Controller
             ->where('recommends.end', '>=', $now)
             ->where('items.zaikosuu', '>=', 0.1)
             ->selectRaw('carts.*, items.zaikosuu as zaikosuu') // "items.zaikosuu"の値を取得
+            ->groupBy('carts.id')
             ->get();
             // ->get(['carts.*']);
             // foreach ($carts as $cart) {
