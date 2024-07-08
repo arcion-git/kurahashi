@@ -103,7 +103,7 @@ class RegisterController extends Controller
               'first_name_kana' => ['required', 'string', 'max:255', 'regex:/\A[ァ-ヴー]+\z/u'],
               'last_name_kana' => ['required', 'string', 'max:255', 'regex:/\A[ァ-ヴー]+\z/u'],
               'company' => ['required', 'string', 'max:255', 'regex:/^[^\x20-\x7E]+$/u'],
-              // 'company_kana' => ['required', 'string', 'max:255', 'regex:/\A[ァ-ヴー]+\z/u'],
+              'company_kana' => ['required', 'string', 'max:255', 'regex:/\A[ァ-ヴー]+\z/u'],
               'address01' => ['required', 'string', 'max:8', 'regex:/^[0-9]+$/'],
               'address02' => ['required', 'string', 'max:255', 'regex:/^[^\x20-\x7E]+$/u'],
               'address03' => ['required', 'string', 'max:255', 'regex:/^[^\x20-\x7E]+$/u'],
@@ -413,10 +413,10 @@ class RegisterController extends Controller
         $user = $this->create($request->all());
 
         if (is_null($user)) {
-            return redirect()->back()->with('error', '登録に失敗しました。');
+            return redirect()->back()->with('message', '登録に失敗しました。');
         } elseif (!$user instanceof \Illuminate\Contracts\Auth\Authenticatable) {
             // create メソッドが \Illuminate\Contracts\Auth\Authenticatable インターフェースを実装していない場合
-            return redirect()->back()->with('error', '無効なユーザーオブジェクトが返されました。');
+            return redirect()->back()->with('message', '無効なユーザーオブジェクトが返されました。');
         }
 
         // ユーザーをログインさせる
@@ -450,7 +450,7 @@ class RegisterController extends Controller
         $data = [];
         if ($request->has('message')) {
             $data['message'] = $request->query('message');
-                        dd($data['message']);
+
         }
         return view('user.auth.register', $data);
       }
