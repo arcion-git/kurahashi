@@ -33,6 +33,15 @@
           </ul>
         </div>
       @endif
+      @if (isset($message))
+      <div class="alert alert-danger">
+        <ul>
+          <li>
+              {{ $message }}
+          </li>
+        </ul>
+      </div>
+      @endif
       <div class="row">
         <div class="form-group col-sm-12 col-md-6">
           <label for="company">法人・個人</label>
