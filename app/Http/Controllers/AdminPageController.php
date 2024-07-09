@@ -681,6 +681,11 @@ class AdminPageController extends Controller
         $setonagi_user->kakebarai_update_time = $now;
         $setonagi_user->save();
       }
+      elseif($result->returnCode == 1){
+        $setonagi_user = Setonagi::where('user_id',$user_id)->first();
+        $setonagi_user->kakebarai_sinsa = '審査状況照会エラー';
+        $setonagi_user->save();
+      }
 
       // ヤマトAPI連携審査状況確認
       $client = new Client();
@@ -709,11 +714,11 @@ class AdminPageController extends Controller
         $setonagi_user->kakebarai_update_time = $now;
         $setonagi_user->save();
       }
-      // elseif($result->returnCode == 1){
-      //   $setonagi_user = Setonagi::where('user_id',$user_id)->first();
-      //   $setonagi_user->kakebarai_sinsa = '審査状況照会エラー';
-      //   $setonagi_user->save();
-      // }
+      elseif($result->returnCode == 1){
+        $setonagi_user = Setonagi::where('user_id',$user_id)->first();
+        $setonagi_user->kakebarai_sinsa = '審査状況照会エラー';
+        $setonagi_user->save();
+      }
     }
 
 
