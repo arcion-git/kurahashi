@@ -65,12 +65,12 @@
                     @endif
                   </td>
                   <td class="text-center">
-                    @if(isset($user->setonagi))
+                    @if(isset($user->setonagi()->kakebarai_limit))
                     {{$user->setonagi()->kakebarai_limit}}
                     @endif
                   </td>
                   <td class="text-center">
-                    @if(isset($user->setonagi))
+                    @if(isset($user->setonagi()->kakebarai_usepay))
                     {{$user->setonagi()->kakebarai_usepay}}
                     @endif
                   </td>
