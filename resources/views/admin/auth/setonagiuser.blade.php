@@ -91,6 +91,7 @@
                       </form>
                       @endif
                     @endif
+                    @if(isset($user->setonagi()->kakebarai_riyou))
                       @if($user->setonagi()->kakebarai_riyou == '1' || $user->setonagi()->setonagi_ok == '1')
                       <form action="{{ url('/admin/riyouteisi') }}" method="POST" class="form-horizontal">
                         {{ csrf_field() }}
@@ -98,6 +99,7 @@
                         <button type="submit" class="riyouteisi_btn btn btn-success">利用停止</button>
                       </form>
                       @endif
+                    @endif
                   </td>
                   <td class="text-center">
                       @if($user->setonagi()->kakebarai_riyou == 1)
