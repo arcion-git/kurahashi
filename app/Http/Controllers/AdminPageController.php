@@ -653,34 +653,34 @@ class AdminPageController extends Controller
       $user = User::where('id',$user_id)->first();
       // dd($user_id);
       // ヤマトAPI連携利用金額確認
-      $client = new Client();
-      $url = config('app.kakebarai_riyoukingaku');
-      $option = [
-        'headers' => [
-          'Accept' => '*/*',
-          'Content-Type' => 'application/x-www-form-urlencoded',
-          'charset' => 'UTF-8',
-        ],
-        'form_params' => [
-          'traderCode' => $kakebarai_traderCode,
-          // バイヤーid
-          'buyerId' => $user_id.$envi,
-          'buyerTelNo' => '',
-          'passWord' => $kakebarai_passWord
-        ]
-      ];
-      // dd($option);
-      $response = $client->request('POST', $url, $option);
-      $result = simplexml_load_string($response->getBody()->getContents());
-      // dd($result);
-      if($result->returnCode == 0){
-        $setonagi_user = Setonagi::where('user_id',$user_id)->first();
-        $setonagi_user->kakebarai_usepay = $result->usePayment;
-        $setonagi_user->kakebarai_limit = $result->useOverLimit;
-        $setonagi_user->kakebarai_sinsa = $result->useUsable;
-        $setonagi_user->kakebarai_update_time = $now;
-        $setonagi_user->save();
-      }
+      // $client = new Client();
+      // $url = config('app.kakebarai_riyoukingaku');
+      // $option = [
+      //   'headers' => [
+      //     'Accept' => '*/*',
+      //     'Content-Type' => 'application/x-www-form-urlencoded',
+      //     'charset' => 'UTF-8',
+      //   ],
+      //   'form_params' => [
+      //     'traderCode' => $kakebarai_traderCode,
+      //     // バイヤーid
+      //     'buyerId' => $user_id.$envi,
+      //     'buyerTelNo' => '',
+      //     'passWord' => $kakebarai_passWord
+      //   ]
+      // ];
+      // // dd($option);
+      // $response = $client->request('POST', $url, $option);
+      // $result = simplexml_load_string($response->getBody()->getContents());
+      // // dd($result);
+      // if($result->returnCode == 0){
+      //   $setonagi_user = Setonagi::where('user_id',$user_id)->first();
+      //   $setonagi_user->kakebarai_usepay = $result->usePayment;
+      //   $setonagi_user->kakebarai_limit = $result->useOverLimit;
+      //   $setonagi_user->kakebarai_sinsa = $result->useUsable;
+      //   $setonagi_user->kakebarai_update_time = $now;
+      //   $setonagi_user->save();
+      // }
 
       // ヤマトAPI連携審査状況確認
       $client = new Client();
