@@ -60,7 +60,7 @@
                     {{$user->email}}
                   </td>
                   <td class="text-center">
-                    @if(isset($user->setonagi))
+                    @if(isset($user->setonagi()->kakebarai_sinsa))
                     {{$user->setonagi()->kakebarai_sinsa}}
                     @endif
                   </td>
