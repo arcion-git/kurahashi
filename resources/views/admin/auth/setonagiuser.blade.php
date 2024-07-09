@@ -102,7 +102,7 @@
                     @endif
                   </td>
                   <td class="text-center">
-                      @if($user->setonagi()->kakebarai_riyou == 1)
+                      <!-- @if($user->setonagi()->kakebarai_riyou == 1)
                       利用許可済
                       @elseif($user->setonagi()->setonagi_ok == 1)
                       カード払い利用許可済
@@ -112,7 +112,7 @@
                       審査中
                       @else
                       利用不可
-                      @endif
+                      @endif -->
                   </td>
                 </tr>
                 @endforeach
