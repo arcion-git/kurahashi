@@ -75,6 +75,7 @@
                     @endif
                   </td>
                   <td class="text-center">
+                    @if(isset($user->setonagi()->kakebarai_sinsa))
                       @if($user->setonagi()->kakebarai_sinsa == 'ご利用可' & $user->setonagi()->kakebarai_riyou == '')
                       <form action="{{ url('/admin/riyoukyoka') }}" method="POST" class="form-horizontal">
                         {{ csrf_field() }}
@@ -89,6 +90,7 @@
                         <button type="submit" class="card_riyoukyoka_btn btn btn-primary">カード払いのみで利用許可</button>
                       </form>
                       @endif
+                    @endif
                       @if($user->setonagi()->kakebarai_riyou == '1' || $user->setonagi()->setonagi_ok == '1')
                       <form action="{{ url('/admin/riyouteisi') }}" method="POST" class="form-horizontal">
                         {{ csrf_field() }}

@@ -642,6 +642,8 @@ class AdminPageController extends Controller
     $setonagi_users = Setonagi::whereNotNull('shipping_code')
         ->where('shipping_code', '!=', '')
         ->get();
+
+    
     $now = Carbon::now();
 
     $kakebarai_traderCode = config('app.kakebarai_traderCode');
