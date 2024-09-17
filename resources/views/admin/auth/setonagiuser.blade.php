@@ -102,7 +102,7 @@
                       利用許可済
                       @elseif($user->setonagi()->setonagi_ok == 1)
                       カード払い利用許可済
-                      @elseif($user->setonagi()->kakebarai_sinsa == 'ご利用可' & $user->setonagi()->kakebarai_riyou == 0)
+                      @elseif(($user->setonagi()->kakebarai_sinsa == 'ご利用可' || $user->setonagi()->kakebarai_sinsa == '利用可') && $user->setonagi()->kakebarai_riyou == 0)
                       利用許可待ち
                       @elseif($user->setonagi()->kakebarai_sinsa == '審査受付中')
                       審査中
