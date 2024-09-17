@@ -666,7 +666,7 @@ class AdminPageController extends Controller
         'form_params' => [
           'traderCode' => $kakebarai_traderCode,
           // バイヤーid
-          'buyerId' => $user_id,
+          'buyerId' => $user_id.$envi,
           'buyerTelNo' => '',
           'passWord' => $kakebarai_passWord
         ]
