@@ -638,9 +638,9 @@ class AdminPageController extends Controller
   public function setonagiuser(){
 
     $users = User::where('setonagi',1)->paginate(30);
+
     // $setonagi_users = Setonagi::get();
-    $setonagi_users = Setonagi::whereNotNull('shipping_code')
-        ->where('shipping_code', '!=', '')
+    $setonagi_users = Setonagi::where('shipping_code', '=', null)
         ->get();
 
 
@@ -684,9 +684,9 @@ class AdminPageController extends Controller
         $setonagi_user->save();
       }
       elseif($result->returnCode == 1){
-        $setonagi_user = Setonagi::where('user_id',$user_id)->first();
-        $setonagi_user->kakebarai_sinsa = '審査状況照会エラー';
-        $setonagi_user->save();
+        // $setonagi_user = Setonagi::where('user_id',$user_id)->first();
+        // $setonagi_user->kakebarai_sinsa = '審査状況照会エラー';
+        // $setonagi_user->save();
       }
 
       // ヤマトAPI連携審査状況確認
@@ -717,9 +717,9 @@ class AdminPageController extends Controller
         $setonagi_user->save();
       }
       elseif($result->returnCode == 1){
-        $setonagi_user = Setonagi::where('user_id',$user_id)->first();
-        $setonagi_user->kakebarai_sinsa = '審査状況照会エラー';
-        $setonagi_user->save();
+        // $setonagi_user = Setonagi::where('user_id',$user_id)->first();
+        // $setonagi_user->kakebarai_sinsa = '審査状況照会エラー';
+        // $setonagi_user->save();
       }
     }
 
