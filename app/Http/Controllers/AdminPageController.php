@@ -666,7 +666,7 @@ class AdminPageController extends Controller
         'form_params' => [
           'traderCode' => $kakebarai_traderCode,
           // バイヤーid
-          'buyerId' => $user_id.$envi,
+          'buyerId' => $user_id,
           'buyerTelNo' => '',
           'passWord' => $kakebarai_passWord
         ]
@@ -684,43 +684,44 @@ class AdminPageController extends Controller
         $setonagi_user->save();
       }
       elseif($result->returnCode == 1){
-        // $setonagi_user = Setonagi::where('user_id',$user_id)->first();
-        // $setonagi_user->kakebarai_sinsa = '審査状況照会エラー';
-        // $setonagi_user->save();
+        $setonagi_user = Setonagi::where('user_id',$user_id)->first();
+        $setonagi_user->kakebarai_sinsa = '審査状況照会エラー';
+        $setonagi_user->save();
       }
 
       // ヤマトAPI連携審査状況確認
-      $client = new Client();
-      $url = config('app.kakebarai_sinsa');
-      $option = [
-        'headers' => [
-          'Accept' => '*/*',
-          'Content-Type' => 'application/x-www-form-urlencoded',
-          'charset' => 'UTF-8',
-        ],
-        'form_params' => [
-          'traderCode' => $kakebarai_traderCode,
-          // バイヤーid
-          'buyerId' => $user_id.$envi,
-          'buyerTelNo' => '',
-          'passWord' => $kakebarai_passWord
-        ]
-      ];
-      // dd($option);
-      $response = $client->request('POST', $url, $option);
-      $result = simplexml_load_string($response->getBody()->getContents());
-      // dd($result);
-      if($result->returnCode == 0){
-        $setonagi_user = Setonagi::where('user_id',$user_id)->first();
-        $setonagi_user->kakebarai_sinsa = $result->judgeStatus;
-        $setonagi_user->kakebarai_update_time = $now;
-        $setonagi_user->save();
-      }
-      elseif($result->returnCode == 1){
-        // $setonagi_user = Setonagi::where('user_id',$user_id)->first();
-        // $setonagi_user->kakebarai_sinsa = '審査状況照会エラー';
-        // $setonagi_user->save();
-      }
+      // $client = new Client();
+      // $url = config('app.kakebarai_sinsa');
+      // $option = [
+      //   'headers' => [
+      //     'Accept' => '*/*',
+      //     'Content-Type' => 'application/x-www-form-urlencoded',
+      //     'charset' => 'UTF-8',
+      //   ],
+      //   'form_params' => [
+      //     'traderCode' => $kakebarai_traderCode,
+      //     // バイヤーid
+      //     'buyerId' => $user_id,
+      //     'buyerTelNo' => '',
+      //     'passWord' => $kakebarai_passWord
+      //   ]
+      // ];
+      // // dd($option);
+      // $response = $client->request('POST', $url, $option);
+      // $result = simplexml_load_string($response->getBody()->getContents());
+      // // dd($result);
+      // if($result->returnCode == 0){
+      //   $setonagi_user = Setonagi::where('user_id',$user_id)->first();
+      //   $setonagi_user->kakebarai_sinsa = $result->judgeStatus;
+      //   $setonagi_user->kakebarai_update_time = $now;
+      //   $setonagi_user->save();
+      // }
+      // elseif($result->returnCode == 1){
+      //   $setonagi_user = Setonagi::where('user_id',$user_id)->first();
+      //   $setonagi_user->kakebarai_sinsa = '審査状況照会エラー';
+      //   $setonagi_user->kakebarai_update_time = $now;
+      //   $setonagi_user->save();
+      // }
     }
 
 
