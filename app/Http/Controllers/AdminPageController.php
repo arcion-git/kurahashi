@@ -643,7 +643,7 @@ class AdminPageController extends Controller
         ->where('shipping_code', '!=', '')
         ->get();
 
-    
+
     $now = Carbon::now();
 
     $kakebarai_traderCode = config('app.kakebarai_traderCode');
