@@ -23,6 +23,7 @@
   // 顧客側ページ
   // Route::get('/', 'LoginPageController@index')->name('home');
   Route::get('/','UserAuth\LoginController@showWelcome')->name('welcom');
+  Route::get('/maintenance','UserAuth\LoginController@showMaintenance')->name('maintenance');
   Route::get('/welcomeguide','UserAuth\LoginController@showWelcomeguide')->name('welcomguide');
   Route::get('/welcomelow','UserAuth\LoginController@showWelcomelow')->name('welcomlow');
   Route::get('/welcomeprivacypolicy','UserAuth\LoginController@showWelcomeprivacypolicy')->name('welcomprivacypolicy');

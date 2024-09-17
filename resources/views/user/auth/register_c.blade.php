@@ -1,6 +1,12 @@
 @extends('layouts.auth')
 
 @section('content')
+<?php if(!isset($_GET['type'])) { ?>
+<?php } else { ?>
+  <script>
+    window.location.href = '/maintenance';
+  </script>
+<?php } ?>
 <ul class="nav nav-tabs">
   <li class="nav-item col-6 text-center">
     <a class="nav-link font-weight-bold" href="{{ route('login', ['type' => request()->input('type')]) }}">{{ __('Login') }}</a>

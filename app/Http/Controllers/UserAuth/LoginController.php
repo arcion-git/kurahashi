@@ -98,6 +98,11 @@ class LoginController extends Controller
         return view('user.auth.welcome');
     }
 
+    public function showMaintenance(){
+
+        return view('user.auth.maintenance');
+    }
+
     public function showWelcomeguide(){
         return view('user.auth.welcomeguide');
     }
