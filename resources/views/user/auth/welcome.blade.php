@@ -4,7 +4,7 @@
   <?php if(!isset($_GET['type'])) { ?>
   <?php } else { ?>
     <script>
-      window.location.href = '/maintenance';
+      // window.location.href = '/maintenance';
     </script>
   <?php } ?>
     <meta charset="utf-8">
